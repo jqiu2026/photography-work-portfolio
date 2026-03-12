@@ -21,7 +21,7 @@ async function getShootproofImages() {
   const data = await res.json();
 
   return data.photos.map((photo: any) => ({
-    src: `https://d2rxqglyhdohqf.cloudfront.net/ph/${photo.key}/m/${photo.id}.jpg`,
+    src: `https://d2rxqglyhdohqf.cloudfront.net/ph/${photo.key}/l/${photo.id}.jpg`,
     alt: "",
     orientation: photo.w > photo.g ? "horizontal" : "vertical"
   }));
