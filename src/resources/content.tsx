@@ -1,19 +1,19 @@
 import { About, Blog, Gallery, Home, Newsletter, Person, Social, Work } from "@/types";
-import { Line, Row, Text } from "@once-ui-system/core";
+import { Line, Row, Text, SmartLink , List, ListItem } from "@once-ui-system/core";
 
 const person: Person = {
-  firstName: "Selene",
-  lastName: "Yu",
-  name: `Selene Yu`,
-  role: "Design Engineer",
+  firstName: "Jerry",
+  lastName: "Qiu",
+  name: `Jerry Qiu`,
+  role: "Creator",
   avatar: "/images/avatar.jpg",
   email: "example@gmail.com",
-  location: "Asia/Jakarta", // Expecting the IANA time zone identifier, e.g., 'Europe/Vienna'
-  languages: ["English", "Bahasa"], // optional: Leave the array empty if you don't want to display languages
+  location: "America/New_York", // Expecting the IANA time zone identifier, e.g., 'Europe/Vienna'
+  languages: ["English", "Mandarin Chinese","French"], // optional: Leave the array empty if you don't want to display languages
 };
 
 const newsletter: Newsletter = {
-  display: true,
+  display: false,
   title: <>Subscribe to {person.firstName}'s Newsletter</>,
   description: <>My weekly newsletter about creativity and engineering</>,
 };
@@ -23,27 +23,21 @@ const social: Social = [
   // Import new icons in /once-ui/icons.ts
   // Set essentials: true for links you want to show on the about page
   {
-    name: "GitHub",
-    icon: "github",
-    link: "https://github.com/once-ui-system",
-    essential: true,
-  },
-  {
     name: "LinkedIn",
     icon: "linkedin",
-    link: "https://www.linkedin.com/company/once-ui/",
+    link: "https://www.linkedin.com/in/jqiu2026/",
     essential: true,
   },
   {
     name: "Instagram",
     icon: "instagram",
-    link: "https://www.instagram.com/once_ui/",
-    essential: false,
+    link: "https://www.instagram.com/jqiu2026/",
+    essential: true,
   },
   {
-    name: "Threads",
-    icon: "threads",
-    link: "https://www.threads.com/@once_ui",
+    name: "YouTube",
+    icon: "youtube",
+    link: "https://www.youtube.com/@jqiu2026",
     essential: true,
   },
   {
@@ -59,8 +53,8 @@ const home: Home = {
   image: "/images/og/home.jpg",
   label: "Home",
   title: `${person.name}'s Portfolio`,
-  description: `Portfolio website showcasing my work as a ${person.role}`,
-  headline: <>Building bridges between design and code</>,
+  description: `Discover my work as a ${person.role}`,
+  headline: <>Your Vision = My Mission.</>,
   featured: {
     display: true,
     title: (
@@ -76,7 +70,7 @@ const home: Home = {
   },
   subline: (
     <>
-    I'm Selene, a design engineer at <Text as="span" size="xl" weight="strong">ONCE UI</Text>, where I craft intuitive <br /> user experiences. After hours, I build my own projects.
+    I'm Jerry, a <Text as="span" size="xl" weight="strong">creator</Text> passionate about capturing moments that matter. <br /> I'm also an Aerospace Engineering major at [TBD].
 </>
   ),
 };
@@ -95,21 +89,19 @@ const about: About = {
   },
   calendar: {
     display: true,
-    link: "https://cal.com",
+    link: "mailto:${person.email}",
   },
   intro: {
     display: true,
     title: "Introduction",
     description: (
       <>
-        Selene is a Jakarta-based design engineer with a passion for transforming complex challenges
-        into simple, elegant design solutions. Her work spans digital interfaces, interactive
-        experiences, and the convergence of design and technology.
+        Jerry is a creator and photographer based in New York City. He approaches photography thoughtfully, aiming to capture moments that matter. He has contributed to several non-profits and his high school through his work.
       </>
     ),
   },
   work: {
-    display: true, // set to false to hide this section
+    display: false, // set to false to hide this section
     title: "Work Experience",
     experiences: [
       {
@@ -155,16 +147,16 @@ const about: About = {
     ],
   },
   studies: {
-    display: true, // set to false to hide this section
+    display: false, // set to false to hide this section
     title: "Studies",
     institutions: [
       {
-        name: "University of Jakarta",
-        description: <>Studied software engineering.</>,
+        name: "[Insert College]",
+        description: <>Working towards a B.S. in Aerospace Engineering.</>,
       },
       {
-        name: "Build the Future",
-        description: <>Studied online marketing and personal branding.</>,
+        name: "Stuyvesant High School",
+        description: <>Obtained a high school diploma with advanced regents designation.</>,
       },
     ],
   },
@@ -173,14 +165,22 @@ const about: About = {
     title: "Technical skills",
     skills: [
       {
-        title: "Figma",
+        title: "Adobe Creative Cloud",
         description: (
-          <>Able to prototype in Figma with Once UI with unnatural speed.</>
+          <>Several years of experience using Lightroom and Lightroom Classic for photo editing, Premiere for video editing, and Photoshop for photo corrections and creative projects.</>
         ),
         tags: [
           {
-            name: "Figma",
-            icon: "figma",
+            name: "Adobe",
+            icon: "adobe",
+          },
+          {
+            name: "Photoshop",
+            icon: "photoshop",
+          },
+          {
+            name: "Premiere",
+            icon: "premiere",
           },
         ],
         // optional: leave the array empty if you don't want to display images
@@ -200,22 +200,18 @@ const about: About = {
         ],
       },
       {
-        title: "Next.js",
+        title: "Certified Drone Pilot",
         description: (
-          <>Building next gen apps with Next.js + Once UI + Supabase.</>
+          <>Certified drone pilot with some experience in aerial photography and videography. Currently exploring FPV flying techniques to expand my skills.</>
         ),
         tags: [
           {
-            name: "JavaScript",
-            icon: "javascript",
+            name: "DJI",
+            icon: "dji",
           },
           {
-            name: "Next.js",
-            icon: "nextjs",
-          },
-          {
-            name: "Supabase",
-            icon: "supabase",
+            name: "Part 107",
+            icon: "drone",
           },
         ],
         // optional: leave the array empty if you don't want to display images
@@ -223,6 +219,111 @@ const about: About = {
           {
             src: "/images/projects/project-01/cover-04.jpg",
             alt: "Project image",
+            width: 16,
+            height: 9,
+          },
+        ],
+      },
+      {
+        title: "Graphic Design",
+        description: (
+          <>Experienced in creating social media graphics and visual content using Figma and Canva, with a focus on clean, thoughtful aesthetics that communicate ideas effectively.</>
+        ),
+        tags: [
+          {
+            name: "Figma",
+            icon: "figma",
+          },
+          {
+            name: "Canva",
+            icon: "canva",
+          },
+        ],
+        // optional: leave the array empty if you don't want to display images
+        images: [
+          {
+            src: "/images/projects/project-01/cover-04.jpg",
+            alt: "Project image",
+            width: 16,
+            height: 9,
+          },
+        ],
+      },
+      {
+        title: "Digital Content Management",
+        description: (
+          <>Experienced in managing social media accounts, creating engaging content and analyzing performance metrics to optimize reach and engagement.
+          <br />
+          <b>MANAGED ACCOUNTS:</b>
+          <List>
+            <ListItem><SmartLink href="https://instagram.com/stuyaviators" prefixIcon="instagram" selected>@stuyaviators</SmartLink> (April 2024 - Present)</ListItem>
+            <ListItem><SmartLink href="https://instagram.com/stuycast" prefixIcon="instagram" selected>@stuycast</SmartLink> (September 2025 - Present)</ListItem>
+            <ListItem><SmartLink href="https://instagram.com/wiki/@seniorsing26" prefixIcon="instagram" selected>@seniorsing26</SmartLink> (Jan 2026 - Mar 2026)</ListItem>
+          </List>
+          <br />
+          Administrator for the <SmartLink href="https://roblox-shipping-lanes.fandom.com/wiki/Shipping_Lanes_Wiki" prefixIcon="link" selected>Roblox Shipping Lanes Wiki</SmartLink>, responsible for organizing, editing, and maintaining content. Ensures accuracy, clarity, and accessibility while fostering an engaged community of users.</>
+        ),
+        tags: [
+          {
+            name: "Instagram",
+            icon: "instagram",
+          },
+          {
+            name: "Fandom Wiki",
+            icon: "fandom",
+          },
+        ],
+        // optional: leave the array empty if you don't want to display images
+        images: [
+          {
+            src: "/images/projects/project-01/cover-04.jpg",
+            alt: "Project image",
+
+            width: 16,
+            height: 9,
+          },
+        ],
+      },
+      {
+        title: "Coding & Programming",
+        description: (
+          <><List><ListItem>Python (3+ years)</ListItem>
+          <ListItem>Lua / Luau (3+ years) — Roblox Studio</ListItem>
+          <ListItem>Java (1+ years)</ListItem>
+          <ListItem>Experienced with web technologies and GitHub</ListItem></List></>
+        ),
+        tags: [
+          {
+            name: "Python",
+            icon: "python",
+          },
+          {
+            name: "Java",
+            icon: "java",
+          },
+          {
+            name: "Lua",
+            icon: "lua",
+          },
+          {
+            name: "Roblox Studio",
+            icon: "robloxstudio",
+          },
+          {
+            name: "GitHub",
+            icon: "github",
+          },
+          {
+            name: "Web Dev",
+            icon: "globe",
+          },
+        ],
+        // optional: leave the array empty if you don't want to display images
+        images: [
+          {
+            src: "/images/projects/project-01/cover-04.jpg",
+            alt: "Project image",
+            
             width: 16,
             height: 9,
           },
@@ -301,4 +402,5 @@ const gallery: Gallery = {
   ],
 };
 
-export { person, social, newsletter, home, about, blog, work, gallery };
+export { about, blog, gallery, home, newsletter, person, social, work };
+

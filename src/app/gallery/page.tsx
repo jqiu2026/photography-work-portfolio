@@ -12,7 +12,24 @@ export async function generateMetadata() {
   });
 }
 
-export default function Gallery() {
+async function getShootproofImages() {
+  const res = await fetch(
+    "https://photos.jerryqiu.com/gallery/c30c33e0-811e-418d-9fe8-0caff7e33b34/data?cr=1",
+    { cache: "no-store" }
+  );
+
+  const data = await res.json();
+
+  return data.photos.map((photo: any) => ({
+    src: `https://d2rxqglyhdohqf.cloudfront.net/ph/${photo.key}/m/${photo.id}.jpg`,
+    alt: "",
+    orientation: photo.w > photo.g ? "horizontal" : "vertical"
+  }));
+}
+
+export default async function Gallery() {
+  const images = await getShootproofImages();
+
   return (
     <Flex maxWidth="l">
       <Schema
@@ -28,7 +45,8 @@ export default function Gallery() {
           image: `${baseURL}${person.avatar}`,
         }}
       />
-      <GalleryView />
+
+      <GalleryView images={images} />
     </Flex>
   );
 }

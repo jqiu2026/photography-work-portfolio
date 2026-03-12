@@ -27,9 +27,21 @@ import {
   SiNextdotjs,
   SiFigma,
   SiSupabase,
+  SiCanva,
+  SiDji,
+  SiFandom,
+  SiLua,
+  SiRobloxstudio,
 } from "react-icons/si";
 
-import { FaDiscord, FaGithub, FaLinkedin, FaX, FaThreads, FaInstagram, FaXTwitter, FaFacebook, FaPinterest, FaWhatsapp, FaReddit, FaTelegram, } from "react-icons/fa6";
+import {
+  TbBrandAdobe,
+  TbBrandAdobePhotoshop,
+  TbBrandAdobePremier,
+  TbDrone,
+} from "react-icons/tb";
+
+import { FaDiscord, FaGithub, FaLinkedin, FaX, FaThreads, FaInstagram, FaXTwitter, FaFacebook, FaPinterest, FaWhatsapp, FaReddit, FaTelegram, FaYoutube, FaJava, FaPython} from "react-icons/fa6";
 
 export const iconLibrary: Record<string, IconType> = {
   arrowUpRight: HiArrowUpRight,
@@ -64,6 +76,18 @@ export const iconLibrary: Record<string, IconType> = {
   reddit: FaReddit,
   telegram: FaTelegram,
   instagram: FaInstagram,
+  youtube: FaYoutube,
+  adobe: TbBrandAdobe,
+  photoshop: TbBrandAdobePhotoshop,
+  premiere: TbBrandAdobePremier,
+  canva: SiCanva,
+  dji: SiDji,
+  drone: TbDrone,
+  fandom: SiFandom,
+  lua: SiLua,
+  robloxstudio: SiRobloxstudio,
+  java: FaJava,
+  python: FaPython,
 };
 
 export type IconLibrary = typeof iconLibrary;
