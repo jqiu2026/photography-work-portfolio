@@ -226,9 +226,9 @@ export default function About() {
 
           {about.work.display && (
             <>
-              <HeadingLink as="nav" id={`${about.work.title}-scroll-lock`}><Heading as="h2" id={about.work.title} variant="display-strong-s" onBackground="accent-medium" marginBottom="m">
+              <Heading as="h2" id={about.work.title} variant="display-strong-s" onBackground="accent-medium" marginBottom="l">
                 {about.work.title}
-              </Heading></HeadingLink>
+              </Heading>
               <Column fillWidth gap="l" marginBottom="40">
                 {about.work.experiences.map((experience, index) => (
                     <Column key={`${experience.company}-${experience.role}-${index}`} fillWidth>
@@ -285,11 +285,9 @@ export default function About() {
 
           {about.studies.display && (
             <>
-              <HeadingLink as="nav" id={`${about.studies.title}-scroll-lock`}>
-                  <Heading as="h2" id={`${about.studies.title}`} variant="display-strong-s" onBackground="accent-medium" marginBottom="m">
-                    {about.studies.title}
+                  <Heading as="h2" id={`${about.studies.title}`} variant="display-strong-s" onBackground="accent-medium" marginBottom="l">
+                {about.studies.title}
                   </Heading>
-              </HeadingLink>
               <Column fillWidth gap="l" marginBottom="40">
                 {about.studies.institutions.map((institution, index) => (
                   <Column key={`${institution.name}-${index}`} fillWidth gap="4">
@@ -307,16 +305,15 @@ export default function About() {
 
           {about.technical.display && (
             <>
-            <HeadingLink as="nav" id={`${about.technical.title}scroll-lock`}>
               <Heading
                 as="h2"
                 id={about.technical.title}
                 variant="display-strong-s"
-                marginBottom="40"
+                marginBottom="l"
                 onBackground="accent-medium"
               >
                 {about.technical.title}
-              </Heading></HeadingLink>
+              </Heading>
               <Column fillWidth gap="l">
                 {about.technical.skills.map((skill, index) => (
                   <Column key={`${skill}-${index}`} fillWidth gap="4">
