@@ -1,11 +1,13 @@
 "use client";
 
-import { Media, MasonryGrid } from "@once-ui-system/core";
+import { Media, MasonryGrid, RevealFx } from "@once-ui-system/core";
 
 export default function GalleryView({ images }: any) {
+  const columns = 2;
   return (
-    <MasonryGrid columns={2} s={{ columns: 1 }}>
+    <MasonryGrid columns={columns} s={{ columns: 1 }}>
       {images.map((image: any, index: number) => (
+        <RevealFx delay={((index % Math.ceil(images.length / 2)) * 0.12) + (Math.floor(index / Math.ceil(images.length / 2)) * 0.12)}>
         <Media
           enlarge
           priority={index < 10}
@@ -16,6 +18,7 @@ export default function GalleryView({ images }: any) {
           src={image.src}
           alt={image.alt}
         />
+        </RevealFx>
       ))}
     </MasonryGrid>
   );

@@ -1,4 +1,4 @@
-import { Flex, Meta, Schema } from "@once-ui-system/core";
+import { Column, Meta, Schema, Heading, Text, TypeFx } from "@once-ui-system/core";
 import GalleryView from "@/components/gallery/GalleryView";
 import { baseURL, gallery, person } from "@/resources";
 
@@ -31,7 +31,7 @@ export default async function Gallery() {
   const images = await getShootproofImages();
 
   return (
-    <Flex maxWidth="l">
+    <Column maxWidth="m" paddingTop="24">
       <Schema
         as="webPage"
         baseURL={baseURL}
@@ -45,8 +45,15 @@ export default async function Gallery() {
           image: `${baseURL}${person.avatar}`,
         }}
       />
-
+      
+      <Heading marginBottom="l" variant="heading-strong-xl" align="center">
+        <TypeFx center 
+        words={gallery.description}
+        trigger="instant"
+        speed={25}
+        />
+      </Heading>
       <GalleryView images={images} />
-    </Flex>
+    </Column>
   );
 }

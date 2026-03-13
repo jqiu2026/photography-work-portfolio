@@ -3,8 +3,14 @@ import {
   Button,
   Column,
   Heading,
+  HeadingLink,
   Icon,
   IconButton,
+  RevealFx,
+  ShineFx,
+  TiltFx,
+  TypeFx,
+  HoloFx,
   Media,
   Tag,
   Text,
@@ -51,6 +57,7 @@ export default function About() {
     },
   ];
   return (
+    
     <Column maxWidth="m">
       <Schema
         as="webPage"
@@ -77,6 +84,7 @@ export default function About() {
           <TableOfContents structure={structure} about={about} />
         </Column>
       )}
+      <RevealFx center>
       <Row fillWidth s={{ direction: "column"}} horizontal="center">
         {about.avatar.display && (
           <Column
@@ -93,7 +101,11 @@ export default function About() {
             flex={3}
             horizontal="center"
           >
+            <HoloFx
+            radius="full"
+            >
             <Avatar src={person.avatar} size="xl" />
+            </HoloFx>
             <Row gap="8" vertical="center">
               <Icon onBackground="accent-weak" name="globe" />
               {person.location}
@@ -107,6 +119,7 @@ export default function About() {
                 ))}
               </Row>
             )}
+            
           </Column>
         )}
         <Column className={styles.blockAlign} flex={9} maxWidth={40}>
@@ -150,7 +163,9 @@ export default function About() {
               variant="display-default-xs"
               onBackground="neutral-weak"
             >
+              <ShineFx speed={2} baseOpacity={0.7}>
               {person.role}
+              </ShineFx>
             </Text>
             {social.length > 0 && (
               <Row
@@ -168,6 +183,7 @@ export default function About() {
                       .map(
                   (item) =>
                     item.link && (
+                      <TiltFx>
                       <React.Fragment key={item.name}>
                         <Row s={{ hide: true }}>
                           <Button
@@ -181,6 +197,7 @@ export default function About() {
                           />
                         </Row>
                         <Row hide s={{ hide: false }}>
+                          
                           <IconButton
                             size="l"
                             key={`${item.name}-icon`}
@@ -190,6 +207,7 @@ export default function About() {
                           />
                         </Row>
                       </React.Fragment>
+                      </TiltFx>
                     ),
                 )}
               </Row>
@@ -198,18 +216,22 @@ export default function About() {
 
           {about.intro.display && (
             <Column textVariant="body-default-l" fillWidth gap="m" marginBottom="xl">
-              {about.intro.description}
+              <TypeFx center
+              words={about.intro.description}
+              speed={10}
+              trigger="instant"
+              />
             </Column>
           )}
 
           {about.work.display && (
             <>
-              <Heading as="h2" id={about.work.title} variant="display-strong-s" marginBottom="m">
+              <HeadingLink id={about.work.title}><Heading as="h2" id={`${about.work.title}-inner`} variant="display-strong-s" onBackground="accent-medium" marginBottom="m">
                 {about.work.title}
-              </Heading>
+              </Heading></HeadingLink>
               <Column fillWidth gap="l" marginBottom="40">
                 {about.work.experiences.map((experience, index) => (
-                  <Column key={`${experience.company}-${experience.role}-${index}`} fillWidth>
+                    <Column key={`${experience.company}-${experience.role}-${index}`} fillWidth>
                     <Row fillWidth horizontal="between" vertical="end" marginBottom="4">
                       <Text id={experience.company} variant="heading-strong-l">
                         {experience.company}
@@ -263,9 +285,9 @@ export default function About() {
 
           {about.studies.display && (
             <>
-              <Heading as="h2" id={about.studies.title} variant="display-strong-s" marginBottom="m">
+              <HeadingLink id={about.studies.title}><Heading as="h2" id={`${about.studies.title}-inner`} variant="display-strong-s" onBackground="accent-medium" marginBottom="m">
                 {about.studies.title}
-              </Heading>
+              </Heading></HeadingLink>
               <Column fillWidth gap="l" marginBottom="40">
                 {about.studies.institutions.map((institution, index) => (
                   <Column key={`${institution.name}-${index}`} fillWidth gap="4">
@@ -283,14 +305,16 @@ export default function About() {
 
           {about.technical.display && (
             <>
+            <HeadingLink id={about.technical.title}>
               <Heading
                 as="h2"
-                id={about.technical.title}
+                id={`${about.technical.title}-inner`}
                 variant="display-strong-s"
                 marginBottom="40"
+                onBackground="accent-medium"
               >
                 {about.technical.title}
-              </Heading>
+              </Heading></HeadingLink>
               <Column fillWidth gap="l">
                 {about.technical.skills.map((skill, index) => (
                   <Column key={`${skill}-${index}`} fillWidth gap="4">
@@ -337,6 +361,7 @@ export default function About() {
           )}
         </Column>
       </Row>
+      </RevealFx>
     </Column>
   );
 }

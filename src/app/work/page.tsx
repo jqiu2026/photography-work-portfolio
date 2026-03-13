@@ -1,4 +1,4 @@
-import { Column, Heading, Meta, Schema } from "@once-ui-system/core";
+import { Column, Heading, Meta, Schema, RevealFx , TypeFx} from "@once-ui-system/core";
 import { baseURL, about, person, work } from "@/resources";
 import { Projects } from "@/components/work/Projects";
 
@@ -29,9 +29,16 @@ export default function Work() {
         }}
       />
       <Heading marginBottom="l" variant="heading-strong-xl" align="center">
-        {work.title}
+        <TypeFx center 
+        words={work.description}
+        trigger="instant"
+        speed={25}
+        />
       </Heading>
+
+      <RevealFx delay={0.2}>
       <Projects />
+      </RevealFx>
     </Column>
   );
 }
