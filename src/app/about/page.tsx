@@ -217,7 +217,7 @@ export default function About() {
           {about.intro.display && (
             <Column textVariant="body-default-l" fillWidth gap="m" marginBottom="xl">
               <TypeFx center
-              words={about.intro.description}
+              words={about.intro.description as string}
               speed={10}
               trigger="instant"
               />

@@ -94,8 +94,11 @@ const about: About = {
   intro: {
     display: true,
     title: "Introduction",
-    description: "Jerry is a creator and photographer based in New York City. He approaches photography thoughtfully, aiming to capture moments that matter. He has contributed to several non-profits and his high school through his work."
-    ,
+    description: (
+      <>
+        Jerry is a creator and photographer based in New York City. He approaches photography thoughtfully, aiming to capture moments that matter. He has contributed to several non-profits and his high school through his work.
+      </>
+    ),
   },
   work: {
     display: true, // set to false to hide this section
