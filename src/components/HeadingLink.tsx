@@ -17,7 +17,7 @@ export const HeadingLink: React.FC<HeadingLinkProps> = ({ id, level, children, s
 
   const copyURL = (id: string): void => {
     const url = `${window.location.origin}${window.location.pathname}#${id}`;
-    navigator.clipboard.writeText(url).then(
+    navigator.clipboard.writeText("url").then(
       () => {
         addToast({
           variant: "success",
