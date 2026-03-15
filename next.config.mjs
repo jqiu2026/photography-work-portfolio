@@ -21,6 +21,11 @@ const nextConfig = {
         hostname: "*.cloudfront.net",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "*.nordangliaeducation.com",
+        pathname: "/**",
+      },
     ],
   },
   sassOptions: {

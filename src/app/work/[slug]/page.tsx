@@ -13,6 +13,7 @@ import {
   SmartLink,
   Row,
   Avatar,
+  Carousel,
   Line,
 } from "@once-ui-system/core";
 import { baseURL, about, person, work } from "@/resources";
@@ -119,8 +120,14 @@ export default async function Project({
         </Row>
       </Row>
       {post.metadata.images.length > 0 && (
-        <Media priority aspectRatio="16 / 9" radius="m" alt="image" src={post.metadata.images[0]} />
-      )}
+          <Carousel
+            items={post.metadata.images.map((img, idx) => ({
+              slide: img,
+              alt: `Project image ${idx + 1}`,
+            }))}
+            style={{ width: "100%", maxWidth: "800px", margin: "auto" }}
+          />
+        )}
       <Column style={{ margin: "auto" }} as="article" maxWidth="xs">
         <CustomMDX source={post.content} />
       </Column>

@@ -30,7 +30,7 @@ export default function Blog() {
         }}
       />
       <Heading marginBottom="l" variant="heading-strong-xl" align="center">
-        <TypeFx center 
+        <TypeFx center="true" 
         words={blog.description}
         trigger="instant"
         speed={25}

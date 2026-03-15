@@ -29,7 +29,7 @@ export default function Work() {
         }}
       />
       <Heading marginBottom="l" variant="heading-strong-xl" align="center">
-        <TypeFx center 
+        <TypeFx center='true'
         words={work.description}
         trigger="instant"
         speed={25}

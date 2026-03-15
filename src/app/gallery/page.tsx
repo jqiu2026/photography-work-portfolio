@@ -47,7 +47,7 @@ export default async function Gallery() {
       />
       
       <Heading marginBottom="l" variant="heading-strong-xl" align="center">
-        <TypeFx center 
+        <TypeFx center='true' 
         words={gallery.description}
         trigger="instant"
         speed={25}

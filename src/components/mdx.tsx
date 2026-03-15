@@ -164,8 +164,8 @@ function createListItem({ children }: { children: ReactNode }) {
 
 function createHR() {
   return (
-    <Row fillWidth horizontal="center">
-      <Line maxWidth="40" />
+    <Row fillWidth horizontal="center" marginY="24">
+      <Line maxWidth={100} />
     </Row>
   );
 }
