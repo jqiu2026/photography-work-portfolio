@@ -31,7 +31,7 @@ const social: Social = [
   {
     name: "Instagram",
     icon: "instagram",
-    link: "https://www.instagram.com/jqiu2026/",
+    link: "https://ig.jerryqiu.com",
     essential: true,
   },
   {
@@ -211,7 +211,7 @@ const about: About = {
           <List>
             <ListItem><SmartLink href="https://instagram.com/stuyaviators" prefixIcon="instagram" selected>@stuyaviators</SmartLink> (April 2024 - Present)</ListItem>
             <ListItem><SmartLink href="https://instagram.com/stuycast" prefixIcon="instagram" selected>@stuycast</SmartLink> (September 2025 - Present)</ListItem>
-            <ListItem><SmartLink href="https://instagram.com/wiki/@seniorsing26" prefixIcon="instagram" selected>@seniorsing26</SmartLink> (Jan 2026 - Mar 2026)</ListItem>
+            <ListItem><SmartLink href="https://instagram.com/seniorsing26" prefixIcon="instagram" selected>@seniorsing26</SmartLink> (Jan 2026 - Mar 2026)</ListItem>
           </List>
           <br />
           Administrator for the <SmartLink href="https://roblox-shipping-lanes.fandom.com/wiki/Shipping_Lanes_Wiki" prefixIcon="link" selected>Roblox Shipping Lanes Wiki</SmartLink>, responsible for organizing, editing, and maintaining content. Ensures accuracy, clarity, and accessibility while fostering an engaged community of users.</>
