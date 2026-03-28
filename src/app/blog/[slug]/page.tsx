@@ -116,7 +116,7 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
             <Row gap="16" vertical="center">
               <Avatar size="s" src={person.avatar} />
               <Text variant="label-default-m" onBackground="brand-weak">
-                {person.name}
+                <SmartLink href="https://ig.jerryqiu.com">{person.name}</SmartLink>
               </Text>
             </Row>
           </Row>

@@ -113,7 +113,7 @@ export default async function Project({
                     ,{" "}
                   </Text>
                 )}
-                <SmartLink href={member.linkedIn}>{member.name}</SmartLink>
+                <SmartLink href={member.instagram}>{member.name}</SmartLink>
               </span>
             ))}
           </Text>
@@ -128,6 +128,13 @@ export default async function Project({
             style={{ width: "100%", maxWidth: "800px", margin: "auto" }}
           />
         )}
+      {post.metadata.video && (
+          <Media
+            src={post.metadata.video}
+            aspectRatio="16/9"
+            radius="xl"
+          />
+      )}
       <Column style={{ margin: "auto" }} as="article" maxWidth="xs">
         <CustomMDX source={post.content} />
       </Column>
