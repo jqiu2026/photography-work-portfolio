@@ -8,12 +8,14 @@ import {
   Heading,
   SmartLink,
   Text,
+  Media
 } from "@once-ui-system/core";
 
 interface ProjectCardProps {
   href: string;
   priority?: boolean;
   images: string[];
+  video?: string;
   title: string;
   content: string;
   description: string;
@@ -24,6 +26,7 @@ interface ProjectCardProps {
 export const ProjectCard: React.FC<ProjectCardProps> = ({
   href,
   images = [],
+  video,
   title,
   content,
   description,
@@ -39,6 +42,13 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
           alt: title,
         }))}
       />
+      {video && (
+        <Media
+          src={video}
+          aspectRatio="16/9"
+          radius="xl"
+        />
+      )}
       <Flex
         s={{ direction: "column" }}
         fillWidth

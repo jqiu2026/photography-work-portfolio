@@ -26,6 +26,16 @@ const nextConfig = {
         hostname: "*.nordangliaeducation.com",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "*.instagram.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "*.ytimg.com",
+        pathname: "/**",
+      },
     ],
   },
   sassOptions: {
