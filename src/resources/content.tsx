@@ -299,9 +299,119 @@ const gallery: Gallery = {
   description: `Curated samples of my photography work.`,
   images: [
     {
-      src: "/images/gallery/horizontal-1.jpg",
-      alt: "image",
+      src: "/images/gallery/10-19-2025-MAKER-FAIRE-CONEY-ISLAND-2025-129 (1).jpg",
+      alt: "Event",
       orientation: "horizontal",
+    },
+    {
+      src: "/images/gallery/10-19-2025-MAKER-FAIRE-CONEY-ISLAND-2025-51 (1).jpg",
+      alt: "Event",
+      orientation: "horizontal",
+    },
+    {
+      src: "/images/gallery/10-19-2025-MAKER-FAIRE-CONEY-ISLAND-2025-98 (1).jpg",
+      alt: "Event",
+      orientation: "horizontal",
+    },
+    {
+      src: "/images/gallery/2026-01-17_Snow-7.jpg",
+      alt: "Street",
+      orientation: "vertical",
+    },
+    {
+      src: "/images/gallery/2026-01-17_Snow-8.jpg",
+      alt: "Street",
+      orientation: "vertical",
+    },
+    {
+      src: "/images/gallery/2026-01-17_Snow-9.jpg",
+      alt: "Macro",
+      orientation: "vertical",
+    },
+    {
+      src: "/images/gallery/2026-03-25_StuyOpenHouse-20.jpg",
+      alt: "Event",
+      orientation: "horizontal",
+    },
+    {
+      src: "/images/gallery/2026-03-25_StuyOpenHouse-30.jpg",
+      alt: "Event",
+      orientation: "horizontal",
+    },
+    {
+      src: "/images/gallery/2026-03-25_StuyOpenHouse-4.jpg",
+      alt: "Event",
+      orientation: "horizontal",
+    },
+    {
+      src: "/images/gallery/2026-03-25_StuyOpenHouse-60.jpg",
+      alt: "Event",
+      orientation: "horizontal",
+    },
+    {
+      src: "/images/gallery/2026-03-25_StuyOpenHouse-9.jpg",
+      alt: "Dance",
+      orientation: "horizontal",
+    },
+    {
+      src: "/images/gallery/GF4A9402-2-3.jpg",
+      alt: "Portrait",
+      orientation: "horizontal",
+    },
+    {
+      src: "/images/gallery/JetBlue-A220-300 (1).jpg",
+      alt: "Aviation",
+      orientation: "horizontal",
+    },
+    {
+      src: "/images/gallery/JetBlue-A321NEO (1).jpg",
+      alt: "Aviation",
+      orientation: "horizontal",
+    },
+    {
+      src: "/images/gallery/_JRY0011.jpg",
+      alt: "Composite",
+      orientation: "horizontal",
+    },
+    {
+      src: "/images/gallery/_JRY0022-Enhanced-NR.jpg",
+      alt: "Theater",
+      orientation: "horizontal",
+    },
+    {
+      src: "/images/gallery/_JRY0126-Enhanced-NR.jpg",
+      alt: "Low Light",
+      orientation: "horizontal",
+    },
+    {
+      src: "/images/gallery/_JRY0159.jpg",
+      alt: "Dance",
+      orientation: "horizontal",
+    },
+    {
+      src: "/images/gallery/_JRY0473.jpg",
+      alt: "Theater",
+      orientation: "horizontal",
+    },
+    {
+      src: "/images/gallery/_JRY0697.jpg",
+      alt: "Theater",
+      orientation: "vertical",
+    },
+    {
+      src: "/images/gallery/_JRY0837.jpg",
+      alt: "Theater",
+      orientation: "horizontal",
+    },
+    {
+      src: "/images/gallery/_JRY1082.jpg",
+      alt: "Theater",
+      orientation: "horizontal",
+    },
+    {
+      src: "/images/gallery/_JRY1117.jpg",
+      alt: "Theater",
+      orientation: "vertical",
     },
   ],
 };
