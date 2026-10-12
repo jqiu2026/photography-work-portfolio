@@ -55,3 +55,14 @@ describe("RenderMarkdown (CMS content is data, never code)", () => {
       expect(html(bad)).not.toContain("Loads youtube");
   });
 });
+
+describe("media: scheme", () => {
+  it("maps a library id to the protected image route and drops other schemes", async () => {
+    const { transformUrl } = await import("@/lib/markdown");
+    const id = "0b7f3d52-6a41-4c8e-9a2b-1f3c5d7e9a01";
+    expect(transformUrl(`media:${id}`)).toBe(`/api/img/${id}?w=1600`);
+    expect(transformUrl("media:../../etc/passwd")).not.toContain("media:");
+    expect(transformUrl("javascript:alert(1)")).toBe("");
+    expect(transformUrl("https://example.com/a.png")).toBe("https://example.com/a.png");
+  });
+});

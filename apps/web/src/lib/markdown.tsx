@@ -1,7 +1,7 @@
 import { EmbedFacade, Link, Prose } from "@placeholder/ui";
 import NextLink from "next/link";
 import type { ReactNode } from "react";
-import ReactMarkdown, { type Components } from "react-markdown";
+import ReactMarkdown, { type Components, defaultUrlTransform } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { visit } from "unist-util-visit";
 
@@ -28,6 +28,15 @@ function remarkShortcodes() {
       },
     );
   };
+}
+
+const MEDIA_SRC = /^media:([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$/i;
+
+/** `media:UUID` points at a library image; it is served by the protected image route (never a raw file URL). */
+export function transformUrl(url: string): string {
+  const m = MEDIA_SRC.exec(url.trim());
+  if (m) return `/api/img/${m[1].toLowerCase()}?w=1600`;
+  return defaultUrlTransform(url);
 }
 
 function safeHref(href: string | undefined) {
@@ -79,7 +88,12 @@ const components: Components = {
 export function RenderMarkdown({ source }: { source: string }) {
   return (
     <Prose>
-      <ReactMarkdown remarkPlugins={[remarkGfm, remarkShortcodes]} components={components} skipHtml>
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm, remarkShortcodes]}
+        components={components}
+        urlTransform={transformUrl}
+        skipHtml
+      >
         {source}
       </ReactMarkdown>
     </Prose>

@@ -164,6 +164,11 @@ export function F({
             {hint}
           </p>
         ) : null}
+        {err ? (
+          <p role="alert" className="adm-bad" style={{ marginTop: "0.3rem", fontSize: "var(--ph-text-sm)" }}>
+            {err}
+          </p>
+        ) : null}
       </div>
     );
   return (

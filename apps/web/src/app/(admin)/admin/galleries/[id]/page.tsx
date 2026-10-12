@@ -94,6 +94,7 @@ export default async function EditGallery({ params }: { params: Promise<{ id: st
             Images
           </h2>
           <GalleryEditor
+            key={(data?.items ?? []).map((i) => i.id).join(",")}
             galleryId={g.id}
             coverId={g.coverMediaId}
             items={(data?.items ?? []).map((i) => ({

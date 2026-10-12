@@ -47,7 +47,7 @@ test.describe("galleries", () => {
         .first()
         .getByLabel(/^Caption for/),
     ).toHaveValue("First light");
-    await expect(page.locator(".adm-gitems li").first()).toHaveAttribute("data-hidden", "");
+    await expect(page.locator(".adm-gitems li").first()).toHaveAttribute("data-hidden", "true");
 
     // protection level is saved
     await page.getByLabel("Image protection").selectOption("strict");
