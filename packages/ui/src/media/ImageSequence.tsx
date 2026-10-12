@@ -127,8 +127,7 @@ export function ImageSequence({
     <canvas
       ref={canvas}
       className={className}
-      role="img"
-      aria-label={alt}
+      {...(alt ? { role: "img", "aria-label": alt } : { "aria-hidden": true })}
       style={{ width: "100%", height: "100%", display: "block" }}
     />
   );

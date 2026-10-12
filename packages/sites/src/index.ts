@@ -61,12 +61,17 @@ export function getSite(id: SiteId): SiteInfo {
 }
 
 /**
- * Link path for a page of a site. On the hub app, music and flying live under /music and /flying in dev
- * (path mode); in production they are served from their own hostname (host mode) and paths are root-relative.
+ * Link path for a page of a site. When a site shares the hub's origin (dev: localhost:3000/music) its pages
+ * live under /music and /flying (path mode); when it has its own origin (production: music.jerryqiu.com)
+ * paths are root-relative (host mode) and proxy.ts rewrites them.
  */
 export function sitePath(id: SiteId, path = "/"): string {
-  const hostMode = process.env.NODE_ENV === "production" || !!process.env.NEXT_PUBLIC_HOST_MODE;
-  const prefix = id === "music" || id === "flying" ? (hostMode ? "" : `/${id}`) : "";
+  const prefix =
+    id === "music" || id === "flying"
+      ? new URL(getSite(id).url).origin === new URL(getSite("hub").url).origin
+        ? `/${id}`
+        : ""
+      : "";
   const p = path === "/" ? "" : path;
   return `${prefix}${p}` || "/";
 }

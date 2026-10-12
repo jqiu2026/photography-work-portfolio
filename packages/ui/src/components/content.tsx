@@ -58,7 +58,7 @@ export function Quote({ children, cite }: { children: ReactNode; cite?: string }
 
 export function CodeBlock({ code, language }: { code: string; language?: string }) {
   return (
-    <pre className="ph-code" data-language={language}>
+    <pre className="ph-code" data-language={language} tabIndex={0} aria-label={language ? `${language} code` : "Code"}>
       <code>{code}</code>
     </pre>
   );

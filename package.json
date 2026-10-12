@@ -13,13 +13,20 @@
     "test": "pnpm -r --if-present test",
     "lint": "biome check .",
     "format": "biome format --write .",
-    "typecheck": "pnpm -r --if-present typecheck"
+    "typecheck": "pnpm -r --if-present typecheck",
+    "test:e2e": "NEXT_PUBLIC_HUB_URL=http://localhost:4000 NEXT_PUBLIC_PHOTOS_URL=http://localhost:4002 NEXT_PUBLIC_MUSIC_URL=http://localhost:4000/music NEXT_PUBLIC_FLYING_URL=http://localhost:4000/flying pnpm build && playwright test"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@biomejs/biome": "^1.9.4",
     "@playwright/test": "1.64.0",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.7",
     "concurrently": "^10.0.6",
+    "jsdom": "^30.1.2",
     "sharp": "^0.35.5",
-    "typescript": "~6.0.3"
+    "typescript": "~6.0.3",
+    "vitest": "5.0.3"
   }
 }

@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, useInView } from "motion/react";
-import { useEffect, useRef, useState, type ElementType, type ReactNode } from "react";
+import { motion, useInView, useMotionTemplate, useScroll, useTransform } from "motion/react";
+import { useEffect, useRef, useState, type ElementType, type ReactNode, type RefObject } from "react";
 import { motion as tokens } from "../tokens";
 import { useCalm } from "./core";
 
@@ -104,7 +104,10 @@ export function CountUp({
   );
 }
 
-/** Words of a paragraph light up as it scrolls through the viewport. */
+/**
+ * Words of a paragraph light up as it scrolls through the viewport. The dim state is the muted text colour
+ * (AA contrast), and words blend to the full text colour, so the text is always readable.
+ */
 export function ScrollHighlight({ text, className }: { text: string; className?: string }) {
   const calm = useCalm();
   const ref = useRef<HTMLParagraphElement>(null);
@@ -118,8 +121,6 @@ export function ScrollHighlight({ text, className }: { text: string; className?:
   );
 }
 
-import { useScroll, useTransform } from "motion/react";
-import type { RefObject } from "react";
 function HighlightWord({
   word,
   i,
@@ -129,6 +130,7 @@ function HighlightWord({
 }: { word: string; i: number; n: number; target: RefObject<HTMLElement | null>; calm: boolean }) {
   const { scrollYProgress } = useScroll({ target, offset: ["start 0.85", "end 0.35"] });
   const start = i / n;
-  const opacity = useTransform(scrollYProgress, [start, Math.min(1, start + 1.5 / n)], [0.25, 1]);
-  return <motion.span style={calm ? undefined : { opacity, color: "var(--ph-text)" }}>{word} </motion.span>;
+  const pct = useTransform(scrollYProgress, [start, Math.min(1, start + 1.5 / n)], [0, 100]);
+  const color = useMotionTemplate`color-mix(in srgb, var(--ph-text) ${pct}%, var(--ph-muted))`;
+  return <motion.span style={calm ? undefined : { color }}>{word} </motion.span>;
 }

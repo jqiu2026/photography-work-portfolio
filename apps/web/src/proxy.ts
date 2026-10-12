@@ -32,6 +32,8 @@ export function proxy(request: NextRequest) {
 
   if (process.env.NODE_ENV === "production") {
     for (const s of ["music", "flying"] as const) {
+      // Same origin as the hub (path mode, e.g. test builds): nothing to redirect to.
+      if (new URL(SUBS[s]).origin === new URL(HUB_URL).origin) continue;
       if (pathname === `/${s}` || pathname.startsWith(`/${s}/`)) {
         return NextResponse.redirect(
           new URL(`${SUBS[s].replace(/\/$/, "")}${pathname.slice(s.length + 1)}${request.nextUrl.search}`, HUB_URL),
