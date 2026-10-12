@@ -23,7 +23,7 @@
   --hl-text-2xl: clamp(1.5rem, 1.25rem + 1vw, 2rem);
   --hl-text-3xl: clamp(2rem, 1.5rem + 2vw, 3rem);
   --hl-text-4xl: clamp(2.5rem, 1.6rem + 3.6vw, 4.5rem);
-  --hl-text-display: clamp(3rem, 1.2rem + 9vw, 9.5rem);
+  --hl-text-display: clamp(2.1rem, 0.5rem + 7.6vw, 9.5rem);
 
   /* Space, 4px base */
   --hl-space-1: 0.25rem;

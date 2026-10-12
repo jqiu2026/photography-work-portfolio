@@ -42,3 +42,7 @@
 .hl-root :where(h1, h2, .hl-heading--display) {
   font-variation-settings: "wdth" calc(var(--hl-wdth) + var(--hl-wdth-boost));
 }
+.hl-root :where(h1, h2, h3, .hl-heading) {
+  overflow-wrap: break-word;
+  hyphens: manual;
+}
