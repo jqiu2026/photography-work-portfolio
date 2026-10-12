@@ -2,11 +2,11 @@
 
 Living status. Update at every milestone. Newest entries at the top of "Log".
 
-**Branch:** `feat/custom-ui-cms`  **Live view:** http://localhost:3000 (`/_progress` once built)
-**Current phase:** 1  **Current milestone:** M1  **State:** not started
+**Branch:** `feat/custom-ui-cms`  **Live view:** http://localhost:3000/_progress
+**Current phase:** 1  **Current milestone:** M2  **State:** M1 done (component gallery on /_progress arrives with M3)
 
 ## Phase 1: UI package and redesign
-- [ ] M1 pnpm workspace (`apps/web`, `apps/photos`, `apps/docs`, `packages/ui`, `packages/sites`, `packages/config`), dev on :3000/:3002/:3001, `/_progress` live page
+- [x] M1 pnpm workspace (`apps/web`, `apps/photos`, `apps/docs`, `packages/ui`, `packages/sites`, `packages/config`), dev on :3000/:3002/:3001, `/_progress` live page
 - [ ] M2 Once UI audit, design exploration (`/_design`, 3 directions), design language doc (Squarespace-grade, not StuyAviators), tokens, site theme presets
 - [ ] M3 Foundations, forms, overlays, profile/site components (ProfileHeader, SocialLinks, SiteSwitcher...) + docs site skeleton
 - [ ] M4 Motion + media components
@@ -35,4 +35,5 @@ Living status. Update at every milestone. Newest entries at the top of "Log".
 (none yet; see QUESTIONS.md)
 
 ## Log
+- 2026-10-12: M1 done. pnpm workspace (apps/web via git mv, photos+docs placeholders, packages/ui, sites registry, config). Pins: Once UI 1.5.6, react-icons 5.5.0 (newer versions break the old site), Next 16.3.8, React 19.2.8. Dev-only `/_progress` (RouteGuard lets `/_*` through in dev). Playwright + `scripts/shot.mjs`. Build passes. Hub on :3000 after owner freed the port.
 - 2026-10-12: Planning docs written (`docs/project/`), then revised: hub + subdomain sites (photos, music, flying), Squarespace-grade non-StuyAviators design, profile-style home, legal doc. No code changes yet.

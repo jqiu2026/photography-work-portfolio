@@ -28,6 +28,8 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
 
       const checkRouteEnabled = () => {
         if (!pathname) return false;
+        // dev-only pages (/_progress, /_design); they 404 server-side in production
+        if (process.env.NODE_ENV !== "production" && pathname.startsWith("/_")) return true;
 
         if (pathname in routes) {
           return routes[pathname as keyof typeof routes];

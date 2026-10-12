@@ -20,3 +20,5 @@ Never block on these. Each has a default already being used. Append new ones at 
 | Q14 | Single sign-in across subdomains via `.jerryqiu.com` cookie? | Yes, for staff only, production only | Host-only cookies per site (separate logins) |
 | Q15 | Vercel projects and domains for `jerryqiu.com`, `music.`, `flying.`, `photos.` | Documented checklist in `docs/project/DEPLOYMENT.md`, nothing created | Owner creates projects and DNS |
 | Q16 | Should `music.` and `flying.` be separate Vercel projects instead of served by the hub app? | One app with host routing | Split later; code is route-grouped to make it easy |
+| Q17 | Pinned Once UI 1.5.6 and react-icons 5.5.0 (newer versions break the old site) | Pinned until Once UI is removed in M7 | none |
+
