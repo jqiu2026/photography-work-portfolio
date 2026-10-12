@@ -86,16 +86,14 @@ export async function ingestImage(opts: {
     for (const o of old?.derivatives ?? []) if (!keep.has(o.key)) await opts.publicStore.delete(o.key);
     return { id, similarTo, replaced: true };
   }
-  await opts.db
-    .insert(schema.media)
-    .values({
-      id,
-      ...row,
-      alt: opts.alt ?? null,
-      createdBy: opts.user,
-      reviewStatus: opts.defaultReview ? "needs_review" : "ok",
-      containsPeople: Boolean(opts.defaultReview),
-    });
+  await opts.db.insert(schema.media).values({
+    id,
+    ...row,
+    alt: opts.alt ?? null,
+    createdBy: opts.user,
+    reviewStatus: opts.defaultReview ? "needs_review" : "ok",
+    containsPeople: Boolean(opts.defaultReview),
+  });
   return { id, similarTo, replaced: false };
 }
 

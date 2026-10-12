@@ -47,13 +47,11 @@ test.describe("media library", () => {
   test("an HTML file renamed .jpg is refused when processed, and nothing is added", async ({ page }) => {
     await page.goto("/admin/media", { waitUntil: "networkidle" });
     const before = await page.locator(".adm-media li").count();
-    await page
-      .getByLabel("Upload images")
-      .setInputFiles({
-        name: `evil-${uid}.jpg`,
-        mimeType: "image/jpeg",
-        buffer: Buffer.from("<html><script>alert(1)</script></html>"),
-      });
+    await page.getByLabel("Upload images").setInputFiles({
+      name: `evil-${uid}.jpg`,
+      mimeType: "image/jpeg",
+      buffer: Buffer.from("<html><script>alert(1)</script></html>"),
+    });
     await expect(page.getByText(/isn't a readable image|Only JPEG/)).toBeVisible({ timeout: 30_000 });
     await page.reload();
     expect(await page.locator(".adm-media li").count()).toBe(before);
@@ -61,13 +59,11 @@ test.describe("media library", () => {
 
   test("an SVG is refused before it is even uploaded", async ({ page }) => {
     await page.goto("/admin/media", { waitUntil: "networkidle" });
-    await page
-      .getByLabel("Upload images")
-      .setInputFiles({
-        name: "x.svg",
-        mimeType: "image/svg+xml",
-        buffer: Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" onload="alert(1)"/>'),
-      });
+    await page.getByLabel("Upload images").setInputFiles({
+      name: "x.svg",
+      mimeType: "image/svg+xml",
+      buffer: Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" onload="alert(1)"/>'),
+    });
     await expect(page.getByText(/Unsupported file/)).toBeVisible({ timeout: 15_000 });
   });
 
