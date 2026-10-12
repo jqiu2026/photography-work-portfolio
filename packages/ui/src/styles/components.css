@@ -1406,7 +1406,7 @@
   overflow: hidden;
 }
 .ph-gallery li .ph-img img {
-  transition: opacity 0.7s var(--ph-ease), transform 1.2s var(--ph-ease);
+  transition: transform 1.2s var(--ph-ease);
 }
 .ph-gallery li:hover .ph-img img {
   transform: scale(1.03);
@@ -1646,4 +1646,18 @@
   border-radius: 50%;
   background: #fff;
   box-shadow: 0 2px 12px rgb(0 0 0 / 0.35);
+}
+
+.ph-switcher-wrap {
+  position: relative;
+}
+.ph-switcher__panel {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  z-index: 80;
+  min-width: 16rem;
+}
+.ph-header--over .ph-switcher__panel {
+  color: var(--ph-text);
 }

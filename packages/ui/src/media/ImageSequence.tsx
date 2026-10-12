@@ -54,7 +54,7 @@ export function ImageSequence({
     );
   };
 
-  // Only start downloading frames when the sequence is within ~1.5 screens of the viewport.
+  // Only start downloading frames when the sequence is within ~0.6 screens of the viewport.
   // biome-ignore lint/correctness/useExhaustiveDependencies: re-observe when the canvas is (un)mounted by lite/calm
   useEffect(() => {
     const el = canvas.current;
@@ -62,7 +62,7 @@ export function ImageSequence({
       setNear(true);
       return;
     }
-    const io = new IntersectionObserver(([e]) => e.isIntersecting && setNear(true), { rootMargin: "150% 0px" });
+    const io = new IntersectionObserver(([e]) => e.isIntersecting && setNear(true), { rootMargin: "60% 0px" });
     io.observe(el);
     return () => io.disconnect();
   }, [lite, calm]);

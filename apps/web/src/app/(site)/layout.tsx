@@ -1,7 +1,7 @@
 import "@placeholder/ui/styles.css";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { ThemeProvider, ThemeScript, TooltipProvider } from "@placeholder/ui";
+import { ThemeProvider, ThemeScript } from "@placeholder/ui";
 import { SmoothScroll } from "@placeholder/ui/motion";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
@@ -30,9 +30,7 @@ export default function SiteLayout({ children }: { children: ReactNode }) {
       </head>
       <body className="ph-root">
         <ThemeProvider preset="hub">
-          <TooltipProvider>
-            <SmoothScroll>{children}</SmoothScroll>
-          </TooltipProvider>
+          <SmoothScroll>{children}</SmoothScroll>
         </ThemeProvider>
         <Analytics />
         <SpeedInsights />

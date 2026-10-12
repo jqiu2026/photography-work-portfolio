@@ -46,3 +46,18 @@ test("keyboard: lightbox opens, navigates and closes", async ({ page }) => {
   await page.keyboard.press("Escape");
   await expect(dialog).toBeHidden();
 });
+
+test("mobile menu: opens as a dialog, lists the pages, closes with Escape and returns focus", async ({ browser }) => {
+  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  const page = await ctx.newPage();
+  await page.goto(`${hub}/`, { waitUntil: "networkidle" });
+  const burger = page.getByRole("button", { name: "Open menu" });
+  await burger.click();
+  const dialog = page.getByRole("dialog", { name: "Menu" });
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByRole("link", { name: "Writing" })).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+  await expect(burger).toBeFocused();
+  await ctx.close();
+});

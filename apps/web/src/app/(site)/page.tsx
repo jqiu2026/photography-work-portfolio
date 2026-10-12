@@ -66,31 +66,40 @@ export default function Home() {
   };
 
   return (
-    <SiteShell>
+    <SiteShell transparentTop={false}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <div className="home-hero">
+      <header className="home-hero">
+        <Container className="home-hero__head">
+          <Eyebrow>
+            {person.name} · {person.location}
+          </Eyebrow>
+          <RevealText
+            as="h1"
+            text="Hello, I'm Jerry."
+            className="ph-heading ph-heading--display home-hero__title"
+            delay={0.1}
+          />
+          <Text size="xl" tone="muted" className="home-hero__lede">
+            {person.headline}
+          </Text>
+        </Container>
         <ShaderHero
           src={heroSrc}
           srcSet={heroFiles.map((f) => `${f.src} ${f.width}w`).join(", ")}
           sizes="100vw"
           alt="A person seen from behind, standing next to a video camera on a tripod."
-          className="home-hero__frame"
+          className="home-hero__band"
           intensity={1}
-        >
-          <div className="home-hero__inner">
-            <Eyebrow>
-              {person.name} · {person.location}
-            </Eyebrow>
-            <RevealText as="h1" text="Hello, I'm Jerry." className="ph-heading ph-heading--display" delay={0.15} />
-            <div className="home-hero__meta">
-              <span>Photograph by {person.name}</span>
-              <span className="home-scroll" aria-hidden>
-                Scroll ↓
-              </span>
-            </div>
+        />
+        <Container>
+          <div className="home-hero__meta">
+            <span>Photograph by {person.name}. Move your pointer over it.</span>
+            <span className="home-scroll" aria-hidden>
+              Scroll ↓
+            </span>
           </div>
-        </ShaderHero>
-      </div>
+        </Container>
+      </header>
 
       <Section className="home-profile" as="section">
         <Container>

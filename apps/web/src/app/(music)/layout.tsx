@@ -1,5 +1,5 @@
 import "@placeholder/ui/styles.css";
-import { ThemeProvider, ThemeScript, TooltipProvider } from "@placeholder/ui";
+import { ThemeProvider, ThemeScript } from "@placeholder/ui";
 import { SmoothScroll } from "@placeholder/ui/motion";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -24,9 +24,7 @@ export default function MusicLayout({ children }: { children: ReactNode }) {
       </head>
       <body className="ph-root">
         <ThemeProvider preset="music">
-          <TooltipProvider>
-            <SmoothScroll>{children}</SmoothScroll>
-          </TooltipProvider>
+          <SmoothScroll>{children}</SmoothScroll>
         </ThemeProvider>
         <Analytics />
         <SpeedInsights />

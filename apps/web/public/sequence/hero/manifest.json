@@ -1,6 +1,6 @@
 {
  "count": 96,
- "width": 1280,
- "height": 720,
+ "width": 1024,
+ "height": 576,
  "pattern": "frame-%03d.webp"
 }

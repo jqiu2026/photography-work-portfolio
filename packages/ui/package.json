@@ -1,7 +1,6 @@
 {
   "name": "@placeholder/ui",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.1.0",
   "type": "module",
   "license": "MIT",
   "main": "./src/index.ts",
@@ -16,7 +15,9 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "build": "tsup && tsc -p tsconfig.build.json && node scripts/postbuild.mjs",
+    "prepack": "pnpm run build"
   },
   "peerDependencies": {
     "react": "^19",
@@ -26,6 +27,7 @@
     "@jerryqiu/config": "workspace:*",
     "@types/react": "^19.2.0",
     "react": "19.2.8",
+    "tsup": "^8.5.1",
     "typescript": "~6.0.3"
   },
   "dependencies": {
@@ -37,5 +39,46 @@
     "radix-ui": "^1.7.0",
     "simple-icons": "^16.34.0"
   },
-  "sideEffects": ["**/*.css"]
+  "sideEffects": ["**/*.css"],
+  "description": "A small, calm React UI kit: neutral design tokens, quiet components, and an optional cinematic motion layer. (Placeholder name.)",
+  "keywords": ["react", "ui", "design-system", "motion", "photography", "portfolio", "webgl", "accessibility"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TODO-owner/TODO-repo.git",
+    "directory": "packages/ui"
+  },
+  "homepage": "https://TODO-owner.example/docs",
+  "bugs": {
+    "url": "https://github.com/TODO-owner/TODO-repo/issues"
+  },
+  "author": "TODO(owner): copyright holder",
+  "files": ["dist", "README.md", "LICENSE"],
+  "publishConfig": {
+    "access": "public",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
+      },
+      "./motion": {
+        "types": "./dist/motion/index.d.ts",
+        "import": "./dist/motion/index.js"
+      },
+      "./media": {
+        "types": "./dist/media/index.d.ts",
+        "import": "./dist/media/index.js"
+      },
+      "./webgl": {
+        "types": "./dist/webgl/index.d.ts",
+        "import": "./dist/webgl/index.js"
+      },
+      "./tokens": {
+        "types": "./dist/tokens.d.ts",
+        "import": "./dist/tokens.js"
+      },
+      "./styles.css": "./dist/styles.css"
+    }
+  }
 }

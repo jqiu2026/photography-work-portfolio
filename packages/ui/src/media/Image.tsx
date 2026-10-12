@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import type { CSSProperties } from "react";
 import { cx } from "../components/cx";
 
 /** Shape written by scripts/optimize-images.mjs into manifest.json. */
@@ -30,13 +30,8 @@ export type ImageProps = {
 
 /** Framework-agnostic responsive image: srcset, dominant-colour placeholder, blur-up, no layout shift. */
 export function Image({ asset, alt, sizes = "100vw", priority, fit = "cover", fill, className, style }: ImageProps) {
-  const [loaded, setLoaded] = useState(false);
-  const ref = useRef<HTMLImageElement>(null);
   const sorted = [...asset.files].sort((a, b) => a.width - b.width);
   const largest = sorted[sorted.length - 1];
-  useEffect(() => {
-    if (ref.current?.complete && ref.current.naturalWidth > 0) setLoaded(true);
-  }, []);
   return (
     <span
       className={cx("ph-img", fill && "ph-img--fill", className)}
@@ -48,7 +43,6 @@ export function Image({ asset, alt, sizes = "100vw", priority, fit = "cover", fi
       }}
     >
       <img
-        ref={ref}
         src={largest.src}
         srcSet={sorted.map((f) => `${f.src} ${f.width}w`).join(", ")}
         sizes={sizes}
@@ -58,8 +52,7 @@ export function Image({ asset, alt, sizes = "100vw", priority, fit = "cover", fi
         loading={priority ? "eager" : "lazy"}
         decoding={priority ? "sync" : "async"}
         {...(priority ? { fetchPriority: "high" as const } : {})}
-        onLoad={() => setLoaded(true)}
-        style={{ objectFit: fit, opacity: loaded ? 1 : 0 }}
+        style={{ objectFit: fit }}
       />
     </span>
   );

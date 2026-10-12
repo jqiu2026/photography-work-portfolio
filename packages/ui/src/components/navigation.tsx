@@ -1,11 +1,23 @@
 "use client";
 
 import { ChevronDown, Menu as MenuIcon, Moon, Sun } from "lucide-react";
-import { useEffect, useState, type CSSProperties, type ElementType, type ReactNode } from "react";
+import {
+  Suspense,
+  lazy,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type CSSProperties,
+  type ElementType,
+  type ReactNode,
+} from "react";
 import { cx } from "./cx";
 import { IconButton } from "./Button";
-import { Popover, Sheet } from "./overlays";
 import { useTheme } from "./ThemeProvider";
+
+// The mobile menu sheet pulls in Radix Dialog; load it only when the menu is opened.
+const LazySheet = lazy(() => import("./overlays").then((m) => ({ default: m.Sheet })));
 
 export type NavLink = { label: string; href: string; current?: boolean };
 export type SiteEntry = {
@@ -36,37 +48,67 @@ export function ThemeToggle() {
   );
 }
 
-/** Quiet wordmark with a chevron that lists every site in the family. */
+/** Quiet wordmark with a chevron that lists every site in the family (a simple disclosure, no overlay library). */
 export function SiteSwitcher({
   sites,
   currentId,
   label = "Jerry Qiu",
 }: { sites: SiteEntry[]; currentId: string; label?: string }) {
-  return (
-    <Popover
-      trigger={
-        <button type="button" className="ph-switcher">
-          <span>{label}</span>
-          <ChevronDown size={14} aria-hidden />
-          <span className="ph-sr-only">Switch site</span>
-        </button>
+  const [open, setOpen] = useState(false);
+  const wrap = useRef<HTMLDivElement>(null);
+  const btn = useRef<HTMLButtonElement>(null);
+  const id = useId();
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e: PointerEvent) => {
+      if (!wrap.current?.contains(e.target as Node)) setOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setOpen(false);
+        btn.current?.focus();
       }
-    >
-      <nav aria-label="All sites" className="ph-switcher__list">
-        {sites.map((s) => (
-          <a
-            key={s.id}
-            href={s.url}
-            aria-current={s.id === currentId ? "page" : undefined}
-            className="ph-switcher__item"
-            style={s.color ? ({ "--site": `var(--ph-${s.color})` } as CSSProperties) : undefined}
-          >
-            <strong>{s.name}</strong>
-            <span>{s.description}</span>
-          </a>
-        ))}
-      </nav>
-    </Popover>
+    };
+    document.addEventListener("pointerdown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("pointerdown", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+  return (
+    <div ref={wrap} className="ph-switcher-wrap">
+      <button
+        ref={btn}
+        type="button"
+        className="ph-switcher"
+        aria-expanded={open}
+        aria-controls={open ? id : undefined}
+        onClick={() => setOpen((o) => !o)}
+      >
+        <span>{label}</span>
+        <ChevronDown size={14} aria-hidden />
+        <span className="ph-sr-only">Switch site</span>
+      </button>
+      {open ? (
+        <nav id={id} aria-label="All sites" className="ph-popover ph-switcher__panel">
+          <div className="ph-switcher__list">
+            {sites.map((s) => (
+              <a
+                key={s.id}
+                href={s.url}
+                aria-current={s.id === currentId ? "page" : undefined}
+                className="ph-switcher__item"
+                style={s.color ? ({ "--site": `var(--ph-${s.color})` } as CSSProperties) : undefined}
+              >
+                <strong>{s.name}</strong>
+                <span>{s.description}</span>
+              </a>
+            ))}
+          </div>
+        </nav>
+      ) : null}
+    </div>
   );
 }
 
@@ -79,6 +121,8 @@ export function Header({
   transparentTop = true,
 }: { brand: ReactNode; links: NavLink[]; actions?: ReactNode; linkAs?: ElementType; transparentTop?: boolean }) {
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const burger = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     const on = () => setScrolled(window.scrollY > 24);
     on();
@@ -98,23 +142,38 @@ export function Header({
         </nav>
         <div className="ph-header__actions">
           {actions}
-          <Sheet
-            title="Menu"
-            side="right"
-            trigger={
-              <IconButton label="Open menu" className="ph-header__burger">
-                <MenuIcon size={20} />
-              </IconButton>
-            }
+          <IconButton
+            ref={burger}
+            label="Open menu"
+            className="ph-header__burger"
+            aria-haspopup="dialog"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen(true)}
           >
-            <nav aria-label="Mobile" className="ph-mobilenav">
-              {links.map((l) => (
-                <a key={l.label} href={l.href} aria-current={l.current ? "page" : undefined}>
-                  {l.label}
-                </a>
-              ))}
-            </nav>
-          </Sheet>
+            <MenuIcon size={20} />
+          </IconButton>
+          {menuOpen ? (
+            <Suspense fallback={null}>
+              <LazySheet
+                title="Menu"
+                side="right"
+                open
+                onOpenChange={(o) => {
+                  setMenuOpen(o);
+                  // No Radix trigger here, so return focus to the menu button ourselves.
+                  if (!o) requestAnimationFrame(() => burger.current?.focus());
+                }}
+              >
+                <nav aria-label="Mobile" className="ph-mobilenav">
+                  {links.map((l) => (
+                    <a key={l.label} href={l.href} aria-current={l.current ? "page" : undefined}>
+                      {l.label}
+                    </a>
+                  ))}
+                </nav>
+              </LazySheet>
+            </Suspense>
+          ) : null}
         </div>
       </div>
     </header>

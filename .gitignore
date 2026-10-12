@@ -43,3 +43,7 @@ next-env.d.ts
 **/dist/
 .env*.local
 .env
+
+# example build artefacts
+examples/*/vendor/
+examples/*/dist/

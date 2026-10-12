@@ -54,7 +54,7 @@
   aspect-ratio: auto !important;
 }
 .cat-card img {
-  transition: opacity .7s var(--ph-ease), transform 1.4s var(--ph-ease);
+  transition: transform 1.4s var(--ph-ease);
 }
 .cat-card:hover img {
   transform: scale(1.05);
