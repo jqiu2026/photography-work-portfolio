@@ -53,3 +53,6 @@ The owner wants the whole vision designed now and "working as expected" locally;
 - Photographs are never degraded by effects; image protection semantics in [05](05-security-and-image-protection.md) stay.
 - Real facts only. Privacy for flying: no live location, no tail numbers by default, nobody identifiable without permission ([11](11-legal-and-compliance.md)).
 - The UI package is original (not derived from Once UI or any existing kit), has its own name (default proposal: **Halation UI**, chosen by the owner; see Q33), and is prepared to be sold: the owner does the publishing and selling.
+
+## Status (2026-10-12)
+Built in Phase 2.5; see [PHASE-2.5-SUMMARY.md](PHASE-2.5-SUMMARY.md) for what exists, what is mocked and the honest gaps.

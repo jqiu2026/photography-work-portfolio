@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Rules for AI agents and contributors. Note: the UI package rules below describe the Phase 1 package and are rewritten when the new original UI system lands (Phase 2.5). Project plan, status and hard rules live in `docs/project/` (start with `README.md`, then `08-operating-rules.md` and `PROGRESS.md`). `CLAUDE.md` repeats the hard rules.
+Rules for AI agents and contributors. Project plan, status and hard rules live in `docs/project/` (start with `README.md`, then `08-operating-rules.md` and `PROGRESS.md`). `CLAUDE.md` repeats the hard rules.
 
 ## Hard rules (summary; the docs are authoritative)
 
@@ -12,17 +12,19 @@ Rules for AI agents and contributors. Note: the UI package rules below describe 
 
 ## Repo layout
 
-`apps/web` hub + music + flying (:3000), `apps/photos` (:3002), `apps/docs` UI docs (:3001), `packages/ui` (`@halation/ui`, open source, MIT), `packages/sites` site registry and theme presets, `packages/config` shared tsconfig.
+`apps/web` hub + music + flying (:3000), `apps/photos` photography and studio (:3002), `apps/docs` UI docs, `packages/ui` (`@halation/ui`, **Halation UI**: the original design system; licence undecided, Q32), `packages/sites` site registry and shared chrome (`SiteShell`), `packages/render` (Markdown, MDX, project blocks), `packages/mocks` (labelled local mocks of Phase 3 services), plus `db`, `auth`, `storage`, `protect`, `media`, `inbox`, `shootproof`, `config`.
 
-## Working with the UI package (`packages/ui`)
+## Working with the UI package (`packages/ui`, Halation UI)
 
-- Styling is plain CSS with tokens: `--hl-*` variables (`src/styles/tokens.css`, `themes.css`) and `ph-*` classes (`components.css`). No Tailwind, no CSS-in-JS. Never hard-code colours in apps; use tokens. Themes switch on `[data-theme]` and `[data-preset]`.
-- Compose pages from the package components (`Container`, `Stack`, `Row`, `Grid`, `Section`, `Heading`, `Text`, `Button`, ...). Add a new component to the package when two pages need it; keep it generic (no Jerry-specific content in `packages/ui`).
-- Subpath exports: `@halation/ui` (primitives), `/motion`, `/media`, `/webgl`, `/styles.css`, `/tokens`. Heavy code (ogl, Lenis, image sequences) stays out of the main entry.
-- Every motion component must render a complete static state under `prefers-reduced-motion` (use `useCalm()`).
-- Accessibility is an acceptance criterion: visible focus, 44px targets, labelled controls, AA contrast, keyboard use.
-- Use `motion` tokens from `src/tokens.ts` (one easing curve, one spring); do not invent per-component curves.
-- Fonts are provided by the app through `next/font` variables: `--font-sans` (Instrument Sans) and `--font-mono` (DM Mono); one sans family, no serif. Colour is neutral grayscale plus one accent per site; keep accents to small dashes.
+- Prefix `hl` (`--hl-*` variables, `hl-*` classes), set by `brand.config.json` and `pnpm rename`. Handwritten CSS in `src/styles/` (`tokens.css`, `themes.css`, `base.css`, `components.css`, `stage.css`). No Tailwind, no CSS-in-JS. Never hard-code colours in apps; use tokens (Night, Day, Cinema; world accents blue/red/amber/green). `scripts/contrast.mjs` must stay green.
+- The idea is **Flow** (docs/project/redesign-brief.md, design-language.md): one persistent stage (`@halation/ui/stage`: `StageProvider`, `Scene`, `IndexControl`, `Condense`/`Streak`/`Settle`, `Threshold`), one motion language (`--hl-ease-glide|pour|drain`, `--hl-dur-*`, springs `settle` and `droplet`), quality tiers (full, reduced, static) from `src/stage/tier.ts`. **No navbar anywhere**: the floating index control, a skip link and landmarks.
+- Content is always real DOM; the stage is decoration. Anything hidden for a reveal must be gated by `html.hl-js` (set by `ThemeScript`, never under reduced motion, Save-Data or no JS). Every effect needs a static equivalent and a test. Heavy code (ogl, the fluid renderer) is lazy-loaded after first paint.
+- Subpath exports: `@halation/ui` (primitives), `/stage`, `/motion`, `/media`, `/webgl`, `/styles.css`, `/tokens`. Do not pass functions from server components to client components (use declarative props such as `param={[from, to]}`).
+- Every exported component needs a docs entry in `apps/docs/src/content/components.ts` (enforced by `apps/docs/test/coverage.test.ts`; uppercase non-component exports break it, so keep helpers lowercase or unexported).
+- Fonts come from the app through `next/font` variables `--font-display` (Anybody), `--font-sans` (Hanken Grotesk), `--font-voice` (Newsreader), `--font-mono` (Martian Mono); all SIL OFL 1.1, licence texts in `packages/ui/licenses/fonts/`.
+- Accessibility is an acceptance criterion: visible focus, 44px targets, labelled controls, AA contrast, keyboard use, no bare-letter shortcuts.
+- Cross-site rule: photography, music and flying contain no reference to another family site; their footer carries the single `jerryqiu.com` return button (`data-return-to-hub`). `e2e/cross-site.spec.ts` enforces it.
+- Mocks (`packages/mocks`) are labelled `MOCK` in the UI, behind interfaces, and 404 in production builds (`mocksEnabled()`); never add live keys or network calls to them.
 - Images: run `node scripts/optimize-images.mjs <src> <out> <prefix>`; use `Image` with the manifest entry. Never delete or overwrite original photos.
 
 ## Next.js 16
@@ -31,4 +33,4 @@ This is not the Next.js you may remember. Read `apps/web/node_modules/next/dist/
 
 ## Checks before committing
 
-`pnpm build && pnpm typecheck && pnpm lint` (and `pnpm test` once tests exist). UI work: take Playwright screenshots (`node scripts/shot.mjs <url> <out.png> [width] [dark|light] [--scroll] [--reduce]`), look at them, fix what is off.
+`pnpm lint && pnpm typecheck && pnpm test`, then `pnpm test:e2e` (production builds on :4000-4002) and `pnpm test:admin` (dev servers and a throwaway database). UI work: take Playwright screenshots (`node scripts/shot.mjs <url> <out.png> [width] [dark|light] [--scroll] [--reduce]`), look at them, fix what is off.

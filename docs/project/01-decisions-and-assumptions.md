@@ -87,3 +87,13 @@ The owner will not be around while this runs. **Never block on a question.** Use
 
 Earlier decisions A29 (nav/site switcher), the Phase 1 palette/type decisions, and the "no e-commerce on the hub" wording are superseded where they conflict.
 
+## Phase 2.5 build decisions (R-series, 2026-10-12)
+
+| # | Topic | Decision |
+|---|---|---|
+| R1 | Split | Projects are `site: "photos"` (migration `0001_projects_to_photos`); hub `/work` 301s to `NEXT_PUBLIC_PHOTOS_URL`; shared `@jerryqiu/render` package. |
+| R2 | Package | Halation UI (`@halation/ui`, prefix `hl`); own fluid solver on `ogl`; fonts Anybody, Hanken Grotesk, Newsreader, Martian Mono (OFL 1.1, verified); headless Radix Primitives allowed (Q40). |
+| R3 | Navigation | No navbar anywhere: quiet text mark, floating index control, skip link, landmarks. Inner pages use a poster-only stage. |
+| R4 | Tiers | Static tier is decided before paint for reduced motion, Save-Data, slow connections and the Calm choice (no layout shift); full and reduced are chosen after first paint, then governed. |
+| R5 | Mocks | `@jerryqiu/mocks`, labelled MOCK, off in production builds (Q47), localStorage for state, Stripe test-mode shape, privacy rules for flights enforced in code (Q43). |
+| R6 | Legal links | Photography, music and flying carry only the return button; photography has its own short `/privacy` (Q45). |

@@ -95,3 +95,5 @@ Keep old URLs working with redirects (`/blog` to `/writing`, `/contact` to `/con
 ## UX heuristics checklist
 
 Clear current-location cue; consistent patterns; visible keyboard focus; inline, human form errors; 44 px touch targets; no horizontal scroll at 320 px; fast perceived loading (blur-up, posters); no dead ends; designed 404 with a way home; every page has a purpose and one primary action; the floating index works with keyboard and screen readers.
+
+> **Status (2026-10-12):** the designer's brief that fulfils this document is [redesign-brief.md](redesign-brief.md); the compact reference is [design-language.md](design-language.md). Both are built (see [PHASE-2.5-SUMMARY.md](PHASE-2.5-SUMMARY.md)).

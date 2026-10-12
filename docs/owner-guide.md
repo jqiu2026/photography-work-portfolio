@@ -34,3 +34,10 @@ At the top of the sidebar, pick **Hub**, **Photography**, **Music** or **Flying*
 ## Things that need your accounts (nothing is set up for you)
 
 See `docs/project/DEPLOYMENT.md` for the full checklist: Vercel projects and domains, Neon database, storage (Cloudflare R2), Google sign-in, Resend email, the shared secrets, and DNS. Open questions with their current defaults are in `docs/project/QUESTIONS.md`.
+
+## The new look and the studio mocks (Phase 2.5)
+
+- **No navbar.** Every page has a small round index button at the bottom right (a ring that fills as you scroll). It opens a full-screen index of the page's sections and the site's pages, and holds the light/dark switch and a **Motion: Full / Calm** switch (Calm turns the animated background off and is remembered).
+- **Photography, music and flying** each have their own look and no links to each other; the only way back is the `jerryqiu.com` button in the footer. The hub introduces all three.
+- **Local mocks** (clearly labelled MOCK, sample data only, in your browser): Photography > `/studio` sections (clients, shoots, galleries, contracts, invoices), the client entry at `/client`, the score store at `/music/scores`, the flight map at `/flying/map`. They run on your computer and are hidden on the live sites until Phase 3 makes them real.
+- **Copy:** every line written for you is marked `TODO(owner)` in the source; rewrite them in your own voice.

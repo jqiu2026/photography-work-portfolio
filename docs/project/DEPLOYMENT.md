@@ -48,3 +48,9 @@ Manual steps in Vercel: add a Firewall rule rate-limiting `/api/img/*` and `/api
 
 ## Project move (Phase 2.5, R1)
 Case studies (projects) now belong to the photography site. The hub's `/work` and `/work/:slug` send a 301 to `NEXT_PUBLIC_PHOTOS_URL` (set it on the **hub** project too, not only on photos). Run `pnpm --filter @jerryqiu/db migrate` once per database: migration `0001_projects_to_photos` moves existing project rows from `hub` to `photos` (idempotent). The seed also adds redirect rows for the old hub URLs as a fallback the hub's 404 page reads. `REVALIDATE_SECRET` must be the same on both projects so saving a project in the admin refreshes the photography site.
+
+## Mocks in production (Phase 2.5, R5)
+Mock routes (studio sections, client portal pages, score store, flight map) are **404 in production builds**, and their navigation links are hidden. Set `ENABLE_MOCKS=true` on a preview deployment only if you want to demonstrate them; there are no live keys or network calls in the mocks. `/flying/instruction` is a 404 unless the `flying.instruction.enabled` setting is true (Q49).
+
+## Hub redirects and the photography URL
+The hub's `next.config.mjs` redirects `/work` and `/work/:slug` (301) to `NEXT_PUBLIC_PHOTOS_URL`; set it on the hub project. The seed also adds fallback rows in the Redirects table (editable in the admin).
