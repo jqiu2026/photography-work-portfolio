@@ -232,7 +232,7 @@ export function Progress({ value, label, className }: { value: number; label: st
       aria-label={label}
       aria-valuemin={0}
       aria-valuemax={100}
-      aria-valuenow={Math.round(value)}
+      aria-valuenow={Math.round(Math.max(0, Math.min(100, value)))}
       className={cx("ph-progress", className)}
     >
       <div style={{ width: `${Math.max(0, Math.min(100, value))}%` }} />

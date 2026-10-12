@@ -12,7 +12,8 @@
     "./contact": "./src/ContactForm.tsx"
   },
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
   },
   "devDependencies": {
     "@jerryqiu/config": "workspace:*",

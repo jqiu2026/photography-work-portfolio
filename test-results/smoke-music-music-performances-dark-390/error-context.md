@@ -17,7 +17,7 @@ Error: no horizontal scroll
 expect(received).toBeLessThanOrEqual(expected)
 
 Expected: <= 1
-Received:    3
+Received:    6
 ```
 
 # Page snapshot

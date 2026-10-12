@@ -9,7 +9,7 @@ import {
   useTransform,
   type MotionValue,
 } from "motion/react";
-import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from "react";
 import { motion as tokens } from "../tokens";
 import { SceneProvider, useCalm, useSceneProgress } from "./core";
 
@@ -53,7 +53,7 @@ export function PinnedScene({
   const body = typeof children === "function" ? children(calm ? done : scrollYProgress) : children;
   if (calm)
     return (
-      <section aria-label={label} className={className}>
+      <section ref={ref} aria-label={label} className={className}>
         {body}
       </section>
     );
@@ -154,6 +154,9 @@ export function HorizontalShowcase({ children, className }: { children: ReactNod
   if (calm)
     return (
       <div
+        ref={ref as RefObject<HTMLDivElement>}
+        role="region"
+        aria-label="Scrollable list"
         className={className}
         style={{
           display: "flex",

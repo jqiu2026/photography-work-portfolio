@@ -58,6 +58,7 @@ export function ShaderLayer({ src, intensity = 1, pointer = "window", onReady }:
   const calm = useCalm();
   const host = useRef<HTMLDivElement>(null);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: onReady is intentionally not a dependency
   useEffect(() => {
     if (calm || lowPower()) return;
     let dispose = () => {};
@@ -158,7 +159,6 @@ export function ShaderLayer({ src, intensity = 1, pointer = "window", onReady }:
       cancelled = true;
       dispose();
     };
-    // biome-ignore lint/correctness/useExhaustiveDependencies: onReady is intentionally not a dependency
   }, [src, intensity, calm, pointer]);
 
   return <div ref={host} aria-hidden style={{ position: "absolute", inset: 0 }} />;
