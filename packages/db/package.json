@@ -10,7 +10,9 @@
     "./schema": "./src/schema.ts",
     "./queries": "./src/queries.ts",
     "./export": "./src/export.ts",
-    "./settings": "./src/settings.ts"
+    "./settings": "./src/settings.ts",
+    "./studio": "./src/studio.ts",
+    "./studio-crypto": "./src/studio-crypto.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

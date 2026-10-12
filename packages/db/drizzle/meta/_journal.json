@@ -15,6 +15,13 @@
       "when": 1791842119846,
       "tag": "0001_projects_to_photos",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791846662663,
+      "tag": "0002_studio_platform",
+      "breakpoints": true
     }
   ]
 }

@@ -396,3 +396,196 @@ export const externalCache = pgTable(
     index("external_cache_expiry_idx").on(t.expiresAt),
   ],
 );
+
+/* ------------------------------------------------------------------------------------------------------------------
+ * Phase 3: photography studio (clients, jobs, client galleries, contracts, invoices, payments, bookings).
+ * Money is integer cents. Link tokens and passcodes are stored only as hashes. `studio_id` stays nullable and unused.
+ * ---------------------------------------------------------------------------------------------------------------- */
+export const jobStatusEnum = pgEnum("studio_job_status", ["inquiry", "booked", "shot", "editing", "delivered", "paid", "cancelled"]);
+export const clientGalleryStatusEnum = pgEnum("studio_gallery_status", ["draft", "published", "archived"]);
+export const accessModeEnum = pgEnum("studio_access_mode", ["passcode", "magic-link", "both"]);
+export const downloadPolicyEnum = pgEnum("studio_download_policy", ["none", "preview", "web", "full"]);
+export const contractStatusEnum = pgEnum("studio_contract_status", ["draft", "sent", "viewed", "signed", "declined", "void"]);
+export const invoiceStatusEnum = pgEnum("studio_invoice_status", ["draft", "sent", "viewed", "partial", "paid", "void"]);
+export const paymentStatusEnum = pgEnum("studio_payment_status", ["pending", "succeeded", "failed", "refunded"]);
+export const bookingStatusEnum = pgEnum("studio_booking_status", ["new", "converted", "archived"]);
+
+export const studioClients = pgTable(
+  "studio_clients",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    name: text("name").notNull(),
+    /** Stored lower-cased; unique among live clients. */
+    email: text("email").notNull(),
+    phone: text("phone"),
+    notes: text("notes"),
+    tags: jsonb("tags").notNull().$type<string[]>().default(sql`'[]'::jsonb`),
+    ...stamps,
+  },
+  (t) => [uniqueIndex("studio_clients_email_idx").on(t.email).where(sql`${t.deletedAt} is null`)],
+);
+
+export const studioJobs = pgTable(
+  "studio_jobs",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    clientId: uuid("client_id")
+      .notNull()
+      .references(() => studioClients.id),
+    title: text("title").notNull(),
+    type: text("type").notNull().default("event"),
+    date: date("date"),
+    location: text("location"),
+    status: jobStatusEnum("status").notNull().default("inquiry"),
+    feeCents: integer("fee_cents").notNull().default(0),
+    notes: text("notes"),
+    ...stamps,
+  },
+  (t) => [index("studio_jobs_client_idx").on(t.clientId), index("studio_jobs_status_idx").on(t.status)],
+);
+
+export const studioGalleries = pgTable(
+  "studio_galleries",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    jobId: uuid("job_id")
+      .notNull()
+      .references(() => studioJobs.id),
+    title: text("title").notNull(),
+    status: clientGalleryStatusEnum("status").notNull().default("draft"),
+    accessMode: accessModeEnum("access_mode").notNull().default("passcode"),
+    /** scrypt hash "salt:hash" of the passcode. Never the passcode itself. */
+    passcodeHash: text("passcode_hash"),
+    downloadPolicy: downloadPolicyEnum("download_policy").notNull().default("preview"),
+    watermark: boolean("watermark").notNull().default(true),
+    coverMediaId: uuid("cover_media_id").references(() => media.id),
+    expiresAt: timestamp("expires_at", { withTimezone: true }),
+    ...stamps,
+  },
+  (t) => [index("studio_galleries_job_idx").on(t.jobId)],
+);
+
+export const studioGalleryItems = pgTable(
+  "studio_gallery_items",
+  {
+    galleryId: uuid("gallery_id")
+      .notNull()
+      .references(() => studioGalleries.id, { onDelete: "cascade" }),
+    mediaId: uuid("media_id")
+      .notNull()
+      .references(() => media.id),
+    sort: integer("sort").notNull().default(0),
+    hidden: boolean("hidden").notNull().default(false),
+  },
+  (t) => [primaryKey({ columns: [t.galleryId, t.mediaId] })],
+);
+
+export const studioFavorites = pgTable(
+  "studio_favorites",
+  {
+    galleryId: uuid("gallery_id")
+      .notNull()
+      .references(() => studioGalleries.id, { onDelete: "cascade" }),
+    mediaId: uuid("media_id")
+      .notNull()
+      .references(() => media.id),
+    note: text("note"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [primaryKey({ columns: [t.galleryId, t.mediaId] })],
+);
+
+export const studioContracts = pgTable(
+  "studio_contracts",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    jobId: uuid("job_id")
+      .notNull()
+      .references(() => studioJobs.id),
+    title: text("title").notNull(),
+    body: text("body").notNull(),
+    status: contractStatusEnum("status").notNull().default("draft"),
+    /** sha256 of the signing link token. */
+    tokenHash: text("token_hash"),
+    sentAt: timestamp("sent_at", { withTimezone: true }),
+    viewedAt: timestamp("viewed_at", { withTimezone: true }),
+    signedAt: timestamp("signed_at", { withTimezone: true }),
+    signerName: text("signer_name"),
+    /** one-way hashes only (privacy): sha256(ip + AUTH_SECRET-derived salt) */
+    signerIpHash: text("signer_ip_hash"),
+    signerUserAgent: text("signer_user_agent"),
+    /** sha256 of the exact text that was signed */
+    documentSha256: text("document_sha256"),
+    ...stamps,
+  },
+  (t) => [uniqueIndex("studio_contracts_token_idx").on(t.tokenHash), index("studio_contracts_job_idx").on(t.jobId)],
+);
+
+export type InvoiceLine = { description: string; amountCents: number };
+
+export const studioInvoices = pgTable(
+  "studio_invoices",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    /** Human number, e.g. "2026-0001" (unique). */
+    number: text("number").notNull(),
+    jobId: uuid("job_id")
+      .notNull()
+      .references(() => studioJobs.id),
+    lines: jsonb("lines").notNull().$type<InvoiceLine[]>().default(sql`'[]'::jsonb`),
+    currency: text("currency").notNull().default("usd"),
+    totalCents: integer("total_cents").notNull().default(0),
+    status: invoiceStatusEnum("status").notNull().default("draft"),
+    dueDate: date("due_date"),
+    /** sha256 of the payment link token. */
+    tokenHash: text("token_hash"),
+    sentAt: timestamp("sent_at", { withTimezone: true }),
+    paidAt: timestamp("paid_at", { withTimezone: true }),
+    ...stamps,
+  },
+  (t) => [
+    uniqueIndex("studio_invoices_number_idx").on(t.number),
+    uniqueIndex("studio_invoices_token_idx").on(t.tokenHash),
+    index("studio_invoices_job_idx").on(t.jobId),
+  ],
+);
+
+export const studioPayments = pgTable(
+  "studio_payments",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    invoiceId: uuid("invoice_id")
+      .notNull()
+      .references(() => studioInvoices.id),
+    /** "stripe" | "manual" | "mock" */
+    provider: text("provider").notNull(),
+    /** Provider's id (payment_intent id). Unique per provider: makes webhooks and retries idempotent. */
+    providerRef: text("provider_ref").notNull(),
+    amountCents: integer("amount_cents").notNull(),
+    status: paymentStatusEnum("status").notNull().default("pending"),
+    receiptRef: text("receipt_ref"),
+    raw: jsonb("raw").$type<Record<string, unknown>>(),
+    paidAt: timestamp("paid_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex("studio_payments_provider_ref_idx").on(t.provider, t.providerRef), index("studio_payments_invoice_idx").on(t.invoiceId)],
+);
+
+export const studioBookings = pgTable("studio_bookings", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  topic: text("topic").notNull().default("General"),
+  message: text("message").notNull(),
+  status: bookingStatusEnum("status").notNull().default("new"),
+  clientId: uuid("client_id").references(() => studioClients.id),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+/** Provider webhook events already processed (idempotency). */
+export const webhookEvents = pgTable("webhook_events", {
+  id: text("id").primaryKey(),
+  provider: text("provider").notNull(),
+  type: text("type").notNull(),
+  receivedAt: timestamp("received_at", { withTimezone: true }).notNull().defaultNow(),
+});
