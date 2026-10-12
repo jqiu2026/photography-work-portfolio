@@ -5,8 +5,14 @@
   "type": "module",
   "main": "./src/index.ts",
   "types": "./src/index.ts",
-  "exports": { ".": "./src/index.ts" },
-  "scripts": { "typecheck": "tsc --noEmit", "test": "vitest run" },
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "seed": "node ../../scripts/with-env.mjs dev tsx scripts/seed-media.ts"
+  },
   "dependencies": {
     "@jerryqiu/db": "workspace:*",
     "@jerryqiu/storage": "workspace:*",
@@ -19,6 +25,7 @@
     "@jerryqiu/config": "workspace:*",
     "@types/node": "^24.19.2",
     "typescript": "~6.0.3",
-    "vitest": "5.0.3"
+    "vitest": "5.0.3",
+    "tsx": "^4.20.0"
   }
 }
