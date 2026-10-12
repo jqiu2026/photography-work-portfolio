@@ -1,0 +1,62 @@
+"use client";
+
+import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { cx } from "../components/cx";
+
+/** Shape written by scripts/optimize-images.mjs into manifest.json. */
+export type ImageAsset = {
+  width: number;
+  height: number;
+  /** Dominant colour, shown until the image is ready. */
+  color?: string;
+  /** Tiny WebP data URL for blur-up. */
+  blur?: string;
+  files: { width: number; src: string }[];
+  alt?: string;
+  caption?: string;
+};
+
+export type ImageProps = {
+  asset: ImageAsset;
+  alt: string;
+  sizes?: string;
+  priority?: boolean;
+  fit?: "cover" | "contain";
+  className?: string;
+  style?: CSSProperties;
+  /** Keep the intrinsic aspect ratio (default) or fill the parent. */
+  fill?: boolean;
+};
+
+/** Framework-agnostic responsive image: srcset, dominant-colour placeholder, blur-up, no layout shift. */
+export function Image({ asset, alt, sizes = "100vw", priority, fit = "cover", fill, className, style }: ImageProps) {
+  const [loaded, setLoaded] = useState(false);
+  const ref = useRef<HTMLImageElement>(null);
+  const sorted = [...asset.files].sort((a, b) => a.width - b.width);
+  const largest = sorted[sorted.length - 1];
+  useEffect(() => {
+    if (ref.current?.complete && ref.current.naturalWidth > 0) setLoaded(true);
+  }, []);
+  return (
+    <span
+      className={cx("ph-img", fill && "ph-img--fill", className)}
+      style={{ aspectRatio: fill ? undefined : `${asset.width} / ${asset.height}`, backgroundColor: asset.color, backgroundImage: asset.blur ? `url(${asset.blur})` : undefined, ...style }}
+    >
+      {/* biome-ignore lint/performance/noImgElement: framework-agnostic package */}
+      <img
+        ref={ref}
+        src={largest.src}
+        srcSet={sorted.map((f) => `${f.src} ${f.width}w`).join(", ")}
+        sizes={sizes}
+        alt={alt}
+        width={asset.width}
+        height={asset.height}
+        loading={priority ? "eager" : "lazy"}
+        decoding={priority ? "sync" : "async"}
+        {...(priority ? { fetchPriority: "high" as const } : {})}
+        onLoad={() => setLoaded(true)}
+        style={{ objectFit: fit, opacity: loaded ? 1 : 0 }}
+      />
+    </span>
+  );
+}
