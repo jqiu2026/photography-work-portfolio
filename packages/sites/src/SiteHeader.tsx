@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Header, SiteSwitcher, type SiteEntry, ThemeToggle } from "@placeholder/ui";
+import { Button, Header, SiteSwitcher, type SiteEntry, ThemeToggle } from "@halation/ui";
 import NextLink from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -34,7 +34,7 @@ export function SiteHeader({
       transparentTop={transparentTop}
       brand={
         brandName ? (
-          <NextLink href={brandHref} className="ph-brand">
+          <NextLink href={brandHref} className="hl-brand">
             {brandName}
           </NextLink>
         ) : (
@@ -46,7 +46,7 @@ export function SiteHeader({
         <>
           <ThemeToggle />
           {connectHref ? (
-            <Button as={NextLink} href={connectHref} size="sm" variant="solid" className="ph-hide-sm">
+            <Button as={NextLink} href={connectHref} size="sm" variant="solid" className="hl-hide-sm">
               Connect
             </Button>
           ) : null}

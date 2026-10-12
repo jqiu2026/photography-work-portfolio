@@ -30,7 +30,7 @@ export type SiteEntry = {
 
 export function SkipLink({ href = "#main", children = "Skip to content" }: { href?: string; children?: ReactNode }) {
   return (
-    <a href={href} className="ph-skip">
+    <a href={href} className="hl-skip">
       {children}
     </a>
   );
@@ -77,29 +77,29 @@ export function SiteSwitcher({
     };
   }, [open]);
   return (
-    <div ref={wrap} className="ph-switcher-wrap">
+    <div ref={wrap} className="hl-switcher-wrap">
       <button
         ref={btn}
         type="button"
-        className="ph-switcher"
+        className="hl-switcher"
         aria-expanded={open}
         aria-controls={open ? id : undefined}
         onClick={() => setOpen((o) => !o)}
       >
         <span>{label}</span>
         <ChevronDown size={14} aria-hidden />
-        <span className="ph-sr-only">Switch site</span>
+        <span className="hl-sr-only">Switch site</span>
       </button>
       {open ? (
-        <nav id={id} aria-label="All sites" className="ph-popover ph-switcher__panel">
-          <div className="ph-switcher__list">
+        <nav id={id} aria-label="All sites" className="hl-popover hl-switcher__panel">
+          <div className="hl-switcher__list">
             {sites.map((s) => (
               <a
                 key={s.id}
                 href={s.url}
                 aria-current={s.id === currentId ? "page" : undefined}
-                className="ph-switcher__item"
-                style={s.color ? ({ "--site": `var(--ph-${s.color})` } as CSSProperties) : undefined}
+                className="hl-switcher__item"
+                style={s.color ? ({ "--site": `var(--hl-${s.color})` } as CSSProperties) : undefined}
               >
                 <strong>{s.name}</strong>
                 <span>{s.description}</span>
@@ -130,22 +130,22 @@ export function Header({
     return () => window.removeEventListener("scroll", on);
   }, []);
   return (
-    <header className={cx("ph-header", scrolled || !transparentTop ? "ph-header--solid" : "ph-header--over")}>
-      <div className="ph-header__inner">
-        <div className="ph-header__brand">{brand}</div>
-        <nav aria-label="Primary" className="ph-header__nav">
+    <header className={cx("hl-header", scrolled || !transparentTop ? "hl-header--solid" : "hl-header--over")}>
+      <div className="hl-header__inner">
+        <div className="hl-header__brand">{brand}</div>
+        <nav aria-label="Primary" className="hl-header__nav">
           {links.map((l) => (
             <LinkAs key={l.label} href={l.href} aria-current={l.current ? "page" : undefined}>
               {l.label}
             </LinkAs>
           ))}
         </nav>
-        <div className="ph-header__actions">
+        <div className="hl-header__actions">
           {actions}
           <IconButton
             ref={burger}
             label="Open menu"
-            className="ph-header__burger"
+            className="hl-header__burger"
             aria-haspopup="dialog"
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen(true)}
@@ -164,7 +164,7 @@ export function Header({
                   if (!o) requestAnimationFrame(() => burger.current?.focus());
                 }}
               >
-                <nav aria-label="Mobile" className="ph-mobilenav">
+                <nav aria-label="Mobile" className="hl-mobilenav">
                   {links.map((l) => (
                     <a key={l.label} href={l.href} aria-current={l.current ? "page" : undefined}>
                       {l.label}
@@ -194,7 +194,7 @@ export function TableOfContents({ items }: { items: { id: string; label: string 
     return () => obs.disconnect();
   }, [items]);
   return (
-    <nav aria-label="On this page" className="ph-toc">
+    <nav aria-label="On this page" className="hl-toc">
       <ul>
         {items.map((i) => (
           <li key={i.id}>

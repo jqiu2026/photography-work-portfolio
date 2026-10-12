@@ -1,8 +1,8 @@
-import { Container, Eyebrow, Heading, InterestHero, Section, Text } from "@placeholder/ui";
-import { Image } from "@placeholder/ui/media";
+import { Container, Eyebrow, Heading, InterestHero, Section, Text } from "@halation/ui";
+import { Image } from "@halation/ui/media";
 import { sitePath } from "@jerryqiu/sites";
 import Link from "next/link";
-import { Button } from "@placeholder/ui";
+import { Button } from "@halation/ui";
 import { Empty } from "@/components/interest/Empty";
 import { InterestShell } from "@/components/interest/InterestShell";
 import { getMusicContent } from "@/lib/interests";

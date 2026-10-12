@@ -1,5 +1,5 @@
 import { schema } from "@jerryqiu/db";
-import { Button } from "@placeholder/ui";
+import { Button } from "@halation/ui";
 import { and, desc, eq } from "drizzle-orm";
 import NextLink from "next/link";
 import { notFound } from "next/navigation";
@@ -73,7 +73,7 @@ export default async function EditPost({ params }: { params: Promise<{ id: strin
       <PostForm values={values} />
       {data?.versions.length ? (
         <section style={{ marginTop: "3rem" }} aria-labelledby="hist">
-          <h2 id="hist" style={{ fontSize: "var(--ph-text-xl)", marginBottom: "0.75rem" }}>
+          <h2 id="hist" style={{ fontSize: "var(--hl-text-xl)", marginBottom: "0.75rem" }}>
             Version history
           </h2>
           <table className="adm-table">

@@ -1,5 +1,5 @@
-import { Container, Eyebrow, Heading, Section } from "@placeholder/ui";
-import { Gallery, GuardScope, ProtectedGallery } from "@placeholder/ui/media";
+import { Container, Eyebrow, Heading, Section } from "@halation/ui";
+import { Gallery, GuardScope, ProtectedGallery } from "@halation/ui/media";
 import { mintAllWidths, tokenSecrets } from "@jerryqiu/protect";
 import type { Metadata } from "next";
 import Link from "next/link";

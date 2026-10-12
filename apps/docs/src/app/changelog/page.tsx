@@ -1,4 +1,4 @@
-import { Prose } from "@placeholder/ui";
+import { Prose } from "@halation/ui";
 
 export const metadata = { title: "Changelog" };
 

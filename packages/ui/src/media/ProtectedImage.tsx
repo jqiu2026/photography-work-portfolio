@@ -49,9 +49,9 @@ export function ProtectedImage({
   const strict = effective === "strict" && Boolean(tokens && asset.id);
   if (!strict) {
     return (
-      <span data-protected={effective} className="ph-protected" style={{ display: "block", position: "relative" }}>
+      <span data-protected={effective} className="hl-protected" style={{ display: "block", position: "relative" }}>
         <Image asset={asset} alt={alt} priority={priority} fit={fit} fill={fill} className={className} style={style} />
-        {effective !== "off" ? <span className="ph-protected__shield" aria-hidden="true" /> : null}
+        {effective !== "off" ? <span className="hl-protected__shield" aria-hidden="true" /> : null}
       </span>
     );
   }
@@ -169,7 +169,7 @@ function BlobImage({
       ref={box}
       data-pid={id}
       data-protected="strict"
-      className={["ph-img", "ph-protected", fill ? "ph-img--fill" : "", className ?? ""].filter(Boolean).join(" ")}
+      className={["hl-img", "hl-protected", fill ? "hl-img--fill" : "", className ?? ""].filter(Boolean).join(" ")}
       style={{
         aspectRatio: fill ? undefined : `${asset.width} / ${asset.height}`,
         backgroundColor: asset.color,
@@ -189,9 +189,9 @@ function BlobImage({
           style={{ objectFit: fit }}
         />
       ) : (
-        <span className="ph-visually-hidden">{failed ? `${alt} (could not be loaded)` : alt}</span>
+        <span className="hl-visually-hidden">{failed ? `${alt} (could not be loaded)` : alt}</span>
       )}
-      <span className="ph-protected__shield" aria-hidden="true" />
+      <span className="hl-protected__shield" aria-hidden="true" />
     </span>
   );
 }

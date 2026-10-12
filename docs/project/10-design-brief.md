@@ -89,7 +89,7 @@ Keep old URLs working with redirects (`/blog` to `/writing`, `/contact` to `/con
 
 - **Accessibility:** WCAG 2.2 AA contrast, visible focus, 44 px targets, full keyboard paths, skip link, landmarks, alt text always present, reduced motion = complete static layout, no autoplaying sound.
 - **Performance:** stage code lazy-loaded; DPR capped; paused off-screen; no layout shift; LCP an image or text; mobile Lighthouse performance 90 or better on every home.
-- **Tokens and architecture:** the designer chooses (hand-written CSS with tokens is fine). A new package name replaces `@placeholder/ui` through `pnpm rename`; the owner's suggestion and default is **Halation UI** (halation: the glow that spreads around bright light in film), unless the brief finds a conflict (check by reading only; the owner does trademark and npm checks). Docs site with a demo for every export; tests; changelog.
+- **Tokens and architecture:** the designer chooses (hand-written CSS with tokens is fine). A new package name replaces `@halation/ui` through `pnpm rename`; the owner's suggestion and default is **Halation UI** (halation: the glow that spreads around bright light in film), unless the brief finds a conflict (check by reading only; the owner does trademark and npm checks). Docs site with a demo for every export; tests; changelog.
 - **Imagery:** photographs are never degraded by overlays or filters beyond the deliberate effects in a scene; correct colour; fast loading; protected where configured.
 
 ## UX heuristics checklist

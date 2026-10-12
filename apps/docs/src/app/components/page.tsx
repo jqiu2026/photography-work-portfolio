@@ -1,4 +1,4 @@
-import { Prose } from "@placeholder/ui";
+import { Prose } from "@halation/ui";
 import type { Metadata } from "next";
 import { docs, groups } from "@/content/components";
 

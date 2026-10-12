@@ -1,9 +1,9 @@
-import "@placeholder/ui/styles.css";
+import "@halation/ui/styles.css";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { ThemeProvider, ThemeScript } from "@placeholder/ui";
-import { ScreenshotGuard } from "@placeholder/ui/media";
-import { SmoothScroll } from "@placeholder/ui/motion";
+import { ThemeProvider, ThemeScript } from "@halation/ui";
+import { ScreenshotGuard } from "@halation/ui/media";
+import { SmoothScroll } from "@halation/ui/motion";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { fontVars } from "@/lib/fonts";
@@ -40,7 +40,7 @@ export default async function SiteLayout({ children }: { children: ReactNode }) 
         <ThemeScript preset="hub" />
         <meta name="robots" content="noai, noimageai" />
       </head>
-      <body className="ph-root">
+      <body className="hl-root">
         <ThemeProvider preset="hub">
           <ScreenshotGuard level={protection.level}>
             <SmoothScroll>

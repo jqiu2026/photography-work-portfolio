@@ -1,6 +1,6 @@
 "use client";
 
-import { BeforeAfter, Image, type GalleryImage } from "@placeholder/ui/media";
+import { BeforeAfter, Image, type GalleryImage } from "@halation/ui/media";
 import { useState } from "react";
 
 /**
@@ -31,13 +31,13 @@ export function Compare({ photos }: { photos: GalleryImage[] }) {
         />
       </div>
       <div>
-        <p className="ph-eyebrow" style={{ marginBottom: "1rem" }}>
+        <p className="hl-eyebrow" style={{ marginBottom: "1rem" }}>
           Compare
         </p>
-        <h2 className="ph-heading ph-heading--display" style={{ fontSize: "var(--ph-text-4xl)" }}>
+        <h2 className="hl-heading hl-heading--display" style={{ fontSize: "var(--hl-text-4xl)" }}>
           Colour, or not.
         </h2>
-        <p className="ph-text ph-text--muted" style={{ marginTop: "1rem" }}>
+        <p className="hl-text hl-text--muted" style={{ marginTop: "1rem" }}>
           Drag the handle. The same frame, with and without its colour: sometimes the picture is the light, sometimes it
           is the colour.
         </p>

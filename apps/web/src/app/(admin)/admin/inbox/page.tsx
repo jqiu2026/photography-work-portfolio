@@ -1,5 +1,5 @@
 import { schema } from "@jerryqiu/db";
-import { Badge } from "@placeholder/ui";
+import { Badge } from "@halation/ui";
 import { desc, eq, isNull, and } from "drizzle-orm";
 import NextLink from "next/link";
 import { requirePageUser } from "@/auth";
@@ -75,7 +75,7 @@ export default async function InboxPage({ searchParams }: { searchParams: Promis
       </table>
       {user.role === "owner" ? (
         <section className="adm-card" style={{ marginTop: "3rem" }} aria-labelledby="erase">
-          <h2 id="erase" style={{ fontSize: "var(--ph-text-xl)" }}>
+          <h2 id="erase" style={{ fontSize: "var(--hl-text-xl)" }}>
             Delete someone's contact data
           </h2>
           <p className="adm-note">

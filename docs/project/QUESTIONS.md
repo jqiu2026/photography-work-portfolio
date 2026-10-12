@@ -4,7 +4,7 @@ Never block on these. Each has a default already being used. Append new ones at 
 
 | # | Question | Default in use | If you choose otherwise |
 |---|---|---|---|
-| Q1 | Final UI package name? | `@placeholder/ui` (see [07](07-naming-brainstorm.md)) | Run `pnpm rename` |
+| Q1 | Final UI package name? | `@halation/ui` (see [07](07-naming-brainstorm.md)) | Run `pnpm rename` |
 | Q2 | Path to real footage for the hero image sequence / WebGL scene? | Generated placeholder sequence from existing photos | Run `scripts/make-sequence.ts` on the video |
 | Q3 | Brand accent color and typeface? | Planner's pick, recorded in `design-language.md` | Change tokens in one file |
 | Q4 | Which CMS approach? | Custom admin on our UI package, patterned on stuyaviators | Payload would be a rewrite of Phase 2 |
@@ -22,7 +22,7 @@ Never block on these. Each has a default already being used. Append new ones at 
 | Q16 | Should `music.` and `flying.` be separate Vercel projects instead of served by the hub app? | One app with host routing | Split later; code is route-grouped to make it easy |
 | Q17 | Pinned Once UI 1.5.6 and react-icons 5.5.0 (newer versions break the old site) | Pinned until Once UI is removed in M7 | none |
 | Q18 | Hub design direction (Q3/Q12 answered) | Hub = A Gallery white, photos = B Midnight cinema, music = C Soft neutral, flying = cool sans (see design-language.md) | Change preset in `packages/sites` / one token file |
-| Q19 | UI package styling: Tailwind v4 compiled (A4) or handwritten CSS variables? | Handwritten CSS (`ph-*` classes, `--ph-*` tokens) | Port to Tailwind later; tokens stay the same |
+| Q19 | UI package styling: Tailwind v4 compiled (A4) or handwritten CSS variables? | Handwritten CSS (`ph-*` classes, `--hl-*` tokens) | Port to Tailwind later; tokens stay the same |
 | Q20 | Alt text for the 23 portfolio photographs (old site only had category names) | Generic "<Category> photograph N" with a TODO | Write real descriptions (CMS alt field in Phase 2) |
 | Q21 | ShootProof gallery login URL for the /client button | Hidden unless `NEXT_PUBLIC_SHOOTPROOF_URL` is set | Set the env var |
 | Q22 | Music: the trombone photo used on the music site is a portfolio photo; I did not claim it is you | Used with neutral alt text | Replace with your own performance photo |

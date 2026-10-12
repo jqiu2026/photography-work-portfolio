@@ -9,15 +9,15 @@
   height: 100dvh;
   overflow: auto;
   padding: 1.25rem;
-  border-right: 1px solid var(--ph-line);
-  background: var(--ph-surface);
+  border-right: 1px solid var(--hl-line);
+  background: var(--hl-surface);
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 .adm-brand {
   font-weight: 600;
-  font-size: var(--ph-text-xl);
+  font-size: var(--hl-text-xl);
   letter-spacing: -0.03em;
   text-decoration: none;
 }
@@ -31,19 +31,19 @@
 }
 .adm-sites button {
   font: inherit;
-  font-size: var(--ph-text-sm);
+  font-size: var(--hl-text-sm);
   padding: 0.55em 0.4em;
   min-height: 40px;
-  border: 1px solid var(--ph-line);
-  background: var(--ph-bg);
-  color: var(--ph-muted);
+  border: 1px solid var(--hl-line);
+  background: var(--hl-bg);
+  color: var(--hl-muted);
   cursor: pointer;
-  border-radius: var(--ph-radius-control);
+  border-radius: var(--hl-radius-control);
 }
 .adm-sites button[aria-pressed="true"] {
-  background: var(--ph-text);
-  color: var(--ph-bg);
-  border-color: var(--ph-text);
+  background: var(--hl-text);
+  color: var(--hl-bg);
+  border-color: var(--hl-text);
 }
 .adm-nav {
   display: flex;
@@ -59,18 +59,18 @@
   display: block;
   padding: 0.45em 0.6em;
   margin-inline: -0.6em;
-  border-radius: var(--ph-radius-sm);
+  border-radius: var(--hl-radius-sm);
   text-decoration: none;
-  color: var(--ph-muted);
-  font-size: var(--ph-text-sm);
+  color: var(--hl-muted);
+  font-size: var(--hl-text-sm);
 }
 .adm-nav a:hover {
-  color: var(--ph-text);
-  background: var(--ph-surface-2);
+  color: var(--hl-text);
+  background: var(--hl-surface-2);
 }
 .adm-nav a[aria-current="page"] {
-  color: var(--ph-text);
-  background: var(--ph-surface-2);
+  color: var(--hl-text);
+  background: var(--hl-surface-2);
   font-weight: 500;
 }
 .adm-main {
@@ -84,10 +84,10 @@
   align-items: center;
   gap: 1rem;
   padding: 0.6rem 1.25rem;
-  border-bottom: 1px solid var(--ph-line);
+  border-bottom: 1px solid var(--hl-line);
   position: sticky;
   top: 0;
-  background: color-mix(in srgb, var(--ph-bg) 90%, transparent);
+  background: color-mix(in srgb, var(--hl-bg) 90%, transparent);
   backdrop-filter: blur(10px);
   z-index: 20;
 }
@@ -99,22 +99,22 @@
   min-width: 0;
 }
 .adm-user {
-  font-size: var(--ph-text-sm);
-  color: var(--ph-muted);
+  font-size: var(--hl-text-sm);
+  color: var(--hl-muted);
   max-width: 16rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .adm-dev {
-  font-size: var(--ph-text-xs);
+  font-size: var(--hl-text-xs);
   padding: 0.2em 0.6em;
-  background: var(--ph-yellow);
+  background: var(--hl-yellow);
   color: #0a0a0a;
   border-radius: 2px;
 }
 .adm-kbd {
-  font-family: var(--ph-font-mono);
+  font-family: var(--hl-font-mono);
   font-size: 0.75em;
   opacity: 0.6;
   margin-left: 0.4em;
@@ -131,16 +131,16 @@
   display: flex;
   justify-content: space-between;
   padding: 0.7em 0.5em;
-  border-radius: var(--ph-radius-sm);
+  border-radius: var(--hl-radius-sm);
   text-decoration: none;
 }
 .adm-palette a:hover,
 .adm-palette a:focus-visible {
-  background: var(--ph-surface-2);
+  background: var(--hl-surface-2);
 }
 .adm-palette span {
-  color: var(--ph-muted);
-  font-size: var(--ph-text-sm);
+  color: var(--hl-muted);
+  font-size: var(--hl-text-sm);
 }
 @media (max-width: 900px) {
   .adm {
@@ -157,14 +157,14 @@
   }
 }
 .adm-h1 {
-  font-size: var(--ph-text-3xl);
+  font-size: var(--hl-text-3xl);
   letter-spacing: -0.04em;
   font-weight: 600;
   line-height: 1.05;
   margin-bottom: 0.5rem;
 }
 .adm-lede {
-  color: var(--ph-muted);
+  color: var(--hl-muted);
   margin-bottom: 2rem;
   max-width: 60ch;
 }
@@ -174,25 +174,25 @@
   gap: 1rem;
 }
 .adm-card {
-  border: 1px solid var(--ph-line);
-  border-radius: var(--ph-radius-lg);
+  border: 1px solid var(--hl-line);
+  border-radius: var(--hl-radius-lg);
   padding: 1.25rem;
-  background: var(--ph-surface);
+  background: var(--hl-surface);
   text-decoration: none;
   display: block;
 }
 .adm-card h2 {
-  font-size: var(--ph-text-lg);
+  font-size: var(--hl-text-lg);
   font-weight: 600;
   letter-spacing: -0.02em;
 }
 .adm-card p {
-  color: var(--ph-muted);
-  font-size: var(--ph-text-sm);
+  color: var(--hl-muted);
+  font-size: var(--hl-text-sm);
   margin-top: 0.3rem;
 }
 .adm-card .n {
-  font-size: var(--ph-text-3xl);
+  font-size: var(--hl-text-3xl);
   letter-spacing: -0.04em;
   font-weight: 600;
   display: block;
@@ -201,22 +201,22 @@
 .adm-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: var(--ph-text-sm);
+  font-size: var(--hl-text-sm);
 }
 .adm-table th {
   text-align: left;
   font-weight: 500;
-  color: var(--ph-muted);
+  color: var(--hl-muted);
   padding: 0.6em 0.8em;
-  border-bottom: 1px solid var(--ph-line);
+  border-bottom: 1px solid var(--hl-line);
 }
 .adm-table td {
   padding: 0.75em 0.8em;
-  border-bottom: 1px solid var(--ph-line);
+  border-bottom: 1px solid var(--hl-line);
   vertical-align: middle;
 }
 .adm-table tr:hover td {
-  background: var(--ph-surface);
+  background: var(--hl-surface);
 }
 .adm-toolbar {
   display: flex;
@@ -242,42 +242,42 @@
   }
 }
 .adm-ok {
-  color: var(--ph-success);
+  color: var(--hl-success);
 }
 .adm-bad {
-  color: var(--ph-danger);
+  color: var(--hl-danger);
 }
 .adm-warn {
-  color: var(--ph-warn);
+  color: var(--hl-warn);
 }
 .adm-note {
-  font-size: var(--ph-text-sm);
-  color: var(--ph-muted);
+  font-size: var(--hl-text-sm);
+  color: var(--hl-muted);
 }
 .adm-tab {
   text-decoration: none;
-  color: var(--ph-muted);
+  color: var(--hl-muted);
   padding: 0.3em 0;
   border-bottom: 2px solid transparent;
-  font-size: var(--ph-text-sm);
+  font-size: var(--hl-text-sm);
 }
 .adm-tab[aria-current="page"] {
-  color: var(--ph-text);
-  border-bottom-color: var(--ph-text);
+  color: var(--hl-text);
+  border-bottom-color: var(--hl-text);
 }
 .adm-drop {
-  border: 1.5px dashed var(--ph-line);
-  border-radius: var(--ph-radius-lg);
+  border: 1.5px dashed var(--hl-line);
+  border-radius: var(--hl-radius-lg);
   padding: 2rem;
   text-align: center;
   display: grid;
   gap: 0.75rem;
   justify-items: center;
-  transition: border-color var(--ph-dur-base), background var(--ph-dur-base);
+  transition: border-color var(--hl-dur-base), background var(--hl-dur-base);
 }
 .adm-drop[data-over] {
-  border-color: var(--ph-accent-text);
-  background: var(--ph-surface);
+  border-color: var(--hl-accent-text);
+  background: var(--hl-surface);
 }
 .adm-jobs {
   list-style: none;
@@ -285,14 +285,14 @@
   margin: 1rem 0 0;
   display: grid;
   gap: 0.6rem;
-  font-size: var(--ph-text-sm);
+  font-size: var(--hl-text-sm);
 }
 .adm-jobs li {
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 0.25rem 1rem;
 }
-.adm-jobs li > .ph-progress {
+.adm-jobs li > .hl-progress {
   grid-column: 1 / -1;
 }
 .adm-media {
@@ -312,14 +312,14 @@
   width: 100%;
   aspect-ratio: 4 / 3;
   object-fit: cover;
-  border-radius: var(--ph-radius-md);
-  border: 1px solid var(--ph-line);
+  border-radius: var(--hl-radius-md);
+  border: 1px solid var(--hl-line);
   display: block;
 }
 .adm-media span {
   display: block;
-  font-size: var(--ph-text-xs);
-  color: var(--ph-muted);
+  font-size: var(--hl-text-xs);
+  color: var(--hl-muted);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -329,7 +329,7 @@
   position: absolute;
   top: 6px;
   left: 6px;
-  background: var(--ph-yellow);
+  background: var(--hl-yellow);
   color: #0a0a0a;
   font-size: 0.68rem;
   padding: 0.1em 0.5em;
@@ -349,10 +349,10 @@
   gap: 1rem;
 }
 .adm-gitems li {
-  border: 1px solid var(--ph-line);
-  border-radius: var(--ph-radius-lg);
+  border: 1px solid var(--hl-line);
+  border-radius: var(--hl-radius-lg);
   overflow: hidden;
-  background: var(--ph-surface);
+  background: var(--hl-surface);
   cursor: grab;
 }
 .adm-gitems li[data-hidden] {

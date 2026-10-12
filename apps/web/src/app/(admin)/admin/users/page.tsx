@@ -1,5 +1,5 @@
 import { schema } from "@jerryqiu/db";
-import { Badge } from "@placeholder/ui";
+import { Badge } from "@halation/ui";
 import { asc } from "drizzle-orm";
 import { kit, requirePageUser } from "@/auth";
 import { ActionForm, F } from "@/components/admin/form-kit";
@@ -53,7 +53,7 @@ export default async function UsersPage() {
         </tbody>
       </table>
       <section className="adm-card" style={{ marginTop: "2rem" }} aria-labelledby="invite">
-        <h2 id="invite" style={{ fontSize: "var(--ph-text-xl)" }}>
+        <h2 id="invite" style={{ fontSize: "var(--hl-text-xl)" }}>
           Invite someone
         </h2>
         <ActionForm action={inviteUser} submitLabel="Allow sign-in">

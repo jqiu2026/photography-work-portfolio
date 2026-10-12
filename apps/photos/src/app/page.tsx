@@ -1,6 +1,6 @@
-import { Button, Container, Eyebrow, Heading, Section, Text } from "@placeholder/ui";
-import { Gallery, Image } from "@placeholder/ui/media";
-import { InView } from "@placeholder/ui/motion";
+import { Button, Container, Eyebrow, Heading, Section, Text } from "@halation/ui";
+import { Gallery, Image } from "@halation/ui/media";
+import { InView } from "@halation/ui/motion";
 import Link from "next/link";
 import { Compare } from "@/components/Compare";
 import { Hero } from "@/components/Hero";

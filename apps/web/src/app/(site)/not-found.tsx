@@ -1,4 +1,4 @@
-import { Button, Container, Heading, Text } from "@placeholder/ui";
+import { Button, Container, Heading, Text } from "@halation/ui";
 import NextLink from "next/link";
 import { SiteShell } from "@/components/site/SiteShell";
 

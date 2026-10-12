@@ -1,4 +1,4 @@
-import { Container, Eyebrow, Heading, Text } from "@placeholder/ui";
+import { Container, Eyebrow, Heading, Text } from "@halation/ui";
 import type { ReactNode } from "react";
 
 /** Standard top of an inner page: eyebrow, large display title, optional intro. */

@@ -79,13 +79,13 @@ export function StepSequence({ steps, className }: { steps: { title: string; bod
   useMotionValueEvent(progress, "change", (p) => setActive(Math.min(steps.length - 1, Math.floor(p * steps.length))));
   if (calm)
     return (
-      <ol className={className} style={{ listStyle: "none", padding: 0, display: "grid", gap: "var(--ph-space-8)" }}>
+      <ol className={className} style={{ listStyle: "none", padding: 0, display: "grid", gap: "var(--hl-space-8)" }}>
         {steps.map((s) => (
           <li key={s.title}>
-            <h3 className="ph-heading ph-heading--display" style={{ fontSize: "var(--ph-text-3xl)" }}>
+            <h3 className="hl-heading hl-heading--display" style={{ fontSize: "var(--hl-text-3xl)" }}>
               {s.title}
             </h3>
-            {s.body ? <p className="ph-text ph-text--muted">{s.body}</p> : null}
+            {s.body ? <p className="hl-text hl-text--muted">{s.body}</p> : null}
           </li>
         ))}
       </ol>
@@ -100,11 +100,11 @@ export function StepSequence({ steps, className }: { steps: { title: string; bod
           transition={{ duration: tokens.duration.slow, ease: tokens.ease }}
           style={{ position: "absolute", inset: 0 }}
         >
-          <h3 className="ph-heading ph-heading--display" style={{ fontSize: "var(--ph-text-4xl)" }}>
+          <h3 className="hl-heading hl-heading--display" style={{ fontSize: "var(--hl-text-4xl)" }}>
             {s.title}
           </h3>
           {s.body ? (
-            <p className="ph-text ph-text--muted" style={{ marginTop: "var(--ph-space-4)" }}>
+            <p className="hl-text hl-text--muted" style={{ marginTop: "var(--hl-space-4)" }}>
               {s.body}
             </p>
           ) : null}
@@ -118,14 +118,14 @@ export function StepSequence({ steps, className }: { steps: { title: string; bod
 export function StackingCards({ items, className }: { items: ReactNode[]; className?: string }) {
   const calm = useCalm();
   return (
-    <div className={className} style={{ display: "grid", gap: calm ? "var(--ph-space-6)" : 0 }}>
+    <div className={className} style={{ display: "grid", gap: calm ? "var(--hl-space-6)" : 0 }}>
       {items.map((it, i) => (
         <div
           key={i}
           style={
             calm
               ? undefined
-              : { position: "sticky", top: `calc(6rem + ${i * 1.5}rem)`, paddingBottom: "var(--ph-space-8)" }
+              : { position: "sticky", top: `calc(6rem + ${i * 1.5}rem)`, paddingBottom: "var(--hl-space-8)" }
           }
         >
           {it}
@@ -160,10 +160,10 @@ export function HorizontalShowcase({ children, className }: { children: ReactNod
         className={className}
         style={{
           display: "flex",
-          gap: "var(--ph-space-6)",
+          gap: "var(--hl-space-6)",
           overflowX: "auto",
           scrollSnapType: "x mandatory",
-          padding: "var(--ph-gutter)",
+          padding: "var(--hl-gutter)",
         }}
         tabIndex={0}
       >
@@ -187,8 +187,8 @@ export function HorizontalShowcase({ children, className }: { children: ReactNod
           style={{
             x,
             display: "flex",
-            gap: "var(--ph-space-6)",
-            paddingInline: "var(--ph-gutter)",
+            gap: "var(--hl-space-6)",
+            paddingInline: "var(--hl-gutter)",
             willChange: "transform",
           }}
         >
@@ -212,7 +212,7 @@ export function ScrollProgress() {
         position: "fixed",
         inset: "0 0 auto 0",
         height: 2,
-        background: "var(--ph-accent)",
+        background: "var(--hl-accent)",
         zIndex: 150,
       }}
     />

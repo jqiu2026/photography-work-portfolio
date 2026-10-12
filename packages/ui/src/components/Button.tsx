@@ -27,19 +27,19 @@ export function Button({
   const isButton = As === "button";
   return (
     <As
-      className={cx("ph-btn", `ph-btn--${variant}`, `ph-btn--${size}`, className)}
+      className={cx("hl-btn", `hl-btn--${variant}`, `hl-btn--${size}`, className)}
       {...(isButton ? { type: (rest.type as string) ?? "button", disabled: disabled || loading } : {})}
       aria-busy={loading || undefined}
       {...rest}
     >
       {iconLeft ? (
-        <span className="ph-btn__icon" aria-hidden>
+        <span className="hl-btn__icon" aria-hidden>
           {iconLeft}
         </span>
       ) : null}
       <span>{children}</span>
       {iconRight ? (
-        <span className="ph-btn__icon" aria-hidden>
+        <span className="hl-btn__icon" aria-hidden>
           {iconRight}
         </span>
       ) : null}
@@ -67,7 +67,7 @@ export function IconButton({
 }) {
   return (
     <As
-      className={cx("ph-btn", "ph-btn--icon", `ph-btn--${variant}`, `ph-btn--${size}`, className)}
+      className={cx("hl-btn", "hl-btn--icon", `hl-btn--${variant}`, `hl-btn--${size}`, className)}
       aria-label={label}
       {...(As === "button" ? { type: "button" } : {})}
       {...rest}

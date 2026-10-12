@@ -90,7 +90,7 @@ export default async function EditGallery({ params }: { params: Promise<{ id: st
       </ActionForm>
       {g ? (
         <section style={{ marginTop: "3rem" }} aria-labelledby="imgs">
-          <h2 id="imgs" style={{ fontSize: "var(--ph-text-xl)", marginBottom: "1rem" }}>
+          <h2 id="imgs" style={{ fontSize: "var(--hl-text-xl)", marginBottom: "1rem" }}>
             Images
           </h2>
           <GalleryEditor

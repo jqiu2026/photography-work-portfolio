@@ -24,7 +24,7 @@
     "react": "19.2.8"
   },
   "dependencies": {
-    "@placeholder/ui": "workspace:*"
+    "@halation/ui": "workspace:*"
   },
   "peerDependencies": {
     "next": "^16",

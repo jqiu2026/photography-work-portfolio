@@ -214,12 +214,12 @@ importers:
 
   apps/docs:
     dependencies:
+      '@halation/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
       '@jerryqiu/sites':
         specifier: workspace:*
         version: link:../../packages/sites
-      '@placeholder/ui':
-        specifier: workspace:*
-        version: link:../../packages/ui
       lucide-react:
         specifier: ^1.55.0
         version: 1.55.0(@types/react@19.3.0)(react@19.2.8)
@@ -251,6 +251,9 @@ importers:
 
   apps/photos:
     dependencies:
+      '@halation/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
       '@jerryqiu/auth':
         specifier: workspace:*
         version: link:../../packages/auth
@@ -278,9 +281,6 @@ importers:
       '@jerryqiu/storage':
         specifier: workspace:*
         version: link:../../packages/storage
-      '@placeholder/ui':
-        specifier: workspace:*
-        version: link:../../packages/ui
       '@vercel/analytics':
         specifier: ^2.0.1
         version: 2.0.1(next@16.3.8(@opentelemetry/api@1.9.1)(@playwright/test@1.64.0)(@types/node@24.19.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(sass@1.105.1))(react@19.2.8)
@@ -330,6 +330,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@halation/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
       '@jerryqiu/auth':
         specifier: workspace:*
         version: link:../../packages/auth
@@ -354,9 +357,6 @@ importers:
       '@jerryqiu/storage':
         specifier: workspace:*
         version: link:../../packages/storage
-      '@placeholder/ui':
-        specifier: workspace:*
-        version: link:../../packages/ui
       '@vercel/analytics':
         specifier: ^2.0.1
         version: 2.0.1(next@16.3.8(@opentelemetry/api@1.9.1)(@playwright/test@1.64.0)(@types/node@24.19.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(sass@1.105.1))(react@19.2.8)
@@ -604,12 +604,12 @@ importers:
 
   packages/render:
     dependencies:
+      '@halation/ui':
+        specifier: workspace:*
+        version: link:../ui
       '@jerryqiu/db':
         specifier: workspace:*
         version: link:../db
-      '@placeholder/ui':
-        specifier: workspace:*
-        version: link:../ui
       gray-matter:
         specifier: ^4.0.3
         version: 4.0.3
@@ -687,7 +687,7 @@ importers:
 
   packages/sites:
     dependencies:
-      '@placeholder/ui':
+      '@halation/ui':
         specifier: workspace:*
         version: link:../ui
     devDependencies:

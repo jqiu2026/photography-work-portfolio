@@ -12,7 +12,7 @@ export function SocialLinks({
   className,
 }: { links: SocialLink[]; variant?: "labels" | "icons"; className?: string }) {
   return (
-    <ul className={cx("ph-social", `ph-social--${variant}`, className)}>
+    <ul className={cx("hl-social", `hl-social--${variant}`, className)}>
       {links.map((l) => (
         <li key={l.href}>
           <a
@@ -32,7 +32,7 @@ export function SocialLinks({
 
 export function SkillTags({ tags, className }: { tags: string[]; className?: string }) {
   return (
-    <ul className={cx("ph-tags", className)}>
+    <ul className={cx("hl-tags", className)}>
       {tags.map((t) => (
         <li key={t}>{t}</li>
       ))}
@@ -67,22 +67,22 @@ export function ProfileHeader({
   className?: string;
 }) {
   return (
-    <header className={cx("ph-profile", stacked && "ph-profile--stacked", className)}>
-      {portrait ? <div className="ph-profile__portrait">{portrait}</div> : null}
-      <div className="ph-profile__body">
+    <header className={cx("hl-profile", stacked && "hl-profile--stacked", className)}>
+      {portrait ? <div className="hl-profile__portrait">{portrait}</div> : null}
+      <div className="hl-profile__body">
         {location ? <Eyebrow>{location}</Eyebrow> : null}
         <Heading as={nameAs} size={nameSize} display>
           {name}
         </Heading>
-        <Text size="xl" className="ph-profile__headline">
+        <Text size="xl" className="hl-profile__headline">
           {headline}
         </Text>
         {currently ? (
-          <Text tone="muted" className="ph-profile__now">
-            <span className="ph-dot" aria-hidden /> {currently}
+          <Text tone="muted" className="hl-profile__now">
+            <span className="hl-dot" aria-hidden /> {currently}
           </Text>
         ) : null}
-        {actions ? <div className="ph-profile__actions">{actions}</div> : null}
+        {actions ? <div className="hl-profile__actions">{actions}</div> : null}
         {links?.length ? <SocialLinks links={links} /> : null}
       </div>
     </header>
@@ -93,16 +93,16 @@ export type TimelineItem = { title: string; org?: string; period: string; summar
 /** Vertical timeline: work, school, leadership, flying, music. */
 export function Timeline({ items, className }: { items: TimelineItem[]; className?: string }) {
   return (
-    <ol className={cx("ph-timeline", className)}>
+    <ol className={cx("hl-timeline", className)}>
       {items.map((it) => (
-        <li key={`${it.title}-${it.period}`} className="ph-timeline__item">
-          <p className="ph-timeline__period">{it.period}</p>
+        <li key={`${it.title}-${it.period}`} className="hl-timeline__item">
+          <p className="hl-timeline__period">{it.period}</p>
           <div>
-            <h3 className="ph-timeline__title">
+            <h3 className="hl-timeline__title">
               {it.title}
               {it.org ? <span> · {it.org}</span> : null}
             </h3>
-            {it.summary ? <div className="ph-timeline__summary">{it.summary}</div> : null}
+            {it.summary ? <div className="hl-timeline__summary">{it.summary}</div> : null}
           </div>
         </li>
       ))}
@@ -119,12 +119,12 @@ export function SitePreviewCard({
   className,
 }: { title: string; description: string; href: string; image?: ReactNode; as?: ElementType; className?: string }) {
   return (
-    <As href={href} className={cx("ph-preview", className)}>
-      {image ? <div className="ph-preview__media">{image}</div> : null}
-      <div className="ph-preview__body">
+    <As href={href} className={cx("hl-preview", className)}>
+      {image ? <div className="hl-preview__media">{image}</div> : null}
+      <div className="hl-preview__body">
         <h3>{title}</h3>
         <p>{description}</p>
-        <span className="ph-preview__go" aria-hidden>
+        <span className="hl-preview__go" aria-hidden>
           Visit →
         </span>
       </div>
@@ -141,8 +141,8 @@ export function InterestHero({
   actions,
 }: { eyebrow?: string; title: string; intro?: string; media?: ReactNode; actions?: ReactNode }) {
   return (
-    <section className="ph-interest">
-      <div className="ph-interest__text">
+    <section className="hl-interest">
+      <div className="hl-interest__text">
         {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
         <Heading as="h1" size="display" display>
           {title}
@@ -152,16 +152,16 @@ export function InterestHero({
             {intro}
           </Text>
         ) : null}
-        {actions ? <div className="ph-profile__actions">{actions}</div> : null}
+        {actions ? <div className="hl-profile__actions">{actions}</div> : null}
       </div>
-      {media ? <div className="ph-interest__media">{media}</div> : null}
+      {media ? <div className="hl-interest__media">{media}</div> : null}
     </section>
   );
 }
 
 export function ResumeButton({ href, label = "Download résumé (PDF)" }: { href: string; label?: string }) {
   return (
-    <a className="ph-btn ph-btn--ghost ph-btn--md" href={href} download>
+    <a className="hl-btn hl-btn--ghost hl-btn--md" href={href} download>
       <span>{label}</span>
     </a>
   );

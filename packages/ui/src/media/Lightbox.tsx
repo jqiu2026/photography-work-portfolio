@@ -45,9 +45,9 @@ export function Lightbox({ images, index, onIndexChange }: LightboxProps) {
       }}
     >
       <Dialog.Portal>
-        <Dialog.Overlay className="ph-lb__overlay" />
+        <Dialog.Overlay className="hl-lb__overlay" />
         <Dialog.Content
-          className="ph-lb"
+          className="hl-lb"
           aria-describedby={undefined}
           onPointerDown={(e) => {
             start.current = e.clientX;
@@ -60,12 +60,12 @@ export function Lightbox({ images, index, onIndexChange }: LightboxProps) {
             start.current = null;
           }}
         >
-          <Dialog.Title className="ph-sr-only">{img ? img.alt : "Image viewer"}</Dialog.Title>
+          <Dialog.Title className="hl-sr-only">{img ? img.alt : "Image viewer"}</Dialog.Title>
           {img ? (
-            <figure className="ph-lb__fig" data-zoom={zoom || undefined}>
+            <figure className="hl-lb__fig" data-zoom={zoom || undefined}>
               <button
                 type="button"
-                className="ph-lb__img"
+                className="hl-lb__img"
                 onClick={() => setZoom((z) => !z)}
                 aria-label={zoom ? "Zoom out" : "Zoom in"}
               >
@@ -80,25 +80,25 @@ export function Lightbox({ images, index, onIndexChange }: LightboxProps) {
               </figcaption>
             </figure>
           ) : null}
-          <Dialog.Close className="ph-lb__btn ph-lb__close" aria-label="Close">
+          <Dialog.Close className="hl-lb__btn hl-lb__close" aria-label="Close">
             <X size={20} aria-hidden />
           </Dialog.Close>
           {images.length > 1 ? (
             <>
               <button
                 type="button"
-                className="ph-lb__btn ph-lb__prev"
+                className="hl-lb__btn hl-lb__prev"
                 onClick={() => go(-1)}
                 aria-label="Previous image"
               >
                 <ChevronLeft size={22} aria-hidden />
               </button>
-              <button type="button" className="ph-lb__btn ph-lb__next" onClick={() => go(1)} aria-label="Next image">
+              <button type="button" className="hl-lb__btn hl-lb__next" onClick={() => go(1)} aria-label="Next image">
                 <ChevronRight size={22} aria-hidden />
               </button>
             </>
           ) : null}
-          <span className="ph-lb__hint" aria-hidden>
+          <span className="hl-lb__hint" aria-hidden>
             <ZoomIn size={14} /> click to zoom
           </span>
         </Dialog.Content>

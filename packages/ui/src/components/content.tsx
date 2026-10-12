@@ -7,7 +7,7 @@ export function Card({
   className,
   ...rest
 }: { as?: ElementType; interactive?: boolean } & HTMLAttributes<HTMLElement> & { href?: string }) {
-  return <As className={cx("ph-card", interactive && "ph-card--interactive", className)} {...rest} />;
+  return <As className={cx("hl-card", interactive && "hl-card--interactive", className)} {...rest} />;
 }
 
 export function Avatar({ src, alt, name, size = 48 }: { src?: string; alt?: string; name: string; size?: number }) {
@@ -19,7 +19,7 @@ export function Avatar({ src, alt, name, size = 48 }: { src?: string; alt?: stri
     .toUpperCase();
   return src ? (
     <img
-      className="ph-avatar"
+      className="hl-avatar"
       src={src}
       alt={alt ?? name}
       width={size}
@@ -28,7 +28,7 @@ export function Avatar({ src, alt, name, size = 48 }: { src?: string; alt?: stri
     />
   ) : (
     <span
-      className="ph-avatar ph-avatar--fallback"
+      className="hl-avatar hl-avatar--fallback"
       role="img"
       aria-label={alt ?? name}
       style={{ width: size, height: size }}
@@ -40,16 +40,16 @@ export function Avatar({ src, alt, name, size = 48 }: { src?: string; alt?: stri
 
 export function Stat({ value, label, className }: { value: ReactNode; label: string; className?: string }) {
   return (
-    <div className={cx("ph-stat", className)}>
-      <div className="ph-stat__value">{value}</div>
-      <div className="ph-stat__label">{label}</div>
+    <div className={cx("hl-stat", className)}>
+      <div className="hl-stat__value">{value}</div>
+      <div className="hl-stat__label">{label}</div>
     </div>
   );
 }
 
 export function Quote({ children, cite }: { children: ReactNode; cite?: string }) {
   return (
-    <figure className="ph-quote">
+    <figure className="hl-quote">
       <blockquote>{children}</blockquote>
       {cite ? <figcaption>{cite}</figcaption> : null}
     </figure>
@@ -58,7 +58,7 @@ export function Quote({ children, cite }: { children: ReactNode; cite?: string }
 
 export function CodeBlock({ code, language }: { code: string; language?: string }) {
   return (
-    <pre className="ph-code" data-language={language} tabIndex={0} aria-label={language ? `${language} code` : "Code"}>
+    <pre className="hl-code" data-language={language} tabIndex={0} aria-label={language ? `${language} code` : "Code"}>
       <code>{code}</code>
     </pre>
   );
@@ -66,8 +66,8 @@ export function CodeBlock({ code, language }: { code: string; language?: string 
 
 export function Table({ className, ...rest }: HTMLAttributes<HTMLTableElement>) {
   return (
-    <div className="ph-table-wrap" role="region" tabIndex={0} aria-label="Scrollable table">
-      <table className={cx("ph-table", className)} {...rest} />
+    <div className="hl-table-wrap" role="region" tabIndex={0} aria-label="Scrollable table">
+      <table className={cx("hl-table", className)} {...rest} />
     </div>
   );
 }

@@ -113,7 +113,7 @@ export function ScrollHighlight({ text, className }: { text: string; className?:
   const ref = useRef<HTMLParagraphElement>(null);
   const words = text.split(" ");
   return (
-    <p ref={ref} className={className} style={calm ? undefined : { color: "var(--ph-muted)" }}>
+    <p ref={ref} className={className} style={calm ? undefined : { color: "var(--hl-muted)" }}>
       {words.map((w, i) => (
         <HighlightWord key={`${w}-${i}`} word={w} i={i} n={words.length} target={ref} calm={calm} />
       ))}
@@ -131,6 +131,6 @@ function HighlightWord({
   const { scrollYProgress } = useScroll({ target, offset: ["start 0.85", "end 0.35"] });
   const start = i / n;
   const pct = useTransform(scrollYProgress, [start, Math.min(1, start + 1.5 / n)], [0, 100]);
-  const color = useMotionTemplate`color-mix(in srgb, var(--ph-text) ${pct}%, var(--ph-muted))`;
+  const color = useMotionTemplate`color-mix(in srgb, var(--hl-text) ${pct}%, var(--hl-muted))`;
   return <motion.span style={calm ? undefined : { color }}>{word} </motion.span>;
 }

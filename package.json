@@ -2,7 +2,7 @@
   "name": "jerryqiu-sites",
   "private": true,
   "version": "0.1.0",
-  "description": "Monorepo for jerryqiu.com, photos., music. and flying. plus the @placeholder/ui package",
+  "description": "Monorepo for jerryqiu.com, photos., music. and flying. plus the @halation/ui package",
   "packageManager": "pnpm@12.11.2",
   "scripts": {
     "dev": "concurrently -n db,seed,web,docs,photos -c green,gray,cyan,magenta,yellow \"pnpm dev:db\" \"pnpm dev:seed\" \"pnpm dev:web\" \"pnpm dev:docs\" \"pnpm dev:photos\"",

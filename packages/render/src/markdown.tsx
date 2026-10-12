@@ -1,4 +1,4 @@
-import { EmbedFacade, Link, Prose } from "@placeholder/ui";
+import { EmbedFacade, Link, Prose } from "@halation/ui";
 import NextLink from "next/link";
 import type { ReactNode } from "react";
 import ReactMarkdown, { type Components, defaultUrlTransform } from "react-markdown";

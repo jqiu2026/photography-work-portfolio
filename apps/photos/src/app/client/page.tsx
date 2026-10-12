@@ -1,4 +1,4 @@
-import { Button, Container, Section, Text } from "@placeholder/ui";
+import { Button, Container, Section, Text } from "@halation/ui";
 import { person } from "@jerryqiu/sites/profile";
 import type { Metadata } from "next";
 import { Shell } from "@/components/Shell";
@@ -11,7 +11,7 @@ export default function Client() {
   return (
     <Shell>
       <Container className="page-head">
-        <h1 className="ph-heading ph-heading--display">Client galleries</h1>
+        <h1 className="hl-heading hl-heading--display">Client galleries</h1>
       </Container>
       <Section style={{ paddingTop: 0 }}>
         <Container size="md">

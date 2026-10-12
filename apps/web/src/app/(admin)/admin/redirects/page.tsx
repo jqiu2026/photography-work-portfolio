@@ -54,7 +54,7 @@ export default async function RedirectsPage() {
         </tbody>
       </table>
       <section className="adm-card" style={{ marginTop: "2rem" }}>
-        <h2 style={{ fontSize: "var(--ph-text-xl)" }}>Add a redirect</h2>
+        <h2 style={{ fontSize: "var(--hl-text-xl)" }}>Add a redirect</h2>
         <ActionForm action={addRedirect} submitLabel="Add redirect">
           <F
             name="site"

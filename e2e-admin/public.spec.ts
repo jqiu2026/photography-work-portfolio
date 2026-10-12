@@ -21,7 +21,7 @@ test.describe("the public site follows the CMS", () => {
 
     await page.getByLabel("Status").selectOption("published");
     await page.getByRole("button", { name: "Publish" }).click();
-    await expect(page.locator(".ph-toast", { hasText: "Published" })).toBeVisible();
+    await expect(page.locator(".hl-toast", { hasText: "Published" })).toBeVisible();
 
     await page.goto(`/writing/${slug}`);
     await expect(page.getByRole("heading", { level: 1, name: `Public Post ${uid}` })).toBeVisible();
@@ -39,7 +39,7 @@ test.describe("the public site follows the CMS", () => {
       .getByRole("button", { name: /Publish|Save/ })
       .first()
       .click();
-    await expect(page.locator(".ph-toast").first()).toBeVisible();
+    await expect(page.locator(".hl-toast").first()).toBeVisible();
     await page.goto(`/writing/${slug}`);
     await expect(page.getByRole("heading", { level: 1 })).toContainText("edited");
 

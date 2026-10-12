@@ -1,4 +1,4 @@
-import { Container, Section, SkillTags, Text } from "@placeholder/ui";
+import { Container, Section, SkillTags, Text } from "@halation/ui";
 import type { Metadata } from "next";
 import { Empty } from "@/components/interest/Empty";
 import { InterestShell } from "@/components/interest/InterestShell";

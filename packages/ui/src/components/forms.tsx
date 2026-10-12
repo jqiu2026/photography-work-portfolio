@@ -21,19 +21,19 @@ export function Field({
   const describedBy = [hint && `${id}-hint`, error && `${id}-error`].filter(Boolean).join(" ") || undefined;
   return (
     <FieldContext.Provider value={{ id, describedBy, invalid: !!error }}>
-      <div className={cx("ph-field", className)}>
-        <label htmlFor={id} className="ph-field__label">
+      <div className={cx("hl-field", className)}>
+        <label htmlFor={id} className="hl-field__label">
           {label}
           {required ? <span aria-hidden> *</span> : null}
         </label>
         {children}
         {hint ? (
-          <p id={`${id}-hint`} className="ph-field__hint">
+          <p id={`${id}-hint`} className="hl-field__hint">
             {hint}
           </p>
         ) : null}
         {error ? (
-          <p id={`${id}-error`} className="ph-field__error" role="alert">
+          <p id={`${id}-error`} className="hl-field__error" role="alert">
             {error}
           </p>
         ) : null}
@@ -53,7 +53,7 @@ export function Input({ className, ...rest }: ComponentProps<"input">) {
       id={f?.id}
       aria-describedby={f?.describedBy}
       aria-invalid={f?.invalid || undefined}
-      className={cx("ph-input", className)}
+      className={cx("hl-input", className)}
       {...rest}
     />
   );
@@ -66,7 +66,7 @@ export function Textarea({ className, ...rest }: ComponentProps<"textarea">) {
       id={f?.id}
       aria-describedby={f?.describedBy}
       aria-invalid={f?.invalid || undefined}
-      className={cx("ph-input ph-textarea", className)}
+      className={cx("hl-input hl-textarea", className)}
       {...rest}
     />
   );
@@ -80,7 +80,7 @@ export function Select({ className, children, ...rest }: ComponentProps<"select"
       id={f?.id}
       aria-describedby={f?.describedBy}
       aria-invalid={f?.invalid || undefined}
-      className={cx("ph-input ph-select", className)}
+      className={cx("hl-input hl-select", className)}
       {...rest}
     >
       {children}
@@ -95,8 +95,8 @@ export function Checkbox({
 }: { label: ReactNode; className?: string } & RCheckbox.CheckboxProps) {
   const id = useId();
   return (
-    <div className={cx("ph-check", className)}>
-      <RCheckbox.Root id={id} className="ph-check__box" {...rest}>
+    <div className={cx("hl-check", className)}>
+      <RCheckbox.Root id={id} className="hl-check__box" {...rest}>
         <RCheckbox.Indicator>
           <Check size={14} aria-hidden />
         </RCheckbox.Indicator>
@@ -109,9 +109,9 @@ export function Checkbox({
 export function Switch({ label, className, ...rest }: { label: ReactNode; className?: string } & RSwitch.SwitchProps) {
   const id = useId();
   return (
-    <div className={cx("ph-check", className)}>
-      <RSwitch.Root id={id} className="ph-switch" {...rest}>
-        <RSwitch.Thumb className="ph-switch__thumb" />
+    <div className={cx("hl-check", className)}>
+      <RSwitch.Root id={id} className="hl-switch" {...rest}>
+        <RSwitch.Thumb className="hl-switch__thumb" />
       </RSwitch.Root>
       <label htmlFor={id}>{label}</label>
     </div>
@@ -125,11 +125,11 @@ export function RadioGroup({
 }: { options: { value: string; label: ReactNode }[]; className?: string } & RRadio.RadioGroupProps) {
   const id = useId();
   return (
-    <RRadio.Root className={cx("ph-radio-group", className)} {...rest}>
+    <RRadio.Root className={cx("hl-radio-group", className)} {...rest}>
       {options.map((o) => (
-        <div className="ph-check" key={o.value}>
-          <RRadio.Item id={`${id}-${o.value}`} value={o.value} className="ph-check__box ph-check__box--round">
-            <RRadio.Indicator className="ph-radio__dot" />
+        <div className="hl-check" key={o.value}>
+          <RRadio.Item id={`${id}-${o.value}`} value={o.value} className="hl-check__box hl-check__box--round">
+            <RRadio.Indicator className="hl-radio__dot" />
           </RRadio.Item>
           <label htmlFor={`${id}-${o.value}`}>{o.label}</label>
         </div>
@@ -141,12 +141,12 @@ export function RadioGroup({
 export function Slider({ label, className, ...rest }: { label: string; className?: string } & RSlider.SliderProps) {
   const n = (rest.value ?? rest.defaultValue ?? [0]).length;
   return (
-    <RSlider.Root className={cx("ph-slider", className)} {...rest}>
-      <RSlider.Track className="ph-slider__track">
-        <RSlider.Range className="ph-slider__range" />
+    <RSlider.Root className={cx("hl-slider", className)} {...rest}>
+      <RSlider.Track className="hl-slider__track">
+        <RSlider.Range className="hl-slider__range" />
       </RSlider.Track>
       {Array.from({ length: n }, (_, i) => (
-        <RSlider.Thumb key={i} aria-label={label} className="ph-slider__thumb" />
+        <RSlider.Thumb key={i} aria-label={label} className="hl-slider__thumb" />
       ))}
     </RSlider.Root>
   );

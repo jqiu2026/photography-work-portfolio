@@ -6,7 +6,7 @@ import { AutoRefresh } from "@/dev/AutoRefresh";
 import { MotionGallery } from "@/dev/MotionGallery";
 import { ComponentGallery } from "@/dev/ComponentGallery";
 import { Markdown } from "@/dev/markdown";
-import "@placeholder/ui/styles.css";
+import "@halation/ui/styles.css";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Progress (dev)", robots: { index: false } };

@@ -14,37 +14,37 @@
   color: inherit;
 }
 .work-card__media {
-  border-radius: var(--ph-radius-lg);
+  border-radius: var(--hl-radius-lg);
   overflow: hidden;
   aspect-ratio: 4 / 3;
-  background: var(--ph-surface-2);
+  background: var(--hl-surface-2);
 }
-.work-card__media .ph-img {
+.work-card__media .hl-img {
   aspect-ratio: 4 / 3 !important;
   height: 100%;
 }
 .work-card__media img {
-  transition: transform 1.4s var(--ph-ease);
+  transition: transform 1.4s var(--hl-ease);
 }
 .work-card:hover img {
   transform: scale(1.035);
 }
 .work-card h2 {
-  font-family: var(--ph-font-display);
-  font-weight: var(--ph-display-weight);
-  font-size: var(--ph-text-2xl);
-  letter-spacing: var(--ph-display-tracking);
+  font-family: var(--hl-font-display);
+  font-weight: var(--hl-display-weight);
+  font-size: var(--hl-text-2xl);
+  letter-spacing: var(--hl-display-tracking);
   margin-top: 1.1rem;
   line-height: 1.1;
 }
 .work-card p {
-  color: var(--ph-muted);
-  font-size: var(--ph-text-sm);
+  color: var(--hl-muted);
+  font-size: var(--hl-text-sm);
   margin-top: .4rem;
 }
 .work-detail__hero {
-  margin: 0 var(--ph-gutter);
-  border-radius: var(--ph-radius-lg);
+  margin: 0 var(--hl-gutter);
+  border-radius: var(--hl-radius-lg);
   overflow: hidden;
 }
 .work-detail__meta {
@@ -53,11 +53,11 @@
   gap: 2rem 4rem;
   margin-top: 2rem;
   padding-top: 1.5rem;
-  border-top: 1px solid var(--ph-line);
-  font-size: var(--ph-text-sm);
+  border-top: 1px solid var(--hl-line);
+  font-size: var(--hl-text-sm);
 }
 .work-detail__meta dt {
-  color: var(--ph-muted);
+  color: var(--hl-muted);
 }
 .work-detail__meta dd {
   margin: .2rem 0 0;
@@ -66,7 +66,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
-  border-top: 1px solid var(--ph-line);
+  border-top: 1px solid var(--hl-line);
   padding-block: 3rem;
 }
 .next-prev a {
@@ -79,14 +79,14 @@
   text-align: right;
 }
 .next-prev span {
-  color: var(--ph-muted);
-  font-size: var(--ph-text-sm);
+  color: var(--hl-muted);
+  font-size: var(--hl-text-sm);
 }
 .next-prev strong {
-  font-family: var(--ph-font-display);
-  font-weight: var(--ph-display-weight);
-  font-size: var(--ph-text-2xl);
-  letter-spacing: var(--ph-display-tracking);
+  font-family: var(--hl-font-display);
+  font-weight: var(--hl-display-weight);
+  font-size: var(--hl-text-2xl);
+  letter-spacing: var(--hl-display-tracking);
 }
 .work-card__empty {
   height: 100%;
@@ -94,8 +94,8 @@
   place-items: center;
   padding: 2rem;
   text-align: center;
-  font-family: var(--ph-font-display);
-  font-size: var(--ph-text-2xl);
-  letter-spacing: var(--ph-display-tracking);
-  color: var(--ph-muted);
+  font-family: var(--hl-font-display);
+  font-size: var(--hl-text-2xl);
+  letter-spacing: var(--hl-display-tracking);
+  color: var(--hl-muted);
 }

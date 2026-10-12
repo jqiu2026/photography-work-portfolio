@@ -109,8 +109,8 @@ export function Marquee({
   className,
 }: { children: ReactNode; speed?: number; className?: string }) {
   return (
-    <div className={`ph-marquee ${className ?? ""}`} style={{ ["--ph-marquee-speed" as string]: `${speed}s` }}>
-      <div className="ph-marquee__track">
+    <div className={`hl-marquee ${className ?? ""}`} style={{ ["--hl-marquee-speed" as string]: `${speed}s` }}>
+      <div className="hl-marquee__track">
         <div>{children}</div>
         <div aria-hidden>{children}</div>
       </div>
@@ -147,7 +147,7 @@ export function CursorFollower() {
         width: 12,
         height: 12,
         borderRadius: "50%",
-        background: "var(--ph-accent)",
+        background: "var(--hl-accent)",
         pointerEvents: "none",
         zIndex: 160,
         mixBlendMode: "difference",

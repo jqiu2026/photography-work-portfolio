@@ -1,4 +1,4 @@
-import { Container, Section } from "@placeholder/ui";
+import { Container, Section } from "@halation/ui";
 import type { Metadata } from "next";
 import NextLink from "next/link";
 import { PageHeader } from "@/components/site/PageHeader";
@@ -28,9 +28,9 @@ export default async function Writing() {
                 <div>
                   <h2
                     style={{
-                      fontFamily: "var(--ph-font-display)",
-                      fontWeight: "var(--ph-display-weight)",
-                      fontSize: "var(--ph-text-2xl)",
+                      fontFamily: "var(--hl-font-display)",
+                      fontWeight: "var(--hl-display-weight)",
+                      fontSize: "var(--hl-text-2xl)",
                     }}
                   >
                     {p.title}

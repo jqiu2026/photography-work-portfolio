@@ -1,4 +1,4 @@
-import { Container, Prose, Section } from "@placeholder/ui";
+import { Container, Prose, Section } from "@halation/ui";
 import type { ReactNode } from "react";
 import { getLegalPage } from "@/lib/content-db";
 import { RenderMarkdownBare } from "@jerryqiu/render";

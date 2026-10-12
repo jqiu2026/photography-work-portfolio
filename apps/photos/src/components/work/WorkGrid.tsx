@@ -1,5 +1,5 @@
-import { TiltCard, InView } from "@placeholder/ui/motion";
-import { Image } from "@placeholder/ui/media";
+import { TiltCard, InView } from "@halation/ui/motion";
+import { Image } from "@halation/ui/media";
 import NextLink from "next/link";
 import type { WorkItem } from "@/lib/work";
 

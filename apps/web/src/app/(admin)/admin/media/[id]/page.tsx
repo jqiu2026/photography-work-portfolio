@@ -1,5 +1,5 @@
 import { schema } from "@jerryqiu/db";
-import { Button } from "@placeholder/ui";
+import { Button } from "@halation/ui";
 import { eq } from "drizzle-orm";
 import NextLink from "next/link";
 import { notFound } from "next/navigation";
@@ -52,14 +52,14 @@ export default async function MediaDetail({ params }: { params: Promise<{ id: st
           <img
             src={`/api/admin/media/${m.id}/file?w=960`}
             alt={m.alt ?? ""}
-            style={{ width: "100%", borderRadius: 4, border: "1px solid var(--ph-line)" }}
+            style={{ width: "100%", borderRadius: 4, border: "1px solid var(--hl-line)" }}
           />
-          <h2 style={{ fontSize: "var(--ph-text-lg)", margin: "1.5rem 0 0.5rem" }}>Replace the file</h2>
+          <h2 style={{ fontSize: "var(--hl-text-lg)", margin: "1.5rem 0 0.5rem" }}>Replace the file</h2>
           <p className="adm-note" style={{ marginBottom: "0.75rem" }}>
             Keeps the same id, so every page that uses this image updates.
           </p>
           <Uploader replaceId={m.id} multiple={false} label="Choose replacement" />
-          <h2 style={{ fontSize: "var(--ph-text-lg)", margin: "1.5rem 0 0.5rem" }}>Used in</h2>
+          <h2 style={{ fontSize: "var(--hl-text-lg)", margin: "1.5rem 0 0.5rem" }}>Used in</h2>
           {usage.length ? (
             <ul style={{ paddingLeft: "1.2rem" }}>
               {usage.map((u) => (
@@ -73,7 +73,7 @@ export default async function MediaDetail({ params }: { params: Promise<{ id: st
           )}
           {exif.length ? (
             <>
-              <h2 style={{ fontSize: "var(--ph-text-lg)", margin: "1.5rem 0 0.5rem" }}>Camera details</h2>
+              <h2 style={{ fontSize: "var(--hl-text-lg)", margin: "1.5rem 0 0.5rem" }}>Camera details</h2>
               <p className="adm-note" style={{ marginBottom: "0.5rem" }}>
                 Shown here only. Public copies carry just your name and copyright; location is never published.
               </p>
@@ -121,7 +121,7 @@ export default async function MediaDetail({ params }: { params: Promise<{ id: st
             />
             <fieldset
               style={{
-                border: "1px solid var(--ph-line)",
+                border: "1px solid var(--hl-line)",
                 borderRadius: 4,
                 padding: "1rem",
                 display: "grid",

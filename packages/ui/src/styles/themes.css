@@ -6,88 +6,88 @@
  */
 :root,
 [data-theme="light"] {
-  --ph-bg: #fff;
-  --ph-surface: #fafafa;
-  --ph-surface-2: #f2f2f2;
-  --ph-text: #0a0a0a;
-  --ph-muted: #666;
-  --ph-line: #e6e6e6;
-  --ph-cinema: #000;
+  --hl-bg: #fff;
+  --hl-surface: #fafafa;
+  --hl-surface-2: #f2f2f2;
+  --hl-text: #0a0a0a;
+  --hl-muted: #666;
+  --hl-line: #e6e6e6;
+  --hl-cinema: #000;
   /* Accent spectrum: fill colours, AA-safe text colours, and the text colour that sits on a fill */
-  --ph-blue: #2563eb;
-  --ph-blue-text: #1d4ed8;
-  --ph-blue-on: #fff;
-  --ph-red: #dc2626;
-  --ph-red-text: #c81e1e;
-  --ph-red-on: #fff;
-  --ph-green: #15803d;
-  --ph-green-text: #15803d;
-  --ph-green-on: #fff;
-  --ph-yellow: #facc15;
-  --ph-yellow-text: #7a5a00;
-  --ph-yellow-on: #0a0a0a;
-  --ph-danger: var(--ph-red-text);
-  --ph-success: var(--ph-green-text);
-  --ph-warn: var(--ph-yellow-text);
+  --hl-blue: #2563eb;
+  --hl-blue-text: #1d4ed8;
+  --hl-blue-on: #fff;
+  --hl-red: #dc2626;
+  --hl-red-text: #c81e1e;
+  --hl-red-on: #fff;
+  --hl-green: #15803d;
+  --hl-green-text: #15803d;
+  --hl-green-on: #fff;
+  --hl-yellow: #facc15;
+  --hl-yellow-text: #7a5a00;
+  --hl-yellow-on: #0a0a0a;
+  --hl-danger: var(--hl-red-text);
+  --hl-success: var(--hl-green-text);
+  --hl-warn: var(--hl-yellow-text);
   color-scheme: light;
 }
 [data-theme="dark"] {
-  --ph-bg: #0a0a0a;
-  --ph-surface: #111;
-  --ph-surface-2: #1a1a1a;
-  --ph-text: #fafafa;
-  --ph-muted: #a3a3a3;
-  --ph-line: #262626;
-  --ph-cinema: #000;
-  --ph-blue: #6b9bff;
-  --ph-blue-text: #8fb4ff;
-  --ph-blue-on: #0a0a0a;
-  --ph-red: #ff6b60;
-  --ph-red-text: #ff8a80;
-  --ph-red-on: #0a0a0a;
-  --ph-green: #4ade80;
-  --ph-green-text: #4ade80;
-  --ph-green-on: #0a0a0a;
-  --ph-yellow: #fde047;
-  --ph-yellow-text: #fde047;
-  --ph-yellow-on: #0a0a0a;
-  --ph-danger: var(--ph-red-text);
-  --ph-success: var(--ph-green-text);
-  --ph-warn: var(--ph-yellow-text);
+  --hl-bg: #0a0a0a;
+  --hl-surface: #111;
+  --hl-surface-2: #1a1a1a;
+  --hl-text: #fafafa;
+  --hl-muted: #a3a3a3;
+  --hl-line: #262626;
+  --hl-cinema: #000;
+  --hl-blue: #6b9bff;
+  --hl-blue-text: #8fb4ff;
+  --hl-blue-on: #0a0a0a;
+  --hl-red: #ff6b60;
+  --hl-red-text: #ff8a80;
+  --hl-red-on: #0a0a0a;
+  --hl-green: #4ade80;
+  --hl-green-text: #4ade80;
+  --hl-green-on: #0a0a0a;
+  --hl-yellow: #fde047;
+  --hl-yellow-text: #fde047;
+  --hl-yellow-on: #0a0a0a;
+  --hl-danger: var(--hl-red-text);
+  --hl-success: var(--hl-green-text);
+  --hl-warn: var(--hl-yellow-text);
   color-scheme: dark;
 }
 
 /* Typography is Geist everywhere; presets differ in weight and tracking, and in accent and corner shape. */
 :root {
-  --ph-font-display: var(--ph-font-sans);
-  --ph-display-weight: 600;
-  --ph-display-tracking: -0.045em;
-  --ph-accent: var(--ph-blue);
-  --ph-accent-text: var(--ph-blue-text);
-  --ph-accent-contrast: var(--ph-blue-on);
+  --hl-font-display: var(--hl-font-sans);
+  --hl-display-weight: 600;
+  --hl-display-tracking: -0.045em;
+  --hl-accent: var(--hl-blue);
+  --hl-accent-text: var(--hl-blue-text);
+  --hl-accent-contrast: var(--hl-blue-on);
 }
 [data-preset="hub"] {
-  --ph-accent: var(--ph-blue);
-  --ph-accent-text: var(--ph-blue-text);
-  --ph-accent-contrast: var(--ph-blue-on);
+  --hl-accent: var(--hl-blue);
+  --hl-accent-text: var(--hl-blue-text);
+  --hl-accent-contrast: var(--hl-blue-on);
 }
 [data-preset="photos"] {
-  --ph-accent: var(--ph-red);
-  --ph-accent-text: var(--ph-red-text);
-  --ph-accent-contrast: var(--ph-red-on);
-  --ph-display-weight: 500;
-  --ph-display-tracking: -0.055em;
-  --ph-radius-md: 8px;
-  --ph-radius-lg: 12px;
-  --ph-radius-control: 10px;
+  --hl-accent: var(--hl-red);
+  --hl-accent-text: var(--hl-red-text);
+  --hl-accent-contrast: var(--hl-red-on);
+  --hl-display-weight: 500;
+  --hl-display-tracking: -0.055em;
+  --hl-radius-md: 8px;
+  --hl-radius-lg: 12px;
+  --hl-radius-control: 10px;
 }
 [data-preset="music"] {
-  --ph-accent: var(--ph-yellow);
-  --ph-accent-text: var(--ph-yellow-text);
-  --ph-accent-contrast: var(--ph-yellow-on);
+  --hl-accent: var(--hl-yellow);
+  --hl-accent-text: var(--hl-yellow-text);
+  --hl-accent-contrast: var(--hl-yellow-on);
 }
 [data-preset="flying"] {
-  --ph-accent: var(--ph-green);
-  --ph-accent-text: var(--ph-green-text);
-  --ph-accent-contrast: var(--ph-green-on);
+  --hl-accent: var(--hl-green);
+  --hl-accent-text: var(--hl-green-text);
+  --hl-accent-contrast: var(--hl-green-on);
 }

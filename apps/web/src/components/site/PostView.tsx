@@ -1,4 +1,4 @@
-import { Breadcrumbs, Container, Eyebrow, Heading, Section, Text } from "@placeholder/ui";
+import { Breadcrumbs, Container, Eyebrow, Heading, Section, Text } from "@halation/ui";
 import type { ReactNode } from "react";
 import { RenderMarkdown } from "@jerryqiu/render";
 

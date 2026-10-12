@@ -1,6 +1,6 @@
 # jerryqiu.com sites
 
-Monorepo for Jerry Qiu's personal hub (jerryqiu.com), the photography site (photos.), and the music and flying sites, built on one open-source UI package (`@placeholder/ui`, a placeholder name).
+Monorepo for Jerry Qiu's personal hub (jerryqiu.com), the photography site (photos.), and the music and flying sites, built on one open-source UI package (`@halation/ui`, a placeholder name).
 
 ```bash
 pnpm install

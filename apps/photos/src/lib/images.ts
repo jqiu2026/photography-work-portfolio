@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import type { GalleryImage } from "@placeholder/ui/media";
+import type { GalleryImage } from "@halation/ui/media";
 
 type Manifest = Record<string, Omit<GalleryImage, "alt">>;
 let cache: Manifest | undefined;

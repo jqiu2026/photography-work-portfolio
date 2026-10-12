@@ -59,14 +59,14 @@ describe("ScreenshotGuard", () => {
     );
     expect(document.documentElement).toHaveAttribute("data-guard", "strict");
     fireEvent.keyDown(window, { key: "PrintScreen" });
-    expect(document.documentElement).toHaveClass("ph-guard-hide");
+    expect(document.documentElement).toHaveClass("hl-guard-hide");
     const dialog = screen.getByRole("alertdialog", { name: guardCopy.title });
     expect(dialog).toHaveTextContent("not a lock");
     act(() => {
       vi.advanceTimersByTime(3100);
     });
     expect(screen.queryByRole("alertdialog")).toBeNull();
-    expect(document.documentElement).not.toHaveClass("ph-guard-hide");
+    expect(document.documentElement).not.toHaveClass("hl-guard-hide");
   });
 
   it("strict: the dialog can be dismissed with the button and with Escape", () => {
@@ -105,18 +105,18 @@ describe("ScreenshotGuard", () => {
       </ScreenshotGuard>,
     );
     fireEvent.blur(window);
-    expect(document.documentElement).toHaveClass("ph-guard-hide");
+    expect(document.documentElement).toHaveClass("hl-guard-hide");
     fireEvent.focus(window);
     act(() => {
       vi.advanceTimersByTime(400);
     });
-    expect(document.documentElement).not.toHaveClass("ph-guard-hide");
+    expect(document.documentElement).not.toHaveClass("hl-guard-hide");
   });
 
   it("light: blocks the context menu on images but never shows a dialog; other pages keep theirs", () => {
     render(
       <ScreenshotGuard level="light">
-        <span className="ph-img">
+        <span className="hl-img">
           <img alt="a" src="/a.webp" />
         </span>
         <input aria-label="field" />
@@ -132,7 +132,7 @@ describe("ScreenshotGuard", () => {
   it("off: does nothing at all", () => {
     render(
       <ScreenshotGuard level="off">
-        <span className="ph-img">
+        <span className="hl-img">
           <img alt="a" src="/a.webp" />
         </span>
       </ScreenshotGuard>,

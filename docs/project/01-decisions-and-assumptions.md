@@ -55,7 +55,7 @@ The owner will not be around while this runs. **Never block on a question.** Use
 | A16 | Email | **Resend** free tier (3,000/month) for notifications; React Email templates (already used in stuyaviators). | Free at this volume. |
 | A17 | Payments | **Stripe** (pay-as-you-go fees, no monthly cost). Build behind a `PaymentProvider` interface. Test mode only until the owner adds live keys. | Standard. |
 | A18 | E-signature | Built in: typed name + drawn signature, timestamp, IP, user agent, document hash, audit trail PDF. | Free. Add a "have a lawyer review the templates" note. Not legal advice. |
-| A19 | Placeholder package name | `@placeholder/ui`, brand `PlaceholderUI`, CSS variable prefix `--ph-`. All occurrences come from **one config file** and a `pnpm rename` script so the real name is a 5-minute swap. | Owner is still choosing a name. |
+| A19 | Placeholder package name | `@halation/ui`, brand `Halation`, CSS variable prefix `--hl-`. All occurrences come from **one config file** and a `pnpm rename` script so the real name is a 5-minute swap. | Owner is still choosing a name. |
 | A20 | Branding for the hub | Brand is **Jerry Qiu** (personal), not "Jerry Qiu Photography"; photography branding lives on the studio. Palette, type and identity come from the `/_design` exploration, **not** from StuyAviators. Photos need neutral surroundings. | The hub is about the whole person. |
 | A21 | Analytics | Keep `@vercel/analytics` and `@vercel/speed-insights` (already installed). No other trackers. | Already paid for with Pro. |
 | A22 | Git push / PRs / deploy | **Never** without the owner. Local commits only. | Outward-facing. |
@@ -83,7 +83,7 @@ The owner will not be around while this runs. **Never block on a question.** Use
 | V9 | Technical ambition | The strongest techniques (real-time WebGL stage, shaders, fluid simulation, view transitions) with quality tiers and static fallbacks. |
 | V10 | Scope | Design everything now; build working local mocks of the studio, score store, client portal and flight map; real services in Phase 3. |
 | V11 | Voice | Jerry's own first-person voice; Claude drafts from real facts and marks `TODO(owner)`. |
-| V12 | Package | Completely new, original UI system and name (owner's suggestion and default: **Halation UI**), prepared for sale (owner publishes and sells). Supersedes A-decisions about the old package look, handwritten `--ph-*` CSS, and "open source MIT" intent: licence is an open question (Q32). |
+| V12 | Package | Completely new, original UI system and name (owner's suggestion and default: **Halation UI**), prepared for sale (owner publishes and sells). Supersedes A-decisions about the old package look, handwritten `--hl-*` CSS, and "open source MIT" intent: licence is an open question (Q32). |
 
 Earlier decisions A29 (nav/site switcher), the Phase 1 palette/type decisions, and the "no e-commerce on the hub" wording are superseded where they conflict.
 

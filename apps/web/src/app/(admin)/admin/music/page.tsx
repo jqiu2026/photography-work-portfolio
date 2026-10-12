@@ -1,5 +1,5 @@
 import { schema } from "@jerryqiu/db";
-import { Badge, Button } from "@placeholder/ui";
+import { Badge, Button } from "@halation/ui";
 import { and, asc, desc, eq, isNull } from "drizzle-orm";
 import NextLink from "next/link";
 import { ActionForm, F } from "@/components/admin/form-kit";
@@ -69,7 +69,7 @@ export default async function MusicAdmin() {
           ) : null}
         </tbody>
       </table>
-      <h2 style={{ margin: "3rem 0 1rem", fontSize: "var(--ph-text-2xl)", letterSpacing: "-0.03em" }}>Background</h2>
+      <h2 style={{ margin: "3rem 0 1rem", fontSize: "var(--hl-text-2xl)", letterSpacing: "-0.03em" }}>Background</h2>
       <ActionForm action={saveMusicBackground}>
         <F
           name="story"

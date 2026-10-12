@@ -12,13 +12,13 @@ Rules for AI agents and contributors. Note: the UI package rules below describe 
 
 ## Repo layout
 
-`apps/web` hub + music + flying (:3000), `apps/photos` (:3002), `apps/docs` UI docs (:3001), `packages/ui` (`@placeholder/ui`, open source, MIT), `packages/sites` site registry and theme presets, `packages/config` shared tsconfig.
+`apps/web` hub + music + flying (:3000), `apps/photos` (:3002), `apps/docs` UI docs (:3001), `packages/ui` (`@halation/ui`, open source, MIT), `packages/sites` site registry and theme presets, `packages/config` shared tsconfig.
 
 ## Working with the UI package (`packages/ui`)
 
-- Styling is plain CSS with tokens: `--ph-*` variables (`src/styles/tokens.css`, `themes.css`) and `ph-*` classes (`components.css`). No Tailwind, no CSS-in-JS. Never hard-code colours in apps; use tokens. Themes switch on `[data-theme]` and `[data-preset]`.
+- Styling is plain CSS with tokens: `--hl-*` variables (`src/styles/tokens.css`, `themes.css`) and `ph-*` classes (`components.css`). No Tailwind, no CSS-in-JS. Never hard-code colours in apps; use tokens. Themes switch on `[data-theme]` and `[data-preset]`.
 - Compose pages from the package components (`Container`, `Stack`, `Row`, `Grid`, `Section`, `Heading`, `Text`, `Button`, ...). Add a new component to the package when two pages need it; keep it generic (no Jerry-specific content in `packages/ui`).
-- Subpath exports: `@placeholder/ui` (primitives), `/motion`, `/media`, `/webgl`, `/styles.css`, `/tokens`. Heavy code (ogl, Lenis, image sequences) stays out of the main entry.
+- Subpath exports: `@halation/ui` (primitives), `/motion`, `/media`, `/webgl`, `/styles.css`, `/tokens`. Heavy code (ogl, Lenis, image sequences) stays out of the main entry.
 - Every motion component must render a complete static state under `prefers-reduced-motion` (use `useCalm()`).
 - Accessibility is an acceptance criterion: visible focus, 44px targets, labelled controls, AA contrast, keyboard use.
 - Use `motion` tokens from `src/tokens.ts` (one easing curve, one spring); do not invent per-component curves.

@@ -26,12 +26,12 @@ export function Dialog({ trigger, title, description, children, ...root }: Dialo
     <RDialog.Root {...root}>
       {trigger ? <RDialog.Trigger asChild>{trigger}</RDialog.Trigger> : null}
       <RDialog.Portal>
-        <RDialog.Overlay className="ph-overlay" />
-        <RDialog.Content className="ph-dialog" aria-describedby={description ? undefined : undefined}>
-          <RDialog.Title className="ph-dialog__title">{title}</RDialog.Title>
-          {description ? <RDialog.Description className="ph-dialog__desc">{description}</RDialog.Description> : null}
+        <RDialog.Overlay className="hl-overlay" />
+        <RDialog.Content className="hl-dialog" aria-describedby={description ? undefined : undefined}>
+          <RDialog.Title className="hl-dialog__title">{title}</RDialog.Title>
+          {description ? <RDialog.Description className="hl-dialog__desc">{description}</RDialog.Description> : null}
           {children}
-          <RDialog.Close className="ph-dialog__close" aria-label="Close">
+          <RDialog.Close className="hl-dialog__close" aria-label="Close">
             <X size={18} aria-hidden />
           </RDialog.Close>
         </RDialog.Content>
@@ -51,11 +51,11 @@ export function Sheet({
     <RDialog.Root {...root}>
       {trigger ? <RDialog.Trigger asChild>{trigger}</RDialog.Trigger> : null}
       <RDialog.Portal>
-        <RDialog.Overlay className="ph-overlay" />
-        <RDialog.Content className={cx("ph-sheet", `ph-sheet--${side}`)} aria-describedby={undefined}>
-          <RDialog.Title className="ph-dialog__title">{title}</RDialog.Title>
+        <RDialog.Overlay className="hl-overlay" />
+        <RDialog.Content className={cx("hl-sheet", `hl-sheet--${side}`)} aria-describedby={undefined}>
+          <RDialog.Title className="hl-dialog__title">{title}</RDialog.Title>
           {children}
-          <RDialog.Close className="ph-dialog__close" aria-label="Close">
+          <RDialog.Close className="hl-dialog__close" aria-label="Close">
             <X size={18} aria-hidden />
           </RDialog.Close>
         </RDialog.Content>
@@ -76,7 +76,7 @@ export function Popover({
     <RPopover.Root>
       <RPopover.Trigger asChild>{trigger}</RPopover.Trigger>
       <RPopover.Portal>
-        <RPopover.Content className="ph-popover" align={align} sideOffset={10}>
+        <RPopover.Content className="hl-popover" align={align} sideOffset={10}>
           {children}
         </RPopover.Content>
       </RPopover.Portal>
@@ -92,7 +92,7 @@ export function Tooltip({ content, children }: { content: string; children: Reac
     <RTooltip.Root>
       <RTooltip.Trigger asChild>{children}</RTooltip.Trigger>
       <RTooltip.Portal>
-        <RTooltip.Content className="ph-tooltip" sideOffset={8}>
+        <RTooltip.Content className="hl-tooltip" sideOffset={8}>
           {content}
         </RTooltip.Content>
       </RTooltip.Portal>
@@ -110,11 +110,11 @@ export function Menu({
     <RMenu.Root>
       <RMenu.Trigger asChild>{trigger}</RMenu.Trigger>
       <RMenu.Portal>
-        <RMenu.Content className="ph-popover ph-menu" align={align} sideOffset={10}>
+        <RMenu.Content className="hl-popover hl-menu" align={align} sideOffset={10}>
           {items.map((it) => (
             <RMenu.Item
               key={it.label}
-              className={cx("ph-menu__item", it.destructive && "ph-menu__item--danger")}
+              className={cx("hl-menu__item", it.destructive && "hl-menu__item--danger")}
               onSelect={it.onSelect}
               asChild={!!it.href}
             >
@@ -134,16 +134,16 @@ export function Tabs({
   className,
 }: { tabs: { value: string; label: string; content: ReactNode }[]; defaultValue?: string; className?: string }) {
   return (
-    <RTabs.Root defaultValue={defaultValue ?? tabs[0]?.value} className={cx("ph-tabs", className)}>
-      <RTabs.List className="ph-tabs__list">
+    <RTabs.Root defaultValue={defaultValue ?? tabs[0]?.value} className={cx("hl-tabs", className)}>
+      <RTabs.List className="hl-tabs__list">
         {tabs.map((t) => (
-          <RTabs.Trigger key={t.value} value={t.value} className="ph-tabs__tab">
+          <RTabs.Trigger key={t.value} value={t.value} className="hl-tabs__tab">
             {t.label}
           </RTabs.Trigger>
         ))}
       </RTabs.List>
       {tabs.map((t) => (
-        <RTabs.Content key={t.value} value={t.value} className="ph-tabs__panel">
+        <RTabs.Content key={t.value} value={t.value} className="hl-tabs__panel">
           {t.content}
         </RTabs.Content>
       ))}
@@ -162,18 +162,18 @@ export function Accordion({
 }) {
   const props = type === "single" ? ({ type: "single", collapsible: true } as const) : ({ type: "multiple" } as const);
   return (
-    <RAccordion.Root className={cx("ph-accordion", className)} {...props}>
+    <RAccordion.Root className={cx("hl-accordion", className)} {...props}>
       {items.map((i) => (
-        <RAccordion.Item key={i.value} value={i.value} className="ph-accordion__item">
+        <RAccordion.Item key={i.value} value={i.value} className="hl-accordion__item">
           <RAccordion.Header asChild>
             <h3>
-              <RAccordion.Trigger className="ph-accordion__trigger">
+              <RAccordion.Trigger className="hl-accordion__trigger">
                 {i.title}
                 <ChevronDown size={18} aria-hidden />
               </RAccordion.Trigger>
             </h3>
           </RAccordion.Header>
-          <RAccordion.Content className="ph-accordion__content">
+          <RAccordion.Content className="hl-accordion__content">
             <div>{i.content}</div>
           </RAccordion.Content>
         </RAccordion.Item>
@@ -195,9 +195,9 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   return (
     <ToastCtx.Provider value={{ toast }}>
       {children}
-      <div className="ph-toasts" role="status" aria-live="polite">
+      <div className="hl-toasts" role="status" aria-live="polite">
         {items.map((t) => (
-          <div key={t.id} className={cx("ph-toast", `ph-toast--${t.tone}`)}>
+          <div key={t.id} className={cx("hl-toast", `hl-toast--${t.tone}`)}>
             {t.message}
           </div>
         ))}
@@ -213,17 +213,17 @@ export function useToast() {
 
 /* Small feedback atoms (server-safe) */
 export function Spinner({ label = "Loading", className }: { label?: string; className?: string }) {
-  return <span role="status" aria-label={label} className={cx("ph-spinner", className)} />;
+  return <span role="status" aria-label={label} className={cx("hl-spinner", className)} />;
 }
 export function Skeleton({ className, ...rest }: HTMLAttributes<HTMLDivElement>) {
-  return <div aria-hidden className={cx("ph-skeleton", className)} {...rest} />;
+  return <div aria-hidden className={cx("hl-skeleton", className)} {...rest} />;
 }
 export function Badge({
   tone = "default",
   className,
   ...rest
 }: { tone?: "default" | "accent" | "success" | "danger" } & HTMLAttributes<HTMLSpanElement>) {
-  return <span className={cx("ph-badge", `ph-badge--${tone}`, className)} {...rest} />;
+  return <span className={cx("hl-badge", `hl-badge--${tone}`, className)} {...rest} />;
 }
 export function Progress({ value, label, className }: { value: number; label: string; className?: string }) {
   return (
@@ -233,7 +233,7 @@ export function Progress({ value, label, className }: { value: number; label: st
       aria-valuemin={0}
       aria-valuemax={100}
       aria-valuenow={Math.round(Math.max(0, Math.min(100, value)))}
-      className={cx("ph-progress", className)}
+      className={cx("hl-progress", className)}
     >
       <div style={{ width: `${Math.max(0, Math.min(100, value))}%` }} />
     </div>

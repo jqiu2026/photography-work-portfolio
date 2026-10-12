@@ -1,5 +1,5 @@
 import { schema } from "@jerryqiu/db";
-import { Badge, Button } from "@placeholder/ui";
+import { Badge, Button } from "@halation/ui";
 import { and, asc, count, eq, isNull } from "drizzle-orm";
 import NextLink from "next/link";
 import { NoDb, PageHead } from "@/components/admin/ui";

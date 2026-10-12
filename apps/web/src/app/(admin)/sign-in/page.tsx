@@ -1,4 +1,4 @@
-import { Button, Container, Heading, Text } from "@placeholder/ui";
+import { Button, Container, Heading, Text } from "@halation/ui";
 import { safeCallback } from "@jerryqiu/auth/policy";
 import { getSites } from "@jerryqiu/sites";
 import { redirect } from "next/navigation";
@@ -30,7 +30,7 @@ export default async function SignIn({
 
   return (
     <Container size="sm" style={{ paddingBlock: "clamp(4rem, 14vh, 9rem)" }}>
-      <p className="ph-eyebrow" style={{ marginBottom: "1.25rem" }}>
+      <p className="hl-eyebrow" style={{ marginBottom: "1.25rem" }}>
         Admin
       </p>
       <Heading as="h1" size="4xl" display>
@@ -40,7 +40,7 @@ export default async function SignIn({
         Only @{kit.domain} accounts on the allow-list can sign in.
       </Text>
       {sp.error ? (
-        <p role="alert" style={{ color: "var(--ph-danger)", marginBottom: "1.5rem" }}>
+        <p role="alert" style={{ color: "var(--hl-danger)", marginBottom: "1.5rem" }}>
           {errors[sp.error] ?? "Sign-in failed. Try again."}
         </p>
       ) : null}
@@ -55,7 +55,7 @@ export default async function SignIn({
         </Text>
       ) : null}
       {kit.isOpenSignIn ? (
-        <div style={{ marginTop: "2.5rem", paddingTop: "1.5rem", borderTop: "1px solid var(--ph-line)" }}>
+        <div style={{ marginTop: "2.5rem", paddingTop: "1.5rem", borderTop: "1px solid var(--hl-line)" }}>
           <Text size="sm" tone="muted">
             Development only: open sign-in is on (DASHBOARD_OPEN_SIGNIN). Production builds ignore it.
           </Text>

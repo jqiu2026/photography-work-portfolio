@@ -1,5 +1,5 @@
-import { Breadcrumbs, Container, Eyebrow, Heading, Section, Text } from "@placeholder/ui";
-import { Gallery, Image, type GalleryImage } from "@placeholder/ui/media";
+import { Breadcrumbs, Container, Eyebrow, Heading, Section, Text } from "@halation/ui";
+import { Gallery, Image, type GalleryImage } from "@halation/ui/media";
 import { Blocks, MDX } from "@jerryqiu/render";
 import { getSite } from "@jerryqiu/sites";
 import { person } from "@jerryqiu/sites/profile";

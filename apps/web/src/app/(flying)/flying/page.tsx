@@ -9,8 +9,8 @@ import {
   Link as UiLink,
   Section,
   Text,
-} from "@placeholder/ui";
-import { Image } from "@placeholder/ui/media";
+} from "@halation/ui";
+import { Image } from "@halation/ui/media";
 import { sitePath } from "@jerryqiu/sites";
 import NextLink from "next/link";
 import { InterestShell } from "@/components/interest/InterestShell";

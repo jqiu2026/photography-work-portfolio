@@ -1,6 +1,6 @@
-import { Breadcrumbs, Container, Eyebrow, Heading, Section, Text } from "@placeholder/ui";
-import { Image } from "@placeholder/ui/media";
-import { ScrollProgress } from "@placeholder/ui/motion";
+import { Breadcrumbs, Container, Eyebrow, Heading, Section, Text } from "@halation/ui";
+import { Image } from "@halation/ui/media";
+import { ScrollProgress } from "@halation/ui/motion";
 import type { Metadata } from "next";
 import NextLink from "next/link";
 import { notFound } from "next/navigation";

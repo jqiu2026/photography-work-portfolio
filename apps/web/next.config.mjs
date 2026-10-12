@@ -9,7 +9,7 @@ export default {
   // A second dev server (the admin e2e suite) needs its own build directory.
   distDir: process.env.NEXT_DIST_DIR || ".next",
   transpilePackages: [
-    "@placeholder/ui",
+    "@halation/ui",
     "@jerryqiu/sites",
     "@jerryqiu/render",
     "@jerryqiu/auth",

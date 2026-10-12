@@ -1,5 +1,5 @@
 import { schema } from "@jerryqiu/db";
-import { Badge, Button } from "@placeholder/ui";
+import { Badge, Button } from "@halation/ui";
 import { and, asc, desc, eq, isNull } from "drizzle-orm";
 import NextLink from "next/link";
 import { AircraftRow } from "@/components/admin/AircraftRow";
@@ -78,7 +78,7 @@ export default async function FlyingAdmin() {
           ) : null}
         </tbody>
       </table>
-      <h2 style={{ margin: "3rem 0 1rem", fontSize: "var(--ph-text-2xl)", letterSpacing: "-0.03em" }}>Background</h2>
+      <h2 style={{ margin: "3rem 0 1rem", fontSize: "var(--hl-text-2xl)", letterSpacing: "-0.03em" }}>Background</h2>
       <ActionForm action={saveFlyingBackground}>
         <F
           name="story"
@@ -102,7 +102,7 @@ export default async function FlyingAdmin() {
         </div>
         <F name="clubNote" label="Club note" defaultValue={data.bg.clubNote} />
       </ActionForm>
-      <h2 style={{ margin: "3rem 0 0.75rem", fontSize: "var(--ph-text-2xl)", letterSpacing: "-0.03em" }}>Aircraft</h2>
+      <h2 style={{ margin: "3rem 0 0.75rem", fontSize: "var(--hl-text-2xl)", letterSpacing: "-0.03em" }}>Aircraft</h2>
       <div style={{ display: "grid", gap: "1rem" }}>
         {data.aircraft.map((a) => (
           <AircraftRow key={a.id} row={a} />

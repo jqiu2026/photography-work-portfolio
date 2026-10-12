@@ -38,7 +38,7 @@ describe("ThemeProvider", () => {
     expect(screen.getByRole("button")).toHaveTextContent("system:dark");
     await user.click(screen.getByRole("button"));
     expect(document.documentElement).toHaveAttribute("data-theme", "light");
-    expect(localStorage.getItem("ph-theme")).toBe("light");
+    expect(localStorage.getItem("hl-theme")).toBe("light");
   });
   it("the no-flash script embeds the preset and default theme", () => {
     const s = themeScript("music", "dark");

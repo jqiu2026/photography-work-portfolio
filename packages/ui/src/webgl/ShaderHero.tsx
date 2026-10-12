@@ -183,7 +183,7 @@ export type ShaderHeroProps = {
 export function ShaderHero({ src, alt, intensity = 1, srcSet, sizes, className, children }: ShaderHeroProps) {
   const [live, setLive] = useState(false);
   return (
-    <div className={className} style={{ position: "relative", overflow: "hidden", background: "var(--ph-cinema)" }}>
+    <div className={className} style={{ position: "relative", overflow: "hidden", background: "var(--hl-cinema)" }}>
       <img
         src={src}
         srcSet={srcSet}

@@ -1,6 +1,6 @@
 import type { ProjectBlockView } from "@jerryqiu/db/queries";
 import { readMdxDir } from "@jerryqiu/render/mdx-files";
-import type { GalleryImage, ImageAsset } from "@placeholder/ui/media";
+import type { GalleryImage, ImageAsset } from "@halation/ui/media";
 import { getProjects } from "@/lib/content-db";
 import { getProjectImage } from "@/lib/images";
 

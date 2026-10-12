@@ -1,4 +1,4 @@
-import { Container, Section, Text } from "@placeholder/ui";
+import { Container, Section, Text } from "@halation/ui";
 import { ContactForm } from "@jerryqiu/sites/contact";
 import { person } from "@jerryqiu/sites/profile";
 import type { Metadata } from "next";
@@ -11,7 +11,7 @@ export default function Book() {
   return (
     <Shell>
       <Container className="page-head">
-        <h1 className="ph-heading ph-heading--display">Book a shoot</h1>
+        <h1 className="hl-heading hl-heading--display">Book a shoot</h1>
         <Text size="xl" tone="muted" style={{ marginTop: "1.5rem", maxWidth: "36ch" }}>
           Tell me about the event or idea. I'll reply by email.
         </Text>

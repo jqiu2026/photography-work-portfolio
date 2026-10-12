@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Field, Input, Select, Textarea } from "@placeholder/ui";
+import { Button, Field, Input, Select, Textarea } from "@halation/ui";
 import NextLink from "next/link";
 import { useState, type FormEvent } from "react";
 
@@ -69,8 +69,8 @@ export function ContactForm({
   if (state === "sent")
     return (
       <div role="status" style={{ maxWidth: "36rem" }}>
-        <p style={{ fontSize: "var(--ph-text-lg)" }}>Thanks, your message is on its way.</p>
-        <p style={{ color: "var(--ph-muted)" }}>I read everything and will reply by email.</p>
+        <p style={{ fontSize: "var(--hl-text-lg)" }}>Thanks, your message is on its way.</p>
+        <p style={{ color: "var(--hl-muted)" }}>I read everything and will reply by email.</p>
       </div>
     );
   return (
@@ -99,7 +99,7 @@ export function ContactForm({
           <input name="website" tabIndex={-1} autoComplete="off" />
         </label>
       </div>
-      <p style={{ fontSize: "var(--ph-text-sm)", color: "var(--ph-muted)" }}>
+      <p style={{ fontSize: "var(--hl-text-sm)", color: "var(--hl-muted)" }}>
         {endpoint
           ? "Your message is stored so I can reply, and emailed to me. I delete it on request. See the"
           : "Pressing send opens your email app with this message. Nothing is stored on this site. See the"}{" "}
@@ -109,7 +109,7 @@ export function ContactForm({
         .
       </p>
       {state === "error" ? (
-        <p role="alert" style={{ color: "var(--ph-danger, #b00020)" }}>
+        <p role="alert" style={{ color: "var(--hl-danger, #b00020)" }}>
           {problem}{" "}
           <a href={`mailto:${to}`} style={{ textDecoration: "underline" }}>
             Email {to}

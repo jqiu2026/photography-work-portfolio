@@ -98,7 +98,7 @@ test.describe("posts", () => {
     await expect(page.getByText("Add a short summary before publishing")).toBeVisible();
     await page.getByLabel("Summary").fill("A short summary.");
     await page.getByRole("button", { name: "Publish" }).click();
-    await expect(page.locator(".ph-toast", { hasText: "Published" })).toBeVisible();
+    await expect(page.locator(".hl-toast", { hasText: "Published" })).toBeVisible();
 
     // preview renders markdown, and the video is click-to-load (no iframe)
     await page.getByRole("tab", { name: "Preview" }).click();

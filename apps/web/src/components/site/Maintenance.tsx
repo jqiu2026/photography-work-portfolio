@@ -1,4 +1,4 @@
-import { Container, Heading, Text } from "@placeholder/ui";
+import { Container, Heading, Text } from "@halation/ui";
 
 /** Shown instead of a public site while maintenance mode is on. The admin stays reachable. */
 export function Maintenance({ message }: { message?: string }) {

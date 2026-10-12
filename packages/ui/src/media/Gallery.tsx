@@ -58,8 +58,8 @@ export function Gallery({
   return (
     <>
       <ul
-        className={cx("ph-gallery", `ph-gallery--${layout}`, className)}
-        style={{ ["--ph-row" as string]: `${rowHeight}px` }}
+        className={cx("hl-gallery", `hl-gallery--${layout}`, className)}
+        style={{ ["--hl-row" as string]: `${rowHeight}px` }}
       >
         {images.map((img, i) => {
           const ratio = img.width / img.height;

@@ -34,7 +34,7 @@ export function Image({ asset, alt, sizes = "100vw", priority, fit = "cover", fi
   const largest = sorted[sorted.length - 1];
   return (
     <span
-      className={cx("ph-img", fill && "ph-img--fill", className)}
+      className={cx("hl-img", fill && "hl-img--fill", className)}
       style={{
         aspectRatio: fill ? undefined : `${asset.width} / ${asset.height}`,
         backgroundColor: asset.color,

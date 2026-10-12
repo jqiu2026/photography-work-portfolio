@@ -1,4 +1,4 @@
-import { Footer, SkipLink } from "@placeholder/ui";
+import { Footer, SkipLink } from "@halation/ui";
 import type { ReactNode } from "react";
 import { type SiteId, getSite, getSites, sitePath } from "./index";
 import { legalPaths, person, socials } from "./profile";
@@ -57,11 +57,11 @@ export function SiteShell({
         brandHref={sitePath(currentId)}
       />
       <main id="main">{children}</main>
-      <footer className="ph-footer">
-        <div className="ph-footer__inner">
-          <div className="ph-footer__legal">
+      <footer className="hl-footer">
+        <div className="hl-footer__inner">
+          <div className="hl-footer__legal">
             <p>{`© ${new Date().getFullYear()} ${person.name}. All photographs and writing are © ${person.name} unless stated.`}</p>
-            <a className="ph-btn ph-btn--ghost ph-btn--md" href={hub.url} data-return-to-hub>
+            <a className="hl-btn hl-btn--ghost hl-btn--md" href={hub.url} data-return-to-hub>
               jerryqiu.com
             </a>
           </div>

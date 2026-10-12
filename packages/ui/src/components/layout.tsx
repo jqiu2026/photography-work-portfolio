@@ -11,7 +11,7 @@ type BoxProps<T extends ElementType> = {
 export type ContainerProps = BoxProps<ElementType> & { size?: "sm" | "md" | "lg" | "full"; bleed?: boolean };
 /** Centers content to a max width with fluid side gutters. */
 export function Container({ as: As = "div", size = "lg", className, ...rest }: ContainerProps) {
-  return <As className={cx("ph-container", `ph-container--${size}`, className)} {...rest} />;
+  return <As className={cx("hl-container", `hl-container--${size}`, className)} {...rest} />;
 }
 
 export type StackProps = BoxProps<ElementType> & {
@@ -21,10 +21,10 @@ export type StackProps = BoxProps<ElementType> & {
 export function Stack({ as: As = "div", gap = 4, align, className, style, ...rest }: StackProps) {
   return (
     <As
-      className={cx("ph-stack", className)}
+      className={cx("hl-stack", className)}
       style={
         {
-          "--ph-gap": `var(--ph-space-${gap})`,
+          "--hl-gap": `var(--hl-space-${gap})`,
           alignItems: align && (align === "start" || align === "end" ? `flex-${align}` : align),
           ...style,
         } as CSSProperties
@@ -50,10 +50,10 @@ export function Row({ as: As = "div", gap = 4, align = "center", justify, wrap, 
   } as const;
   return (
     <As
-      className={cx("ph-row", wrap && "ph-row--wrap", className)}
+      className={cx("hl-row", wrap && "hl-row--wrap", className)}
       style={
         {
-          "--ph-gap": `var(--ph-space-${gap})`,
+          "--hl-gap": `var(--hl-space-${gap})`,
           alignItems: map[align],
           justifyContent: justify && map[justify],
           ...style,
@@ -69,10 +69,10 @@ export type GridProps = BoxProps<ElementType> & { cols?: 1 | 2 | 3 | 4; gap?: 2 
 export function Grid({ as: As = "div", cols, gap = 6, min, className, style, ...rest }: GridProps) {
   return (
     <As
-      className={cx("ph-grid", cols && `ph-grid--${cols}`, className)}
+      className={cx("hl-grid", cols && `hl-grid--${cols}`, className)}
       style={
         {
-          "--ph-gap": `var(--ph-space-${gap})`,
+          "--hl-gap": `var(--hl-space-${gap})`,
           ...(min ? { gridTemplateColumns: `repeat(auto-fit, minmax(min(100%, ${min}), 1fr))` } : {}),
           ...style,
         } as CSSProperties
@@ -89,5 +89,5 @@ export function Section({
   className,
   ...rest
 }: BoxProps<ElementType> & { tone?: "default" | "surface" | "cinema" }) {
-  return <As className={cx("ph-section", tone && tone !== "default" && `ph-section--${tone}`, className)} {...rest} />;
+  return <As className={cx("hl-section", tone && tone !== "default" && `hl-section--${tone}`, className)} {...rest} />;
 }

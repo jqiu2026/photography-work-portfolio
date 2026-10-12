@@ -7,7 +7,7 @@ type Choice = Theme | "system";
 type Ctx = { choice: Choice; theme: Theme; preset: Preset; setChoice: (c: Choice) => void };
 
 const ThemeContext = createContext<Ctx | null>(null);
-const KEY = "ph-theme";
+const KEY = "hl-theme";
 
 /**
  * Inline script (render in <head>) that sets data-theme and data-preset before first paint,

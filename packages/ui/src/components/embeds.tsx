@@ -24,7 +24,7 @@ export function EmbedFacade({
 }: { provider: EmbedProvider; id: string; title: string; poster?: ReactNode; ratio?: string }) {
   const [on, setOn] = useState(false);
   return (
-    <div className="ph-embed" style={{ aspectRatio: ratio }}>
+    <div className="hl-embed" style={{ aspectRatio: ratio }}>
       {on ? (
         <iframe
           src={hosts[provider](id)}
@@ -35,12 +35,12 @@ export function EmbedFacade({
           referrerPolicy="strict-origin-when-cross-origin"
         />
       ) : (
-        <button type="button" onClick={() => setOn(true)} className="ph-embed__facade">
+        <button type="button" onClick={() => setOn(true)} className="hl-embed__facade">
           {poster}
-          <span className="ph-embed__play">
+          <span className="hl-embed__play">
             <Play size={22} aria-hidden />
           </span>
-          <span className="ph-embed__label">
+          <span className="hl-embed__label">
             {title}
             <small>Loads {provider} when you press play</small>
           </span>
@@ -54,7 +54,7 @@ export function EmbedFacade({
 export function AudioPlayer({ src, title }: { src: string; title: string }) {
   const ref = useRef<HTMLAudioElement>(null);
   return (
-    <figure className="ph-audio">
+    <figure className="hl-audio">
       <figcaption>{title}</figcaption>
       <audio ref={ref} controls preload="none" src={src} />
     </figure>

@@ -19,7 +19,7 @@ export function GuardScope({ level }: { level: GuardLevel }) {
   return null;
 }
 
-const PROTECTED = ".ph-img, [data-protected]";
+const PROTECTED = ".hl-img, [data-protected]";
 
 /**
  * Deterrent against casual copying (never a lock):
@@ -39,7 +39,7 @@ export function ScreenshotGuard({ level = "light", children }: { level?: GuardLe
   const dialogOpen = useRef(false);
 
   const hide = useCallback((on: boolean) => {
-    document.documentElement.classList.toggle("ph-guard-hide", on);
+    document.documentElement.classList.toggle("hl-guard-hide", on);
   }, []);
 
   const trigger = useCallback(
@@ -130,19 +130,19 @@ export function ScreenshotGuard({ level = "light", children }: { level?: GuardLe
     <GuardContext.Provider value={ctx}>
       {children}
       {open ? (
-        <div className="ph-guard" role="presentation">
+        <div className="hl-guard" role="presentation">
           <div
-            className="ph-guard__box"
+            className="hl-guard__box"
             role="alertdialog"
             aria-modal="true"
-            aria-labelledby="ph-guard-title"
-            aria-describedby="ph-guard-body"
+            aria-labelledby="hl-guard-title"
+            aria-describedby="hl-guard-body"
             onKeyDown={(e) => e.key === "Escape" && dismiss()}
           >
-            <h2 id="ph-guard-title">{guardCopy.title}</h2>
-            <p id="ph-guard-body">{guardCopy.body}</p>
-            <p className="ph-guard__note">{guardCopy.note}</p>
-            <button ref={ok} type="button" className="ph-btn ph-btn--solid" onClick={dismiss}>
+            <h2 id="hl-guard-title">{guardCopy.title}</h2>
+            <p id="hl-guard-body">{guardCopy.body}</p>
+            <p className="hl-guard__note">{guardCopy.note}</p>
+            <button ref={ok} type="button" className="hl-btn hl-btn--solid" onClick={dismiss}>
               {guardCopy.action}
             </button>
           </div>

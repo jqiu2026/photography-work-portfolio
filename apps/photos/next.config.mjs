@@ -2,7 +2,7 @@
 export default {
   distDir: process.env.NEXT_DIST_DIR || ".next",
   transpilePackages: [
-    "@placeholder/ui",
+    "@halation/ui",
     "@jerryqiu/sites",
     "@jerryqiu/render",
     "@jerryqiu/auth",

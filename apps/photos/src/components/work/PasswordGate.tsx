@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Field, Input } from "@placeholder/ui";
+import { Button, Field, Input } from "@halation/ui";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 

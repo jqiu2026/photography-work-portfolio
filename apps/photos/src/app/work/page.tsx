@@ -1,4 +1,4 @@
-import { Container, Section } from "@placeholder/ui";
+import { Container, Section } from "@halation/ui";
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/PageHeader";
 import { Shell } from "@/components/Shell";

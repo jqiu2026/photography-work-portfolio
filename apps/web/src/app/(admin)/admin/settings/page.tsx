@@ -29,7 +29,7 @@ function Group({
 }: { site: string; k: string; title: string; help?: string; children: React.ReactNode }) {
   return (
     <section className="adm-card" aria-labelledby={`g-${k}`} style={{ marginBottom: "1.5rem" }}>
-      <h2 id={`g-${k}`} style={{ fontSize: "var(--ph-text-xl)" }}>
+      <h2 id={`g-${k}`} style={{ fontSize: "var(--hl-text-xl)" }}>
         {title}
       </h2>
       {help ? <p className="adm-note">{help}</p> : null}
@@ -182,7 +182,7 @@ export default async function SettingsPage() {
         <F name="items" label="Links" type="textarea" rows={6} defaultValue={navToLines(nav.items)} />
       </Group>
       <section className="adm-card" aria-labelledby="g-backup" style={{ marginBottom: "1.5rem" }}>
-        <h2 id="g-backup" style={{ fontSize: "var(--ph-text-xl)" }}>
+        <h2 id="g-backup" style={{ fontSize: "var(--hl-text-xl)" }}>
           Export and backup
         </h2>
         <p className="adm-note">
@@ -196,7 +196,7 @@ export default async function SettingsPage() {
       </section>
       {site === "hub" ? (
         <section className="adm-card" aria-labelledby="g-legal">
-          <h2 id="g-legal" style={{ fontSize: "var(--ph-text-xl)" }}>
+          <h2 id="g-legal" style={{ fontSize: "var(--hl-text-xl)" }}>
             Legal pages
           </h2>
           <p className="adm-note">

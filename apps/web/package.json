@@ -18,7 +18,7 @@
     "@jerryqiu/render": "workspace:*",
     "@jerryqiu/sites": "workspace:*",
     "@jerryqiu/storage": "workspace:*",
-    "@placeholder/ui": "workspace:*",
+    "@halation/ui": "workspace:*",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
     "cookie": "^1.0.2",

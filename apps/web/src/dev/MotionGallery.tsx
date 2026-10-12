@@ -1,8 +1,8 @@
 "use client";
 
-import { Container, Heading, Text, Eyebrow, Card } from "@placeholder/ui";
-import { Image, Gallery, BeforeAfter, ImageSequence, type ImageAsset } from "@placeholder/ui/media";
-import { ShaderHero } from "@placeholder/ui/webgl";
+import { Container, Heading, Text, Eyebrow, Card } from "@halation/ui";
+import { Image, Gallery, BeforeAfter, ImageSequence, type ImageAsset } from "@halation/ui/media";
+import { ShaderHero } from "@halation/ui/webgl";
 import {
   CountUp,
   InView,
@@ -16,8 +16,8 @@ import {
   MagneticButton,
   StackingCards,
   ScrollProgress,
-} from "@placeholder/ui/motion";
-import { Button } from "@placeholder/ui";
+} from "@halation/ui/motion";
+import { Button } from "@halation/ui";
 
 type Manifest = Record<string, ImageAsset>;
 const frames = Array.from({ length: 96 }, (_, i) => `/sequence/hero/frame-${String(i).padStart(3, "0")}.webp`);
@@ -28,10 +28,10 @@ export function MotionGallery({ manifest }: { manifest: Manifest }) {
   const hero = manifest[ids[3]] ?? manifest[ids[0]];
   return (
     <div
-      className="ph-root"
+      className="hl-root"
       data-preset="hub"
       data-theme="light"
-      style={{ minHeight: 0, borderRadius: 20, border: "1px solid var(--ph-line)", overflow: "clip", marginTop: 40 }}
+      style={{ minHeight: 0, borderRadius: 20, border: "1px solid var(--hl-line)", overflow: "clip", marginTop: 40 }}
     >
       <ScrollProgress />
       <ShaderHero src={hero.files[hero.files.length - 1].src} alt="Sample hero photograph" className="demo-hero">
@@ -40,7 +40,7 @@ export function MotionGallery({ manifest }: { manifest: Manifest }) {
             height: "70vh",
             display: "flex",
             alignItems: "flex-end",
-            padding: "var(--ph-gutter)",
+            padding: "var(--hl-gutter)",
             color: "#fff",
           }}
         >
@@ -51,16 +51,16 @@ export function MotionGallery({ manifest }: { manifest: Manifest }) {
       </ShaderHero>
       <Container size="md" style={{ paddingBlock: "3rem" }}>
         <Eyebrow>Motion and media</Eyebrow>
-        <RevealText as="h2" text="Words rise out of a quiet mask." className="ph-heading ph-heading--display" />
+        <RevealText as="h2" text="Words rise out of a quiet mask." className="hl-heading hl-heading--display" />
         <div style={{ height: 24 }} />
         <ScrollHighlight
           text="I take photos, write code and I'm learning to fly. Most of what I make starts as a small question and a camera."
-          className="ph-text"
+          className="hl-text"
         />
         <div style={{ height: 40 }} />
         <div style={{ display: "flex", gap: 48 }}>
           <div>
-            <div className="ph-stat__value">
+            <div className="hl-stat__value">
               <CountUp to={23} />
             </div>
             <Text size="sm" tone="muted">
@@ -68,7 +68,7 @@ export function MotionGallery({ manifest }: { manifest: Manifest }) {
             </Text>
           </div>
           <div>
-            <div className="ph-stat__value">
+            <div className="hl-stat__value">
               <CountUp to={5} />
             </div>
             <Text size="sm" tone="muted">
@@ -92,7 +92,7 @@ export function MotionGallery({ manifest }: { manifest: Manifest }) {
         <div style={{ height: 24 }} />
         <Marquee speed={30}>
           {["Photography", "Music", "Flying", "Writing", "Code"].map((w) => (
-            <span key={w} className="ph-heading ph-heading--display" style={{ fontSize: "var(--ph-text-3xl)" }}>
+            <span key={w} className="hl-heading hl-heading--display" style={{ fontSize: "var(--hl-text-3xl)" }}>
               {w}
             </span>
           ))}
@@ -117,8 +117,8 @@ export function MotionGallery({ manifest }: { manifest: Manifest }) {
             height: "100%",
             display: "grid",
             placeItems: "center",
-            background: "var(--ph-surface)",
-            padding: "0 var(--ph-gutter)",
+            background: "var(--hl-surface)",
+            padding: "0 var(--hl-gutter)",
           }}
         >
           <div style={{ width: "min(60rem, 100%)" }}>

@@ -1,5 +1,5 @@
-import { Container, Eyebrow, Heading, Section, Text } from "@placeholder/ui";
-import { Gallery } from "@placeholder/ui/media";
+import { Container, Eyebrow, Heading, Section, Text } from "@halation/ui";
+import { Gallery } from "@halation/ui/media";
 import type { Metadata } from "next";
 import { Empty } from "@/components/interest/Empty";
 import { InterestShell } from "@/components/interest/InterestShell";

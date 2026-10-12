@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Progress, useToast } from "@placeholder/ui";
+import { Button, Progress, useToast } from "@halation/ui";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 

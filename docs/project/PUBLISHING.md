@@ -14,7 +14,7 @@ Nothing here has been done. The package is prepared so publishing is a few comma
 ```bash
 pnpm changeset              # describe the change, pick the bump
 pnpm changeset version      # updates packages/ui/package.json and CHANGELOG.md
-pnpm --filter @placeholder/ui build
+pnpm --filter @halation/ui build
 cd packages/ui && pnpm pack --dry-run        # check only dist, README, LICENSE, package.json are included
 pnpm publish --access public                 # needs `npm login` (2FA); this is the step that goes public
 ```

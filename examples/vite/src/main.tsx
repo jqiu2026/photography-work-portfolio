@@ -1,6 +1,6 @@
-import "@placeholder/ui/styles.css";
-import { Button, Container, Field, Heading, Input, Row, Text, ThemeProvider, Timeline } from "@placeholder/ui";
-import { InView } from "@placeholder/ui/motion";
+import "@halation/ui/styles.css";
+import { Button, Container, Field, Heading, Input, Row, Text, ThemeProvider, Timeline } from "@halation/ui";
+import { InView } from "@halation/ui/motion";
 import { createRoot } from "react-dom/client";
 
 createRoot(document.getElementById("root") as HTMLElement).render(

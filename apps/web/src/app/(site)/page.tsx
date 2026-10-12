@@ -9,11 +9,11 @@ import {
   SitePreviewCard,
   Section,
   Text,
-} from "@placeholder/ui";
-import { Image } from "@placeholder/ui/media";
-import { ImageSequence } from "@placeholder/ui/media";
-import { InView, PinnedScene, RevealText, ScrollHighlight, StepSequence } from "@placeholder/ui/motion";
-import { ShaderHero } from "@placeholder/ui/webgl";
+} from "@halation/ui";
+import { Image } from "@halation/ui/media";
+import { ImageSequence } from "@halation/ui/media";
+import { InView, PinnedScene, RevealText, ScrollHighlight, StepSequence } from "@halation/ui/motion";
+import { ShaderHero } from "@halation/ui/webgl";
 import { getSite } from "@jerryqiu/sites";
 import NextLink from "next/link";
 import type { Metadata } from "next";
@@ -68,7 +68,7 @@ export default async function Home() {
           <RevealText
             as="h1"
             text="Hello, I'm Jerry."
-            className="ph-heading ph-heading--display home-hero__title"
+            className="hl-heading hl-heading--display home-hero__title"
             delay={0.1}
           />
           <Text size="xl" tone="muted" className="home-hero__lede">
@@ -105,7 +105,7 @@ export default async function Home() {
                   asset={portrait}
                   alt={`Portrait of ${person.name}`}
                   sizes="320px"
-                  style={{ borderRadius: "var(--ph-radius-lg)" }}
+                  style={{ borderRadius: "var(--hl-radius-lg)" }}
                 />
               }
               name={person.name}
@@ -209,8 +209,8 @@ export default async function Home() {
 
       <Section tone="surface" className="home-close">
         <Container>
-          <RevealText as="h2" text="Say hello." className="ph-heading ph-heading--display" />
-          <div className="ph-profile__actions">
+          <RevealText as="h2" text="Say hello." className="hl-heading hl-heading--display" />
+          <div className="hl-profile__actions">
             <Button as={NextLink} href="/connect" size="lg">
               Get in touch
             </Button>

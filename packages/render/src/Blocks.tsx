@@ -1,6 +1,6 @@
-import { Quote } from "@placeholder/ui";
-import { EmbedFacade } from "@placeholder/ui";
-import { Image } from "@placeholder/ui/media";
+import { Quote } from "@halation/ui";
+import { EmbedFacade } from "@halation/ui";
+import { Image } from "@halation/ui/media";
 import type { ProjectBlockView } from "@jerryqiu/db/queries";
 import { RenderMarkdown } from "./markdown";
 

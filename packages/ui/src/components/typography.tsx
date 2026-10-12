@@ -13,8 +13,8 @@ export function Heading({
 }: { as?: ElementType; size?: Size; display?: boolean } & HTMLAttributes<HTMLHeadingElement>) {
   return (
     <As
-      className={cx("ph-heading", display && "ph-heading--display", className)}
-      style={{ fontSize: `var(--ph-text-${size})`, ...(style as CSSProperties) }}
+      className={cx("hl-heading", display && "hl-heading--display", className)}
+      style={{ fontSize: `var(--hl-text-${size})`, ...(style as CSSProperties) }}
       {...rest}
     />
   );
@@ -30,8 +30,8 @@ export function Text({
 }: { as?: ElementType; size?: Size; tone?: "default" | "muted" | "accent" } & HTMLAttributes<HTMLElement>) {
   return (
     <As
-      className={cx("ph-text", tone !== "default" && `ph-text--${tone}`, className)}
-      style={{ fontSize: `var(--ph-text-${size})`, ...(style as CSSProperties) }}
+      className={cx("hl-text", tone !== "default" && `hl-text--${tone}`, className)}
+      style={{ fontSize: `var(--hl-text-${size})`, ...(style as CSSProperties) }}
       {...rest}
     />
   );
@@ -39,7 +39,7 @@ export function Text({
 
 /** Small uppercase label above headings. */
 export function Eyebrow({ className, ...rest }: HTMLAttributes<HTMLParagraphElement>) {
-  return <p className={cx("ph-eyebrow", className)} {...rest} />;
+  return <p className={cx("hl-eyebrow", className)} {...rest} />;
 }
 
 export type LinkProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
@@ -53,7 +53,7 @@ export function Link({ as: As = "a", variant = "underline", external, className,
   const ext = external ?? (typeof rest.href === "string" && /^https?:\/\//.test(rest.href));
   return (
     <As
-      className={cx("ph-link", `ph-link--${variant}`, className)}
+      className={cx("hl-link", `hl-link--${variant}`, className)}
       {...(ext ? { target: target ?? "_blank", rel: rel ?? "noopener noreferrer" } : { target, rel })}
       {...rest}
     />
@@ -65,17 +65,17 @@ export function Separator({ vertical, className, ...rest }: { vertical?: boolean
     <div
       role="separator"
       aria-orientation={vertical ? "vertical" : "horizontal"}
-      className={cx("ph-separator", vertical && "ph-separator--v", className)}
+      className={cx("hl-separator", vertical && "hl-separator--v", className)}
       {...rest}
     />
   );
 }
 
 export function VisuallyHidden({ as: As = "span", ...rest }: { as?: ElementType; children?: ReactNode }) {
-  return <As className="ph-sr-only" {...rest} />;
+  return <As className="hl-sr-only" {...rest} />;
 }
 
 /** Typographic wrapper for long-form content (MDX / markdown output). */
 export function Prose({ className, ...rest }: HTMLAttributes<HTMLDivElement>) {
-  return <div className={cx("ph-prose", className)} {...rest} />;
+  return <div className={cx("hl-prose", className)} {...rest} />;
 }

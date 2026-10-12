@@ -6,7 +6,7 @@ Written at M2 from the code in `apps/web` (pinned to `@once-ui-system/core` 1.5.
 
 | Component | Where | Decision |
 |---|---|---|
-| `Column`, `Row`, `Flex`, `Grid` | everywhere | Replace with `Stack`/`Row`/`Grid`/`Container` in `@placeholder/ui` |
+| `Column`, `Row`, `Flex`, `Grid` | everywhere | Replace with `Stack`/`Row`/`Grid`/`Container` in `@halation/ui` |
 | `Text`, `Heading` | everywhere | Port (`Text`, `Heading`, fluid scale) |
 | `Button`, `IconButton`, `ToggleButton` | header, forms, share | Port (`Button`, `IconButton`) |
 | `SmartLink` | content, footer | Port (`Link`) |
@@ -19,7 +19,7 @@ Written at M2 from the code in `apps/web` (pinned to `@once-ui-system/core` 1.5.
 | `Theme`/`ThemeToggle`/`ScrollToTop` | providers | Port (`ThemeProvider`, `ThemeToggle`) |
 
 ## Tokens
-- `src/resources/once-ui.config.ts`: dark default, neutral gray, brand cyan, accent red, Geist for all four font roles, effects (gradient, dots, grid, lines mask). **All dropped.** New tokens (`--ph-*`) come from the design exploration, not from these values.
+- `src/resources/once-ui.config.ts`: dark default, neutral gray, brand cyan, accent red, Geist for all four font roles, effects (gradient, dots, grid, lines mask). **All dropped.** New tokens (`--hl-*`) come from the design exploration, not from these values.
 - `src/resources/custom.css`: only comments. Dropped.
 
 ## Pages and content sources

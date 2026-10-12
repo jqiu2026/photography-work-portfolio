@@ -1,8 +1,8 @@
 import { getDb } from "@jerryqiu/db";
 import { type ExtEvent, listCached, sourceFromEnv } from "@jerryqiu/shootproof";
 import { mintAllWidths, tokenSecrets } from "@jerryqiu/protect";
-import { Button, Container, Eyebrow, Heading, Section, Text } from "@placeholder/ui";
-import { GuardScope, ProtectedGallery } from "@placeholder/ui/media";
+import { Button, Container, Eyebrow, Heading, Section, Text } from "@halation/ui";
+import { GuardScope, ProtectedGallery } from "@halation/ui/media";
 import { Shell } from "@/components/Shell";
 import { requirePageUser } from "@/auth";
 import "../../globals.css";

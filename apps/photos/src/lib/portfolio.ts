@@ -1,4 +1,4 @@
-import type { GalleryImage } from "@placeholder/ui/media";
+import type { GalleryImage } from "@halation/ui/media";
 import * as repo from "@/content/portfolio";
 import { getGalleries } from "@/lib/content-db";
 

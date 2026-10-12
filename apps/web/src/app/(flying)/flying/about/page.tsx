@@ -1,4 +1,4 @@
-import { Container, Section, Text } from "@placeholder/ui";
+import { Container, Section, Text } from "@halation/ui";
 import type { Metadata } from "next";
 import { InterestShell } from "@/components/interest/InterestShell";
 import { PageHeader } from "@/components/site/PageHeader";

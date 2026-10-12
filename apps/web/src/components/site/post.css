@@ -2,7 +2,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
-  border-top: 1px solid var(--ph-line);
+  border-top: 1px solid var(--hl-line);
   padding-block: 3rem;
 }
 .next-prev a {
@@ -15,12 +15,12 @@
   text-align: right;
 }
 .next-prev span {
-  color: var(--ph-muted);
-  font-size: var(--ph-text-sm);
+  color: var(--hl-muted);
+  font-size: var(--hl-text-sm);
 }
 .next-prev strong {
-  font-family: var(--ph-font-display);
-  font-weight: var(--ph-display-weight);
-  font-size: var(--ph-text-2xl);
-  letter-spacing: var(--ph-display-tracking);
+  font-family: var(--hl-font-display);
+  font-weight: var(--hl-display-weight);
+  font-size: var(--hl-text-2xl);
+  letter-spacing: var(--hl-display-tracking);
 }

@@ -1,5 +1,5 @@
-import { Container, Eyebrow, Heading, Section } from "@placeholder/ui";
-import { Gallery } from "@placeholder/ui/media";
+import { Container, Eyebrow, Heading, Section } from "@halation/ui";
+import { Gallery } from "@halation/ui/media";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Shell } from "@/components/Shell";

@@ -87,10 +87,10 @@ test.describe("a strict gallery on the photography site", () => {
       const dialog = page.getByRole("alertdialog");
       await expect(dialog, name).toBeVisible();
       await expect(dialog).toContainText("not a lock");
-      await expect(page.locator("html")).toHaveClass(/ph-guard-hide/);
+      await expect(page.locator("html")).toHaveClass(/hl-guard-hide/);
       await dialog.getByRole("button", { name: /understand/ }).click();
       await expect(dialog).toHaveCount(0);
-      await expect(page.locator("html")).not.toHaveClass(/ph-guard-hide/);
+      await expect(page.locator("html")).not.toHaveClass(/hl-guard-hide/);
     }
     // ordinary typing does nothing
     await page.keyboard.press("a");
@@ -130,7 +130,7 @@ test.describe("a light gallery", () => {
     await makeGallery(page, slug, "light");
     await page.waitForTimeout(1500);
     await page.goto(`${PHOTOS}/portfolio/${slug}`, { waitUntil: "networkidle" });
-    const img = page.locator(".ph-img img").first();
+    const img = page.locator(".hl-img img").first();
     await expect(img).toBeVisible({ timeout: 20_000 });
     expect(await img.getAttribute("src")).toMatch(/\/api\/img\/[0-9a-f-]{36}\?w=\d+&v=\d+/);
     const prevented = await img.evaluate((el) => {
@@ -166,7 +166,7 @@ test.describe("the watermark setting", () => {
     await card.getByLabel("Add a visible watermark to images").check();
     await card.getByLabel("Watermark text").fill("© E2E");
     await card.getByRole("button", { name: "Save" }).click();
-    await expect(page.locator(".ph-toast", { hasText: "Saved" })).toBeVisible();
+    await expect(page.locator(".hl-toast", { hasText: "Saved" })).toBeVisible();
 
     const marked = Buffer.from(
       await (await request.get(`${PHOTOS}/api/img/${id}?w=960&v=2`, { headers: { accept: "image/webp" } })).body(),
@@ -177,7 +177,7 @@ test.describe("the watermark setting", () => {
     // restore for later tests
     await card.getByLabel("Add a visible watermark to images").uncheck();
     await card.getByRole("button", { name: "Save" }).click();
-    await expect(page.locator(".ph-toast", { hasText: "Saved" }).last()).toBeVisible();
+    await expect(page.locator(".hl-toast", { hasText: "Saved" }).last()).toBeVisible();
     await page.getByRole("group", { name: "Choose site" }).first().getByRole("button", { name: "Hub" }).click();
   });
 });

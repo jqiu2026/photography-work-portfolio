@@ -1,9 +1,9 @@
-import { Prose } from "@placeholder/ui";
+import { Prose } from "@halation/ui";
 
 export default function Home() {
   return (
     <Prose>
-      <h1>PlaceholderUI</h1>
+      <h1>Halation</h1>
       <p>A small, calm React UI kit: quiet components, one signature easing curve, and an optional Apple-style motion layer (scroll scenes, parallax, reveals) that always degrades to a complete static page.</p>
       <p>The name is a placeholder. It lives in one config file and a rename script changes it everywhere.</p>
       <ul>

@@ -51,6 +51,6 @@ Notes are patterns from general familiarity with their public sites and template
 - Motion (Apple-style) is a layer on top, used for 2 to 3 moments on the home page: a hero reveal, one pinned scene, and gentle parallax. Everything else is calm. `prefers-reduced-motion` gives a complete static page.
 - Color restraint: neutrals plus a single accent; photos are the color.
 
-## Token structure (`--ph-*`)
+## Token structure (`--hl-*`)
 
-Surfaces `--ph-bg --ph-surface --ph-surface-2`, text `--ph-text --ph-muted`, `--ph-line` hairline, `--ph-accent`, `--ph-accent-contrast`, `--ph-cinema` (pure black gallery surface), semantic `--ph-danger --ph-success --ph-warn`. Type `--ph-font-display --ph-font-sans --ph-font-mono` and a fluid scale `--ph-text-xs` to `--ph-text-display`. Space on a 4px base `--ph-space-1..32`. Radius `--ph-radius-sm/md/lg/pill`. Motion: `--ph-ease` (cubic-bezier(.16,1,.3,1)), `--ph-ease-inout`, durations `--ph-dur-fast/base/slow`. Themes switch with `[data-theme="light|dark"]` and `[data-preset="hub|photos|music|flying"]`; no flash on load (inline init script).
+Surfaces `--hl-bg --hl-surface --hl-surface-2`, text `--hl-text --hl-muted`, `--hl-line` hairline, `--hl-accent`, `--hl-accent-contrast`, `--hl-cinema` (pure black gallery surface), semantic `--hl-danger --hl-success --hl-warn`. Type `--hl-font-display --hl-font-sans --hl-font-mono` and a fluid scale `--hl-text-xs` to `--hl-text-display`. Space on a 4px base `--hl-space-1..32`. Radius `--hl-radius-sm/md/lg/pill`. Motion: `--hl-ease` (cubic-bezier(.16,1,.3,1)), `--hl-ease-inout`, durations `--hl-dur-fast/base/slow`. Themes switch with `[data-theme="light|dark"]` and `[data-preset="hub|photos|music|flying"]`; no flash on load (inline init script).

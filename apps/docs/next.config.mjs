@@ -1,2 +1,2 @@
 /** @type {import('next').NextConfig} */
-export default { transpilePackages: ["@placeholder/ui"] };
+export default { transpilePackages: ["@halation/ui"] };

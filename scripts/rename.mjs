@@ -39,7 +39,7 @@ const rules = [
   [new RegExp(esc(cfg.brand), "g"), next.brand],
 ];
 if (next.cssPrefix !== cfg.cssPrefix) {
-  // custom properties (--ph-*) and classes / keys (ph-*), at a word boundary only
+  // custom properties (--hl-*) and classes / keys (ph-*), at a word boundary only
   rules.push([new RegExp(`(?<![A-Za-z0-9])--${cfg.cssPrefix}-`, "g"), `--${next.cssPrefix}-`]);
   rules.push([new RegExp(`(?<![A-Za-z0-9-])${cfg.cssPrefix}-(?=[a-z])`, "g"), `${next.cssPrefix}-`]);
 }

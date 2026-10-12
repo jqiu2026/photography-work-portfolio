@@ -5,9 +5,9 @@ import {
   Header, Heading, IconButton, Input, InterestHero, Link, Menu, MoreFromMe, Pagination, Popover, Progress, ProfileHeader, Prose, Quote, RadioGroup, ResumeButton, Row,
   Section, Select, Separator, Sheet, SiteSwitcher, SitePreviewCard, SkillTags, Skeleton, Slider, SocialLinks, Spinner, Stack, Stat, Switch, Table, TableOfContents, Tabs,
   Text, Textarea, Timeline, ToastProvider, Tooltip, useToast, VisuallyHidden,
-} from "@placeholder/ui";
-import { BeforeAfter, Gallery, Image, ProtectedImage, type ImageAsset } from "@placeholder/ui/media";
-import { CountUp, InView, MagneticButton, Marquee, Parallax, RevealText, ScrollHighlight, StackingCards, TiltCard } from "@placeholder/ui/motion";
+} from "@halation/ui";
+import { BeforeAfter, Gallery, Image, ProtectedImage, type ImageAsset } from "@halation/ui/media";
+import { CountUp, InView, MagneticButton, Marquee, Parallax, RevealText, ScrollHighlight, StackingCards, TiltCard } from "@halation/ui/motion";
 import type { ReactNode } from "react";
 import manifest from "../../public/demo/manifest.json";
 
@@ -19,7 +19,7 @@ const sites = [
   { id: "music", name: "Music", description: "Listen", url: "#", color: "yellow" as const },
 ];
 const links = [{ label: "Instagram", href: "https://example.com", icon: "instagram" }, { label: "GitHub", href: "https://example.com", icon: "github" }, { label: "Email", href: "mailto:a@example.com", icon: "email" }];
-const Box = ({ children }: { children?: ReactNode }) => <div style={{ padding: "1rem", border: "1px dashed var(--ph-line)", borderRadius: 4 }}>{children ?? "Content"}</div>;
+const Box = ({ children }: { children?: ReactNode }) => <div style={{ padding: "1rem", border: "1px dashed var(--hl-line)", borderRadius: 4 }}>{children ?? "Content"}</div>;
 function ToastBtn() {
   const toast = useToast();
   return <Button onClick={() => toast("Saved")}>Show toast</Button>;
@@ -62,7 +62,7 @@ const demos: Record<string, () => ReactNode> = {
   Badge: () => <Row><Badge>Draft</Badge><Badge tone="accent">New</Badge><Badge tone="success">Live</Badge><Badge tone="danger">Error</Badge></Row>,
   Progress: () => <Progress value={62} label="Upload progress" />,
   SiteSwitcher: () => <SiteSwitcher sites={sites} currentId="hub" />,
-  Header: () => <div style={{ border: "1px solid var(--ph-line)" }}><Header transparentTop={false} brand="Brand" links={[{ label: "Work", href: "#" }, { label: "About", href: "#", current: true }]} /></div>,
+  Header: () => <div style={{ border: "1px solid var(--hl-line)" }}><Header transparentTop={false} brand="Brand" links={[{ label: "Work", href: "#" }, { label: "About", href: "#", current: true }]} /></div>,
   TableOfContents: () => <TableOfContents items={[{ id: "a", label: "Section A" }, { id: "b", label: "Section B" }]} />,
   MoreFromMe: () => <MoreFromMe sites={sites} currentId="hub" />,
   Footer: () => <Footer sites={sites} currentId="hub" social={links} legal={[{ label: "Privacy", href: "#" }]} note="© 2026" />,
@@ -84,8 +84,8 @@ const demos: Record<string, () => ReactNode> = {
   ResumeButton: () => <ResumeButton href="#cv" />,
   EmbedFacade: () => <div style={{ maxWidth: 420 }}><EmbedFacade provider="youtube" id="aqz-KE-bpKQ" title="Demo video (Big Buck Bunny, Blender Foundation, CC BY)" /></div>,
   InView: () => <InView><Card>Lifts into place once.</Card></InView>,
-  RevealText: () => <RevealText text="Words rise out of a quiet mask." as="h3" className="ph-heading ph-heading--display" />,
-  CountUp: () => <span className="ph-stat__value"><CountUp to={1234} /></span>,
+  RevealText: () => <RevealText text="Words rise out of a quiet mask." as="h3" className="hl-heading hl-heading--display" />,
+  CountUp: () => <span className="hl-stat__value"><CountUp to={1234} /></span>,
   ScrollHighlight: () => <ScrollHighlight text="Scroll this paragraph through the viewport and the words brighten one by one." />,
   Parallax: () => <div style={{ maxWidth: 480 }}><Parallax speed={0.2}><Image asset={m.g3} alt="" sizes="480px" /></Parallax></div>,
   StackingCards: () => <StackingCards items={[1, 2, 3].map((n) => <Card key={n}>Card {n}</Card>)} />,

@@ -52,7 +52,7 @@ test.describe("galleries", () => {
     // protection level is saved
     await page.getByLabel("Image protection").selectOption("strict");
     await page.getByRole("button", { name: "Save" }).first().click();
-    await expect(page.locator(".ph-toast", { hasText: "Saved" })).toBeVisible();
+    await expect(page.locator(".hl-toast", { hasText: "Saved" })).toBeVisible();
 
     page.once("dialog", (d) => d.accept());
     await page.getByRole("button", { name: "Delete" }).first().click();

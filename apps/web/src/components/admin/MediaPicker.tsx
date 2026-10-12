@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Dialog, Input } from "@placeholder/ui";
+import { Button, Dialog, Input } from "@halation/ui";
 import { useEffect, useState } from "react";
 
 type Item = { id: string; filename: string; alt: string | null; width: number | null; height: number | null };
@@ -42,7 +42,7 @@ export function MediaPicker({
 
   return (
     <div>
-      <p className="ph-field__label" style={{ marginBottom: "0.5rem" }}>
+      <p className="hl-field__label" style={{ marginBottom: "0.5rem" }}>
         {label}
       </p>
       {name ? <input type="hidden" name={name} value={value} onChange={() => {}} /> : null}
@@ -54,7 +54,7 @@ export function MediaPicker({
             alt=""
             width={96}
             height={64}
-            style={{ objectFit: "cover", borderRadius: 3, border: "1px solid var(--ph-line)", width: 96, height: 64 }}
+            style={{ objectFit: "cover", borderRadius: 3, border: "1px solid var(--hl-line)", width: 96, height: 64 }}
           />
         ) : multiple ? null : (
           <span className="adm-note">None selected</span>

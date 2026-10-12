@@ -1,4 +1,4 @@
-import { Container, Eyebrow, Heading, Section, Text } from "@placeholder/ui";
+import { Container, Eyebrow, Heading, Section, Text } from "@halation/ui";
 import { sourceFromEnv } from "@jerryqiu/shootproof";
 import { can } from "@jerryqiu/auth";
 import Link from "next/link";
@@ -41,7 +41,7 @@ export default async function Studio() {
                   : "Set up. Import an event to show it here for a day."}
             </Text>
             {can(user.role, "shootproof.manage") ? (
-              <Link href="/studio/shootproof" className="ph-link">
+              <Link href="/studio/shootproof" className="hl-link">
                 Open ShootProof bridge
               </Link>
             ) : (

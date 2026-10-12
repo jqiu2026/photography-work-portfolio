@@ -1,12 +1,12 @@
 import { readdirSync } from "node:fs";
-import * as main from "@placeholder/ui";
-import * as media from "@placeholder/ui/media";
-import * as motion from "@placeholder/ui/motion";
-import * as webgl from "@placeholder/ui/webgl";
+import * as main from "@halation/ui";
+import * as media from "@halation/ui/media";
+import * as motion from "@halation/ui/motion";
+import * as webgl from "@halation/ui/webgl";
 import { describe, expect, it } from "vitest";
 import { docs } from "../src/content/components";
 
-/** Every exported component of @placeholder/ui must have a docs entry, and every entry a real export. */
+/** Every exported component of @halation/ui must have a docs entry, and every entry a real export. */
 const exportsOf = (m: object) => Object.keys(m).filter((k) => /^[A-Z]/.test(k));
 
 describe("docs coverage", () => {

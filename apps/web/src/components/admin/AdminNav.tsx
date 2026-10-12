@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Dialog, IconButton, Input, Sheet, ThemeToggle } from "@placeholder/ui";
+import { Button, Dialog, IconButton, Input, Sheet, ThemeToggle } from "@halation/ui";
 import { Command, LogOut, Menu } from "lucide-react";
 import NextLink from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -14,7 +14,7 @@ function Links({ groups, onNavigate }: { groups: NavGroup[]; onNavigate?: () => 
     <nav aria-label="Admin" className="adm-nav">
       {groups.map((g) => (
         <div key={g.title}>
-          <p className="ph-eyebrow">{g.title}</p>
+          <p className="hl-eyebrow">{g.title}</p>
           <ul>
             {g.items.map((i) => {
               const current = i.href === "/admin" ? pathname === "/admin" : pathname.startsWith(i.href);
@@ -37,7 +37,7 @@ function SiteSelector({ site, back }: { site: AdminSite; back: string }) {
   return (
     <form action={setAdminSite} className="adm-sites" aria-label="Site">
       <input type="hidden" name="back" value={back} />
-      <p className="ph-eyebrow">Editing</p>
+      <p className="hl-eyebrow">Editing</p>
       <div role="group" aria-label="Choose site">
         {adminSites.map((s) => (
           <button key={s.id} type="submit" name="site" value={s.id} aria-pressed={s.id === site} title={s.note}>
@@ -154,7 +154,7 @@ export function AdminTopbar({
               </NextLink>
             </li>
           ))}
-          {!results.length ? <li style={{ color: "var(--ph-muted)" }}>No match</li> : null}
+          {!results.length ? <li style={{ color: "var(--hl-muted)" }}>No match</li> : null}
         </ul>
       </Dialog>
     </header>

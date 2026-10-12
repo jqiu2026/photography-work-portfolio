@@ -17,7 +17,7 @@ export function ProtectedGallery({
   refreshUrl,
 }: { items: ProtectedGalleryItem[]; columns?: number; base?: string; refreshUrl?: string }) {
   return (
-    <ul className="ph-pgallery" style={{ columnCount: columns }}>
+    <ul className="hl-pgallery" style={{ columnCount: columns }}>
       {items.map((it, i) => (
         <li key={it.asset.id ?? i}>
           <ProtectedImage asset={it.asset} alt={it.alt} tokens={it.tokens} base={base} refreshUrl={refreshUrl} />

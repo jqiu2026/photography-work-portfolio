@@ -1,6 +1,6 @@
 # 02. Phase 1: UI package and site redesign
 
-> **Status 2026-10-12:** Phase 1 is complete and archived. Its visual outcome (Instrument Sans, neutral grayscale, handwritten `--ph-*` CSS, header-based pages) is being **replaced from scratch** in Phase 2.5 by an original, sellable UI system; see [12-vision-v2.md](12-vision-v2.md) and [HANDOFF.md](HANDOFF.md). Engineering parts (workspace layout, tests, docs-coverage rule, rename script, accessibility test rig) carry over.
+> **Status 2026-10-12:** Phase 1 is complete and archived. Its visual outcome (Instrument Sans, neutral grayscale, handwritten `--hl-*` CSS, header-based pages) is being **replaced from scratch** in Phase 2.5 by an original, sellable UI system; see [12-vision-v2.md](12-vision-v2.md) and [HANDOFF.md](HANDOFF.md). Engineering parts (workspace layout, tests, docs-coverage rule, rename script, accessibility test rig) carry over.
 
 **Goal:** an open-source, documented UI package, and the family of sites rebuilt on it: the hub (profile-style, `jerryqiu.com`), the photography portfolio (`photos.jerryqiu.com`), and the music and flying sites. Squarespace-grade polish with a restrained Apple-style motion layer ([10](10-design-brief.md)). No Once UI left when done. Must **not** resemble the StuyAviators site.
 
@@ -46,19 +46,19 @@ First do the **design exploration** in [10](10-design-brief.md) (three direction
 - **Space and layout:** 4px base, container widths, a 12-col grid, full-bleed utilities, safe areas.
 - **Radius, elevation, borders, glass** (backdrop blur surfaces with a solid fallback).
 - **Motion tokens:** durations, easing curves (a signature `ease-out-expo`-like curve and a spring), stagger, distance. One source of truth for JS and CSS.
-- **Theming API:** all tokens are CSS variables under a prefix (`--ph-*`), switch by `[data-theme]`, respect `prefers-color-scheme`, no flash on load.
+- **Theming API:** all tokens are CSS variables under a prefix (`--hl-*`), switch by `[data-theme]`, respect `prefers-color-scheme`, no flash on load.
 
 ## 1.3 The UI package (`packages/ui`)
 
 **Authoring:** TypeScript, React 19, Tailwind v4 compiled to `dist/styles.css`, tokens as CSS variables. `"use client"` only where needed. Build with `tsup` or `tsdown`. ESM + types. **Subpath exports** so apps only pull what they use:
 
 ```
-@placeholder/ui            primitives, layout, typography, forms, overlays, navigation
-@placeholder/ui/motion     scroll and animation components
-@placeholder/ui/media      image, gallery, lightbox, sequence, protection components
-@placeholder/ui/webgl      optional WebGL hero (lazy, ogl)
-@placeholder/ui/styles.css compiled stylesheet and tokens
-@placeholder/ui/tokens     JS token export
+@halation/ui            primitives, layout, typography, forms, overlays, navigation
+@halation/ui/motion     scroll and animation components
+@halation/ui/media      image, gallery, lightbox, sequence, protection components
+@halation/ui/webgl      optional WebGL hero (lazy, ogl)
+@halation/ui/styles.css compiled stylesheet and tokens
+@halation/ui/tokens     JS token export
 ```
 
 `sideEffects` flags correct, tree-shakeable, no runtime CSS-in-JS.

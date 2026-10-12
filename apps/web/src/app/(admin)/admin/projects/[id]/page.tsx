@@ -52,7 +52,7 @@ export default async function EditProject({ params }: { params: Promise<{ id: st
       <ProjectForm values={values} />
       {data?.versions.length ? (
         <section style={{ marginTop: "3rem" }} aria-labelledby="hist">
-          <h2 id="hist" style={{ fontSize: "var(--ph-text-xl)", marginBottom: "0.75rem" }}>
+          <h2 id="hist" style={{ fontSize: "var(--hl-text-xl)", marginBottom: "0.75rem" }}>
             Version history
           </h2>
           <table className="adm-table">

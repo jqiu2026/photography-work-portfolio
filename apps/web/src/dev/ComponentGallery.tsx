@@ -51,7 +51,7 @@ import {
   CodeBlock,
   type Preset,
   type Theme,
-} from "@placeholder/ui";
+} from "@halation/ui";
 import { Bell } from "lucide-react";
 import { useState } from "react";
 
@@ -73,7 +73,7 @@ function ToastDemo() {
 
 function Block({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section style={{ padding: "2.5rem 0", borderTop: "1px solid var(--ph-line)" }}>
+    <section style={{ padding: "2.5rem 0", borderTop: "1px solid var(--hl-line)" }}>
       <Eyebrow style={{ marginBottom: "1.25rem" }}>{title}</Eyebrow>
       {children}
     </section>
@@ -88,8 +88,8 @@ export function ComponentGallery() {
     <div
       data-preset={preset}
       data-theme={theme}
-      className="ph-root"
-      style={{ minHeight: 0, borderRadius: 20, border: "1px solid var(--ph-line)", overflow: "hidden" }}
+      className="hl-root"
+      style={{ minHeight: 0, borderRadius: 20, border: "1px solid var(--hl-line)", overflow: "hidden" }}
     >
       <ToastProvider>
         <TooltipProvider>

@@ -10,9 +10,9 @@ import {
   Text,
   Timeline,
   Link,
-} from "@placeholder/ui";
-import { Image } from "@placeholder/ui/media";
-import { InView, Parallax } from "@placeholder/ui/motion";
+} from "@halation/ui";
+import { Image } from "@halation/ui/media";
+import { InView, Parallax } from "@halation/ui/motion";
 import type { Metadata } from "next";
 import NextLink from "next/link";
 import { SiteShell } from "@/components/site/SiteShell";
@@ -44,7 +44,7 @@ export default async function About() {
                 asset={portrait}
                 alt={`Portrait of ${person.name}`}
                 sizes="22vw"
-                style={{ borderRadius: "var(--ph-radius-lg)" }}
+                style={{ borderRadius: "var(--hl-radius-lg)" }}
               />
             </Parallax>
           }
@@ -60,7 +60,7 @@ export default async function About() {
         <Container size="md">
           <Eyebrow style={{ marginBottom: "1.5rem" }}>Introduction</Eyebrow>
           {/* TODO(owner): rewrite in your own voice (first person) */}
-          <Text size="2xl" style={{ fontFamily: "var(--ph-font-display)", maxWidth: "32ch", lineHeight: 1.25 }}>
+          <Text size="2xl" style={{ fontFamily: "var(--hl-font-display)", maxWidth: "32ch", lineHeight: 1.25 }}>
             {intro}
           </Text>
         </Container>

@@ -1,7 +1,7 @@
-import "@placeholder/ui/styles.css";
-import { ThemeProvider, ThemeScript } from "@placeholder/ui";
-import { ScreenshotGuard } from "@placeholder/ui/media";
-import { SmoothScroll } from "@placeholder/ui/motion";
+import "@halation/ui/styles.css";
+import { ThemeProvider, ThemeScript } from "@halation/ui";
+import { ScreenshotGuard } from "@halation/ui/media";
+import { SmoothScroll } from "@halation/ui/motion";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { getSite } from "@jerryqiu/sites";
@@ -33,7 +33,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <ThemeScript preset="photos" defaultTheme="dark" />
         <meta name="robots" content="noai, noimageai" />
       </head>
-      <body className="ph-root">
+      <body className="hl-root">
         <ThemeProvider preset="photos" defaultTheme="dark">
           <ScreenshotGuard level={protection.level}>
             <SmoothScroll>

@@ -1,5 +1,5 @@
-import "@placeholder/ui/styles.css";
-import { ThemeProvider, ThemeScript, ToastProvider, TooltipProvider } from "@placeholder/ui";
+import "@halation/ui/styles.css";
+import { ThemeProvider, ThemeScript, ToastProvider, TooltipProvider } from "@halation/ui";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { fontVars } from "@/lib/fonts";
@@ -18,7 +18,7 @@ export default function AdminRootLayout({ children }: { children: ReactNode }) {
         <ThemeScript preset="hub" />
         <meta name="robots" content="noindex, nofollow, noarchive" />
       </head>
-      <body className="ph-root">
+      <body className="hl-root">
         <ThemeProvider preset="hub">
           <TooltipProvider>
             <ToastProvider>{children}</ToastProvider>

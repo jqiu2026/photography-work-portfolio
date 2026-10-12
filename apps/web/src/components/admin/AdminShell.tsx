@@ -10,7 +10,7 @@ export async function AdminShell({ user, children }: { user: AppUser; children: 
   const groups = itemsFor(site, user.role);
   return (
     <div className="adm">
-      <a href="#main" className="ph-skip">
+      <a href="#main" className="hl-skip">
         Skip to content
       </a>
       <AdminSidebar groups={groups} site={site} />

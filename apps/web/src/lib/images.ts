@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import type { ImageAsset } from "@placeholder/ui/media";
+import type { ImageAsset } from "@halation/ui/media";
 
 type Manifest = Record<string, ImageAsset>;
 const cache = new Map<string, Manifest>();
