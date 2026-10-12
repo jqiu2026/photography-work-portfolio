@@ -12,7 +12,18 @@ export type ButtonProps = {
 } & Omit<ButtonHTMLAttributes<HTMLButtonElement>, "className"> & { className?: string };
 
 /** Pass `as="a"` (or a router Link) with `href` to render a link that looks like a button. */
-export function Button({ variant = "solid", size = "md", as: As = "button", loading, iconLeft, iconRight, className, children, disabled, ...rest }: ButtonProps) {
+export function Button({
+  variant = "solid",
+  size = "md",
+  as: As = "button",
+  loading,
+  iconLeft,
+  iconRight,
+  className,
+  children,
+  disabled,
+  ...rest
+}: ButtonProps) {
   const isButton = As === "button";
   return (
     <As
@@ -21,17 +32,46 @@ export function Button({ variant = "solid", size = "md", as: As = "button", load
       aria-busy={loading || undefined}
       {...rest}
     >
-      {iconLeft ? <span className="ph-btn__icon" aria-hidden>{iconLeft}</span> : null}
+      {iconLeft ? (
+        <span className="ph-btn__icon" aria-hidden>
+          {iconLeft}
+        </span>
+      ) : null}
       <span>{children}</span>
-      {iconRight ? <span className="ph-btn__icon" aria-hidden>{iconRight}</span> : null}
+      {iconRight ? (
+        <span className="ph-btn__icon" aria-hidden>
+          {iconRight}
+        </span>
+      ) : null}
     </As>
   );
 }
 
 /** Icon-only button. `label` is required: it becomes the accessible name. */
-export function IconButton({ label, variant = "quiet", size = "md", as: As = "button", className, children, ...rest }: { label: string; variant?: "solid" | "ghost" | "quiet"; size?: "sm" | "md" | "lg"; as?: ElementType; className?: string; children: ReactNode; [k: string]: unknown }) {
+export function IconButton({
+  label,
+  variant = "quiet",
+  size = "md",
+  as: As = "button",
+  className,
+  children,
+  ...rest
+}: {
+  label: string;
+  variant?: "solid" | "ghost" | "quiet";
+  size?: "sm" | "md" | "lg";
+  as?: ElementType;
+  className?: string;
+  children: ReactNode;
+  [k: string]: unknown;
+}) {
   return (
-    <As className={cx("ph-btn", "ph-btn--icon", `ph-btn--${variant}`, `ph-btn--${size}`, className)} aria-label={label} {...(As === "button" ? { type: "button" } : {})} {...rest}>
+    <As
+      className={cx("ph-btn", "ph-btn--icon", `ph-btn--${variant}`, `ph-btn--${size}`, className)}
+      aria-label={label}
+      {...(As === "button" ? { type: "button" } : {})}
+      {...rest}
+    >
       <span aria-hidden>{children}</span>
     </As>
   );

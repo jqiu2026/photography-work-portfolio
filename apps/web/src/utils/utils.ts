@@ -1,5 +1,5 @@
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 import matter from "gray-matter";
 
 type Team = {
@@ -20,6 +20,7 @@ type Metadata = {
   tag?: string;
   team: Team[];
   link?: string;
+  protected?: boolean;
 };
 
 import { notFound } from "next/navigation";
@@ -51,6 +52,7 @@ function readMDXFile(filePath: string) {
     tag: data.tag || [],
     team: data.team || [],
     link: data.link || "",
+    protected: data.protected === true,
   };
 
   return { metadata, content };

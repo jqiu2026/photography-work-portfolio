@@ -21,7 +21,12 @@ async function walk(dir) {
   return out;
 }
 
-const slug = (s) => s.toLowerCase().replace(/\.[^.]+$/, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+const slug = (s) =>
+  s
+    .toLowerCase()
+    .replace(/\.[^.]+$/, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
 
 for (const file of await walk(srcDir)) {
   const id = slug(path.relative(srcDir, file));
@@ -35,7 +40,10 @@ for (const file of await walk(srcDir)) {
   for (const width of WIDTHS.filter((x) => x < w)) {
     const name = `${id}-${width}.webp`;
     const target = path.join(outDir, name);
-    const exists = await stat(target).then(() => true, () => false);
+    const exists = await stat(target).then(
+      () => true,
+      () => false,
+    );
     if (!exists) await img.clone().resize({ width }).webp({ quality: 78, effort: 5 }).toFile(target);
     files.push({ width, src: `${prefix}/${name}` });
   }
@@ -44,7 +52,13 @@ for (const file of await walk(srcDir)) {
     await img.clone().webp({ quality: 80 }).toFile(path.join(outDir, name));
     files.push({ width: w, src: `${prefix}/${name}` });
   }
-  manifest[id] = { width: w, height: h, color: `rgb(${r}, ${g}, ${b})`, blur: `data:image/webp;base64,${blur.toString("base64")}`, files };
+  manifest[id] = {
+    width: w,
+    height: h,
+    color: `rgb(${r}, ${g}, ${b})`,
+    blur: `data:image/webp;base64,${blur.toString("base64")}`,
+    files,
+  };
   console.log(id, `${w}x${h}`, files.length, "sizes");
 }
 await writeFile(path.join(outDir, "manifest.json"), JSON.stringify(manifest, null, 1));

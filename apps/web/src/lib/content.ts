@@ -3,11 +3,15 @@ import { getPosts } from "@/utils/utils";
 export type Project = ReturnType<typeof getProjects>[number];
 
 export function getProjects() {
-  return getPosts(["src", "content", "projects"]).sort((a, b) => +new Date(b.metadata.publishedAt) - +new Date(a.metadata.publishedAt));
+  return getPosts(["src", "content", "projects"]).sort(
+    (a, b) => +new Date(b.metadata.publishedAt) - +new Date(a.metadata.publishedAt),
+  );
 }
 
 export function getWriting() {
-  return getPosts(["src", "content", "posts"]).sort((a, b) => +new Date(b.metadata.publishedAt) - +new Date(a.metadata.publishedAt));
+  return getPosts(["src", "content", "posts"]).sort(
+    (a, b) => +new Date(b.metadata.publishedAt) - +new Date(a.metadata.publishedAt),
+  );
 }
 
 /** "/images/projects/stuy-sing-26/senior.png" -> optimized manifest id "stuy-sing-26-senior" */

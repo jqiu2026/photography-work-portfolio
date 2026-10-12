@@ -9,7 +9,9 @@ const cache = new Map<string, Manifest>();
 function manifest(group: string): Manifest {
   let m = cache.get(group);
   if (!m) {
-    m = JSON.parse(fs.readFileSync(path.join(process.cwd(), "public", "opt", group, "manifest.json"), "utf8")) as Manifest;
+    m = JSON.parse(
+      fs.readFileSync(path.join(process.cwd(), "public", "opt", group, "manifest.json"), "utf8"),
+    ) as Manifest;
     cache.set(group, m);
   }
   return m;

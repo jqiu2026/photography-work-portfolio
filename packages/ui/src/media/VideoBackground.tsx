@@ -11,6 +11,7 @@ export function VideoBackground({ src, poster, className }: { src: string; poste
   useEffect(() => {
     setSaveData(!!(navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData);
   }, []);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: re-observe when the rendered element changes (calm/saveData)
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
@@ -19,7 +20,21 @@ export function VideoBackground({ src, poster, className }: { src: string; poste
     return () => io.disconnect();
   }, [calm, saveData]);
   if (calm || saveData)
-    // biome-ignore lint/performance/noImgElement: framework-agnostic package
-    return <img className={className} src={poster} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />;
-  return <video ref={ref} className={className} src={src} poster={poster} muted loop playsInline preload="metadata" aria-hidden style={{ width: "100%", height: "100%", objectFit: "cover" }} />;
+    return (
+      <img className={className} src={poster} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+    );
+  return (
+    <video
+      ref={ref}
+      className={className}
+      src={src}
+      poster={poster}
+      muted
+      loop
+      playsInline
+      preload="metadata"
+      aria-hidden
+      style={{ width: "100%", height: "100%", objectFit: "cover" }}
+    />
+  );
 }

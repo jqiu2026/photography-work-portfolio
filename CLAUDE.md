@@ -8,4 +8,4 @@ Hard rules (details in `docs/project/08-operating-rules.md`):
 - Never push, merge to `main`, deploy, publish, or spend money without the owner.
 - Never block on questions: use the documented default and log it in `docs/project/QUESTIONS.md`.
 - Phase 1 flows into Phase 2; stop after Phase 2. Do not start Phase 3.
-- The `.agents` file holds Once UI rules, valid only until Once UI is removed in Phase 1.
+- Once UI was removed in Phase 1 (M7). `.agents` is gone; UI package rules live in `AGENTS.md`.

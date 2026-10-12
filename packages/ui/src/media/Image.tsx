@@ -40,9 +40,13 @@ export function Image({ asset, alt, sizes = "100vw", priority, fit = "cover", fi
   return (
     <span
       className={cx("ph-img", fill && "ph-img--fill", className)}
-      style={{ aspectRatio: fill ? undefined : `${asset.width} / ${asset.height}`, backgroundColor: asset.color, backgroundImage: asset.blur ? `url(${asset.blur})` : undefined, ...style }}
+      style={{
+        aspectRatio: fill ? undefined : `${asset.width} / ${asset.height}`,
+        backgroundColor: asset.color,
+        backgroundImage: asset.blur ? `url(${asset.blur})` : undefined,
+        ...style,
+      }}
     >
-      {/* biome-ignore lint/performance/noImgElement: framework-agnostic package */}
       <img
         ref={ref}
         src={largest.src}

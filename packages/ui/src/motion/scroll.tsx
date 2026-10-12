@@ -1,12 +1,24 @@
 "use client";
 
-import { motion, motionValue, useMotionValueEvent, useScroll, useSpring, useTransform, type MotionValue } from "motion/react";
+import {
+  motion,
+  motionValue,
+  useMotionValueEvent,
+  useScroll,
+  useSpring,
+  useTransform,
+  type MotionValue,
+} from "motion/react";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { motion as tokens } from "../tokens";
 import { SceneProvider, useCalm, useSceneProgress } from "./core";
 
 /** Moves children slower or faster than the page as it scrolls past. `speed` 0.2 = subtle. */
-export function Parallax({ children, speed = 0.15, className }: { children: ReactNode; speed?: number; className?: string }) {
+export function Parallax({
+  children,
+  speed = 0.15,
+  className,
+}: { children: ReactNode; speed?: number; className?: string }) {
   const calm = useCalm();
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
@@ -23,15 +35,35 @@ export function Parallax({ children, speed = 0.15, className }: { children: Reac
  * Children read progress with useSceneProgress(), or pass a render function.
  * Under reduced motion it is not pinned: content shows its final state at normal height.
  */
-export function PinnedScene({ children, length = 3, className, label }: { children: ReactNode | ((progress: MotionValue<number>) => ReactNode); length?: number; className?: string; label?: string }) {
+export function PinnedScene({
+  children,
+  length = 3,
+  className,
+  label,
+}: {
+  children: ReactNode | ((progress: MotionValue<number>) => ReactNode);
+  length?: number;
+  className?: string;
+  label?: string;
+}) {
   const calm = useCalm();
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
   const done = useMemo(() => motionValue(1), []);
   const body = typeof children === "function" ? children(calm ? done : scrollYProgress) : children;
-  if (calm) return <section aria-label={label} className={className}>{body}</section>;
+  if (calm)
+    return (
+      <section aria-label={label} className={className}>
+        {body}
+      </section>
+    );
   return (
-    <section ref={ref} aria-label={label} className={className} style={{ height: `${length * 100}vh`, position: "relative" }}>
+    <section
+      ref={ref}
+      aria-label={label}
+      className={className}
+      style={{ height: `${length * 100}vh`, position: "relative" }}
+    >
       <SceneProvider value={scrollYProgress}>
         <div style={{ position: "sticky", top: 0, height: "100vh", overflow: "hidden" }}>{body}</div>
       </SceneProvider>
@@ -49,16 +81,33 @@ export function StepSequence({ steps, className }: { steps: { title: string; bod
     return (
       <ol className={className} style={{ listStyle: "none", padding: 0, display: "grid", gap: "var(--ph-space-8)" }}>
         {steps.map((s) => (
-          <li key={s.title}><h3 className="ph-heading ph-heading--display" style={{ fontSize: "var(--ph-text-3xl)" }}>{s.title}</h3>{s.body ? <p className="ph-text ph-text--muted">{s.body}</p> : null}</li>
+          <li key={s.title}>
+            <h3 className="ph-heading ph-heading--display" style={{ fontSize: "var(--ph-text-3xl)" }}>
+              {s.title}
+            </h3>
+            {s.body ? <p className="ph-text ph-text--muted">{s.body}</p> : null}
+          </li>
         ))}
       </ol>
     );
   return (
     <div className={className} aria-live="polite" style={{ position: "relative", minHeight: "12rem" }}>
       {steps.map((s, i) => (
-        <motion.div key={s.title} aria-hidden={i !== active} animate={{ opacity: i === active ? 1 : 0, y: i === active ? 0 : i < active ? -24 : 24 }} transition={{ duration: tokens.duration.slow, ease: tokens.ease }} style={{ position: "absolute", inset: 0 }}>
-          <h3 className="ph-heading ph-heading--display" style={{ fontSize: "var(--ph-text-4xl)" }}>{s.title}</h3>
-          {s.body ? <p className="ph-text ph-text--muted" style={{ marginTop: "var(--ph-space-4)" }}>{s.body}</p> : null}
+        <motion.div
+          key={s.title}
+          aria-hidden={i !== active}
+          animate={{ opacity: i === active ? 1 : 0, y: i === active ? 0 : i < active ? -24 : 24 }}
+          transition={{ duration: tokens.duration.slow, ease: tokens.ease }}
+          style={{ position: "absolute", inset: 0 }}
+        >
+          <h3 className="ph-heading ph-heading--display" style={{ fontSize: "var(--ph-text-4xl)" }}>
+            {s.title}
+          </h3>
+          {s.body ? (
+            <p className="ph-text ph-text--muted" style={{ marginTop: "var(--ph-space-4)" }}>
+              {s.body}
+            </p>
+          ) : null}
         </motion.div>
       ))}
     </div>
@@ -71,7 +120,16 @@ export function StackingCards({ items, className }: { items: ReactNode[]; classN
   return (
     <div className={className} style={{ display: "grid", gap: calm ? "var(--ph-space-6)" : 0 }}>
       {items.map((it, i) => (
-        <div key={i} style={calm ? undefined : { position: "sticky", top: `calc(6rem + ${i * 1.5}rem)`, paddingBottom: "var(--ph-space-8)" }}>{it}</div>
+        <div
+          key={i}
+          style={
+            calm
+              ? undefined
+              : { position: "sticky", top: `calc(6rem + ${i * 1.5}rem)`, paddingBottom: "var(--ph-space-8)" }
+          }
+        >
+          {it}
+        </div>
       ))}
     </div>
   );
@@ -94,11 +152,45 @@ export function HorizontalShowcase({ children, className }: { children: ReactNod
     return () => window.removeEventListener("resize", measure);
   }, []);
   if (calm)
-    return <div className={className} style={{ display: "flex", gap: "var(--ph-space-6)", overflowX: "auto", scrollSnapType: "x mandatory", padding: "var(--ph-gutter)" }} tabIndex={0}>{children}</div>;
+    return (
+      <div
+        className={className}
+        style={{
+          display: "flex",
+          gap: "var(--ph-space-6)",
+          overflowX: "auto",
+          scrollSnapType: "x mandatory",
+          padding: "var(--ph-gutter)",
+        }}
+        tabIndex={0}
+      >
+        {children}
+      </div>
+    );
   return (
     <section ref={ref} className={className} style={{ height: `calc(100vh + ${dist}px)`, position: "relative" }}>
-      <div style={{ position: "sticky", top: 0, height: "100vh", overflow: "hidden", display: "flex", alignItems: "center" }}>
-        <motion.div ref={trackRef} style={{ x, display: "flex", gap: "var(--ph-space-6)", paddingInline: "var(--ph-gutter)", willChange: "transform" }}>{children}</motion.div>
+      <div
+        style={{
+          position: "sticky",
+          top: 0,
+          height: "100vh",
+          overflow: "hidden",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <motion.div
+          ref={trackRef}
+          style={{
+            x,
+            display: "flex",
+            gap: "var(--ph-space-6)",
+            paddingInline: "var(--ph-gutter)",
+            willChange: "transform",
+          }}
+        >
+          {children}
+        </motion.div>
       </div>
     </section>
   );
@@ -108,5 +200,18 @@ export function HorizontalShowcase({ children, className }: { children: ReactNod
 export function ScrollProgress() {
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 140, damping: 30 });
-  return <motion.div aria-hidden style={{ scaleX, transformOrigin: "0 50%", position: "fixed", inset: "0 0 auto 0", height: 2, background: "var(--ph-accent)", zIndex: 150 }} />;
+  return (
+    <motion.div
+      aria-hidden
+      style={{
+        scaleX,
+        transformOrigin: "0 50%",
+        position: "fixed",
+        inset: "0 0 auto 0",
+        height: 2,
+        background: "var(--ph-accent)",
+        zIndex: 150,
+      }}
+    />
+  );
 }

@@ -8,9 +8,16 @@ export function Heading({
   size = "3xl",
   display,
   className,
+  style,
   ...rest
 }: { as?: ElementType; size?: Size; display?: boolean } & HTMLAttributes<HTMLHeadingElement>) {
-  return <As className={cx("ph-heading", display && "ph-heading--display", className)} style={{ fontSize: `var(--ph-text-${size})`, ...(rest.style as CSSProperties) }} {...rest} />;
+  return (
+    <As
+      className={cx("ph-heading", display && "ph-heading--display", className)}
+      style={{ fontSize: `var(--ph-text-${size})`, ...(style as CSSProperties) }}
+      {...rest}
+    />
+  );
 }
 
 export function Text({
@@ -18,9 +25,16 @@ export function Text({
   size = "base",
   tone = "default",
   className,
+  style,
   ...rest
 }: { as?: ElementType; size?: Size; tone?: "default" | "muted" | "accent" } & HTMLAttributes<HTMLElement>) {
-  return <As className={cx("ph-text", tone !== "default" && `ph-text--${tone}`, className)} style={{ fontSize: `var(--ph-text-${size})`, ...(rest.style as CSSProperties) }} {...rest} />;
+  return (
+    <As
+      className={cx("ph-text", tone !== "default" && `ph-text--${tone}`, className)}
+      style={{ fontSize: `var(--ph-text-${size})`, ...(style as CSSProperties) }}
+      {...rest}
+    />
+  );
 }
 
 /** Small uppercase label above headings. */
@@ -28,7 +42,12 @@ export function Eyebrow({ className, ...rest }: HTMLAttributes<HTMLParagraphElem
   return <p className={cx("ph-eyebrow", className)} {...rest} />;
 }
 
-export type LinkProps = AnchorHTMLAttributes<HTMLAnchorElement> & { variant?: "underline" | "plain" | "accent"; external?: boolean; as?: ElementType; [k: string]: unknown };
+export type LinkProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
+  variant?: "underline" | "plain" | "accent";
+  external?: boolean;
+  as?: ElementType;
+  [k: string]: unknown;
+};
 /** Underline link. Pass `as={NextLink}` to use a framework router link. External links get rel="noopener noreferrer". */
 export function Link({ as: As = "a", variant = "underline", external, className, rel, target, ...rest }: LinkProps) {
   const ext = external ?? (typeof rest.href === "string" && /^https?:\/\//.test(rest.href));
@@ -42,7 +61,14 @@ export function Link({ as: As = "a", variant = "underline", external, className,
 }
 
 export function Separator({ vertical, className, ...rest }: { vertical?: boolean } & HTMLAttributes<HTMLDivElement>) {
-  return <div role="separator" aria-orientation={vertical ? "vertical" : "horizontal"} className={cx("ph-separator", vertical && "ph-separator--v", className)} {...rest} />;
+  return (
+    <div
+      role="separator"
+      aria-orientation={vertical ? "vertical" : "horizontal"}
+      className={cx("ph-separator", vertical && "ph-separator--v", className)}
+      {...rest}
+    />
+  );
 }
 
 export function VisuallyHidden({ as: As = "span", ...rest }: { as?: ElementType; children?: ReactNode }) {

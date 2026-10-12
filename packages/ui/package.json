@@ -36,7 +36,5 @@
     "radix-ui": "^1.7.0",
     "simple-icons": "^16.34.0"
   },
-  "sideEffects": [
-    "**/*.css"
-  ]
+  "sideEffects": ["**/*.css"]
 }

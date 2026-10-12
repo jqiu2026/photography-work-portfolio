@@ -18,7 +18,6 @@ export function themeScript(preset: Preset) {
 }
 
 export function ThemeScript({ preset = "hub" }: { preset?: Preset }) {
-  // biome-ignore lint/security/noDangerouslySetInnerHtml: static, build-time string
   return <script dangerouslySetInnerHTML={{ __html: themeScript(preset) }} />;
 }
 

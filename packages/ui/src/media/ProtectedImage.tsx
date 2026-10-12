@@ -16,8 +16,12 @@ export type ProtectedImageProps = ImageProps & {
 
 export function ProtectedImage({ watermark: _w, level = "deter", ...rest }: ProtectedImageProps) {
   return (
-    // biome-ignore lint/a11y/noStaticElementInteractions: deterrent only
-    <span data-protected={level} onContextMenu={level === "none" ? undefined : (e) => e.preventDefault()} onDragStart={level === "none" ? undefined : (e) => e.preventDefault()} style={{ display: "contents" }}>
+    <span
+      data-protected={level}
+      onContextMenu={level === "none" ? undefined : (e) => e.preventDefault()}
+      onDragStart={level === "none" ? undefined : (e) => e.preventDefault()}
+      style={{ display: "contents" }}
+    >
       <Image {...rest} />
     </span>
   );

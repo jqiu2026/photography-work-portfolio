@@ -15,17 +15,35 @@ export type EmbedProvider = keyof typeof hosts;
  * Click-to-load embed. Nothing from the third party is requested (no script, cookie or iframe)
  * until the visitor clicks. `id` is the video id, spotify path ("track/xyz"), SoundCloud URL or Bandcamp embed URL.
  */
-export function EmbedFacade({ provider, id, title, poster, ratio = "16 / 9" }: { provider: EmbedProvider; id: string; title: string; poster?: ReactNode; ratio?: string }) {
+export function EmbedFacade({
+  provider,
+  id,
+  title,
+  poster,
+  ratio = "16 / 9",
+}: { provider: EmbedProvider; id: string; title: string; poster?: ReactNode; ratio?: string }) {
   const [on, setOn] = useState(false);
   return (
     <div className="ph-embed" style={{ aspectRatio: ratio }}>
       {on ? (
-        <iframe src={hosts[provider](id)} title={title} allow="autoplay; encrypted-media; fullscreen" allowFullScreen loading="lazy" referrerPolicy="strict-origin-when-cross-origin" />
+        <iframe
+          src={hosts[provider](id)}
+          title={title}
+          allow="autoplay; encrypted-media; fullscreen"
+          allowFullScreen
+          loading="lazy"
+          referrerPolicy="strict-origin-when-cross-origin"
+        />
       ) : (
         <button type="button" onClick={() => setOn(true)} className="ph-embed__facade">
           {poster}
-          <span className="ph-embed__play"><Play size={22} aria-hidden /></span>
-          <span className="ph-embed__label">{title}<small>Loads {provider} when you press play</small></span>
+          <span className="ph-embed__play">
+            <Play size={22} aria-hidden />
+          </span>
+          <span className="ph-embed__label">
+            {title}
+            <small>Loads {provider} when you press play</small>
+          </span>
         </button>
       )}
     </div>
@@ -38,7 +56,6 @@ export function AudioPlayer({ src, title }: { src: string; title: string }) {
   return (
     <figure className="ph-audio">
       <figcaption>{title}</figcaption>
-      {/* biome-ignore lint/a11y/useMediaCaption: music clips have no captions track */}
       <audio ref={ref} controls preload="none" src={src} />
     </figure>
   );

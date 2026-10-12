@@ -1,0 +1,101 @@
+.work-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(2rem, 5vw, 4.5rem) clamp(1rem, 3vw, 2.5rem);
+}
+@media (max-width: 760px) {
+  .work-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.work-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+.work-card__media {
+  border-radius: var(--ph-radius-lg);
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  background: var(--ph-surface-2);
+}
+.work-card__media .ph-img {
+  aspect-ratio: 4 / 3 !important;
+  height: 100%;
+}
+.work-card__media img {
+  transition: opacity .7s var(--ph-ease), transform 1.4s var(--ph-ease);
+}
+.work-card:hover img {
+  transform: scale(1.035);
+}
+.work-card h2 {
+  font-family: var(--ph-font-display);
+  font-weight: var(--ph-display-weight);
+  font-size: var(--ph-text-2xl);
+  letter-spacing: var(--ph-display-tracking);
+  margin-top: 1.1rem;
+  line-height: 1.1;
+}
+.work-card p {
+  color: var(--ph-muted);
+  font-size: var(--ph-text-sm);
+  margin-top: .4rem;
+}
+.work-detail__hero {
+  margin: 0 var(--ph-gutter);
+  border-radius: var(--ph-radius-lg);
+  overflow: hidden;
+}
+.work-detail__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem 4rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--ph-line);
+  font-size: var(--ph-text-sm);
+}
+.work-detail__meta dt {
+  color: var(--ph-muted);
+}
+.work-detail__meta dd {
+  margin: .2rem 0 0;
+}
+.next-prev {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  border-top: 1px solid var(--ph-line);
+  padding-block: 3rem;
+}
+.next-prev a {
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+}
+.next-prev a:last-child {
+  text-align: right;
+}
+.next-prev span {
+  color: var(--ph-muted);
+  font-size: var(--ph-text-sm);
+}
+.next-prev strong {
+  font-family: var(--ph-font-display);
+  font-weight: var(--ph-display-weight);
+  font-size: var(--ph-text-2xl);
+  letter-spacing: var(--ph-display-tracking);
+}
+.work-card__empty {
+  height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+  text-align: center;
+  font-family: var(--ph-font-display);
+  font-size: var(--ph-text-2xl);
+  letter-spacing: var(--ph-display-tracking);
+  color: var(--ph-muted);
+}

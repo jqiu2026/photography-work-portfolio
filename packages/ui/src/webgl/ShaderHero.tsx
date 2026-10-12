@@ -75,14 +75,28 @@ export function ShaderHero({ src, alt, intensity = 1, srcSet, sizes, className, 
       if (!(probe.getContext("webgl") || probe.getContext("webgl2"))) return;
       const { Renderer, Program, Mesh, Triangle, Texture } = await import("ogl");
       if (cancelled) return;
-      const renderer = new Renderer({ dpr: Math.min(window.devicePixelRatio || 1, 1.5), alpha: false, antialias: false });
+      const renderer = new Renderer({
+        dpr: Math.min(window.devicePixelRatio || 1, 1.5),
+        alpha: false,
+        antialias: false,
+      });
       const gl = renderer.gl;
       host.appendChild(gl.canvas);
       gl.canvas.style.cssText = "position:absolute;inset:0;width:100%;height:100%;display:block";
       const texture = new Texture(gl, { generateMipmaps: false });
       const program = new Program(gl, {
-        vertex, fragment,
-        uniforms: { tMap: { value: texture }, uRes: { value: [1, 1] }, uImg: { value: [1, 1] }, uMouse: { value: [0.5, 0.5] }, uTime: { value: 0 }, uScroll: { value: 0 }, uIntensity: { value: intensity }, uReveal: { value: 0 } },
+        vertex,
+        fragment,
+        uniforms: {
+          tMap: { value: texture },
+          uRes: { value: [1, 1] },
+          uImg: { value: [1, 1] },
+          uMouse: { value: [0.5, 0.5] },
+          uTime: { value: 0 },
+          uScroll: { value: 0 },
+          uIntensity: { value: intensity },
+          uReveal: { value: 0 },
+        },
       });
       const mesh = new Mesh(gl, { geometry: new Triangle(gl), program });
       const mouse = [0.5, 0.5];
@@ -105,7 +119,7 @@ export function ShaderHero({ src, alt, intensity = 1, srcSet, sizes, className, 
 
       let raf = 0;
       let visible = true;
-      let t0 = performance.now();
+      const t0 = performance.now();
       let reveal = 0;
       const frame = (t: number) => {
         raf = requestAnimationFrame(frame);
@@ -121,32 +135,59 @@ export function ShaderHero({ src, alt, intensity = 1, srcSet, sizes, className, 
         u.uReveal.value = 1 - (1 - reveal) ** 3;
         renderer.render({ scene: mesh });
       };
-      const start = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(frame); };
+      const start = () => {
+        cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(frame);
+      };
       const onMove = (e: PointerEvent) => {
         const r = box.getBoundingClientRect();
         target[0] = (e.clientX - r.left) / r.width;
         target[1] = 1 - (e.clientY - r.top) / r.height;
       };
-      const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; });
+      const io = new IntersectionObserver(([e]) => {
+        visible = e.isIntersecting;
+      });
       io.observe(box);
       const ro = new ResizeObserver(resize);
       ro.observe(box);
       window.addEventListener("pointermove", onMove, { passive: true });
       dispose = () => {
         cancelAnimationFrame(raf);
-        io.disconnect(); ro.disconnect();
+        io.disconnect();
+        ro.disconnect();
         window.removeEventListener("pointermove", onMove);
         gl.canvas.remove();
         gl.getExtension("WEBGL_lose_context")?.loseContext();
       };
     })();
-    return () => { cancelled = true; dispose(); };
+    return () => {
+      cancelled = true;
+      dispose();
+    };
   }, [src, intensity, calm]);
 
   return (
-    <div ref={wrap} className={className} style={{ position: "relative", overflow: "hidden", background: "var(--ph-cinema)" }}>
-      {/* biome-ignore lint/performance/noImgElement: framework-agnostic package */}
-      <img src={src} srcSet={srcSet} sizes={sizes} alt={alt} fetchPriority="high" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: live ? 0 : 1, transition: "opacity 0.6s" }} />
+    <div
+      ref={wrap}
+      className={className}
+      style={{ position: "relative", overflow: "hidden", background: "var(--ph-cinema)" }}
+    >
+      <img
+        src={src}
+        srcSet={srcSet}
+        sizes={sizes}
+        alt={alt}
+        fetchPriority="high"
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          opacity: live ? 0 : 1,
+          transition: "opacity 0.6s",
+        }}
+      />
       <div ref={canvasHost} aria-hidden style={{ position: "absolute", inset: 0 }} />
       {children ? <div style={{ position: "relative", height: "100%" }}>{children}</div> : null}
     </div>

@@ -1,7 +1,8 @@
 /* @placeholder/ui design tokens. Prefix --ph-. Values for colour live in themes.css. */
 :root {
   /* Type families: apps provide the font variables (next/font); fallbacks keep it usable without them */
-  --ph-font-sans: var(--font-inter-tight, "Inter Tight"), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --ph-font-sans: var(--font-inter-tight, "Inter Tight"), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    sans-serif;
   --ph-font-serif: var(--font-instrument-serif, "Instrument Serif"), "Iowan Old Style", Georgia, serif;
   --ph-font-mono: var(--font-geist-mono, "Geist Mono"), ui-monospace, SFMono-Regular, Menlo, monospace;
 

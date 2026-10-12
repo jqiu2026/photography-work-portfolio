@@ -8,7 +8,9 @@ import type { ReactNode } from "react";
 import { fontVars } from "@/lib/fonts";
 import { person } from "@/content/site";
 
-const base = process.env.NEXT_PUBLIC_HUB_URL ?? (process.env.NODE_ENV === "production" ? "https://jerryqiu.com" : "http://localhost:3000");
+const base =
+  process.env.NEXT_PUBLIC_HUB_URL ??
+  (process.env.NODE_ENV === "production" ? "https://jerryqiu.com" : "http://localhost:3000");
 
 export const metadata: Metadata = {
   metadataBase: new URL(base),

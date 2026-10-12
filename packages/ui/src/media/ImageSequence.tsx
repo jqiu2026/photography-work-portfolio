@@ -11,7 +11,13 @@ type Conn = { saveData?: boolean; effectiveType?: string };
  * Frames load progressively (first, then every 8th, then the rest). On Save-Data, slow connections or
  * reduced motion it shows only the `poster` (or the middle frame) and never downloads the sequence.
  */
-export function ImageSequence({ frames, poster, progress, alt, className }: { frames: string[]; poster?: string; progress?: MotionValue<number>; alt: string; className?: string }) {
+export function ImageSequence({
+  frames,
+  poster,
+  progress,
+  alt,
+  className,
+}: { frames: string[]; poster?: string; progress?: MotionValue<number>; alt: string; className?: string }) {
   const calm = useCalm();
   const scene = useSceneProgress();
   const p = progress ?? scene;
@@ -32,35 +38,61 @@ export function ImageSequence({ frames, poster, progress, alt, className }: { fr
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const w = c.clientWidth * dpr;
     const h = c.clientHeight * dpr;
-    if (c.width !== w || c.height !== h) { c.width = w; c.height = h; }
+    if (c.width !== w || c.height !== h) {
+      c.width = w;
+      c.height = h;
+    }
     const ctx = c.getContext("2d");
     if (!ctx) return;
     const s = Math.max(w / img.naturalWidth, h / img.naturalHeight);
-    ctx.drawImage(img, (w - img.naturalWidth * s) / 2, (h - img.naturalHeight * s) / 2, img.naturalWidth * s, img.naturalHeight * s);
+    ctx.drawImage(
+      img,
+      (w - img.naturalWidth * s) / 2,
+      (h - img.naturalHeight * s) / 2,
+      img.naturalWidth * s,
+      img.naturalHeight * s,
+    );
   };
 
   // Only start downloading frames when the sequence is within ~1.5 screens of the viewport.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: re-observe when the canvas is (un)mounted by lite/calm
   useEffect(() => {
     const el = canvas.current;
-    if (!el) { setNear(true); return; }
+    if (!el) {
+      setNear(true);
+      return;
+    }
     const io = new IntersectionObserver(([e]) => e.isIntersecting && setNear(true), { rootMargin: "150% 0px" });
     io.observe(el);
     return () => io.disconnect();
   }, [lite, calm]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: draw reads refs only; effect restarts on frames/calm/near
   useEffect(() => {
     if (!near) return;
     const conn = (navigator as Navigator & { connection?: Conn }).connection;
-    if (calm || conn?.saveData || /(^|-)2g$/.test(conn?.effectiveType ?? "")) { setLite(true); return; }
+    if (calm || conn?.saveData || /(^|-)2g$/.test(conn?.effectiveType ?? "")) {
+      setLite(true);
+      return;
+    }
     let cancelled = false;
-    const order = [0, ...frames.map((_, i) => i).filter((i) => i % 8 === 0 && i), ...frames.map((_, i) => i).filter((i) => i % 8 !== 0)];
-    const load = (i: number) => new Promise<void>((res) => {
-      const im = new window.Image();
-      im.decoding = "async";
-      im.onload = () => { imgs.current[i] = im; if (i === 0 || Math.abs(i - last.current) < 8) draw(Math.max(0, last.current)); res(); };
-      im.onerror = () => res();
-      im.src = frames[i];
-    });
+    const order = [
+      0,
+      ...frames.map((_, i) => i).filter((i) => i % 8 === 0 && i),
+      ...frames.map((_, i) => i).filter((i) => i % 8 !== 0),
+    ];
+    const load = (i: number) =>
+      new Promise<void>((res) => {
+        const im = new window.Image();
+        im.decoding = "async";
+        im.onload = () => {
+          imgs.current[i] = im;
+          if (i === 0 || Math.abs(i - last.current) < 8) draw(Math.max(0, last.current));
+          res();
+        };
+        im.onerror = () => res();
+        im.src = frames[i];
+      });
     (async () => {
       await load(order[0]);
       draw(0);
@@ -68,17 +100,36 @@ export function ImageSequence({ frames, poster, progress, alt, className }: { fr
     })();
     const onResize = () => draw(Math.max(0, last.current));
     window.addEventListener("resize", onResize);
-    return () => { cancelled = true; window.removeEventListener("resize", onResize); };
-    // biome-ignore lint/correctness/useExhaustiveDependencies: draw is stable enough for this effect
+    return () => {
+      cancelled = true;
+      window.removeEventListener("resize", onResize);
+    };
   }, [frames, calm, near]);
 
   useMotionValueEvent(p, "change", (v) => {
     const i = Math.max(0, Math.min(frames.length - 1, Math.round(v * (frames.length - 1))));
-    if (i !== last.current) { last.current = i; draw(i); }
+    if (i !== last.current) {
+      last.current = i;
+      draw(i);
+    }
   });
 
   if (lite || calm)
-    // biome-ignore lint/performance/noImgElement: framework-agnostic package
-    return <img className={className} src={poster ?? frames[Math.floor(frames.length / 2)]} alt={alt} style={{ width: "100%", height: "100%", objectFit: "cover" }} />;
-  return <canvas ref={canvas} className={className} role="img" aria-label={alt} style={{ width: "100%", height: "100%", display: "block" }} />;
+    return (
+      <img
+        className={className}
+        src={poster ?? frames[Math.floor(frames.length / 2)]}
+        alt={alt}
+        style={{ width: "100%", height: "100%", objectFit: "cover" }}
+      />
+    );
+  return (
+    <canvas
+      ref={canvas}
+      className={className}
+      role="img"
+      aria-label={alt}
+      style={{ width: "100%", height: "100%", display: "block" }}
+    />
+  );
 }
