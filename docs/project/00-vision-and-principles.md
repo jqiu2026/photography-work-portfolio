@@ -26,7 +26,7 @@ More sites can be added by registering a hostname in `packages/sites`.
 
 ## Taste bar
 
-Read [10-design-brief.md](10-design-brief.md). In one line: **the most immersive personal website there is, awe and boldness with cinematic polish and inventive interaction, liquid motion throughout, still professional, modern and minimal, accessible and fast on any device.**
+Read [10-design-brief.md](10-design-brief.md). In one line: **the most immersive personal website there is, awe and boldness with cinematic polish and inventive interaction, Flow (liquid and light streaks) throughout, still professional, modern and minimal, accessible and fast on any device.**
 
 The StuyAviators site is an **engineering reference only**; this site must not look like it ([09](09-reference-stuyaviators.md)). The UI package must not look like Once UI or any other kit.
 

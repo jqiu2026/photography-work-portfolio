@@ -5,7 +5,7 @@
 ## Fixed by the owner (do not reopen)
 
 - Feeling: awe, bold, expressive, cinematic, inventive; professional, modern, minimal.
-- Motion metaphor for the whole family: **liquid / ink**. One easing and spring family, one reveal grammar, one cursor behaviour.
+- Motion metaphor for the whole family: **Flow** (liquid motion and light streaks; halation glow). Working name for the library: **Halation UI** (owner's suggestion, default for Q33). One easing and spring family, one reveal grammar, one cursor behaviour.
 - Dimensions/space as the idea that connects the hub to its three worlds, restrained and futuristic, never kitsch.
 - Four worlds, one system: hub (blue accent moment), photography (red), music (yellow), flying (green). Accents are signature moments, not theme paint.
 - No navbar on any home. One floating index control. No site switcher. Photography, music and flying carry only a footer button back to jerryqiu.com.
@@ -14,4 +14,4 @@
 
 ## What this file must contain when finished
 
-Principles; colour (light/dark/cinema, accent behaviour, AA table from `scripts/contrast.mjs`); typography (families with licences, scale, how type behaves in motion); layout grammar; the liquid motion language (curves, durations, spring, the ink/threshold transitions, cursor interaction); stage visuals per world; component vocabulary; iconography; sound policy (none by default, never autoplay); writing voice (first person, Jerry's own, specific, no buzzwords); an honest comparison with Once UI and other kits showing what is different.
+Principles; colour (light/dark/cinema, accent behaviour, AA table from `scripts/contrast.mjs`); typography (families with licences, scale, how type behaves in motion); layout grammar; the Flow motion language (curves, durations, spring, liquid and light-streak transitions, threshold crossings, cursor interaction); stage visuals per world; component vocabulary; iconography; sound policy (none by default, never autoplay); writing voice (first person, Jerry's own, specific, no buzzwords); an honest comparison with Once UI and other kits showing what is different.

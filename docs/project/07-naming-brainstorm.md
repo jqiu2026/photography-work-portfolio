@@ -1,5 +1,7 @@
 # 07. Naming brainstorm for the UI package
 
+> **2026-10-12: owner suggestion and default: "Halation UI"** (the glow that spreads around bright light in film; fits the Flow / light-streak motion language). Candidates below are history unless a conflict forces a change. Availability not checked (npm, GitHub, domain, trademark): the owner does that.
+
 **Current placeholder: `@placeholder/ui` / `PlaceholderUI` / `--ph-*`.** One config file and `pnpm rename` swap it later.
 
 Availability below is for the *unscoped* npm name `<word>-ui` as of the check on 2026-10-12 (a 404 from `npm view` means the name is currently unused). A scoped name (`@word/ui`) needs the npm org `word` to be free; **not checked**. GitHub org/repo, domain, and trademark availability are also unchecked. Do a proper search before committing.
