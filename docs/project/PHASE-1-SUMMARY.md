@@ -25,7 +25,7 @@ Date: 2026-10-12. Branch `feat/custom-ui-cms`. Nothing was pushed, merged, deplo
 
 | Criterion | Result |
 |---|---|
-| `install && build && test && lint && typecheck` from a clean clone | see PROGRESS.md log (clean-clone run recorded there) |
+| `install && build && test && lint && typecheck` from a clean clone | Pass (fresh `git clone`, `pnpm install --frozen-lockfile`, build, test, lint, typecheck, run on the final Phase 1 commit) |
 | No `once-ui` in apps/packages; dependency removed | Pass |
 | Lighthouse mobile (throttled), perf / a11y / best-practices / SEO | Hub `/` 94 / 100 / 96 / 100; `/about` 98 / 100 / 96 / 100; project page 93 / 100 / 96 / 100; photos `/` 95 / 100 / 96 / 100; photos `/portfolio` 91 / 100 / 96 / 100; `/flying` 96 / 100 / 96 / 100 |
 | axe: zero serious/critical on every page | Pass (142 route x theme x width runs) |
