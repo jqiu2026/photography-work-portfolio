@@ -1,82 +1,121 @@
-import {
-  Button,
-  Card,
-  Container,
-  Eyebrow,
-  Grid,
-  Heading,
-  InterestHero,
-  Link as UiLink,
-  Section,
-  Text,
-} from "@halation/ui";
 import { Image } from "@halation/ui/media";
-import { sitePath } from "@jerryqiu/sites";
-import NextLink from "next/link";
-import { InterestShell } from "@/components/interest/InterestShell";
-import { getFlyingContent } from "@/lib/interests";
+import { Condense, Scene, Settle, StageProvider, Streak } from "@halation/ui/stage";
+import { getSite, sitePath } from "@jerryqiu/sites";
+import { ShellIndex } from "@jerryqiu/sites/index-control";
+import Link from "next/link";
+import { Altimeter } from "@/components/flying/Altimeter";
+import "@/components/flying/flying.css";
 import { getImage } from "@/lib/images";
+import { getFlyingContent } from "@/lib/interests";
 
 export default async function FlyingHome() {
   const flying = await getFlyingContent();
   const cockpit = getImage("blogs", "day-one-cover");
+  const hub = getSite("hub");
+  const links = [
+    { label: "Home", href: sitePath("flying") },
+    { label: "Log", href: sitePath("flying", "/log") },
+    { label: "Aircraft", href: sitePath("flying", "/aircraft") },
+    { label: "About", href: sitePath("flying", "/about") },
+  ];
   return (
-    <InterestShell id="flying">
-      <Container style={{ paddingBlock: "clamp(3rem, 9vw, 7rem)" }}>
-        <InterestHero
-          eyebrow="Jerry Qiu"
-          title="Flying"
-          intro={flying.intro}
-          media={
-            <Image
-              asset={cockpit}
-              alt="The view from a small airplane's cockpit over green countryside and clouds, a pilot in headphones in the foreground."
-              sizes="(min-width: 860px) 45vw, 100vw"
-              priority
-            />
-          }
-          actions={
-            <Button as={NextLink} href={sitePath("flying", "/about")}>
-              The short version
-            </Button>
-          }
-        />
-      </Container>
-      <Section tone="surface">
-        <Container>
-          <Grid min="18rem" gap={6}>
-            {flying.story ? (
-              <Card>
-                <Eyebrow>How it started</Eyebrow>
-                <Text style={{ marginTop: "0.75rem" }}>{flying.story}</Text>
-              </Card>
-            ) : null}
-            {flying.certificates.map((c) => (
-              <Card key={c.title}>
-                <Eyebrow>Certificates</Eyebrow>
-                <Heading as="h2" size="xl" style={{ margin: "0.75rem 0 0.5rem" }}>
-                  {c.title}
-                </Heading>
-                <Text tone="muted" size="sm">
-                  {c.note}
-                </Text>
-              </Card>
-            ))}
-            <Card>
-              <Eyebrow>Club</Eyebrow>
-              <Heading as="h2" size="xl" style={{ margin: "0.75rem 0 0.5rem" }}>
-                {flying.club.name}
-              </Heading>
-              <Text tone="muted" size="sm">
-                {flying.club.note} <UiLink href={flying.club.href}>@stuyaviators</UiLink>
-              </Text>
-            </Card>
-          </Grid>
-          <Text tone="muted" size="sm" style={{ marginTop: "3rem" }}>
-            {flying.disclaimer}
-          </Text>
-        </Container>
-      </Section>
-    </InterestShell>
+    <StageProvider world="flying">
+      <a className="hl-skip" href="#main">
+        Skip to content
+      </a>
+      <ShellIndex routes={links} />
+      <Altimeter />
+      <main id="main" className="fl">
+        <Scene id="ground" label="Ground" as="header" className="fl-ground" param={[0, 0.1]}>
+          <div className="fl-wrap">
+            <p className="hl-eyebrow">Jerry Qiu</p>
+            <Streak as="h1" text="Flying" className="fl-title" />
+            {/* TODO(owner): rewrite in your voice. */}
+            <Settle as="p" className="fl-lede" when="load">
+              I'm learning to read the sky.
+            </Settle>
+            <p className="fl-cue" aria-hidden>
+              Climb
+            </p>
+          </div>
+        </Scene>
+
+        <Scene id="climb" label="Climb" className="fl-climb" param={[0.1, 0.4]}>
+          <div className="fl-wrap fl-split">
+            <figure className="fl-photo">
+              <Image
+                asset={cockpit}
+                alt="The view from a small airplane's cockpit over green countryside and clouds, a pilot in headphones in the foreground."
+                sizes="(min-width: 860px) 46vw, 100vw"
+              />
+            </figure>
+            <div>
+              <Condense text="Where I've started." className="fl-h2" />
+              {flying.story ? (
+                <Settle as="p" className="fl-lede">
+                  {flying.story}
+                </Settle>
+              ) : null}
+              <ul className="fl-facts">
+                {flying.certificates.map((c) => (
+                  <li key={c.title}>
+                    <strong>{c.title}</strong>
+                    <span>{c.note}</span>
+                  </li>
+                ))}
+                <li>
+                  <strong>{flying.club.name}</strong>
+                  <span>
+                    {flying.club.note} <a href={flying.club.href}>@stuyaviators</a>
+                  </span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </Scene>
+
+        <Scene id="log" label="Log" className="fl-log" param={[0.4, 0.7]}>
+          <div className="fl-wrap">
+            <Condense text="The log." className="fl-h2" />
+            {flying.log.length ? (
+              <ul className="fl-strips">
+                {flying.log.map((e) => (
+                  <li key={`${e.title}-${e.date}`}>
+                    <span className="hl-eyebrow">{e.date}</span>
+                    <span>{e.title}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <Settle as="p" className="fl-lede">
+                Nothing logged yet. Entries appear here once I've published them.
+              </Settle>
+            )}
+            <Link href={sitePath("flying", "/log")} className="fl-more">
+              Open the log →
+            </Link>
+          </div>
+        </Scene>
+
+        <Scene id="altitude" label="Say hello" className="fl-hello" param={[0.7, 1.0]}>
+          <div className="fl-wrap">
+            <Condense text="Say hello." className="fl-hello__t" />
+            <Settle as="p" className="fl-note">
+              {flying.disclaimer}
+            </Settle>
+          </div>
+        </Scene>
+      </main>
+      <footer className="hl-footer">
+        <div className="hl-footer__in">
+          <p className="hl-footer__note">
+            © {new Date().getFullYear()} Jerry Qiu. All photographs and writing are © Jerry Qiu unless stated.
+          </p>
+          <a className="hl-return" href={hub.url} data-return-to-hub>
+            jerryqiu.com
+          </a>
+        </div>
+      </footer>
+    </StageProvider>
   );
 }

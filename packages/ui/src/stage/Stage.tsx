@@ -296,7 +296,7 @@ export function Scene({
   as?: ElementType;
   field?: string;
   accent?: string;
-  param?: (p: number) => number;
+  param?: [number, number];
   /** Extra scroll distance, in viewport heights, that the content stays pinned (CSS sticky inside a tall wrapper) */
   pin?: number;
   className?: string;
@@ -305,11 +305,13 @@ export function Scene({
   const ref = useRef<HTMLElement>(null);
   const stage = useStageOptional();
   const register = stage?.registerScene;
-  // biome-ignore lint/correctness/useExhaustiveDependencies: the scene record is rebuilt only when its identity changes
+  const from = param?.[0];
+  const to = param?.[1];
   useEffect(() => {
     if (!register || !ref.current) return;
-    return register({ id, label, el: ref.current, field, accent, param });
-  }, [register, id, label, field, accent]);
+    const map = from !== undefined && to !== undefined ? (p: number) => from + (to - from) * p : undefined;
+    return register({ id, label, el: ref.current, field, accent, param: map });
+  }, [register, id, label, field, accent, from, to]);
   return (
     <Tag
       ref={ref}
