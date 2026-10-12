@@ -30,7 +30,7 @@ export default function Portfolio() {
               </Link>
             ))}
           </nav>
-          <Gallery images={photos} layout="masonry" />
+          <Gallery images={photos} layout="masonry" glitch />
         </Container>
       </Section>
     </Shell>

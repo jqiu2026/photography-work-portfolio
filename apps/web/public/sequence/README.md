@@ -1,6 +1,6 @@
 # Image sequences
 
-`hero/` is a **placeholder** sequence generated from portfolio stills by `scripts/make-sequence.mjs` (slow zoom + crossfade, 96 frames, 1280x720 WebP, about 2 MB). It is used by the hub home pinned scene via `ImageSequence`.
+`hero/` is a **placeholder** sequence generated from portfolio stills by `scripts/make-sequence.mjs` (slow zoom + crossfade, 96 frames, 1280x720 WebP, about 4.4 MB). It is used by the hub home pinned scene via `ImageSequence`.
 
 ## Swap in real footage (TODO(owner): supply a video)
 

@@ -22,7 +22,7 @@ Rules for AI agents and contributors. Project plan, status and hard rules live i
 - Every motion component must render a complete static state under `prefers-reduced-motion` (use `useCalm()`).
 - Accessibility is an acceptance criterion: visible focus, 44px targets, labelled controls, AA contrast, keyboard use.
 - Use `motion` tokens from `src/tokens.ts` (one easing curve, one spring); do not invent per-component curves.
-- Fonts are provided by the app through `next/font` variables (`--font-inter-tight`, `--font-instrument-serif`, `--font-geist-mono`, `--font-geist`, `--font-newsreader`).
+- Fonts are provided by the app through `next/font` variables: `--font-sans` (Instrument Sans) and `--font-mono` (DM Mono); one sans family, no serif. Colour is neutral grayscale plus one accent per site; keep accents to small dashes.
 - Images: run `node scripts/optimize-images.mjs <src> <out> <prefix>`; use `Image` with the manifest entry. Never delete or overwrite original photos.
 
 ## Next.js 16

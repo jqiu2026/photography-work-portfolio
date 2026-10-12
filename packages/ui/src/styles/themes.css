@@ -1,171 +1,93 @@
 /*
- * Themes. Colour tokens switch on [data-theme="light|dark"] and [data-preset="hub|photos|music|flying"].
- * Defaults (no attributes) = hub light. Direction notes: docs/project/design-language.md
+ * Themes. Neutral grayscale surfaces for light and dark, one small spectrum of accents
+ * (blue, red, green, yellow) used sparingly. [data-theme="light|dark"] picks the neutrals;
+ * [data-preset="hub|photos|music|flying"] picks the site's accent colour and shape.
+ * Direction notes: docs/project/design-language.md
  */
 :root,
-[data-preset="hub"][data-theme="light"] {
-  --ph-bg: #f5f2ec;
-  --ph-surface: #fbf9f5;
-  --ph-surface-2: #ece8df;
-  --ph-text: #1b1a17;
-  --ph-muted: #66625a;
-  --ph-line: #dcd7cc;
-  --ph-accent: #8a4b2a;
-  --ph-accent-contrast: #fff;
+[data-theme="light"] {
+  --ph-bg: #fff;
+  --ph-surface: #fafafa;
+  --ph-surface-2: #f2f2f2;
+  --ph-text: #0a0a0a;
+  --ph-muted: #666;
+  --ph-line: #e6e6e6;
   --ph-cinema: #000;
-  --ph-danger: #b3261e;
-  --ph-success: #1f7a45;
-  --ph-warn: #8a5a00;
-  --ph-font-display: var(--ph-font-serif);
-  --ph-display-weight: 400;
-  --ph-display-tracking: -0.025em;
-  --ph-radius-control: var(--ph-radius-pill);
+  /* Accent spectrum: fill colours, AA-safe text colours, and the text colour that sits on a fill */
+  --ph-blue: #2563eb;
+  --ph-blue-text: #1d4ed8;
+  --ph-blue-on: #fff;
+  --ph-red: #dc2626;
+  --ph-red-text: #c81e1e;
+  --ph-red-on: #fff;
+  --ph-green: #15803d;
+  --ph-green-text: #15803d;
+  --ph-green-on: #fff;
+  --ph-yellow: #facc15;
+  --ph-yellow-text: #7a5a00;
+  --ph-yellow-on: #0a0a0a;
+  --ph-danger: var(--ph-red-text);
+  --ph-success: var(--ph-green-text);
+  --ph-warn: var(--ph-yellow-text);
   color-scheme: light;
 }
-[data-preset="hub"][data-theme="dark"],
-:root[data-theme="dark"]:not([data-preset]) {
-  --ph-bg: #151412;
-  --ph-surface: #1c1b18;
-  --ph-surface-2: #262420;
-  --ph-text: #efebe3;
-  --ph-muted: #a09a8e;
-  --ph-line: #2e2c27;
-  --ph-accent: #d49a74;
-  --ph-accent-contrast: #151412;
+[data-theme="dark"] {
+  --ph-bg: #0a0a0a;
+  --ph-surface: #111;
+  --ph-surface-2: #1a1a1a;
+  --ph-text: #fafafa;
+  --ph-muted: #a3a3a3;
+  --ph-line: #262626;
   --ph-cinema: #000;
-  --ph-danger: #ff8a80;
-  --ph-success: #6fcf97;
-  --ph-warn: #e8b84a;
-  --ph-font-display: var(--ph-font-serif);
-  --ph-display-weight: 400;
-  --ph-display-tracking: -0.025em;
+  --ph-blue: #6b9bff;
+  --ph-blue-text: #8fb4ff;
+  --ph-blue-on: #0a0a0a;
+  --ph-red: #ff6b60;
+  --ph-red-text: #ff8a80;
+  --ph-red-on: #0a0a0a;
+  --ph-green: #4ade80;
+  --ph-green-text: #4ade80;
+  --ph-green-on: #0a0a0a;
+  --ph-yellow: #fde047;
+  --ph-yellow-text: #fde047;
+  --ph-yellow-on: #0a0a0a;
+  --ph-danger: var(--ph-red-text);
+  --ph-success: var(--ph-green-text);
+  --ph-warn: var(--ph-yellow-text);
   color-scheme: dark;
 }
 
-/* Photography: cinema black by default */
-[data-preset="photos"][data-theme="dark"] {
-  --ph-bg: #07080a;
-  --ph-surface: #0e1013;
-  --ph-surface-2: #161a1e;
-  --ph-text: #eef0f3;
-  --ph-muted: #8d949e;
-  --ph-line: #1f2329;
-  --ph-accent: #8ab6ff;
-  --ph-accent-contrast: #07080a;
-  --ph-cinema: #000;
-  --ph-danger: #ff8a80;
-  --ph-success: #6fcf97;
-  --ph-warn: #e8b84a;
-  --ph-font-display: var(--font-geist, "Geist"), var(--ph-font-sans);
-  --ph-display-weight: 500;
-  --ph-display-tracking: -0.05em;
-  --ph-radius-md: 6px;
-  --ph-radius-lg: 10px;
-  --ph-radius-control: 10px;
-  color-scheme: dark;
-}
-[data-preset="photos"][data-theme="light"] {
-  --ph-bg: #f4f6f8;
-  --ph-surface: #fff;
-  --ph-surface-2: #e9edf1;
-  --ph-text: #0b0d10;
-  --ph-muted: #555d68;
-  --ph-line: #d9dee4;
-  --ph-accent: #2457c5;
-  --ph-accent-contrast: #fff;
-  --ph-cinema: #000;
-  --ph-danger: #b3261e;
-  --ph-success: #1f7a45;
-  --ph-warn: #8a5a00;
-  --ph-font-display: var(--font-geist, "Geist"), var(--ph-font-sans);
-  --ph-display-weight: 500;
-  --ph-display-tracking: -0.05em;
-  --ph-radius-md: 6px;
-  --ph-radius-lg: 10px;
-  --ph-radius-control: 10px;
-  color-scheme: light;
-}
-
-/* Music: soft neutral, serif, textural */
-[data-preset="music"][data-theme="light"] {
-  --ph-bg: #e9e6df;
-  --ph-surface: #f1efe9;
-  --ph-surface-2: #dedad1;
-  --ph-text: #23211e;
-  --ph-muted: #5f5b53;
-  --ph-line: #cfcac0;
-  --ph-accent: #4a5a43;
-  --ph-accent-contrast: #fff;
-  --ph-cinema: #000;
-  --ph-danger: #b3261e;
-  --ph-success: #1f7a45;
-  --ph-warn: #8a5a00;
-  --ph-font-display: var(--font-newsreader, "Newsreader"), var(--ph-font-serif);
-  --ph-display-weight: 300;
-  --ph-display-tracking: -0.02em;
-  --ph-radius-md: 3px;
-  --ph-radius-lg: 4px;
-  --ph-radius-control: 4px;
-  color-scheme: light;
-}
-[data-preset="music"][data-theme="dark"] {
-  --ph-bg: #1b1a18;
-  --ph-surface: #22211e;
-  --ph-surface-2: #2b2a26;
-  --ph-text: #e8e5de;
-  --ph-muted: #9c978b;
-  --ph-line: #33312c;
-  --ph-accent: #a9bd9f;
-  --ph-accent-contrast: #1b1a18;
-  --ph-cinema: #000;
-  --ph-danger: #ff8a80;
-  --ph-success: #6fcf97;
-  --ph-warn: #e8b84a;
-  --ph-font-display: var(--font-newsreader, "Newsreader"), var(--ph-font-serif);
-  --ph-display-weight: 300;
-  --ph-display-tracking: -0.02em;
-  --ph-radius-md: 3px;
-  --ph-radius-lg: 4px;
-  --ph-radius-control: 4px;
-  color-scheme: dark;
-}
-
-/* Flying: cool, airy, precise (sans display, blue accent, soft radii) */
-[data-preset="flying"][data-theme="light"] {
-  --ph-bg: #f3f6fa;
-  --ph-surface: #fff;
-  --ph-surface-2: #e6edf5;
-  --ph-text: #0d1520;
-  --ph-muted: #536172;
-  --ph-line: #d5dee9;
-  --ph-accent: #1f5fae;
-  --ph-accent-contrast: #fff;
-  --ph-cinema: #000;
-  --ph-danger: #b3261e;
-  --ph-success: #1f7a45;
-  --ph-warn: #8a5a00;
-  --ph-font-display: var(--font-inter-tight, "Inter Tight"), var(--ph-font-sans);
-  --ph-display-weight: 500;
+/* Typography is Geist everywhere; presets differ in weight and tracking, and in accent and corner shape. */
+:root {
+  --ph-font-display: var(--ph-font-sans);
+  --ph-display-weight: 600;
   --ph-display-tracking: -0.045em;
-  --ph-radius-control: var(--ph-radius-md);
-  color-scheme: light;
+  --ph-accent: var(--ph-blue);
+  --ph-accent-text: var(--ph-blue-text);
+  --ph-accent-contrast: var(--ph-blue-on);
 }
-[data-preset="flying"][data-theme="dark"] {
-  --ph-bg: #0a0f16;
-  --ph-surface: #101822;
-  --ph-surface-2: #17222f;
-  --ph-text: #e8eef6;
-  --ph-muted: #92a1b3;
-  --ph-line: #1f2c3b;
-  --ph-accent: #7db4f2;
-  --ph-accent-contrast: #0a0f16;
-  --ph-cinema: #000;
-  --ph-danger: #ff8a80;
-  --ph-success: #6fcf97;
-  --ph-warn: #e8b84a;
-  --ph-font-display: var(--font-inter-tight, "Inter Tight"), var(--ph-font-sans);
+[data-preset="hub"] {
+  --ph-accent: var(--ph-blue);
+  --ph-accent-text: var(--ph-blue-text);
+  --ph-accent-contrast: var(--ph-blue-on);
+}
+[data-preset="photos"] {
+  --ph-accent: var(--ph-red);
+  --ph-accent-text: var(--ph-red-text);
+  --ph-accent-contrast: var(--ph-red-on);
   --ph-display-weight: 500;
-  --ph-display-tracking: -0.045em;
-  --ph-radius-control: var(--ph-radius-md);
-  color-scheme: dark;
+  --ph-display-tracking: -0.055em;
+  --ph-radius-md: 8px;
+  --ph-radius-lg: 12px;
+  --ph-radius-control: 10px;
+}
+[data-preset="music"] {
+  --ph-accent: var(--ph-yellow);
+  --ph-accent-text: var(--ph-yellow-text);
+  --ph-accent-contrast: var(--ph-yellow-on);
+}
+[data-preset="flying"] {
+  --ph-accent: var(--ph-green);
+  --ph-accent-text: var(--ph-green-text);
+  --ph-accent-contrast: var(--ph-green-on);
 }

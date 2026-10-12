@@ -14,6 +14,8 @@ export type SiteInfo = {
   url: string;
   /** Theme preset (see packages/ui themes.css). */
   preset: Preset;
+  /** The site's accent colour (a dash of colour in the switcher and footer). */
+  color: "blue" | "red" | "green" | "yellow";
   /** Path form that works in dev on the hub app (music/flying). */
   devPath?: string;
 };
@@ -27,12 +29,20 @@ function origin(envValue: string | undefined, dev: string, prod: string) {
 export function getSites(): SiteInfo[] {
   const hub = origin(process.env.NEXT_PUBLIC_HUB_URL, "http://localhost:3000", "https://jerryqiu.com");
   return [
-    { id: "hub", name: "Jerry Qiu", description: "About me, my work and writing", preset: "hub", url: hub },
+    {
+      id: "hub",
+      name: "Jerry Qiu",
+      description: "About me, my work and writing",
+      preset: "hub",
+      color: "blue",
+      url: hub,
+    },
     {
       id: "photos",
       name: "Photography",
       description: "Portfolio and galleries",
       preset: "photos",
+      color: "red",
       url: origin(process.env.NEXT_PUBLIC_PHOTOS_URL, "http://localhost:3002", "https://photos.jerryqiu.com"),
     },
     {
@@ -40,6 +50,7 @@ export function getSites(): SiteInfo[] {
       name: "Music",
       description: "What I play and where to hear it",
       preset: "music",
+      color: "yellow",
       url: origin(process.env.NEXT_PUBLIC_MUSIC_URL, `${hub}/music`, "https://music.jerryqiu.com"),
       devPath: "/music",
     },
@@ -48,6 +59,7 @@ export function getSites(): SiteInfo[] {
       name: "Flying",
       description: "Notes and photos about flying",
       preset: "flying",
+      color: "green",
       url: origin(process.env.NEXT_PUBLIC_FLYING_URL, `${hub}/flying`, "https://flying.jerryqiu.com"),
       devPath: "/flying",
     },

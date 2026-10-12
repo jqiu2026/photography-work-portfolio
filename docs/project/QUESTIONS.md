@@ -28,4 +28,5 @@ Never block on these. Each has a default already being used. Append new ones at 
 | Q22 | Music: the trombone photo used on the music site is a portfolio photo; I did not claim it is you | Used with neutral alt text | Replace with your own performance photo |
 | Q23 | Hub headline/intro/skills copy is the original About text lightly arranged; first-person rewrite needed | Marked TODO(owner) in source | Rewrite in your voice |
 | Q24 | The About page says "Class of 2026" and the college is unknown | College hidden until supplied | Add via about content / CMS |
+| Q25 | Visual identity (owner feedback: first pass ugly) | Switched to Geist sans on neutral grayscale + red/blue/green/yellow dashes (hub blue, photos red, music yellow, flying green) | Edit `packages/ui/src/styles/themes.css` |
 

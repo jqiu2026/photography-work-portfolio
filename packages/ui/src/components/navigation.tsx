@@ -1,14 +1,20 @@
 "use client";
 
 import { ChevronDown, Menu as MenuIcon, Moon, Sun } from "lucide-react";
-import { useEffect, useState, type ElementType, type ReactNode } from "react";
+import { useEffect, useState, type CSSProperties, type ElementType, type ReactNode } from "react";
 import { cx } from "./cx";
 import { IconButton } from "./Button";
 import { Popover, Sheet } from "./overlays";
 import { useTheme } from "./ThemeProvider";
 
 export type NavLink = { label: string; href: string; current?: boolean };
-export type SiteEntry = { id: string; name: string; description: string; url: string };
+export type SiteEntry = {
+  id: string;
+  name: string;
+  description: string;
+  url: string;
+  color?: "blue" | "red" | "green" | "yellow";
+};
 
 export function SkipLink({ href = "#main", children = "Skip to content" }: { href?: string; children?: ReactNode }) {
   return (
@@ -53,6 +59,7 @@ export function SiteSwitcher({
             href={s.url}
             aria-current={s.id === currentId ? "page" : undefined}
             className="ph-switcher__item"
+            style={s.color ? ({ "--site": `var(--ph-${s.color})` } as CSSProperties) : undefined}
           >
             <strong>{s.name}</strong>
             <span>{s.description}</span>
@@ -79,7 +86,7 @@ export function Header({
     return () => window.removeEventListener("scroll", on);
   }, []);
   return (
-    <header className={cx("ph-header", (scrolled || !transparentTop) && "ph-header--solid")}>
+    <header className={cx("ph-header", scrolled || !transparentTop ? "ph-header--solid" : "ph-header--over")}>
       <div className="ph-header__inner">
         <div className="ph-header__brand">{brand}</div>
         <nav aria-label="Primary" className="ph-header__nav">

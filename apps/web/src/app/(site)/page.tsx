@@ -68,7 +68,7 @@ export default function Home() {
   return (
     <SiteShell>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <div className="home-hero" style={{ marginTop: "-68px", paddingTop: "calc(68px + 0.5rem)" }}>
+      <div className="home-hero">
         <ShaderHero
           src={heroSrc}
           srcSet={heroFiles.map((f) => `${f.src} ${f.width}w`).join(", ")}

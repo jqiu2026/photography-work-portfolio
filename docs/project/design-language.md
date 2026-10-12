@@ -1,5 +1,8 @@
 # Design language
 
+> **2026-10-12, owner direction (supersedes the A/B/C pick below):** the first pass (warm paper, serif display) was rejected as ugly. The identity is now **a modern minimalist sans (Geist, tight tracking, one family plus Geist Mono) on a truly neutral grayscale palette, with small dashes of blue, red, green and yellow**. Each site carries one accent (hub blue, photos red, music yellow, flying green) used sparingly: eyebrow marks, status dots, the "More from me" dots, links, focus rings, and the yellow text selection. Buttons and surfaces stay black/white/gray. The exploration below is kept for the record (it is still on `/_design`); the live tokens are in `packages/ui/src/styles/themes.css`.
+
+
 Decided at M2 from the `/_design` exploration (screenshots in `screenshots/m1/design.png`). Logged as Q3/Q12 in [QUESTIONS.md](QUESTIONS.md).
 
 ## The three directions tested

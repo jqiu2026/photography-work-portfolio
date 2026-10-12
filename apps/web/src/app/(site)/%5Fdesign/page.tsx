@@ -108,7 +108,8 @@ export default function DesignPage() {
     <main className={fonts} style={{ width: "100%", maxWidth: 1200, padding: "2rem 0 6rem" }}>
       <h1 style={{ fontSize: 28, marginBottom: 6 }}>Design directions</h1>
       <p style={{ opacity: 0.7, marginBottom: 32 }}>
-        Three directions for the hub, each in light and dark. Decision and scoring: docs/project/design-language.md
+        SUPERSEDED (owner chose Geist + neutral + color dashes; see design-language.md). The original three exploration
+        directions, kept for the record. Decision and scoring: docs/project/design-language.md
       </p>
       {DIRS.map((d) => (
         <section key={d.k} id={d.k}>

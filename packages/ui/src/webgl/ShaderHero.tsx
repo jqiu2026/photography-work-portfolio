@@ -33,17 +33,14 @@ void main(){
   gl_FragColor = vec4(col * uReveal, 1.0);
 }`;
 
-export type ShaderHeroProps = {
+export type ShaderLayerProps = {
   src: string;
-  alt: string;
   /** 0 to 1.5, strength of the displacement / light leak. */
   intensity?: number;
-  /** Responsive candidates for the fallback <img> (the WebGL texture uses `src`). */
-  srcSet?: string;
-  sizes?: string;
-  className?: string;
-  /** Rendered on top of the canvas (headline etc). */
-  children?: ReactNode;
+  /** "window": follows the pointer anywhere (hero). "local": only while over the parent (tiles). */
+  pointer?: "window" | "local";
+  /** Called once the texture is uploaded and the first frame can be drawn. */
+  onReady?: () => void;
 };
 
 function lowPower() {
@@ -52,25 +49,23 @@ function lowPower() {
 }
 
 /**
- * Hero image with a soft WebGL treatment (drifting displacement, pointer-reactive chromatic split,
- * a faint light leak, slow zoom on scroll). ogl is imported on demand, rendering pauses off-screen,
- * DPR is capped at 1.5, and it falls back to the plain image for reduced motion, Save-Data,
- * low-power devices or when WebGL is unavailable. The image is always in the DOM (alt text, no-JS, LCP).
+ * The WebGL treatment as a layer that fills its positioned parent: drifting displacement, a pointer-reactive
+ * chromatic "glitch" split, a faint light leak and a slow zoom on scroll. ogl is imported on demand, rendering
+ * pauses off-screen, DPR is capped at 1.5. Renders nothing (the parent keeps its plain image) for reduced
+ * motion, Save-Data, low-power devices or when WebGL is unavailable.
  */
-export function ShaderHero({ src, alt, intensity = 1, srcSet, sizes, className, children }: ShaderHeroProps) {
+export function ShaderLayer({ src, intensity = 1, pointer = "window", onReady }: ShaderLayerProps) {
   const calm = useCalm();
-  const wrap = useRef<HTMLDivElement>(null);
-  const canvasHost = useRef<HTMLDivElement>(null);
-  const [live, setLive] = useState(false);
+  const host = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (calm || lowPower()) return;
     let dispose = () => {};
     let cancelled = false;
     (async () => {
-      const host = canvasHost.current;
-      const box = wrap.current;
-      if (!host || !box) return;
+      const el = host.current;
+      const box = el?.parentElement;
+      if (!el || !box) return;
       const probe = document.createElement("canvas");
       if (!(probe.getContext("webgl") || probe.getContext("webgl2"))) return;
       const { Renderer, Program, Mesh, Triangle, Texture } = await import("ogl");
@@ -81,7 +76,9 @@ export function ShaderHero({ src, alt, intensity = 1, srcSet, sizes, className, 
         antialias: false,
       });
       const gl = renderer.gl;
-      host.appendChild(gl.canvas);
+      el.style.opacity = "0";
+      el.style.transition = "opacity 0.3s";
+      el.appendChild(gl.canvas);
       gl.canvas.style.cssText = "position:absolute;inset:0;width:100%;height:100%;display:block";
       const texture = new Texture(gl, { generateMipmaps: false });
       const program = new Program(gl, {
@@ -105,28 +102,16 @@ export function ShaderHero({ src, alt, intensity = 1, srcSet, sizes, className, 
         renderer.setSize(box.clientWidth, box.clientHeight);
         program.uniforms.uRes.value = [box.clientWidth, box.clientHeight];
       };
-      const img = new Image();
-      img.crossOrigin = "anonymous";
-      img.onload = () => {
-        if (cancelled) return;
-        texture.image = img;
-        program.uniforms.uImg.value = [img.naturalWidth, img.naturalHeight];
-        resize();
-        setLive(true);
-        start();
-      };
-      img.src = src;
-
       let raf = 0;
       let visible = true;
       const t0 = performance.now();
-      let reveal = 0;
+      let reveal = pointer === "local" ? 1 : 0;
       const frame = (t: number) => {
         raf = requestAnimationFrame(frame);
         if (!visible) return;
-        mouse[0] += (target[0] - mouse[0]) * 0.08;
-        mouse[1] += (target[1] - mouse[1]) * 0.08;
-        reveal = Math.min(1, reveal + 0.02);
+        mouse[0] += (target[0] - mouse[0]) * 0.12;
+        mouse[1] += (target[1] - mouse[1]) * 0.12;
+        reveal = Math.min(1, reveal + 0.04);
         const r = box.getBoundingClientRect();
         const u = program.uniforms;
         u.uMouse.value = [mouse[0], mouse[1]];
@@ -135,10 +120,18 @@ export function ShaderHero({ src, alt, intensity = 1, srcSet, sizes, className, 
         u.uReveal.value = 1 - (1 - reveal) ** 3;
         renderer.render({ scene: mesh });
       };
-      const start = () => {
-        cancelAnimationFrame(raf);
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.onload = () => {
+        if (cancelled) return;
+        texture.image = img;
+        program.uniforms.uImg.value = [img.naturalWidth, img.naturalHeight];
+        resize();
         raf = requestAnimationFrame(frame);
+        el.style.opacity = "1";
+        onReady?.();
       };
+      img.src = src;
       const onMove = (e: PointerEvent) => {
         const r = box.getBoundingClientRect();
         target[0] = (e.clientX - r.left) / r.width;
@@ -150,12 +143,13 @@ export function ShaderHero({ src, alt, intensity = 1, srcSet, sizes, className, 
       io.observe(box);
       const ro = new ResizeObserver(resize);
       ro.observe(box);
-      window.addEventListener("pointermove", onMove, { passive: true });
+      const scope: EventTarget = pointer === "local" ? box : window;
+      scope.addEventListener("pointermove", onMove as EventListener, { passive: true });
       dispose = () => {
         cancelAnimationFrame(raf);
         io.disconnect();
         ro.disconnect();
-        window.removeEventListener("pointermove", onMove);
+        scope.removeEventListener("pointermove", onMove as EventListener);
         gl.canvas.remove();
         gl.getExtension("WEBGL_lose_context")?.loseContext();
       };
@@ -164,14 +158,32 @@ export function ShaderHero({ src, alt, intensity = 1, srcSet, sizes, className, 
       cancelled = true;
       dispose();
     };
-  }, [src, intensity, calm]);
+    // biome-ignore lint/correctness/useExhaustiveDependencies: onReady is intentionally not a dependency
+  }, [src, intensity, calm, pointer]);
 
+  return <div ref={host} aria-hidden style={{ position: "absolute", inset: 0 }} />;
+}
+
+export type ShaderHeroProps = {
+  src: string;
+  alt: string;
+  intensity?: number;
+  /** Responsive candidates for the fallback <img> (the WebGL texture uses `src`). */
+  srcSet?: string;
+  sizes?: string;
+  className?: string;
+  /** Rendered on top of the canvas (headline etc). */
+  children?: ReactNode;
+};
+
+/**
+ * Hero image with the glitch treatment. The plain image is always in the DOM (alt text, no-JS, LCP) and
+ * fades out once WebGL is drawing; reduced motion, Save-Data and low-power devices keep the plain image.
+ */
+export function ShaderHero({ src, alt, intensity = 1, srcSet, sizes, className, children }: ShaderHeroProps) {
+  const [live, setLive] = useState(false);
   return (
-    <div
-      ref={wrap}
-      className={className}
-      style={{ position: "relative", overflow: "hidden", background: "var(--ph-cinema)" }}
-    >
+    <div className={className} style={{ position: "relative", overflow: "hidden", background: "var(--ph-cinema)" }}>
       <img
         src={src}
         srcSet={srcSet}
@@ -188,7 +200,7 @@ export function ShaderHero({ src, alt, intensity = 1, srcSet, sizes, className, 
           transition: "opacity 0.6s",
         }}
       />
-      <div ref={canvasHost} aria-hidden style={{ position: "absolute", inset: 0 }} />
+      <ShaderLayer src={src} intensity={intensity} onReady={() => setLive(true)} />
       {children ? <div style={{ position: "relative", height: "100%" }}>{children}</div> : null}
     </div>
   );

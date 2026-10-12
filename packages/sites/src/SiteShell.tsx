@@ -19,7 +19,7 @@ export function SiteShell({
   links: { label: string; href: string }[];
   transparentTop?: boolean;
 }) {
-  const sites = getSites().map(({ id, name, description, url }) => ({ id, name, description, url }));
+  const sites = getSites().map(({ id, name, description, url, color }) => ({ id, name, description, url, color }));
   const hub = getSite("hub").url;
   const own = currentId === "hub" ? "" : hub;
   return (

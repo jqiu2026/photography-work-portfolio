@@ -29,10 +29,6 @@
   outline-offset: 3px;
   border-radius: 2px;
 }
-.ph-root ::selection {
-  background: var(--ph-accent);
-  color: var(--ph-accent-contrast);
-}
 .ph-sr-only {
   position: absolute;
   width: 1px;

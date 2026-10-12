@@ -1,11 +1,11 @@
 .home-hero {
-  padding: 0 var(--ph-gutter);
+  padding: 0;
+  margin-top: -68px;
 }
 .home-hero__frame {
-  height: calc(100svh - 6.5rem);
-  min-height: 34rem;
-  max-height: 62rem;
-  border-radius: var(--ph-radius-lg);
+  height: 100svh;
+  min-height: 36rem;
+  border-radius: 0;
 }
 .home-hero__inner {
   position: absolute;
@@ -15,7 +15,8 @@
   justify-content: flex-end;
   padding: clamp(1.25rem, 4vw, 3.5rem);
   color: #fff;
-  background: linear-gradient(to top, rgb(0 0 0 / 0.5), transparent 55%);
+  background: linear-gradient(to top, rgb(0 0 0 / 0.55), transparent 55%),
+    linear-gradient(to bottom, rgb(0 0 0 / 0.35), transparent 22%);
 }
 .home-hero__inner h1 {
   font-size: clamp(2.75rem, 1rem + 7.5vw, 8.25rem);
@@ -62,7 +63,8 @@
 .home-scene__media {
   position: absolute;
   inset: 0;
-  opacity: 0.55;
+  opacity: 0.42;
+  filter: grayscale(0.35);
 }
 .home-scene__text {
   position: relative;

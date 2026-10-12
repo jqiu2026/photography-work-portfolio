@@ -2,6 +2,7 @@ import { Button, Container, Eyebrow, Heading, Section, Text } from "@placeholder
 import { Gallery, Image } from "@placeholder/ui/media";
 import { InView } from "@placeholder/ui/motion";
 import Link from "next/link";
+import { Compare } from "@/components/Compare";
 import { Hero } from "@/components/Hero";
 import { Shell } from "@/components/Shell";
 import { categories, featured, photos, photosIn } from "@/content/portfolio";
@@ -28,11 +29,17 @@ export default function Home() {
           <Heading size="4xl" display style={{ marginBottom: "2.5rem" }}>
             Recent work
           </Heading>
-          <Gallery images={featured} rowHeight={320} />
+          <Gallery images={featured} rowHeight={320} glitch />
         </Container>
       </Section>
 
       <Section tone="surface">
+        <Container>
+          <Compare photos={["jry1082", "2026-01-17-snow-7", "jry0473"].map((id) => photos.find((p) => p.id === id)!)} />
+        </Container>
+      </Section>
+
+      <Section>
         <Container>
           <Eyebrow style={{ marginBottom: "1rem" }}>Portfolio</Eyebrow>
           <Heading size="4xl" display style={{ marginBottom: "2.5rem" }}>

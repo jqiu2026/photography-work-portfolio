@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { cx } from "./cx";
 import type { SiteEntry } from "./navigation";
 import { SocialLinks, type SocialLink } from "./profile";
@@ -17,7 +17,7 @@ export function MoreFromMe({
           .filter((s) => s.id !== currentId)
           .map((s) => (
             <li key={s.id}>
-              <a href={s.url}>
+              <a href={s.url} style={s.color ? ({ "--site": `var(--ph-${s.color})` } as CSSProperties) : undefined}>
                 <strong>{s.name}</strong>
                 <span>{s.description}</span>
               </a>

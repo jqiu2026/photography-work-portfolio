@@ -41,7 +41,7 @@ export default async function Category({ params }: { params: Promise<{ slug: str
               </Link>
             ))}
           </nav>
-          <Gallery images={items} layout={items.length > 3 ? "masonry" : "justified"} rowHeight={380} />
+          <Gallery images={items} layout={items.length > 3 ? "masonry" : "justified"} glitch rowHeight={380} />
         </Container>
       </Section>
     </Shell>

@@ -14,7 +14,8 @@
   justify-content: flex-end;
   padding: clamp(1.25rem, 4vw, 3.5rem);
   color: #fff;
-  background: linear-gradient(to top, rgb(0 0 0 / 0.55), transparent 50%);
+  background: linear-gradient(to top, rgb(0 0 0 / 0.55), transparent 50%),
+    linear-gradient(to bottom, rgb(0 0 0 / 0.35), transparent 22%);
 }
 .ph-hero__inner h1 {
   font-size: clamp(3rem, 1rem + 9vw, 10rem);
@@ -116,4 +117,61 @@
 .page-head h1 {
   font-size: var(--ph-text-display);
   max-width: 12ch;
+}
+
+.compare {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: clamp(1.5rem, 5vw, 5rem);
+  align-items: center;
+}
+@media (max-width: 860px) {
+  .compare {
+    grid-template-columns: 1fr;
+  }
+}
+.compare__stage {
+  position: relative;
+}
+.compare__tag {
+  position: absolute;
+  top: 1rem;
+  z-index: 2;
+  padding: .35em .8em;
+  background: rgb(0 0 0 / 0.65);
+  color: #fff;
+  font-size: var(--ph-text-xs);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  pointer-events: none;
+  backdrop-filter: blur(6px);
+}
+.compare__tag--l {
+  left: 1rem;
+}
+.compare__tag--r {
+  right: 1rem;
+}
+.compare__picks {
+  display: flex;
+  gap: .5rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+.compare__picks button {
+  border: 1px solid var(--ph-line);
+  background: transparent;
+  color: var(--ph-muted);
+  padding: .55em 1em;
+  font: inherit;
+  font-size: var(--ph-text-sm);
+  cursor: pointer;
+  border-radius: var(--ph-radius-control);
+  transition: all var(--ph-dur-base) var(--ph-ease);
+  min-height: 44px;
+}
+.compare__picks button[aria-pressed="true"] {
+  background: var(--ph-text);
+  color: var(--ph-bg);
+  border-color: var(--ph-text);
 }

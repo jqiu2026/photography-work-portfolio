@@ -285,7 +285,11 @@ export function ComponentGallery() {
               <div style={{ height: 32 }} />
               <Quote cite="TODO(owner): real quote only">Quotes appear only if real ones are supplied.</Quote>
               <div style={{ height: 32 }} />
-              <EmbedFacade provider="youtube" id="dQw4w9WgXcQ" title="Click-to-load video (demo)" />
+              <EmbedFacade
+                provider="youtube"
+                id="aqz-KE-bpKQ"
+                title="Click-to-load video (demo: Big Buck Bunny, Blender Foundation, CC BY)"
+              />
               <div style={{ height: 32 }} />
               <Card interactive>
                 <Text>Interactive card</Text>
