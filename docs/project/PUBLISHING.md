@@ -1,5 +1,7 @@
 # Publishing the UI package (owner steps; Claude never does these)
 
+> **2026-10-12:** the package is being rebuilt as **Halation UI** (default name, Q33; prefix `hl`, `--hl-*`). It is meant to be **sold**, so read [SELLING.md](SELLING.md) first (licence model, legal, selling channel). The commands below stay valid with the new name; the package path is still `packages/ui` unless R2 moves it. The licence is undecided (Q32): do not publish under MIT unless you choose that.
+
 Nothing here has been done. The package is prepared so publishing is a few commands.
 
 ## Before you publish
