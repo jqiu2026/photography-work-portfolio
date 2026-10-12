@@ -1,5 +1,6 @@
 import { Image } from "@halation/ui/media";
 import { Condense, Scene, Settle, StageProvider, Streak } from "@halation/ui/stage";
+import { compositions, mocksEnabled } from "@jerryqiu/mocks";
 import { getSite, sitePath } from "@jerryqiu/sites";
 import { ShellIndex } from "@jerryqiu/sites/index-control";
 import Link from "next/link";
@@ -15,6 +16,12 @@ export default async function MusicHome() {
   const hasRecordings = music.recordings.length > 0;
   const links = [
     { label: "Home", href: sitePath("music") },
+    ...(mocksEnabled()
+      ? [
+          { label: "Compositions", href: sitePath("music", "/compositions") },
+          { label: "Scores", href: sitePath("music", "/scores") },
+        ]
+      : []),
     ...(hasRecordings ? [{ label: "Listen", href: sitePath("music", "/listen") }] : []),
     { label: "Performances", href: sitePath("music", "/performances") },
     { label: "About", href: sitePath("music", "/about") },
@@ -69,6 +76,25 @@ export default async function MusicHome() {
             </div>
           </div>
         </Scene>
+
+        {mocksEnabled() ? (
+          <Scene id="pieces" label="Compositions" className="mu-perf" param={[0.3, 0.55]}>
+            <div className="mu-wrap">
+              <Condense text="Pieces." className="mu-h2" />
+              <ul className="mu-list">
+                {compositions.map((c) => (
+                  <li key={c.slug}>
+                    <Link href={sitePath("music", `/compositions/${c.slug}`)}>{c.title}</Link>
+                    <span className="hl-eyebrow">{c.forces}</span>
+                  </li>
+                ))}
+              </ul>
+              <Link href={sitePath("music", "/scores")} className="mu-more">
+                Scores: preview and buy (mock) →
+              </Link>
+            </div>
+          </Scene>
+        ) : null}
 
         {music.performances.length ? (
           <Scene id="performances" label="Performances" className="mu-perf">

@@ -36,7 +36,11 @@ export function publishable(raw: RawFlight[], now: Date, delayDays = MIN_DELAY_D
 export function greatCircle(a: Airport, b: Airport, steps = 48): [number, number][] {
   const rad = Math.PI / 180;
   const [la1, lo1, la2, lo2] = [a.lat * rad, a.lon * rad, b.lat * rad, b.lon * rad];
-  const d = 2 * Math.asin(Math.sqrt(Math.sin((la2 - la1) / 2) ** 2 + Math.cos(la1) * Math.cos(la2) * Math.sin((lo2 - lo1) / 2) ** 2));
+  const d =
+    2 *
+    Math.asin(
+      Math.sqrt(Math.sin((la2 - la1) / 2) ** 2 + Math.cos(la1) * Math.cos(la2) * Math.sin((lo2 - lo1) / 2) ** 2),
+    );
   if (d === 0) return [[a.lat, a.lon]];
   const out: [number, number][] = [];
   for (let i = 0; i <= steps; i++) {

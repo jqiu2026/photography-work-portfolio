@@ -1,7 +1,13 @@
 import { mockId } from "./store";
 
 /** Client portal interface: how a client reaches their gallery. Phase 3 sends real emails; the mock shows the link on screen. */
-export type PortalSession = { token: string; galleryId: string; clientId: string; via: "passcode" | "magic-link"; mock: true };
+export type PortalSession = {
+  token: string;
+  galleryId: string;
+  clientId: string;
+  via: "passcode" | "magic-link";
+  mock: true;
+};
 export type PortalGalleryRef = { id: string; clientId: string; passcode: string; clientEmail: string };
 
 export interface ClientPortal {
@@ -18,7 +24,15 @@ export class MockClientPortal implements ClientPortal {
 
   async withPasscode(passcode: string) {
     const g = this.galleries().find((x) => norm(x.passcode) === norm(passcode));
-    return g ? { token: mockId("sess_mock"), galleryId: g.id, clientId: g.clientId, via: "passcode" as const, mock: true as const } : null;
+    return g
+      ? {
+          token: mockId("sess_mock"),
+          galleryId: g.id,
+          clientId: g.clientId,
+          via: "passcode" as const,
+          mock: true as const,
+        }
+      : null;
   }
 
   async requestMagicLink(email: string) {

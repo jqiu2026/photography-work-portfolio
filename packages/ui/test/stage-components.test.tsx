@@ -33,7 +33,11 @@ describe("IndexControl", () => {
     await user.click(btn);
     const dialog = screen.getByRole("dialog", { name: "Index" });
     const scenes = within(dialog).getByRole("navigation", { name: "On this page" });
-    expect(within(scenes).getAllByRole("link").map((a) => a.getAttribute("href"))).toEqual(["#one", "#two"]);
+    expect(
+      within(scenes)
+        .getAllByRole("link")
+        .map((a) => a.getAttribute("href")),
+    ).toEqual(["#one", "#two"]);
     expect(within(dialog).getByRole("link", { name: "About" })).toHaveAttribute("href", "/about");
     await user.keyboard("{Escape}");
     expect(screen.queryByRole("dialog")).toBeNull();

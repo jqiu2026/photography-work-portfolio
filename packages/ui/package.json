@@ -40,9 +40,7 @@
     "radix-ui": "^1.7.0",
     "simple-icons": "^16.34.0"
   },
-  "sideEffects": [
-    "**/*.css"
-  ],
+  "sideEffects": ["**/*.css"],
   "description": "Halation UI: an immersive, scroll-driven design system. A persistent WebGL stage (fluid, light streaks, halation) with quality tiers and static fallbacks, one motion language (Flow), a floating index instead of a navbar, and accessible primitives. Licence undecided (Q32).",
   "keywords": [
     "react",
@@ -66,12 +64,7 @@
     "url": "https://github.com/TODO-owner/TODO-repo/issues"
   },
   "author": "TODO(owner): copyright holder",
-  "files": [
-    "LICENSE",
-    "README.md",
-    "dist",
-    "licenses"
-  ],
+  "files": ["LICENSE", "README.md", "dist", "licenses"],
   "publishConfig": {
     "access": "public",
     "main": "./dist/index.js",

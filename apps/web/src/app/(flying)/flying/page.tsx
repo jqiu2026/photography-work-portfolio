@@ -1,5 +1,6 @@
 import { Image } from "@halation/ui/media";
 import { Condense, Scene, Settle, StageProvider, Streak } from "@halation/ui/stage";
+import { mocksEnabled } from "@jerryqiu/mocks";
 import { getSite, sitePath } from "@jerryqiu/sites";
 import { ShellIndex } from "@jerryqiu/sites/index-control";
 import Link from "next/link";
@@ -15,6 +16,7 @@ export default async function FlyingHome() {
   const links = [
     { label: "Home", href: sitePath("flying") },
     { label: "Log", href: sitePath("flying", "/log") },
+    ...(mocksEnabled() ? [{ label: "Map", href: sitePath("flying", "/map") }] : []),
     { label: "Aircraft", href: sitePath("flying", "/aircraft") },
     { label: "About", href: sitePath("flying", "/about") },
   ];

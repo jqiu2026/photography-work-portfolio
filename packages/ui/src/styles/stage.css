@@ -613,3 +613,27 @@ html[data-hl-leaving] body > *:not(.hl-stage) {
 .hl-skip:focus {
   top: 1rem;
 }
+
+/* ---- MOCK label: every local mock wears this, so nothing is mistaken for a real service ---- */
+.hl-mock-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  width: min(100% - 2 * var(--hl-gutter), var(--hl-container-lg));
+  margin: clamp(4.5rem, 9vw, 6rem) auto 0;
+  padding: 0.65rem 1rem;
+  border-radius: var(--hl-radius-md);
+  background: color-mix(in oklab, var(--hl-amber) 14%, var(--hl-field));
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--hl-amber) 55%, transparent);
+  font-family: var(--hl-font-mono);
+  font-size: var(--hl-text-xs);
+  letter-spacing: 0.04em;
+  color: var(--hl-text);
+}
+.hl-mock-banner strong {
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--hl-radius-sm);
+  background: var(--hl-amber);
+  color: var(--hl-amber-on);
+}

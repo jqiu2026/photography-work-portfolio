@@ -5,6 +5,7 @@ export default {
     "@halation/ui",
     "@jerryqiu/sites",
     "@jerryqiu/render",
+    "@jerryqiu/mocks",
     "@jerryqiu/auth",
     "@jerryqiu/db",
     "@jerryqiu/protect",

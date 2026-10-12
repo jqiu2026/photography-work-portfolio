@@ -9,16 +9,17 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@halation/ui": "workspace:*",
     "@jerryqiu/auth": "workspace:*",
     "@jerryqiu/db": "workspace:*",
     "@jerryqiu/inbox": "workspace:*",
     "@jerryqiu/media": "workspace:*",
+    "@jerryqiu/mocks": "workspace:*",
     "@jerryqiu/protect": "workspace:*",
     "@jerryqiu/render": "workspace:*",
     "@jerryqiu/shootproof": "workspace:*",
     "@jerryqiu/sites": "workspace:*",
     "@jerryqiu/storage": "workspace:*",
-    "@halation/ui": "workspace:*",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
     "cookie": "^1.0.2",

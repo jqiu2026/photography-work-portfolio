@@ -266,6 +266,9 @@ importers:
       '@jerryqiu/media':
         specifier: workspace:*
         version: link:../../packages/media
+      '@jerryqiu/mocks':
+        specifier: workspace:*
+        version: link:../../packages/mocks
       '@jerryqiu/protect':
         specifier: workspace:*
         version: link:../../packages/protect
@@ -345,6 +348,9 @@ importers:
       '@jerryqiu/media':
         specifier: workspace:*
         version: link:../../packages/media
+      '@jerryqiu/mocks':
+        specifier: workspace:*
+        version: link:../../packages/mocks
       '@jerryqiu/protect':
         specifier: workspace:*
         version: link:../../packages/protect
@@ -705,6 +711,9 @@ importers:
       '@halation/ui':
         specifier: workspace:*
         version: link:../ui
+      '@jerryqiu/mocks':
+        specifier: workspace:*
+        version: link:../mocks
     devDependencies:
       '@jerryqiu/config':
         specifier: workspace:*

@@ -20,10 +20,43 @@ export type Composition = {
 };
 
 export const compositions: Composition[] = [
-  { slug: "sample-nocturne-for-brass", title: "SAMPLE: Nocturne for Brass Quartet", year: 2025, forces: "2 trumpets, horn, trombone", durationMin: 6, score: { priceCents: 1200, pages: 9, format: "PDF", licence: "Personal and ensemble performance; no resale." }, sample: true },
-  { slug: "sample-three-small-pieces", title: "SAMPLE: Three Small Pieces", year: 2024, forces: "solo trombone", durationMin: 5, recording: { provider: "youtube", id: "dQw4w9WgXcQ" }, score: { priceCents: 800, pages: 6, format: "PDF", licence: "Personal and ensemble performance; no resale." }, sample: true },
-  { slug: "sample-halation-study", title: "SAMPLE: Halation Study", year: 2026, forces: "piano", durationMin: 4, recording: { provider: "soundcloud", id: "000000000" }, sample: true },
-  { slug: "sample-window-music", title: "SAMPLE: Window Music", year: 2023, forces: "string trio", durationMin: 8, score: { priceCents: 1500, pages: 14, format: "PDF", licence: "Personal and ensemble performance; no resale." }, sample: true },
+  {
+    slug: "sample-nocturne-for-brass",
+    title: "SAMPLE: Nocturne for Brass Quartet",
+    year: 2025,
+    forces: "2 trumpets, horn, trombone",
+    durationMin: 6,
+    score: { priceCents: 1200, pages: 9, format: "PDF", licence: "Personal and ensemble performance; no resale." },
+    sample: true,
+  },
+  {
+    slug: "sample-three-small-pieces",
+    title: "SAMPLE: Three Small Pieces",
+    year: 2024,
+    forces: "solo trombone",
+    durationMin: 5,
+    recording: { provider: "youtube", id: "dQw4w9WgXcQ" },
+    score: { priceCents: 800, pages: 6, format: "PDF", licence: "Personal and ensemble performance; no resale." },
+    sample: true,
+  },
+  {
+    slug: "sample-halation-study",
+    title: "SAMPLE: Halation Study",
+    year: 2026,
+    forces: "piano",
+    durationMin: 4,
+    recording: { provider: "soundcloud", id: "000000000" },
+    sample: true,
+  },
+  {
+    slug: "sample-window-music",
+    title: "SAMPLE: Window Music",
+    year: 2023,
+    forces: "string trio",
+    durationMin: 8,
+    score: { priceCents: 1500, pages: 14, format: "PDF", licence: "Personal and ensemble performance; no resale." },
+    sample: true,
+  },
 ];
 
 export const hasListen = (c: Composition) => !!c.recording;
@@ -32,7 +65,15 @@ export const bySlug = (slug: string) => compositions.find((c) => c.slug === slug
 
 /* ---- Cart and orders ---- */
 export type CartLine = { slug: string; priceCents: Cents };
-export type Order = { id: string; createdAt: string; lines: CartLine[]; totalCents: Cents; receiptId: string; email: string; mock: true };
+export type Order = {
+  id: string;
+  createdAt: string;
+  lines: CartLine[];
+  totalCents: Cents;
+  receiptId: string;
+  email: string;
+  mock: true;
+};
 
 export function addToCart(cart: CartLine[], slug: string): CartLine[] {
   const c = bySlug(slug);
@@ -46,7 +87,15 @@ export const cartTotal = (cart: CartLine[]): Cents => cart.reduce((n, l) => n + 
 export function makeOrder(cart: CartLine[], email: string, receiptId: string, now = new Date()): Order {
   if (!cart.length) throw new Error("The cart is empty.");
   if (!/^\S+@\S+\.\S+$/.test(email.trim())) throw new Error("Enter an email address for the receipt.");
-  return { id: mockId("ord_mock"), createdAt: now.toISOString(), lines: cart, totalCents: cartTotal(cart), receiptId, email: email.trim(), mock: true };
+  return {
+    id: mockId("ord_mock"),
+    createdAt: now.toISOString(),
+    lines: cart,
+    totalCents: cartTotal(cart),
+    receiptId,
+    email: email.trim(),
+    mock: true,
+  };
 }
 
 /* ---- Delivery interface ---- */

@@ -10,7 +10,8 @@
     "./profile": "./src/profile.ts",
     "./shell": "./src/SiteShell.tsx",
     "./contact": "./src/ContactForm.tsx",
-    "./index-control": "./src/ShellIndex.tsx"
+    "./index-control": "./src/ShellIndex.tsx",
+    "./mock": "./src/MockBanner.tsx"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
@@ -25,7 +26,8 @@
     "react": "19.2.8"
   },
   "dependencies": {
-    "@halation/ui": "workspace:*"
+    "@halation/ui": "workspace:*",
+    "@jerryqiu/mocks": "workspace:*"
   },
   "peerDependencies": {
     "next": "^16",

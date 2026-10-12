@@ -6,7 +6,10 @@ export type Signature = { envelopeId: string; signerName: string; signedAt: stri
 
 export interface ESignProvider {
   createEnvelope(contractId: string): Promise<Envelope>;
-  sign(envelope: Envelope, input: { signerName: string; agree: boolean }): Promise<{ envelope: Envelope; signature: Signature }>;
+  sign(
+    envelope: Envelope,
+    input: { signerName: string; agree: boolean },
+  ): Promise<{ envelope: Envelope; signature: Signature }>;
 }
 
 export class MockESignProvider implements ESignProvider {

@@ -19,7 +19,14 @@ const ym = (d: Date) => d.toISOString().slice(0, 7);
 
 export function sampleRaw(now = new Date()): RawFlight[] {
   const mk = (id: string, from: string, to: string, ago: number, aircraft: string, note: string): RawFlight => ({
-    id, from, to, aircraft, note, sample: true, landedAt: day(ago, now).toISOString(), month: ym(day(ago, now)),
+    id,
+    from,
+    to,
+    aircraft,
+    note,
+    sample: true,
+    landedAt: day(ago, now).toISOString(),
+    month: ym(day(ago, now)),
     tailNumber: "N000SAMPLE", // present on purpose in the raw record to prove it never reaches the public type
   });
   return [

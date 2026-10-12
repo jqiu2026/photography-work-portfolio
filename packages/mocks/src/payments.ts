@@ -18,10 +18,16 @@ export type PaymentIntent = {
   mock: true;
 };
 export type CardInput = { number: string; exp: string; cvc: string; name?: string };
-export type ConfirmResult = { ok: true; intent: PaymentIntent; receiptId: string } | { ok: false; intent: PaymentIntent; error: string };
+export type ConfirmResult =
+  | { ok: true; intent: PaymentIntent; receiptId: string }
+  | { ok: false; intent: PaymentIntent; error: string };
 
 export interface PaymentProvider {
-  createIntent(input: { amount: number; description?: string; metadata?: Record<string, string> }): Promise<PaymentIntent>;
+  createIntent(input: {
+    amount: number;
+    description?: string;
+    metadata?: Record<string, string>;
+  }): Promise<PaymentIntent>;
   confirm(intent: PaymentIntent, card: CardInput): Promise<ConfirmResult>;
 }
 
@@ -68,12 +74,15 @@ export class MockPaymentProvider implements PaymentProvider {
     });
     if (intent.status === "succeeded") return fail("already_paid", "This payment is already complete.");
     const n = digits(card.number);
-    if (n.length < 13) return fail("incomplete_number", "Enter the full card number. In this mock, use 4242 4242 4242 4242.");
+    if (n.length < 13)
+      return fail("incomplete_number", "Enter the full card number. In this mock, use 4242 4242 4242 4242.");
     if (!expiryOk(card.exp, this.now())) return fail("invalid_expiry", "Enter a future expiry as MM / YY.");
     if (!/^\d{3,4}$/.test(card.cvc.trim())) return fail("invalid_cvc", "Enter the 3 or 4 digit security code.");
     if (n === TEST_CARDS.declined) return fail("card_declined", "Your card was declined (mock test card).");
-    if (n === TEST_CARDS.insufficientFunds) return fail("insufficient_funds", "Your card has insufficient funds (mock test card).");
-    if (n !== TEST_CARDS.success) return fail("mock_only", "This is a mock. Only the Stripe test card 4242 4242 4242 4242 is accepted.");
+    if (n === TEST_CARDS.insufficientFunds)
+      return fail("insufficient_funds", "Your card has insufficient funds (mock test card).");
+    if (n !== TEST_CARDS.success)
+      return fail("mock_only", "This is a mock. Only the Stripe test card 4242 4242 4242 4242 is accepted.");
     return { ok: true, intent: { ...intent, status: "succeeded" }, receiptId: mockId("rcpt_mock") };
   }
 }

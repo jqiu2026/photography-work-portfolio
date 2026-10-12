@@ -1,8 +1,27 @@
 import { describe, expect, it } from "vitest";
 import {
-  MemoryStore, MockClientPortal, MockESignProvider, MockFlightSource, MockPaymentProvider, MockScoreDelivery, StudioRepo,
-  TEST_CARDS, addToCart, assertMocks, cartTotal, compositions, greatCircle, hasListen, invoiceTotal, makeOrder, mocksEnabled,
-  publishable, sampleRaw, airports, SHOOT_STEPS, removeFromCart,
+  MemoryStore,
+  MockClientPortal,
+  MockESignProvider,
+  MockFlightSource,
+  MockPaymentProvider,
+  MockScoreDelivery,
+  StudioRepo,
+  TEST_CARDS,
+  addToCart,
+  assertMocks,
+  cartTotal,
+  compositions,
+  greatCircle,
+  hasListen,
+  invoiceTotal,
+  makeOrder,
+  mocksEnabled,
+  publishable,
+  sampleRaw,
+  airports,
+  SHOOT_STEPS,
+  removeFromCart,
 } from "../src";
 
 const now = new Date("2026-10-12T12:00:00Z");
@@ -33,7 +52,13 @@ describe("PaymentProvider (Stripe test-mode shape)", () => {
   const card = { number: "4242 4242 4242 4242", exp: "12 / 30", cvc: "123" };
   it("creates a payment_intent shaped like Stripe's and marks it mock", async () => {
     const i = await p.createIntent({ amount: 12000, description: "Invoice", metadata: { invoice: "i1" } });
-    expect(i).toMatchObject({ object: "payment_intent", amount: 12000, currency: "usd", status: "requires_payment_method", mock: true });
+    expect(i).toMatchObject({
+      object: "payment_intent",
+      amount: 12000,
+      currency: "usd",
+      status: "requires_payment_method",
+      mock: true,
+    });
     expect(i.id).toMatch(/^pi_mock_/);
   });
   it("rejects tiny or fractional amounts", async () => {
@@ -48,7 +73,11 @@ describe("PaymentProvider (Stripe test-mode shape)", () => {
       expect(ok.intent.status).toBe("succeeded");
       expect(ok.receiptId).toMatch(/^rcpt_mock_/);
     }
-    for (const [number, code] of [[TEST_CARDS.declined, "card_declined"], [TEST_CARDS.insufficientFunds, "insufficient_funds"], ["5555555555554444", "mock_only"]] as const) {
+    for (const [number, code] of [
+      [TEST_CARDS.declined, "card_declined"],
+      [TEST_CARDS.insufficientFunds, "insufficient_funds"],
+      ["5555555555554444", "mock_only"],
+    ] as const) {
       const bad = await p.confirm(i, { ...card, number });
       expect(bad.ok).toBe(false);
       if (!bad.ok) expect(bad.intent.last_payment_error?.code).toBe(code);
@@ -116,7 +145,10 @@ describe("StudioRepo", () => {
     expect(() => r.createGallery("s2", "SAMPLE-1234")).toThrow(/already used/);
     expect(r.createGallery("s2", "another-pass").passcode).toBe("another-pass");
     expect(() => r.createInvoice("s1", [{ description: "", amountCents: 0 }])).toThrow();
-    const inv = r.createInvoice("s2", [{ description: "Coverage", amountCents: 20000 }, { description: "Prints", amountCents: 5000 }]);
+    const inv = r.createInvoice("s2", [
+      { description: "Coverage", amountCents: 20000 },
+      { description: "Prints", amountCents: 5000 },
+    ]);
     expect(invoiceTotal(inv)).toBe(25000);
   });
   it("toggles favourites and converts a booking into a client once", () => {
