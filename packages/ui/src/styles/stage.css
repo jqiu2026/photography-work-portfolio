@@ -141,6 +141,9 @@ html.hl-js .hl-settle.hl-in {
   position: relative;
   display: block;
 }
+.hl-streak__text {
+  display: block;
+}
 html.hl-js .hl-streak:not(.hl-in) .hl-streak__text {
   clip-path: inset(0 100% 0 0);
 }
@@ -513,4 +516,100 @@ html[data-hl-leaving] body > *:not(.hl-stage) {
   text-transform: uppercase;
   color: var(--hl-muted);
   margin: 0;
+}
+
+.hl-stage[data-cinema] {
+  background: #000;
+}
+.hl-stage[data-cinema] .hl-stage__poster {
+  opacity: 0.4;
+}
+
+/* ---- Quiet header (inner pages): a text mark, nothing else. Never a navbar. ---- */
+.hl-quiet {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 50;
+  padding: clamp(1rem, 3vw, 1.75rem) var(--hl-gutter);
+  transition: opacity var(--hl-dur-medium) var(--hl-ease-glide);
+}
+.hl-quiet a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  text-decoration: none;
+  font-family: var(--hl-font-display);
+  font-variation-settings: "wdth" var(--hl-wdth);
+  font-size: var(--hl-text-lg);
+  letter-spacing: var(--hl-display-tracking);
+}
+.hl-quiet a:hover {
+  color: var(--hl-accent-text);
+}
+.hl-quiet + main {
+  padding-top: clamp(4rem, 9vw, 6rem);
+}
+
+/* ---- Footer ---- */
+.hl-footer {
+  padding: 3rem var(--hl-gutter) 7rem;
+  border-top: 1px solid var(--hl-line);
+  background: color-mix(in oklab, var(--hl-field) 85%, transparent);
+}
+.hl-footer__in {
+  width: min(100%, var(--hl-container-lg));
+  margin-inline: auto;
+  display: grid;
+  gap: 1.5rem;
+}
+.hl-footer ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.5rem;
+}
+.hl-footer a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  text-decoration: none;
+}
+.hl-footer a:hover {
+  color: var(--hl-accent-text);
+}
+.hl-footer__note {
+  color: var(--hl-muted);
+  font-size: var(--hl-text-sm);
+}
+.hl-return {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 1.5rem;
+  border-radius: var(--hl-radius-pill);
+  box-shadow: inset 0 0 0 1px var(--hl-line);
+  font-family: var(--hl-font-mono);
+  font-size: var(--hl-text-sm);
+  letter-spacing: 0.04em;
+}
+.hl-return:hover {
+  box-shadow: inset 0 0 0 1px var(--hl-accent), 0 0 30px -8px var(--hl-accent);
+}
+.hl-skip {
+  position: fixed;
+  left: 1rem;
+  top: -4rem;
+  z-index: 100;
+  padding: 0.75rem 1rem;
+  background: var(--hl-accent);
+  color: var(--hl-accent-contrast);
+  border-radius: var(--hl-radius-md);
+  transition: top var(--hl-dur-short);
+}
+.hl-skip:focus {
+  top: 1rem;
 }

@@ -61,9 +61,15 @@ function cssColor(name: string, fallback: [number, number, number]) {
  */
 export function StageProvider({
   world = "hub",
+  quiet = false,
+  cinema = false,
   children,
 }: {
   world?: Preset;
+  /** Inner pages: poster only (no canvas, no pinning), same index control and scenes. */
+  quiet?: boolean;
+  /** Pure-black field behind photographs (photography portfolio and gallery pages). */
+  cinema?: boolean;
   children: ReactNode;
 }) {
   const storeRef = useRef<StoreState>(createStore());
@@ -90,6 +96,7 @@ export function StageProvider({
 
   // Tier selection: once, after first paint (never before LCP), then the runtime governor.
   useEffect(() => {
+    if (quiet) return;
     let cancelled = false;
     const c = readChoice();
     setChoiceState(c);
@@ -107,7 +114,7 @@ export function StageProvider({
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [quiet]);
 
   const setChoice = useCallback((c: Choice) => {
     writeChoice(c);
@@ -259,7 +266,7 @@ export function StageProvider({
 
   return (
     <Ctx.Provider value={value}>
-      <div className="hl-stage" aria-hidden="true" data-world={world}>
+      <div className="hl-stage" aria-hidden="true" data-world={world} data-cinema={cinema || undefined}>
         <div className="hl-stage__poster" />
         {tier !== "static" ? <canvas ref={canvasRef} className="hl-stage__canvas" /> : null}
       </div>

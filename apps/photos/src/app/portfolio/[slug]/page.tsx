@@ -26,7 +26,7 @@ export default async function Category({ params }: { params: Promise<{ slug: str
   if (cat.level === "strict") await connection();
   const tabs = categories.filter((c) => photosIn(c.slug).length);
   return (
-    <Shell>
+    <Shell cinema>
       <Container className="page-head">
         <Eyebrow style={{ marginBottom: "1rem" }}>Portfolio</Eyebrow>
         <Heading as="h1" size="display" display>

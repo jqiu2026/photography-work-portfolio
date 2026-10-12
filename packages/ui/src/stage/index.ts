@@ -11,3 +11,4 @@ export {
   type Choice,
   type Signals,
 } from "./tier";
+export { sceneProgress } from "./store";

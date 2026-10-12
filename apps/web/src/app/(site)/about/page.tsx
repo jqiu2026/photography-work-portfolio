@@ -30,7 +30,7 @@ export default async function About() {
   const { person, socials, timeline, skills, skillTags, intro } = await getPerson();
   const portrait = getImage("site", "avatar");
   return (
-    <SiteShell transparentTop={false}>
+    <SiteShell>
       <Container style={{ paddingTop: "clamp(3rem, 8vw, 6rem)" }}>
         <ProfileHeader
           name={person.name}

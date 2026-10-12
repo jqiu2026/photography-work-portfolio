@@ -3,15 +3,12 @@ import type { ReactNode } from "react";
 import { nav as defaultNav } from "@/content/site";
 import { siteSettings } from "@/lib/site-settings";
 
-/** Hub chrome: the shared shell with the hub's navigation. */
-export async function SiteShell({
-  children,
-  transparentTop = true,
-}: { children: ReactNode; transparentTop?: boolean }) {
+/** Hub chrome for inner pages: quiet mark, index control (this site's routes only), hub footer. */
+export async function SiteShell({ children }: { children: ReactNode }) {
   const { nav: custom } = await siteSettings("hub");
   const nav = custom.items.length ? custom.items : defaultNav;
   return (
-    <Shell currentId="hub" links={nav} transparentTop={transparentTop}>
+    <Shell currentId="hub" links={[{ label: "Home", href: "/" }, ...nav]}>
       {children}
     </Shell>
   );

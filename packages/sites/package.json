@@ -9,7 +9,8 @@
     ".": "./src/index.ts",
     "./profile": "./src/profile.ts",
     "./shell": "./src/SiteShell.tsx",
-    "./contact": "./src/ContactForm.tsx"
+    "./contact": "./src/ContactForm.tsx",
+    "./index-control": "./src/ShellIndex.tsx"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

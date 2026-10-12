@@ -1,5 +1,5 @@
 // usage: node scripts/frames.mjs <url> <outPrefix> [width=1440] [dark|light] [--reduce] [--times=0,2,4]
-// Scrolls at ~600px/s and saves viewport frames at the given seconds (default 0,2,4,6,8,10,12,15). Prints tier info.
+// --y=0,900,1800 jumps to those scroll offsets instead. Scrolls at ~600px/s and saves viewport frames at the given seconds (default 0,2,4,6,8,10,12,15). Prints tier info.
 import { chromium } from "@playwright/test";
 const args = process.argv.slice(2);
 const flags = args.filter((a) => a.startsWith("--"));
@@ -25,6 +25,21 @@ const info = await p.evaluate(() => ({
   h: document.documentElement.scrollHeight,
 }));
 console.log(JSON.stringify(info));
+const ys = flags
+  .find((f) => f.startsWith("--y="))
+  ?.slice(4)
+  .split(",")
+  .map(Number);
+if (ys) {
+  for (const y of ys) {
+    await p.evaluate((yy) => window.scrollTo(0, yy), y);
+    await p.waitForTimeout(1500);
+    await p.screenshot({ path: `${out}-y${String(y).padStart(5, "0")}.png` });
+  }
+  if (errors.length) console.log("ERRORS:", errors.slice(0, 6).join("\n"));
+  await b.close();
+  process.exit(0);
+}
 const t0 = Date.now();
 for (const t of times) {
   while ((Date.now() - t0) / 1000 < t) {

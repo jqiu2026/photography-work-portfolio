@@ -33,7 +33,7 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
   const next = all[i - 1];
   const cover = p.cover;
   return (
-    <SiteShell transparentTop={false}>
+    <SiteShell>
       <ScrollProgress />
       <Container size="md" style={{ paddingTop: "clamp(2rem, 6vw, 4rem)" }}>
         <Breadcrumbs items={[{ label: "Writing", href: "/writing" }, { label: p.title }]} />

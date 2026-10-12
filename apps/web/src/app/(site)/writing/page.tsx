@@ -17,7 +17,7 @@ const fmt = (d: string) => new Date(d).toLocaleDateString("en-US", { month: "sho
 export default async function Writing() {
   const posts = await getWriting();
   return (
-    <SiteShell transparentTop={false}>
+    <SiteShell>
       <PageHeader eyebrow="Writing" title="Notes" intro="Thoughts, stories and notes from my creative journey." />
       <Section style={{ paddingTop: 0 }}>
         <Container size="md">

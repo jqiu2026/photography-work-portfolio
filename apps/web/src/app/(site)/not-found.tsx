@@ -4,7 +4,7 @@ import { SiteShell } from "@/components/site/SiteShell";
 
 export default function NotFound() {
   return (
-    <SiteShell transparentTop={false}>
+    <SiteShell>
       <Container size="sm" style={{ paddingBlock: "8rem" }}>
         <Heading as="h1" size="display" display>
           Not found

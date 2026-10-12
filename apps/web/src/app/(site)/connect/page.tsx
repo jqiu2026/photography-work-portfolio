@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export default async function Connect() {
   const { person, socials } = await getPerson();
   return (
-    <SiteShell transparentTop={false}>
+    <SiteShell>
       <PageHeader
         eyebrow="Connect"
         title="Let's talk"

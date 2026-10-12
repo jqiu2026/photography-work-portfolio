@@ -12,7 +12,7 @@ export default async function Portfolio() {
   const { categories, photos, photosIn } = await getPortfolio();
   const tabs = categories.filter((c) => photosIn(c.slug).length);
   return (
-    <Shell>
+    <Shell cinema>
       <Container className="page-head">
         <Eyebrow style={{ marginBottom: "1rem" }}>Portfolio</Eyebrow>
         <Heading as="h1" size="display" display>
