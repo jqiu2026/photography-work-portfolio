@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { LegalPage } from "@/components/site/LegalPage";
+import { LegalOrBuiltin, LegalPage } from "@/components/site/LegalPage";
 import { person } from "@/content/site";
 
 export const metadata: Metadata = {
@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 };
 
 // TODO(owner): have a lawyer review this text.
-export default function Licensing() {
+function Builtin() {
   return (
     <LegalPage title="Copyright and licensing" updated="October 2026">
       <p>
@@ -44,4 +44,8 @@ export default function Licensing() {
       </p>
     </LegalPage>
   );
+}
+
+export default function Licensing() {
+  return <LegalOrBuiltin slug="licensing" fallback={<Builtin />} />;
 }

@@ -3,11 +3,12 @@ import type { Metadata } from "next";
 import { Empty } from "@/components/interest/Empty";
 import { InterestShell } from "@/components/interest/InterestShell";
 import { PageHeader } from "@/components/site/PageHeader";
-import { flying } from "@/content/interests";
+import { getFlyingContent } from "@/lib/interests";
 
 export const metadata: Metadata = { title: "Log" };
 
-export default function Log() {
+export default async function Log() {
+  const flying = await getFlyingContent();
   // Only entries marked safeToPublish are shown (no real-time location by default; see 11-legal-and-compliance.md).
   const entries = flying.log.filter((e) => e.safeToPublish);
   return (

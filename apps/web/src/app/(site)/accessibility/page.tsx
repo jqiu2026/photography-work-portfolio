@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { LegalPage } from "@/components/site/LegalPage";
+import { LegalOrBuiltin, LegalPage } from "@/components/site/LegalPage";
 import { person } from "@/content/site";
 
 export const metadata: Metadata = {
@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 };
 
 // TODO(owner): review; update the known issues list after each audit.
-export default function Accessibility() {
+function Builtin() {
   return (
     <LegalPage title="Accessibility" updated="October 2026">
       <p>I want everyone to be able to use these sites. The goal is conformance with WCAG 2.2 level AA.</p>
@@ -32,4 +32,8 @@ export default function Accessibility() {
       </p>
     </LegalPage>
   );
+}
+
+export default function Accessibility() {
+  return <LegalOrBuiltin slug="accessibility" fallback={<Builtin />} />;
 }

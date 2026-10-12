@@ -6,7 +6,9 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { getSite } from "@jerryqiu/sites";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { Maintenance } from "@/components/site/Maintenance";
 import { fontVars } from "@/lib/fonts";
+import { siteSettings } from "@/lib/site-settings";
 
 export const metadata: Metadata = {
   metadataBase: new URL(getSite("music").url),
@@ -15,7 +17,8 @@ export const metadata: Metadata = {
   other: { "ai-crawlers": "noai, noimageai" },
 };
 
-export default function MusicLayout({ children }: { children: ReactNode }) {
+export default async function MusicLayout({ children }: { children: ReactNode }) {
+  const { general } = await siteSettings("music");
   return (
     <html lang="en" suppressHydrationWarning className={fontVars}>
       <head>
@@ -24,7 +27,9 @@ export default function MusicLayout({ children }: { children: ReactNode }) {
       </head>
       <body className="ph-root">
         <ThemeProvider preset="music">
-          <SmoothScroll>{children}</SmoothScroll>
+          <SmoothScroll>
+            {general.maintenance ? <Maintenance message={general.maintenanceMessage} /> : children}
+          </SmoothScroll>
         </ThemeProvider>
         <Analytics />
         <SpeedInsights />

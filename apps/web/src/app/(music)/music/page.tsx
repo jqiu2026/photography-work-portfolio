@@ -5,10 +5,11 @@ import Link from "next/link";
 import { Button } from "@placeholder/ui";
 import { Empty } from "@/components/interest/Empty";
 import { InterestShell } from "@/components/interest/InterestShell";
-import { music } from "@/content/interests";
+import { getMusicContent } from "@/lib/interests";
 import { getImage } from "@/lib/images";
 
-export default function MusicHome() {
+export default async function MusicHome() {
+  const music = await getMusicContent();
   const img = getImage("gallery", "jry0473");
   return (
     <InterestShell id="music">

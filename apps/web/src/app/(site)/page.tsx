@@ -26,9 +26,10 @@ import NextLink from "next/link";
 import type { Metadata } from "next";
 import { SiteShell } from "@/components/site/SiteShell";
 import "@/components/home/home.css";
-import { person, socials, todo } from "@/content/site";
+import { todo } from "@/content/site";
+import { getPerson } from "@/lib/profile";
 import { getImage } from "@/lib/images";
-import { getProjects, getWriting, imageId, projectCover } from "@/lib/content";
+import { getWork, getWriting } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: { absolute: "Jerry Qiu" },
@@ -38,15 +39,14 @@ export const metadata: Metadata = {
 const frames = Array.from({ length: 96 }, (_, i) => `/sequence/hero/frame-${String(i).padStart(3, "0")}.webp`);
 const fmt = (d: string) => new Date(d).toLocaleDateString("en-US", { month: "short", year: "numeric" });
 
-export default function Home() {
+export default async function Home() {
+  const { person, socials } = await getPerson();
   const hero = getImage("gallery", "jry0126-enhanced-nr");
   const heroFiles = [...hero.files].sort((a, b) => a.width - b.width);
   const heroSrc = (heroFiles.find((f) => f.width >= 1600) ?? heroFiles[heroFiles.length - 1]).src;
   const portrait = getImage("site", "avatar");
-  const projects = getProjects()
-    .filter((p) => projectCover(p))
-    .slice(0, 6);
-  const posts = getWriting().slice(0, 3);
+  const projects = (await getWork()).filter((p) => p.cover).slice(0, 6);
+  const posts = (await getWriting()).slice(0, 3);
 
   // TODO(owner): rewrite these beats in your voice. Facts come from the original About page.
   const steps = [
@@ -204,14 +204,12 @@ export default function Home() {
         </Container>
         <HorizontalShowcase>
           {projects.map((p) => {
-            const cover = projectCover(p);
+            const cover = p.cover;
             return (
               <NextLink key={p.slug} href={`/work/${p.slug}`} className="home-work-card">
-                {cover ? (
-                  <Image asset={getImage(cover.group, cover.id)} alt="" sizes="(min-width: 900px) 34rem, 78vw" />
-                ) : null}
-                <h3>{p.metadata.title}</h3>
-                <p>{[fmt(p.metadata.publishedAt), p.metadata.summary].filter(Boolean).join(" · ")}</p>
+                {cover ? <Image asset={cover} alt="" sizes="(min-width: 900px) 34rem, 78vw" /> : null}
+                <h3>{p.title}</h3>
+                <p>{[fmt(p.date), p.summary].filter(Boolean).join(" · ")}</p>
               </NextLink>
             );
           })}
@@ -234,10 +232,10 @@ export default function Home() {
           <div className="home-writing">
             {posts.map((p) => (
               <NextLink key={p.slug} href={`/writing/${p.slug}`}>
-                <time dateTime={p.metadata.publishedAt}>{fmt(p.metadata.publishedAt)}</time>
+                <time dateTime={p.date}>{fmt(p.date)}</time>
                 <div>
-                  <h3>{p.metadata.title}</h3>
-                  {p.metadata.summary ? <p>{p.metadata.summary}</p> : null}
+                  <h3>{p.title}</h3>
+                  {p.summary ? <p>{p.summary}</p> : null}
                 </div>
               </NextLink>
             ))}

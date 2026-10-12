@@ -1,5 +1,7 @@
 import { Container, Prose, Section } from "@placeholder/ui";
 import type { ReactNode } from "react";
+import { getLegalPage } from "@/lib/content-db";
+import { RenderMarkdownBare } from "@/lib/markdown";
 import { PageHeader } from "./PageHeader";
 import { SiteShell } from "./SiteShell";
 
@@ -14,5 +16,17 @@ export function LegalPage({ title, updated, children }: { title: string; updated
         </Container>
       </Section>
     </SiteShell>
+  );
+}
+
+/** A legal page published in the CMS replaces the built-in draft text; otherwise `fallback` renders. */
+export async function LegalOrBuiltin({ slug, fallback }: { slug: string; fallback: ReactNode }) {
+  const page = await getLegalPage(slug);
+  if (!page) return fallback;
+  const updated = new Date(page.updatedAt).toLocaleDateString("en-US", { month: "long", year: "numeric" });
+  return (
+    <LegalPage title={page.title} updated={updated}>
+      <RenderMarkdownBare source={page.body} />
+    </LegalPage>
   );
 }

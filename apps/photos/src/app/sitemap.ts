@@ -1,8 +1,9 @@
 import { getSite } from "@jerryqiu/sites";
 import type { MetadataRoute } from "next";
-import { categories, photosIn } from "@/content/portfolio";
+import { getPortfolio } from "@/lib/portfolio";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const { categories, photosIn } = await getPortfolio();
   const base = getSite("photos").url;
   return [
     ...["", "/portfolio", "/about", "/book", "/client"].map((p) => ({ url: `${base}${p}`, lastModified: new Date() })),

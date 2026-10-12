@@ -16,6 +16,7 @@ export default {
     "@jerryqiu/protect",
     "@jerryqiu/storage",
     "@jerryqiu/inbox",
+    "@jerryqiu/media",
   ],
   // PGlite and sharp are native/WASM packages that must not be bundled.
   serverExternalPackages: ["sharp", "pg", "@electric-sql/pglite"],

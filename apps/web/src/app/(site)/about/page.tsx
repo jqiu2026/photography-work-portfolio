@@ -16,16 +16,18 @@ import { InView, Parallax } from "@placeholder/ui/motion";
 import type { Metadata } from "next";
 import NextLink from "next/link";
 import { SiteShell } from "@/components/site/SiteShell";
-import { intro, managed, skills, timeline } from "@/content/about";
-import { person, socials } from "@/content/site";
+import { managed } from "@/content/about";
+import { person as staticPerson } from "@/content/site";
+import { getPerson } from "@/lib/profile";
 import { getImage } from "@/lib/images";
 
 export const metadata: Metadata = {
   title: "About",
-  description: `About ${person.name}: background, skills and where to find me.`,
+  description: `About ${staticPerson.name}: background, skills and where to find me.`,
 };
 
-export default function About() {
+export default async function About() {
+  const { person, socials, timeline, skills, skillTags, intro } = await getPerson();
   const portrait = getImage("site", "avatar");
   return (
     <SiteShell transparentTop={false}>
@@ -78,6 +80,7 @@ export default function About() {
           <Heading size="4xl" display style={{ marginBottom: "2.5rem" }}>
             Skills and interests
           </Heading>
+          {skillTags.length ? <SkillTags tags={skillTags} /> : null}
           <Grid min="19rem" gap={8}>
             {skills.map((s) => (
               <InView key={s.title}>

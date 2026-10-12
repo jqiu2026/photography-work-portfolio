@@ -14,16 +14,17 @@ export const metadata: Metadata = {
 
 const fmt = (d: string) => new Date(d).toLocaleDateString("en-US", { month: "short", year: "numeric" });
 
-export default function Writing() {
+export default async function Writing() {
+  const posts = await getWriting();
   return (
     <SiteShell transparentTop={false}>
       <PageHeader eyebrow="Writing" title="Notes" intro="Thoughts, stories and notes from my creative journey." />
       <Section style={{ paddingTop: 0 }}>
         <Container size="md">
           <div className="home-writing">
-            {getWriting().map((p) => (
+            {posts.map((p) => (
               <NextLink key={p.slug} href={`/writing/${p.slug}`}>
-                <time dateTime={p.metadata.publishedAt}>{fmt(p.metadata.publishedAt)}</time>
+                <time dateTime={p.date}>{fmt(p.date)}</time>
                 <div>
                   <h2
                     style={{
@@ -32,9 +33,9 @@ export default function Writing() {
                       fontSize: "var(--ph-text-2xl)",
                     }}
                   >
-                    {p.metadata.title}
+                    {p.title}
                   </h2>
-                  {p.metadata.summary ? <p>{p.metadata.summary}</p> : null}
+                  {p.summary ? <p>{p.summary}</p> : null}
                 </div>
               </NextLink>
             ))}

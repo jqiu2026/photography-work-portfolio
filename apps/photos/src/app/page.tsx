@@ -5,11 +5,12 @@ import Link from "next/link";
 import { Compare } from "@/components/Compare";
 import { Hero } from "@/components/Hero";
 import { Shell } from "@/components/Shell";
-import { categories, featured, photos, photosIn } from "@/content/portfolio";
+import { getPortfolio } from "@/lib/portfolio";
 import "./globals.css";
 
-export default function Home() {
-  const hero = photos.find((p) => p.id === "gf4a9402-2-3")!;
+export default async function Home() {
+  const { categories, featured, hero, compare, photosIn } = await getPortfolio();
+  if (!hero) return null;
   const files = [...hero.files].sort((a, b) => a.width - b.width);
   const src = (files.find((f) => f.width >= 1600) ?? files[files.length - 1]).src;
   const cats = categories.map((c) => ({ ...c, items: photosIn(c.slug) })).filter((c) => c.items.length);
@@ -35,7 +36,7 @@ export default function Home() {
 
       <Section tone="surface">
         <Container>
-          <Compare photos={["jry1082", "2026-01-17-snow-7", "jry0473"].map((id) => photos.find((p) => p.id === id)!)} />
+          <Compare photos={compare} />
         </Container>
       </Section>
 

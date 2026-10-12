@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { LegalPage } from "@/components/site/LegalPage";
+import { LegalOrBuiltin, LegalPage } from "@/components/site/LegalPage";
 import { person } from "@/content/site";
 
 export const metadata: Metadata = { title: "Privacy", description: "What this site collects, and what it doesn't." };
 
 // TODO(owner): have a lawyer review this text. Legal entity, postal address and governing law are placeholders.
-export default function Privacy() {
+function Builtin() {
   return (
     <LegalPage title="Privacy" updated="October 2026">
       <p>
@@ -23,8 +23,9 @@ export default function Privacy() {
           do not follow you across sites.
         </li>
         <li>
-          <strong>Email.</strong> The contact form opens your own email app; this site does not store the message. If
-          you email me, I keep the conversation as long as it is useful.
+          <strong>Messages.</strong> If you send a message through the contact form, I store your name, email address
+          and message so I can reply, and a one-way hash of your IP address to limit spam. I am emailed a copy. I keep a
+          conversation as long as it is useful and delete it on request. If you email me directly, the same applies.
         </li>
         <li>
           <strong>Your settings.</strong> Your light or dark choice is saved in your browser (local storage), not sent
@@ -56,4 +57,8 @@ export default function Privacy() {
       </p>
     </LegalPage>
   );
+}
+
+export default function Privacy() {
+  return <LegalOrBuiltin slug="privacy" fallback={<Builtin />} />;
 }

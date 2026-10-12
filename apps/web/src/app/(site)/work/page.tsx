@@ -4,14 +4,15 @@ import { PageHeader } from "@/components/site/PageHeader";
 import { SiteShell } from "@/components/site/SiteShell";
 import { WorkGrid } from "@/components/work/WorkGrid";
 import "@/components/work/work.css";
-import { getProjects } from "@/lib/content";
+import { getWork } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Work",
   description: "Photography and video projects: events, theatre and community work.",
 };
 
-export default function Work() {
+export default async function Work() {
+  const projects = await getWork();
   return (
     <SiteShell transparentTop={false}>
       <PageHeader
@@ -21,7 +22,7 @@ export default function Work() {
       />
       <Section style={{ paddingTop: 0 }}>
         <Container>
-          <WorkGrid projects={getProjects()} />
+          <WorkGrid projects={projects} />
         </Container>
       </Section>
     </SiteShell>

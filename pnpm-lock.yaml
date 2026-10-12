@@ -260,6 +260,9 @@ importers:
       '@jerryqiu/inbox':
         specifier: workspace:*
         version: link:../../packages/inbox
+      '@jerryqiu/media':
+        specifier: workspace:*
+        version: link:../../packages/media
       '@jerryqiu/protect':
         specifier: workspace:*
         version: link:../../packages/protect
@@ -531,6 +534,9 @@ importers:
       '@jerryqiu/db':
         specifier: workspace:*
         version: link:../db
+      '@jerryqiu/protect':
+        specifier: workspace:*
+        version: link:../protect
       '@jerryqiu/storage':
         specifier: workspace:*
         version: link:../storage

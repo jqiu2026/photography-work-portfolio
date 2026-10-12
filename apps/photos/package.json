@@ -12,6 +12,7 @@
     "@jerryqiu/auth": "workspace:*",
     "@jerryqiu/db": "workspace:*",
     "@jerryqiu/inbox": "workspace:*",
+    "@jerryqiu/media": "workspace:*",
     "@jerryqiu/protect": "workspace:*",
     "@jerryqiu/sites": "workspace:*",
     "@jerryqiu/storage": "workspace:*",

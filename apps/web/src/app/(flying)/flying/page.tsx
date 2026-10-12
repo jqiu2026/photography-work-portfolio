@@ -14,10 +14,11 @@ import { Image } from "@placeholder/ui/media";
 import { sitePath } from "@jerryqiu/sites";
 import NextLink from "next/link";
 import { InterestShell } from "@/components/interest/InterestShell";
-import { flying } from "@/content/interests";
+import { getFlyingContent } from "@/lib/interests";
 import { getImage } from "@/lib/images";
 
-export default function FlyingHome() {
+export default async function FlyingHome() {
+  const flying = await getFlyingContent();
   const cockpit = getImage("blogs", "day-one-cover");
   return (
     <InterestShell id="flying">

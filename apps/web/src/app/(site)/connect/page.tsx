@@ -3,14 +3,15 @@ import type { Metadata } from "next";
 import { ContactForm } from "@jerryqiu/sites/contact";
 import { PageHeader } from "@/components/site/PageHeader";
 import { SiteShell } from "@/components/site/SiteShell";
-import { person, socials } from "@/content/site";
+import { getPerson } from "@/lib/profile";
 
 export const metadata: Metadata = {
   title: "Connect",
   description: "Where to find me online, and how to get in touch.",
 };
 
-export default function Connect() {
+export default async function Connect() {
+  const { person, socials } = await getPerson();
   return (
     <SiteShell transparentTop={false}>
       <PageHeader

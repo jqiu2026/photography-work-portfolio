@@ -2,11 +2,12 @@ import { Container, Section, Text } from "@placeholder/ui";
 import type { Metadata } from "next";
 import { InterestShell } from "@/components/interest/InterestShell";
 import { PageHeader } from "@/components/site/PageHeader";
-import { flying } from "@/content/interests";
+import { getFlyingContent } from "@/lib/interests";
 
 export const metadata: Metadata = { title: "About" };
 
-export default function About() {
+export default async function About() {
+  const flying = await getFlyingContent();
   return (
     <InterestShell id="flying">
       <PageHeader eyebrow="Flying" title="The short version" />

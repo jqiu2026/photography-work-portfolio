@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { LegalPage } from "@/components/site/LegalPage";
+import { LegalOrBuiltin, LegalPage } from "@/components/site/LegalPage";
 import { person } from "@/content/site";
 
 export const metadata: Metadata = { title: "Terms", description: "Terms of use for this site." };
 
 // TODO(owner): have a lawyer review this text. Governing law and jurisdiction are placeholders.
-export default function Terms() {
+function Builtin() {
   return (
     <LegalPage title="Terms of use" updated="October 2026">
       <p>By using this site you agree to these terms. If you do not agree, please do not use it.</p>
@@ -39,4 +39,8 @@ export default function Terms() {
       <p>[Governing law and jurisdiction to be added.]</p>
     </LegalPage>
   );
+}
+
+export default function Terms() {
+  return <LegalOrBuiltin slug="terms" fallback={<Builtin />} />;
 }

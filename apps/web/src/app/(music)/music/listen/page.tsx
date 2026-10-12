@@ -4,11 +4,12 @@ import type { Metadata } from "next";
 import { Empty } from "@/components/interest/Empty";
 import { InterestShell } from "@/components/interest/InterestShell";
 import { PageHeader } from "@/components/site/PageHeader";
-import { music } from "@/content/interests";
+import { getMusicContent } from "@/lib/interests";
 
 export const metadata: Metadata = { title: "Listen" };
 
-export default function Listen() {
+export default async function Listen() {
+  const music = await getMusicContent();
   return (
     <InterestShell id="music">
       <PageHeader

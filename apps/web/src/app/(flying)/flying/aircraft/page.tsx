@@ -4,12 +4,13 @@ import type { Metadata } from "next";
 import { Empty } from "@/components/interest/Empty";
 import { InterestShell } from "@/components/interest/InterestShell";
 import { PageHeader } from "@/components/site/PageHeader";
-import { flying } from "@/content/interests";
+import { getFlyingContent } from "@/lib/interests";
 import { getImage } from "@/lib/images";
 
 export const metadata: Metadata = { title: "Aircraft" };
 
-export default function Aircraft() {
+export default async function Aircraft() {
+  const flying = await getFlyingContent();
   const photos = flying.photographed.map((id, i) => ({
     ...getImage("gallery", id),
     alt: `Airliner photograph ${i + 1}`,

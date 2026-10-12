@@ -7,22 +7,18 @@ import { notFound } from "next/navigation";
 import { MDX } from "@/components/site/MDX";
 import { SiteShell } from "@/components/site/SiteShell";
 import { person } from "@/content/site";
-import { getWriting, imageId } from "@/lib/content";
-import { getImage } from "@/lib/images";
+import { getWriting } from "@/lib/content";
+import { RenderMarkdown } from "@/lib/markdown";
 import "@/components/work/work.css";
-
-export function generateStaticParams() {
-  return getWriting().map((p) => ({ slug: p.slug }));
-}
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const p = getWriting().find((x) => x.slug === slug);
+  const p = (await getWriting()).find((x) => x.slug === slug);
   if (!p) return {};
   return {
-    title: p.metadata.title,
-    description: p.metadata.summary,
-    openGraph: { type: "article", publishedTime: p.metadata.publishedAt },
+    title: p.title,
+    description: p.summary,
+    openGraph: { type: "article", publishedTime: p.date },
   };
 }
 
@@ -30,27 +26,27 @@ const fmt = (d: string) => new Date(d).toLocaleDateString("en-US", { month: "lon
 
 export default async function Post({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const all = getWriting();
+  const all = await getWriting();
   const i = all.findIndex((x) => x.slug === slug);
   if (i < 0) notFound();
   const p = all[i];
   const prev = all[i + 1];
   const next = all[i - 1];
-  const cover = p.metadata.image ? getImage("blogs", imageId(p.metadata.image)) : null;
+  const cover = p.cover;
   return (
     <SiteShell transparentTop={false}>
       <ScrollProgress />
       <Container size="md" style={{ paddingTop: "clamp(2rem, 6vw, 4rem)" }}>
-        <Breadcrumbs items={[{ label: "Writing", href: "/writing" }, { label: p.metadata.title }]} />
+        <Breadcrumbs items={[{ label: "Writing", href: "/writing" }, { label: p.title }]} />
         <Eyebrow style={{ margin: "2.5rem 0 1rem" }}>
-          {fmt(p.metadata.publishedAt)} · {person.name}
+          {fmt(p.date)} · {person.name}
         </Eyebrow>
         <Heading as="h1" size="4xl" display>
-          {p.metadata.title}
+          {p.title}
         </Heading>
-        {p.metadata.subtitle ? (
+        {p.subtitle ? (
           <Text size="xl" tone="muted" style={{ marginTop: "1.25rem", fontStyle: "italic" }}>
-            {p.metadata.subtitle}
+            {p.subtitle}
           </Text>
         ) : null}
       </Container>
@@ -61,7 +57,7 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
       ) : null}
       <Section>
         <Container size="sm">
-          <MDX source={p.content} />
+          {p.body.kind === "mdx" ? <MDX source={p.body.source} /> : <RenderMarkdown source={p.body.source} />}
         </Container>
       </Section>
       <Container size="md">
@@ -69,7 +65,7 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
           {prev ? (
             <NextLink href={`/writing/${prev.slug}`}>
               <span>← Older</span>
-              <strong>{prev.metadata.title}</strong>
+              <strong>{prev.title}</strong>
             </NextLink>
           ) : (
             <span />
@@ -77,7 +73,7 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
           {next ? (
             <NextLink href={`/writing/${next.slug}`}>
               <span>Newer →</span>
-              <strong>{next.metadata.title}</strong>
+              <strong>{next.title}</strong>
             </NextLink>
           ) : (
             <span />

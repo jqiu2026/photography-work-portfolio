@@ -3,12 +3,13 @@ import { Gallery } from "@placeholder/ui/media";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Shell } from "@/components/Shell";
-import { categories, photos, photosIn } from "@/content/portfolio";
+import { getPortfolio } from "@/lib/portfolio";
 import "../globals.css";
 
 export const metadata: Metadata = { title: "Portfolio", description: "Selected photographs by subject." };
 
-export default function Portfolio() {
+export default async function Portfolio() {
+  const { categories, photos, photosIn } = await getPortfolio();
   const tabs = categories.filter((c) => photosIn(c.slug).length);
   return (
     <Shell>

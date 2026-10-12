@@ -85,6 +85,20 @@ const components: Components = {
   },
 };
 
+/** Markdown without the Prose wrapper, for places that already provide one. */
+export function RenderMarkdownBare({ source }: { source: string }) {
+  return (
+    <ReactMarkdown
+      remarkPlugins={[remarkGfm, remarkShortcodes]}
+      components={components}
+      urlTransform={transformUrl}
+      skipHtml
+    >
+      {source}
+    </ReactMarkdown>
+  );
+}
+
 export function RenderMarkdown({ source }: { source: string }) {
   return (
     <Prose>

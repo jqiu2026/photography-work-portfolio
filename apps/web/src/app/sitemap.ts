@@ -1,8 +1,9 @@
 import { getSite } from "@jerryqiu/sites";
 import type { MetadataRoute } from "next";
-import { getProjects, getWriting } from "@/lib/content";
+import { getWork, getWriting } from "@/lib/content";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const [work, writing] = await Promise.all([getWork(), getWriting()]);
   const base = getSite("hub").url;
   const pages = [
     "",
@@ -17,7 +18,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ].map((p) => ({ url: `${base}${p}`, lastModified: new Date() }));
   return [
     ...pages,
-    ...getProjects().map((p) => ({ url: `${base}/work/${p.slug}`, lastModified: p.metadata.publishedAt })),
-    ...getWriting().map((p) => ({ url: `${base}/writing/${p.slug}`, lastModified: p.metadata.publishedAt })),
+    ...work.map((p) => ({ url: `${base}/work/${p.slug}`, lastModified: p.date })),
+    ...writing.map((p) => ({ url: `${base}/writing/${p.slug}`, lastModified: p.date })),
   ];
 }
