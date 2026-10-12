@@ -34,12 +34,19 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const deny = (status: number, why: string) =>
   new Response(null, { status, headers: { "Cache-Control": "no-store", "X-Denied": why } });
 
-/** True when the image is used in any visible gallery whose protection level is strict. */
+/**
+ * True when the image is used in any visible gallery whose protection level is strict, or in ANY client (studio)
+ * gallery: client photographs are private by default and never served from the public tier.
+ */
 export async function isStrictImage(db: Database, mediaId: string): Promise<boolean> {
   const r = await db.execute<{ n: number }>(sql`
     select 1 as n from gallery_items gi
     join galleries g on g.id = gi.gallery_id
     where gi.media_id = ${mediaId} and g.protection = 'strict' and g.deleted_at is null
+    union all
+    select 1 as n from studio_gallery_items sgi
+    join studio_galleries sg on sg.id = sgi.gallery_id
+    where sgi.media_id = ${mediaId} and sg.deleted_at is null
     limit 1`);
   const rows = (Array.isArray(r) ? r : (r as { rows: unknown[] }).rows) as unknown[];
   return rows.length > 0;
