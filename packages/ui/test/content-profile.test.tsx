@@ -1,18 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
-import {
-  Avatar,
-  Breadcrumbs,
-  EmbedFacade,
-  Footer,
-  Header,
-  Link,
-  Pagination,
-  SiteSwitcher,
-  SocialLinks,
-  Timeline,
-} from "../src";
+import { Avatar, Breadcrumbs, EmbedFacade, Header, Link, Pagination, SocialLinks, Timeline } from "../src";
 
 const sites = [
   { id: "hub", name: "Jerry Qiu", description: "About me", url: "https://jerryqiu.com" },
@@ -95,35 +84,5 @@ describe("Breadcrumbs, Pagination, Timeline, Avatar", () => {
   it("Avatar falls back to initials with a label", () => {
     render(<Avatar name="Jerry Qiu" />);
     expect(screen.getByRole("img", { name: "Jerry Qiu" })).toHaveTextContent("JQ");
-  });
-});
-
-describe("Site chrome", () => {
-  it("SiteSwitcher lists every site and marks the current one", async () => {
-    const user = userEvent.setup();
-    render(<SiteSwitcher sites={sites} currentId="photos" />);
-    await user.click(screen.getByRole("button", { name: /Jerry Qiu/ }));
-    const nav = await screen.findByRole("navigation", { name: "All sites" });
-    expect(nav.querySelectorAll("a")).toHaveLength(3);
-    expect(screen.getByRole("link", { name: /Photography/ })).toHaveAttribute("aria-current", "page");
-  });
-  it("Footer 'More from me' excludes the current site and shows legal links", () => {
-    render(<Footer sites={sites} currentId="hub" legal={[{ label: "Privacy", href: "/privacy" }]} />);
-    const more = screen.getByRole("navigation", { name: "More from me" });
-    expect(more).not.toHaveTextContent("About me");
-    expect(more).toHaveTextContent("Photography");
-    expect(screen.getByRole("link", { name: "Privacy" })).toBeInTheDocument();
-  });
-  it("Header marks the current page link", () => {
-    render(
-      <Header
-        brand="Jerry"
-        links={[
-          { label: "Work", href: "/work", current: true },
-          { label: "About", href: "/about" },
-        ]}
-      />,
-    );
-    expect(screen.getAllByRole("link", { name: "Work" })[0]).toHaveAttribute("aria-current", "page");
   });
 });

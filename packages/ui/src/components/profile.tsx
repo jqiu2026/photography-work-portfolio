@@ -110,28 +110,6 @@ export function Timeline({ items, className }: { items: TimelineItem[]; classNam
   );
 }
 
-export function SitePreviewCard({
-  title,
-  description,
-  href,
-  image,
-  as: As = "a",
-  className,
-}: { title: string; description: string; href: string; image?: ReactNode; as?: ElementType; className?: string }) {
-  return (
-    <As href={href} className={cx("hl-preview", className)}>
-      {image ? <div className="hl-preview__media">{image}</div> : null}
-      <div className="hl-preview__body">
-        <h3>{title}</h3>
-        <p>{description}</p>
-        <span className="hl-preview__go" aria-hidden>
-          Visit →
-        </span>
-      </div>
-    </As>
-  );
-}
-
 /** Opening block for the music and flying sites (interest-site template). */
 export function InterestHero({
   eyebrow,

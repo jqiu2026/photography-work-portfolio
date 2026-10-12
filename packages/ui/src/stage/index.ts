@@ -5,7 +5,6 @@ export {
   selectTier,
   readSignals,
   tierSettings,
-  Governor,
   downgrade,
   type Tier,
   type Choice,

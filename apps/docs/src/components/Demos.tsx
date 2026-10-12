@@ -1,9 +1,9 @@
 "use client";
 
 import {
-  Accordion, Avatar, Badge, BrandIcon, Breadcrumbs, Button, Card, Checkbox, CodeBlock, Container, Dialog, DialogClose, EmbedFacade, Eyebrow, Field, Footer, Grid,
-  Header, Heading, IconButton, Input, InterestHero, Link, Menu, MoreFromMe, Pagination, Popover, Progress, ProfileHeader, Prose, Quote, RadioGroup, ResumeButton, Row,
-  Section, Select, Separator, Sheet, SiteSwitcher, SitePreviewCard, SkillTags, Skeleton, Slider, SocialLinks, Spinner, Stack, Stat, Switch, Table, TableOfContents, Tabs,
+  Accordion, Avatar, Badge, BrandIcon, Breadcrumbs, Button, Card, Checkbox, CodeBlock, Container, Dialog, DialogClose, EmbedFacade, Eyebrow, Field, Grid,
+  Heading, IconButton, Input, InterestHero, Link, Menu, Pagination, Popover, Progress, ProfileHeader, Prose, Quote, RadioGroup, ResumeButton, Row,
+  Section, Select, Separator, Sheet, SkillTags, Skeleton, Slider, SocialLinks, Spinner, Stack, Stat, Switch, Table, TableOfContents, Tabs,
   Text, Textarea, Timeline, ToastProvider, Tooltip, useToast, VisuallyHidden,
 } from "@halation/ui";
 import { BeforeAfter, Gallery, Image, ProtectedImage, type ImageAsset } from "@halation/ui/media";
@@ -13,11 +13,6 @@ import manifest from "../../public/demo/manifest.json";
 
 const m = manifest as Record<string, ImageAsset>;
 const imgs = ["g1", "g2", "g3", "g2", "g1", "g3"].map((k, i) => ({ ...m[k], alt: `Generated gradient ${i + 1}` }));
-const sites = [
-  { id: "hub", name: "Home", description: "About me", url: "#", color: "blue" as const },
-  { id: "photos", name: "Photos", description: "Portfolio", url: "#", color: "red" as const },
-  { id: "music", name: "Music", description: "Listen", url: "#", color: "yellow" as const },
-];
 const links = [{ label: "Instagram", href: "https://example.com", icon: "instagram" }, { label: "GitHub", href: "https://example.com", icon: "github" }, { label: "Email", href: "mailto:a@example.com", icon: "email" }];
 const Box = ({ children }: { children?: ReactNode }) => <div style={{ padding: "1rem", border: "1px dashed var(--hl-line)", borderRadius: 4 }}>{children ?? "Content"}</div>;
 function ToastBtn() {
@@ -61,11 +56,7 @@ const demos: Record<string, () => ReactNode> = {
   Skeleton: () => <Stack gap={2}><Skeleton style={{ height: 16 }} /><Skeleton style={{ height: 16, width: "60%" }} /></Stack>,
   Badge: () => <Row><Badge>Draft</Badge><Badge tone="accent">New</Badge><Badge tone="success">Live</Badge><Badge tone="danger">Error</Badge></Row>,
   Progress: () => <Progress value={62} label="Upload progress" />,
-  SiteSwitcher: () => <SiteSwitcher sites={sites} currentId="hub" />,
-  Header: () => <div style={{ border: "1px solid var(--hl-line)" }}><Header transparentTop={false} brand="Brand" links={[{ label: "Work", href: "#" }, { label: "About", href: "#", current: true }]} /></div>,
   TableOfContents: () => <TableOfContents items={[{ id: "a", label: "Section A" }, { id: "b", label: "Section B" }]} />,
-  MoreFromMe: () => <MoreFromMe sites={sites} currentId="hub" />,
-  Footer: () => <Footer sites={sites} currentId="hub" social={links} legal={[{ label: "Privacy", href: "#" }]} note="© 2026" />,
   Breadcrumbs: () => <Breadcrumbs items={[{ label: "Work", href: "#" }, { label: "Project" }]} />,
   Pagination: () => <Pagination page={2} pages={4} hrefFor={(p) => `#${p}`} />,
   Card: () => <Grid min="12rem" gap={3}><Card>Static card</Card><Card interactive as="a" href="#x">Interactive card</Card></Grid>,
@@ -79,7 +70,6 @@ const demos: Record<string, () => ReactNode> = {
   SkillTags: () => <SkillTags tags={["Python", "Lightroom", "Figma"]} />,
   ProfileHeader: () => <ProfileHeader name="Ada Lovelace" nameAs="h3" nameSize="3xl" headline="Mathematician and writer." location="London" links={links} portrait={<Avatar name="Ada Lovelace" size={96} />} />,
   Timeline: () => <Timeline items={[{ title: "Role", org: "Company", period: "2025", summary: "What I did." }, { title: "School", period: "2021 to 2025" }]} />,
-  SitePreviewCard: () => <div style={{ maxWidth: 280 }}><SitePreviewCard title="Photography" description="Portfolio and galleries." href="#x" image={<Image asset={m.g1} alt="" sizes="280px" fill />} /></div>,
   InterestHero: () => <InterestHero eyebrow="Ada" title="Music" intro="A short introduction." media={<Image asset={m.g2} alt="" sizes="400px" />} />,
   ResumeButton: () => <ResumeButton href="#cv" />,
   EmbedFacade: () => <div style={{ maxWidth: 420 }}><EmbedFacade provider="youtube" id="aqz-KE-bpKQ" title="Demo video (Big Buck Bunny, Blender Foundation, CC BY)" /></div>,

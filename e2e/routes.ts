@@ -2,7 +2,7 @@ export const hub = "http://localhost:4000";
 export const photos = "http://localhost:4002";
 export const docs = "http://localhost:4001";
 
-/** Every public route of every site. Dev-only pages (/_progress, /_design) are not listed. */
+/** Every public route of every site. */
 export const routes: { site: string; path: string; base: string }[] = [
   ...[
     "/",

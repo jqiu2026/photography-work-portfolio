@@ -1,69 +1,6 @@
 import type { CSSProperties, ReactNode } from "react";
 import { cx } from "./cx";
-import type { SiteEntry } from "./navigation";
 import { SocialLinks, type SocialLink } from "./profile";
-
-/** "More from me": the family row shown in every footer. */
-export function MoreFromMe({
-  sites,
-  currentId,
-  title = "More from me",
-}: { sites: SiteEntry[]; currentId: string; title?: string }) {
-  return (
-    <nav aria-label={title} className="hl-more">
-      <h2 className="hl-eyebrow">{title}</h2>
-      <ul>
-        {sites
-          .filter((s) => s.id !== currentId)
-          .map((s) => (
-            <li key={s.id}>
-              <a href={s.url} style={s.color ? ({ "--site": `var(--hl-${s.color})` } as CSSProperties) : undefined}>
-                <strong>{s.name}</strong>
-                <span>{s.description}</span>
-              </a>
-            </li>
-          ))}
-      </ul>
-    </nav>
-  );
-}
-
-export function Footer({
-  sites,
-  currentId,
-  social,
-  legal,
-  note,
-  className,
-}: {
-  sites: SiteEntry[];
-  currentId: string;
-  social?: SocialLink[];
-  legal: { label: string; href: string }[];
-  note?: ReactNode;
-  className?: string;
-}) {
-  return (
-    <footer className={cx("hl-footer", className)}>
-      <div className="hl-footer__inner">
-        <MoreFromMe sites={sites} currentId={currentId} />
-        {social?.length ? <SocialLinks links={social} variant="icons" /> : null}
-        <div className="hl-footer__legal">
-          <p>{note}</p>
-          <nav aria-label="Legal">
-            <ul>
-              {legal.map((l) => (
-                <li key={l.label}>
-                  <a href={l.href}>{l.label}</a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        </div>
-      </div>
-    </footer>
-  );
-}
 
 export function Breadcrumbs({ items }: { items: { label: string; href?: string }[] }) {
   return (

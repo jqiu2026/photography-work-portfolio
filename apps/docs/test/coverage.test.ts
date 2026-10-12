@@ -2,6 +2,7 @@ import { readdirSync } from "node:fs";
 import * as main from "@halation/ui";
 import * as media from "@halation/ui/media";
 import * as motion from "@halation/ui/motion";
+import * as stage from "@halation/ui/stage";
 import * as webgl from "@halation/ui/webgl";
 import { describe, expect, it } from "vitest";
 import { docs } from "../src/content/components";
@@ -11,7 +12,7 @@ const exportsOf = (m: object) => Object.keys(m).filter((k) => /^[A-Z]/.test(k));
 
 describe("docs coverage", () => {
   it("documents every exported component, and only real ones", () => {
-    const all = [...exportsOf(main), ...exportsOf(motion), ...exportsOf(media), ...exportsOf(webgl)];
+    const all = [...exportsOf(main), ...exportsOf(motion), ...exportsOf(media), ...exportsOf(webgl), ...exportsOf(stage)];
     const documented = docs.map((d) => d.name);
     expect(all.filter((n) => !documented.includes(n))).toEqual([]);
     expect(documented.filter((n) => !all.includes(n))).toEqual([]);
