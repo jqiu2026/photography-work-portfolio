@@ -110,7 +110,7 @@ const COMPOSE = `${HEAD}
 uniform sampler2D uDye; uniform vec2 uTexel; uniform vec2 uRes; uniform float uTime;
 uniform int uMode; uniform float uProgress; uniform float uParam; uniform float uScene;
 uniform vec3 uField; uniform vec3 uAccent; uniform vec3 uHalation; uniform vec2 uPointer;
-uniform float uStreak; uniform float uHalationAmt; uniform float uVelocity;
+uniform float uStreak; uniform float uHalationAmt; uniform float uVelocity; uniform float uLight;
 float h(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
 float n(vec2 p){ vec2 i = floor(p), f = fract(p); f = f*f*(3.0-2.0*f);
   return mix(mix(h(i), h(i+vec2(1,0)), f.x), mix(h(i+vec2(0,1)), h(i+vec2(1,1)), f.x), f.y); }
@@ -119,32 +119,35 @@ vec3 dye(vec2 uv){ return texture(uDye, uv).rgb; }
 void main(){
   vec2 uv = vUv; float asp = uRes.x / uRes.y;
   vec3 col = uField;
+  // On a light field the "light" becomes ink: light mode subtracts the complement of the accent (multiply-like), dark mode adds.
+  vec3 acc = uLight > 0.5 ? -(vec3(1.0) - uAccent) : uAccent;
+  float lgt = uLight > 0.5 ? 0.0 : 1.0;
   // World field
   if (uMode == 0) {
     // long-exposure streaks: stretched noise bands drifting sideways, brighter toward the lower third
     float bands = fbm(vec2(uv.x * 0.6 + uTime * 0.02 + uProgress * 0.8, uv.y * 40.0));
     float mask = smoothstep(0.55, 1.0, bands) * (0.35 + 0.65 * smoothstep(0.9, 0.0, uv.y));
-    col += uAccent * mask * 0.5 * (1.0 - uProgress * 0.6);
+    col += acc * mask * 0.5 * (1.0 - uProgress * 0.6);
     // one bright anamorphic flare line behind the headline, breathing slowly; it fades as the page moves on
     float flareY = 0.40 + sin(uTime * 0.17) * 0.012 - uProgress * 0.6;
     float flare = exp(-abs(uv.y - flareY) * 90.0) * (0.55 + 0.45 * sin(uv.x * 2.4 + uTime * 0.25));
-    col += (uAccent * 0.9 + vec3(0.5)) * flare * 0.55 * (1.0 - smoothstep(0.0, 0.12, uProgress));
-    col += uAccent * exp(-abs(uv.y - flareY) * 9.0) * 0.12 * (1.0 - smoothstep(0.0, 0.16, uProgress));
+    col += (acc * 0.9 + vec3(0.5)) * flare * 0.55 * (1.0 - smoothstep(0.0, 0.12, uProgress));
+    col += acc * exp(-abs(uv.y - flareY) * 9.0) * 0.12 * (1.0 - smoothstep(0.0, 0.16, uProgress));
     // vanishing-point glow that grows as the corridor opens
     float d = distance(vec2(uv.x * asp, uv.y), vec2(0.5 * asp, 0.5));
-    col += uAccent * exp(-d * 5.0) * 0.18 * smoothstep(0.15, 0.55, uProgress);
+    col += acc * exp(-d * 5.0) * 0.18 * smoothstep(0.15, 0.55, uProgress);
   } else if (uMode == 1) {
     // iris glow: nine-blade-ish polygon edge light whose radius follows the aperture
     vec2 p = (uv - 0.5) * vec2(asp, 1.0);
     float a = atan(p.y, p.x) + uTime * 0.03; float r = length(p);
     float blade = cos(floor(0.5 + a * 9.0 / 6.28318) * 6.28318 / 9.0 - a) * r;
     float edge = smoothstep(0.012, 0.0, abs(blade - mix(0.12, 0.62, uParam)));
-    col += uAccent * edge * 0.5 + uAccent * exp(-abs(blade - mix(0.12, 0.62, uParam)) * 6.0) * 0.08;
+    col += acc * edge * 0.5 + acc * exp(-abs(blade - mix(0.12, 0.62, uParam)) * 6.0) * 0.08;
   } else if (uMode == 2) {
     // spotlight cone from the top, following the pointer; the rest of the floor stays dim but legible
     vec2 p = (uv - uPointer) * vec2(asp, 1.0);
     float cone = exp(-dot(p, p) / mix(0.04, 0.16, uParam));
-    col += uAccent * cone * 0.30 + vec3(1.0, 0.92, 0.75) * cone * 0.06;
+    col += acc * cone * 0.30 + vec3(1.0, 0.92, 0.75) * cone * 0.06 * lgt;
   } else {
     // atmosphere: ground haze -> cloud deck -> clear -> high; uParam is altitude 0..1
     float alt = clamp(uParam, 0.0, 1.0);
@@ -152,7 +155,7 @@ void main(){
     vec3 sky = mix(mix(low, mid, smoothstep(0.0, 0.45, alt)), hi, smoothstep(0.45, 1.0, alt));
     float cloud = fbm(vec2(uv.x * 3.0 + uTime * 0.01, uv.y * 6.0 - alt * 14.0));
     float deck = smoothstep(0.55, 0.85, cloud) * (1.0 - smoothstep(0.35, 0.6, alt)) * smoothstep(0.02, 0.2, alt);
-    col = mix(uField, sky * 0.55, 0.55) + vec3(deck) * 0.12 + uAccent * exp(-abs(uv.y - (0.18 - alt * 0.15)) * 20.0) * 0.05;
+    col = mix(uField, (uLight > 0.5 ? mix(sky, vec3(1.0), 0.6) : sky * 0.55), 0.55) + vec3(deck) * 0.12 + acc * exp(-abs(uv.y - (0.18 - alt * 0.15)) * 20.0) * 0.05;
   }
   // Dye (the liquid) with an anamorphic streak and a halation bloom
   vec3 d0 = dye(uv);
@@ -168,9 +171,10 @@ void main(){
     halo += dye(uv + o) + dye(uv + o * 2.4);
   }
   halo /= 16.0;
-  col += d0 + streak * uStreak + halo * uHalation * uHalationAmt;
+  vec3 lightAdd = d0 + streak * uStreak + halo * uHalation * uHalationAmt;
+  if (uLight > 0.5) col -= lightAdd * (vec3(1.0) - uAccent) * 0.85; else col += lightAdd;
   // velocity makes the whole field breathe a touch brighter
-  col += uAccent * abs(uVelocity) * 0.015;
+  col += acc * abs(uVelocity) * 0.015;
   // grain (static blue-noise-like hash), 2%
   col += (h(uv * uRes + fract(uTime)) - 0.5) * 0.02;
   outColor = vec4(max(col, 0.0), 1.0);
@@ -311,6 +315,7 @@ export class StageRenderer {
       uStreak: { value: 1 },
       uHalationAmt: { value: 1 },
       uVelocity: { value: 0 },
+      uLight: { value: 0 },
     });
   }
 
@@ -463,7 +468,7 @@ export class StageRenderer {
       uSrc: this.dye.read.texture,
       uTexel: dv,
       uDt: dt,
-      uDissipation: 0.978,
+      uDissipation: 0.972,
     });
     this.dye.swap();
     void gl;
@@ -485,6 +490,7 @@ export class StageRenderer {
       uAccent: i.accent,
       uPointer: [i.pointer.x, i.pointer.y],
       uVelocity: i.velocity,
+      uLight: 0.2126 * i.field[0] + 0.7152 * i.field[1] + 0.0722 * i.field[2] > 0.5 ? 1 : 0,
       uStreak: this.tier === "full" ? 1 : 0.6,
       uHalationAmt: this.tier === "full" ? 1 : 0.6,
     });
