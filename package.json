@@ -18,7 +18,8 @@
     "dev:db": "pnpm --filter @jerryqiu/db dev",
     "db:migrate": "pnpm --filter @jerryqiu/db migrate",
     "db:seed": "pnpm --filter @jerryqiu/db seed",
-    "db:generate": "pnpm --filter @jerryqiu/db generate"
+    "db:generate": "pnpm --filter @jerryqiu/db generate",
+    "test:admin": "playwright test -c playwright.admin.config.ts"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",

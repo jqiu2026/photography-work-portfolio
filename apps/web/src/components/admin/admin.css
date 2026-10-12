@@ -254,3 +254,14 @@
   font-size: var(--ph-text-sm);
   color: var(--ph-muted);
 }
+.adm-tab {
+  text-decoration: none;
+  color: var(--ph-muted);
+  padding: 0.3em 0;
+  border-bottom: 2px solid transparent;
+  font-size: var(--ph-text-sm);
+}
+.adm-tab[aria-current="page"] {
+  color: var(--ph-text);
+  border-bottom-color: var(--ph-text);
+}

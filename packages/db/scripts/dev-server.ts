@@ -1,6 +1,7 @@
 // Local development database: PGlite (real Postgres compiled to WASM) persisted in .data/pglite and served on a
 // Postgres wire-protocol socket, so `apps/web` and `apps/photos` can share one database offline. Not for production.
 import { mkdirSync } from "node:fs";
+import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { PGlite } from "@electric-sql/pglite";
@@ -12,7 +13,8 @@ import * as schema from "../src/schema";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, "../../..");
-const dataDir = process.env.PGLITE_DIR ?? path.join(root, ".data/pglite");
+// Outside the repo on purpose: a data directory inside the workspace makes the Next.js dev server rebuild on every write.
+const dataDir = process.env.PGLITE_DIR ?? path.join(os.homedir(), ".jerryqiu-dev", "pglite");
 const port = Number(process.env.PGLITE_PORT ?? 54329);
 
 mkdirSync(path.dirname(dataDir), { recursive: true });
@@ -30,7 +32,7 @@ const seeded = await seed(db as never, {
 const server = new PGLiteSocketServer({ db: client, port, host: "127.0.0.1", maxConnections: 10 });
 await server.start();
 console.log(
-  `[db] local Postgres (PGlite) on postgres://postgres:postgres@127.0.0.1:${port}/postgres  data: ${path.relative(root, dataDir)}  seeded: ${JSON.stringify(seeded)}`,
+  `[db] local Postgres (PGlite) on postgres://postgres:postgres@127.0.0.1:${port}/postgres  data: ${dataDir}  seeded: ${JSON.stringify(seeded)}`,
 );
 const stop = async () => {
   await server.stop();

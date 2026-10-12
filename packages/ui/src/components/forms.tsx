@@ -2,15 +2,7 @@
 
 import { Checkbox as RCheckbox, RadioGroup as RRadio, Slider as RSlider, Switch as RSwitch } from "radix-ui";
 import { Check } from "lucide-react";
-import {
-  createContext,
-  useContext,
-  useId,
-  type InputHTMLAttributes,
-  type ReactNode,
-  type SelectHTMLAttributes,
-  type TextareaHTMLAttributes,
-} from "react";
+import { type ComponentProps, createContext, useContext, useId, type ReactNode } from "react";
 import { cx } from "./cx";
 
 type FieldCtx = { id: string; describedBy?: string; invalid: boolean };
@@ -54,7 +46,7 @@ function useField() {
   return useContext(FieldContext);
 }
 
-export function Input({ className, ...rest }: InputHTMLAttributes<HTMLInputElement>) {
+export function Input({ className, ...rest }: ComponentProps<"input">) {
   const f = useField();
   return (
     <input
@@ -67,7 +59,7 @@ export function Input({ className, ...rest }: InputHTMLAttributes<HTMLInputEleme
   );
 }
 
-export function Textarea({ className, ...rest }: TextareaHTMLAttributes<HTMLTextAreaElement>) {
+export function Textarea({ className, ...rest }: ComponentProps<"textarea">) {
   const f = useField();
   return (
     <textarea
@@ -81,7 +73,7 @@ export function Textarea({ className, ...rest }: TextareaHTMLAttributes<HTMLText
 }
 
 /** Native select (best accessibility and mobile behaviour), styled to match. */
-export function Select({ className, children, ...rest }: SelectHTMLAttributes<HTMLSelectElement>) {
+export function Select({ className, children, ...rest }: ComponentProps<"select">) {
   const f = useField();
   return (
     <select

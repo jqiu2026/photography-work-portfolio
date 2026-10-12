@@ -23,6 +23,13 @@ const readMdx = (dir: string) =>
         })
     : [];
 
+/** CMS posts are plain Markdown: convert the MDX-only embed component to the safe [[youtube ...]] shortcode. */
+const toCmsMarkdown = (body: string) =>
+  body.replace(
+    /<EmbedGrid\s+videos=\{\[([^\]]*)\]\}\s*\/>/g,
+    (_m, list: string) => `[[youtube ${[...list.matchAll(/"([\w-]+)"/g)].map((x) => x[1]).join(" ")}]]`,
+  );
+
 const minutes = (text: string) => Math.max(1, Math.round(text.split(/\s+/).length / 220));
 
 export async function seed(db: Database, opts: SeedOptions) {
@@ -47,7 +54,7 @@ export async function seed(db: Database, opts: SeedOptions) {
         title: String(p.data.title ?? p.slug),
         subtitle: p.data.subtitle || null,
         summary: p.data.summary || null,
-        body: p.content.trim(),
+        body: toCmsMarkdown(p.content.trim()),
         tags: p.data.tag ? [String(p.data.tag)] : [],
         status: "published",
         publishAt: p.data.publishedAt ? new Date(p.data.publishedAt) : new Date(),

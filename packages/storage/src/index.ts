@@ -1,3 +1,4 @@
+import os from "node:os";
 import path from "node:path";
 import { blobProvider } from "./blob";
 import { localStorageProvider } from "./local";
@@ -13,7 +14,7 @@ export type Store = "originals" | "public";
 /**
  * Env:
  *   STORAGE_DRIVER   local | r2 | blob   (default local; "blob" is allowed for the public store only)
- *   STORAGE_DIR      local directory (default <repo>/.data/storage)
+ *   STORAGE_DIR      local directory (default ~/.jerryqiu-dev/storage, outside the repo so dev rebuilds are not triggered)
  *   R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET_ORIGINALS, R2_BUCKET_PUBLIC
  *   BLOB_READ_WRITE_TOKEN
  * Missing credentials never crash: the factory falls back to local storage and warns once.
@@ -31,7 +32,7 @@ export function createStorage(store: Store, env: Record<string, string | undefin
   const secret = env.AUTH_SECRET ?? "dev-only-secret";
   const local = () =>
     localStorageProvider({
-      dir: env.STORAGE_DIR ?? path.resolve(process.cwd(), "../../.data/storage"),
+      dir: env.STORAGE_DIR ?? path.join(os.homedir(), ".jerryqiu-dev", "storage"),
       secret,
       baseUrl: (env.NEXT_PUBLIC_HUB_URL ?? "http://localhost:3000").replace(/\/$/, ""),
       store,
