@@ -76,7 +76,6 @@ export function FlightMap({ airports, flights }: { airports: Airport[]; flights:
           Reset
         </button>
       </div>
-      {/* biome-ignore lint/a11y/noNoninteractiveTabindex: the map region is keyboard-operable (arrows, + and -) */}
       <svg
         className="fm__svg"
         viewBox={`0 0 ${W} ${H}`}

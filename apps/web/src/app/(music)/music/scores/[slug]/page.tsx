@@ -23,7 +23,6 @@ export default async function ScorePage({ params }: { params: Promise<{ slug: st
       <div className="sc-preview">
         {pages.map((p) => (
           // Previews are generated images, never the file (the real store watermarks and rasterises server-side).
-          // biome-ignore lint/performance/noImgElement: generated SVG data URL
           <img
             key={p.n}
             alt={`Preview page ${p.n} of ${c.score!.pages}, watermarked`}
