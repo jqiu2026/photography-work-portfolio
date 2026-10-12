@@ -15,7 +15,8 @@ export default defineConfig({
     {
       command: "pnpm --filter @jerryqiu/web start",
       port: 4000,
-      env: { PORT: "4000" },
+      // DASHBOARD_OPEN_SIGNIN is set on purpose: production builds must ignore it (see e2e/auth.spec.ts).
+      env: { PORT: "4000", AUTH_SECRET: "e2e-only-secret-0123456789abcdefghijklmnop", DASHBOARD_OPEN_SIGNIN: "true" },
       reuseExistingServer: true,
       timeout: 120_000,
     },
@@ -29,7 +30,7 @@ export default defineConfig({
     {
       command: "pnpm --filter @jerryqiu/photos start",
       port: 4002,
-      env: { PORT: "4002" },
+      env: { PORT: "4002", AUTH_SECRET: "e2e-only-secret-0123456789abcdefghijklmnop", DASHBOARD_OPEN_SIGNIN: "true" },
       reuseExistingServer: true,
       timeout: 120_000,
     },

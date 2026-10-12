@@ -3,18 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p ${PORT:-3000}",
-    "build": "next build",
-    "start": "next start -p ${PORT:-3000}",
+    "dev": "node ../../scripts/with-env.mjs dev next dev -p ${PORT:-3000}",
+    "build": "node ../../scripts/with-env.mjs prod next build",
+    "start": "node ../../scripts/with-env.mjs prod next start -p ${PORT:-3000}",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@jerryqiu/auth": "workspace:*",
+    "@jerryqiu/db": "workspace:*",
+    "@jerryqiu/protect": "workspace:*",
     "@jerryqiu/sites": "workspace:*",
-    "@next/env": "16.3.8",
+    "@jerryqiu/storage": "workspace:*",
     "@placeholder/ui": "workspace:*",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
     "cookie": "^1.0.2",
+    "drizzle-orm": "^0.45.4",
     "gray-matter": "^4.0.3",
     "lucide-react": "^1.55.0",
     "next": "16.3.8",
@@ -22,7 +26,8 @@
     "next-mdx-remote": "^6.0.0",
     "react": "19.2.8",
     "react-dom": "19.2.8",
-    "transliteration": "^2.3.5"
+    "transliteration": "^2.3.5",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@jerryqiu/config": "workspace:*",

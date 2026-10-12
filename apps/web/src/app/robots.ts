@@ -26,7 +26,7 @@ export default function robots(): MetadataRoute.Robots {
   const base = getSite("hub").url;
   return {
     rules: [
-      { userAgent: "*", allow: "/", disallow: ["/api/", "/_progress", "/_design"] },
+      { userAgent: "*", allow: "/", disallow: ["/api/", "/admin", "/sign-in", "/_progress", "/_design"] },
       ...AI.map((userAgent) => ({ userAgent, disallow: "/" })),
     ],
     sitemap: `${base}/sitemap.xml`,
