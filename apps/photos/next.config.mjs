@@ -7,6 +7,7 @@ export default {
     "@jerryqiu/db",
     "@jerryqiu/protect",
     "@jerryqiu/storage",
+    "@jerryqiu/inbox",
   ],
   serverExternalPackages: ["sharp", "pg", "@electric-sql/pglite"],
 };

@@ -8,7 +8,8 @@
   "exports": {
     ".": "./src/index.ts",
     "./schema": "./src/schema.ts",
-    "./queries": "./src/queries.ts"
+    "./queries": "./src/queries.ts",
+    "./export": "./src/export.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
@@ -16,7 +17,8 @@
     "generate": "drizzle-kit generate",
     "migrate": "tsx scripts/migrate.ts",
     "dev": "tsx scripts/dev-server.ts",
-    "seed": "tsx scripts/seed.ts"
+    "seed": "tsx scripts/seed.ts",
+    "backup": "node ../../scripts/with-env.mjs dev tsx scripts/backup.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.2.0",

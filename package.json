@@ -18,6 +18,7 @@
     "dev:seed": "pnpm --filter @jerryqiu/media seed",
     "dev:db": "pnpm --filter @jerryqiu/db dev",
     "db:migrate": "pnpm --filter @jerryqiu/db migrate",
+    "db:backup": "pnpm --filter @jerryqiu/db backup",
     "db:seed": "pnpm --filter @jerryqiu/db seed",
     "db:generate": "pnpm --filter @jerryqiu/db generate",
     "test:admin": "playwright test -c playwright.admin.config.ts"

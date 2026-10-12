@@ -21,6 +21,7 @@ export default function Book() {
         <Container>
           <ContactForm
             to={person.bookingEmail}
+            endpoint="/api/contact"
             topics={["Event", "Performance", "Portrait", "Licensing a photograph", "Something else"]}
             privacyHref={`${getSite("hub").url}/privacy`}
           />

@@ -43,7 +43,7 @@ export default function Connect() {
             </div>
             <div>
               <Eyebrow style={{ marginBottom: "1rem" }}>Send a message</Eyebrow>
-              <ContactForm to={person.email} />
+              <ContactForm to={person.email} endpoint="/api/contact" />
             </div>
           </Grid>
         </Container>

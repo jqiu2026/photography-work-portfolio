@@ -28,7 +28,7 @@ export const navGroups: NavGroup[] = [
       { label: "Galleries", href: "/admin/galleries", sites: ["photos"] },
       { label: "Music", href: "/admin/music", sites: ["music"], hint: "recordings and performances" },
       { label: "Flight log", href: "/admin/flying", sites: ["flying"], hint: "milestones, flights, aircraft" },
-      { label: "Pages & settings", href: "/admin/settings" },
+      { label: "Pages & settings", href: "/admin/settings", owner: true },
     ],
   },
   {
