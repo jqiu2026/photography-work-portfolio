@@ -2,15 +2,7 @@ import { crc32 } from "node:zlib";
 import exifr from "exifr";
 import sharp from "sharp";
 import { describe, expect, it } from "vitest";
-import {
-  ImageError,
-  MAX_PIXELS,
-  dHash,
-  hamming,
-  processImage,
-  safeName,
-  validateImage,
-} from "../src/lib/media/process";
+import { ImageError, MAX_PIXELS, dHash, hamming, processImage, safeName, validateImage } from "../src/process";
 
 const jpeg = (w: number, h: number, color = "#3366cc") =>
   sharp({ create: { width: w, height: h, channels: 3, background: color } })

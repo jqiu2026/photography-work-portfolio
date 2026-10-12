@@ -265,3 +265,78 @@
   color: var(--ph-text);
   border-bottom-color: var(--ph-text);
 }
+.adm-drop {
+  border: 1.5px dashed var(--ph-line);
+  border-radius: var(--ph-radius-lg);
+  padding: 2rem;
+  text-align: center;
+  display: grid;
+  gap: 0.75rem;
+  justify-items: center;
+  transition: border-color var(--ph-dur-base), background var(--ph-dur-base);
+}
+.adm-drop[data-over] {
+  border-color: var(--ph-accent-text);
+  background: var(--ph-surface);
+}
+.adm-jobs {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0;
+  display: grid;
+  gap: 0.6rem;
+  font-size: var(--ph-text-sm);
+}
+.adm-jobs li {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.25rem 1rem;
+}
+.adm-jobs li > .ph-progress {
+  grid-column: 1 / -1;
+}
+.adm-media {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+  gap: 0.75rem;
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 0;
+}
+.adm-media a {
+  display: block;
+  text-decoration: none;
+  position: relative;
+}
+.adm-media img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--ph-radius-md);
+  border: 1px solid var(--ph-line);
+  display: block;
+}
+.adm-media span {
+  display: block;
+  font-size: var(--ph-text-xs);
+  color: var(--ph-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-top: 0.3rem;
+}
+.adm-media .flag {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  background: var(--ph-yellow);
+  color: #0a0a0a;
+  font-size: 0.68rem;
+  padding: 0.1em 0.5em;
+  border-radius: 2px;
+}
+@media (max-width: 900px) {
+  .adm-media-detail {
+    grid-template-columns: 1fr !important;
+  }
+}
