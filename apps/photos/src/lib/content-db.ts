@@ -17,3 +17,18 @@ export const getGalleries = unstable_cache(
   ["galleries"],
   { tags: ["galleries", "media"], revalidate: 3600 },
 );
+
+export const getSiteSettings = unstable_cache(
+  async () => {
+    const db = getDb();
+    if (!db) return null;
+    try {
+      return await q.getSettings(db, "photos");
+    } catch (error) {
+      console.error("[content] settings read failed", error);
+      return null;
+    }
+  },
+  ["settings-photos"],
+  { tags: ["settings"], revalidate: 3600 },
+);

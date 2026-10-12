@@ -5,3 +5,6 @@ export * from "./BeforeAfter";
 export * from "./ImageSequence";
 export * from "./VideoBackground";
 export * from "./ProtectedImage";
+export * from "./ProtectedGallery";
+export * from "./ScreenshotGuard";
+export { guardCopy, detectTrigger, type GuardLevel, type Trigger } from "./guard";

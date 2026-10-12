@@ -1,7 +1,9 @@
 import { Container, Eyebrow, Heading, Section } from "@placeholder/ui";
-import { Gallery } from "@placeholder/ui/media";
+import { Gallery, GuardScope, ProtectedGallery } from "@placeholder/ui/media";
+import { mintAllWidths, tokenSecrets } from "@jerryqiu/protect";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { connection } from "next/server";
 import { notFound } from "next/navigation";
 import { Shell } from "@/components/Shell";
 import { getPortfolio } from "@/lib/portfolio";
@@ -20,6 +22,8 @@ export default async function Category({ params }: { params: Promise<{ slug: str
   const cat = categories.find((c) => c.slug === slug);
   const items = photosIn(slug);
   if (!cat || !items.length) notFound();
+  // Strict galleries mint fresh tokens on every request, so the page is never served from a static cache.
+  if (cat.level === "strict") await connection();
   const tabs = categories.filter((c) => photosIn(c.slug).length);
   return (
     <Shell>
@@ -39,7 +43,28 @@ export default async function Category({ params }: { params: Promise<{ slug: str
               </Link>
             ))}
           </nav>
-          <Gallery images={items} layout={items.length > 3 ? "masonry" : "justified"} glitch rowHeight={380} />
+          {cat.level === "strict" ? (
+            <>
+              <GuardScope level="strict" />
+              <p className="cat-note">
+                These photographs are protected. Screenshots and saving are discouraged; to use an image, get in touch
+                for a licence.
+              </p>
+              <ProtectedGallery
+                items={items.map((p) => ({
+                  // Only what the placeholder needs: no file URLs reach the page source.
+                  asset: { id: p.id, width: p.width, height: p.height, color: p.color, blur: p.blur, files: [] },
+                  alt: p.alt,
+                  tokens: mintAllWidths({ id: p.id, secrets: tokenSecrets() }),
+                }))}
+              />
+            </>
+          ) : (
+            <>
+              <GuardScope level={cat.level} />
+              <Gallery images={items} layout={items.length > 3 ? "masonry" : "justified"} glitch rowHeight={380} />
+            </>
+          )}
         </Container>
       </Section>
     </Shell>

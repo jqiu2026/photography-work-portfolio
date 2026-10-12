@@ -6,7 +6,7 @@ import { guarded } from "@/auth";
 import type { ActionState } from "@/components/admin/form-kit";
 import { fdBool, fdStr, parseForm } from "@/lib/action-utils";
 import { touch } from "@/lib/revalidate";
-import { type SettingKey, parseNavLines, settingSchemas } from "@/lib/settings";
+import { type SettingKey, parseNavLines, settingSchemas } from "@jerryqiu/db/settings";
 
 const siteField = z.enum(["hub", "photos", "music", "flying"]);
 const keyField = z.enum(Object.keys(settingSchemas) as [SettingKey, ...SettingKey[]]);

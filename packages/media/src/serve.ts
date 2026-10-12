@@ -1,7 +1,17 @@
 import { type Database, hitRateLimit, schema } from "@jerryqiu/db";
-import { clientIpHash, isAllowedWidth, isBlockedBot, tokenSecrets, verifyImageToken } from "@jerryqiu/protect";
+import { readSetting } from "@jerryqiu/db/settings";
+import {
+  clientIpHash,
+  isAllowedWidth,
+  isBlockedBot,
+  mintAllWidths,
+  tokenSecrets,
+  verifyImageToken,
+} from "@jerryqiu/protect";
 import type { StorageProvider } from "@jerryqiu/storage";
+import { createHash } from "node:crypto";
 import { and, eq, isNull, sql } from "drizzle-orm";
+import { applyWatermark } from "./watermark";
 
 /**
  * Public image delivery (`/api/img/[id]?w=&v=&t=`). Originals are never reachable from here: only the stripped, downscaled
@@ -16,6 +26,8 @@ export type ServeDeps = {
   db: Database;
   store: StorageProvider;
   env?: Record<string, string | undefined>;
+  /** Which site's protection settings (watermark) apply to images served by this deployment. */
+  site?: "hub" | "photos";
 };
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -89,12 +101,26 @@ export async function serveImage(request: Request, id: string, deps: ServeDeps):
   }
 
   const d = pickDerivative(m.derivatives, w, request.headers.get("accept") ?? "");
-  const obj = await store.get(d.key);
+  let obj = await store.get(d.key);
   if (!obj) return deny(404, "file");
+  const mark = await watermarkFor(deps);
+  if (mark && (d.format === "webp" || d.format === "avif")) {
+    // Baked once per (text, position, opacity, source file) and cached beside the derivatives.
+    const tag = createHash("sha256").update(`${mark.text}|${mark.position}|${mark.opacity}`).digest("hex").slice(0, 12);
+    const wmKey = `wm/${tag}/${d.key}`;
+    const cached = await store.get(wmKey);
+    if (cached) obj = cached;
+    else {
+      const baked = await applyWatermark(obj.body, d.format, mark);
+      await store.put(wmKey, baked, { contentType: obj.contentType }).catch(() => {});
+      obj = { body: baked, contentType: obj.contentType };
+    }
+  }
   const headers: Record<string, string> = {
     "Content-Type": obj.contentType || (d.format === "avif" ? "image/avif" : "image/webp"),
     "Content-Disposition": "inline",
     "X-Content-Type-Options": "nosniff",
+    "X-Robots-Tag": "noai, noimageai",
     "Content-Length": String(obj.body.byteLength),
     Vary: "Accept",
   };
@@ -109,4 +135,46 @@ export async function serveImage(request: Request, id: string, deps: ServeDeps):
       : "public, max-age=300";
   }
   return new Response(request.method === "HEAD" ? null : Buffer.from(obj.body), { status: 200, headers });
+}
+
+async function watermarkFor(deps: ServeDeps) {
+  if (!deps.site) return null;
+  const rows = await deps.db
+    .select({ value: schema.settings.value })
+    .from(schema.settings)
+    .where(and(eq(schema.settings.site, deps.site), eq(schema.settings.key, "protection")))
+    .limit(1);
+  const p = readSetting("protection", rows[0]?.value);
+  return p.watermark && p.watermarkText
+    ? { text: p.watermarkText, position: p.watermarkPosition, opacity: p.watermarkOpacity }
+    : null;
+}
+
+/**
+ * `POST /api/img/token`: a fresh set of signed tokens for a strict image, for a page that has been open longer than the
+ * token lifetime. Same trust as loading the page (any visitor gets one), but only for same-origin browser requests, never
+ * for known scrapers, and rate limited. Only strict images get tokens; everything else needs none.
+ */
+export async function handleTokenRequest(request: Request, deps: ServeDeps): Promise<Response> {
+  const json = (status: number, body: unknown) =>
+    Response.json(body, { status, headers: { "Cache-Control": "no-store" } });
+  if (request.method !== "POST") return json(405, { error: "method" });
+  if (isBlockedBot(request.headers.get("user-agent"))) return json(403, { error: "bot" });
+  const origin = request.headers.get("origin");
+  const host = request.headers.get("host");
+  let sameOrigin = false;
+  try {
+    sameOrigin = Boolean(origin && host && new URL(origin).host === host);
+  } catch {}
+  const site = request.headers.get("sec-fetch-site");
+  if (!sameOrigin || (site && site !== "same-origin")) return json(403, { error: "origin" });
+  const body = (await request.json().catch(() => null)) as { id?: unknown } | null;
+  const id = typeof body?.id === "string" ? body.id : "";
+  if (!UUID.test(id)) return json(400, { error: "id" });
+  const ipHash = clientIpHash(request.headers);
+  if (!(await hitRateLimit(deps.db, `imgtok:${ipHash}`, 120, 60)).allowed) return json(429, { error: "rate" });
+  if (!(await isStrictImage(deps.db, id))) return json(404, { error: "not protected" });
+  const secrets = tokenSecrets(deps.env);
+  if (!secrets.length) return json(503, { error: "not configured" });
+  return json(200, { tokens: mintAllWidths({ id, secrets }) });
 }

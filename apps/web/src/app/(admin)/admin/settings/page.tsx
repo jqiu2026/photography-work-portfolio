@@ -8,7 +8,7 @@ import { adminSites } from "@/components/admin/nav";
 import { getAdminSite } from "@/components/admin/site";
 import { NoDb, PageHead } from "@/components/admin/ui";
 import { withDb } from "@/lib/admin-db";
-import { navToLines, readSetting } from "@/lib/settings";
+import { navToLines, readSetting } from "@jerryqiu/db/settings";
 import { saveSettings } from "./actions";
 
 export const metadata = { title: "Pages & settings" };

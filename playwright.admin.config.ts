@@ -16,6 +16,8 @@ const env = {
   PGLITE_DIR: path.join(DATA, "pglite"),
   STORAGE_DIR: path.join(DATA, "storage"),
   NEXT_PUBLIC_HUB_URL: "http://localhost:3300",
+  NEXT_PUBLIC_PHOTOS_URL: "http://localhost:3302",
+  REVALIDATE_SECRET: "e2e-revalidate-secret-0123456789",
 };
 
 export default defineConfig({
@@ -38,6 +40,13 @@ export default defineConfig({
       command: "pnpm --filter @jerryqiu/web dev",
       port: 3300,
       env: { ...env, PORT: "3300", NEXT_DIST_DIR: ".next-e2e" },
+      reuseExistingServer: false,
+      timeout: 180_000,
+    },
+    {
+      command: "pnpm --filter @jerryqiu/photos dev",
+      port: 3302,
+      env: { ...env, PORT: "3302", NEXT_DIST_DIR: ".next-e2e" },
       reuseExistingServer: false,
       timeout: 180_000,
     },

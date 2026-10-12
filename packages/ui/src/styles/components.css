@@ -1661,3 +1661,86 @@
 .ph-header--over .ph-switcher__panel {
   color: var(--ph-text);
 }
+
+/* ---- Image protection (a deterrent, see docs/project/05-security-and-image-protection.md) ---- */
+.ph-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.ph-protected {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+.ph-protected img,
+html[data-guard] .ph-img img {
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+/* Transparent layer over the picture: long-press and drag land here, not on the image. */
+.ph-protected__shield {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: transparent;
+}
+html.ph-guard-hide .ph-img,
+html.ph-guard-hide [data-protected] {
+  visibility: hidden;
+}
+.ph-pgallery {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  column-gap: 0.75rem;
+}
+.ph-pgallery li {
+  break-inside: avoid;
+  margin-bottom: 0.75rem;
+}
+@media (max-width: 640px) {
+  .ph-pgallery {
+    column-count: 1 !important;
+  }
+}
+@media print {
+  html[data-guard="strict"] .ph-img,
+  html[data-guard="strict"] [data-protected] {
+    display: none !important;
+  }
+}
+.ph-guard {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  background: rgb(0 0 0 / 0.7);
+}
+.ph-guard__box {
+  max-width: 28rem;
+  padding: 1.75rem;
+  background: var(--ph-bg);
+  color: var(--ph-text);
+  border: 1px solid var(--ph-line);
+  display: grid;
+  gap: 0.9rem;
+}
+.ph-guard__box h2 {
+  margin: 0;
+  font-size: var(--ph-text-xl);
+}
+.ph-guard__box p {
+  margin: 0;
+}
+.ph-guard__note {
+  color: var(--ph-muted);
+  font-size: var(--ph-text-sm);
+}

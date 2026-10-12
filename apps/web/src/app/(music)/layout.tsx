@@ -1,5 +1,6 @@
 import "@placeholder/ui/styles.css";
 import { ThemeProvider, ThemeScript } from "@placeholder/ui";
+import { ScreenshotGuard } from "@placeholder/ui/media";
 import { SmoothScroll } from "@placeholder/ui/motion";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
 };
 
 export default async function MusicLayout({ children }: { children: ReactNode }) {
-  const { general } = await siteSettings("music");
+  const { general, protection } = await siteSettings("music");
   return (
     <html lang="en" suppressHydrationWarning className={fontVars}>
       <head>
@@ -27,9 +28,11 @@ export default async function MusicLayout({ children }: { children: ReactNode })
       </head>
       <body className="ph-root">
         <ThemeProvider preset="music">
-          <SmoothScroll>
-            {general.maintenance ? <Maintenance message={general.maintenanceMessage} /> : children}
-          </SmoothScroll>
+          <ScreenshotGuard level={protection.level}>
+            <SmoothScroll>
+              {general.maintenance ? <Maintenance message={general.maintenanceMessage} /> : children}
+            </SmoothScroll>
+          </ScreenshotGuard>
         </ThemeProvider>
         <Analytics />
         <SpeedInsights />

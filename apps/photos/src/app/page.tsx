@@ -13,7 +13,10 @@ export default async function Home() {
   if (!hero) return null;
   const files = [...hero.files].sort((a, b) => a.width - b.width);
   const src = (files.find((f) => f.width >= 1600) ?? files[files.length - 1]).src;
-  const cats = categories.map((c) => ({ ...c, items: photosIn(c.slug) })).filter((c) => c.items.length);
+  const cats = categories
+    .filter((c) => c.level !== "strict")
+    .map((c) => ({ ...c, items: photosIn(c.slug) }))
+    .filter((c) => c.items.length);
   return (
     <Shell transparentTop>
       <Hero

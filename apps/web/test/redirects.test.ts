@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { validateRedirect } from "../src/lib/redirects";
-import { navToLines, parseNavLines, readSetting, settingSchemas } from "../src/lib/settings";
+import { navToLines, parseNavLines, readSetting, settingSchemas } from "@jerryqiu/db/settings";
 
 describe("validateRedirect", () => {
   it("accepts a path to a path or an https URL and trims trailing slashes", () => {

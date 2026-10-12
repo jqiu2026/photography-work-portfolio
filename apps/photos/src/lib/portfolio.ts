@@ -2,8 +2,8 @@ import type { GalleryImage } from "@placeholder/ui/media";
 import * as repo from "@/content/portfolio";
 import { getGalleries } from "@/lib/content-db";
 
-export type Category = { slug: string; name: string };
-export type Photo = GalleryImage & { id: string; category: string };
+export type Category = { slug: string; name: string; level: "off" | "light" | "strict" };
+export type Photo = GalleryImage & { id: string; category: string; protectedLevel?: "off" | "light" | "strict" };
 export type Portfolio = {
   categories: Category[];
   photos: Photo[];
@@ -13,9 +13,12 @@ export type Portfolio = {
   compare: Photo[];
 };
 
-function build(categories: Category[], photos: Photo[], featured?: Photo[]): Portfolio {
-  const photosIn = (slug: string) => photos.filter((p) => p.category === slug);
-  const present = categories.filter((c) => photosIn(c.slug).length);
+function build(categories: Category[], all: Photo[], featured?: Photo[]): Portfolio {
+  const photosIn = (slug: string) => all.filter((p) => p.category === slug);
+  // Photographs in strict galleries are shown only on their own gallery page (with token delivery), never mixed into
+  // the public overview, the home page or the hero.
+  const photos = all.filter((p) => p.protectedLevel !== "strict");
+  const present = categories.filter((c) => c.level !== "strict" && photosIn(c.slug).length);
   // Featured: the first photograph of each subject in turn, so the home page shows range.
   const pick =
     featured ??
@@ -44,12 +47,16 @@ export async function getPortfolio(): Promise<Portfolio> {
   if (!galleries) {
     const byId = (id: string) => repo.photos.find((p) => p.id === id) as Photo;
     return {
-      ...build(repo.categories, repo.photos as Photo[], repo.featured as Photo[]),
+      ...build(
+        repo.categories.map((c) => ({ ...c, level: "light" as const })),
+        repo.photos as Photo[],
+        repo.featured as Photo[],
+      ),
       hero: byId("gf4a9402-2-3"),
       compare: ["jry1082", "2026-01-17-snow-7", "jry0473"].map(byId),
     };
   }
-  const categories = galleries.map((g) => ({ slug: g.slug, name: g.title }));
+  const categories = galleries.map((g): Category => ({ slug: g.slug, name: g.title, level: g.protection }));
   const photos = galleries.flatMap((g) =>
     g.items.map(
       (it, i): Photo => ({

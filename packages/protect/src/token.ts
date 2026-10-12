@@ -92,3 +92,20 @@ export function tokenSecrets(env: Record<string, string | undefined> = process.e
   const primary = env.IMAGE_TOKEN_SECRET || env.AUTH_SECRET;
   return [primary, env.IMAGE_TOKEN_SECRET_PREVIOUS].filter((x): x is string => Boolean(x));
 }
+
+/** One token per allowed width for an image (the browser picks the width at load time). */
+export function mintAllWidths(input: { id: string; viewer?: string; ttl?: number; secrets: string[]; now?: number }) {
+  return Object.fromEntries(
+    ALLOWED_WIDTHS.map((width) => [
+      width,
+      signImageToken({
+        id: input.id,
+        width,
+        viewer: input.viewer,
+        ttl: input.ttl ?? TTL.protected,
+        secrets: input.secrets,
+        now: input.now,
+      }),
+    ]),
+  ) as Record<AllowedWidth, string>;
+}

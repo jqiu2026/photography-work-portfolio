@@ -9,7 +9,9 @@ import { localStorageProvider } from "@jerryqiu/storage";
 import { drizzle } from "drizzle-orm/pglite";
 import { migrate } from "drizzle-orm/pglite/migrator";
 import { beforeAll, describe, expect, it } from "vitest";
-import { serveImage } from "../src";
+import sharp from "sharp";
+import { handleTokenRequest, serveImage } from "../src";
+import { applyWatermark } from "../src/watermark";
 
 const migrations = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../db/drizzle");
 const env = { IMAGE_TOKEN_SECRET: "test-secret-0123456789" };
@@ -106,5 +108,103 @@ describe("strict tier", () => {
     let last = 200;
     for (let i = 0; i < 45; i++) last = (await get(strict, `w=960&t=${t}`, { "x-forwarded-for": "9.9.9.9" })).status;
     expect(last).toBe(429);
+  });
+});
+
+const tokenReq = (body: unknown, headers: Record<string, string> = {}) =>
+  handleTokenRequest(
+    new Request("http://site.test/api/img/token", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "user-agent": UA,
+        origin: "http://site.test",
+        host: "site.test",
+        ...headers,
+      },
+      body: JSON.stringify(body),
+    }),
+    { db, store, env },
+  );
+
+describe("token refresh endpoint", () => {
+  it("mints a token per allowed width for a strict image, and those tokens work", async () => {
+    const r = await tokenReq({ id: strict }, { "x-forwarded-for": "7.7.7.7" });
+    expect(r.status).toBe(200);
+    const { tokens } = (await r.json()) as { tokens: Record<string, string> };
+    expect(Object.keys(tokens).sort()).toEqual(["1600", "2400", "480", "960"]);
+    expect((await get(strict, `w=960&t=${tokens["960"]}`, { "sec-fetch-site": "same-origin" })).status).toBe(200);
+  });
+  it("refuses images that are not protected, cross-site callers, bots and bad ids", async () => {
+    expect((await tokenReq({ id: open })).status).toBe(404);
+    expect((await tokenReq({ id: strict }, { origin: "https://evil.example" })).status).toBe(403);
+    expect((await tokenReq({ id: strict }, { "sec-fetch-site": "cross-site" })).status).toBe(403);
+    expect((await tokenReq({ id: strict }, { "user-agent": "ClaudeBot/1.0" })).status).toBe(403);
+    expect((await tokenReq({ id: "nope" })).status).toBe(400);
+  });
+});
+
+describe("watermark", () => {
+  it("changes the picture but not its size or format", async () => {
+    const plain = await sharp({ create: { width: 800, height: 500, channels: 3, background: "#406080" } })
+      .webp()
+      .toBuffer();
+    const marked = await applyWatermark(plain, "webp", { text: "© Jerry Qiu", position: "bottom-right", opacity: 0.5 });
+    const meta = await sharp(marked).metadata();
+    expect([meta.width, meta.height, meta.format]).toEqual([800, 500, "webp"]);
+    expect(marked.equals(plain)).toBe(false);
+    const a = await sharp(plain).raw().toBuffer();
+    const b = await sharp(marked).raw().toBuffer();
+    let diff = 0;
+    for (let i = 0; i < a.length; i += 3) if (Math.abs(a[i] - b[i]) > 20) diff++;
+    expect(diff).toBeGreaterThan(50);
+  });
+  it("escapes markup in the text", async () => {
+    const plain = await sharp({ create: { width: 400, height: 300, channels: 3, background: "#000" } })
+      .webp()
+      .toBuffer();
+    await expect(
+      applyWatermark(plain, "webp", { text: '<script>"&', position: "center", opacity: 0.4 }),
+    ).resolves.toBeInstanceOf(Buffer);
+  });
+  it("is applied by the image route when the site setting is on, and cached", async () => {
+    const png = await sharp({ create: { width: 960, height: 600, channels: 3, background: "#406080" } })
+      .webp()
+      .toBuffer();
+    await store.put("wm-src-960.webp", png, { contentType: "image/webp" });
+    const [m] = await db
+      .insert(schema.media)
+      .values({
+        filename: "w.jpg",
+        mime: "image/jpeg",
+        originalKey: "o/w",
+        derivatives: [{ width: 960, format: "webp", key: "wm-src-960.webp" }],
+      })
+      .returning();
+    await db.insert(schema.settings).values({
+      site: "photos",
+      key: "protection",
+      value: {
+        level: "light",
+        watermark: true,
+        watermarkText: "© Test",
+        watermarkPosition: "bottom-right",
+        watermarkOpacity: 0.5,
+      },
+    });
+    const req = () =>
+      new Request(`http://site.test/api/img/${m.id}?w=960&v=1`, {
+        headers: { "user-agent": UA, accept: "image/webp" },
+      });
+    const r1 = await serveImage(req(), m.id, { db, store, env, site: "photos" });
+    const body1 = Buffer.from(await r1.arrayBuffer());
+    expect(body1.equals(png)).toBe(false);
+    const stored = await store.list("wm/");
+    expect(stored.length).toBe(1);
+    const r2 = await serveImage(req(), m.id, { db, store, env, site: "photos" });
+    expect(Buffer.from(await r2.arrayBuffer()).equals(body1)).toBe(true);
+    // a site with the setting off serves the plain file
+    const r3 = await serveImage(req(), m.id, { db, store, env, site: "hub" });
+    expect(Buffer.from(await r3.arrayBuffer()).equals(png)).toBe(true);
   });
 });

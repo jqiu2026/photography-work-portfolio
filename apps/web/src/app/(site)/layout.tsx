@@ -2,6 +2,7 @@ import "@placeholder/ui/styles.css";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ThemeProvider, ThemeScript } from "@placeholder/ui";
+import { ScreenshotGuard } from "@placeholder/ui/media";
 import { SmoothScroll } from "@placeholder/ui/motion";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
@@ -32,7 +33,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function SiteLayout({ children }: { children: ReactNode }) {
-  const { general } = await siteSettings("hub");
+  const { general, protection } = await siteSettings("hub");
   return (
     <html lang="en" suppressHydrationWarning className={fontVars}>
       <head>
@@ -41,9 +42,11 @@ export default async function SiteLayout({ children }: { children: ReactNode }) 
       </head>
       <body className="ph-root">
         <ThemeProvider preset="hub">
-          <SmoothScroll>
-            {general.maintenance ? <Maintenance message={general.maintenanceMessage} /> : children}
-          </SmoothScroll>
+          <ScreenshotGuard level={protection.level}>
+            <SmoothScroll>
+              {general.maintenance ? <Maintenance message={general.maintenanceMessage} /> : children}
+            </SmoothScroll>
+          </ScreenshotGuard>
         </ThemeProvider>
         <Analytics />
         <SpeedInsights />

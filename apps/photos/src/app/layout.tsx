@@ -1,21 +1,32 @@
 import "@placeholder/ui/styles.css";
 import { ThemeProvider, ThemeScript } from "@placeholder/ui";
+import { ScreenshotGuard } from "@placeholder/ui/media";
 import { SmoothScroll } from "@placeholder/ui/motion";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { getSite } from "@jerryqiu/sites";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { Maintenance } from "@/components/Maintenance";
 import { fontVars } from "@/lib/fonts";
+import { photosSettings } from "@/lib/site-settings";
 
-export const metadata: Metadata = {
-  metadataBase: new URL(getSite("photos").url),
-  title: { default: "Photography · Jerry Qiu", template: "%s · Jerry Qiu Photography" },
-  description: "Photography by Jerry Qiu: theater, events, street and aviation.",
-  other: { "ai-crawlers": "noai, noimageai" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { seo, general } = await photosSettings();
+  return {
+    metadataBase: new URL(getSite("photos").url),
+    title: {
+      default: seo.title || "Photography · Jerry Qiu",
+      template: `%s · ${general.siteName || "Jerry Qiu Photography"}`,
+    },
+    description: seo.description || "Photography by Jerry Qiu: theater, events, street and aviation.",
+    ...(seo.ogImageMediaId ? { openGraph: { images: [`/api/img/${seo.ogImageMediaId}?w=1600`] } } : {}),
+    other: { "ai-crawlers": "noai, noimageai" },
+  };
+}
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({ children }: { children: ReactNode }) {
+  const { general, protection } = await photosSettings();
   return (
     <html lang="en" suppressHydrationWarning className={fontVars}>
       <head>
@@ -24,7 +35,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </head>
       <body className="ph-root">
         <ThemeProvider preset="photos" defaultTheme="dark">
-          <SmoothScroll>{children}</SmoothScroll>
+          <ScreenshotGuard level={protection.level}>
+            <SmoothScroll>
+              {general.maintenance ? <Maintenance message={general.maintenanceMessage} /> : children}
+            </SmoothScroll>
+          </ScreenshotGuard>
         </ThemeProvider>
         <Analytics />
         <SpeedInsights />

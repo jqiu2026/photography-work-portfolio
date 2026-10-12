@@ -175,3 +175,10 @@
   color: var(--ph-bg);
   border-color: var(--ph-text);
 }
+
+.cat-note {
+  color: var(--ph-muted);
+  font-size: var(--ph-text-sm);
+  margin-bottom: 1.25rem;
+  max-width: 60ch;
+}

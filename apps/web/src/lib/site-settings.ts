@@ -1,5 +1,5 @@
 import { getSiteSettings } from "@/lib/content-db";
-import { readSetting } from "@/lib/settings";
+import { readSetting } from "@jerryqiu/db/settings";
 
 type Site = "hub" | "photos" | "music" | "flying";
 
