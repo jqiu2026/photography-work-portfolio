@@ -10,6 +10,7 @@ export default {
     "@jerryqiu/storage",
     "@jerryqiu/inbox",
     "@jerryqiu/media",
+    "@jerryqiu/shootproof",
   ],
   serverExternalPackages: ["sharp", "pg", "@electric-sql/pglite"],
 };

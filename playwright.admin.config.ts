@@ -46,7 +46,15 @@ export default defineConfig({
     {
       command: "pnpm --filter @jerryqiu/photos dev",
       port: 3302,
-      env: { ...env, PORT: "3302", NEXT_DIST_DIR: ".next-e2e" },
+      env: { ...env, PORT: "3302", NEXT_DIST_DIR: ".next-e2e", SHOOTPROOF_MODE: "mock" },
+      reuseExistingServer: false,
+      timeout: 180_000,
+    },
+    {
+      // Same app with no ShootProof credentials at all: must show the "Not connected" state and never call out.
+      command: "pnpm --filter @jerryqiu/photos dev",
+      port: 3303,
+      env: { ...env, PORT: "3303", NEXT_DIST_DIR: ".next-e2e-b", NEXT_PUBLIC_PHOTOS_URL: "http://localhost:3303" },
       reuseExistingServer: false,
       timeout: 180_000,
     },

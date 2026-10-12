@@ -266,6 +266,9 @@ importers:
       '@jerryqiu/protect':
         specifier: workspace:*
         version: link:../../packages/protect
+      '@jerryqiu/shootproof':
+        specifier: workspace:*
+        version: link:../../packages/shootproof
       '@jerryqiu/sites':
         specifier: workspace:*
         version: link:../../packages/sites
@@ -296,6 +299,9 @@ importers:
       react-dom:
         specifier: 19.2.8
         version: 19.2.8(react@19.2.8)
+      server-only:
+        specifier: ^0.0.1
+        version: 0.0.1
       zod:
         specifier: ^4.6.5
         version: 4.6.5
@@ -574,6 +580,43 @@ importers:
 
   packages/protect:
     devDependencies:
+      '@jerryqiu/config':
+        specifier: workspace:*
+        version: link:../config
+      '@types/node':
+        specifier: ^24.19.2
+        version: 24.19.2
+      typescript:
+        specifier: ~6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: 5.0.3
+        version: 5.0.3(@opentelemetry/api@1.9.1)(@types/node@24.19.2)(jsdom@30.1.2)(vite@8.3.4(@types/node@24.19.2)(esbuild@0.27.7)(sass@1.105.1)(tsx@4.23.15)(yaml@2.9.1))
+
+  packages/shootproof:
+    dependencies:
+      '@jerryqiu/db':
+        specifier: workspace:*
+        version: link:../db
+      '@jerryqiu/media':
+        specifier: workspace:*
+        version: link:../media
+      '@jerryqiu/protect':
+        specifier: workspace:*
+        version: link:../protect
+      '@jerryqiu/storage':
+        specifier: workspace:*
+        version: link:../storage
+      drizzle-orm:
+        specifier: ^0.45.4
+        version: 0.45.4(@electric-sql/pglite@0.5.8)(@neondatabase/serverless@1.2.0)(@opentelemetry/api@1.9.1)(@types/pg@8.23.1)(pg@8.23.1)
+      sharp:
+        specifier: ^0.35.5
+        version: 0.35.5(@types/node@24.19.2)
+    devDependencies:
+      '@electric-sql/pglite':
+        specifier: ^0.5.8
+        version: 0.5.8
       '@jerryqiu/config':
         specifier: workspace:*
         version: link:../config
@@ -4605,6 +4648,9 @@ packages:
     resolution: {integrity: sha512-Y7/KDsb8LjooZpwaqGyulO6DQlksgCncchHGk+sZIY4SBvUocMBEFH5Ur1fI4dV+Jvl0w6cjvucaIi40puRioA==}
     engines: {node: '>=10'}
     hasBin: true
+
+  server-only@0.0.1:
+    resolution: {integrity: sha512-qepMx2JxAa5jjfzxG79yPPq+8BuFToHd1hm7kI+Z4zAq1ftQiP7HcxMhDDItrbtwVeLg/cY2JnKnrcFkmiswNA==}
 
   sharp@0.35.5:
     resolution: {integrity: sha512-Ywn4OnzGukp7CDMrp08RQ50YKmuwG47brZgIVPTvBaaAfQlRlygrRqSrxdCiL9M+LlzLBiJ68IR1QqvzHyjC7g==}
@@ -8939,6 +8985,8 @@ snapshots:
       kind-of: 6.0.3
 
   semver@7.8.5: {}
+
+  server-only@0.0.1: {}
 
   sharp@0.35.5(@types/node@24.19.2):
     dependencies:

@@ -182,3 +182,42 @@
   margin-bottom: 1.25rem;
   max-width: 60ch;
 }
+
+.studio-card {
+  border: 1px solid var(--ph-line);
+  padding: clamp(1rem, 3vw, 1.75rem);
+}
+.studio-msg {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--ph-line);
+  margin-bottom: 1.25rem;
+}
+.studio-msg--bad {
+  border-color: var(--ph-danger, #c0392b);
+}
+.studio-note {
+  color: var(--ph-muted);
+  font-size: var(--ph-text-sm);
+}
+.studio-steps {
+  display: grid;
+  gap: 0.6rem;
+  padding-left: 1.25rem;
+  margin: 1rem 0;
+}
+.studio-list {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+.studio-list li {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 0.5rem 0;
+  border-top: 1px solid var(--ph-line);
+}

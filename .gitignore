@@ -50,6 +50,6 @@ examples/*/dist/
 
 # local data (PGlite database, local storage)
 .data/
-.next-e2e/
+.next-e2e*/
 
 test-results/

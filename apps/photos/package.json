@@ -14,6 +14,7 @@
     "@jerryqiu/inbox": "workspace:*",
     "@jerryqiu/media": "workspace:*",
     "@jerryqiu/protect": "workspace:*",
+    "@jerryqiu/shootproof": "workspace:*",
     "@jerryqiu/sites": "workspace:*",
     "@jerryqiu/storage": "workspace:*",
     "@placeholder/ui": "workspace:*",
@@ -24,6 +25,7 @@
     "next-auth": "5.0.0-beta.32",
     "react": "19.2.8",
     "react-dom": "19.2.8",
+    "server-only": "^0.0.1",
     "zod": "^4.6.5"
   },
   "devDependencies": {
