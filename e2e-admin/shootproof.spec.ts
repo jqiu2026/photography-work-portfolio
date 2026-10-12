@@ -19,6 +19,8 @@ test.describe("studio and the ShootProof bridge (sample mode)", () => {
     await page.getByRole("button", { name: "Import Spring recital (sample)" }).click();
     await expect(page.getByText("Imported 3 photos.")).toBeVisible({ timeout: 60_000 });
     await expect(page.getByRole("heading", { name: "Imported (3)" })).toBeVisible();
+    // protected images load lazily as they approach the viewport
+    await page.getByTestId("imported").scrollIntoViewIfNeeded();
     const shown = page.locator("[data-testid='imported'] img[src^='blob:']");
     await expect(shown.first()).toBeVisible({ timeout: 20_000 });
 
