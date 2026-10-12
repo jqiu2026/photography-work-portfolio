@@ -1,7 +1,7 @@
 import { Container, Prose, Section } from "@placeholder/ui";
 import type { ReactNode } from "react";
 import { getLegalPage } from "@/lib/content-db";
-import { RenderMarkdownBare } from "@/lib/markdown";
+import { RenderMarkdownBare } from "@jerryqiu/render";
 import { PageHeader } from "./PageHeader";
 import { SiteShell } from "./SiteShell";
 

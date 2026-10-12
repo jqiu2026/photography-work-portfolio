@@ -5,7 +5,7 @@ for (const [name, url] of [
   ["hub", `${hub}/`],
   ["photos", `${photos}/`],
 ] as const) {
-  test(`keyboard: ${name} skip link first, focus is visible, switcher opens`, async ({ page }) => {
+  test(`keyboard: ${name} skip link first, focus is visible, switcher only on the hub`, async ({ page }) => {
     await page.goto(url, { waitUntil: "networkidle" });
     await page.keyboard.press("Tab");
     await expect(page.locator(":focus")).toHaveText(/Skip to content/);
@@ -21,14 +21,19 @@ for (const [name, url] of [
       });
       expect(ok).toBe(true);
     }
-    await page
-      .getByRole("button", { name: /Jerry Qiu/ })
-      .first()
-      .focus();
-    await page.keyboard.press("Enter");
-    await expect(page.getByRole("navigation", { name: "All sites" })).toBeVisible();
-    await page.keyboard.press("Escape");
-    await expect(page.getByRole("navigation", { name: "All sites" })).toBeHidden();
+    if (name === "hub") {
+      await page
+        .getByRole("button", { name: /Jerry Qiu/ })
+        .first()
+        .focus();
+      await page.keyboard.press("Enter");
+      await expect(page.getByRole("navigation", { name: "All sites" })).toBeVisible();
+      await page.keyboard.press("Escape");
+      await expect(page.getByRole("navigation", { name: "All sites" })).toBeHidden();
+    } else {
+      // Cross-site rule: the worlds have no switcher at all.
+      await expect(page.getByRole("navigation", { name: "All sites" })).toHaveCount(0);
+    }
   });
 }
 

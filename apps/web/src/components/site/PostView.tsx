@@ -1,6 +1,6 @@
 import { Breadcrumbs, Container, Eyebrow, Heading, Section, Text } from "@placeholder/ui";
 import type { ReactNode } from "react";
-import { RenderMarkdown } from "@/lib/markdown";
+import { RenderMarkdown } from "@jerryqiu/render";
 
 export type PostData = {
   title: string;

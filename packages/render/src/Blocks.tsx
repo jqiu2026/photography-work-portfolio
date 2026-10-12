@@ -2,7 +2,7 @@ import { Quote } from "@placeholder/ui";
 import { EmbedFacade } from "@placeholder/ui";
 import { Image } from "@placeholder/ui/media";
 import type { ProjectBlockView } from "@jerryqiu/db/queries";
-import { RenderMarkdown } from "@/lib/markdown";
+import { RenderMarkdown } from "./markdown";
 
 /** Renders a project's CMS blocks. Text is Markdown (no raw HTML); images come from the media library by id only. */
 export function Blocks({ blocks, title }: { blocks: ProjectBlockView[]; title: string }) {

@@ -99,12 +99,14 @@ for (const [ci, cat] of cats.entries()) {
 }
 
 // 2. Project images: cover + a gallery block (only once, so owner edits are never overwritten).
-const projectsDir = path.join(webImages, "projects");
+const projectsDir = path.join(root, "apps/photos/public/images/projects");
 for (const dirName of readdirSync(projectsDir)) {
   const [p] = await db
     .select()
     .from(schema.projects)
-    .where(and(eq(schema.projects.site, "hub"), eq(schema.projects.slug, dirName), isNull(schema.projects.deletedAt)))
+    .where(
+      and(eq(schema.projects.site, "photos"), eq(schema.projects.slug, dirName), isNull(schema.projects.deletedAt)),
+    )
     .limit(1);
   if (!p || p.coverMediaId) continue;
   const files = readdirSync(path.join(projectsDir, dirName))

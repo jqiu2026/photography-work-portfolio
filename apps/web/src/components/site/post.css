@@ -1,0 +1,26 @@
+.next-prev {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  border-top: 1px solid var(--ph-line);
+  padding-block: 3rem;
+}
+.next-prev a {
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+}
+.next-prev a:last-child {
+  text-align: right;
+}
+.next-prev span {
+  color: var(--ph-muted);
+  font-size: var(--ph-text-sm);
+}
+.next-prev strong {
+  font-family: var(--ph-font-display);
+  font-weight: var(--ph-display-weight);
+  font-size: var(--ph-text-2xl);
+  letter-spacing: var(--ph-display-tracking);
+}

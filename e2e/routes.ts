@@ -7,10 +7,6 @@ export const routes: { site: string; path: string; base: string }[] = [
   ...[
     "/",
     "/about",
-    "/work",
-    "/work/stuy-sing-26",
-    "/work/stuypa-cny-dinner-26",
-    "/work/stuy-open-house-march-26",
     "/writing",
     "/writing/day-one",
     "/writing/positivity-at-stuy",
@@ -31,7 +27,21 @@ export const routes: { site: string; path: string; base: string }[] = [
     path,
     base: hub,
   })),
-  ...["/", "/portfolio", "/portfolio/theater", "/about", "/book", "/client", "/nope"].map((path) => ({
+  ...[
+    "/",
+    "/portfolio",
+    "/portfolio/theater",
+    "/work",
+    "/work/stuy-sing-26",
+    "/work/stuypa-cny-dinner-26",
+    "/work/stuy-open-house-march-26",
+    "/video",
+    "/about",
+    "/book",
+    "/privacy",
+    "/client",
+    "/nope",
+  ].map((path) => ({
     site: "photos",
     path,
     base: photos,

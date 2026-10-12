@@ -1,10 +1,10 @@
 import { Container, Section } from "@placeholder/ui";
 import type { Metadata } from "next";
-import { PageHeader } from "@/components/site/PageHeader";
-import { SiteShell } from "@/components/site/SiteShell";
+import { PageHeader } from "@/components/PageHeader";
+import { Shell } from "@/components/Shell";
 import { WorkGrid } from "@/components/work/WorkGrid";
 import "@/components/work/work.css";
-import { getWork } from "@/lib/content";
+import { getWork } from "@/lib/work";
 
 export const metadata: Metadata = {
   title: "Work",
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 export default async function Work() {
   const projects = await getWork();
   return (
-    <SiteShell transparentTop={false}>
+    <Shell>
       <PageHeader
         eyebrow="Work"
         title="Things I've made"
@@ -25,6 +25,6 @@ export default async function Work() {
           <WorkGrid projects={projects} />
         </Container>
       </Section>
-    </SiteShell>
+    </Shell>
   );
 }

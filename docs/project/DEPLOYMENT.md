@@ -45,3 +45,6 @@ See [06-cost-analysis.md](06-cost-analysis.md).
 
 Manual steps in Vercel: add a Firewall rule rate-limiting `/api/img/*` and `/api/contact`; keep unused subdomains out of DNS (subdomain takeover); run the database migration once (`pnpm db:migrate`) against the production `DATABASE_URL`.
 
+
+## Project move (Phase 2.5, R1)
+Case studies (projects) now belong to the photography site. The hub's `/work` and `/work/:slug` send a 301 to `NEXT_PUBLIC_PHOTOS_URL` (set it on the **hub** project too, not only on photos). Run `pnpm --filter @jerryqiu/db migrate` once per database: migration `0001_projects_to_photos` moves existing project rows from `hub` to `photos` (idempotent). The seed also adds redirect rows for the old hub URLs as a fallback the hub's 404 page reads. `REVALIDATE_SECRET` must be the same on both projects so saving a project in the admin refreshes the photography site.

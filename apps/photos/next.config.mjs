@@ -4,6 +4,7 @@ export default {
   transpilePackages: [
     "@placeholder/ui",
     "@jerryqiu/sites",
+    "@jerryqiu/render",
     "@jerryqiu/auth",
     "@jerryqiu/db",
     "@jerryqiu/protect",

@@ -1,7 +1,6 @@
 import { Container, Section, Text } from "@placeholder/ui";
 import { ContactForm } from "@jerryqiu/sites/contact";
 import { person } from "@jerryqiu/sites/profile";
-import { getSite } from "@jerryqiu/sites";
 import type { Metadata } from "next";
 import { Shell } from "@/components/Shell";
 import "../globals.css";
@@ -23,7 +22,7 @@ export default function Book() {
             to={person.bookingEmail}
             endpoint="/api/contact"
             topics={["Event", "Performance", "Portrait", "Licensing a photograph", "Something else"]}
-            privacyHref={`${getSite("hub").url}/privacy`}
+            privacyHref="/privacy"
           />
         </Container>
       </Section>

@@ -22,7 +22,6 @@ const cached = <A extends unknown[], T>(name: string, tags: string[], fn: (...a:
   unstable_cache(fn, [name], { tags, revalidate: 3600 });
 
 export const getPosts = cached("posts", ["posts", "media"], () => safe((db) => q.listPosts(db, "hub")));
-export const getProjects = cached("projects", ["projects", "media"], () => safe((db) => q.listProjects(db, "hub")));
 export const getProfile = cached("profile", ["profile", "social", "timeline", "settings"], () =>
   safe((db) => q.getProfile(db)),
 );

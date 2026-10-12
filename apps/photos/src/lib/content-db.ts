@@ -32,3 +32,30 @@ export const getSiteSettings = unstable_cache(
   ["settings-photos"],
   { tags: ["settings"], revalidate: 3600 },
 );
+
+export const getProjects = unstable_cache(
+  async () => {
+    const db = getDb();
+    if (!db) return null;
+    try {
+      return await q.listProjects(db, "photos");
+    } catch (error) {
+      console.error("[content] database read failed, using repository content", error);
+      return null;
+    }
+  },
+  ["projects-photos"],
+  { tags: ["projects", "media"], revalidate: 3600 },
+);
+
+/** Not cached: counts a hit. Only runs on 404s. */
+export async function lookupRedirect(path: string) {
+  const db = getDb();
+  if (!db) return null;
+  try {
+    return await q.findRedirect(db, "photos", path);
+  } catch (error) {
+    console.error("[content] redirect lookup failed", error);
+    return null;
+  }
+}

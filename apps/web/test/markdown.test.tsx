@@ -1,6 +1,6 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
-import { RenderMarkdown } from "../src/lib/markdown";
+import { RenderMarkdown } from "@jerryqiu/render";
 
 const html = (md: string) => renderToStaticMarkup(<RenderMarkdown source={md} />);
 
@@ -58,7 +58,7 @@ describe("RenderMarkdown (CMS content is data, never code)", () => {
 
 describe("media: scheme", () => {
   it("maps a library id to the protected image route and drops other schemes", async () => {
-    const { transformUrl } = await import("@/lib/markdown");
+    const { transformUrl } = await import("@jerryqiu/render");
     const id = "0b7f3d52-6a41-4c8e-9a2b-1f3c5d7e9a01";
     expect(transformUrl(`media:${id}`)).toBe(`/api/img/${id}?w=1600`);
     expect(transformUrl("media:../../etc/passwd")).not.toContain("media:");

@@ -11,6 +11,7 @@ export default {
   transpilePackages: [
     "@placeholder/ui",
     "@jerryqiu/sites",
+    "@jerryqiu/render",
     "@jerryqiu/auth",
     "@jerryqiu/db",
     "@jerryqiu/protect",
@@ -25,6 +26,9 @@ export default {
       { source: "/blog", destination: "/writing", permanent: true },
       { source: "/blog/:slug", destination: "/writing/:slug", permanent: true },
       { source: "/contact", destination: "/connect", permanent: true },
+      // Project case studies moved to the photography site (R1). 301 on purpose: the move is permanent.
+      { source: "/work", destination: `${photos()}/work`, statusCode: 301 },
+      { source: "/work/:slug", destination: `${photos()}/work/:slug`, statusCode: 301 },
       { source: "/gallery", destination: `${photos()}/`, permanent: false },
       { source: "/api/rss", destination: "/writing/rss.xml", permanent: true },
     ];

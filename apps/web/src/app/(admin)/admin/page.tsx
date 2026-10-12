@@ -50,7 +50,7 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
   const cards: [string, string, number | string, string][] = data
     ? [
         ["Posts", "/admin/posts", data.posts, `${data.drafts} draft`],
-        ["Projects", "/admin/projects", data.projects, "work on the hub"],
+        ["Projects", "/admin/projects", data.projects, "case studies on photography"],
         ["Galleries", "/admin/galleries", data.galleries, "photography portfolio"],
         ["Media", "/admin/media", data.media, `${data.review} need review`],
         ["Inbox", "/admin/inbox", data.inbox, "new messages"],

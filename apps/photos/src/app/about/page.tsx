@@ -1,7 +1,6 @@
 import { Button, Container, Grid, Section, Text } from "@placeholder/ui";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getSite } from "@jerryqiu/sites";
 import { Shell } from "@/components/Shell";
 import "../globals.css";
 
@@ -23,16 +22,10 @@ export default function About() {
               work.
             </Text>
             <div>
-              <Text tone="muted">
-                I photograph theater, school and community events, street scenes and aircraft. For the rest of me
-                (writing, code, flying), see my personal site.
-              </Text>
+              <Text tone="muted">I photograph theater, school and community events, street scenes and aircraft.</Text>
               <div style={{ marginTop: "2rem", display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
                 <Button as={Link} href="/book">
                   Book a shoot
-                </Button>
-                <Button as="a" href={getSite("hub").url} variant="ghost">
-                  jerryqiu.com
                 </Button>
               </div>
             </div>

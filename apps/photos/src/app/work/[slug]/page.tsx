@@ -1,26 +1,22 @@
-import { Breadcrumbs, Container, Heading, Eyebrow, Section, Text } from "@placeholder/ui";
+import { Breadcrumbs, Container, Eyebrow, Heading, Section, Text } from "@placeholder/ui";
 import { Gallery, Image, type GalleryImage } from "@placeholder/ui/media";
+import { Blocks, MDX } from "@jerryqiu/render";
+import { getSite } from "@jerryqiu/sites";
+import { person } from "@jerryqiu/sites/profile";
 import { cookies } from "next/headers";
 import NextLink from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { MDX } from "@/components/site/MDX";
-import { PasswordGate } from "@/components/site/PasswordGate";
-import { SiteShell } from "@/components/site/SiteShell";
+import { Shell } from "@/components/Shell";
+import { PasswordGate } from "@/components/work/PasswordGate";
 import "@/components/work/work.css";
-import { person } from "@/content/site";
-import { getWork } from "@/lib/content";
-import { Blocks } from "@/components/site/Blocks";
+import { getWork } from "@/lib/work";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const p = (await getWork()).find((x) => x.slug === slug);
   if (!p) return {};
-  return {
-    title: p.title,
-    description: p.summary,
-    openGraph: { images: [`/api/og/generate?title=${encodeURIComponent(p.title)}`] },
-  };
+  return { title: p.title, description: p.summary };
 }
 
 const fmt = (d: string) => new Date(d).toLocaleDateString("en-US", { month: "long", year: "numeric" });
@@ -36,7 +32,7 @@ export default async function Project({ params }: { params: Promise<{ slug: stri
 
   if (p.protectedPage && (await cookies()).get("authToken")?.value !== "authenticated") {
     return (
-      <SiteShell transparentTop={false}>
+      <Shell>
         <Container size="sm" style={{ paddingBlock: "8rem" }}>
           <Heading as="h1" size="3xl" display>
             {p.title}
@@ -46,15 +42,26 @@ export default async function Project({ params }: { params: Promise<{ slug: stri
           </Text>
           <PasswordGate />
         </Container>
-      </SiteShell>
+      </Shell>
     );
   }
 
-  const cover = p.cover;
   const images: GalleryImage[] = p.images;
+  const url = `${getSite("photos").url}/work/${p.slug}`;
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    name: p.title,
+    description: p.summary,
+    dateCreated: p.date,
+    url,
+    creator: { "@type": "Person", name: person.name },
+    ...(p.cover?.files.length ? { image: `${getSite("photos").url}${p.cover.files.at(-1)?.src}` } : {}),
+  };
 
   return (
-    <SiteShell transparentTop={false}>
+    <Shell>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Container style={{ paddingTop: "clamp(2rem, 6vw, 4rem)" }}>
         <Breadcrumbs items={[{ label: "Work", href: "/work" }, { label: p.title }]} />
         <Eyebrow style={{ margin: "2.5rem 0 1rem" }}>{fmt(p.date)}</Eyebrow>
@@ -77,9 +84,9 @@ export default async function Project({ params }: { params: Promise<{ slug: stri
           </div>
         </dl>
       </Container>
-      {cover ? (
+      {p.cover ? (
         <div className="work-detail__hero" style={{ marginTop: "3rem" }}>
-          <Image asset={cover} alt={`${p.title}, cover photograph`} sizes="100vw" priority />
+          <Image asset={p.cover} alt={`${p.title}, cover photograph`} sizes="100vw" priority />
         </div>
       ) : null}
       <Section>
@@ -114,6 +121,6 @@ export default async function Project({ params }: { params: Promise<{ slug: stri
           )}
         </nav>
       </Container>
-    </SiteShell>
+    </Shell>
   );
 }

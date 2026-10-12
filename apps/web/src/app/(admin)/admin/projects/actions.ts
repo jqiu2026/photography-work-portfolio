@@ -100,7 +100,7 @@ export async function saveProject(_prev: ActionState, fd: FormData): Promise<Act
       .from(schema.projects)
       .where(
         and(
-          eq(schema.projects.site, "hub"),
+          eq(schema.projects.site, "photos"),
           eq(schema.projects.slug, d.slug),
           d.id ? ne(schema.projects.id, d.id) : undefined,
         ),
@@ -140,7 +140,7 @@ export async function saveProject(_prev: ActionState, fd: FormData): Promise<Act
       if (before.slug !== d.slug && before.status === "published") {
         await db
           .insert(schema.redirects)
-          .values({ site: "hub", fromPath: `/work/${before.slug}`, toPath: `/work/${d.slug}`, permanent: true })
+          .values({ site: "photos", fromPath: `/work/${before.slug}`, toPath: `/work/${d.slug}`, permanent: true })
           .onConflictDoUpdate({
             target: [schema.redirects.site, schema.redirects.fromPath],
             set: { toPath: `/work/${d.slug}` },
@@ -150,7 +150,7 @@ export async function saveProject(_prev: ActionState, fd: FormData): Promise<Act
     } else {
       const [row] = await db
         .insert(schema.projects)
-        .values({ site: "hub", ...values })
+        .values({ site: "photos", ...values })
         .returning({ id: schema.projects.id });
       id = row.id;
     }
@@ -175,10 +175,10 @@ export async function saveProject(_prev: ActionState, fd: FormData): Promise<Act
       action: d.id ? "project.update" : "project.create",
       entity: "project",
       entityId: id,
-      site: "hub",
+      site: "photos",
       summary: `${d.id ? "Updated" : "Created"} “${d.title}” (${d.status})`,
     });
-    touch(["projects"], ["/", "/work", `/work/${d.slug}`, "/sitemap.xml"]);
+    touch(["projects"], [], ["/", "/work", `/work/${d.slug}`, "/sitemap.xml"]);
     return {
       ok: true as const,
       message: d.status === "published" ? "Published" : "Draft saved",
@@ -199,10 +199,10 @@ export async function deleteProject(id: string): Promise<ActionState> {
       action: "project.delete",
       entity: "project",
       entityId: id,
-      site: "hub",
+      site: "photos",
       summary: `Moved “${p?.title}” to the trash`,
     });
-    touch(["projects"], ["/", "/work", `/work/${p?.slug}`]);
+    touch(["projects"], [], ["/", "/work", ...(p?.slug ? [`/work/${p.slug}`] : [])]);
     return { ok: true as const, message: "Moved to trash", redirectTo: "/admin/projects" };
   });
 }
@@ -242,10 +242,10 @@ export async function restoreProjectVersion(projectId: string, versionId: string
       action: "project.restore_version",
       entity: "project",
       entityId: projectId,
-      site: "hub",
+      site: "photos",
       summary: `Restored version ${v.version} as a draft`,
     });
-    touch(["projects"], ["/work"]);
+    touch(["projects"], [], ["/work"]);
     return { ok: true as const, message: `Restored version ${v.version} as a draft` };
   });
 }

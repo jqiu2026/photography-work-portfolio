@@ -59,6 +59,12 @@ describe("seed", () => {
     expect(first.projects).toBe(5);
     expect(first.social).toBeGreaterThanOrEqual(4);
     expect(first.users).toBe(1);
+    // case studies belong to the photography site; the old hub URLs are seeded as redirect rows
+    const projects = await db.select().from(s.projects);
+    expect(new Set(projects.map((p) => p.site))).toEqual(new Set(["photos"]));
+    const [work] = await db.select().from(s.redirects).where(eq(s.redirects.fromPath, "/work/stuy-sing-26"));
+    expect(work).toMatchObject({ site: "hub", permanent: true });
+    expect(work.toPath).toMatch(/^https?:\/\/.+\/work\/stuy-sing-26$/);
     // an owner edit survives re-seeding
     await db.update(s.posts).set({ title: "Edited by the owner" }).where(eq(s.posts.slug, "day-one"));
     const second = await seed(db, { webRoot, adminEmails: ["owner@jerryqiu.com"] });

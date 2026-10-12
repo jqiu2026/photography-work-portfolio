@@ -3,7 +3,7 @@ import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import { PostView } from "@/components/site/PostView";
 import { withDb } from "@/lib/admin-db";
-import "@/components/work/work.css";
+import "@/components/site/post.css";
 
 export const metadata = { title: "Preview" };
 

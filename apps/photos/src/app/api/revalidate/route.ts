@@ -5,7 +5,7 @@ import { z } from "zod";
 export const dynamic = "force-dynamic";
 
 const body = z.object({
-  tags: z.array(z.enum(["galleries", "media", "settings", "redirects", "pages"])).max(8),
+  tags: z.array(z.enum(["galleries", "projects", "media", "settings", "redirects", "pages"])).max(8),
   paths: z
     .array(z.string().regex(/^\/[A-Za-z0-9/_-]{0,100}$/))
     .max(8)

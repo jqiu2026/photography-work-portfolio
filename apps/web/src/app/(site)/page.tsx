@@ -12,14 +12,7 @@ import {
 } from "@placeholder/ui";
 import { Image } from "@placeholder/ui/media";
 import { ImageSequence } from "@placeholder/ui/media";
-import {
-  HorizontalShowcase,
-  InView,
-  PinnedScene,
-  RevealText,
-  ScrollHighlight,
-  StepSequence,
-} from "@placeholder/ui/motion";
+import { InView, PinnedScene, RevealText, ScrollHighlight, StepSequence } from "@placeholder/ui/motion";
 import { ShaderHero } from "@placeholder/ui/webgl";
 import { getSite } from "@jerryqiu/sites";
 import NextLink from "next/link";
@@ -29,7 +22,7 @@ import "@/components/home/home.css";
 import { todo } from "@/content/site";
 import { getPerson } from "@/lib/profile";
 import { getImage } from "@/lib/images";
-import { getWork, getWriting } from "@/lib/content";
+import { getWriting } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: { absolute: "Jerry Qiu" },
@@ -45,7 +38,6 @@ export default async function Home() {
   const heroFiles = [...hero.files].sort((a, b) => a.width - b.width);
   const heroSrc = (heroFiles.find((f) => f.width >= 1600) ?? heroFiles[heroFiles.length - 1]).src;
   const portrait = getImage("site", "avatar");
-  const projects = (await getWork()).filter((p) => p.cover).slice(0, 6);
   const posts = (await getWriting()).slice(0, 3);
 
   // TODO(owner): rewrite these beats in your voice. Facts come from the original About page.
@@ -126,7 +118,7 @@ export default async function Home() {
                   <Button as={NextLink} href="/about" variant="solid">
                     About me
                   </Button>
-                  <Button as={NextLink} href="/work" variant="ghost">
+                  <Button as="a" href={`${getSite("photos").url}/work`} variant="ghost">
                     See my work
                   </Button>
                 </>
@@ -186,34 +178,6 @@ export default async function Home() {
             ))}
           </Grid>
         </Container>
-      </Section>
-
-      <Section tone="surface" style={{ paddingBottom: 0 }}>
-        <Container>
-          <div className="home-head" style={{ marginBottom: 0 }}>
-            <div>
-              <Eyebrow>Selected work</Eyebrow>
-              <Heading size="4xl" display>
-                Recent projects
-              </Heading>
-            </div>
-            <Button as={NextLink} href="/work" variant="ghost">
-              All work
-            </Button>
-          </div>
-        </Container>
-        <HorizontalShowcase>
-          {projects.map((p) => {
-            const cover = p.cover;
-            return (
-              <NextLink key={p.slug} href={`/work/${p.slug}`} className="home-work-card">
-                {cover ? <Image asset={cover} alt="" sizes="(min-width: 900px) 34rem, 78vw" /> : null}
-                <h3>{p.title}</h3>
-                <p>{[fmt(p.date), p.summary].filter(Boolean).join(" · ")}</p>
-              </NextLink>
-            );
-          })}
-        </HorizontalShowcase>
       </Section>
 
       <Section>

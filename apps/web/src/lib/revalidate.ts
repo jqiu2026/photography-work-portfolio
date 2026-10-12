@@ -22,17 +22,17 @@ export const TAGS = [
 export type Tag = (typeof TAGS)[number];
 
 /** Tags the photography app caches; changing any of them pokes that deployment too. */
-const PHOTOS_TAGS = ["galleries", "media", "settings", "redirects", "pages"] as const;
+const PHOTOS_TAGS = ["galleries", "projects", "media", "settings", "redirects", "pages"] as const;
 
 /** Fire-and-forget: a slow or unreachable photos site must never slow down or fail an admin save. */
-function pokePhotos(tags: Tag[]) {
+function pokePhotos(tags: Tag[], extraPaths: string[]) {
   const secret = process.env.REVALIDATE_SECRET;
   const base = process.env.NEXT_PUBLIC_PHOTOS_URL;
   const relevant = tags.filter((t): t is (typeof PHOTOS_TAGS)[number] =>
     (PHOTOS_TAGS as readonly string[]).includes(t),
   );
   if (!secret || !base || !relevant.length) return;
-  const paths = relevant.includes("galleries") ? ["/", "/portfolio"] : [];
+  const paths = [...(relevant.includes("galleries") ? ["/", "/portfolio"] : []), ...extraPaths];
   fetch(`${base.replace(/\/$/, "")}/api/revalidate`, {
     method: "POST",
     headers: { Authorization: `Bearer ${secret}`, "Content-Type": "application/json" },
@@ -41,8 +41,9 @@ function pokePhotos(tags: Tag[]) {
   }).catch((error) => console.warn("[revalidate] could not reach the photography site", String(error)));
 }
 
-export function touch(tags: Tag[], paths: string[] = []) {
+/** `photosPaths` are paths on the photography site (e.g. "/work") to refresh there. */
+export function touch(tags: Tag[], paths: string[] = [], photosPaths: string[] = []) {
   for (const t of tags) revalidateTag(t, { expire: 0 });
   for (const p of paths) revalidatePath(p);
-  pokePhotos(tags);
+  pokePhotos(tags, photosPaths);
 }

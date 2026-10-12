@@ -17,3 +17,14 @@ export function getImage(id: string) {
   if (!a) throw new Error(`Image not found: ${id}`);
   return a;
 }
+
+let projects: Manifest | undefined;
+/** Project case-study images: public/opt/projects/manifest.json (made by scripts/optimize-images.mjs). */
+export function getProjectImage(id: string) {
+  projects ??= JSON.parse(
+    fs.readFileSync(path.join(process.cwd(), "public", "opt", "projects", "manifest.json"), "utf8"),
+  ) as Manifest;
+  const a = projects[id];
+  if (!a) throw new Error(`Image not found: projects/${id}`);
+  return a;
+}

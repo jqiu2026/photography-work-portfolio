@@ -10,7 +10,11 @@ import * as s from "./schema";
  * Idempotent: rows are keyed by slug/label and left alone if they already exist (owner edits are never overwritten).
  * Real facts only (see docs/project/audit-once-ui.md); nothing is invented.
  */
-export type SeedOptions = { webRoot: string; adminEmails?: string[] };
+export type SeedOptions = {
+  webRoot: string /** Defaults to ../photos next to webRoot. */;
+  photosRoot?: string;
+  adminEmails?: string[];
+};
 
 const readMdx = (dir: string) =>
   fs.existsSync(dir)
@@ -66,7 +70,9 @@ export async function seed(db: Database, opts: SeedOptions) {
     out.posts += r.length;
   }
 
-  const projects = readMdx(path.join(opts.webRoot, "src/content/projects"));
+  const projects = readMdx(
+    path.join(opts.photosRoot ?? path.join(opts.webRoot, "..", "photos"), "src/content/projects"),
+  );
   for (const [i, p] of projects.entries()) {
     const credits = Array.isArray(p.data.team)
       ? p.data.team.map((t: { name: string; role: string; instagram?: string }) => ({
@@ -78,7 +84,7 @@ export async function seed(db: Database, opts: SeedOptions) {
     const r = await db
       .insert(s.projects)
       .values({
-        site: "hub",
+        site: "photos",
         slug: p.slug,
         type: "photography",
         title: String(p.data.title ?? p.slug),
@@ -94,6 +100,16 @@ export async function seed(db: Database, opts: SeedOptions) {
       .onConflictDoNothing()
       .returning({ id: s.projects.id });
     out.projects += r.length;
+  }
+
+  // Old hub URLs for work now live on the photography site (R1). The static redirects in the hub's next.config handle the
+  // normal case; these rows are the fallback the catch-all 404 reads, and the owner can edit them in the admin.
+  const photosUrl = (process.env.NEXT_PUBLIC_PHOTOS_URL || "https://photos.jerryqiu.com").replace(/\/$/, "");
+  for (const from of ["/work", ...projects.map((p) => `/work/${p.slug}`)]) {
+    await db
+      .insert(s.redirects)
+      .values({ site: "hub", fromPath: from, toPath: `${photosUrl}${from}`, permanent: true })
+      .onConflictDoNothing();
   }
 
   // Real links found on the original site.

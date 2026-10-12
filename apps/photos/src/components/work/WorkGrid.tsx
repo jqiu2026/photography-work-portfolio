@@ -1,7 +1,7 @@
 import { TiltCard, InView } from "@placeholder/ui/motion";
 import { Image } from "@placeholder/ui/media";
 import NextLink from "next/link";
-import type { WorkItem } from "@/lib/content";
+import type { WorkItem } from "@/lib/work";
 
 const fmt = (d: string) => new Date(d).toLocaleDateString("en-US", { month: "long", year: "numeric" });
 

@@ -2,7 +2,7 @@
 
 import { Button, Input, Select, Textarea } from "@placeholder/ui";
 import { type RefObject, useEffect, useRef, useState } from "react";
-import { RenderMarkdown } from "@/lib/markdown";
+import { RenderMarkdown } from "@jerryqiu/render";
 import { autosavePost, deletePost, savePost } from "@/app/(admin)/admin/posts/actions";
 import { slugify } from "@/lib/slugify";
 import { ActionForm, ConfirmButton, ErrorFor, F, FieldE } from "./form-kit";

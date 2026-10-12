@@ -24,7 +24,7 @@ export const navGroups: NavGroup[] = [
       { label: "Profile & links", href: "/admin/profile", sites: ["hub"], hint: "headline, socials, skills" },
       { label: "Timeline", href: "/admin/timeline", sites: ["hub"], hint: "work, school, flying, music" },
       { label: "Posts", href: "/admin/posts", sites: ["hub"] },
-      { label: "Projects", href: "/admin/projects", sites: ["hub"] },
+      { label: "Projects", href: "/admin/projects", sites: ["photos"], hint: "case studies" },
       { label: "Galleries", href: "/admin/galleries", sites: ["photos"] },
       { label: "Music", href: "/admin/music", sites: ["music"], hint: "recordings and performances" },
       { label: "Flight log", href: "/admin/flying", sites: ["flying"], hint: "milestones, flights, aircraft" },

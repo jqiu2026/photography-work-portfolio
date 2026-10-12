@@ -12,7 +12,7 @@ export default async function ProjectsPage() {
     db
       .select()
       .from(schema.projects)
-      .where(and(isNull(schema.projects.deletedAt), eq(schema.projects.site, "hub")))
+      .where(and(isNull(schema.projects.deletedAt), eq(schema.projects.site, "photos")))
       .orderBy(desc(schema.projects.sort), desc(schema.projects.date)),
   );
   if (!rows) return <NoDb />;
@@ -20,7 +20,7 @@ export default async function ProjectsPage() {
     <>
       <PageHead
         title="Projects"
-        lede="Everything built or made: photography, software, design. Shown on the hub under Work."
+        lede="Case studies: the photography and video projects shown on the photography site under Work."
         actions={
           <Button as={NextLink} href="/admin/projects/new">
             New project

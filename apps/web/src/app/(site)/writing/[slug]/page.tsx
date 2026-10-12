@@ -4,12 +4,11 @@ import { ScrollProgress } from "@placeholder/ui/motion";
 import type { Metadata } from "next";
 import NextLink from "next/link";
 import { notFound } from "next/navigation";
-import { MDX } from "@/components/site/MDX";
+import { MDX, RenderMarkdown } from "@jerryqiu/render";
 import { SiteShell } from "@/components/site/SiteShell";
 import { person } from "@/content/site";
 import { getWriting } from "@/lib/content";
-import { RenderMarkdown } from "@/lib/markdown";
-import "@/components/work/work.css";
+import "@/components/site/post.css";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
