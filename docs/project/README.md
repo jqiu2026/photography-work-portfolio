@@ -1,0 +1,27 @@
+# Project docs: custom UI, personal hub + CMS, and photo-business studio
+
+Branch: `feat/custom-ui-cms` (never merge to `main`, never push, unless the owner says so).
+
+A family of sites, one codebase: **jerryqiu.com** (the personal hub, "ME"), plus **photos.**, **music.** and **flying.jerryqiu.com** (photos becomes the ShootProof replacement in Phase 3). Read these in order. They are the source of truth for the whole project.
+
+IMPORTANT: DO NOT CO-AUTHOR ANYTHING WHATSOEVER. DO NOT CO-AUTHOR COMMITS. DO NOT. I REPEAT. DO NOT. 
+
+| # | Doc | What it is |
+|---|---|---|
+| 00 | [Vision and principles](00-vision-and-principles.md) | What we are building and the taste bar |
+| 01 | [Decisions and assumptions](01-decisions-and-assumptions.md) | Every default chosen, and every open question with its placeholder |
+| 02 | [Phase 1: UI package and redesign](02-phase-1-ui-package-and-redesign.md) | Build the open-source UI package, rebuild the site on it |
+| 03 | [Phase 2: CMS and protection](03-phase-2-cms-and-protection.md) | Google-login CMS, image protection, ShootProof bridge |
+| 04 | [Phase 3: Photo business platform](04-phase-3-photo-business-platform.md) | Galleries, contracts, invoices, payments. **Not started until the owner says so.** |
+| 05 | [Security and image protection](05-security-and-image-protection.md) | Threat model, what works, what only deters |
+| 06 | [Cost analysis](06-cost-analysis.md) | Budget and the ShootProof comparison |
+| 07 | [Naming brainstorm](07-naming-brainstorm.md) | Candidate names for the UI package |
+| 08 | [Operating rules](08-operating-rules.md) | Git, context, usage, pausing, handoff |
+| 09 | [Reference: stuyaviators repo](09-reference-stuyaviators.md) | Engineering reference only. What to reuse, what not to |
+| 10 | [Design brief](10-design-brief.md) | Priorities, Squarespace-grade polish, information architecture, "not a copy" rule |
+| 11 | [Legal and compliance](11-legal-and-compliance.md) | Privacy, terms, licensing, accessibility, contracts, people in photos |
+| | [DEPLOYMENT.md](DEPLOYMENT.md) | Owner-only checklist: hostnames, Vercel projects, env names, DNS cut-over. Claude never does these |
+| | [PROGRESS.md](PROGRESS.md) | Living checklist. Update it after every milestone. |
+| | [QUESTIONS.md](QUESTIONS.md) | Questions for the owner. Append, never block on them. |
+| | [HANDOFF_TEMPLATE.md](HANDOFF_TEMPLATE.md) | Shape of the "todo list" prompt written when pausing |
+| | [KICKOFF_PROMPT.md](KICKOFF_PROMPT.md) | The prompt that starts a fresh chat |
