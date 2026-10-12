@@ -4,6 +4,13 @@ let originals: StorageProvider | undefined;
 let publicStore: StorageProvider | undefined;
 
 /** Private originals: never served directly. */
-export const originalsStore = () => (originals ??= createStorage("originals"));
+export function originalsStore(): StorageProvider {
+  originals ??= createStorage("originals");
+  return originals;
+}
+
 /** Public-safe derivatives (downscaled, metadata stripped). */
-export const derivativesStore = () => (publicStore ??= createStorage("public"));
+export function derivativesStore(): StorageProvider {
+  publicStore ??= createStorage("public");
+  return publicStore;
+}
