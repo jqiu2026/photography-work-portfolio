@@ -1,11 +1,13 @@
 "use client";
 
 import { Container, Heading, Text, Eyebrow, Card } from "@placeholder/ui";
-import { Image, Gallery, BeforeAfter, type ImageAsset } from "@placeholder/ui/media";
+import { Image, Gallery, BeforeAfter, ImageSequence, type ImageAsset } from "@placeholder/ui/media";
+import { ShaderHero } from "@placeholder/ui/webgl";
 import { CountUp, InView, Marquee, Parallax, PinnedScene, RevealText, ScrollHighlight, StepSequence, TiltCard, MagneticButton, StackingCards, ScrollProgress } from "@placeholder/ui/motion";
 import { Button } from "@placeholder/ui";
 
 type Manifest = Record<string, ImageAsset>;
+const frames = Array.from({ length: 96 }, (_, i) => `/sequence/hero/frame-${String(i).padStart(3, "0")}.webp`);
 
 export function MotionGallery({ manifest }: { manifest: Manifest }) {
   const ids = Object.keys(manifest);
@@ -14,6 +16,9 @@ export function MotionGallery({ manifest }: { manifest: Manifest }) {
   return (
     <div className="ph-root" data-preset="hub" data-theme="light" style={{ minHeight: 0, borderRadius: 20, border: "1px solid var(--ph-line)", overflow: "clip", marginTop: 40 }}>
       <ScrollProgress />
+      <ShaderHero src={hero.files[hero.files.length - 1].src} alt="Sample hero photograph" className="demo-hero">
+        <div style={{ height: "70vh", display: "flex", alignItems: "flex-end", padding: "var(--ph-gutter)", color: "#fff" }}><Heading as="h2" size="4xl" display>WebGL hero</Heading></div>
+      </ShaderHero>
       <Container size="md" style={{ paddingBlock: "3rem" }}>
         <Eyebrow>Motion and media</Eyebrow>
         <RevealText as="h2" text="Words rise out of a quiet mask." className="ph-heading ph-heading--display" />
@@ -47,6 +52,9 @@ export function MotionGallery({ manifest }: { manifest: Manifest }) {
             <StepSequence steps={[{ title: "A camera first.", body: "Photography came before anything else." }, { title: "Then code.", body: "Building small tools and sites." }, { title: "Now the sky.", body: "Learning to fly." }]} />
           </div>
         </div>
+      </PinnedScene>
+      <PinnedScene length={4} label="Sequence demo">
+        <div style={{ height: "100%", position: "relative" }}><ImageSequence frames={frames} alt="Placeholder image sequence" /></div>
       </PinnedScene>
       <Container size="md" style={{ paddingBlock: "3rem" }}>
         <StackingCards items={[1, 2, 3].map((n) => <Card key={n} style={{ minHeight: 220 }}><Heading size="2xl" display>Card {n}</Heading></Card>)} />
