@@ -19,7 +19,8 @@ function GlitchTile({
   sizes,
   fill,
   glitch,
-}: { img: GalleryImage; sizes: string; fill: boolean; glitch: boolean }) {
+  priority,
+}: { img: GalleryImage; sizes: string; fill: boolean; glitch: boolean; priority?: boolean }) {
   const [hover, setHover] = useState(false);
   return (
     <span
@@ -27,7 +28,7 @@ function GlitchTile({
       onPointerEnter={(e) => glitch && e.pointerType === "mouse" && setHover(true)}
       onPointerLeave={() => setHover(false)}
     >
-      <Image asset={img} alt={img.alt} sizes={sizes} fill={fill} />
+      <Image asset={img} alt={img.alt} sizes={sizes} fill={fill} priority={priority} />
       {hover ? <ShaderLayer src={pickSrc(img)} pointer="local" intensity={1.2} /> : null}
     </span>
   );
@@ -77,7 +78,7 @@ export function Gallery({
                 aria-label={`Open ${img.alt}`}
                 disabled={!lightbox}
               >
-                <GlitchTile img={img} sizes={sizes} fill={layout === "justified"} glitch={glitch} />
+                <GlitchTile img={img} sizes={sizes} fill={layout === "justified"} glitch={glitch} priority={i < 2} />
               </button>
             </li>
           );
