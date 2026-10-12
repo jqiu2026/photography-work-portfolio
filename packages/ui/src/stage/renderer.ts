@@ -362,22 +362,28 @@ export class StageRenderer {
     this.rest = 0;
   }
 
-  /** A scene beat: a long streak of accent light across the stage (used by the Pour and Threshold recipes). */
+  private sweep: { dir: 1 | -1; strength: number; t: number } | null = null;
+
+  /** A scene beat: a streak of accent light sweeps across the stage (used by the arrival, Pour and Threshold recipes). */
   streak(direction: 1 | -1 = 1, strength = 1) {
     this.beat = 1;
+    this.sweep = { dir: direction, strength, t: 0 };
+    this.rest = 0;
+  }
+
+  private runSweep(dt: number) {
+    const sw = this.sweep;
+    if (!sw) return;
     const { accent } = this.inputs;
-    for (let i = 0; i < 14; i++) {
-      const y = 0.25 + (i / 13) * 0.5 + (Math.random() - 0.5) * 0.04;
-      const x = direction === 1 ? 0.04 : 0.96;
-      this.splat(
-        x,
-        y,
-        direction * 900 * strength,
-        (Math.random() - 0.5) * 60,
-        [accent[0] * 0.5, accent[1] * 0.5, accent[2] * 0.5],
-        0.0009,
-      );
+    const x = sw.dir === 1 ? sw.t : 1 - sw.t;
+    const lines = 9;
+    for (let i = 0; i < lines; i++) {
+      const y = 0.3 + (i / (lines - 1)) * 0.4 + (Math.sin(i * 12.9898 + sw.t * 6) * 0.01);
+      const k = 0.32 * sw.strength * (1 - Math.abs(i - (lines - 1) / 2) / lines);
+      this.splat(x, y, sw.dir * 700 * sw.strength, 0, [accent[0] * k, accent[1] * k, accent[2] * k], 0.0005);
     }
+    sw.t += dt / 0.9;
+    if (sw.t >= 1) this.sweep = null;
   }
 
   private step(dt: number) {
@@ -386,6 +392,7 @@ export class StageRenderer {
     const sv = [1 / this.vel.read.width, 1 / this.vel.read.height];
     const dv = [1 / this.dye.read.width, 1 / this.dye.read.height];
     const { pointer, accent, velocity } = this.inputs;
+    this.runSweep(dt);
 
     // Pointer injects force and a streak of dye
     const speed = Math.hypot(pointer.vx, pointer.vy);

@@ -160,8 +160,8 @@ html.hl-js .home-planes li {
   text-wrap: balance;
 }
 html.hl-js:not([data-hl-tier="static"]) .home-steps p {
-  opacity: clamp(0, calc(1.4 - abs(var(--hl-p, 0.5) - var(--c)) * 16), 1);
-  filter: blur(calc(clamp(0, abs(var(--hl-p, 0.5) - var(--c)) * 40 - 0.4, 1) * 14px));
+  opacity: clamp(0, calc(1.5 - abs(var(--hl-p, 0.5) - var(--c)) * 12), 1);
+  filter: blur(calc(clamp(0, (abs(var(--hl-p, 0.5) - var(--c)) - 0.04) * 12, 1) * 14px));
   transform: translateY(calc((var(--hl-p, 0.5) - var(--c)) * -80px));
 }
 html:not(.hl-js) .home-steps,

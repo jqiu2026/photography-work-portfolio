@@ -141,13 +141,13 @@ export default async function Home() {
           <Scene id="what" label="What I do" className="home-what" pin={2.4}>
             <div className="home-wrap home-steps">
               {/* TODO(owner): rewrite these four lines in your voice. Facts: original About page. */}
-              <p style={{ ["--c" as string]: 0.28 } as React.CSSProperties}>
+              <p style={{ ["--c" as string]: 0.3 } as React.CSSProperties}>
                 Photography is how I started, and it is still how I pay attention.
               </p>
-              <p style={{ ["--c" as string]: 0.42 } as React.CSSProperties}>
+              <p style={{ ["--c" as string]: 0.43 } as React.CSSProperties}>
                 I fly drones with a Part 107 certificate.
               </p>
-              <p style={{ ["--c" as string]: 0.56 } as React.CSSProperties}>I built this site.</p>
+              <p style={{ ["--c" as string]: 0.57 } as React.CSSProperties}>I built this site.</p>
               <p style={{ ["--c" as string]: 0.7 } as React.CSSProperties}>I run the StuyAviators Instagram.</p>
             </div>
           </Scene>
