@@ -13,7 +13,7 @@ It becomes **a family of sites that share one codebase and one design system**, 
 | **Music** | `music.jerryqiu.com` | What he plays, recordings, performances, listen-in embeds. |
 | **Flying** | `flying.jerryqiu.com` | The flying journey: ratings and milestones, aircraft, memorable flights, cockpit photos, the StuyAviators connection. |
 
-More sites can be added later by registering a hostname in `packages/sites`. The sites link to each other through a shared header **site switcher** and a "More from me" footer row. Photography, music and flying each get a compact preview card on the hub home page.
+More sites can be added later by registering a hostname in `packages/sites`. **Superseded (owner, 2026-10-12):** the hub is the main page and the only place that introduces the other three sites. Photography, music and flying do not reference each other or the other sections at all; their only cross-site element is a footer button back to jerryqiu.com. No site switcher, no "More from me".
 
 ## The three phases
 

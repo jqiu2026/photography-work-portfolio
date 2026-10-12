@@ -85,7 +85,7 @@ flying.jerryqiu.com     FLYING
   /about                Ratings and background, StuyAviators connection
 ```
 
-**Site switcher:** every site has a quiet header control (the "Jerry Qiu" wordmark with a small chevron) that lists all sites with a one-line description, and a footer "More from me" row. This is how the family stays navigable and feels like one thing. Registry and links come from `packages/sites`.
+**Superseded (owner, 2026-10-12): no site switcher and no "More from me" row. Photography, music and flying show nothing about the other sites; their footer has one button back to jerryqiu.com. The hub introduces the others inside its own flow.** Former text, kept for the record: every site had a quiet header control (the "Jerry Qiu" wordmark with a small chevron) that lists all sites with a one-line description, and a footer "More from me" row. This is how the family stays navigable and feels like one thing. Registry and links come from `packages/sites`.
 
 **Hub nav:** Work, Writing, About, a **Sites** group (Photos, Music, Flying), and a **Connect** button. Each sub-site has its own simple nav (3-5 links) in the same header component. Keep old URLs working with redirects (`/blog` -> `/writing`, `/gallery` -> photos site, `/contact` -> `/connect`).
 
