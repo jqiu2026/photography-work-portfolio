@@ -4,17 +4,13 @@
 import { readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
-const args = Object.fromEntries(
-  process.argv
-    .slice(2)
-    .reduce(
-      (a, x, i, all) =>
-        x.startsWith("--")
-          ? [...a, [x.slice(2), all[i + 1]?.startsWith("--") || all[i + 1] === undefined ? true : all[i + 1]]]
-          : a,
-      [],
-    ),
-);
+const args = {};
+const argv = process.argv.slice(2);
+for (let i = 0; i < argv.length; i++) {
+  if (!argv[i].startsWith("--")) continue;
+  const next = argv[i + 1];
+  args[argv[i].slice(2)] = next === undefined || next.startsWith("--") ? true : next;
+}
 const root = path.resolve(args.root && args.root !== true ? args.root : ".");
 const cfgPath = path.join(root, "brand.config.json");
 const cfg = JSON.parse(readFileSync(cfgPath, "utf8"));
