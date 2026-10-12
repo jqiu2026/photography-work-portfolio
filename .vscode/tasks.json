@@ -1,0 +1,14 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "dev: all sites (web :3000, docs :3001, photos :3002)",
+      "type": "shell",
+      "command": "pnpm dev",
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": { "reveal": "silent", "panel": "dedicated" },
+      "runOptions": { "runOn": "folderOpen" }
+    }
+  ]
+}
