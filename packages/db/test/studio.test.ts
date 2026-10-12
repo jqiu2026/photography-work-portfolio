@@ -58,14 +58,24 @@ describe("clients, jobs, bookings", () => {
     expect((await st.advanceJob(db, j.id)).status).toBe("paid");
   });
   it("job validation: client must exist, fee in whole cents", async () => {
-    await expect(st.createJob(db, { clientId: "00000000-0000-0000-0000-000000000000", title: "x y" })).rejects.toThrow(/client/);
+    await expect(st.createJob(db, { clientId: "00000000-0000-0000-0000-000000000000", title: "x y" })).rejects.toThrow(
+      /client/,
+    );
     const { c } = await seedJob("fee");
     await expect(st.createJob(db, { clientId: c.id, title: "Bad fee", feeCents: 10.5 })).rejects.toThrow(/cents/);
   });
   it("converts a booking into a client once and reuses an existing client", async () => {
-    const b = await st.addBooking(db, { name: "Visitor One", email: "visitor@example.test", message: "A small event next month" });
+    const b = await st.addBooking(db, {
+      name: "Visitor One",
+      email: "visitor@example.test",
+      message: "A small event next month",
+    });
     const c1 = await st.convertBooking(db, b.id);
-    const b2 = await st.addBooking(db, { name: "Visitor One", email: "Visitor@example.test", message: "One more question" });
+    const b2 = await st.addBooking(db, {
+      name: "Visitor One",
+      email: "Visitor@example.test",
+      message: "One more question",
+    });
     const c2 = await st.convertBooking(db, b2.id);
     expect(c2.id).toBe(c1.id);
     await expect(st.addBooking(db, { name: "V", email: "x", message: "hi" })).rejects.toThrow();
@@ -83,13 +93,22 @@ describe("galleries and favourites", () => {
     await st.publishGallery(db, g.id);
     expect((await st.openGalleryWithPasscode(db, " GALLERY-PASS-1 "))?.id).toBe(g.id);
     expect(await st.openGalleryWithPasscode(db, "wrong-code")).toBeNull();
-    await db.update(s.studioGalleries).set({ expiresAt: new Date("2026-01-01") }).where(eq(s.studioGalleries.id, g.id));
+    await db
+      .update(s.studioGalleries)
+      .set({ expiresAt: new Date("2026-01-01") })
+      .where(eq(s.studioGalleries.id, g.id));
     expect(await st.openGalleryWithPasscode(db, "gallery-pass-1", now)).toBeNull(); // expired
   });
   it("favourites toggle and only work for photographs in the gallery", async () => {
     const { j } = await seedJob("fav");
-    const [m1] = await db.insert(s.media).values({ filename: "a.jpg", mime: "image/jpeg", originalKey: "k/a" }).returning();
-    const [m2] = await db.insert(s.media).values({ filename: "b.jpg", mime: "image/jpeg", originalKey: "k/b" }).returning();
+    const [m1] = await db
+      .insert(s.media)
+      .values({ filename: "a.jpg", mime: "image/jpeg", originalKey: "k/a" })
+      .returning();
+    const [m2] = await db
+      .insert(s.media)
+      .values({ filename: "b.jpg", mime: "image/jpeg", originalKey: "k/b" })
+      .returning();
     const g = await st.createGallery(db, { jobId: j.id, passcode: "fav-pass-77", mediaIds: [m1.id] });
     expect(await st.toggleFavorite(db, g.id, m1.id)).toEqual([m1.id]);
     expect(await st.toggleFavorite(db, g.id, m1.id)).toEqual([]);
@@ -107,10 +126,17 @@ describe("contracts", () => {
     expect((await st.contractByToken(db, token, now))?.status).toBe("viewed");
     await expect(st.signContract(db, token, { signerName: "A", agree: true })).rejects.toThrow(/full name/);
     await expect(st.signContract(db, token, { signerName: "Sample Client", agree: false })).rejects.toThrow(/agree/);
-    const signed = await st.signContract(db, token, { signerName: "  Sample Client ", agree: true, ipHash: "h", userAgent: "UA" }, now);
+    const signed = await st.signContract(
+      db,
+      token,
+      { signerName: "  Sample Client ", agree: true, ipHash: "h", userAgent: "UA" },
+      now,
+    );
     expect(signed).toMatchObject({ status: "signed", signerName: "Sample Client", signerIpHash: "h" });
     expect(signed.documentSha256).toMatch(/^[0-9a-f]{64}$/);
-    await expect(st.signContract(db, token, { signerName: "Sample Client", agree: true })).rejects.toThrow(/already signed/);
+    await expect(st.signContract(db, token, { signerName: "Sample Client", agree: true })).rejects.toThrow(
+      /already signed/,
+    );
     await expect(st.sendContract(db, k.id)).rejects.toThrow(/already signed/);
   });
 });
@@ -118,9 +144,27 @@ describe("contracts", () => {
 describe("invoices and payments", () => {
   it("numbers invoices per year, totals in cents, and only sends non-final invoices", async () => {
     const { j } = await seedJob("inv");
-    await expect(st.createInvoice(db, { jobId: j.id, lines: [{ description: "", amountCents: 0 }] })).rejects.toThrow(/at least one/);
-    const a = await st.createInvoice(db, { jobId: j.id, lines: [{ description: "Coverage", amountCents: 30000 }, { description: "Prints", amountCents: 5000 }] }, undefined, now);
-    const b = await st.createInvoice(db, { jobId: j.id, lines: [{ description: "Extra", amountCents: 1000 }] }, undefined, now);
+    await expect(st.createInvoice(db, { jobId: j.id, lines: [{ description: "", amountCents: 0 }] })).rejects.toThrow(
+      /at least one/,
+    );
+    const a = await st.createInvoice(
+      db,
+      {
+        jobId: j.id,
+        lines: [
+          { description: "Coverage", amountCents: 30000 },
+          { description: "Prints", amountCents: 5000 },
+        ],
+      },
+      undefined,
+      now,
+    );
+    const b = await st.createInvoice(
+      db,
+      { jobId: j.id, lines: [{ description: "Extra", amountCents: 1000 }] },
+      undefined,
+      now,
+    );
     expect(a.totalCents).toBe(35000);
     expect(a.number).toMatch(/^2026-\d{4}$/);
     expect(Number(b.number.split("-")[1])).toBe(Number(a.number.split("-")[1]) + 1);
@@ -130,19 +174,40 @@ describe("invoices and payments", () => {
   });
   it("records payments idempotently, moves the invoice to partial then paid, and the job to paid when all invoices are paid", async () => {
     const { j } = await seedJob("pay");
-    const inv = await st.createInvoice(db, { jobId: j.id, lines: [{ description: "Coverage", amountCents: 20000 }] }, undefined, now);
+    const inv = await st.createInvoice(
+      db,
+      { jobId: j.id, lines: [{ description: "Coverage", amountCents: 20000 }] },
+      undefined,
+      now,
+    );
     await st.sendInvoice(db, inv.id, now);
-    const p1 = await st.recordPayment(db, { invoiceId: inv.id, provider: "mock", providerRef: "pi_1", amountCents: 5000, status: "succeeded" }, now);
+    const p1 = await st.recordPayment(
+      db,
+      { invoiceId: inv.id, provider: "mock", providerRef: "pi_1", amountCents: 5000, status: "succeeded" },
+      now,
+    );
     expect(p1.duplicate).toBe(false);
     expect((await db.select().from(s.studioInvoices).where(eq(s.studioInvoices.id, inv.id)))[0].status).toBe("partial");
-    const dup = await st.recordPayment(db, { invoiceId: inv.id, provider: "mock", providerRef: "pi_1", amountCents: 5000, status: "succeeded" }, now);
+    const dup = await st.recordPayment(
+      db,
+      { invoiceId: inv.id, provider: "mock", providerRef: "pi_1", amountCents: 5000, status: "succeeded" },
+      now,
+    );
     expect(dup.duplicate).toBe(true);
-    await st.recordPayment(db, { invoiceId: inv.id, provider: "mock", providerRef: "pi_2", amountCents: 15000, status: "succeeded" }, now);
+    await st.recordPayment(
+      db,
+      { invoiceId: inv.id, provider: "mock", providerRef: "pi_2", amountCents: 15000, status: "succeeded" },
+      now,
+    );
     const [paid] = await db.select().from(s.studioInvoices).where(eq(s.studioInvoices.id, inv.id));
     expect(paid.status).toBe("paid");
     expect((await db.select().from(s.studioJobs).where(eq(s.studioJobs.id, j.id)))[0].status).toBe("paid");
     // a failed payment changes nothing
-    const f = await st.recordPayment(db, { invoiceId: inv.id, provider: "mock", providerRef: "pi_3", amountCents: 1, status: "failed" }, now);
+    const f = await st.recordPayment(
+      db,
+      { invoiceId: inv.id, provider: "mock", providerRef: "pi_3", amountCents: 1, status: "failed" },
+      now,
+    );
     expect(f.duplicate).toBe(false);
   });
   it("webhook events are claimed once", async () => {

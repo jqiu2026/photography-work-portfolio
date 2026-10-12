@@ -15,6 +15,7 @@
     "@jerryqiu/inbox": "workspace:*",
     "@jerryqiu/media": "workspace:*",
     "@jerryqiu/mocks": "workspace:*",
+    "@jerryqiu/payments": "workspace:*",
     "@jerryqiu/protect": "workspace:*",
     "@jerryqiu/render": "workspace:*",
     "@jerryqiu/shootproof": "workspace:*",

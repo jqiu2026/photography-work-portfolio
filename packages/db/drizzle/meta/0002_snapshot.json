@@ -442,12 +442,8 @@
           "name": "flight_entries_photo_media_id_media_id_fk",
           "tableFrom": "flight_entries",
           "tableTo": "media",
-          "columnsFrom": [
-            "photo_media_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["photo_media_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -589,12 +585,8 @@
           "name": "galleries_cover_media_id_media_id_fk",
           "tableFrom": "galleries",
           "tableTo": "media",
-          "columnsFrom": [
-            "cover_media_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["cover_media_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -683,12 +675,8 @@
           "name": "gallery_items_gallery_id_galleries_id_fk",
           "tableFrom": "gallery_items",
           "tableTo": "galleries",
-          "columnsFrom": [
-            "gallery_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["gallery_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -696,12 +684,8 @@
           "name": "gallery_items_media_id_media_id_fk",
           "tableFrom": "gallery_items",
           "tableTo": "media",
-          "columnsFrom": [
-            "media_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["media_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1159,12 +1143,8 @@
           "name": "music_items_audio_media_id_media_id_fk",
           "tableFrom": "music_items",
           "tableTo": "media",
-          "columnsFrom": [
-            "audio_media_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["audio_media_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -1172,12 +1152,8 @@
           "name": "music_items_cover_media_id_media_id_fk",
           "tableFrom": "music_items",
           "tableTo": "media",
-          "columnsFrom": [
-            "cover_media_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["cover_media_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1353,12 +1329,8 @@
           "name": "post_versions_post_id_posts_id_fk",
           "tableFrom": "post_versions",
           "tableTo": "posts",
-          "columnsFrom": [
-            "post_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["post_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1542,12 +1514,8 @@
           "name": "posts_cover_media_id_media_id_fk",
           "tableFrom": "posts",
           "tableTo": "media",
-          "columnsFrom": [
-            "cover_media_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["cover_media_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1607,12 +1575,8 @@
           "name": "project_versions_project_id_projects_id_fk",
           "tableFrom": "project_versions",
           "tableTo": "projects",
-          "columnsFrom": [
-            "project_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["project_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1809,12 +1773,8 @@
           "name": "projects_cover_media_id_media_id_fk",
           "tableFrom": "projects",
           "tableTo": "media",
-          "columnsFrom": [
-            "cover_media_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["cover_media_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1983,10 +1943,7 @@
       "compositePrimaryKeys": {
         "settings_site_key_pk": {
           "name": "settings_site_key_pk",
-          "columns": [
-            "site",
-            "key"
-          ]
+          "columns": ["site", "key"]
         }
       },
       "uniqueConstraints": {},
@@ -2165,12 +2122,8 @@
           "name": "studio_bookings_client_id_studio_clients_id_fk",
           "tableFrom": "studio_bookings",
           "tableTo": "studio_clients",
-          "columnsFrom": [
-            "client_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["client_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -2436,12 +2389,8 @@
           "name": "studio_contracts_job_id_studio_jobs_id_fk",
           "tableFrom": "studio_contracts",
           "tableTo": "studio_jobs",
-          "columnsFrom": [
-            "job_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["job_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -2488,12 +2437,8 @@
           "name": "studio_favorites_gallery_id_studio_galleries_id_fk",
           "tableFrom": "studio_favorites",
           "tableTo": "studio_galleries",
-          "columnsFrom": [
-            "gallery_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["gallery_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -2501,12 +2446,8 @@
           "name": "studio_favorites_media_id_media_id_fk",
           "tableFrom": "studio_favorites",
           "tableTo": "media",
-          "columnsFrom": [
-            "media_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["media_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -2514,10 +2455,7 @@
       "compositePrimaryKeys": {
         "studio_favorites_gallery_id_media_id_pk": {
           "name": "studio_favorites_gallery_id_media_id_pk",
-          "columns": [
-            "gallery_id",
-            "media_id"
-          ]
+          "columns": ["gallery_id", "media_id"]
         }
       },
       "uniqueConstraints": {},
@@ -2652,12 +2590,8 @@
           "name": "studio_galleries_job_id_studio_jobs_id_fk",
           "tableFrom": "studio_galleries",
           "tableTo": "studio_jobs",
-          "columnsFrom": [
-            "job_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["job_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -2665,12 +2599,8 @@
           "name": "studio_galleries_cover_media_id_media_id_fk",
           "tableFrom": "studio_galleries",
           "tableTo": "media",
-          "columnsFrom": [
-            "cover_media_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["cover_media_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -2718,12 +2648,8 @@
           "name": "studio_gallery_items_gallery_id_studio_galleries_id_fk",
           "tableFrom": "studio_gallery_items",
           "tableTo": "studio_galleries",
-          "columnsFrom": [
-            "gallery_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["gallery_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -2731,12 +2657,8 @@
           "name": "studio_gallery_items_media_id_media_id_fk",
           "tableFrom": "studio_gallery_items",
           "tableTo": "media",
-          "columnsFrom": [
-            "media_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["media_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -2744,10 +2666,7 @@
       "compositePrimaryKeys": {
         "studio_gallery_items_gallery_id_media_id_pk": {
           "name": "studio_gallery_items_gallery_id_media_id_pk",
-          "columns": [
-            "gallery_id",
-            "media_id"
-          ]
+          "columns": ["gallery_id", "media_id"]
         }
       },
       "uniqueConstraints": {},
@@ -2916,12 +2835,8 @@
           "name": "studio_invoices_job_id_studio_jobs_id_fk",
           "tableFrom": "studio_invoices",
           "tableTo": "studio_jobs",
-          "columnsFrom": [
-            "job_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["job_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -3065,12 +2980,8 @@
           "name": "studio_jobs_client_id_studio_clients_id_fk",
           "tableFrom": "studio_jobs",
           "tableTo": "studio_clients",
-          "columnsFrom": [
-            "client_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["client_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -3193,12 +3104,8 @@
           "name": "studio_payments_invoice_id_studio_invoices_id_fk",
           "tableFrom": "studio_payments",
           "tableTo": "studio_invoices",
-          "columnsFrom": [
-            "invoice_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["invoice_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -3457,206 +3364,102 @@
     "public.studio_access_mode": {
       "name": "studio_access_mode",
       "schema": "public",
-      "values": [
-        "passcode",
-        "magic-link",
-        "both"
-      ]
+      "values": ["passcode", "magic-link", "both"]
     },
     "public.studio_booking_status": {
       "name": "studio_booking_status",
       "schema": "public",
-      "values": [
-        "new",
-        "converted",
-        "archived"
-      ]
+      "values": ["new", "converted", "archived"]
     },
     "public.studio_gallery_status": {
       "name": "studio_gallery_status",
       "schema": "public",
-      "values": [
-        "draft",
-        "published",
-        "archived"
-      ]
+      "values": ["draft", "published", "archived"]
     },
     "public.studio_contract_status": {
       "name": "studio_contract_status",
       "schema": "public",
-      "values": [
-        "draft",
-        "sent",
-        "viewed",
-        "signed",
-        "declined",
-        "void"
-      ]
+      "values": ["draft", "sent", "viewed", "signed", "declined", "void"]
     },
     "public.studio_download_policy": {
       "name": "studio_download_policy",
       "schema": "public",
-      "values": [
-        "none",
-        "preview",
-        "web",
-        "full"
-      ]
+      "values": ["none", "preview", "web", "full"]
     },
     "public.flight_kind": {
       "name": "flight_kind",
       "schema": "public",
-      "values": [
-        "milestone",
-        "flight"
-      ]
+      "values": ["milestone", "flight"]
     },
     "public.inbox_status": {
       "name": "inbox_status",
       "schema": "public",
-      "values": [
-        "new",
-        "read",
-        "replied",
-        "archived",
-        "spam"
-      ]
+      "values": ["new", "read", "replied", "archived", "spam"]
     },
     "public.studio_invoice_status": {
       "name": "studio_invoice_status",
       "schema": "public",
-      "values": [
-        "draft",
-        "sent",
-        "viewed",
-        "partial",
-        "paid",
-        "void"
-      ]
+      "values": ["draft", "sent", "viewed", "partial", "paid", "void"]
     },
     "public.studio_job_status": {
       "name": "studio_job_status",
       "schema": "public",
-      "values": [
-        "inquiry",
-        "booked",
-        "shot",
-        "editing",
-        "delivered",
-        "paid",
-        "cancelled"
-      ]
+      "values": ["inquiry", "booked", "shot", "editing", "delivered", "paid", "cancelled"]
     },
     "public.license": {
       "name": "license",
       "schema": "public",
-      "values": [
-        "all-rights-reserved",
-        "cc-by",
-        "cc-by-nc",
-        "cc-by-sa",
-        "cc0"
-      ]
+      "values": ["all-rights-reserved", "cc-by", "cc-by-nc", "cc-by-sa", "cc0"]
     },
     "public.media_kind": {
       "name": "media_kind",
       "schema": "public",
-      "values": [
-        "image",
-        "audio",
-        "video",
-        "file"
-      ]
+      "values": ["image", "audio", "video", "file"]
     },
     "public.music_kind": {
       "name": "music_kind",
       "schema": "public",
-      "values": [
-        "recording",
-        "performance"
-      ]
+      "values": ["recording", "performance"]
     },
     "public.studio_payment_status": {
       "name": "studio_payment_status",
       "schema": "public",
-      "values": [
-        "pending",
-        "succeeded",
-        "failed",
-        "refunded"
-      ]
+      "values": ["pending", "succeeded", "failed", "refunded"]
     },
     "public.project_type": {
       "name": "project_type",
       "schema": "public",
-      "values": [
-        "photography",
-        "software",
-        "design",
-        "writing",
-        "other"
-      ]
+      "values": ["photography", "software", "design", "writing", "other"]
     },
     "public.review_status": {
       "name": "review_status",
       "schema": "public",
-      "values": [
-        "ok",
-        "needs_review"
-      ]
+      "values": ["ok", "needs_review"]
     },
     "public.music_rights": {
       "name": "music_rights",
       "schema": "public",
-      "values": [
-        "original",
-        "cover",
-        "licensed",
-        "third-party-embed"
-      ]
+      "values": ["original", "cover", "licensed", "third-party-embed"]
     },
     "public.role": {
       "name": "role",
       "schema": "public",
-      "values": [
-        "owner",
-        "editor",
-        "client"
-      ]
+      "values": ["owner", "editor", "client"]
     },
     "public.site": {
       "name": "site",
       "schema": "public",
-      "values": [
-        "hub",
-        "photos",
-        "music",
-        "flying",
-        "all"
-      ]
+      "values": ["hub", "photos", "music", "flying", "all"]
     },
     "public.status": {
       "name": "status",
       "schema": "public",
-      "values": [
-        "draft",
-        "scheduled",
-        "published"
-      ]
+      "values": ["draft", "scheduled", "published"]
     },
     "public.timeline_category": {
       "name": "timeline_category",
       "schema": "public",
-      "values": [
-        "work",
-        "education",
-        "leadership",
-        "volunteering",
-        "flying",
-        "music",
-        "photography",
-        "other"
-      ]
+      "values": ["work", "education", "leadership", "volunteering", "flying", "music", "photography", "other"]
     }
   },
   "schemas": {},

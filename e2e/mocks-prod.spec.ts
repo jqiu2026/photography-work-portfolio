@@ -1,7 +1,10 @@
 import { expect, test } from "@playwright/test";
 import { hub, photos } from "./routes";
 
-/** Mocks are disabled in production builds: every mock route is a 404 and nothing in the navigation points at them. */
+/**
+ * Mocks are disabled in production builds: the score store and the flight map are 404 and nothing in the navigation points
+ * at them. The studio and client pages are real (database-backed): without a database or a session they redirect or 404.
+ */
 const mockRoutes = [
   `${hub}/music/compositions`,
   `${hub}/music/compositions/sample-window-music`,
@@ -13,9 +16,9 @@ const mockRoutes = [
   `${hub}/flying/map`,
   `${photos}/studio/overview`,
   `${photos}/studio/shoots`,
-  `${photos}/client/g/g1`,
-  `${photos}/client/sign/env_mock_seed`,
-  `${photos}/client/pay/i1`,
+  `${photos}/client/gallery`,
+  `${photos}/client/sign/not-a-real-token`,
+  `${photos}/client/pay/not-a-real-token`,
 ];
 
 for (const url of mockRoutes) {
@@ -27,7 +30,7 @@ for (const url of mockRoutes) {
   });
 }
 
-test("the client portal entry shows no mock forms in production", async ({ page }) => {
+test("the client portal entry shows no passcode form without a database", async ({ page }) => {
   await page.goto(`${photos}/client`, { waitUntil: "networkidle" });
   await expect(page.getByRole("note", { name: "Mock notice" })).toHaveCount(0);
   await expect(page.getByLabel("Passcode", { exact: true })).toHaveCount(0);

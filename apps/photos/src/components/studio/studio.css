@@ -200,6 +200,7 @@
   color: #fff;
 }
 .st-fav {
+  z-index: 5;
   position: absolute;
   top: .4rem;
   right: .4rem;

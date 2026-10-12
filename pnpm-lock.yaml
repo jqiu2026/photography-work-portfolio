@@ -269,6 +269,9 @@ importers:
       '@jerryqiu/mocks':
         specifier: workspace:*
         version: link:../../packages/mocks
+      '@jerryqiu/payments':
+        specifier: workspace:*
+        version: link:../../packages/payments
       '@jerryqiu/protect':
         specifier: workspace:*
         version: link:../../packages/protect

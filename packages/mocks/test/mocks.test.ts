@@ -1,12 +1,9 @@
 import { describe, expect, it } from "vitest";
 import {
   MemoryStore,
-  MockClientPortal,
-  MockESignProvider,
   MockFlightSource,
   MockPaymentProvider,
   MockScoreDelivery,
-  StudioRepo,
   TEST_CARDS,
   addToCart,
   assertMocks,
@@ -14,13 +11,11 @@ import {
   compositions,
   greatCircle,
   hasListen,
-  invoiceTotal,
   makeOrder,
   mocksEnabled,
   publishable,
   sampleRaw,
   airports,
-  SHOOT_STEPS,
   removeFromCart,
 } from "../src";
 
@@ -91,76 +86,6 @@ describe("PaymentProvider (Stripe test-mode shape)", () => {
     const done = await p.confirm(i, card);
     if (!done.ok) throw new Error("expected success");
     expect((await p.confirm(done.intent, card)).ok).toBe(false);
-  });
-});
-
-describe("ESignProvider", () => {
-  const e = new MockESignProvider(() => now);
-  it("signs with a typed name and agreement, once", async () => {
-    const env = await e.createEnvelope("k1");
-    expect(env).toMatchObject({ status: "sent", mock: true });
-    await expect(e.sign(env, { signerName: "A", agree: true })).rejects.toThrow(/full name/);
-    await expect(e.sign(env, { signerName: "Sample Client", agree: false })).rejects.toThrow(/agree/);
-    const { envelope, signature } = await e.sign(env, { signerName: "  Sample Client ", agree: true });
-    expect(envelope.status).toBe("signed");
-    expect(signature).toMatchObject({ signerName: "Sample Client", signedAt: now.toISOString() });
-    await expect(e.sign(envelope, { signerName: "Sample Client", agree: true })).rejects.toThrow(/already signed/);
-  });
-});
-
-describe("ClientPortal", () => {
-  const galleries = () => [{ id: "g1", clientId: "c1", passcode: "sample-1234", clientEmail: "client.a@example.test" }];
-  const portal = new MockClientPortal(galleries);
-  it("opens a gallery with the passcode (case and spaces ignored) and refuses a wrong one", async () => {
-    expect((await portal.withPasscode(" SAMPLE-1234 "))?.galleryId).toBe("g1");
-    expect(await portal.withPasscode("nope")).toBeNull();
-  });
-  it("magic links are shown on screen (never emailed), single use, and unknown emails get nothing", async () => {
-    const m = await portal.requestMagicLink("Client.A@example.test");
-    expect(m?.shownOnScreen).toBe(true);
-    expect(m?.link).toContain("/client/g/g1?ml=");
-    expect((await portal.redeem(m!.token))?.via).toBe("magic-link");
-    expect(await portal.redeem(m!.token)).toBeNull();
-    expect(await portal.requestMagicLink("stranger@example.test")).toBeNull();
-  });
-});
-
-describe("StudioRepo", () => {
-  const repo = () => new StudioRepo(new MemoryStore(), () => now);
-  it("seeds fake data labelled as samples", () => {
-    const d = repo().data();
-    expect(d.clients.every((c) => /^Sample/.test(c.name))).toBe(true);
-    expect(d.shoots.every((s) => s.title.startsWith("SAMPLE"))).toBe(true);
-  });
-  it("walks a shoot through every step, then stops", () => {
-    const r = repo();
-    const s = r.addShoot("c1", "Test shoot", "2026-11-01");
-    for (let i = 1; i < SHOOT_STEPS.length; i++) expect(r.advanceShoot(s.id).step).toBe(SHOOT_STEPS[i]);
-    expect(r.advanceShoot(s.id).step).toBe("paid");
-  });
-  it("validates clients, passcodes (length, uniqueness) and invoices", () => {
-    const r = repo();
-    expect(() => r.addClient("A", "x")).toThrow();
-    expect(() => r.createGallery("s2", "short")).toThrow(/6 characters/);
-    expect(() => r.createGallery("s2", "SAMPLE-1234")).toThrow(/already used/);
-    expect(r.createGallery("s2", "another-pass").passcode).toBe("another-pass");
-    expect(() => r.createInvoice("s1", [{ description: "", amountCents: 0 }])).toThrow();
-    const inv = r.createInvoice("s2", [
-      { description: "Coverage", amountCents: 20000 },
-      { description: "Prints", amountCents: 5000 },
-    ]);
-    expect(invoiceTotal(inv)).toBe(25000);
-  });
-  it("toggles favourites and converts a booking into a client once", () => {
-    const r = repo();
-    expect(r.toggleFavourite("g1", "p3")).toEqual(["p3"]);
-    expect(r.toggleFavourite("g1", "p3")).toEqual([]);
-    const c1 = r.convertBooking("b1");
-    const count = r.data().clients.length;
-    r.addBooking({ name: "Sample Visitor", email: "visitor@example.test", topic: "Event", message: "again" });
-    const second = r.data().bookings[0];
-    expect(r.convertBooking(second.id).id).toBe(c1.id);
-    expect(r.data().clients.length).toBe(count);
   });
 });
 

@@ -1,8 +1,6 @@
 import { Container, Eyebrow, Heading, Section, Text } from "@halation/ui";
 import { sourceFromEnv } from "@jerryqiu/shootproof";
 import { can } from "@jerryqiu/auth";
-import { mocksEnabled } from "@jerryqiu/mocks";
-import { MockBanner } from "@jerryqiu/sites/mock";
 import Link from "next/link";
 import { studioSections } from "@/components/studio/sections";
 import { Shell } from "@/components/Shell";
@@ -13,10 +11,11 @@ export const metadata = { title: "Studio", robots: { index: false, follow: false
 export const dynamic = "force-dynamic";
 
 const roadmap = [
-  "Client galleries with passcodes, favourites and downloads",
-  "Contracts and e-signatures",
-  "Invoices and payments",
-  "Bookings and a client portal",
+  "Downloads with per-viewer watermarks and a download log",
+  "Emailed links (Resend) instead of copying them",
+  "Stripe live payments (test mode needs your Stripe key)",
+  "Signed PDF contracts and a booking calendar",
+  "Migrating galleries from ShootProof",
 ];
 
 export default async function Studio() {
@@ -30,28 +29,25 @@ export default async function Studio() {
           Hello, {user.name?.split(" ")[0] ?? "there"}
         </Heading>
       </Container>
-      {mocksEnabled() ? <MockBanner what="The business tools below are local mocks" /> : null}
       <Section style={{ paddingTop: 0 }}>
         <Container size="md">
-          {mocksEnabled() ? (
-            <div className="studio-card" style={{ marginBottom: "1.5rem" }}>
-              <Heading as="h2" size="2xl">
-                Studio (mock)
-              </Heading>
-              <Text tone="muted" size="sm" style={{ margin: "0.5rem 0 1rem" }}>
-                Clients, shoots, galleries, contracts and invoices. Everything is sample data stored in this browser.
-              </Text>
-              <ul className="studio-steps">
-                {studioSections.map((x) => (
-                  <li key={x.id}>
-                    <Link href={`/studio/${x.id}`} className="hl-link">
-                      {x.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ) : null}
+          <div className="studio-card" style={{ marginBottom: "1.5rem" }}>
+            <Heading as="h2" size="2xl">
+              Studio
+            </Heading>
+            <Text tone="muted" size="sm" style={{ margin: "0.5rem 0 1rem" }}>
+              Clients, jobs, client galleries, contracts, invoices and bookings.
+            </Text>
+            <ul className="studio-steps">
+              {studioSections.map((x) => (
+                <li key={x.id}>
+                  <Link href={`/studio/${x.id}`} className="hl-link">
+                    {x.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
           <div className="studio-card">
             <Heading as="h2" size="2xl">
               ShootProof bridge
@@ -75,10 +71,10 @@ export default async function Studio() {
           </div>
           <div className="studio-card" style={{ marginTop: "1.5rem" }}>
             <Heading as="h2" size="2xl">
-              Phase 3 replaces the mocks with real services
+              Still to come
             </Heading>
             <Text tone="muted" size="sm" style={{ margin: "0.5rem 0" }}>
-              Not started. This replaces the need for ShootProof.
+              The studio above is built; these pieces finish the replacement of ShootProof.
             </Text>
             <ul className="studio-steps">
               {roadmap.map((r) => (

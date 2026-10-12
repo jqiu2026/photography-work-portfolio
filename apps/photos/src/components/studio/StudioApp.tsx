@@ -1,43 +1,64 @@
 "use client";
 
-import {
-  SHOOT_STEPS,
-  invoiceTotal,
-  usd,
-  type Booking,
-  type Client,
-  type Contract,
-  type Invoice,
-  type Shoot,
-} from "@jerryqiu/mocks";
 import Link from "next/link";
-import { useState, type FormEvent, type ReactNode } from "react";
+import { useRouter } from "next/navigation";
+import { useState, useTransition, type ReactNode } from "react";
+import {
+  addClientAction,
+  addJobAction,
+  advanceJobAction,
+  convertBookingAction,
+  createContractAction,
+  createGalleryAction,
+  createInvoiceAction,
+  markInvoicePaidAction,
+  publishGalleryAction,
+  sendContractAction,
+  sendInvoiceAction,
+} from "@/app/studio/actions";
 import "./studio.css";
 import { studioSections } from "./sections";
-import { useStudio } from "./useStudio";
 
-function useAction() {
-  const [error, setError] = useState<string>();
-  const run = (fn: () => void | Promise<void>) => async () => {
-    setError(undefined);
-    try {
-      await fn();
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Something went wrong.");
-    }
-  };
-  return { error, setError, run };
+const JOB_STEPS = ["inquiry", "booked", "shot", "editing", "delivered", "paid"] as const;
+const usd = (cents: number) =>
+  new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(cents / 100);
+const day = (d: Date | string | null) => (d ? new Date(d).toISOString().slice(0, 10) : "");
+
+export type StudioData = {
+  clients: { id: string; name: string; email: string }[];
+  jobs: {
+    id: string;
+    clientId: string;
+    clientName: string;
+    title: string;
+    date: Date | string | null;
+    status: string;
+    feeCents: number;
+  }[];
+  galleries: { id: string; jobTitle: string; title: string; status: string; items: number }[];
+  bookings: { id: string; name: string; email: string; topic: string; message: string; status: string }[];
+  contracts: { id: string; jobTitle: string; status: string; signedBy: string | null }[];
+  invoices: { id: string; number: string; jobTitle: string; status: string; totalCents: number; lines: string }[];
+  media: { id: string; filename: string }[];
+};
+
+type Result = { ok: boolean; message?: string; error?: string; link?: string };
+
+function Banner({ note }: { note: Result | null }) {
+  if (!note) return null;
+  return (
+    <div className="st-card" role={note.ok ? "status" : "alert"} data-ok={note.ok || undefined}>
+      <p className={note.ok ? "st-note" : "st-error"}>{note.ok ? note.message : note.error}</p>
+      {note.link ? (
+        <p className="st-note">
+          Link (copy it to the client; nothing is emailed in this phase): <code>{note.link}</code>
+        </p>
+      ) : null}
+    </div>
+  );
 }
 
-function Err({ error }: { error?: string }) {
-  return error ? (
-    <p role="alert" className="st-error">
-      {error}
-    </p>
-  ) : null;
-}
-
-function Card({ title, children, id }: { title: string; children: ReactNode; id?: string }) {
+function Card({ title, children, id }: { title: string; children: ReactNode; id: string }) {
   return (
     <section className="st-card" aria-labelledby={id}>
       <h2 id={id}>{title}</h2>
@@ -46,41 +67,32 @@ function Card({ title, children, id }: { title: string; children: ReactNode; id?
   );
 }
 
-export function StudioApp({ section, user }: { section: string; user: string }) {
-  const s = useStudio();
-  const { repo, data, bump } = s;
-  const act = useAction();
+/** Studio dashboard sections. Every button calls a guarded server action; the page refreshes from the database. */
+export function StudioApp({ section, user, data }: { section: string; user: string; data: StudioData }) {
+  const router = useRouter();
+  const [pending, start] = useTransition();
+  const [note, setNote] = useState<Result | null>(null);
   const [form, setForm] = useState<Record<string, string>>({});
+  const [picked, setPicked] = useState<string[]>([]);
   const set = (k: string) => (e: { target: { value: string } }) => setForm((f) => ({ ...f, [k]: e.target.value }));
-  const [links, setLinks] = useState<Record<string, string>>({});
 
-  if (!data) return <p className="st-note">Loading the mock studio…</p>;
-  const client = (id: string) => data.clients.find((c) => c.id === id);
-  const shoot = (id: string) => data.shoots.find((x) => x.id === id);
-
-  const submit = (fn: () => void) => async (e: FormEvent) => {
+  const run = (fn: () => Promise<unknown>, after?: () => void) =>
+    start(async () => {
+      const r = (await fn()) as Result;
+      setNote(r);
+      if (r.ok) {
+        after?.();
+        router.refresh();
+      }
+    });
+  const submit = (fn: () => Promise<unknown>, after?: () => void) => (e: React.FormEvent) => {
     e.preventDefault();
-    await act.run(() => {
-      fn();
-      bump();
-    })();
+    run(fn, after);
   };
-
-  const nav = (
-    <nav className="st-nav" aria-label="Studio sections">
-      {studioSections.map((x) => (
-        <Link key={x.id} href={`/studio/${x.id}`} aria-current={x.id === section ? "page" : undefined}>
-          {x.label}
-        </Link>
-      ))}
-      <Link href="/studio">ShootProof</Link>
-    </nav>
-  );
 
   let body: ReactNode = null;
   if (section === "overview") {
-    const unpaid = data.invoices.filter((i) => i.status !== "paid");
-    const upcoming = data.shoots.filter((x) => x.date >= new Date().toISOString().slice(0, 10) && x.step !== "paid");
+    const unpaid = data.invoices.filter((i) => i.status !== "paid" && i.status !== "void");
     body = (
       <div className="st-grid">
         <Card title="Today" id="st-today">
@@ -90,16 +102,16 @@ export function StudioApp({ section, user }: { section: string; user: string }) 
               <dd>{data.bookings.filter((b) => b.status === "new").length}</dd>
             </div>
             <div>
-              <dt>Upcoming shoots</dt>
-              <dd>{upcoming.length}</dd>
+              <dt>Open jobs</dt>
+              <dd>{data.jobs.filter((j) => j.status !== "paid" && j.status !== "cancelled").length}</dd>
             </div>
             <div>
               <dt>Unpaid invoices</dt>
               <dd>{unpaid.length}</dd>
             </div>
             <div>
-              <dt>Contracts awaiting signature</dt>
-              <dd>{data.contracts.filter((k) => k.status === "sent").length}</dd>
+              <dt>Awaiting signature</dt>
+              <dd>{data.contracts.filter((k) => k.status === "sent" || k.status === "viewed").length}</dd>
             </div>
           </dl>
         </Card>
@@ -108,8 +120,10 @@ export function StudioApp({ section, user }: { section: string; user: string }) 
             <ul className="st-list">
               {unpaid.map((i) => (
                 <li key={i.id}>
-                  <span>{shoot(i.shootId)?.title}</span>
-                  <strong>{usd(invoiceTotal(i))}</strong>
+                  <span>
+                    {i.number} · {i.jobTitle}
+                  </span>
+                  <strong>{usd(i.totalCents)}</strong>
                 </li>
               ))}
             </ul>
@@ -117,71 +131,64 @@ export function StudioApp({ section, user }: { section: string; user: string }) 
             <p className="st-note">Nothing outstanding.</p>
           )}
         </Card>
-        <Card title="Reset" id="st-reset">
-          <p className="st-note">All mock data lives in this browser only. Reset restores the sample records.</p>
-          <button
-            type="button"
-            className="st-btn st-btn--ghost"
-            onClick={() => {
-              repo.reset();
-              bump();
-            }}
-          >
-            Reset sample data
-          </button>
-        </Card>
       </div>
     );
   } else if (section === "bookings") {
     body = (
       <Card title="Bookings" id="st-b">
-        <ul className="st-list">
-          {data.bookings.map((b: Booking) => (
-            <li key={b.id}>
-              <span>
-                <strong>{b.name}</strong> · {b.topic}
-                <small>{b.message}</small>
-              </span>
-              {b.status === "new" ? (
-                <button
-                  type="button"
-                  className="st-btn"
-                  onClick={act.run(() => {
-                    repo.convertBooking(b.id);
-                    bump();
-                  })}
-                >
-                  Convert to client
-                </button>
-              ) : (
-                <em>converted</em>
-              )}
-            </li>
-          ))}
-        </ul>
-        <Err error={act.error} />
+        {data.bookings.length ? (
+          <ul className="st-list">
+            {data.bookings.map((b) => (
+              <li key={b.id}>
+                <span>
+                  <strong>{b.name}</strong> · {b.topic}
+                  <small>{b.message}</small>
+                </span>
+                {b.status === "new" ? (
+                  <button
+                    type="button"
+                    className="st-btn"
+                    disabled={pending}
+                    onClick={() => run(() => convertBookingAction(b.id))}
+                  >
+                    Convert to client
+                  </button>
+                ) : (
+                  <em>{b.status}</em>
+                )}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="st-note">No bookings yet.</p>
+        )}
       </Card>
     );
   } else if (section === "clients") {
     body = (
       <div className="st-grid">
         <Card title="Clients" id="st-c">
-          <ul className="st-list">
-            {data.clients.map((c: Client) => (
-              <li key={c.id}>
-                <strong>{c.name}</strong>
-                <span>{c.email}</span>
-              </li>
-            ))}
-          </ul>
+          {data.clients.length ? (
+            <ul className="st-list">
+              {data.clients.map((c) => (
+                <li key={c.id}>
+                  <strong>{c.name}</strong>
+                  <span>{c.email}</span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="st-note">No clients yet.</p>
+          )}
         </Card>
         <Card title="Add a client" id="st-ac">
           <form
-            onSubmit={submit(() => {
-              repo.addClient(form.cname ?? "", form.cemail ?? "");
-              setForm({});
-            })}
+            noValidate
             className="st-form"
+            onSubmit={submit(
+              () => addClientAction({ name: form.cname ?? "", email: form.cemail ?? "" }),
+              () => setForm({}),
+            )}
           >
             <label>
               Name
@@ -191,8 +198,7 @@ export function StudioApp({ section, user }: { section: string; user: string }) 
               Email
               <input type="email" value={form.cemail ?? ""} onChange={set("cemail")} />
             </label>
-            <Err error={act.error} />
-            <button className="st-btn" type="submit">
+            <button className="st-btn" type="submit" disabled={pending}>
               Add client
             </button>
           </form>
@@ -202,77 +208,87 @@ export function StudioApp({ section, user }: { section: string; user: string }) 
   } else if (section === "shoots") {
     body = (
       <div className="st-grid">
-        <Card title="Shoots" id="st-s">
-          <ul className="st-list st-list--tall">
-            {data.shoots.map((x: Shoot) => (
-              <li key={x.id}>
-                <span>
-                  <strong>{x.title}</strong>
-                  <small>
-                    {client(x.clientId)?.name} · {x.date}
-                  </small>
-                  <ol className="st-steps" aria-label={`Progress: ${x.step}`}>
-                    {SHOOT_STEPS.map((st) => (
-                      <li
-                        key={st}
-                        data-done={SHOOT_STEPS.indexOf(st) <= SHOOT_STEPS.indexOf(x.step) || undefined}
-                        aria-current={st === x.step ? "step" : undefined}
+        <Card title="Jobs" id="st-s">
+          {data.jobs.length ? (
+            <ul className="st-list st-list--tall">
+              {data.jobs.map((j) => (
+                <li key={j.id}>
+                  <span>
+                    <strong>{j.title}</strong>
+                    <small>
+                      {j.clientName} · {day(j.date)} · {usd(j.feeCents)}
+                    </small>
+                    <ol className="st-steps" aria-label={`Progress: ${j.status}`}>
+                      {JOB_STEPS.map((st) => (
+                        <li
+                          key={st}
+                          data-done={
+                            JOB_STEPS.indexOf(st) <= JOB_STEPS.indexOf(j.status as (typeof JOB_STEPS)[number]) ||
+                            undefined
+                          }
+                          aria-current={st === j.status ? "step" : undefined}
+                        >
+                          {st}
+                        </li>
+                      ))}
+                    </ol>
+                  </span>
+                  <span className="st-actions">
+                    {j.status !== "paid" ? (
+                      <button
+                        type="button"
+                        className="st-btn"
+                        disabled={pending}
+                        onClick={() => run(() => advanceJobAction(j.id))}
                       >
-                        {st}
-                      </li>
-                    ))}
-                  </ol>
-                </span>
-                <span className="st-actions">
-                  {x.step !== "paid" ? (
+                        Advance
+                      </button>
+                    ) : null}
                     <button
                       type="button"
-                      className="st-btn"
-                      onClick={act.run(() => {
-                        repo.advanceShoot(x.id);
-                        bump();
-                      })}
+                      className="st-btn st-btn--ghost"
+                      disabled={pending}
+                      onClick={() => run(() => createContractAction(j.id))}
                     >
-                      Advance
+                      New contract
                     </button>
-                  ) : null}
-                  <button
-                    type="button"
-                    className="st-btn st-btn--ghost"
-                    onClick={act.run(() => {
-                      repo.createContract(x.id);
-                      bump();
-                    })}
-                  >
-                    New contract
-                  </button>
-                  <button
-                    type="button"
-                    className="st-btn st-btn--ghost"
-                    onClick={act.run(() => {
-                      repo.createInvoice(x.id, [{ description: "SAMPLE: Event coverage", amountCents: 30000 }]);
-                      bump();
-                    })}
-                  >
-                    New invoice
-                  </button>
-                </span>
-              </li>
-            ))}
-          </ul>
-          <Err error={act.error} />
+                    <button
+                      type="button"
+                      className="st-btn st-btn--ghost"
+                      disabled={pending}
+                      onClick={() =>
+                        run(() =>
+                          createInvoiceAction({
+                            jobId: j.id,
+                            description: "Photography services",
+                            amountDollars: String(j.feeCents ? j.feeCents / 100 : 300),
+                          }),
+                        )
+                      }
+                    >
+                      New invoice
+                    </button>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="st-note">No jobs yet.</p>
+          )}
         </Card>
-        <Card title="New shoot" id="st-ns">
+        <Card title="New job" id="st-ns">
           <form
-            onSubmit={submit(() => {
-              repo.addShoot(
-                form.client ?? data.clients[0]?.id ?? "",
-                form.title ?? "",
-                form.date ?? new Date().toISOString().slice(0, 10),
-              );
-              setForm({});
-            })}
             className="st-form"
+            onSubmit={submit(
+              () =>
+                addJobAction({
+                  clientId: form.client ?? data.clients[0]?.id ?? "",
+                  title: form.title ?? "",
+                  date: form.date,
+                  feeDollars: form.fee,
+                }),
+              () => setForm({}),
+            )}
           >
             <label>
               Client
@@ -292,9 +308,12 @@ export function StudioApp({ section, user }: { section: string; user: string }) 
               Date
               <input type="date" value={form.date ?? ""} onChange={set("date")} />
             </label>
-            <Err error={act.error} />
-            <button className="st-btn" type="submit">
-              Add shoot
+            <label>
+              Fee (dollars)
+              <input inputMode="decimal" value={form.fee ?? ""} onChange={set("fee")} />
+            </label>
+            <button className="st-btn" type="submit" disabled={pending || !data.clients.length}>
+              Add job
             </button>
           </form>
         </Card>
@@ -304,46 +323,80 @@ export function StudioApp({ section, user }: { section: string; user: string }) 
     body = (
       <div className="st-grid">
         <Card title="Client galleries" id="st-g">
-          <ul className="st-list">
-            {data.galleries.map((g) => (
-              <li key={g.id}>
-                <span>
-                  <strong>{g.title}</strong>
-                  <small>
-                    Passcode <code>{g.passcode}</code> · {g.favourites.length} favourites
-                  </small>
-                </span>
-                <Link href={`/client/g/${g.id}`} className="st-btn st-btn--ghost">
-                  Open as client
-                </Link>
-              </li>
-            ))}
-          </ul>
+          {data.galleries.length ? (
+            <ul className="st-list">
+              {data.galleries.map((g) => (
+                <li key={g.id}>
+                  <span>
+                    <strong>{g.title}</strong>
+                    <small>
+                      {g.jobTitle} · {g.items} photographs · {g.status}
+                    </small>
+                  </span>
+                  {g.status === "draft" ? (
+                    <button
+                      type="button"
+                      className="st-btn"
+                      disabled={pending}
+                      onClick={() => run(() => publishGalleryAction(g.id))}
+                    >
+                      Publish
+                    </button>
+                  ) : null}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="st-note">No galleries yet.</p>
+          )}
         </Card>
         <Card title="New gallery" id="st-ng">
           <form
-            onSubmit={submit(() => {
-              repo.createGallery(form.shoot ?? data.shoots[0]?.id ?? "", form.pass ?? "");
-              setForm({});
-            })}
             className="st-form"
+            onSubmit={submit(
+              () =>
+                createGalleryAction({
+                  jobId: form.job ?? data.jobs[0]?.id ?? "",
+                  passcode: form.pass ?? "",
+                  mediaIds: picked,
+                }),
+              () => {
+                setForm({});
+                setPicked([]);
+              },
+            )}
           >
             <label>
-              Shoot
-              <select value={form.shoot ?? data.shoots[0]?.id ?? ""} onChange={set("shoot")}>
-                {data.shoots.map((x) => (
-                  <option key={x.id} value={x.id}>
-                    {x.title}
+              Job
+              <select value={form.job ?? data.jobs[0]?.id ?? ""} onChange={set("job")}>
+                {data.jobs.map((j) => (
+                  <option key={j.id} value={j.id}>
+                    {j.title}
                   </option>
                 ))}
               </select>
             </label>
             <label>
               Passcode (6+ characters)
-              <input value={form.pass ?? ""} onChange={set("pass")} />
+              <input value={form.pass ?? ""} onChange={set("pass")} autoComplete="off" />
             </label>
-            <Err error={act.error} />
-            <button className="st-btn" type="submit">
+            <fieldset className="st-pick">
+              <legend>Photographs from the media library ({picked.length} chosen)</legend>
+              {data.media.map((m) => (
+                <label key={m.id} className="st-check">
+                  <input
+                    type="checkbox"
+                    checked={picked.includes(m.id)}
+                    onChange={(e) => setPicked((p) => (e.target.checked ? [...p, m.id] : p.filter((x) => x !== m.id)))}
+                  />
+                  {m.filename}
+                </label>
+              ))}
+              {!data.media.length ? (
+                <p className="st-note">Upload photographs in the admin media library first.</p>
+              ) : null}
+            </fieldset>
+            <button className="st-btn" type="submit" disabled={pending || !data.jobs.length}>
               Create gallery
             </button>
           </form>
@@ -353,86 +406,78 @@ export function StudioApp({ section, user }: { section: string; user: string }) 
   } else if (section === "contracts") {
     body = (
       <Card title="Contracts" id="st-k">
-        <ul className="st-list st-list--tall">
-          {data.contracts.map((k: Contract) => (
-            <li key={k.id}>
-              <span>
-                <strong>{shoot(k.shootId)?.title}</strong>
-                <small>
-                  {k.status}
-                  {k.signedBy ? ` · signed by ${k.signedBy}` : ""}
-                </small>
-                {links[k.id] ? (
+        {data.contracts.length ? (
+          <ul className="st-list st-list--tall">
+            {data.contracts.map((k) => (
+              <li key={k.id}>
+                <span>
+                  <strong>{k.jobTitle}</strong>
                   <small>
-                    Signing link (mock, never emailed): <Link href={links[k.id]}>{links[k.id]}</Link>
+                    {k.status}
+                    {k.signedBy ? ` · signed by ${k.signedBy}` : ""}
                   </small>
-                ) : null}
-              </span>
-              <span className="st-actions">
-                {k.status === "draft" ? (
+                </span>
+                {k.status === "draft" || k.status === "sent" || k.status === "viewed" ? (
                   <button
                     type="button"
                     className="st-btn"
-                    onClick={act.run(async () => {
-                      const env = await s.esign.createEnvelope(k.id);
-                      repo.updateContract(k.id, { status: "sent", envelopeId: env.id });
-                      setLinks((l) => ({ ...l, [k.id]: env.url }));
-                      bump();
-                    })}
+                    disabled={pending}
+                    onClick={() => run(() => sendContractAction(k.id))}
                   >
-                    Send for signature
+                    {k.status === "draft" ? "Send for signature" : "New signing link"}
                   </button>
                 ) : null}
-                {k.status === "sent" && k.envelopeId ? (
-                  <Link href={`/client/sign/${k.envelopeId}`} className="st-btn st-btn--ghost">
-                    Open signing page
-                  </Link>
-                ) : null}
-              </span>
-            </li>
-          ))}
-        </ul>
-        <Err error={act.error} />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="st-note">No contracts yet. Create one from a job.</p>
+        )}
       </Card>
     );
   } else if (section === "invoices") {
     body = (
       <Card title="Invoices" id="st-i">
-        <ul className="st-list st-list--tall">
-          {data.invoices.map((i: Invoice) => (
-            <li key={i.id}>
-              <span>
-                <strong>{shoot(i.shootId)?.title}</strong>
-                <small>{i.lines.map((l) => l.description).join(" + ")}</small>
-                <small>
-                  {i.status}
-                  {i.receiptId ? ` · receipt ${i.receiptId}` : ""}
-                </small>
-              </span>
-              <span className="st-actions">
-                <strong>{usd(invoiceTotal(i))}</strong>
-                {i.status === "draft" ? (
-                  <button
-                    type="button"
-                    className="st-btn"
-                    onClick={act.run(() => {
-                      repo.updateInvoice(i.id, { status: "sent" });
-                      bump();
-                    })}
-                  >
-                    Send
-                  </button>
-                ) : null}
-                {i.status === "sent" ? (
-                  <Link href={`/client/pay/${i.id}`} className="st-btn st-btn--ghost">
-                    Open payment page
-                  </Link>
-                ) : null}
-              </span>
-            </li>
-          ))}
-        </ul>
-        <Err error={act.error} />
+        {data.invoices.length ? (
+          <ul className="st-list st-list--tall">
+            {data.invoices.map((i) => (
+              <li key={i.id}>
+                <span>
+                  <strong>
+                    {i.number} · {i.jobTitle}
+                  </strong>
+                  <small>{i.lines}</small>
+                  <small>{i.status}</small>
+                </span>
+                <span className="st-actions">
+                  <strong>{usd(i.totalCents)}</strong>
+                  {i.status !== "paid" && i.status !== "void" ? (
+                    <button
+                      type="button"
+                      className="st-btn"
+                      disabled={pending}
+                      onClick={() => run(() => sendInvoiceAction(i.id))}
+                    >
+                      {i.status === "draft" ? "Send" : "New payment link"}
+                    </button>
+                  ) : null}
+                  {i.status !== "paid" && i.status !== "void" ? (
+                    <button
+                      type="button"
+                      className="st-btn st-btn--ghost"
+                      disabled={pending}
+                      onClick={() => run(() => markInvoicePaidAction(i.id))}
+                    >
+                      Mark paid (cash, Zelle)
+                    </button>
+                  ) : null}
+                </span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="st-note">No invoices yet. Create one from a job.</p>
+        )}
       </Card>
     );
   }
@@ -440,7 +485,15 @@ export function StudioApp({ section, user }: { section: string; user: string }) 
   return (
     <div className="st-wrap">
       <p className="hl-eyebrow">Studio · {user}</p>
-      {nav}
+      <nav className="st-nav" aria-label="Studio sections">
+        {studioSections.map((x) => (
+          <Link key={x.id} href={`/studio/${x.id}`} aria-current={x.id === section ? "page" : undefined}>
+            {x.label}
+          </Link>
+        ))}
+        <Link href="/studio">ShootProof</Link>
+      </nav>
+      <Banner note={note} />
       {body}
     </div>
   );

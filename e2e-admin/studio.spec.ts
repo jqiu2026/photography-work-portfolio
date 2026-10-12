@@ -1,0 +1,170 @@
+import { expect, test } from "@playwright/test";
+import sharp from "sharp";
+
+/**
+ * Studio (Phase 3, database-backed): clients, jobs, client gallery with a passcode and strict-tier images, contract signed
+ * through a one-time link, invoice paid through the labelled mock provider (Stripe is not configured in tests), webhook
+ * signature handling. Runs against the dev servers and the throwaway database.
+ */
+const HUB = "http://localhost:3300";
+const PHOTOS = "http://localhost:3302";
+const uid = Date.now().toString(36);
+const email = `client-${uid}@example.test`;
+
+test.describe.configure({ mode: "serial" });
+// the first call of each server action compiles it in the dev server
+const expectSlow = expect.configure({ timeout: 25_000 });
+
+async function linkFrom(page: import("@playwright/test").Page, path: string) {
+  const code = page.locator("code").first();
+  await expectSlow(code).toContainText(path);
+  return (await code.textContent())!.replace(/^https?:\/\/[^/]+/, "");
+}
+
+test("owner creates a client, a job, a gallery with photographs, a contract and an invoice", async ({ page }) => {
+  // a photograph to put in the gallery (admin media library)
+  await page.goto(`${HUB}/admin/media`, { waitUntil: "networkidle" });
+  const buffer = await sharp({ create: { width: 1600, height: 1000, channels: 3, background: "#7a3ea5" } })
+    .jpeg()
+    .toBuffer();
+  await page.getByLabel("Upload images").setInputFiles({ name: `studio-${uid}.jpg`, mimeType: "image/jpeg", buffer });
+  await expectSlow(page.getByText(/Done/)).toBeVisible({ timeout: 30_000 });
+
+  await page.goto(`${PHOTOS}/studio/clients`, { waitUntil: "networkidle" });
+  await page.getByLabel("Name").fill(`E2E Client ${uid}`);
+  await page.getByLabel("Email").fill("not-an-email");
+  await page.getByRole("button", { name: "Add client" }).click();
+  await expectSlow(page.locator("[role=alert]").filter({ hasText: /email/i }).first()).toBeVisible();
+  await page.getByLabel("Email").fill(email);
+  await page.getByRole("button", { name: "Add client" }).click();
+  await expectSlow(page.getByRole("status")).toContainText("Client added");
+  await expectSlow(page.getByText(email)).toBeVisible();
+  await page.getByLabel("Name").fill("Dup");
+  await page.getByLabel("Email").fill(email);
+  await page.getByRole("button", { name: "Add client" }).click();
+  await expectSlow(
+    page
+      .locator("[role=alert]")
+      .filter({ hasText: /already exists/ })
+      .first(),
+  ).toBeVisible();
+
+  await page.goto(`${PHOTOS}/studio/shoots`, { waitUntil: "networkidle" });
+  await page.getByLabel("Client").selectOption({ label: `E2E Client ${uid}` });
+  await page.getByLabel("Title").fill(`E2E job ${uid}`);
+  await page.getByLabel("Fee (dollars)").fill("350");
+  await page.getByRole("button", { name: "Add job" }).click();
+  const row = page.getByRole("listitem").filter({ hasText: `E2E job ${uid}` });
+  await expectSlow(row).toBeVisible();
+  await row.getByRole("button", { name: "Advance" }).click();
+  await expectSlow(row.getByRole("list", { name: "Progress: booked" })).toBeVisible();
+  await row.getByRole("button", { name: "New contract" }).click();
+  await expectSlow(page.getByRole("status")).toContainText("Contract created");
+  await row.getByRole("button", { name: "New invoice" }).click();
+  await expectSlow(page.getByRole("status")).toContainText(/Invoice \d{4}-\d{4} created/);
+
+  await page.goto(`${PHOTOS}/studio/galleries`, { waitUntil: "networkidle" });
+  await page.getByLabel("Job").selectOption({ label: `E2E job ${uid}` });
+  await page.getByLabel(/Passcode/).fill("a");
+  await page.getByRole("button", { name: "Create gallery" }).click();
+  await expectSlow(
+    page
+      .locator("[role=alert]")
+      .filter({ hasText: /6 characters/ })
+      .first(),
+  ).toBeVisible();
+  await page.getByLabel(/Passcode/).fill(`pass-${uid}`);
+  await page.getByLabel(new RegExp(`studio-${uid}`)).check();
+  await page.getByRole("button", { name: "Create gallery" }).click();
+  await expectSlow(page.getByRole("status")).toContainText("Gallery created");
+  const g = page.getByRole("listitem").filter({ hasText: `E2E job ${uid}` });
+  await expectSlow(g).toContainText("1 photographs");
+  await g.getByRole("button", { name: "Publish" }).click();
+  await expectSlow(page.getByRole("status")).toContainText("Gallery published");
+});
+
+test("client opens the gallery with the passcode (wrong one refused), sees strict images, and keeps favourites", async ({
+  page,
+  request,
+}) => {
+  await page.goto(`${PHOTOS}/client`, { waitUntil: "networkidle" });
+  await page.getByLabel("Passcode").fill("wrong-code");
+  await page.getByRole("button", { name: "Open my gallery" }).click();
+  await expectSlow(page.locator("p[role=alert]")).toContainText("doesn't match");
+  await page.getByLabel("Passcode").fill(`PASS-${uid}`);
+  await page.getByRole("button", { name: "Open my gallery" }).click();
+  await expectSlow(page).toHaveURL(/\/client\/gallery$/);
+  await expectSlow(page.getByRole("heading", { level: 1 })).toContainText(`E2E job ${uid}`);
+  // protected: no file URL in the page source, the image loads through a token as a blob
+  const html = await page.content();
+  expect(html).not.toMatch(/\/opt\/|originals?\//);
+  await page.locator("[aria-label=Photographs]").scrollIntoViewIfNeeded();
+  await expectSlow(page.locator("img[src^='blob:']").first()).toBeVisible({ timeout: 20_000 });
+  const heart = page.getByRole("button", { name: /Add .* to favourites/ }).first();
+  await heart.click();
+  await expectSlow(page.getByRole("button", { name: /Remove .* from favourites/ }).first()).toBeVisible();
+  await page.reload({ waitUntil: "networkidle" });
+  await expectSlow(page.getByRole("button", { name: /Remove .* from favourites/ }).first()).toBeVisible();
+  // the image route refuses a client photograph without a token
+  const id = await page.evaluate(
+    () =>
+      (document.querySelector("[aria-label=Photographs] [data-image-id]") as HTMLElement | null)?.dataset.imageId ?? "",
+  );
+  if (id) expect((await request.get(`${PHOTOS}/api/img/${id}?w=960`)).status()).toBeGreaterThanOrEqual(400);
+  // leaving the gallery ends the session
+  await page.getByRole("button", { name: "Close gallery" }).click();
+  await expectSlow(page).toHaveURL(/\/client$/);
+  await page.goto(`${PHOTOS}/client/gallery`);
+  await expectSlow(page).toHaveURL(/\/client$/);
+});
+
+test("contract: one-time link, name and agreement required, signed once", async ({ page }) => {
+  await page.goto(`${PHOTOS}/studio/contracts`, { waitUntil: "networkidle" });
+  const k = page.getByRole("listitem").filter({ hasText: `E2E job ${uid}` });
+  await k.getByRole("button", { name: "Send for signature" }).click();
+  const link = await linkFrom(page, "/client/sign/");
+  await page.goto(`${PHOTOS}${link}`, { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: "Sign contract" }).click();
+  await expectSlow(page.locator("p[role=alert]")).toContainText("full name");
+  await page.getByLabel("Type your full name to sign").fill("E2E Client");
+  await page.getByRole("button", { name: "Sign contract" }).click();
+  await expectSlow(page.locator("p[role=alert]")).toContainText("agree");
+  await page.getByLabel(/I agree/).check();
+  await page.getByRole("button", { name: "Sign contract" }).click();
+  await expectSlow(page.getByRole("status")).toContainText("Signed");
+  await page.reload({ waitUntil: "networkidle" });
+  await expectSlow(page.getByText(/signed by E2E Client/)).toBeVisible();
+  await page.goto(`${PHOTOS}/client/sign/not-a-real-token`);
+  await expectSlow(page.getByText(/not found|404/i).first()).toBeVisible();
+});
+
+test("invoice: payment link, declined then successful mock card, then marked paid in the studio", async ({ page }) => {
+  await page.goto(`${PHOTOS}/studio/invoices`, { waitUntil: "networkidle" });
+  const inv = page.getByRole("listitem").filter({ hasText: `E2E job ${uid}` });
+  await inv.getByRole("button", { name: "Send" }).click();
+  const link = await linkFrom(page, "/client/pay/");
+  await page.goto(`${PHOTOS}${link}`, { waitUntil: "networkidle" });
+  await expectSlow(page.getByRole("note", { name: "Mock notice" })).toContainText("no card is charged");
+  await page.getByLabel("Card number").fill("4000 0000 0000 0002");
+  await page.getByLabel(/Expiry/).fill("12 / 34");
+  await page.getByLabel("Security code").fill("123");
+  await page.getByRole("button", { name: /^Pay/ }).click();
+  await expectSlow(page.locator("p[role=alert]")).toContainText("declined");
+  await page.getByLabel("Card number").fill("4242 4242 4242 4242");
+  await page.getByRole("button", { name: /^Pay/ }).click();
+  await expectSlow(page.getByRole("status")).toContainText("Receipt rcpt_mock_");
+  await page.goto(`${PHOTOS}${link}`, { waitUntil: "networkidle" });
+  await expectSlow(page.getByText(/is paid/)).toBeVisible();
+  await page.goto(`${PHOTOS}/studio/invoices`, { waitUntil: "networkidle" });
+  await expectSlow(page.getByRole("listitem").filter({ hasText: `E2E job ${uid}` })).toContainText("paid");
+});
+
+test("the Stripe webhook refuses unsigned and mis-signed requests (and is off when not configured)", async ({
+  request,
+}) => {
+  const res = await request.post(`${PHOTOS}/api/webhooks/stripe`, {
+    data: "{}",
+    headers: { "stripe-signature": "t=1,v1=bad" },
+  });
+  expect([400, 503]).toContain(res.status());
+});

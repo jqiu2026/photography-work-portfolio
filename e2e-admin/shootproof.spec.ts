@@ -7,7 +7,7 @@ test.describe("studio and the ShootProof bridge (sample mode)", () => {
   test("connect, list events, import for a day, view protected, remove, disconnect", async ({ page, request }) => {
     await page.goto(`${MOCK}/studio`, { waitUntil: "networkidle" });
     await expect(page.getByRole("heading", { name: /^Hello/ })).toBeVisible();
-    await expect(page.getByRole("heading", { name: "Phase 3 replaces the mocks with real services" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Still to come" })).toBeVisible();
     await page.getByRole("link", { name: "Open ShootProof bridge" }).click();
 
     await expect(page.getByTestId("mock-banner")).toBeVisible();

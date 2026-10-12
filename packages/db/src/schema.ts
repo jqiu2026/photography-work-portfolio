@@ -401,12 +401,34 @@ export const externalCache = pgTable(
  * Phase 3: photography studio (clients, jobs, client galleries, contracts, invoices, payments, bookings).
  * Money is integer cents. Link tokens and passcodes are stored only as hashes. `studio_id` stays nullable and unused.
  * ---------------------------------------------------------------------------------------------------------------- */
-export const jobStatusEnum = pgEnum("studio_job_status", ["inquiry", "booked", "shot", "editing", "delivered", "paid", "cancelled"]);
+export const jobStatusEnum = pgEnum("studio_job_status", [
+  "inquiry",
+  "booked",
+  "shot",
+  "editing",
+  "delivered",
+  "paid",
+  "cancelled",
+]);
 export const clientGalleryStatusEnum = pgEnum("studio_gallery_status", ["draft", "published", "archived"]);
 export const accessModeEnum = pgEnum("studio_access_mode", ["passcode", "magic-link", "both"]);
 export const downloadPolicyEnum = pgEnum("studio_download_policy", ["none", "preview", "web", "full"]);
-export const contractStatusEnum = pgEnum("studio_contract_status", ["draft", "sent", "viewed", "signed", "declined", "void"]);
-export const invoiceStatusEnum = pgEnum("studio_invoice_status", ["draft", "sent", "viewed", "partial", "paid", "void"]);
+export const contractStatusEnum = pgEnum("studio_contract_status", [
+  "draft",
+  "sent",
+  "viewed",
+  "signed",
+  "declined",
+  "void",
+]);
+export const invoiceStatusEnum = pgEnum("studio_invoice_status", [
+  "draft",
+  "sent",
+  "viewed",
+  "partial",
+  "paid",
+  "void",
+]);
 export const paymentStatusEnum = pgEnum("studio_payment_status", ["pending", "succeeded", "failed", "refunded"]);
 export const bookingStatusEnum = pgEnum("studio_booking_status", ["new", "converted", "archived"]);
 
@@ -568,7 +590,10 @@ export const studioPayments = pgTable(
     paidAt: timestamp("paid_at", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
-  (t) => [uniqueIndex("studio_payments_provider_ref_idx").on(t.provider, t.providerRef), index("studio_payments_invoice_idx").on(t.invoiceId)],
+  (t) => [
+    uniqueIndex("studio_payments_provider_ref_idx").on(t.provider, t.providerRef),
+    index("studio_payments_invoice_idx").on(t.invoiceId),
+  ],
 );
 
 export const studioBookings = pgTable("studio_bookings", {

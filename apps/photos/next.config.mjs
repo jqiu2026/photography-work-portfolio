@@ -6,6 +6,7 @@ export default {
     "@jerryqiu/sites",
     "@jerryqiu/render",
     "@jerryqiu/mocks",
+    "@jerryqiu/payments",
     "@jerryqiu/auth",
     "@jerryqiu/db",
     "@jerryqiu/protect",

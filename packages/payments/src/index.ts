@@ -46,11 +46,19 @@ export function checkoutBody(i: CheckoutInput): string {
 }
 
 /** Creates a hosted Checkout Session. Throws on any non-2xx (caller shows a generic error and logs). */
-export async function createCheckoutSession(cfg: StripeConfig, input: CheckoutInput, idempotencyKey: string): Promise<{ id: string; url: string }> {
+export async function createCheckoutSession(
+  cfg: StripeConfig,
+  input: CheckoutInput,
+  idempotencyKey: string,
+): Promise<{ id: string; url: string }> {
   if (!/^sk_(test|live)_/.test(cfg.secretKey)) throw new Error("STRIPE_SECRET_KEY is not a Stripe secret key.");
   const res = await (cfg.fetch ?? fetch)(`${cfg.apiBase ?? "https://api.stripe.com"}/v1/checkout/sessions`, {
     method: "POST",
-    headers: { Authorization: `Bearer ${cfg.secretKey}`, "Content-Type": "application/x-www-form-urlencoded", "Idempotency-Key": idempotencyKey },
+    headers: {
+      Authorization: `Bearer ${cfg.secretKey}`,
+      "Content-Type": "application/x-www-form-urlencoded",
+      "Idempotency-Key": idempotencyKey,
+    },
     body: checkoutBody(input),
   });
   if (!res.ok) throw new Error(`Stripe responded ${res.status}`);
@@ -60,7 +68,12 @@ export async function createCheckoutSession(cfg: StripeConfig, input: CheckoutIn
 }
 
 /** Verifies a `Stripe-Signature` header (t=timestamp,v1=hmac) over the raw body, with a replay tolerance. */
-export function verifyStripeSignature(payload: string, header: string | null, secret: string, opts: { toleranceSec?: number; now?: number } = {}): boolean {
+export function verifyStripeSignature(
+  payload: string,
+  header: string | null,
+  secret: string,
+  opts: { toleranceSec?: number; now?: number } = {},
+): boolean {
   if (!header || !secret) return false;
   const parts = Object.fromEntries(header.split(",").map((p) => p.split("=", 2) as [string, string]));
   const t = Number(parts.t);
@@ -84,19 +97,37 @@ export function signStripePayload(payload: string, secret: string, now = Date.no
 export type StripeEvent = { id: string; type: string; data: { object: Record<string, unknown> } };
 
 /** What the studio needs from a Stripe event: which invoice was paid, how much, and the payment reference. */
-export function paymentFromEvent(e: StripeEvent): { invoiceId: string; amountCents: number; providerRef: string; receiptRef?: string; status: "succeeded" | "failed" } | null {
+export function paymentFromEvent(e: StripeEvent): {
+  invoiceId: string;
+  amountCents: number;
+  providerRef: string;
+  receiptRef?: string;
+  status: "succeeded" | "failed";
+} | null {
   const o = e.data.object;
   const meta = (o.metadata ?? {}) as Record<string, string>;
   if (e.type === "checkout.session.completed") {
     const invoiceId = (o.client_reference_id as string | undefined) ?? meta.invoice_id;
     if (!invoiceId || o.payment_status !== "paid") return null;
-    return { invoiceId, amountCents: Number(o.amount_total), providerRef: String(o.payment_intent ?? o.id), status: "succeeded" };
+    return {
+      invoiceId,
+      amountCents: Number(o.amount_total),
+      providerRef: String(o.payment_intent ?? o.id),
+      status: "succeeded",
+    };
   }
   if (e.type === "payment_intent.succeeded" && meta.invoice_id)
-    return { invoiceId: meta.invoice_id, amountCents: Number(o.amount_received ?? o.amount), providerRef: String(o.id), receiptRef: (o.latest_charge as string | undefined) ?? undefined, status: "succeeded" };
+    return {
+      invoiceId: meta.invoice_id,
+      amountCents: Number(o.amount_received ?? o.amount),
+      providerRef: String(o.id),
+      receiptRef: (o.latest_charge as string | undefined) ?? undefined,
+      status: "succeeded",
+    };
   if (e.type === "payment_intent.payment_failed" && meta.invoice_id)
     return { invoiceId: meta.invoice_id, amountCents: Number(o.amount), providerRef: String(o.id), status: "failed" };
   return null;
 }
 
-export const stripeConfigured = (env: Record<string, string | undefined> = process.env) => Boolean(env.STRIPE_SECRET_KEY && env.STRIPE_WEBHOOK_SECRET);
+export const stripeConfigured = (env: Record<string, string | undefined> = process.env) =>
+  Boolean(env.STRIPE_SECRET_KEY && env.STRIPE_WEBHOOK_SECRET);
