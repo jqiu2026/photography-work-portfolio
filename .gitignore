@@ -47,3 +47,6 @@ next-env.d.ts
 # example build artefacts
 examples/*/vendor/
 examples/*/dist/
+
+# local data (PGlite database, local storage)
+.data/

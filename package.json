@@ -5,7 +5,7 @@
   "description": "Monorepo for jerryqiu.com, photos., music. and flying. plus the @placeholder/ui package",
   "packageManager": "pnpm@12.11.2",
   "scripts": {
-    "dev": "concurrently -n web,docs,photos -c cyan,magenta,yellow \"pnpm dev:web\" \"pnpm dev:docs\" \"pnpm dev:photos\"",
+    "dev": "concurrently -n db,web,docs,photos -c green,cyan,magenta,yellow \"pnpm dev:db\" \"pnpm dev:web\" \"pnpm dev:docs\" \"pnpm dev:photos\"",
     "dev:web": "pnpm --filter @jerryqiu/web dev",
     "dev:photos": "pnpm --filter @jerryqiu/photos dev",
     "dev:docs": "pnpm --filter @jerryqiu/docs dev",
@@ -14,7 +14,11 @@
     "lint": "biome check .",
     "format": "biome format --write .",
     "typecheck": "pnpm -r --if-present typecheck",
-    "test:e2e": "NEXT_PUBLIC_HUB_URL=http://localhost:4000 NEXT_PUBLIC_PHOTOS_URL=http://localhost:4002 NEXT_PUBLIC_MUSIC_URL=http://localhost:4000/music NEXT_PUBLIC_FLYING_URL=http://localhost:4000/flying pnpm build && playwright test"
+    "test:e2e": "NEXT_PUBLIC_HUB_URL=http://localhost:4000 NEXT_PUBLIC_PHOTOS_URL=http://localhost:4002 NEXT_PUBLIC_MUSIC_URL=http://localhost:4000/music NEXT_PUBLIC_FLYING_URL=http://localhost:4000/flying pnpm build && playwright test",
+    "dev:db": "pnpm --filter @jerryqiu/db dev",
+    "db:migrate": "pnpm --filter @jerryqiu/db migrate",
+    "db:seed": "pnpm --filter @jerryqiu/db seed",
+    "db:generate": "pnpm --filter @jerryqiu/db generate"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
