@@ -19,14 +19,17 @@ function words(text: string) {
   );
 }
 
-/** Adds `.hl-in` when the element first enters the viewport (or immediately with `when="load"`). */
+/**
+ * Adds `.hl-in` when the element first enters the viewport. With `when="load"` the class is in the server-rendered HTML,
+ * so the CSS animation starts at first paint without waiting for hydration (keeps LCP and CLS clean).
+ */
 function useReveal(when: "view" | "load") {
   const ref = useRef<HTMLElement>(null);
   useEffect(() => {
     const el = ref.current;
-    if (!el) return;
-    if (when === "load" || typeof IntersectionObserver === "undefined") {
-      requestAnimationFrame(() => el.classList.add("hl-in"));
+    if (!el || when === "load") return;
+    if (typeof IntersectionObserver === "undefined") {
+      el.classList.add("hl-in");
       return;
     }
     const io = new IntersectionObserver(
@@ -51,7 +54,7 @@ type RevealProps = { as?: ElementType; text: string; className?: string; when?: 
 export function Condense({ as: Tag = "h2", text, className, when = "view" }: RevealProps) {
   const ref = useReveal(when);
   return (
-    <Tag ref={ref} className={cx("hl-condense", className)} data-hl-reveal="condense">
+    <Tag ref={ref} className={cx("hl-condense", when === "load" && "hl-in", className)} data-hl-reveal="condense">
       {words(text)}
     </Tag>
   );
@@ -61,7 +64,7 @@ export function Condense({ as: Tag = "h2", text, className, when = "view" }: Rev
 export function Streak({ as: Tag = "h1", text, className, when = "load" }: RevealProps) {
   const ref = useReveal(when);
   return (
-    <Tag ref={ref} className={cx("hl-streak", className)} data-hl-reveal="streak">
+    <Tag ref={ref} className={cx("hl-streak", when === "load" && "hl-in", className)} data-hl-reveal="streak">
       <span className="hl-streak__text">{text}</span>
     </Tag>
   );
@@ -77,7 +80,7 @@ export function Settle({
 }: { as?: ElementType; className?: string; children: ReactNode; when?: "view" | "load" } & Record<string, unknown>) {
   const ref = useReveal(when);
   return (
-    <Tag ref={ref} className={cx("hl-settle", className)} data-hl-reveal="settle" {...rest}>
+    <Tag ref={ref} className={cx("hl-settle", when === "load" && "hl-in", className)} data-hl-reveal="settle" {...rest}>
       {children}
     </Tag>
   );

@@ -14,6 +14,7 @@ const ctx = await b.newContext({
   reducedMotion: flags.includes("--reduce") ? "reduce" : "no-preference",
 });
 const p = await ctx.newPage();
+if (!flags.includes("--auto")) await p.addInitScript(() => localStorage.setItem("hl-motion", "full")); // software GL in CI would otherwise pick the static tier
 const errors = [];
 p.on("console", (m) => m.type() === "error" && errors.push(m.text()));
 p.on("pageerror", (e) => errors.push(String(e)));

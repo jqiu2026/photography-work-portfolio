@@ -13,6 +13,11 @@ describe("selectTier (first match wins)", () => {
     expect(selectTier({ ...ok, effectiveType: "4g" })).toBe("full");
   });
   it("no WebGL2 is static", () => expect(selectTier({ ...ok, webgl2: false })).toBe("static"));
+  it("a software GL renderer (no GPU) is static", () => expect(selectTier({ ...ok, software: true })).toBe("static"));
+  it("the Full choice overrides software rendering and weak-device guesses but not reduced motion", () => {
+    expect(selectTier({ ...ok, software: true, choice: "full", deviceMemory: 1 })).toBe("full");
+    expect(selectTier({ ...ok, reducedMotion: true, choice: "full" })).toBe("static");
+  });
   it("the Calm choice is static", () => expect(selectTier({ ...ok, choice: "calm" })).toBe("static"));
   it("low battery that is not charging is reduced; charging is not", () => {
     expect(selectTier({ ...ok, battery: { level: 0.1, charging: false } })).toBe("reduced");

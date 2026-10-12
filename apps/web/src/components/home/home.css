@@ -187,11 +187,21 @@ html.hl-js:not([data-hl-tier="static"]) .home-doors {
   perspective-origin: 50% 40%;
 }
 html.hl-js:not([data-hl-tier="static"]) .home-doors > * {
-  transform: translateZ(calc((1 - var(--hl-p, 0.5)) * var(--d) * 1px)) rotateY(calc((var(--hl-p, 0.5) - 0.5) * var(--tilt) * 1deg));
+  transform: translateZ(calc((1 - var(--hl-p, 0.5)) * var(--d) * 1px))
+    rotateY(calc((var(--hl-p, 0.5) - 0.5) * var(--tilt) * 1deg));
 }
-.home-doors > :nth-child(1) { --d: -90; --tilt: -14; }
-.home-doors > :nth-child(2) { --d: -180; --tilt: 0; }
-.home-doors > :nth-child(3) { --d: -270; --tilt: 14; }
+.home-doors > :nth-child(1) {
+  --d: -90;
+  --tilt: -14;
+}
+.home-doors > :nth-child(2) {
+  --d: -180;
+  --tilt: 0;
+}
+.home-doors > :nth-child(3) {
+  --d: -270;
+  --tilt: 14;
+}
 .home-doors > :nth-child(2) {
   margin-top: 4rem;
 }

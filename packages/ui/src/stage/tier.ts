@@ -14,6 +14,8 @@ export type Signals = {
   /** navigator.connection.effectiveType, when present */
   effectiveType?: string;
   webgl2: boolean;
+  /** The GL renderer is a software rasteriser (SwiftShader, llvmpipe...): no GPU, so the fluid would stall the page. */
+  software?: boolean;
   /** The visitor's stored "Motion" choice: auto, full (capability result) or calm (static). */
   choice: Choice;
   /** Battery level 0..1 and whether it is charging, when the Battery API exists */
@@ -33,6 +35,9 @@ export function selectTier(s: Signals): Tier {
   if (s.saveData || (s.effectiveType && SLOW.has(s.effectiveType))) return "static";
   if (!s.webgl2) return "static";
   if (s.choice === "calm") return "static";
+  // "Full" is the visitor insisting: it skips the capability guesses below (never the hard stops above).
+  if (s.choice === "full") return "full";
+  if (s.software) return "static";
   if (s.battery && s.battery.level < 0.2 && !s.battery.charging) return "reduced";
   const weak =
     (s.deviceMemory !== undefined && s.deviceMemory <= 2) ||
@@ -105,12 +110,19 @@ type NavigatorExtras = Navigator & {
   getBattery?: () => Promise<{ level: number; charging: boolean }>;
 };
 
-function hasWebgl2(): boolean {
+const SOFTWARE_GL = /swiftshader|llvmpipe|softpipe|software|basic render/i;
+
+function probeGl(): { webgl2: boolean; software: boolean } {
   try {
     const c = document.createElement("canvas");
-    return !!c.getContext("webgl2");
+    const gl = c.getContext("webgl2");
+    if (!gl) return { webgl2: false, software: false };
+    const info = gl.getExtension("WEBGL_debug_renderer_info");
+    const renderer = info ? String(gl.getParameter(info.UNMASKED_RENDERER_WEBGL)) : "";
+    gl.getExtension("WEBGL_lose_context")?.loseContext();
+    return { webgl2: true, software: SOFTWARE_GL.test(renderer) };
   } catch {
-    return false;
+    return { webgl2: false, software: false };
   }
 }
 
@@ -121,11 +133,13 @@ export async function readSignals(): Promise<Signals> {
     const b = await n.getBattery?.();
     if (b) battery = { level: b.level, charging: b.charging };
   } catch {}
+  const gl = probeGl();
   return {
     reducedMotion: matchMedia("(prefers-reduced-motion: reduce)").matches,
     saveData: n.connection?.saveData === true,
     effectiveType: n.connection?.effectiveType,
-    webgl2: hasWebgl2(),
+    webgl2: gl.webgl2,
+    software: gl.software,
     choice: readChoice(),
     battery,
     deviceMemory: n.deviceMemory,

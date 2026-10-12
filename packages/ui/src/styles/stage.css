@@ -116,7 +116,6 @@ html.hl-js .hl-condense.hl-in .hl-word__in {
     opacity: 0;
     filter: blur(14px);
     transform: translateY(var(--hl-motion-distance));
-    font-variation-settings: "wdth" calc(var(--hl-wdth) + 24);
   }
   to {
     opacity: 1;
@@ -150,17 +149,34 @@ html.hl-js .hl-streak:not(.hl-in) .hl-streak__text {
 html.hl-js .hl-streak.hl-in .hl-streak__text {
   animation: hl-streak-text 900ms var(--hl-ease-pour) both;
 }
+/* The bar is a gradient whose position is an animated custom property: paint only, never layout (no CLS). */
+@property --hl-bar {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
 html.hl-js .hl-streak::after {
   content: "";
   position: absolute;
   top: 8%;
   bottom: 8%;
   left: 0;
-  width: 3px;
-  background: var(--hl-accent);
-  box-shadow: 0 0 28px 6px var(--hl-accent), 0 0 90px 24px color-mix(in oklab, var(--hl-halation) 55%, transparent);
-  opacity: 0;
+  right: 0;
   pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(
+      90deg,
+      transparent calc(var(--hl-bar) - 2px),
+      var(--hl-accent) calc(var(--hl-bar) - 1px),
+      #fff calc(var(--hl-bar)),
+      transparent calc(var(--hl-bar) + 2px)
+    ),
+    linear-gradient(
+      90deg,
+      transparent calc(var(--hl-bar) - 90px),
+      color-mix(in oklab, var(--hl-halation) 45%, transparent) var(--hl-bar),
+      transparent calc(var(--hl-bar) + 40px)
+    );
 }
 html.hl-js .hl-streak.hl-in::after {
   animation: hl-streak-bar 900ms var(--hl-ease-pour) both;
@@ -175,7 +191,7 @@ html.hl-js .hl-streak.hl-in::after {
 }
 @keyframes hl-streak-bar {
   0% {
-    left: 0;
+    --hl-bar: 0%;
     opacity: 0;
   }
   12% {
@@ -185,7 +201,7 @@ html.hl-js .hl-streak.hl-in::after {
     opacity: 1;
   }
   100% {
-    left: 100%;
+    --hl-bar: 100%;
     opacity: 0;
   }
 }
