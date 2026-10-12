@@ -65,7 +65,7 @@ export function Gallery({
           const ratio = img.width / img.height;
           return (
             <li
-              key={img.files[0]?.src ?? i}
+              key={`${img.files[0]?.src ?? "img"}-${i}`}
               style={
                 layout === "justified" ? { flexGrow: ratio * 100, flexBasis: `${ratio * rowHeight}px` } : undefined
               }

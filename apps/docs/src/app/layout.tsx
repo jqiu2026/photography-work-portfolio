@@ -1,6 +1,6 @@
 import "@placeholder/ui/styles.css";
 import { DM_Mono, Instrument_Sans } from "next/font/google";
-import { ThemeProvider, ThemeScript, SkipLink, ThemeToggle } from "@placeholder/ui";
+import { ThemeProvider, ThemeScript, SkipLink, ThemeToggle, TooltipProvider, ToastProvider } from "@placeholder/ui";
 import type { ReactNode } from "react";
 import { Sidebar } from "@/lib/Sidebar";
 import "./docs.css";
@@ -16,11 +16,13 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <head><ThemeScript preset="hub" /></head>
       <body className="ph-root">
         <ThemeProvider preset="hub">
+          <TooltipProvider><ToastProvider>
           <SkipLink />
           <div className="docs-shell">
             <Sidebar toggle={<ThemeToggle />} />
             <main id="main" className="docs-main">{children}</main>
           </div>
+          </ToastProvider></TooltipProvider>
         </ThemeProvider>
       </body>
     </html>

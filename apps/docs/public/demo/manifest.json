@@ -1,0 +1,59 @@
+{
+ "g1": {
+  "width": 1600,
+  "height": 1000,
+  "color": "#2563eb",
+  "files": [
+   {
+    "width": 480,
+    "src": "/demo/g1-480.webp"
+   },
+   {
+    "width": 960,
+    "src": "/demo/g1-960.webp"
+   },
+   {
+    "width": 1600,
+    "src": "/demo/g1-1600.webp"
+   }
+  ]
+ },
+ "g2": {
+  "width": 1600,
+  "height": 1000,
+  "color": "#dc2626",
+  "files": [
+   {
+    "width": 480,
+    "src": "/demo/g2-480.webp"
+   },
+   {
+    "width": 960,
+    "src": "/demo/g2-960.webp"
+   },
+   {
+    "width": 1600,
+    "src": "/demo/g2-1600.webp"
+   }
+  ]
+ },
+ "g3": {
+  "width": 1600,
+  "height": 1000,
+  "color": "#15803d",
+  "files": [
+   {
+    "width": 480,
+    "src": "/demo/g3-480.webp"
+   },
+   {
+    "width": 960,
+    "src": "/demo/g3-960.webp"
+   },
+   {
+    "width": 1600,
+    "src": "/demo/g3-1600.webp"
+   }
+  ]
+ }
+}
