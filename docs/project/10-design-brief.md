@@ -1,5 +1,7 @@
 # 10. Design brief
 
+> **Update 2026-10-12 (owner):** Priority 5 is promoted. The sites should feel alive: flowing, scroll-driven, navbar-less homes on all four sites with a shared experience system and four distinct worlds, designed as original UI (the package is to be sold). Restraint and accessibility remain, but "too static" and "too similar to an existing kit" are now failures. The work plan is in `HANDOFF.md` (Phase 2.5).
+
 ## Priorities, in order
 
 1. **Professional and elegant.** Looks like it was made by a good design studio. Restraint over decoration.

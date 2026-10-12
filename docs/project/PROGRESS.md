@@ -29,12 +29,22 @@ Living status. Update at every milestone. Newest entries at the top of "Log".
 - [x] M18 Security review, owner guide, acceptance, `PHASE-2-SUMMARY.md`, `PHASE-3-KICKOFF.md`
 - [x] **STOP (Phase 3 is not started automatically)**
 
+## Phase 2.5: Redesign (owner-requested after Phase 2; brief in HANDOFF.md)
+- [ ] R0 Designer brief: concept sheets (shared scene system + hub, photography, music, flying worlds), storyboards, motion spec, new package name, licence/selling checklist
+- [ ] R1 Split: blog on hub, photography/video work and project case studies on the photography site, redirects, CMS site move
+- [ ] R2 New UI package from scratch (tokens, components, motion toolkit, docs, tests)
+- [ ] R3 Four navbar-less home experiences on one shared system ("Say hello." kept)
+- [ ] R4 Inner pages, admin shell, sign-in, 404 in the new system
+- [ ] R5 Gates, e2e updates, Lighthouse
+- [ ] R6 Documents rewritten, PHASE-2.5-SUMMARY.md
+
 ## Phase 3: not started (needs owner go-ahead)
 
 ## Blocked / waiting on owner
 
 
 ## Log
+- 2026-10-12: Owner follow-up: the photography page can be cooler; all four homes share one massive navbar-less coherent experience but are each unique; documents to be rewritten; the next chat acts as UI/UX designer creating original flowy UI. HANDOFF.md, design-language.md, 10-design-brief.md and this checklist updated. All four dev servers are running (hub :3000 with /music and /flying, photos :3002, docs :3001).
 - 2026-10-12: M18 done, **Phase 2 complete**. Security review (skill) over the branch: no high-confidence findings, two low observations in PHASE-2-SUMMARY.md. Wrote `docs/owner-guide.md`, `PHASE-2-SUMMARY.md`, `PHASE-3-KICKOFF.md`, DEPLOYMENT.md env additions. Owner feedback received afterwards (homepage too static and too Once-UI-like; separate blog from photography; sellable package): written up as the Phase 2.5 brief in HANDOFF.md. Phase 3 is not started.
 - 2026-10-12: M17 done. `packages/shootproof` (16 tests): live adapter written from the published OpenAPI document and auth guide (never run live, never constructed without a client id), generated-fixture mock source (refused in production), AES-GCM encrypted token storage with auto refresh, event importer that keeps one downscaled WebP per photo for 24 hours (never originals, never the `/original` endpoint), SSRF allow-list for photo hosts, expiry purge + cron route, token-gated `/api/ext/[id]`. Photos `/studio` dashboard (Phase 3 roadmap card) and `/studio/shootproof` (Not connected with setup steps / Connect / events / import / protected preview / remove / disconnect), owner only, audited. Findings: a Server Action that redirects to a route handler is re-POSTed and fails with 405 (Connect is now a GET route); a function exported from a `"use server"` file is a public endpoint (moved the token getter to a server-only module). ShootProof's API terms on caching could not be found publicly: logged as Q28 and documented in `docs/shootproof-bridge.md`. Admin e2e 44/44 (now also runs photos in sample mode on :3302 and with no credentials on :3303), prod e2e 154/154.
 - 2026-10-12: M16 done (image protection, documented in 05 "As built"). `ScreenshotGuard` (off/light/strict; every shortcut from the plan detected by a pure `detectTrigger`, 19 unit cases + component tests; dialog with honest copy; blur on focus loss; print hides media), `ProtectedImage` strict path (opaque id in HTML, token fetch to blob URL, auto token refresh, shield, alt kept), `ProtectedGallery`, `GuardScope`, server-baked watermark with sharp (cached), `POST /api/img/token`, bot refusal, `X-Robots-Tag`. Strict galleries render dynamically and appear only on their own page. Playwright (photos site added to the admin e2e rig on :3302): page source has no image URL, forged/missing tokens 403, every shortcut shows the dialog, expired token refreshes, print hides, light gallery blocks right-click without a dialog, watermark changes the served bytes. Bugs the tests found: context-only level meant strict images rendered the non-strict path on the server; strict `files` URLs leaked into the RSC payload. Admin e2e 40/40, prod e2e 154/154, unit tests all green.
