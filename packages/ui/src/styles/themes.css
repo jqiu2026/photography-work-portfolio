@@ -1,67 +1,74 @@
 /*
- * Themes. Neutral grayscale surfaces for light and dark, one small spectrum of accents
- * (blue, red, green, yellow) used sparingly. [data-theme="light|dark"] picks the neutrals;
- * [data-preset="hub|photos|music|flying"] picks the site's accent colour and shape.
- * Direction notes: docs/project/design-language.md
+ * Themes. Night (default, cinematic), Day (warm paper), Cinema (pure black, for photograph pages).
+ * [data-theme="light|dark"] picks the neutrals (light = Day, dark = Night); [data-cinema] forces pure black behind
+ * photographs; [data-preset="hub|photos|music|flying"] picks the world's accent. Accents are signature light
+ * (streaks, halation, edges, focus), never large paint. Contrast table: docs/project/design-language.md.
  */
 :root,
 [data-theme="light"] {
-  --hl-bg: #fff;
-  --hl-surface: #fafafa;
-  --hl-surface-2: #f2f2f2;
-  --hl-text: #0a0a0a;
-  --hl-muted: #666;
-  --hl-line: #e6e6e6;
-  --hl-cinema: #000;
-  /* Accent spectrum: fill colours, AA-safe text colours, and the text colour that sits on a fill */
-  --hl-blue: #2563eb;
-  --hl-blue-text: #1d4ed8;
-  --hl-blue-on: #fff;
-  --hl-red: #dc2626;
-  --hl-red-text: #c81e1e;
-  --hl-red-on: #fff;
-  --hl-green: #15803d;
-  --hl-green-text: #15803d;
-  --hl-green-on: #fff;
-  --hl-yellow: #facc15;
-  --hl-yellow-text: #7a5a00;
-  --hl-yellow-on: #0a0a0a;
-  --hl-danger: var(--hl-red-text);
-  --hl-success: var(--hl-green-text);
-  --hl-warn: var(--hl-yellow-text);
+  /* Day */
+  --hl-field: #f3f1ec;
+  --hl-surface: #e9e6df;
+  --hl-surface-2: #dedad1;
+  --hl-ink: #0b0d12;
+  --hl-dim: #545a68;
+  --hl-edge: rgb(11 13 18 / 0.16);
+  --hl-blue: #1d48c9;
+  --hl-blue-text: #1d48c9;
+  --hl-blue-on: #ffffff;
+  --hl-red: #b3251e;
+  --hl-red-text: #b3251e;
+  --hl-red-on: #ffffff;
+  --hl-amber: #7a5c00;
+  --hl-amber-text: #7a5c00;
+  --hl-amber-on: #ffffff;
+  --hl-green: #0a6b46;
+  --hl-green-text: #0a6b46;
+  --hl-green-on: #ffffff;
+  --hl-halation: #ff5a3c;
   color-scheme: light;
 }
 [data-theme="dark"] {
-  --hl-bg: #0a0a0a;
-  --hl-surface: #111;
-  --hl-surface-2: #1a1a1a;
-  --hl-text: #fafafa;
-  --hl-muted: #a3a3a3;
-  --hl-line: #262626;
-  --hl-cinema: #000;
-  --hl-blue: #6b9bff;
-  --hl-blue-text: #8fb4ff;
-  --hl-blue-on: #0a0a0a;
-  --hl-red: #ff6b60;
-  --hl-red-text: #ff8a80;
-  --hl-red-on: #0a0a0a;
-  --hl-green: #4ade80;
-  --hl-green-text: #4ade80;
-  --hl-green-on: #0a0a0a;
-  --hl-yellow: #fde047;
-  --hl-yellow-text: #fde047;
-  --hl-yellow-on: #0a0a0a;
-  --hl-danger: var(--hl-red-text);
-  --hl-success: var(--hl-green-text);
-  --hl-warn: var(--hl-yellow-text);
+  /* Night */
+  --hl-field: #07080c;
+  --hl-surface: #0e1118;
+  --hl-surface-2: #161a24;
+  --hl-ink: #eceff5;
+  --hl-dim: #a2a9ba;
+  --hl-edge: rgb(236 239 245 / 0.14);
+  --hl-blue: #6f9bff;
+  --hl-blue-text: #6f9bff;
+  --hl-blue-on: #07080c;
+  --hl-red: #ff6a5e;
+  --hl-red-text: #ff6a5e;
+  --hl-red-on: #07080c;
+  --hl-amber: #ffcb47;
+  --hl-amber-text: #ffcb47;
+  --hl-amber-on: #07080c;
+  --hl-green: #4fe0a0;
+  --hl-green-text: #4fe0a0;
+  --hl-green-on: #07080c;
+  --hl-halation: #ff5a3c;
   color-scheme: dark;
 }
+[data-cinema] {
+  --hl-field: #000;
+  --hl-surface: #07080a;
+}
 
-/* Typography is Geist everywhere; presets differ in weight and tracking, and in accent and corner shape. */
+/* Semantic aliases (components read these) */
 :root {
-  --hl-font-display: var(--hl-font-sans);
-  --hl-display-weight: 600;
-  --hl-display-tracking: -0.045em;
+  --hl-bg: var(--hl-field);
+  --hl-text: var(--hl-ink);
+  --hl-muted: var(--hl-dim);
+  --hl-line: var(--hl-edge);
+  --hl-cinema: #000;
+  --hl-yellow: var(--hl-amber);
+  --hl-yellow-text: var(--hl-amber-text);
+  --hl-yellow-on: var(--hl-amber-on);
+  --hl-danger: var(--hl-red-text);
+  --hl-success: var(--hl-green-text);
+  --hl-warn: var(--hl-amber-text);
   --hl-accent: var(--hl-blue);
   --hl-accent-text: var(--hl-blue-text);
   --hl-accent-contrast: var(--hl-blue-on);
@@ -75,19 +82,20 @@
   --hl-accent: var(--hl-red);
   --hl-accent-text: var(--hl-red-text);
   --hl-accent-contrast: var(--hl-red-on);
-  --hl-display-weight: 500;
-  --hl-display-tracking: -0.055em;
-  --hl-radius-md: 8px;
-  --hl-radius-lg: 12px;
-  --hl-radius-control: 10px;
+  --hl-display-weight: 380;
+  --hl-wdth: 104;
 }
 [data-preset="music"] {
-  --hl-accent: var(--hl-yellow);
-  --hl-accent-text: var(--hl-yellow-text);
-  --hl-accent-contrast: var(--hl-yellow-on);
+  --hl-accent: var(--hl-amber);
+  --hl-accent-text: var(--hl-amber-text);
+  --hl-accent-contrast: var(--hl-amber-on);
+  --hl-display-weight: 340;
+  --hl-wdth: 118;
 }
 [data-preset="flying"] {
   --hl-accent: var(--hl-green);
   --hl-accent-text: var(--hl-green-text);
   --hl-accent-contrast: var(--hl-green-on);
+  --hl-display-weight: 300;
+  --hl-wdth: 92;
 }

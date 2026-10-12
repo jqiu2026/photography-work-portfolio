@@ -1,225 +1,236 @@
-import {
-  Button,
-  Container,
-  Heading,
-  Eyebrow,
-  Grid,
-  Avatar,
-  ProfileHeader,
-  SitePreviewCard,
-  Section,
-  Text,
-} from "@halation/ui";
 import { Image } from "@halation/ui/media";
-import { ImageSequence } from "@halation/ui/media";
-import { InView, PinnedScene, RevealText, ScrollHighlight, StepSequence } from "@halation/ui/motion";
-import { ShaderHero } from "@halation/ui/webgl";
+import { Condense, Scene, Settle, StageProvider, Streak, Threshold } from "@halation/ui/stage";
 import { getSite } from "@jerryqiu/sites";
-import NextLink from "next/link";
 import type { Metadata } from "next";
-import { SiteShell } from "@/components/site/SiteShell";
+import NextLink from "next/link";
+import { Footer } from "@/components/site/HubFooter";
+import { HubIndex } from "@/components/site/HubIndex";
 import "@/components/home/home.css";
-import { todo } from "@/content/site";
-import { getPerson } from "@/lib/profile";
 import { getImage } from "@/lib/images";
+import { getPerson } from "@/lib/profile";
 import { getWriting } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: { absolute: "Jerry Qiu" },
-  description: "Photographs, projects and writing by Jerry Qiu, a photographer and builder in New York.",
+  description: "Jerry Qiu: photographer, builder, drone pilot and musician in New York.",
 };
 
-const frames = Array.from({ length: 96 }, (_, i) => `/sequence/hero/frame-${String(i).padStart(3, "0")}.webp`);
-const fmt = (d: string) => new Date(d).toLocaleDateString("en-US", { month: "short", year: "numeric" });
+const fmt = (d: string) => new Date(d).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+
+// Real photographs from the portfolio. Captions use only what the file names state (event and month).
+const proof = [
+  {
+    id: "10-19-2025-maker-faire-coney-island-2025-129-1",
+    caption: "Maker Faire, Coney Island · Oct 2025",
+    alt: "A scene from Maker Faire at Coney Island.",
+  },
+  { id: "2026-01-17-snow-7", caption: "Snow · Jan 2026", alt: "A snowy New York street." },
+  { id: "jetblue-a220-300-1", caption: "A220-300 on approach", alt: "A JetBlue Airbus A220-300 in flight." },
+  {
+    id: "2026-03-25-stuyopenhouse-20",
+    caption: "Open House · Mar 2026",
+    alt: "A moment from the Stuyvesant Open House.",
+  },
+  {
+    id: "jry0126-enhanced-nr",
+    caption: "Behind the camera",
+    alt: "A person standing next to a video camera on a tripod.",
+  },
+] as const;
+
+const roles = ["photographer", "builder", "drone pilot", "musician"];
 
 export default async function Home() {
   const { person, socials } = await getPerson();
-  const hero = getImage("gallery", "jry0126-enhanced-nr");
-  const heroFiles = [...hero.files].sort((a, b) => a.width - b.width);
-  const heroSrc = (heroFiles.find((f) => f.width >= 1600) ?? heroFiles[heroFiles.length - 1]).src;
-  const portrait = getImage("site", "avatar");
-  const posts = (await getWriting()).slice(0, 3);
-
-  // TODO(owner): rewrite these beats in your voice. Facts come from the original About page.
-  const steps = [
-    { title: "I take photographs.", body: "Events, theatre and street, mostly around New York." },
-    { title: "I build things.", body: "Python, Lua and the web: small tools and sites." },
-    { title: "I fly drones.", body: "I'm a certified drone pilot (FAA Part 107)." },
-    { title: "I play music.", body: todo("a line about the music you play") },
-  ].filter((s): s is { title: string; body: string } => !!s.body);
-
+  const writing = await getWriting();
+  const [featured, ...rest] = writing;
+  const photos = getSite("photos");
+  const music = getSite("music");
+  const flying = getSite("flying");
+  const hubUrl = getSite("hub").url;
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Person",
     name: person.name,
-    url: getSite("hub").url,
-    image: `${getSite("hub").url}${getImage("site", "avatar").files.at(-1)?.src ?? ""}`,
+    url: hubUrl,
+    jobTitle: "Photographer",
     sameAs: socials.filter((s) => s.href.startsWith("http")).map((s) => s.href),
   };
+  const worlds = [
+    {
+      site: photos,
+      accent: "red" as const,
+      title: "Photography",
+      // TODO(owner): rewrite in your voice.
+      text: "Pictures of people at work.",
+      img: getImage("gallery", "jry0022-enhanced-nr"),
+      alt: "",
+    },
+    {
+      site: music,
+      accent: "amber" as const,
+      title: "Music",
+      text: "Things I wrote, and sometimes played.",
+      img: getImage("gallery", "jry0473"),
+      alt: "",
+    },
+    {
+      site: flying,
+      accent: "green" as const,
+      title: "Flying",
+      text: "Where I've been, from above.",
+      img: getImage("blogs", "day-one-cover"),
+      alt: "",
+    },
+  ];
 
   return (
-    <SiteShell transparentTop={false}>
+    <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <header className="home-hero">
-        <Container className="home-hero__head">
-          <Eyebrow>
-            {person.name} · {person.location}
-          </Eyebrow>
-          <RevealText
-            as="h1"
-            text="Hello, I'm Jerry."
-            className="hl-heading hl-heading--display home-hero__title"
-            delay={0.1}
-          />
-          <Text size="xl" tone="muted" className="home-hero__lede">
-            {person.headline}
-          </Text>
-        </Container>
-        <ShaderHero
-          src={heroSrc}
-          srcSet={heroFiles.map((f) => `${f.src} ${f.width}w`).join(", ")}
-          sizes="100vw"
-          alt="A person seen from behind, standing next to a video camera on a tripod."
-          className="home-hero__band"
-          intensity={1}
+      <StageProvider world="hub">
+        <a className="hl-skip" href="#main">
+          Skip to content
+        </a>
+        <HubIndex
+          routes={[
+            { label: "Writing", href: "/writing" },
+            { label: "About", href: "/about" },
+            { label: "Connect", href: "/connect" },
+          ]}
         />
-        <Container>
-          <div className="home-hero__meta">
-            <span>Photograph by {person.name}. Move your pointer over it.</span>
-            <span className="home-scroll" aria-hidden>
-              Scroll ↓
-            </span>
-          </div>
-        </Container>
-      </header>
-
-      <Section className="home-profile" as="section">
-        <Container>
-          <div className="home-profile__grid">
-            <ProfileHeader
-              stacked
-              nameAs="h2"
-              nameSize="4xl"
-              portrait={
-                <Image
-                  asset={portrait}
-                  alt={`Portrait of ${person.name}`}
-                  sizes="320px"
-                  style={{ borderRadius: "var(--hl-radius-lg)" }}
-                />
-              }
-              name={person.name}
-              headline={person.headline}
-              location={person.location}
-              currently={person.currently}
-              links={socials}
-              actions={
-                <>
-                  <Button as={NextLink} href="/about" variant="solid">
-                    About me
-                  </Button>
-                  <Button as="a" href={`${getSite("photos").url}/work`} variant="ghost">
-                    See my work
-                  </Button>
-                </>
-              }
-            />
-            <ScrollHighlight
-              className="home-intro"
-              text="Photography is how I started, and it is still how I pay attention. I make pictures of people at work, then spend a long time trying to make them honest."
-            />
-          </div>
-        </Container>
-      </Section>
-
-      <PinnedScene length={Math.max(3, steps.length + 1)} label="A few things about me" className="home-scene-wrap">
-        <div className="home-scene">
-          <div className="home-scene__media">
-            <ImageSequence frames={frames} alt="" />
-          </div>
-          <div className="home-scene__text">
-            <div>
-              <Eyebrow>A few things about me</Eyebrow>
-              <StepSequence steps={steps} />
+        <main id="main" className="home">
+          <Scene id="start" label="Jerry Qiu" className="home-ignition" as="header">
+            <div className="home-wrap">
+              <p className="hl-eyebrow">{person.location}</p>
+              <Streak as="h1" text={`${person.name}.`} className="home-name" />
+              <Settle as="p" className="home-roles" when="load">
+                {roles.map((r, i) => (
+                  <span key={r}>
+                    {r}
+                    {i < roles.length - 1 ? <i aria-hidden> · </i> : null}
+                  </span>
+                ))}
+                <span className="hl-sr-only"> in {person.location}</span>
+              </Settle>
+              {/* TODO(owner): rewrite in your voice. */}
+              <Settle as="p" className="home-lede" when="load">
+                I take photographs, build websites, fly drones and make music. I'm in New York.
+              </Settle>
+              <p className="home-cue" aria-hidden>
+                Scroll
+              </p>
             </div>
-          </div>
-        </div>
-      </PinnedScene>
+          </Scene>
 
-      <Section>
-        <Container>
-          <div className="home-head">
-            <div>
-              <Eyebrow>More rooms</Eyebrow>
-              <Heading size="4xl" display>
-                Elsewhere
-              </Heading>
+          <Scene id="proof" label="Proof" className="home-proof">
+            <div className="home-wrap">
+              <Condense text="A few of the things I've shot." className="home-h2" />
+              <ul className="home-planes">
+                {proof.map((p, i) => (
+                  <li key={p.id} style={{ ["--i" as string]: i } as React.CSSProperties}>
+                    <figure>
+                      <Image asset={getImage("gallery", p.id)} alt={p.alt} sizes="(min-width: 900px) 30vw, 70vw" />
+                      <figcaption className="hl-eyebrow">{p.caption}</figcaption>
+                    </figure>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <Text tone="muted" style={{ maxWidth: "34ch" }}>
-              Photography, music and flying each have a small site of their own.
-            </Text>
-          </div>
-          <Grid min="17rem" gap={6}>
-            {(
-              [
-                ["photos", "Photography", "The portfolio: events, theatre and street.", getImage("gallery", "jry1082")],
-                ["music", "Music", "What I play and where to hear it.", getImage("gallery", "jry0473")],
-                ["flying", "Flying", "Notes on learning to fly.", getImage("gallery", "jetblue-a220-300-1")],
-              ] as const
-            ).map(([id, title, text, img]) => (
-              <InView key={id}>
-                <SitePreviewCard
-                  title={title}
-                  description={text}
-                  href={getSite(id).url}
-                  image={<Image asset={img} alt="" sizes="(min-width: 900px) 30vw, 90vw" fill />}
-                />
-              </InView>
-            ))}
-          </Grid>
-        </Container>
-      </Section>
+          </Scene>
 
-      <Section>
-        <Container size="md">
-          <div className="home-head">
-            <div>
-              <Eyebrow>Writing</Eyebrow>
-              <Heading size="4xl" display>
-                Notes
-              </Heading>
+          <Scene id="what" label="What I do" className="home-what" pin={2.4}>
+            <div className="home-wrap home-steps">
+              {/* TODO(owner): rewrite these four lines in your voice. Facts: original About page. */}
+              <p style={{ ["--c" as string]: 0.28 } as React.CSSProperties}>
+                Photography is how I started, and it is still how I pay attention.
+              </p>
+              <p style={{ ["--c" as string]: 0.42 } as React.CSSProperties}>
+                I fly drones with a Part 107 certificate.
+              </p>
+              <p style={{ ["--c" as string]: 0.56 } as React.CSSProperties}>I built this site.</p>
+              <p style={{ ["--c" as string]: 0.7 } as React.CSSProperties}>I run the StuyAviators Instagram.</p>
             </div>
-            <Button as={NextLink} href="/writing" variant="ghost">
-              All writing
-            </Button>
-          </div>
-          <div className="home-writing">
-            {posts.map((p) => (
-              <NextLink key={p.slug} href={`/writing/${p.slug}`}>
-                <time dateTime={p.date}>{fmt(p.date)}</time>
-                <div>
-                  <h3>{p.title}</h3>
-                  {p.summary ? <p>{p.summary}</p> : null}
-                </div>
+          </Scene>
+
+          <Scene id="rooms" label="Three rooms" className="home-rooms">
+            <div className="home-wrap">
+              <Condense text="Three rooms. Knock on any." className="home-h2" />
+              <div className="home-doors">
+                {worlds.map((w) => (
+                  <Threshold
+                    key={w.title}
+                    href={w.site.url}
+                    title={w.title}
+                    label={`Enter ${w.title.toLowerCase()}`}
+                    accent={w.accent}
+                    media={<Image asset={w.img} alt={w.alt} sizes="(min-width: 900px) 28vw, 80vw" fill />}
+                  >
+                    {w.text}
+                  </Threshold>
+                ))}
+              </div>
+            </div>
+          </Scene>
+
+          <Scene id="writing" label="Writing" className="home-writing">
+            <div className="home-wrap">
+              <p className="hl-eyebrow">Writing</p>
+              {featured ? (
+                <NextLink href={`/writing/${featured.slug}`} className="home-featured">
+                  {featured.cover ? (
+                    <span className="home-featured__img">
+                      <Image asset={featured.cover} alt="" sizes="(min-width: 900px) 50vw, 100vw" />
+                    </span>
+                  ) : null}
+                  <span className="home-featured__text">
+                    <time dateTime={featured.date} className="hl-eyebrow">
+                      {fmt(featured.date)}
+                    </time>
+                    <span className="home-featured__title">{featured.title}</span>
+                    {featured.summary ? <span className="home-featured__sum">{featured.summary}</span> : null}
+                  </span>
+                </NextLink>
+              ) : null}
+              {rest.length ? (
+                <ul className="home-list">
+                  {rest.map((p) => (
+                    <li key={p.slug}>
+                      <NextLink href={`/writing/${p.slug}`}>
+                        <span>{p.title}</span>
+                        <time dateTime={p.date} className="hl-eyebrow">
+                          {fmt(p.date)}
+                        </time>
+                      </NextLink>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+              <NextLink href="/writing" className="home-more">
+                All writing →
               </NextLink>
-            ))}
-          </div>
-        </Container>
-      </Section>
+            </div>
+          </Scene>
 
-      <Section tone="surface" className="home-close">
-        <Container>
-          <RevealText as="h2" text="Say hello." className="hl-heading hl-heading--display" />
-          <div className="hl-profile__actions">
-            <Button as={NextLink} href="/connect" size="lg">
-              Get in touch
-            </Button>
-            <Button as="a" href={`mailto:${person.email}`} variant="ghost" size="lg">
-              {person.email}
-            </Button>
-          </div>
-        </Container>
-      </Section>
-    </SiteShell>
+          <Scene id="hello" label="Say hello" className="home-hello">
+            <div className="home-wrap">
+              <Condense text="Say hello." className="home-hello__title" />
+              {/* TODO(owner): rewrite in your voice. */}
+              <Settle as="p" className="home-lede">
+                If something here made you curious, tell me. I read everything.
+              </Settle>
+              <div className="home-actions">
+                <NextLink href="/connect" className="home-btn">
+                  Get in touch
+                </NextLink>
+                <a href={`mailto:${person.email}`} className="home-btn home-btn--ghost">
+                  {person.email}
+                </a>
+              </div>
+            </div>
+          </Scene>
+        </main>
+        <Footer person={person} socials={socials} worlds={worlds.map((w) => ({ label: w.title, href: w.site.url }))} />
+      </StageProvider>
+    </>
   );
 }

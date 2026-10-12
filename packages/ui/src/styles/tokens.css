@@ -1,10 +1,20 @@
-/* @halation/ui design tokens. Prefix --hl-. Values for colour live in themes.css. */
+/*
+ * Halation UI tokens (v2, "Flow"). Prefix --hl-. Reasoning for every value: docs/project/redesign-brief.md and
+ * design-language.md. Colour lives in themes.css; this file holds type, space, shape and motion.
+ */
 :root {
-  /* Type families: apps provide the font variables (next/font); fallbacks keep it usable without them */
-  --hl-font-sans: var(--font-sans, "Instrument Sans"), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --hl-font-mono: var(--font-mono, "DM Mono"), ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* Type roles. Apps provide the font variables (next/font); fallbacks keep the page usable without them. */
+  --hl-font-display: var(--font-display, "Anybody"), "Arial Narrow", ui-sans-serif, system-ui, sans-serif;
+  --hl-font-sans: var(--font-sans, "Hanken Grotesk"), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --hl-font-voice: var(--font-voice, "Newsreader"), "Iowan Old Style", Georgia, serif;
+  --hl-font-mono: var(--font-mono, "Martian Mono"), ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* The width axis of the display face: headlines get wider with scroll velocity (Flow) and settle back. */
+  --hl-wdth: 112;
+  --hl-wdth-boost: 0;
+  --hl-display-weight: 420;
+  --hl-display-tracking: -0.03em;
 
-  /* Fluid type scale */
+  /* Fluid type scale (1.25 ratio, clamped) */
   --hl-text-xs: 0.75rem;
   --hl-text-sm: 0.875rem;
   --hl-text-base: 1rem;
@@ -13,7 +23,7 @@
   --hl-text-2xl: clamp(1.5rem, 1.25rem + 1vw, 2rem);
   --hl-text-3xl: clamp(2rem, 1.5rem + 2vw, 3rem);
   --hl-text-4xl: clamp(2.5rem, 1.6rem + 3.6vw, 4.5rem);
-  --hl-text-display: clamp(2.6rem, 1.5rem + 8vw, 9rem);
+  --hl-text-display: clamp(3rem, 1.2rem + 9vw, 9.5rem);
 
   /* Space, 4px base */
   --hl-space-1: 0.25rem;
@@ -26,41 +36,52 @@
   --hl-space-16: 4rem;
   --hl-space-24: 6rem;
   --hl-space-32: 8rem;
-  --hl-section: clamp(4rem, 2rem + 8vw, 10rem);
+  --hl-section: clamp(5rem, 2rem + 10vw, 12rem);
   --hl-gutter: clamp(1.25rem, 0.5rem + 3vw, 3rem);
 
   /* Containers */
   --hl-container-sm: 40rem;
   --hl-container-md: 60rem;
-  --hl-container-lg: 76rem;
-  --hl-measure: 68ch;
+  --hl-container-lg: 80rem;
+  --hl-measure: 62ch;
 
-  /* Shape */
-  --hl-radius-sm: 2px;
-  --hl-radius-md: 3px;
-  --hl-radius-lg: 4px;
+  /* Shape: aperture-like corners. Frames are outlined by light, not by a uniform 8px card. */
+  --hl-radius-sm: 6px;
+  --hl-radius-md: 14px;
+  --hl-radius-lg: 28px;
   --hl-radius-pill: 999px;
-  --hl-radius-control: 2px;
+  --hl-radius-control: 14px;
 
-  /* Motion: one signature curve, one inout, shared durations */
-  --hl-ease: cubic-bezier(0.16, 1, 0.3, 1);
-  --hl-ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
-  --hl-dur-fast: 160ms;
-  --hl-dur-base: 280ms;
-  --hl-dur-slow: 640ms;
-  --hl-motion-distance: 24px;
+  /* Flow motion (docs/project/redesign-brief.md section 3.2). JS mirror: tokens.ts. */
+  --hl-ease-glide: cubic-bezier(0.22, 1, 0.36, 1);
+  --hl-ease-pour: cubic-bezier(0.65, 0, 0.35, 1);
+  --hl-ease-drain: cubic-bezier(0.5, 0, 0.9, 0.4);
+  --hl-ease: var(--hl-ease-glide);
+  --hl-ease-inout: var(--hl-ease-pour);
+  --hl-dur-blink: 120ms;
+  --hl-dur-short: 280ms;
+  --hl-dur-medium: 640ms;
+  --hl-dur-long: 1100ms;
+  --hl-dur-scene: 1600ms;
+  --hl-dur-fast: var(--hl-dur-blink);
+  --hl-dur-base: var(--hl-dur-short);
+  --hl-dur-slow: var(--hl-dur-medium);
+  --hl-motion-distance: 14px;
 
-  /* Elevation */
-  --hl-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.06);
-  --hl-shadow-md: 0 8px 30px rgb(0 0 0 / 0.1);
+  /* Light, not shadow: elevation is glow and edge */
+  --hl-shadow-sm: 0 0 0 1px var(--hl-line);
+  --hl-shadow-md: 0 24px 60px -24px rgb(0 0 0 / 0.55), 0 0 0 1px var(--hl-line);
   --hl-focus: 2px solid var(--hl-accent-text);
 }
 
 @media (prefers-reduced-motion: reduce) {
   :root {
-    --hl-dur-fast: 1ms;
-    --hl-dur-base: 1ms;
-    --hl-dur-slow: 1ms;
+    --hl-dur-blink: 1ms;
+    --hl-dur-short: 1ms;
+    --hl-dur-medium: 1ms;
+    --hl-dur-long: 1ms;
+    --hl-dur-scene: 1ms;
     --hl-motion-distance: 0px;
+    --hl-wdth-boost: 0;
   }
 }

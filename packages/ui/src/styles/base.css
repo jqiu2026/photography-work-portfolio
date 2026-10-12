@@ -37,3 +37,8 @@
   clip-path: inset(50%);
   white-space: nowrap;
 }
+
+/* Display type: the width axis follows the page's velocity (set by the stage as --hl-wdth-boost). */
+.hl-root :where(h1, h2, .hl-heading--display) {
+  font-variation-settings: "wdth" calc(var(--hl-wdth) + var(--hl-wdth-boost));
+}

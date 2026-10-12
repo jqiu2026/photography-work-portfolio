@@ -11,7 +11,8 @@
     "./media": "./src/media/index.ts",
     "./styles.css": "./src/styles/index.css",
     "./tokens": "./src/tokens.ts",
-    "./webgl": "./src/webgl/index.ts"
+    "./webgl": "./src/webgl/index.ts",
+    "./stage": "./src/stage/index.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
