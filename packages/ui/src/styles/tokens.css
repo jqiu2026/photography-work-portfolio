@@ -1,0 +1,67 @@
+/* @placeholder/ui design tokens. Prefix --ph-. Values for colour live in themes.css. */
+:root {
+  /* Type families: apps provide the font variables (next/font); fallbacks keep it usable without them */
+  --ph-font-sans: var(--font-inter-tight, "Inter Tight"), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --ph-font-serif: var(--font-instrument-serif, "Instrument Serif"), "Iowan Old Style", Georgia, serif;
+  --ph-font-mono: var(--font-geist-mono, "Geist Mono"), ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Fluid type scale */
+  --ph-text-xs: 0.75rem;
+  --ph-text-sm: 0.875rem;
+  --ph-text-base: 1rem;
+  --ph-text-lg: 1.125rem;
+  --ph-text-xl: clamp(1.25rem, 1.12rem + 0.5vw, 1.5rem);
+  --ph-text-2xl: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+  --ph-text-3xl: clamp(2rem, 1.5rem + 2vw, 3rem);
+  --ph-text-4xl: clamp(2.5rem, 1.6rem + 3.6vw, 4.5rem);
+  --ph-text-display: clamp(3.25rem, 1.8rem + 8vw, 9rem);
+
+  /* Space, 4px base */
+  --ph-space-1: 0.25rem;
+  --ph-space-2: 0.5rem;
+  --ph-space-3: 0.75rem;
+  --ph-space-4: 1rem;
+  --ph-space-6: 1.5rem;
+  --ph-space-8: 2rem;
+  --ph-space-12: 3rem;
+  --ph-space-16: 4rem;
+  --ph-space-24: 6rem;
+  --ph-space-32: 8rem;
+  --ph-section: clamp(4rem, 2rem + 8vw, 10rem);
+  --ph-gutter: clamp(1.25rem, 0.5rem + 3vw, 3rem);
+
+  /* Containers */
+  --ph-container-sm: 40rem;
+  --ph-container-md: 60rem;
+  --ph-container-lg: 76rem;
+  --ph-measure: 68ch;
+
+  /* Shape */
+  --ph-radius-sm: 6px;
+  --ph-radius-md: 12px;
+  --ph-radius-lg: 20px;
+  --ph-radius-pill: 999px;
+  --ph-radius-control: var(--ph-radius-pill);
+
+  /* Motion: one signature curve, one inout, shared durations */
+  --ph-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --ph-ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
+  --ph-dur-fast: 160ms;
+  --ph-dur-base: 280ms;
+  --ph-dur-slow: 640ms;
+  --ph-motion-distance: 24px;
+
+  /* Elevation */
+  --ph-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.06);
+  --ph-shadow-md: 0 8px 30px rgb(0 0 0 / 0.1);
+  --ph-focus: 2px solid var(--ph-accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --ph-dur-fast: 1ms;
+    --ph-dur-base: 1ms;
+    --ph-dur-slow: 1ms;
+    --ph-motion-distance: 0px;
+  }
+}

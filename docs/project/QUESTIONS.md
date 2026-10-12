@@ -21,4 +21,6 @@ Never block on these. Each has a default already being used. Append new ones at 
 | Q15 | Vercel projects and domains for `jerryqiu.com`, `music.`, `flying.`, `photos.` | Documented checklist in `docs/project/DEPLOYMENT.md`, nothing created | Owner creates projects and DNS |
 | Q16 | Should `music.` and `flying.` be separate Vercel projects instead of served by the hub app? | One app with host routing | Split later; code is route-grouped to make it easy |
 | Q17 | Pinned Once UI 1.5.6 and react-icons 5.5.0 (newer versions break the old site) | Pinned until Once UI is removed in M7 | none |
+| Q18 | Hub design direction (Q3/Q12 answered) | Hub = A Gallery white, photos = B Midnight cinema, music = C Soft neutral, flying = cool sans (see design-language.md) | Change preset in `packages/sites` / one token file |
+| Q19 | UI package styling: Tailwind v4 compiled (A4) or handwritten CSS variables? | Handwritten CSS (`ph-*` classes, `--ph-*` tokens) | Port to Tailwind later; tokens stay the same |
 

@@ -1,0 +1,18 @@
+/* Scoped base styles: apply by adding class "ph-root" to <body> (or any wrapper). */
+.ph-root {
+  background: var(--ph-bg);
+  color: var(--ph-text);
+  font-family: var(--ph-font-sans);
+  font-size: var(--ph-text-base);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  min-height: 100dvh;
+}
+.ph-root *, .ph-root *::before, .ph-root *::after { box-sizing: border-box; }
+.ph-root :where(h1, h2, h3, h4, p, figure, blockquote) { margin: 0; }
+.ph-root :where(img, video, canvas, svg) { display: block; max-width: 100%; }
+.ph-root :where(a) { color: inherit; }
+.ph-root :focus-visible { outline: var(--ph-focus); outline-offset: 3px; border-radius: 2px; }
+.ph-root ::selection { background: var(--ph-accent); color: var(--ph-accent-contrast); }
+.ph-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }

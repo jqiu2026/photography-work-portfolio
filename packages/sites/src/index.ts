@@ -4,6 +4,7 @@
  * and the real subdomains in production. Nothing here touches DNS.
  */
 export type SiteId = "hub" | "photos" | "music" | "flying";
+export type Preset = SiteId;
 
 export type SiteInfo = {
   id: SiteId;
@@ -11,6 +12,8 @@ export type SiteInfo = {
   description: string;
   /** Absolute origin, no trailing slash. */
   url: string;
+  /** Theme preset (see packages/ui themes.css). */
+  preset: Preset;
   /** Path form that works in dev on the hub app (music/flying). */
   devPath?: string;
 };
@@ -24,17 +27,19 @@ function origin(envValue: string | undefined, dev: string, prod: string) {
 export function getSites(): SiteInfo[] {
   const hub = origin(process.env.NEXT_PUBLIC_HUB_URL, "http://localhost:3000", "https://jerryqiu.com");
   return [
-    { id: "hub", name: "Jerry Qiu", description: "About me, my work and writing", url: hub },
+    { id: "hub", name: "Jerry Qiu", description: "About me, my work and writing", preset: "hub", url: hub },
     {
       id: "photos",
       name: "Photography",
       description: "Portfolio and galleries",
+      preset: "photos",
       url: origin(process.env.NEXT_PUBLIC_PHOTOS_URL, "http://localhost:3002", "https://photos.jerryqiu.com"),
     },
     {
       id: "music",
       name: "Music",
       description: "What I play and where to hear it",
+      preset: "music",
       url: origin(process.env.NEXT_PUBLIC_MUSIC_URL, `${hub}/music`, "https://music.jerryqiu.com"),
       devPath: "/music",
     },
@@ -42,6 +47,7 @@ export function getSites(): SiteInfo[] {
       id: "flying",
       name: "Flying",
       description: "How I learned to fly",
+      preset: "flying",
       url: origin(process.env.NEXT_PUBLIC_FLYING_URL, `${hub}/flying`, "https://flying.jerryqiu.com"),
       devPath: "/flying",
     },

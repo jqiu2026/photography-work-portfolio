@@ -19,6 +19,7 @@
     "@biomejs/biome": "^1.9.4",
     "@playwright/test": "1.64.0",
     "concurrently": "^10.0.6",
+    "sharp": "^0.35.5",
     "typescript": "~6.0.3"
   }
 }
