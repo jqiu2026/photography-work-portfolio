@@ -1,41 +1,23 @@
 {
-  "name": "@once-ui-system/magic-portfolio",
-  "version": "2.3.0",
+  "name": "jerryqiu-sites",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Monorepo for jerryqiu.com, photos., music. and flying. plus the @placeholder/ui package",
+  "packageManager": "pnpm@12.11.2",
   "scripts": {
-    "dev": "next dev",
-    "export": "next export",
-    "build": "next build",
-    "biome-write": "npx @biomejs/biome format --write .",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "@mdx-js/loader": "^3.1.0",
-    "@next/mdx": "^16.0.10",
-    "@once-ui-system/core": "latest",
-    "@vercel/analytics": "^2.0.1",
-    "@vercel/speed-insights": "^2.0.0",
-    "classnames": "^2.5.1",
-    "cookie": "^1.0.2",
-    "gray-matter": "^4.0.3",
-    "image-size": "^2.0.2",
-    "lint-staged": "^16.1.5",
-    "next": "^16.0.10",
-    "next-mdx-remote": "^6.0.0",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.3",
-    "react-icons": "^5.5.0",
-    "sass": "^1.86.3",
-    "transliteration": "^2.3.5"
+    "dev": "concurrently -n web,docs,photos -c cyan,magenta,yellow \"pnpm dev:web\" \"pnpm dev:docs\" \"pnpm dev:photos\"",
+    "dev:web": "pnpm --filter @jerryqiu/web dev",
+    "dev:photos": "pnpm --filter @jerryqiu/photos dev",
+    "dev:docs": "pnpm --filter @jerryqiu/docs dev",
+    "build": "pnpm -r build",
+    "test": "pnpm -r --if-present test",
+    "lint": "biome check .",
+    "format": "biome format --write .",
+    "typecheck": "pnpm -r --if-present typecheck"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
-    "@types/cookie": "^0.6.0",
-    "@types/node": "^20.17.30",
-    "@types/react": "^19.2.4",
-    "@types/react-dom": "^19.2.3",
-    "eslint": "^9.25.0",
-    "typescript": "^5.8.3",
-    "tzdata": "^1.0.44"
+    "concurrently": "^10.0.6",
+    "typescript": "~6.0.3"
   }
 }

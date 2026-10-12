@@ -34,3 +34,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+# monorepo
+**/.next/
+**/.next-build/
+**/node_modules/
+**/*.tsbuildinfo
+**/next-env.d.ts
+**/dist/
+.env*.local
+.env
