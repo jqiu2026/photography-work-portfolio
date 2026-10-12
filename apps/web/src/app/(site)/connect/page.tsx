@@ -1,6 +1,6 @@
 import { Container, Eyebrow, Grid, Heading, Section, SocialLinks, Text } from "@placeholder/ui";
 import type { Metadata } from "next";
-import { ContactForm } from "@/components/site/ContactForm";
+import { ContactForm } from "@jerryqiu/sites/contact";
 import { PageHeader } from "@/components/site/PageHeader";
 import { SiteShell } from "@/components/site/SiteShell";
 import { person, socials } from "@/content/site";

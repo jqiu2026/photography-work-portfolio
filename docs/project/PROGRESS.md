@@ -3,7 +3,7 @@
 Living status. Update at every milestone. Newest entries at the top of "Log".
 
 **Branch:** `feat/custom-ui-cms`  **Live view:** http://localhost:3000/_progress
-**Current phase:** 1  **Current milestone:** M7b  **State:** M7 done (component gallery on /_progress arrives with M3)
+**Current phase:** 1  **Current milestone:** M8  **State:** M7b done (component gallery on /_progress arrives with M3)
 
 ## Phase 1: UI package and redesign
 - [x] M1 pnpm workspace (`apps/web`, `apps/photos`, `apps/docs`, `packages/ui`, `packages/sites`, `packages/config`), dev on :3000/:3002/:3001, `/_progress` live page
@@ -13,7 +13,7 @@ Living status. Update at every milestone. Newest entries at the top of "Log".
 - [x] M5 WebGL hero + image sequence tooling
 - [x] M6 Hub home rebuilt (profile-forward showpiece, preview cards for photos/music/flying)
 - [x] M7 Remaining hub pages (about, work, writing, connect) + legal pages migrated, Once UI removed
-- [ ] M7b Photography site (`apps/photos`), music and flying sites, `proxy.ts` host routing, site switcher
+- [x] M7b Photography site (`apps/photos`), music and flying sites, `proxy.ts` host routing, site switcher
 - [ ] M8 Perf, a11y, tests, docs completeness, open-source hygiene
 - [ ] M9 Acceptance run (incl. not-a-StuyAviators-lookalike check, legal checklist) + `PHASE-1-SUMMARY.md`
 
@@ -35,6 +35,7 @@ Living status. Update at every milestone. Newest entries at the top of "Log".
 
 
 ## Log
+- 2026-10-12: M7b done. `apps/photos` (:3002): cinematic home (WebGL hero, justified gallery, subject grid), /portfolio and /portfolio/[slug] (masonry + lightbox), /about, /book (mailto form), /client (ShootProof URL via env), robots/sitemap; cinema-dark preset by default. Music and flying built on the hub app as route groups `(music)`/`(flying)` with their own presets, on a shared interest template; only real facts shown (Part 107, StuyAviators Instagram, cockpit and airliner photos), everything else dev-only `TODO(owner)` and hidden in production. `src/proxy.ts` host routing verified (music./flying. rewrite, prefixed paths redirect, production redirects /music -> subdomain). Shared chrome (SiteShell, SiteHeader with site switcher, Footer with More from me, ContactForm) lives in `packages/sites`; legal pages are hub-canonical with absolute links from the other sites. Gallery originals moved (git mv, not deleted) from `apps/web/public/images/gallery` to `apps/photos/public/images/gallery`.
 - 2026-10-12: M7 done. Hub pages on the new UI: /about (profile, timeline, skills from the original real copy), /work + /work/[slug] (cover, credits, MDX, lightbox gallery, next/prev, password gate for `protected: true`), /writing + posts (+ `/writing/rss.xml`, reading progress), /connect (socials + mailto form with honeypot), /privacy /terms /licensing /accessibility (drafts, marked for review), security.txt, robots (AI crawler opt-out), sitemap, redirects (/blog, /contact, /gallery->photos, /api/rss). Once UI fully removed (`@once-ui-system/core`, sass, react-icons, legacy components, OG fetch/proxy routes dropped as SSRF surface). Biome configured; lint, typecheck, build pass. `.agents` replaced by `AGENTS.md`.
 - 2026-10-12: M6 done. Hub home (`apps/web/src/app/(site)/page.tsx`): WebGL hero over a real photo, profile row (portrait, headline, socials, `Person` JSON-LD), scroll-highlight intro, pinned scene with scroll-scrubbed image sequence + step text, preview cards for photos/music/flying, horizontal showcase of real projects, latest writing, closing CTA, footer with More from me + legal links. App is split into route groups: `(site)` = new UI, `(legacy)` = Once UI pages still to migrate in M7. MDX content moved to `src/content/{projects,posts}`. Optimized derivatives for gallery/projects/blogs/avatar in `public/opt/*` (originals untouched). Screenshots: `screenshots/m1/home-*.png`. Placeholder facts are dev-only `TODO(owner)` and hidden in production.
 - 2026-10-12: M5 done. `@placeholder/ui/webgl` ShaderHero (ogl, lazy import, pointer-reactive chromatic split, drifting displacement, light leak, DPR cap 1.5, pauses off-screen, plain-image fallback for reduced motion/Save-Data/low-power/no-WebGL). `scripts/make-sequence.mjs` (sharp-only, no ffmpeg on this machine) generated the placeholder `apps/web/public/sequence/hero` (96 frames, 2.2 MB) + README for swapping real footage. Verified in headless Chromium (swiftshader).

@@ -59,3 +59,14 @@ export function getSite(id: SiteId): SiteInfo {
   if (!site) throw new Error(`Unknown site: ${id}`);
   return site;
 }
+
+/**
+ * Link path for a page of a site. On the hub app, music and flying live under /music and /flying in dev
+ * (path mode); in production they are served from their own hostname (host mode) and paths are root-relative.
+ */
+export function sitePath(id: SiteId, path = "/"): string {
+  const hostMode = process.env.NODE_ENV === "production" || !!process.env.NEXT_PUBLIC_HOST_MODE;
+  const prefix = id === "music" || id === "flying" ? (hostMode ? "" : `/${id}`) : "";
+  const p = path === "/" ? "" : path;
+  return `${prefix}${p}` || "/";
+}

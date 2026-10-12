@@ -23,4 +23,9 @@ Never block on these. Each has a default already being used. Append new ones at 
 | Q17 | Pinned Once UI 1.5.6 and react-icons 5.5.0 (newer versions break the old site) | Pinned until Once UI is removed in M7 | none |
 | Q18 | Hub design direction (Q3/Q12 answered) | Hub = A Gallery white, photos = B Midnight cinema, music = C Soft neutral, flying = cool sans (see design-language.md) | Change preset in `packages/sites` / one token file |
 | Q19 | UI package styling: Tailwind v4 compiled (A4) or handwritten CSS variables? | Handwritten CSS (`ph-*` classes, `--ph-*` tokens) | Port to Tailwind later; tokens stay the same |
+| Q20 | Alt text for the 23 portfolio photographs (old site only had category names) | Generic "<Category> photograph N" with a TODO | Write real descriptions (CMS alt field in Phase 2) |
+| Q21 | ShootProof gallery login URL for the /client button | Hidden unless `NEXT_PUBLIC_SHOOTPROOF_URL` is set | Set the env var |
+| Q22 | Music: the trombone photo used on the music site is a portfolio photo; I did not claim it is you | Used with neutral alt text | Replace with your own performance photo |
+| Q23 | Hub headline/intro/skills copy is the original About text lightly arranged; first-person rewrite needed | Marked TODO(owner) in source | Rewrite in your voice |
+| Q24 | The About page says "Class of 2026" and the college is unknown | College hidden until supplied | Add via about content / CMS |
 

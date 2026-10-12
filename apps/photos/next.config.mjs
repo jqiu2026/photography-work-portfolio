@@ -1,2 +1,4 @@
 /** @type {import('next').NextConfig} */
-export default {};
+export default {
+  transpilePackages: ["@placeholder/ui", "@jerryqiu/sites"],
+};

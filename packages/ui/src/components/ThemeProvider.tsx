@@ -13,16 +13,23 @@ const KEY = "ph-theme";
  * Inline script (render in <head>) that sets data-theme and data-preset before first paint,
  * so there is no flash. Pass the same preset the provider uses.
  */
-export function themeScript(preset: Preset) {
-  return `(function(){try{var d=document.documentElement,c=localStorage.getItem("${KEY}")||"system";var t=c==="system"?(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"):c;d.setAttribute("data-theme",t);d.setAttribute("data-preset","${preset}")}catch(e){document.documentElement.setAttribute("data-preset","${preset}")}})()`;
+export function themeScript(preset: Preset, defaultTheme: Choice = "system") {
+  return `(function(){try{var d=document.documentElement,c=localStorage.getItem("${KEY}")||"${defaultTheme}";var t=c==="system"?(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"):c;d.setAttribute("data-theme",t);d.setAttribute("data-preset","${preset}")}catch(e){document.documentElement.setAttribute("data-preset","${preset}")}})()`;
 }
 
-export function ThemeScript({ preset = "hub" }: { preset?: Preset }) {
-  return <script dangerouslySetInnerHTML={{ __html: themeScript(preset) }} />;
+export function ThemeScript({
+  preset = "hub",
+  defaultTheme = "system",
+}: { preset?: Preset; defaultTheme?: Theme | "system" }) {
+  return <script dangerouslySetInnerHTML={{ __html: themeScript(preset, defaultTheme) }} />;
 }
 
-export function ThemeProvider({ preset = "hub", children }: { preset?: Preset; children: ReactNode }) {
-  const [choice, setChoiceState] = useState<Choice>("system");
+export function ThemeProvider({
+  preset = "hub",
+  defaultTheme = "system",
+  children,
+}: { preset?: Preset; defaultTheme?: Theme | "system"; children: ReactNode }) {
+  const [choice, setChoiceState] = useState<Choice>(defaultTheme);
   const [theme, setTheme] = useState<Theme>("light");
 
   const resolve = useCallback((c: Choice): Theme => {
@@ -31,15 +38,15 @@ export function ThemeProvider({ preset = "hub", children }: { preset?: Preset; c
   }, []);
 
   useEffect(() => {
-    let stored: Choice = "system";
+    let stored: Choice = defaultTheme;
     try {
-      stored = (localStorage.getItem(KEY) as Choice) || "system";
+      stored = (localStorage.getItem(KEY) as Choice) || defaultTheme;
     } catch {}
     setChoiceState(stored);
     setTheme(resolve(stored));
     const mq = matchMedia("(prefers-color-scheme: dark)");
     const onChange = () => {
-      if ((localStorage.getItem(KEY) || "system") === "system") {
+      if ((localStorage.getItem(KEY) || defaultTheme) === "system") {
         const t = resolve("system");
         setTheme(t);
         document.documentElement.setAttribute("data-theme", t);
@@ -47,7 +54,7 @@ export function ThemeProvider({ preset = "hub", children }: { preset?: Preset; c
     };
     mq.addEventListener("change", onChange);
     return () => mq.removeEventListener("change", onChange);
-  }, [resolve]);
+  }, [resolve, defaultTheme]);
 
   useEffect(() => {
     document.documentElement.setAttribute("data-preset", preset);

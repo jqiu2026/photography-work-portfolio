@@ -1551,3 +1551,7 @@
 .ph-profile--stacked .ph-profile__portrait {
   width: clamp(9rem, 16vw, 14rem);
 }
+.ph-gallery--justified button {
+  position: absolute;
+  inset: 0;
+}

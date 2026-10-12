@@ -1,0 +1,119 @@
+.ph-hero {
+  position: relative;
+  margin-top: -68px;
+}
+.ph-hero__frame {
+  height: 100svh;
+  min-height: 36rem;
+}
+.ph-hero__inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: clamp(1.25rem, 4vw, 3.5rem);
+  color: #fff;
+  background: linear-gradient(to top, rgb(0 0 0 / 0.55), transparent 50%);
+}
+.ph-hero__inner h1 {
+  font-size: clamp(3rem, 1rem + 9vw, 10rem);
+  line-height: 0.92;
+  color: #fff;
+}
+.ph-hero__inner p {
+  color: rgb(255 255 255 / 0.85);
+  max-width: 40ch;
+  margin-top: 1.25rem;
+  font-size: var(--ph-text-lg);
+}
+.ph-hero .ph-eyebrow {
+  color: rgb(255 255 255 / 0.75);
+  margin-bottom: 1rem;
+}
+.cat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 1rem;
+}
+.cat-card {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: var(--ph-radius-lg);
+  text-decoration: none;
+  color: #fff;
+  background: var(--ph-surface-2);
+}
+.cat-card .ph-img {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  aspect-ratio: auto !important;
+}
+.cat-card img {
+  transition: opacity .7s var(--ph-ease), transform 1.4s var(--ph-ease);
+}
+.cat-card:hover img {
+  transform: scale(1.05);
+}
+.cat-card span {
+  position: absolute;
+  left: 1.25rem;
+  bottom: 1.1rem;
+  right: 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--ph-font-display);
+  font-weight: var(--ph-display-weight);
+  font-size: var(--ph-text-2xl);
+  letter-spacing: var(--ph-display-tracking);
+  text-shadow: 0 1px 12px rgb(0 0 0 / 0.5);
+}
+.cat-card small {
+  font-family: var(--ph-font-sans);
+  font-size: var(--ph-text-sm);
+  opacity: 0.8;
+  letter-spacing: 0;
+}
+.cat-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgb(0 0 0 / 0.62), transparent 50%);
+  pointer-events: none;
+}
+.cat-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin-bottom: 2rem;
+}
+.cat-tabs a {
+  padding: .55em 1.1em;
+  border: 1px solid var(--ph-line);
+  border-radius: var(--ph-radius-pill);
+  text-decoration: none;
+  font-size: var(--ph-text-sm);
+  color: var(--ph-muted);
+  transition: all var(--ph-dur-base) var(--ph-ease);
+}
+.cat-tabs a:hover {
+  color: var(--ph-text);
+  border-color: var(--ph-text);
+}
+.cat-tabs a[aria-current="page"] {
+  background: var(--ph-text);
+  color: var(--ph-bg);
+  border-color: var(--ph-text);
+}
+.page-head {
+  padding-top: clamp(3rem, 9vw, 7rem);
+  padding-bottom: clamp(1.5rem, 4vw, 3rem);
+}
+.page-head h1 {
+  font-size: var(--ph-text-display);
+  max-width: 12ch;
+}

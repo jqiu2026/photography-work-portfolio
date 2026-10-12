@@ -8,7 +8,17 @@ import { useState, type FormEvent } from "react";
  * Phase 1 contact form: opens the visitor's email app with the message prefilled (nothing is stored or sent
  * by this site). The hidden "website" field is a honeypot. Phase 2 replaces this with a stored inbox.
  */
-export function ContactForm({ to }: { to: string }) {
+export function ContactForm({
+  to,
+  topics = ["General", "Photography", "Music", "Flying", "Licensing a photograph"],
+  privacyHref = "/privacy",
+  submitLabel = "Open in my email app",
+}: {
+  to: string;
+  topics?: string[];
+  privacyHref?: string;
+  submitLabel?: string;
+}) {
   const [errors, setErrors] = useState<Record<string, string>>({});
   function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -55,13 +65,13 @@ export function ContactForm({ to }: { to: string }) {
       </div>
       <p style={{ fontSize: "var(--ph-text-sm)", color: "var(--ph-muted)" }}>
         Pressing send opens your email app with this message. Nothing is stored on this site. See the{" "}
-        <NextLink href="/privacy" style={{ textDecoration: "underline" }}>
+        <NextLink href={privacyHref} style={{ textDecoration: "underline" }}>
           privacy page
         </NextLink>
         .
       </p>
       <div>
-        <Button type="submit">Open in my email app</Button>
+        <Button type="submit">{submitLabel}</Button>
       </div>
     </form>
   );
