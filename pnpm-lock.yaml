@@ -187,6 +187,12 @@ importers:
       '@jerryqiu/sites':
         specifier: workspace:*
         version: link:../../packages/sites
+      '@placeholder/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
+      lucide-react:
+        specifier: ^1.55.0
+        version: 1.55.0(@types/react@19.3.0)(react@19.2.8)
       next:
         specifier: 16.3.8
         version: 16.3.8(@playwright/test@1.64.0)(@types/node@24.19.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(sass@1.105.1)
@@ -258,6 +264,9 @@ importers:
       '@once-ui-system/core':
         specifier: 1.5.6
         version: 1.5.6(next@16.3.8(@playwright/test@1.64.0)(@types/node@24.19.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(sass@1.105.1))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(sass@1.105.1)(sharp@0.35.5(@types/node@24.19.2))
+      '@placeholder/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
       '@vercel/analytics':
         specifier: ^2.0.1
         version: 2.0.1(next@16.3.8(@playwright/test@1.64.0)(@types/node@24.19.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(sass@1.105.1))(react@19.2.8)
@@ -276,6 +285,9 @@ importers:
       image-size:
         specifier: ^2.0.2
         version: 2.0.4
+      lucide-react:
+        specifier: ^1.55.0
+        version: 1.55.0(@types/react@19.3.0)(react@19.2.8)
       next:
         specifier: 16.3.8
         version: 16.3.8(@playwright/test@1.64.0)(@types/node@24.19.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(sass@1.105.1)
@@ -351,6 +363,9 @@ importers:
       react-dom:
         specifier: ^19
         version: 19.2.8(react@19.2.8)
+      simple-icons:
+        specifier: ^16.34.0
+        version: 16.34.0
     devDependencies:
       '@jerryqiu/config':
         specifier: workspace:*
@@ -2319,6 +2334,10 @@ packages:
   shell-quote@1.12.0:
     resolution: {integrity: sha512-PcByqNyT/38F2kDNi006HAMRJaULuBzq/FOsw3qdZvX/GA9W/jamDaRskgHjubHiftXK5sIFxLNkvrXUwcof6Q==}
     engines: {node: '>= 0.4'}
+
+  simple-icons@16.34.0:
+    resolution: {integrity: sha512-UTxKn0PVspk84B2hHF3Dqiqht1yDjJmDc/t4cO7PyCQxCMk6OjEu95pnpGjhLaGeQ4qBrGASbefTIe/+czrX7g==}
+    engines: {node: '>=0.12.18'}
 
   source-map-js@1.2.2:
     resolution: {integrity: sha512-KGj/8Y43x35aZVDtt+J4mK1hoLGHULMYfSkODJNQjNDC3oW1PqPoxMwo0pLUsWM/UEGzON/NxeHywEfNXNP3Vw==}
@@ -4646,6 +4665,8 @@ snapshots:
       '@types/node': 24.19.2
 
   shell-quote@1.12.0: {}
+
+  simple-icons@16.34.0: {}
 
   source-map-js@1.2.2: {}
 

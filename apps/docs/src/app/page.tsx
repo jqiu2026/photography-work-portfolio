@@ -1,8 +1,16 @@
-export default function Page() {
+import { Prose } from "@placeholder/ui";
+
+export default function Home() {
   return (
-    <main>
-      <h1>UI docs (placeholder)</h1>
-      <p>Placeholder. Built in a later Phase 1 milestone.</p>
-    </main>
+    <Prose>
+      <h1>PlaceholderUI</h1>
+      <p>A small, calm React UI kit: quiet components, one signature easing curve, and an optional Apple-style motion layer (scroll scenes, parallax, reveals) that always degrades to a complete static page.</p>
+      <p>The name is a placeholder. It lives in one config file and a rename script changes it everywhere.</p>
+      <ul>
+        <li><a href="/getting-started">Getting started</a></li>
+        <li><a href="/theming">Theming</a></li>
+        <li><a href="/components">Components</a></li>
+      </ul>
+    </Prose>
   );
 }
