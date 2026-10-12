@@ -8,7 +8,8 @@ IMPORTANT: DO NOT CO-AUTHOR ANYTHING WHATSOEVER. DO NOT CO-AUTHOR COMMITS. DO NO
 
 | # | Doc | What it is |
 |---|---|---|
-| 00 | [Vision and principles](00-vision-and-principles.md) | What we are building and the taste bar |
+| 12 | [Owner vision v2](12-vision-v2.md) | **Source of truth (2026-10-12):** the ten answers, structure, four worlds, scope. Read first. |
+| 00 | [Vision and principles](00-vision-and-principles.md) | What we are building, phases, principles |
 | 01 | [Decisions and assumptions](01-decisions-and-assumptions.md) | Every default chosen, and every open question with its placeholder |
 | 02 | [Phase 1: UI package and redesign](02-phase-1-ui-package-and-redesign.md) | Build the open-source UI package, rebuild the site on it |
 | 03 | [Phase 2: CMS and protection](03-phase-2-cms-and-protection.md) | Google-login CMS, image protection, ShootProof bridge |
@@ -18,9 +19,11 @@ IMPORTANT: DO NOT CO-AUTHOR ANYTHING WHATSOEVER. DO NOT CO-AUTHOR COMMITS. DO NO
 | 07 | [Naming brainstorm](07-naming-brainstorm.md) | Candidate names for the UI package |
 | 08 | [Operating rules](08-operating-rules.md) | Git, context, usage, pausing, handoff |
 | 09 | [Reference: stuyaviators repo](09-reference-stuyaviators.md) | Engineering reference only. What to reuse, what not to |
-| 10 | [Design brief](10-design-brief.md) | Priorities, Squarespace-grade polish, information architecture, "not a copy" rule |
+| 10 | [Design brief](10-design-brief.md) | v2: designer role, liquid/ink experience system, four worlds, information architecture (v1 archived beside it) |
 | 11 | [Legal and compliance](11-legal-and-compliance.md) | Privacy, terms, licensing, accessibility, contracts, people in photos |
 | | [DEPLOYMENT.md](DEPLOYMENT.md) | Owner-only checklist: hostnames, Vercel projects, env names, DNS cut-over. Claude never does these |
+| | [design-language.md](design-language.md) | To be written by the designer (v1 archived) |
+| | [PHASE-2-SUMMARY.md](PHASE-2-SUMMARY.md) | What Phase 2 delivered and its honest gaps |
 | | [PROGRESS.md](PROGRESS.md) | Living checklist. Update it after every milestone. |
 | | [QUESTIONS.md](QUESTIONS.md) | Questions for the owner. Append, never block on them. |
 | | [HANDOFF_TEMPLATE.md](HANDOFF_TEMPLATE.md) | Shape of the "todo list" prompt written when pausing |

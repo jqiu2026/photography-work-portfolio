@@ -1,5 +1,11 @@
 # 04. Phase 3: Photo business platform (ShootProof replacement)
 
+> **Status 2026-10-12: still not started for real services, but the whole experience is now DESIGNED and MOCKED first** (Phase 2.5, [12-vision-v2.md](12-vision-v2.md)). Phase 3 replaces the mocks with real providers and backends. Scope additions from the owner:
+> - **Photography studio platform** (native, built around the site): photo and video portfolio management, client galleries, bookings, contracts, invoices, payments, a dashboard. Mock providers locally: `PaymentProvider` (Stripe test-mode shape), `ClientPortal`, contract/e-signature stub, invoices.
+> - **Music score store**: compositions catalogue; listen (only when a performance recording exists) separate from score preview and purchase; cart, checkout (mock), library, delivery of purchased scores (mock file delivery with a watermarked preview). Real payments, tax and delivery are Phase 3.
+> - **Flying**: journal, map of past flights (airport-level, delayed; never live), and a hidden-by-default CFI services slot (inquiry form only until the owner decides).
+> Hard rules still apply: never spend money, no live keys, no live third-party calls without the owner.
+
 > **NOT STARTED. Do not begin this phase unless the owner explicitly says so.** This document is the plan so the next chat can start immediately.
 
 **Goal:** the owner cancels ShootProof (about 30 GB of photos today) and runs client delivery and business admin on their own infrastructure, for roughly the cost in [06](06-cost-analysis.md).

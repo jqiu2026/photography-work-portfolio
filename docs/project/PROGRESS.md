@@ -29,14 +29,15 @@ Living status. Update at every milestone. Newest entries at the top of "Log".
 - [x] M18 Security review, owner guide, acceptance, `PHASE-2-SUMMARY.md`, `PHASE-3-KICKOFF.md`
 - [x] **STOP (Phase 3 is not started automatically)**
 
-## Phase 2.5: Redesign (owner-requested after Phase 2; brief in HANDOFF.md)
+## Phase 2.5: Redesign (owner-requested after Phase 2; vision in 12-vision-v2.md, plan in HANDOFF.md)
 - [ ] R0 Designer brief: concept sheets (shared scene system + hub, photography, music, flying worlds), storyboards, motion spec, new package name, licence/selling checklist
 - [ ] R1 Split: blog on hub, photography/video work and project case studies on the photography site, redirects, CMS site move
 - [ ] R2 New UI package from scratch (tokens, components, motion toolkit, docs, tests)
 - [ ] R3 Four navbar-less home experiences on one shared system ("Say hello." kept)
 - [ ] R4 Inner pages, admin shell, sign-in, 404 in the new system
 - [ ] R5 Gates, e2e updates, Lighthouse
-- [ ] R6 Documents rewritten, PHASE-2.5-SUMMARY.md
+- [ ] R5b Working local mocks: photo studio platform, music score store (listen vs score), client portal, flight map; all labelled MOCK and disabled in production
+- [ ] R6 Documents kept current, PHASE-2.5-SUMMARY.md
 
 ## Phase 3: not started (needs owner go-ahead)
 
@@ -44,6 +45,7 @@ Living status. Update at every milestone. Newest entries at the top of "Log".
 
 
 ## Log
+- 2026-10-12: Vision interview (10 questions) done; documents rewritten to match: new `12-vision-v2.md` (source of truth), `00`, `10-design-brief.md` (v1 archived as `10-design-brief-v1-archive.md`), `design-language.md` (stub for the designer; v1 archived), `01` (v2 decisions V1-V12), `02`/`03`/`04` status notes, README index, QUESTIONS Q32-Q39, and HANDOFF.md (new-chat prompt). Hub may link to the three worlds; they link only back via a footer button.
 - 2026-10-12: Owner rule recorded: photos, music and flying reference no other section; only a footer button back to jerryqiu.com (no site switcher, no "More from me"). Updated HANDOFF.md (R1, R3, acceptance test), 00, 01 (A29), 10. Code still has the switcher until the Phase 2.5 chat removes it.
 - 2026-10-12: Owner follow-up: the photography page can be cooler; all four homes share one massive navbar-less coherent experience but are each unique; documents to be rewritten; the next chat acts as UI/UX designer creating original flowy UI. HANDOFF.md, design-language.md, 10-design-brief.md and this checklist updated. All four dev servers are running (hub :3000 with /music and /flying, photos :3002, docs :3001).
 - 2026-10-12: M18 done, **Phase 2 complete**. Security review (skill) over the branch: no high-confidence findings, two low observations in PHASE-2-SUMMARY.md. Wrote `docs/owner-guide.md`, `PHASE-2-SUMMARY.md`, `PHASE-3-KICKOFF.md`, DEPLOYMENT.md env additions. Owner feedback received afterwards (homepage too static and too Once-UI-like; separate blog from photography; sellable package): written up as the Phase 2.5 brief in HANDOFF.md. Phase 3 is not started.

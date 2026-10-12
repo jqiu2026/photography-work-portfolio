@@ -1,13 +1,13 @@
 # AGENTS.md
 
-Rules for AI agents and contributors. Project plan, status and hard rules live in `docs/project/` (start with `README.md`, then `08-operating-rules.md` and `PROGRESS.md`). `CLAUDE.md` repeats the hard rules.
+Rules for AI agents and contributors. Note: the UI package rules below describe the Phase 1 package and are rewritten when the new original UI system lands (Phase 2.5). Project plan, status and hard rules live in `docs/project/` (start with `README.md`, then `08-operating-rules.md` and `PROGRESS.md`). `CLAUDE.md` repeats the hard rules.
 
 ## Hard rules (summary; the docs are authoritative)
 
 - Work on branch `feat/custom-ui-cms` only. No co-author trailers, no "Generated with" text in commits or PRs.
 - Never push, merge to `main`, deploy, publish, change DNS, create cloud resources, or spend money.
 - Never block on questions: use the documented default and log it in `docs/project/QUESTIONS.md`.
-- Phase 1 flows into Phase 2; stop after Phase 2.
+- Phases 1 and 2 are done; Phase 2.5 (redesign + local mocks) is authorized (`docs/project/12-vision-v2.md`, `HANDOFF.md`); stop after it. Phase 3 is not started.
 - Never invent facts about the owner. Use `todo("...")` (dev-only placeholder) or a `TODO(owner):` comment.
 
 ## Repo layout

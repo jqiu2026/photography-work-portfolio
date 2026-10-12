@@ -54,3 +54,8 @@ ADA (US) and the European Accessibility Act increasingly apply to commercial sit
 - [ ] Image records carry license and people/minors flags (Phase 2); EXIF policy implemented
 - [ ] Contact form consent text and retention setting
 - [ ] Admin delete-contact-data tool
+
+## Added 2026-10-12: selling scores, studio services, flying map
+
+Draft items for professional review (no legal advice): terms of sale and refunds for digital scores; what a score licence permits (personal study, performance, arrangement, redistribution); copyright notices on previews and delivered files, with a visible watermark on previews; consumer and sales-tax handling (Phase 3, with an accountant); privacy notice for purchasers, clients and enquirers; photography contract, model/property releases and minors rules (already flagged on media); flying map shows past flights only, airport-level and delayed, with no live location or tail numbers by default; if CFI services are ever offered, check the rules on advertising instruction and any insurance/certification claims before switching the slot on.
+

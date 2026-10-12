@@ -1,121 +1,97 @@
-# 10. Design brief
+# 10. Design brief (v2)
 
-> **Update 2026-10-12 (owner):** Priority 5 is promoted. The sites should feel alive: flowing, scroll-driven, navbar-less homes on all four sites with a shared experience system and four distinct worlds, designed as original UI (the package is to be sold). Restraint and accessibility remain, but "too static" and "too similar to an existing kit" are now failures. The work plan is in `HANDOFF.md` (Phase 2.5).
+> Direction comes from [12-vision-v2.md](12-vision-v2.md) (the ten owner answers). The first brief (Squarespace-grade restraint, Phase 1) is archived in [10-design-brief-v1-archive.md](10-design-brief-v1-archive.md). Where that archive disagrees with this file, this file wins.
+
+## Your role
+
+Whoever executes this brief is the **lead UI/UX designer** first and the engineer second: research, concepts, storyboards, motion studies, type and colour decisions with written reasons, then build and iterate by looking at the result in a browser. The deliverable is an **original, flowy interface** that nobody could mistake for Once UI, another kit, or the StuyAviators site.
 
 ## Priorities, in order
 
-1. **Professional and elegant.** Looks like it was made by a good design studio. Restraint over decoration.
-2. **Modern, minimalist, sleek.** Generous whitespace, few elements per screen, large confident type, hairline details, soft depth.
-3. **Intuitive.** Obvious structure and familiar patterns. Nothing to learn.
-4. **Legal.** The legal and trust surface is designed, not bolted on (see [11](11-legal-and-compliance.md)).
-5. **A little futuristic, with cinematic moments.** Apple-style scroll choreography, used sparingly and always purposeful.
+1. **Memorable and immersive.** Within 15 seconds of scrolling a stranger should feel awe and know who this is. Bold, expressive, cinematic, inventive.
+2. **Professional, modern, minimal.** Immersion is built from few, precise elements: depth, light, scale, type. No clutter, no sci-fi kitsch, no gimmicks that do not explain something.
+3. **Flow.** One liquid / ink motion language. Scenes melt into each other; there are no hard section boundaries; the cursor disturbs surfaces; transitions between pages and worlds are continuous.
+4. **Intuitive without a navbar.** One floating index control, scroll-spy progress, obvious "enter this world" moments.
+5. **Resilient and legal.** Fast, accessible, with graceful fallbacks; legal and trust surfaces designed, not bolted on ([11](11-legal-and-compliance.md)).
 
-If two goals conflict, the higher one wins. When in doubt, remove something.
+If two goals conflict, the higher one wins, except that accessibility and the fallbacks are never traded away.
 
-## Reference direction: Squarespace-grade polish
+## The shared experience system
 
-The owner admires the look of Squarespace sites. Study (browse, read, take notes; never copy assets, text or exact layouts):
+Designed once, in the UI package; every world uses it:
 
-- Squarespace's own marketing site and its public template gallery, especially portfolio, photography and personal-brand templates.
-- What makes them feel premium: editorial typography, large imagery with a lot of air, consistent vertical rhythm, a very quiet header, slow elegant hover states, full-bleed image sections alternating with narrow text columns, small tasteful captions, restrained color.
-- Apple product pages for the **motion** layer: pinned scenes, scroll-scrubbed sequences, big type reveals.
+- **Stage:** a persistent full-viewport layer (real-time WebGL / shader scene with a fluid or ink simulation, plus DOM content layered over it) that transforms continuously with scroll. Scenes hand off through liquid transitions instead of section breaks.
+- **Motion language (liquid / ink):** one easing and one spring family; shapes condense, spread and melt; type resolves out of ink; velocity-aware smooth scroll; cursor ripples and magnetic physics; view-transition style page changes. Document the exact curves, durations and the ink/threshold transition recipes.
+- **Index control instead of a navbar:** a small floating mark opens a full-screen index of the page's scenes and routes; plus scroll progress and the theme toggle. Inner pages may use the same control and a very quiet header, never a conventional navbar on homes.
+- **Closing pattern:** every home ends with its own "Say hello." moment (the hub's version is retained). Photography, music and flying footers add exactly one button back to jerryqiu.com and nothing else about other sites.
+- **Quality tiers:** full (3D/fluid stage), reduced (cheaper shaders, lower DPR, fewer particles), static (poster frames, CSS only). Chosen automatically from device capability, battery/Save-Data, `prefers-reduced-motion` and WebGL support; the static tier must still be beautiful and complete.
 
-Write what you learned (patterns, not pixels) in `docs/project/design-language.md`.
+## The four worlds
 
-## NOT the StuyAviators site
+Each world needs its own **concept sheet** (mood, metaphor, type character, colour behaviour, stage visuals, signature interaction, storyboard) before it is built.
 
-The owner showed stuyaviators.vercel.app only as an example of the kind of site they can build. **This site must be visibly its own thing.** Concretely:
+- **Hub.** Awe, boldness, cinematic scale. A deep, liquid stage. Opening scene must say: photographer, builder, drone pilot, musician, New York, with real proof (real photographs and work). Then the three worlds as **space-like dimensions**: thresholds of depth and light you pass through (restrained, geometric, futuristic, professional), each ending in a clear "enter" moment. Then writing: one large featured post flowing into a compact list. Then "Say hello." Blue is the signature accent moment. The hub may link to all three worlds.
+- **Photography.** Apple-product-page immersion: pinned scenes, renders and animation accompanied by crafted, unusual words that feel good and mean something (never buzzwords). The photographs are the stage. Sections for photo portfolio and gallery, video portfolio and gallery, project case studies, booking, and an entry to the studio. Red accent moment. Strict-gallery pages keep `ProtectedImage` semantics ([05](05-security-and-image-protection.md)).
+- **Music.** Three vibes, one per kind of page: **stage and spotlight** (home: dark, theatrical, a spotlight following the cursor), **typographic score** (compositions and score store: staves and notation as animated typography), **minimal listening room** (recordings: spare, only the player moves). Compositions list; two separate paths per composition: *listen* (only when a performance recording exists; load-on-press; no autoplay) and *score* (preview, price, buy). Yellow accent moment.
+- **Flying.** Ascent through atmosphere layers with an altitude readout, cockpit-instrument micro-details (headings, gauges, flight-log readouts), and flight paths drawn as liquid lines on a map of where Jerry has flown (past flights, airport-level, delayed; never live position, no tail numbers by default). A flying journal with writing. A hidden-by-default "instruction" slot for CFI services. Green accent moment.
 
-- **Different identity:** palette, typeface, logo treatment, iconography, corner radii, shadow style, button shape, nav layout and footer structure are all newly designed. No aviation metaphors, no boarding-pass cards, no departure boards, no sky imagery, no "waypoints".
-- **Different layout language:** that site is bright, blue-accented and card-heavy. This one is quieter and more editorial: large type, big images, text columns with generous margins, minimal chrome.
-- **Different motion choreography:** reuse the *techniques* (pinned scenes, parallax, reveal) with new timing, easing and purpose. Do not reuse its scene scripts or copy.
-- **What may be reused:** engineering (auth, DB, upload, admin patterns, rate limiting, test setup) and the *structure* of a token system. See [09](09-reference-stuyaviators.md).
-- Final check before Phase 1 acceptance: put screenshots of both sites' home pages side by side. If someone could mistake one for the other, redesign.
+## Not copied, not Once UI, not StuyAviators
 
-## Design exploration step (Phase 1, before building pages)
+- The UI system is designed from scratch: its own tokens, class/prefix names, component set and prop APIs, spacing rhythm, type scale, shapes and motion. Study references for ideas and for what to avoid; never copy assets, text, layouts or code.
+- Keep a written **comparison** (side-by-side screenshots) against Once UI's docs/demo and against StuyAviators in `redesign-brief.md`. If someone could mistake one for another, redesign.
+- Fonts: SIL OFL (or properly licensed) only; check each licence for use in a product that is sold.
 
-The owner is away, so decide, but decide with evidence:
+## Information architecture
 
-1. Build a dev-only `/_design` page in `apps/web` with **three** directions for the home hero, type pairing and palette, each as a real rendered screen (light and dark): e.g. A "Gallery white" (warm off-white, high-contrast serif display + clean sans), B "Midnight cinema" (near-black, one cool accent, large grotesk), C "Soft neutral" (stone/greige, understated serif + mono details).
-2. Score each against the priorities above (and check AA contrast, loading weight). Pick one, record the reasoning in `design-language.md`, log it as Q3 in [QUESTIONS.md](QUESTIONS.md) with the alternates preserved as theme presets so the owner can switch by changing one token file.
-3. Every choice (fonts, images) must have a license that allows the use: prefer SIL OFL fonts via `next/font`, own photos for imagery.
+```
+jerryqiu.com            HUB (main page; may link to the three worlds)
+  /                     Navbar-less story: who I am -> the three worlds -> writing -> Say hello
+  /about                Longer story, timeline, skills, resume
+  /writing, /writing/[slug]   Blog (featured post + list on the home)
+  /connect              Contact form (stored in the inbox) + accounts
+  /privacy /terms /licensing /accessibility   Legal, canonical here
+  (old /work and /work/[slug] redirect to photos.jerryqiu.com)
+
+photos.jerryqiu.com     PHOTOGRAPHY (footer: one button back to jerryqiu.com)
+  /                     Immersive product-page style home
+  /portfolio, /portfolio/[slug]   Photo galleries
+  /video, /video/[slug]           Video gallery
+  /work, /work/[slug]             Project case studies (moved from the hub)
+  /book                 Booking
+  /client               Client portal entry (mock locally; real in Phase 3)
+  /studio               Owner dashboard (CMS-adjacent now, business tools mocked, real in Phase 3)
+
+music.jerryqiu.com      MUSIC (footer: one button back)
+  /                     Stage and spotlight
+  /compositions, /compositions/[slug]   Typographic score; listen and score paths separate
+  /listen               Minimal listening room (recordings that exist)
+  /scores               Score store: preview, cart, checkout (mock), library (mock)
+  /about
+
+flying.jerryqiu.com     FLYING (footer: one button back)
+  /                     Ascent
+  /log, /log/[slug]     Journal entries
+  /map                  Where I've flown
+  /aircraft, /about
+  /instruction          Hidden by default; placeholder for future CFI services
+```
+
+Keep old URLs working with redirects (`/blog` to `/writing`, `/contact` to `/connect`, hub `/work/*` to the photography site). Routes marked mock exist only as locally working mocks until Phase 3.
+
+## Tone and copy guide ("me")
+
+- First person, Jerry's voice, short and specific. Words that feel good and are unusual, not buzzwords or superlatives. Plain facts with context.
+- Credit teams, teachers and collaborators by name. State accomplishments once, with context.
+- Curious and warm, a little dry humour allowed.
+- Claude drafts copy only from facts in the repo, and marks every draft `TODO(owner): rewrite in your voice`. Never fabricate biography, credentials, awards, hours, quotes or prices.
 
 ## Design system requirements
 
-- **Color:** neutral scale with warm or cool bias chosen in exploration, one restrained accent, semantic colors, light and dark, plus a pure-black "cinema" surface for galleries. AA contrast.
-- **Type:** at most two families (a display face with character, and a highly legible text sans, optionally a mono for details). Fluid scale; tight tracking on large sizes; consistent measure (60-75ch) for reading.
-- **Layout:** 12-column grid, a few container widths, strong vertical rhythm on a 4/8 px base, full-bleed image utilities, consistent section spacing.
-- **Components:** quiet. Underline links, ghost and solid buttons with subtle press states, hairline borders, soft shadows, optional glass header. Hover states are slow and graceful (200-400 ms).
-- **Motion tokens:** one signature easing curve and one spring, shared durations, `prefers-reduced-motion` always honored, and a global switch to tone motion down.
-- **Imagery:** treat photos as the hero: correct color, no heavy filters or overlays on images, captions in small type.
+- **Accessibility:** WCAG 2.2 AA contrast, visible focus, 44 px targets, full keyboard paths, skip link, landmarks, alt text always present, reduced motion = complete static layout, no autoplaying sound.
+- **Performance:** stage code lazy-loaded; DPR capped; paused off-screen; no layout shift; LCP an image or text; mobile Lighthouse performance 90 or better on every home.
+- **Tokens and architecture:** the designer chooses (hand-written CSS with tokens is fine). A new package name replaces `@placeholder/ui` through `pnpm rename`. Docs site with a demo for every export; tests; changelog.
+- **Imagery:** photographs are never degraded by overlays or filters beyond the deliberate effects in a scene; correct colour; fast loading; protected where configured.
 
-## Information architecture: a family of sites
+## UX heuristics checklist
 
-One design system, one person, several rooms. Each is a separate hostname (see [01](01-decisions-and-assumptions.md) A2, A33).
-
-```
-jerryqiu.com            THE HUB ("ME")
-  /                     Profile-forward home: profile header, short intro, "now", selected work,
-                        preview cards for Photography / Music / Flying, latest writing
-  /about                Longer story, timeline (work, school, leadership, flying, music),
-                        education, skills & interests, resume/CV
-  /work, /work/[slug]   Everything built or made, filterable by type
-  /writing, /writing/[slug]   Blog (keep /blog as a redirect)
-  /connect              All social accounts + contact form + email (keep /contact as redirect)
-  /privacy /terms /accessibility /licensing   Legal, canonical here (see 11)
-
-photos.jerryqiu.com     PHOTOGRAPHY (apps/photos)
-  /                     Cinematic portfolio home, categories
-  /portfolio/[slug]     Curated galleries with lightbox
-  /about                About the photographer
-  /book                 Booking/inquiry (Phase 1: form + mailto; Phase 3: full booking + deposit)
-  /client               Client galleries login (placeholder in Phase 1-2 linking to ShootProof)
-  /studio               Owner admin (Phase 2 shell, Phase 3 full)
-
-music.jerryqiu.com      MUSIC
-  /                     Hero, story, instruments, featured recordings
-  /listen               Recordings and performances (click-to-load embeds)
-  /performances         Dates, venues, ensembles
-  /about                Background, repertoire
-
-flying.jerryqiu.com     FLYING
-  /                     Hero, the journey in plain terms
-  /log                  Milestones and memorable flights with photos
-  /aircraft             Aircraft flown
-  /about                Ratings and background, StuyAviators connection
-```
-
-**Superseded (owner, 2026-10-12): no site switcher and no "More from me" row. Photography, music and flying show nothing about the other sites; their footer has one button back to jerryqiu.com. The hub introduces the others inside its own flow.** Former text, kept for the record: every site had a quiet header control (the "Jerry Qiu" wordmark with a small chevron) that lists all sites with a one-line description, and a footer "More from me" row. This is how the family stays navigable and feels like one thing. Registry and links come from `packages/sites`.
-
-**Hub nav:** Work, Writing, About, a **Sites** group (Photos, Music, Flying), and a **Connect** button. Each sub-site has its own simple nav (3-5 links) in the same header component. Keep old URLs working with redirects (`/blog` -> `/writing`, `/gallery` -> photos site, `/contact` -> `/connect`).
-
-**Identity per site:** each site chooses a theme preset (accent, hero treatment, sometimes display type) from the same design system. Photos: neutral cinema black/white and the images do the talking. Music: warmer, more textural. Flying: cooler, airy, precise. Presets are subtle; layout, components, motion language and legal pages are shared. Do **not** reuse StuyAviators' sky/aviation visual identity for Flying; it is Jerry's own flying story, designed fresh.
-
-### The profile idea ("LinkedIn, but not LinkedIn")
-
-The home page and `/about` borrow what makes a good professional profile useful, and none of LinkedIn's chrome, feed, branding, blue, or layout. Do not imitate LinkedIn's look.
-
-- **Profile header:** portrait, name, one-line headline, location, a short "currently" line, and a row of **social/account links** (icons with labels, from CMS settings: e.g. LinkedIn, GitHub, Instagram, YouTube, Spotify/SoundCloud, email; verified with `rel="me"`). The same links appear in the footer and on `/connect`.
-- **Sections that read like a profile but look like editorial design:** About (short), Experience & involvement (timeline of work, leadership, volunteering), Education, Projects, Skills & interests (as quiet tags), Currently / Now, and an optional "Kind words" strip (testimonials) only if the owner supplies real ones.
-- **One profile, many facets:** photography, music and flying are their own sites (subdomains) and each gets a compact preview card on the home page (a photo, one sentence, a link out). They sit beside work and writing as equals.
-- **Structured data:** `Person` JSON-LD with `sameAs` for the social accounts, so search engines connect the profiles.
-- **CV:** downloadable PDF resume generated from the same timeline data (Phase 2), plus a print stylesheet.
-
-### Site specifics (build the structure; the owner supplies the facts)
-
-- **Music (`music.jerryqiu.com`):** what he plays, a short story, featured recordings and performances (cards with date, venue/ensemble, note), click-to-load embeds (Spotify, SoundCloud, YouTube, Bandcamp; no third-party scripts load until clicked, for privacy and speed), optional audio player for self-hosted clips, repertoire list, upcoming performances if any. Photos/video from performances.
-- **Flying (`flying.jerryqiu.com`):** the journey in plain terms: how it started, certificates and ratings, aircraft flown, a few memorable flights with photos from the cockpit, involvement with the StuyAviators club, safety-minded tone. **Never invent facts**: hours, ratings, dates and aircraft are `TODO(owner):` placeholders until supplied (shown as clearly fake sample values only in dev, never in production builds; production hides empty fields). Do not publish real-time location, tail numbers or exact times of flights.
-- **Photography (`photos.jerryqiu.com`):** curated portfolio, then booking and client galleries (Phase 3). The hub only previews it.
-- Music and Flying share one **interest-site template** (hero, intro, highlights, timeline, media) so they stay consistent and the CMS stays simple.
-
-### Tone and copy guide (non-boastful)
-
-- First person, plain sentences, specific details over adjectives. "I started flying in 2024 and have flown X" beats "I'm a passionate aviator".
-- No superlatives or self-promotion words. Credit teams, teachers and collaborators by name.
-- State accomplishments once, with context, in the timeline, not repeated as banners or badges.
-- Curious and warm, a little dry humor allowed. Avoid corporate jargon and buzzwords.
-- Sample copy written by Claude is **placeholder**: mark with `TODO(owner): rewrite in your voice`. Never fabricate biography, credentials, awards, hours, or quotes.
-
-## UX heuristics checklist (run at M8)
-
-Clear current-location indicator; consistent patterns; visible keyboard focus; forms with inline, human error messages; 44 px touch targets; no horizontal scroll at 320 px; fast perceived loading (blur-up, skeletons); no dead ends; 404 with search and links home; every page has a purpose and one primary action.
+Clear current-location cue; consistent patterns; visible keyboard focus; inline, human form errors; 44 px touch targets; no horizontal scroll at 320 px; fast perceived loading (blur-up, posters); no dead ends; designed 404 with a way home; every page has a purpose and one primary action; the floating index works with keyboard and screen readers.

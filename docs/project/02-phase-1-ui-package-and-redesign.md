@@ -1,5 +1,7 @@
 # 02. Phase 1: UI package and site redesign
 
+> **Status 2026-10-12:** Phase 1 is complete and archived. Its visual outcome (Instrument Sans, neutral grayscale, handwritten `--ph-*` CSS, header-based pages) is being **replaced from scratch** in Phase 2.5 by an original, sellable UI system; see [12-vision-v2.md](12-vision-v2.md) and [HANDOFF.md](HANDOFF.md). Engineering parts (workspace layout, tests, docs-coverage rule, rename script, accessibility test rig) carry over.
+
 **Goal:** an open-source, documented UI package, and the family of sites rebuilt on it: the hub (profile-style, `jerryqiu.com`), the photography portfolio (`photos.jerryqiu.com`), and the music and flying sites. Squarespace-grade polish with a restrained Apple-style motion layer ([10](10-design-brief.md)). No Once UI left when done. Must **not** resemble the StuyAviators site.
 
 **Exit:** all acceptance criteria below pass, [PROGRESS.md](PROGRESS.md) is updated, then continue straight into Phase 2.

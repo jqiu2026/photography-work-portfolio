@@ -10,6 +10,8 @@ Rules: no co-author trailers or "Generated with" text; never push, merge to main
 
 Phase 3 builds the photo business platform inside apps/photos (/studio and client areas): client galleries with passcodes/magic links, favourites, downloads with per-viewer invisible watermarks, bookings, contracts with e-signatures, invoices and payments (Stripe test mode only), and a client portal, replacing ShootProof.
 
+Phase 2.5 note: the owner's vision (docs/project/12-vision-v2.md) had the whole studio, the music score store, the client portal and the flight map DESIGNED and built as labelled local mocks first; Phase 3 replaces each mock behind its interface with a real provider/backend (payments, e-signature, delivery, client auth, storage), never changing the UI contract. Read PHASE-2.5-SUMMARY.md for what exists.
+
 Foundations already in place: users table with a reserved `client` role and `studio_id` columns on content tables; guarded actions, audit log, rate limits; image route with strict tier, signed tokens and ScreenshotGuard; direct-to-storage uploads and the ingest pipeline; the inbox; encrypted token storage; the ShootProof bridge to migrate existing galleries from.
 
 First steps: (1) read 04 and list the open decisions as defaults in QUESTIONS.md; (2) design the schema additions (clients, projects/shoots, galleries-for-clients, contracts, invoices, payments) with migrations; (3) client authentication (host-only cookie on photos.jerryqiu.com, separate from staff); (4) client gallery delivery with per-viewer watermark and view logs; (5) then bookings, contracts, invoices. Stripe in test mode only, signature-verified webhooks with idempotency keys. Update PROGRESS.md at every milestone and stop at the end of Phase 3 with PHASE-3-SUMMARY.md.

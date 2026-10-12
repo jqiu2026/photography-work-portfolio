@@ -46,5 +46,6 @@ The owner intends to leave Claude running unattended until all tasks complete or
 
 ## Phase boundaries
 
-- Phase 1 complete -> proceed to Phase 2 automatically.
-- Phase 2 complete -> write `PHASE-2-SUMMARY.md` and `PHASE-3-KICKOFF.md`, then **STOP**. Do not start Phase 3, not even "just the schema".
+- Phase 1 and Phase 2 are complete.
+- **Phase 2.5 (owner-authorized on 2026-10-12): redesign, the blog/photography split, and working local mocks of the studio, score store, client portal and flight map** (see [12-vision-v2.md](12-vision-v2.md), [HANDOFF.md](HANDOFF.md)). Finish with `PHASE-2.5-SUMMARY.md`, then **STOP**.
+- **Do not start Phase 3** (real payments, e-signatures, live providers, ShootProof go-live), not even "just the schema", until the owner says so. Mocks must be labelled `MOCK`, sit behind interfaces, use no live keys or third-party calls, and be disabled in production builds.

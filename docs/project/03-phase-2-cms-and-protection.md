@@ -1,5 +1,7 @@
 # 03. Phase 2: CMS, image protection, ShootProof bridge
 
+> **Status 2026-10-12:** Phase 2 is complete ([PHASE-2-SUMMARY.md](PHASE-2-SUMMARY.md)). Changes requested afterwards (Phase 2.5): projects/case studies move from the hub to the photography site (`site: "photos"`), music gains compositions and a score store, flying gains a journal/map; the CMS must expose these under the right site in the admin selector. Cross-site rule: only the hub links to the other sites. Details in [12-vision-v2.md](12-vision-v2.md).
+
 **Goal:** the owner signs in with Google and manages everything on **all sites** (hub, photos, music, flying) without code changes. Protected image delivery. A temporary ShootProof bridge in the photography app. Shared internal packages (`packages/db`, `auth`, `storage`, `protect`) are created here and used by both `apps/web` and `apps/photos`.
 
 **Exit:** acceptance criteria pass, summary written, **then STOP. Do not start Phase 3.** Write the Phase 3 start-up prompt into `docs/project/PHASE-3-KICKOFF.md` for the owner and end.

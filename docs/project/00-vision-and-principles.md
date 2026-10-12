@@ -1,50 +1,54 @@
 # 00. Vision and principles
 
+> The current, detailed vision is [12-vision-v2.md](12-vision-v2.md). This file keeps the stable frame: what the project is, the phases, and the principles.
+
 ## What this is
 
-Jerry Qiu's site today is a Next.js portfolio built on Once UI (`@once-ui-system/core`, "Magic Portfolio" template) with MDX content in `src/app/blog/posts` and `src/app/work/projects`, and a static gallery (the ShootProof integration was abandoned, commit `55a8d8a`).
+Jerry Qiu's site began as a Next.js portfolio on Once UI with MDX content. It is now **a family of four sites on one codebase and one original design system**, each on its own hostname, designed as one immersive, scroll-driven experience with four distinct worlds:
 
-It becomes **a family of sites that share one codebase and one design system**, each on its own hostname:
-
-| Site | Domain | Purpose |
+| Site | Domain | Role |
 |---|---|---|
-| **The hub ("ME")** | `jerryqiu.com` | A personal site about Jerry as a whole person: a **profile-style home** (a glorified LinkedIn-like page that is his own, not LinkedIn) with who he is, what he has done and is doing, and where to find him online (social links on the home page, footer and `/connect`). Also work/projects, writing, about, contact. It introduces the other sites with preview cards. The goal is to show who he is, **warmly and without boasting**: specific, plain and honest rather than promotional. It must work for someone who has never heard of any of the sub-sites. |
-| **Photography** | `photos.jerryqiu.com` | The photography side: the public portfolio now; client galleries, proofing, downloads, store, booking, contracts and invoices in Phase 3 (the ShootProof replacement). ShootProof serves this hostname today, and keeps doing so until the owner switches DNS after Phase 3 is verified. |
-| **Music** | `music.jerryqiu.com` | What he plays, recordings, performances, listen-in embeds. |
-| **Flying** | `flying.jerryqiu.com` | The flying journey: ratings and milestones, aircraft, memorable flights, cockpit photos, the StuyAviators connection. |
+| **Hub** | `jerryqiu.com` | The main page and the only place that introduces the others. A cinematic, navbar-less story of who Jerry is (photographer, builder, drone pilot, musician, New York), then the three worlds as dimensions you pass into, then the blog (a featured post flowing into a list), then "Say hello." It also carries about, connect and the legal pages. |
+| **Photography** | `photos.jerryqiu.com` | Photo and video portfolio and gallery, project case studies, booking, and the studio platform behind it (galleries, clients, contracts, invoices; built in Phase 3, designed and mocked first). Apple-product-page immersion with crafted, unusual words. ShootProof serves this hostname until the owner switches DNS after Phase 3 is verified. |
+| **Music** | `music.jerryqiu.com` | Compositions; listen when a performance recording exists; preview and buy scores, kept separate from listening. Each page has its own vibe: stage and spotlight, typographic score, minimal listening room. |
+| **Flying** | `flying.jerryqiu.com` | A flying journal: involvement, writing, aircraft, a map of past flights, instrument-like details; a quiet, off-by-default slot for CFI services someday. |
 
-More sites can be added later by registering a hostname in `packages/sites`. **Superseded (owner, 2026-10-12):** the hub is the main page and the only place that introduces the other three sites. Photography, music and flying do not reference each other or the other sections at all; their only cross-site element is a footer button back to jerryqiu.com. No site switcher, no "More from me".
+**Cross-site rule:** the hub may point at the three. Photography, music and flying contain no reference to each other or to anything else in the family; their only cross-site element is one footer button back to jerryqiu.com. No site switcher, no "More from me", no preview cards.
 
-## The three phases
+More sites can be added by registering a hostname in `packages/sites`.
 
-1. **Phase 1.** An open-source UI package of our own (placeholder name, see [07](07-naming-brainstorm.md)), with real docs, and the hub, the photography portfolio, and the music and flying sites rebuilt or built on it.
-2. **Phase 2.** A CMS (Google login, `@jerryqiu.com` only) so the owner manages posts, projects, portfolio, music, flying, timeline, social links, pages and settings for all sites without touching code. Image protection. The photography app gets a studio admin shell and the temporary ShootProof bridge.
-3. **Phase 3.** `photos.jerryqiu.com` becomes a full ShootProof replacement. Not started until the owner says so.
+## The phases
+
+1. **Phase 1 (done).** First UI package and rebuild (superseded visually by the redesign).
+2. **Phase 2 (done).** CMS (Google login, `@jerryqiu.com` only), media pipeline, image protection, inbox, settings, public sites on the database, studio shell and ShootProof bridge (mocked). See [PHASE-2-SUMMARY.md](PHASE-2-SUMMARY.md).
+3. **Phase 2.5 (current, owner-requested).** Split blog and photography; redesign all four sites and the UI package from scratch as an original, sellable system; design the whole studio and score store and build **working local mocks** of them. Plan: [HANDOFF.md](HANDOFF.md).
+4. **Phase 3 (not started).** Real services: payments, e-signatures, client portal backends, real delivery, ShootProof replacement go-live. Waits for the owner. See [PHASE-3-KICKOFF.md](PHASE-3-KICKOFF.md).
 
 ## Taste bar
 
-Read [10-design-brief.md](10-design-brief.md). In one line: **modern, minimalist, professional, sleek, elegant, intuitive, and legally sound**, with the polish of a well-designed Squarespace site and a restrained, somewhat futuristic layer of Apple-style motion on top.
+Read [10-design-brief.md](10-design-brief.md). In one line: **the most immersive personal website there is, awe and boldness with cinematic polish and inventive interaction, liquid motion throughout, still professional, modern and minimal, accessible and fast on any device.**
 
-The sibling StuyAviators site (https://stuyaviators.vercel.app) is an **engineering reference only**: it was shown as an example of what the owner can ship. This site must **not** look like it. See [09](09-reference-stuyaviators.md).
+The StuyAviators site is an **engineering reference only**; this site must not look like it ([09](09-reference-stuyaviators.md)). The UI package must not look like Once UI or any other kit.
 
 ## Principles
 
-1. **Photos first.** Never let UI or motion fight the images. Fidelity, color accuracy and fast loading beat effects.
-2. **Calm by default, spectacular on purpose.** Most of the site is quiet, refined and fast. A few moments (home hero, one or two scenes) carry the wow. Motion always has a purpose and always degrades gracefully.
-3. **Show who I am, not how great I am.** Copy is first person, concrete and modest: facts with context, credit to others, no superlatives ("award-winning", "passionate", "world-class"). Let the work, photos and details speak. See the tone guide in [10](10-design-brief.md).
-4. **Intuitive.** A first-time visitor finds work, writing, about and contact within two clicks with no instructions. Familiar patterns over clever ones. No mystery-meat navigation.
-5. **Performance is a feature.** Mobile Lighthouse performance >= 90 on the home page *with* the motion. Heavy things (WebGL, image sequences) lazy-load and have lightweight fallbacks.
-6. **Accessible by default.** WCAG 2.2 AA. Full keyboard use. `prefers-reduced-motion` gives a calm, complete experience, not a broken one.
-7. **Legally sound.** Privacy, terms, copyright and licensing, accessibility statement, takedown contact, honest cookie/analytics posture, third-party license compliance. See [11](11-legal-and-compliance.md). We build the pages and mechanisms; we do not give legal advice, and sample legal text is marked for professional review.
-8. **Honest security.** The web cannot truly block screenshots. We build real defenses (no originals exposed, expiring URLs, watermarks, traceability) plus deterrents (popup on screenshot keys, no right-click), and we say plainly which is which. See [05](05-security-and-image-protection.md).
-9. **Cheap to run.** Owner pays for Vercel Pro and up to about $5/month of extras. Anything else must be free-tier or justified. See [06](06-cost-analysis.md).
-10. **Open source quality.** The UI package is a public product: semver, changelog, docs, tests, contribution guide, MIT license, no secrets or personal photos in its repo history.
-11. **Small, reversible steps.** The site must run at `localhost:3000` after every milestone. Migrate Once UI out piece by piece, not in one big bang.
-12. **Own your dependencies.** Few, well-maintained libraries; write down why each non-trivial one was chosen.
+1. **Photos and work first.** Effects serve the images and the story, never fight them. Colour accuracy and fidelity beat decoration.
+2. **Spectacular on purpose, resilient by design.** The immersive stage is the product. It degrades through quality tiers to a static, beautiful page on low power, Save-Data, no WebGL, reduced motion or no JavaScript.
+3. **Show who I am, in my own voice.** Copy is first person, short, specific, and Jerry's: never invented facts, no superlatives or buzzwords. Drafts are marked `TODO(owner)`.
+4. **One system, four worlds.** Shared motion grammar and index control; unique stage, type character, accent moment and interaction per world.
+5. **Intuitive despite no navbar.** A visitor reaches any part within two moves via the floating index; skip link, landmarks and keyboard paths always exist.
+6. **Performance is a feature.** Mobile Lighthouse performance 90 or better on every home with the stage lazy-loaded, no layout shift.
+7. **Accessible by default.** WCAG 2.2 AA, full keyboard use, reduced motion = complete experience, no autoplaying sound.
+8. **Legally sound.** Privacy, terms, licensing, accessibility, takedown contact, honest analytics posture ([11](11-legal-and-compliance.md)). No legal advice; sample text is marked for professional review.
+9. **Honest security.** Real defences plus clearly labelled deterrents ([05](05-security-and-image-protection.md)).
+10. **Cheap to run.** Vercel Pro plus about $5 a month of extras; anything else is free-tier or justified ([06](06-cost-analysis.md)).
+11. **Original and sellable.** The UI package has its own name, tokens, components and docs; nothing copied from any kit. The owner decides on licence, publishing and selling; Claude only prepares.
+12. **Mock, label, then replace.** Anything that needs a real service (payments, e-signatures, delivery, flight data) is built locally as a clearly labelled mock behind an interface, disabled in production builds, and replaced in Phase 3.
+13. **Small, reversible steps.** The sites run locally after every milestone; every commit leaves the gates green or says `wip:`.
 
-## Non-goals (for now)
+## Non-goals
 
-- No native mobile apps.
-- No multi-photographer / multi-tenant SaaS. One owner (keep a nullable `studio_id` so tenancy *could* be added, but do not build it).
-- No AI features beyond optional free alt-text autofill.
-- No e-commerce on the hub. Selling happens on the studio (Phase 3).
+- No native mobile apps. No multi-tenant SaaS (keep the nullable `studio_id`). No AI features beyond optional free alt-text autofill.
+- No live flight tracking or real-time location, ever (privacy).
+- No real payment, e-signature or email-to-customers integrations before Phase 3 is approved.
+- The hub itself does not sell anything; selling happens on music (scores) and photography (studio services).

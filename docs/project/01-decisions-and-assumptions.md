@@ -67,3 +67,23 @@ The owner will not be around while this runs. **Never block on a question.** Use
 - **Auth.js v5 is still beta** (`5.0.0-beta.x`). Pin the exact version that works in stuyaviators.
 - **Photography ToS and payments.** Taking payments and storing signed contracts has legal and tax implications for the owner. Build the tools, flag it in docs, do not give legal advice.
 - **Image sequences are heavy.** Cap frame count and weight; ship WebP/AVIF frames, load progressively, and fall back to a poster on slow connections and mobile data-saver.
+
+## v2 decisions (owner, 2026-10-12; see [12-vision-v2.md](12-vision-v2.md))
+
+| # | Topic | Decision |
+|---|---|---|
+| V1 | Feeling | Awe, bold, expressive, cinematic, inventive; professional, modern, minimal. |
+| V2 | Motion metaphor | Liquid / ink, family-wide. |
+| V3 | Hub to worlds | Photography, music, flying appear as space-like dimensions inside the hub's flow; restrained and futuristic. |
+| V4 | Hub order | Who I am, the three worlds, blog (featured post + list), "Say hello." (kept). |
+| V5 | Navigation | No navbar on any home; one floating index control; no site switcher; hub may link to the three; they link only back via a footer button. |
+| V6 | Photography | Apple-product-page immersion, crafted unusual words; photo and video portfolio/gallery; project case studies move here; studio platform behind it. |
+| V7 | Music | Stage and spotlight / typographic score / minimal listening room, a vibe per page; compositions; listen (if a recording exists) separate from score preview and purchase. |
+| V8 | Flying | Ascent + cockpit instruments + flight paths and map (past flights only); journal; hidden CFI services slot. |
+| V9 | Technical ambition | The strongest techniques (real-time WebGL stage, shaders, fluid simulation, view transitions) with quality tiers and static fallbacks. |
+| V10 | Scope | Design everything now; build working local mocks of the studio, score store, client portal and flight map; real services in Phase 3. |
+| V11 | Voice | Jerry's own first-person voice; Claude drafts from real facts and marks `TODO(owner)`. |
+| V12 | Package | Completely new, original UI system and name, prepared for sale (owner publishes and sells). Supersedes A-decisions about the old package look, handwritten `--ph-*` CSS, and "open source MIT" intent: licence is an open question (Q32). |
+
+Earlier decisions A29 (nav/site switcher), the Phase 1 palette/type decisions, and the "no e-commerce on the hub" wording are superseded where they conflict.
+
