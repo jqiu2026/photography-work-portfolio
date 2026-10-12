@@ -3,7 +3,7 @@
 Living status. Update at every milestone. Newest entries at the top of "Log".
 
 **Branch:** `feat/custom-ui-cms`  **Live view:** http://localhost:3000/_progress
-**Current phase:** 2  **Current milestone:** M18  **State:** M17 done; starting M18 (security review, owner guide, summaries)
+**Current phase:** 2  **Current milestone:** done  **State:** Phase 2 complete (M10 to M18). Owner then asked for a redesign and a blog/photography split: see HANDOFF.md ("Phase 2.5")
 
 ## Phase 1: UI package and redesign
 - [x] M1 pnpm workspace (`apps/web`, `apps/photos`, `apps/docs`, `packages/ui`, `packages/sites`, `packages/config`), dev on :3000/:3002/:3001, `/_progress` live page
@@ -26,8 +26,8 @@ Living status. Update at every milestone. Newest entries at the top of "Log".
 - [x] M15 All four public sites on DB, cache/revalidation, SEO/feeds, import/export
 - [x] M16 Image protection (signed URLs, ProtectedImage, ScreenshotGuard, watermark)
 - [x] M17 Studio shell + ShootProof bridge in `apps/photos` (mocked until credentials)
-- [ ] M18 Security review, owner guide, acceptance, `PHASE-2-SUMMARY.md`, `PHASE-3-KICKOFF.md`
-- [ ] **STOP (Phase 3 is not started automatically)**
+- [x] M18 Security review, owner guide, acceptance, `PHASE-2-SUMMARY.md`, `PHASE-3-KICKOFF.md`
+- [x] **STOP (Phase 3 is not started automatically)**
 
 ## Phase 3: not started (needs owner go-ahead)
 
@@ -35,6 +35,7 @@ Living status. Update at every milestone. Newest entries at the top of "Log".
 
 
 ## Log
+- 2026-10-12: M18 done, **Phase 2 complete**. Security review (skill) over the branch: no high-confidence findings, two low observations in PHASE-2-SUMMARY.md. Wrote `docs/owner-guide.md`, `PHASE-2-SUMMARY.md`, `PHASE-3-KICKOFF.md`, DEPLOYMENT.md env additions. Owner feedback received afterwards (homepage too static and too Once-UI-like; separate blog from photography; sellable package): written up as the Phase 2.5 brief in HANDOFF.md. Phase 3 is not started.
 - 2026-10-12: M17 done. `packages/shootproof` (16 tests): live adapter written from the published OpenAPI document and auth guide (never run live, never constructed without a client id), generated-fixture mock source (refused in production), AES-GCM encrypted token storage with auto refresh, event importer that keeps one downscaled WebP per photo for 24 hours (never originals, never the `/original` endpoint), SSRF allow-list for photo hosts, expiry purge + cron route, token-gated `/api/ext/[id]`. Photos `/studio` dashboard (Phase 3 roadmap card) and `/studio/shootproof` (Not connected with setup steps / Connect / events / import / protected preview / remove / disconnect), owner only, audited. Findings: a Server Action that redirects to a route handler is re-POSTed and fails with 405 (Connect is now a GET route); a function exported from a `"use server"` file is a public endpoint (moved the token getter to a server-only module). ShootProof's API terms on caching could not be found publicly: logged as Q28 and documented in `docs/shootproof-bridge.md`. Admin e2e 44/44 (now also runs photos in sample mode on :3302 and with no credentials on :3303), prod e2e 154/154.
 - 2026-10-12: M16 done (image protection, documented in 05 "As built"). `ScreenshotGuard` (off/light/strict; every shortcut from the plan detected by a pure `detectTrigger`, 19 unit cases + component tests; dialog with honest copy; blur on focus loss; print hides media), `ProtectedImage` strict path (opaque id in HTML, token fetch to blob URL, auto token refresh, shield, alt kept), `ProtectedGallery`, `GuardScope`, server-baked watermark with sharp (cached), `POST /api/img/token`, bot refusal, `X-Robots-Tag`. Strict galleries render dynamically and appear only on their own page. Playwright (photos site added to the admin e2e rig on :3302): page source has no image URL, forged/missing tokens 403, every shortcut shows the dialog, expired token refreshes, print hides, light gallery blocks right-click without a dialog, watermark changes the served bytes. Bugs the tests found: context-only level meant strict images rendered the non-strict path on the server; strict `files` URLs leaked into the RSC payload. Admin e2e 40/40, prod e2e 154/154, unit tests all green.
 - 2026-10-12: M15 core done (public sites on the DB). `packages/db/src/queries.ts` is the typed content layer (published/scheduled/visible/not-deleted only, flying entries need the safe-to-publish flag, media resolved to `PublicAsset` with no storage keys; 7 tests). Hub: `lib/content-db.ts` (`unstable_cache` + tags, `null` without a DB), `lib/content.ts` unified work/writing from DB or MDX fallback, `Blocks` renderer for project blocks, profile/timeline/socials merged over repo defaults, music and flying content adapters, legal pages overridden by published CMS pages (privacy text corrected: the form now stores messages), settings applied (SEO defaults, nav, maintenance mode on every site), redirect rules followed in the catch-all 404. Photos: portfolio from CMS galleries with static fallback, `/api/revalidate` (REVALIDATE_SECRET) poked by the hub after changes. Image delivery `/api/img/[id]` in both apps (`serveImage` in packages/media): derivatives only, AVIF/WebP negotiation, bot UA refusal, public tier cacheable, strict tier needs HMAC token + fetch metadata + rate limit (8 tests). Admin e2e 35/35, prod e2e 154/154.

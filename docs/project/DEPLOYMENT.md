@@ -31,3 +31,17 @@ Both projects live under the one Vercel Pro plan. Use preview deployments on the
 ## Costs to expect
 
 See [06-cost-analysis.md](06-cost-analysis.md).
+
+## Added in Phase 2 (environment names; values come from you)
+
+| Name | Where | What it does |
+|---|---|---|
+| `CRON_SECRET` | hub and photos | 16+ random characters. Vercel Cron sends it as a bearer token. Without it the daily trash purge (`apps/web/vercel.json`) and hourly ShootProof expiry (`apps/photos/vercel.json`) refuse to run. |
+| `REVALIDATE_SECRET` | hub and photos (same value) | Lets the hub refresh the photography site's cache after a CMS change. Without it the photography site updates within its 1-hour cache. |
+| `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL` | hub and photos | Email notification for contact messages. Without them messages are still stored in the Inbox. |
+| `TURNSTILE_SECRET_KEY`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | optional | Free spam check on the contact form. |
+| `IMAGE_TOKEN_SECRET` (+ `IMAGE_TOKEN_SECRET_PREVIOUS` when rotating) | hub and photos (same value) | Signs the short-lived image tokens for strict galleries. Falls back to `AUTH_SECRET`. |
+| `SHOOTPROOF_CLIENT_ID` (+ optional `SHOOTPROOF_SCOPE`, `SHOOTPROOF_IMAGE_HOSTS`) | photos | Turns the ShootProof bridge on. See `docs/shootproof-bridge.md`. |
+
+Manual steps in Vercel: add a Firewall rule rate-limiting `/api/img/*` and `/api/contact`; keep unused subdomains out of DNS (subdomain takeover); run the database migration once (`pnpm db:migrate`) against the production `DATABASE_URL`.
+
