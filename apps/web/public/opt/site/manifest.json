@@ -1,0 +1,18 @@
+{
+ "avatar": {
+  "width": 1000,
+  "height": 1000,
+  "color": "rgb(88, 95, 99)",
+  "blur": "data:image/webp;base64,UklGRngAAABXRUJQVlA4IGwAAAAwAgCdASoQABAAA4BaJQBOj+AC9EHyvo6o6AD8j84D9HwqEVpZgPS8KY495Oj29ICJqnAXXPZeZBzvkqWObTE6NYib+s6W1rS7pMMtNYGmNUdU0lKRCLjmPjY61WfVBAsjki7zoHxCrk19QAA=",
+  "files": [
+   {
+    "width": 480,
+    "src": "/opt/site/avatar-480.webp"
+   },
+   {
+    "width": 960,
+    "src": "/opt/site/avatar-960.webp"
+   }
+  ]
+ }
+}

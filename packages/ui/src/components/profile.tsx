@@ -30,13 +30,13 @@ export function SkillTags({ tags, className }: { tags: string[]; className?: str
 }
 
 /** Portrait, name, headline, location, "currently" line and social links. No Jerry-specific content lives here. */
-export function ProfileHeader({ portrait, name, headline, location, currently, links, actions, className }: { portrait?: ReactNode; name: string; headline: string; location?: string; currently?: string; links?: SocialLink[]; actions?: ReactNode; className?: string }) {
+export function ProfileHeader({ portrait, name, nameAs = "h1", nameSize = "display", stacked, headline, location, currently, links, actions, className }: { portrait?: ReactNode; name: string; nameAs?: ElementType; nameSize?: "3xl" | "4xl" | "display"; stacked?: boolean; headline: string; location?: string; currently?: string; links?: SocialLink[]; actions?: ReactNode; className?: string }) {
   return (
-    <header className={cx("ph-profile", className)}>
+    <header className={cx("ph-profile", stacked && "ph-profile--stacked", className)}>
       {portrait ? <div className="ph-profile__portrait">{portrait}</div> : null}
       <div className="ph-profile__body">
         {location ? <Eyebrow>{location}</Eyebrow> : null}
-        <Heading as="h1" size="display" display>{name}</Heading>
+        <Heading as={nameAs} size={nameSize} display>{name}</Heading>
         <Text size="xl" className="ph-profile__headline">{headline}</Text>
         {currently ? <Text tone="muted" className="ph-profile__now"><span className="ph-dot" aria-hidden /> {currently}</Text> : null}
         {actions ? <div className="ph-profile__actions">{actions}</div> : null}

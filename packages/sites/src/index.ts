@@ -46,7 +46,7 @@ export function getSites(): SiteInfo[] {
     {
       id: "flying",
       name: "Flying",
-      description: "How I learned to fly",
+      description: "Notes and photos about flying",
       preset: "flying",
       url: origin(process.env.NEXT_PUBLIC_FLYING_URL, `${hub}/flying`, "https://flying.jerryqiu.com"),
       devPath: "/flying",

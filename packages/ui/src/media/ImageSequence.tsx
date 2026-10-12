@@ -18,6 +18,7 @@ export function ImageSequence({ frames, poster, progress, alt, className }: { fr
   const canvas = useRef<HTMLCanvasElement>(null);
   const imgs = useRef<(HTMLImageElement | undefined)[]>([]);
   const [lite, setLite] = useState(false);
+  const [near, setNear] = useState(false);
   const last = useRef(-1);
 
   const draw = (i: number) => {
@@ -38,7 +39,17 @@ export function ImageSequence({ frames, poster, progress, alt, className }: { fr
     ctx.drawImage(img, (w - img.naturalWidth * s) / 2, (h - img.naturalHeight * s) / 2, img.naturalWidth * s, img.naturalHeight * s);
   };
 
+  // Only start downloading frames when the sequence is within ~1.5 screens of the viewport.
   useEffect(() => {
+    const el = canvas.current;
+    if (!el) { setNear(true); return; }
+    const io = new IntersectionObserver(([e]) => e.isIntersecting && setNear(true), { rootMargin: "150% 0px" });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [lite, calm]);
+
+  useEffect(() => {
+    if (!near) return;
     const conn = (navigator as Navigator & { connection?: Conn }).connection;
     if (calm || conn?.saveData || /(^|-)2g$/.test(conn?.effectiveType ?? "")) { setLite(true); return; }
     let cancelled = false;
@@ -59,7 +70,7 @@ export function ImageSequence({ frames, poster, progress, alt, className }: { fr
     window.addEventListener("resize", onResize);
     return () => { cancelled = true; window.removeEventListener("resize", onResize); };
     // biome-ignore lint/correctness/useExhaustiveDependencies: draw is stable enough for this effect
-  }, [frames, calm]);
+  }, [frames, calm, near]);
 
   useMotionValueEvent(p, "change", (v) => {
     const i = Math.max(0, Math.min(frames.length - 1, Math.round(v * (frames.length - 1))));

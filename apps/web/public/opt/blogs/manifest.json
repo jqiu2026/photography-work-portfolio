@@ -1,0 +1,74 @@
+{
+ "day-one-1": {
+  "width": 3840,
+  "height": 2340,
+  "color": "rgb(104, 92, 87)",
+  "blur": "data:image/webp;base64,UklGRnAAAABXRUJQVlA4IGQAAABQAgCdASoQAAoAA4BaJZQCdAYuvnfPUWJpCQAA/tD95qzg20bp/kZH1ZfdnnSLoEfN4ITmoSXWOH+5VKbHps3Lab1W8xeNcy2C3c3M62obqtjbZseXIric3BHFpMKRX39uUgAA",
+  "files": [
+   {
+    "width": 480,
+    "src": "/opt/blogs/day-one-1-480.webp"
+   },
+   {
+    "width": 960,
+    "src": "/opt/blogs/day-one-1-960.webp"
+   },
+   {
+    "width": 1600,
+    "src": "/opt/blogs/day-one-1-1600.webp"
+   },
+   {
+    "width": 2400,
+    "src": "/opt/blogs/day-one-1-2400.webp"
+   }
+  ]
+ },
+ "day-one-cover": {
+  "width": 5707,
+  "height": 3620,
+  "color": "rgb(88, 103, 102)",
+  "blur": "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAAAwAgCdASoQAAoAA4BaJQBdj+ADL++Yz1q9VAD7yVk8ljQEqlsAJsk+g6RJjsoHDQKOtzSYm2baBmqHvAvOBlZyE4wS6wuAI9QNUWUafEbj4UZ6ufy1HW9JjcAAAA==",
+  "files": [
+   {
+    "width": 480,
+    "src": "/opt/blogs/day-one-cover-480.webp"
+   },
+   {
+    "width": 960,
+    "src": "/opt/blogs/day-one-cover-960.webp"
+   },
+   {
+    "width": 1600,
+    "src": "/opt/blogs/day-one-cover-1600.webp"
+   },
+   {
+    "width": 2400,
+    "src": "/opt/blogs/day-one-cover-2400.webp"
+   }
+  ]
+ },
+ "positivity-at-stuy-cover": {
+  "width": 2560,
+  "height": 1436,
+  "color": "rgb(101, 95, 102)",
+  "blur": "data:image/webp;base64,UklGRlYAAABXRUJQVlA4IEoAAADQAQCdASoQAAkAA4BaJZwAAjWdCQxZgADN8crKQjp7hwueH6hoU0MlDj5HAvgzmLerCYxAsWBexh58pwGPSclQEGBBtH5zpDgAAA==",
+  "files": [
+   {
+    "width": 480,
+    "src": "/opt/blogs/positivity-at-stuy-cover-480.webp"
+   },
+   {
+    "width": 960,
+    "src": "/opt/blogs/positivity-at-stuy-cover-960.webp"
+   },
+   {
+    "width": 1600,
+    "src": "/opt/blogs/positivity-at-stuy-cover-1600.webp"
+   },
+   {
+    "width": 2400,
+    "src": "/opt/blogs/positivity-at-stuy-cover-2400.webp"
+   }
+  ]
+ }
+}

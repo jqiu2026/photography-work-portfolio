@@ -3,7 +3,7 @@
 Living status. Update at every milestone. Newest entries at the top of "Log".
 
 **Branch:** `feat/custom-ui-cms`  **Live view:** http://localhost:3000/_progress
-**Current phase:** 1  **Current milestone:** M6  **State:** M5 done (component gallery on /_progress arrives with M3)
+**Current phase:** 1  **Current milestone:** M7  **State:** M6 done (component gallery on /_progress arrives with M3)
 
 ## Phase 1: UI package and redesign
 - [x] M1 pnpm workspace (`apps/web`, `apps/photos`, `apps/docs`, `packages/ui`, `packages/sites`, `packages/config`), dev on :3000/:3002/:3001, `/_progress` live page
@@ -11,7 +11,7 @@ Living status. Update at every milestone. Newest entries at the top of "Log".
 - [x] M3 Foundations, forms, overlays, profile/site components (ProfileHeader, SocialLinks, SiteSwitcher...) + docs site skeleton
 - [x] M4 Motion + media components
 - [x] M5 WebGL hero + image sequence tooling
-- [ ] M6 Hub home rebuilt (profile-forward showpiece, preview cards for photos/music/flying)
+- [x] M6 Hub home rebuilt (profile-forward showpiece, preview cards for photos/music/flying)
 - [ ] M7 Remaining hub pages (about, work, writing, connect) + legal pages migrated, Once UI removed
 - [ ] M7b Photography site (`apps/photos`), music and flying sites, `proxy.ts` host routing, site switcher
 - [ ] M8 Perf, a11y, tests, docs completeness, open-source hygiene
@@ -35,6 +35,7 @@ Living status. Update at every milestone. Newest entries at the top of "Log".
 
 
 ## Log
+- 2026-10-12: M6 done. Hub home (`apps/web/src/app/(site)/page.tsx`): WebGL hero over a real photo, profile row (portrait, headline, socials, `Person` JSON-LD), scroll-highlight intro, pinned scene with scroll-scrubbed image sequence + step text, preview cards for photos/music/flying, horizontal showcase of real projects, latest writing, closing CTA, footer with More from me + legal links. App is split into route groups: `(site)` = new UI, `(legacy)` = Once UI pages still to migrate in M7. MDX content moved to `src/content/{projects,posts}`. Optimized derivatives for gallery/projects/blogs/avatar in `public/opt/*` (originals untouched). Screenshots: `screenshots/m1/home-*.png`. Placeholder facts are dev-only `TODO(owner)` and hidden in production.
 - 2026-10-12: M5 done. `@placeholder/ui/webgl` ShaderHero (ogl, lazy import, pointer-reactive chromatic split, drifting displacement, light leak, DPR cap 1.5, pauses off-screen, plain-image fallback for reduced motion/Save-Data/low-power/no-WebGL). `scripts/make-sequence.mjs` (sharp-only, no ffmpeg on this machine) generated the placeholder `apps/web/public/sequence/hero` (96 frames, 2.2 MB) + README for swapping real footage. Verified in headless Chromium (swiftshader).
 - 2026-10-12: M4 done. Motion (`@placeholder/ui/motion`): InView, RevealText, CountUp, ScrollHighlight, Parallax, PinnedScene (+useSceneProgress), StepSequence, StackingCards, HorizontalShowcase, ScrollProgress, TiltCard, MagneticButton, SmoothScroll (Lenis), PageTransition, Marquee, CursorFollower; all static under reduced motion. Media (`/media`): Image (srcset, blur-up, dominant colour), Gallery (justified/masonry), Lightbox, BeforeAfter, ImageSequence (canvas, progressive, poster fallback on Save-Data/2g/reduced motion), VideoBackground, ProtectedImage stub. Pinned scene verified with Playwright (sticks, steps advance).
 - 2026-10-12: M3 done. `packages/ui`: layout (Container/Stack/Row/Grid/Section), typography (Heading/Text/Link/Prose/Eyebrow/Separator), Button/IconButton, forms (Field/Input/Textarea/Select/Checkbox/Switch/RadioGroup/Slider on Radix), overlays (Dialog/Sheet/Popover/Tooltip/Menu/Tabs/Accordion/Toast), feedback atoms, navigation (Header glass-on-scroll, SiteSwitcher, SkipLink, ThemeToggle, TableOfContents), Footer/MoreFromMe/Breadcrumbs/Pagination, content (Card/Avatar/Stat/Quote/CodeBlock/Table), profile (ProfileHeader/SocialLinks/SkillTags/Timeline/SitePreviewCard/InterestHero/ResumeButton), embeds (click-to-load EmbedFacade, AudioPlayer). Live gallery at /_progress. Docs skeleton in `apps/docs` (running on :3101 because the StuyAviators server took :3001; default script port stays 3001). Unit tests, per-component docs pages: M8.

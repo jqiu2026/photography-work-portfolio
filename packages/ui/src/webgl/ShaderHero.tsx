@@ -38,6 +38,9 @@ export type ShaderHeroProps = {
   alt: string;
   /** 0 to 1.5, strength of the displacement / light leak. */
   intensity?: number;
+  /** Responsive candidates for the fallback <img> (the WebGL texture uses `src`). */
+  srcSet?: string;
+  sizes?: string;
   className?: string;
   /** Rendered on top of the canvas (headline etc). */
   children?: ReactNode;
@@ -54,7 +57,7 @@ function lowPower() {
  * DPR is capped at 1.5, and it falls back to the plain image for reduced motion, Save-Data,
  * low-power devices or when WebGL is unavailable. The image is always in the DOM (alt text, no-JS, LCP).
  */
-export function ShaderHero({ src, alt, intensity = 1, className, children }: ShaderHeroProps) {
+export function ShaderHero({ src, alt, intensity = 1, srcSet, sizes, className, children }: ShaderHeroProps) {
   const calm = useCalm();
   const wrap = useRef<HTMLDivElement>(null);
   const canvasHost = useRef<HTMLDivElement>(null);
@@ -143,7 +146,7 @@ export function ShaderHero({ src, alt, intensity = 1, className, children }: Sha
   return (
     <div ref={wrap} className={className} style={{ position: "relative", overflow: "hidden", background: "var(--ph-cinema)" }}>
       {/* biome-ignore lint/performance/noImgElement: framework-agnostic package */}
-      <img src={src} alt={alt} fetchPriority="high" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: live ? 0 : 1, transition: "opacity 0.6s" }} />
+      <img src={src} srcSet={srcSet} sizes={sizes} alt={alt} fetchPriority="high" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: live ? 0 : 1, transition: "opacity 0.6s" }} />
       <div ref={canvasHost} aria-hidden style={{ position: "absolute", inset: 0 }} />
       {children ? <div style={{ position: "relative", height: "100%" }}>{children}</div> : null}
     </div>
