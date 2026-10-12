@@ -109,38 +109,3 @@ export function Timeline({ items, className }: { items: TimelineItem[]; classNam
     </ol>
   );
 }
-
-/** Opening block for the music and flying sites (interest-site template). */
-export function InterestHero({
-  eyebrow,
-  title,
-  intro,
-  media,
-  actions,
-}: { eyebrow?: string; title: string; intro?: string; media?: ReactNode; actions?: ReactNode }) {
-  return (
-    <section className="hl-interest">
-      <div className="hl-interest__text">
-        {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
-        <Heading as="h1" size="display" display>
-          {title}
-        </Heading>
-        {intro ? (
-          <Text size="xl" tone="muted">
-            {intro}
-          </Text>
-        ) : null}
-        {actions ? <div className="hl-profile__actions">{actions}</div> : null}
-      </div>
-      {media ? <div className="hl-interest__media">{media}</div> : null}
-    </section>
-  );
-}
-
-export function ResumeButton({ href, label = "Download résumé (PDF)" }: { href: string; label?: string }) {
-  return (
-    <a className="hl-btn hl-btn--ghost hl-btn--md" href={href} download>
-      <span>{label}</span>
-    </a>
-  );
-}

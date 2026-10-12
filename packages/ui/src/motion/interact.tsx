@@ -33,41 +33,6 @@ export function TiltCard({ children, max = 6, className }: { children: ReactNode
   );
 }
 
-/** Wraps a button/link so it is gently pulled toward the pointer. */
-export function MagneticButton({
-  children,
-  strength = 0.25,
-  className,
-}: { children: ReactNode; strength?: number; className?: string }) {
-  const calm = useCalm();
-  const x = useSpring(useMotionValue(0), { stiffness: 250, damping: 18 });
-  const y = useSpring(useMotionValue(0), { stiffness: 250, damping: 18 });
-  if (calm)
-    return (
-      <span className={className} style={{ display: "inline-block" }}>
-        {children}
-      </span>
-    );
-  return (
-    <motion.span
-      className={className}
-      style={{ display: "inline-block", x, y }}
-      onPointerMove={(e) => {
-        if (e.pointerType !== "mouse") return;
-        const r = e.currentTarget.getBoundingClientRect();
-        x.set((e.clientX - (r.left + r.width / 2)) * strength);
-        y.set((e.clientY - (r.top + r.height / 2)) * strength);
-      }}
-      onPointerLeave={() => {
-        x.set(0);
-        y.set(0);
-      }}
-    >
-      {children}
-    </motion.span>
-  );
-}
-
 /** Lenis smooth scrolling. Off for reduced motion. Render once near the root. */
 export function SmoothScroll({ children }: { children: ReactNode }) {
   const calm = useCalm();
@@ -86,72 +51,4 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     };
   }, [calm]);
   return <>{children}</>;
-}
-
-/** Fades the page content in on navigation. Use in a Next.js template.tsx so it remounts per route. */
-export function PageTransition({ children }: { children: ReactNode }) {
-  const calm = useCalm();
-  return (
-    <motion.div
-      initial={calm ? false : { opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
-/** Endlessly scrolling row of items (CSS only, paused on hover, static under reduced motion). */
-export function Marquee({
-  children,
-  speed = 40,
-  className,
-}: { children: ReactNode; speed?: number; className?: string }) {
-  return (
-    <div className={`hl-marquee ${className ?? ""}`} style={{ ["--hl-marquee-speed" as string]: `${speed}s` }}>
-      <div className="hl-marquee__track">
-        <div>{children}</div>
-        <div aria-hidden>{children}</div>
-      </div>
-    </div>
-  );
-}
-
-/** A small dot that follows the pointer (fine pointers only). Decorative. */
-export function CursorFollower() {
-  const calm = useCalm();
-  const x = useSpring(useMotionValue(-100), { stiffness: 500, damping: 40 });
-  const y = useSpring(useMotionValue(-100), { stiffness: 500, damping: 40 });
-  const ref = useRef(false);
-  useEffect(() => {
-    if (calm || !matchMedia("(pointer: fine)").matches) return;
-    ref.current = true;
-    const move = (e: PointerEvent) => {
-      x.set(e.clientX - 6);
-      y.set(e.clientY - 6);
-    };
-    window.addEventListener("pointermove", move);
-    return () => window.removeEventListener("pointermove", move);
-  }, [calm, x, y]);
-  if (calm) return null;
-  return (
-    <motion.div
-      aria-hidden
-      style={{
-        x,
-        y,
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: 12,
-        height: 12,
-        borderRadius: "50%",
-        background: "var(--hl-accent)",
-        pointerEvents: "none",
-        zIndex: 160,
-        mixBlendMode: "difference",
-      }}
-    />
-  );
 }

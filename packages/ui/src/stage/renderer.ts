@@ -378,7 +378,7 @@ export class StageRenderer {
     const x = sw.dir === 1 ? sw.t : 1 - sw.t;
     const lines = 9;
     for (let i = 0; i < lines; i++) {
-      const y = 0.3 + (i / (lines - 1)) * 0.4 + (Math.sin(i * 12.9898 + sw.t * 6) * 0.01);
+      const y = 0.3 + (i / (lines - 1)) * 0.4 + Math.sin(i * 12.9898 + sw.t * 6) * 0.01;
       const k = 0.32 * sw.strength * (1 - Math.abs(i - (lines - 1) / 2) / lines);
       this.splat(x, y, sw.dir * 700 * sw.strength, 0, [accent[0] * k, accent[1] * k, accent[2] * k], 0.0005);
     }

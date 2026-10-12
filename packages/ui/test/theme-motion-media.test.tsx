@@ -2,8 +2,8 @@ import { act, fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import { ThemeProvider, themeScript, useTheme } from "../src";
-import { BeforeAfter, Gallery, Image, type ImageAsset } from "../src/media";
-import { CountUp, InView, PinnedScene, RevealText, ScrollHighlight, StepSequence } from "../src/motion";
+import { Gallery, Image, type ImageAsset } from "../src/media";
+import { InView, RevealText } from "../src/motion";
 import { mockMedia } from "./setup";
 
 const asset: ImageAsset = {
@@ -83,26 +83,6 @@ describe("Gallery and Lightbox", () => {
   });
 });
 
-describe("BeforeAfter", () => {
-  it("exposes the slider and moves the comparison with the keyboard", async () => {
-    render(
-      <BeforeAfter
-        before={<div>before</div>}
-        after={<div>after</div>}
-        label="Compare"
-        beforeLabel="Colour"
-        afterLabel="Mono"
-      />,
-    );
-    const slider = screen.getByRole("slider", { name: "Compare" });
-    expect(slider).toHaveValue("50");
-    fireEvent.change(slider, { target: { value: "70" } });
-    expect(slider).toHaveValue("70");
-    expect(screen.getByText("before").parentElement).toHaveStyle({ clipPath: "inset(0 30% 0 0)" });
-    expect(screen.getByText("Colour")).toBeInTheDocument();
-  });
-});
-
 describe("Motion components fall back to a complete static state under reduced motion", () => {
   it("InView renders its children plainly", () => {
     mockMedia({ "prefers-reduced-motion": true });
@@ -113,27 +93,6 @@ describe("Motion components fall back to a complete static state under reduced m
     mockMedia({ "prefers-reduced-motion": true });
     render(<RevealText text="Words rise slowly" as="h2" />);
     expect(screen.getByRole("heading", { name: "Words rise slowly" })).toBeInTheDocument();
-  });
-  it("CountUp shows its final number immediately", () => {
-    mockMedia({ "prefers-reduced-motion": true });
-    render(<CountUp to={1234} />);
-    expect(screen.getByLabelText("1,234")).toHaveTextContent("1,234");
-  });
-  it("ScrollHighlight renders all words", () => {
-    mockMedia({ "prefers-reduced-motion": true });
-    const { container } = render(<ScrollHighlight text="One two three" />);
-    expect(container).toHaveTextContent("One two three");
-  });
-  it("PinnedScene is not pinned and StepSequence lists every step", () => {
-    mockMedia({ "prefers-reduced-motion": true });
-    const { container } = render(
-      <PinnedScene label="Scene" length={4}>
-        <StepSequence steps={[{ title: "First" }, { title: "Second", body: "More" }]} />
-      </PinnedScene>,
-    );
-    expect((container.firstChild as HTMLElement).style.height).toBe("");
-    expect(screen.getByText("First")).toBeInTheDocument();
-    expect(screen.getByText("Second")).toBeInTheDocument();
   });
   it("RevealText hides the split words from screen readers (no double reading)", () => {
     mockMedia();

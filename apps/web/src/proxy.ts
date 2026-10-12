@@ -66,5 +66,5 @@ export function proxy(request: NextRequest) {
 
 export const config = {
   // Skip Next internals, API routes and static asset folders.
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|images|opt|sequence|\\.well-known).*)"],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|images|opt|\\.well-known).*)"],
 };

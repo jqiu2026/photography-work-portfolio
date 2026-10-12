@@ -2,12 +2,12 @@
 
 import {
   Accordion, Avatar, Badge, BrandIcon, Breadcrumbs, Button, Card, Checkbox, CodeBlock, Container, Dialog, DialogClose, EmbedFacade, Eyebrow, Field, Grid,
-  Heading, IconButton, Input, InterestHero, Link, Menu, Pagination, Popover, Progress, ProfileHeader, Prose, Quote, RadioGroup, ResumeButton, Row,
+  Heading, IconButton, Input, Link, Menu, Pagination, Popover, Progress, ProfileHeader, Prose, Quote, RadioGroup, Row,
   Section, Select, Separator, Sheet, SkillTags, Skeleton, Slider, SocialLinks, Spinner, Stack, Stat, Switch, Table, TableOfContents, Tabs,
   Text, Textarea, Timeline, ToastProvider, Tooltip, useToast, VisuallyHidden,
 } from "@halation/ui";
-import { BeforeAfter, Gallery, Image, ProtectedImage, type ImageAsset } from "@halation/ui/media";
-import { CountUp, InView, MagneticButton, Marquee, Parallax, RevealText, ScrollHighlight, StackingCards, TiltCard } from "@halation/ui/motion";
+import { Gallery, Image, ProtectedImage, type ImageAsset } from "@halation/ui/media";
+import { InView, Parallax, RevealText, TiltCard } from "@halation/ui/motion";
 import type { ReactNode } from "react";
 import manifest from "../../public/demo/manifest.json";
 
@@ -70,21 +70,13 @@ const demos: Record<string, () => ReactNode> = {
   SkillTags: () => <SkillTags tags={["Python", "Lightroom", "Figma"]} />,
   ProfileHeader: () => <ProfileHeader name="Ada Lovelace" nameAs="h3" nameSize="3xl" headline="Mathematician and writer." location="London" links={links} portrait={<Avatar name="Ada Lovelace" size={96} />} />,
   Timeline: () => <Timeline items={[{ title: "Role", org: "Company", period: "2025", summary: "What I did." }, { title: "School", period: "2021 to 2025" }]} />,
-  InterestHero: () => <InterestHero eyebrow="Ada" title="Music" intro="A short introduction." media={<Image asset={m.g2} alt="" sizes="400px" />} />,
-  ResumeButton: () => <ResumeButton href="#cv" />,
   EmbedFacade: () => <div style={{ maxWidth: 420 }}><EmbedFacade provider="youtube" id="aqz-KE-bpKQ" title="Demo video (Big Buck Bunny, Blender Foundation, CC BY)" /></div>,
   InView: () => <InView><Card>Lifts into place once.</Card></InView>,
   RevealText: () => <RevealText text="Words rise out of a quiet mask." as="h3" className="hl-heading hl-heading--display" />,
-  CountUp: () => <span className="hl-stat__value"><CountUp to={1234} /></span>,
-  ScrollHighlight: () => <ScrollHighlight text="Scroll this paragraph through the viewport and the words brighten one by one." />,
   Parallax: () => <div style={{ maxWidth: 480 }}><Parallax speed={0.2}><Image asset={m.g3} alt="" sizes="480px" /></Parallax></div>,
-  StackingCards: () => <StackingCards items={[1, 2, 3].map((n) => <Card key={n}>Card {n}</Card>)} />,
   TiltCard: () => <div style={{ maxWidth: 280 }}><TiltCard><Card interactive>Tilts toward the mouse.</Card></TiltCard></div>,
-  MagneticButton: () => <MagneticButton><Button>Magnetic</Button></MagneticButton>,
-  Marquee: () => <Marquee speed={20}>{["One", "Two", "Three", "Four"].map((w) => <span key={w} style={{ fontSize: "2rem", fontWeight: 600 }}>{w}</span>)}</Marquee>,
   Image: () => <div style={{ maxWidth: 420 }}><Image asset={m.g1} alt="A generated blue gradient" sizes="420px" /></div>,
   Gallery: () => <Gallery images={imgs} rowHeight={140} />,
-  BeforeAfter: () => <div style={{ maxWidth: 480 }}><BeforeAfter beforeLabel="Colour" afterLabel="Mono" before={<Image asset={m.g2} alt="Colour version" sizes="480px" />} after={<Image asset={m.g2} alt="" sizes="480px" style={{ filter: "grayscale(1)" }} />} /></div>,
   ProtectedImage: () => <div style={{ maxWidth: 360 }}><ProtectedImage asset={m.g3} alt="A generated green gradient" sizes="360px" /></div>,
 };
 

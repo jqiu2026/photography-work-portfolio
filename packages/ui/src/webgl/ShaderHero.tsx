@@ -175,33 +175,3 @@ export type ShaderHeroProps = {
   /** Rendered on top of the canvas (headline etc). */
   children?: ReactNode;
 };
-
-/**
- * Hero image with the glitch treatment. The plain image is always in the DOM (alt text, no-JS, LCP) and
- * fades out once WebGL is drawing; reduced motion, Save-Data and low-power devices keep the plain image.
- */
-export function ShaderHero({ src, alt, intensity = 1, srcSet, sizes, className, children }: ShaderHeroProps) {
-  const [live, setLive] = useState(false);
-  return (
-    <div className={className} style={{ position: "relative", overflow: "hidden", background: "var(--hl-cinema)" }}>
-      <img
-        src={src}
-        srcSet={srcSet}
-        sizes={sizes}
-        alt={alt}
-        fetchPriority="high"
-        style={{
-          position: "absolute",
-          inset: 0,
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
-          opacity: live ? 0 : 1,
-          transition: "opacity 0.6s",
-        }}
-      />
-      <ShaderLayer src={src} intensity={intensity} onReady={() => setLive(true)} />
-      {children ? <div style={{ position: "relative", height: "100%" }}>{children}</div> : null}
-    </div>
-  );
-}
