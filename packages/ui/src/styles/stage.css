@@ -480,6 +480,7 @@ html[data-hl-leaving] body > *:not(.hl-stage) {
 /* ---- The Pour: cross-document page transition (where supported; otherwise an instant swap) ---- */
 @media (prefers-reduced-motion: no-preference) {
   @view-transition {
+    /* biome-ignore lint/correctness/noUnknownProperty: @view-transition descriptor */
     navigation: auto;
   }
   ::view-transition-old(root) {
