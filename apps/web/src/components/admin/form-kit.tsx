@@ -42,6 +42,7 @@ export function ActionForm({
   const [dirty, setDirty] = useState(false);
   const ref = useRef<HTMLFormElement>(null);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: react to each new action result only
   useEffect(() => {
     if (state.ok) {
       setDirty(false);

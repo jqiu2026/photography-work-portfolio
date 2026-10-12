@@ -4,6 +4,7 @@ import { Button, Input, Select, Textarea } from "@placeholder/ui";
 import { type RefObject, useEffect, useRef, useState } from "react";
 import { RenderMarkdown } from "@/lib/markdown";
 import { autosavePost, deletePost, savePost } from "@/app/(admin)/admin/posts/actions";
+import { slugify } from "@/lib/slugify";
 import { ActionForm, ConfirmButton, ErrorFor, F, FieldE } from "./form-kit";
 import { MediaPicker } from "./MediaPicker";
 
@@ -23,15 +24,6 @@ export type PostValues = {
   seoTitle: string;
   seoDescription: string;
 };
-
-const slugify = (s: string) =>
-  s
-    .normalize("NFKD")
-    .replace(/[̀-ͯ]/g, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-    .slice(0, 80);
 
 /** Wraps the current selection of a textarea. */
 function wrap(el: HTMLTextAreaElement, before: string, after = before, placeholder = "text") {

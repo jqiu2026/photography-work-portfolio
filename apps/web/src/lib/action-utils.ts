@@ -13,7 +13,7 @@ export const fdList = (fd: FormData, k: string) =>
     .map((s) => s.trim())
     .filter(Boolean);
 /** Empty string becomes undefined, so optional DB columns store null. */
-export const blank = (s: string | undefined) => (s && s.trim() ? s.trim() : null);
+export const blank = (s: string | undefined) => (s?.trim() ? s.trim() : null);
 
 export const slug = z
   .string()
@@ -38,18 +38,7 @@ export function parseForm<T extends z.ZodType>(
   return { ok: false, state: { ok: false, error: "Check the highlighted fields.", fieldErrors } };
 }
 
-/** "My Title: A Story!" -> "my-title-a-story" */
-export function slugify(s: string): string {
-  return (
-    s
-      .normalize("NFKD")
-      .replace(/[̀-ͯ]/g, "")
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "")
-      .slice(0, 80) || "untitled"
-  );
-}
+export { slugify } from "./slugify";
 
 export function readingMinutes(markdown: string): number {
   return Math.max(1, Math.round(markdown.split(/\s+/).filter(Boolean).length / 220));

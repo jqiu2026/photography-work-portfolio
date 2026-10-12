@@ -4,6 +4,7 @@ import { Button, Input, Select, Textarea } from "@placeholder/ui";
 import { ArrowDown, ArrowUp, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { deleteProject, saveProject } from "@/app/(admin)/admin/projects/actions";
+import { slugify } from "@/lib/slugify";
 import { ActionForm, ConfirmButton, F, FieldE } from "./form-kit";
 import { MediaPicker } from "./MediaPicker";
 
@@ -273,14 +274,6 @@ export function ProjectForm({ values }: { values: ProjectValues }) {
   const [touched, setTouched] = useState(Boolean(values.id));
   const [blocks, setBlocks] = useState<Block[]>(values.blocks);
   const [credits, setCredits] = useState<Credit[]>(values.credits);
-  const slugify = (s: string) =>
-    s
-      .normalize("NFKD")
-      .replace(/[̀-ͯ]/g, "")
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "")
-      .slice(0, 80);
   return (
     <ActionForm
       action={saveProject}
