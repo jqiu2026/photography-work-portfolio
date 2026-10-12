@@ -3,7 +3,7 @@
 Living status. Update at every milestone. Newest entries at the top of "Log".
 
 **Branch:** `feat/custom-ui-cms`  **Live view:** http://localhost:3000/_progress
-**Current phase:** 1  **Current milestone:** M8  **State:** M7b done (component gallery on /_progress arrives with M3)
+**Current phase:** 2  **Current milestone:** M10  **State:** Phase 1 complete (see PHASE-1-SUMMARY.md); Phase 2 starting
 
 ## Phase 1: UI package and redesign
 - [x] M1 pnpm workspace (`apps/web`, `apps/photos`, `apps/docs`, `packages/ui`, `packages/sites`, `packages/config`), dev on :3000/:3002/:3001, `/_progress` live page
@@ -14,8 +14,8 @@ Living status. Update at every milestone. Newest entries at the top of "Log".
 - [x] M6 Hub home rebuilt (profile-forward showpiece, preview cards for photos/music/flying)
 - [x] M7 Remaining hub pages (about, work, writing, connect) + legal pages migrated, Once UI removed
 - [x] M7b Photography site (`apps/photos`), music and flying sites, `proxy.ts` host routing, site switcher
-- [ ] M8 Perf, a11y, tests, docs completeness, open-source hygiene
-- [ ] M9 Acceptance run (incl. not-a-StuyAviators-lookalike check, legal checklist) + `PHASE-1-SUMMARY.md`
+- [x] M8 Perf, a11y, tests, docs completeness, open-source hygiene
+- [x] M9 Acceptance run (incl. not-a-StuyAviators-lookalike check, legal checklist) + `PHASE-1-SUMMARY.md`
 
 ## Phase 2: CMS and protection
 - [ ] M10 DB (Drizzle/Neon/PGlite), shared packages (`db`, `auth`, `storage`, `protect`), storage providers, env handling
@@ -35,6 +35,7 @@ Living status. Update at every milestone. Newest entries at the top of "Log".
 
 
 ## Log
+- 2026-10-12: M8 + M9 done, **Phase 1 complete** (see PHASE-1-SUMMARY.md). Design reworked on owner feedback (neutral palette, Instrument Sans, square shapes, full-bleed/type-first heroes, glitch tiles, colour/mono compare) and the hub hero redesigned after the StuyAviators side-by-side. Tests: UI 38, registry 5, docs coverage 4, e2e 149 (every route x light/dark x 390/1440, axe, keyboard, reduced motion, mobile menu) all green. Lighthouse mobile: hub 94/100/96/100, about 98, project 93, photos 95, portfolio 91, flying 96 (perf/a11y/bp/seo). Bugs found by the gates and fixed: reduced-motion `useScroll` ref error, Progress aria clamp, duplicate Gallery keys, focus return after the lazy mobile menu, image LCP delay (JS-gated fade). JS budget gap recorded honestly in the summary. Open-source hygiene complete (dist build keeps "use client", Vite example from tarball, rename script tested, licenses report, CI without publish).
 - 2026-10-12: M7b done. `apps/photos` (:3002): cinematic home (WebGL hero, justified gallery, subject grid), /portfolio and /portfolio/[slug] (masonry + lightbox), /about, /book (mailto form), /client (ShootProof URL via env), robots/sitemap; cinema-dark preset by default. Music and flying built on the hub app as route groups `(music)`/`(flying)` with their own presets, on a shared interest template; only real facts shown (Part 107, StuyAviators Instagram, cockpit and airliner photos), everything else dev-only `TODO(owner)` and hidden in production. `src/proxy.ts` host routing verified (music./flying. rewrite, prefixed paths redirect, production redirects /music -> subdomain). Shared chrome (SiteShell, SiteHeader with site switcher, Footer with More from me, ContactForm) lives in `packages/sites`; legal pages are hub-canonical with absolute links from the other sites. Gallery originals moved (git mv, not deleted) from `apps/web/public/images/gallery` to `apps/photos/public/images/gallery`.
 - 2026-10-12: M7 done. Hub pages on the new UI: /about (profile, timeline, skills from the original real copy), /work + /work/[slug] (cover, credits, MDX, lightbox gallery, next/prev, password gate for `protected: true`), /writing + posts (+ `/writing/rss.xml`, reading progress), /connect (socials + mailto form with honeypot), /privacy /terms /licensing /accessibility (drafts, marked for review), security.txt, robots (AI crawler opt-out), sitemap, redirects (/blog, /contact, /gallery->photos, /api/rss). Once UI fully removed (`@once-ui-system/core`, sass, react-icons, legacy components, OG fetch/proxy routes dropped as SSRF surface). Biome configured; lint, typecheck, build pass. `.agents` replaced by `AGENTS.md`.
 - 2026-10-12: M6 done. Hub home (`apps/web/src/app/(site)/page.tsx`): WebGL hero over a real photo, profile row (portrait, headline, socials, `Person` JSON-LD), scroll-highlight intro, pinned scene with scroll-scrubbed image sequence + step text, preview cards for photos/music/flying, horizontal showcase of real projects, latest writing, closing CTA, footer with More from me + legal links. App is split into route groups: `(site)` = new UI, `(legacy)` = Once UI pages still to migrate in M7. MDX content moved to `src/content/{projects,posts}`. Optimized derivatives for gallery/projects/blogs/avatar in `public/opt/*` (originals untouched). Screenshots: `screenshots/m1/home-*.png`. Placeholder facts are dev-only `TODO(owner)` and hidden in production.
