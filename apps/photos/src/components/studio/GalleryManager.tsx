@@ -33,6 +33,7 @@ import {
   unpublishAction,
 } from "@/app/studio/gallery-actions";
 import { GalleryAlbums } from "./GalleryAlbums";
+import { GalleryLinkPanel } from "./GalleryLinkPanel";
 import { GalleryShopPanel } from "./GalleryShopPanel";
 import { GalleryUploader } from "./GalleryUploader";
 import { Frame, useAct } from "./StudioFrame";
@@ -172,7 +173,6 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
   const [copied, setCopied] = useState("");
   const [origin, setOrigin] = useState("");
   useEffect(() => setOrigin(location.origin), []);
-  const link = `${origin}/client`;
   const copy = async (text: string, what: string) => {
     try {
       await navigator.clipboard.writeText(text);
@@ -746,18 +746,7 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
           hidden={tab !== "shop"}
           className="gm-panel"
         >
-          <GalleryShopPanel
-            galleryId={gid}
-            link={{ slug: data.slug, visibility: data.visibility }}
-            shop={data.shop}
-            orders={data.orders}
-            live={live}
-            origin={origin}
-            run={run}
-            pending={pending}
-            copy={copy}
-            copied={copied}
-          />
+          <GalleryShopPanel galleryId={gid} shop={data.shop} orders={data.orders} run={run} pending={pending} />
         </section>
 
         {/* ---------------- Share ---------------- */}
@@ -768,35 +757,18 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
           hidden={tab !== "share"}
           className="gm-panel"
         >
-          <div className="gm-block">
-            <h2>Client link</h2>
-            <p className="st-note">
-              Clients open it, then enter the passcode.{" "}
-              {live ? "The gallery is live." : "Publish the gallery before sending this."}
-            </p>
-            <div className="gm-row">
-              <code>{link}</code>
-              <button type="button" className="st-btn st-btn--ghost" onClick={() => copy(link, "Link copied")}>
-                Copy link
-              </button>
-              <button
-                type="button"
-                className="st-btn st-btn--ghost"
-                disabled={pending}
-                onClick={() => run(() => sendGalleryLinkAction(gid))}
-              >
-                Email {data.clientName || "the client"}
-              </button>
-            </div>
-            {data.clientEmail ? (
-              <p className="st-note">Goes to {data.clientEmail}. The email has the link, not the passcode.</p>
-            ) : null}
-            {copied ? (
-              <p className="st-note" role="status">
-                {copied}
-              </p>
-            ) : null}
-          </div>
+          <GalleryLinkPanel
+            galleryId={gid}
+            link={{ slug: data.slug, visibility: data.visibility }}
+            live={live}
+            origin={origin}
+            clientName={data.clientName}
+            clientEmail={data.clientEmail}
+            run={run}
+            pending={pending}
+            copy={copy}
+            copied={copied}
+          />
           <div className="gm-block">
             <h2>Passcode</h2>
             <p className="st-note">

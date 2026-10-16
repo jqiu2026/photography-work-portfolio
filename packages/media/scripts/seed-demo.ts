@@ -394,7 +394,7 @@ if (qs[0])
     .catch(() => {});
 
 console.log(
-  "Sample data added. Client galleries open at /client with the passcodes sample-demo-1 (published) and sample-demo-2. Public links: /g/okafor-wedding and /g/reyes-family (locked album passcode: formals-2026).",
+  "Sample data added. Galleries have their own links; the passcodes are sample-demo-1 and sample-demo-2. Public links: /g/okafor-wedding and /g/reyes-family (locked album passcode: formals-2026).",
 );
 await enrichGalleries();
 process.exit(0);

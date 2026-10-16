@@ -17,30 +17,29 @@ import { resolveRef } from "@/lib/portal-links";
 export type ClientResult = { ok: true; message?: string } | { ok: false; error: string };
 const no = (error: string): ClientResult => ({ ok: false, error });
 
-export async function openGalleryAction(_prev: ClientResult | null, formData: FormData): Promise<ClientResult> {
+async function sessionSlug(): Promise<string | null> {
   const db = getDb();
-  if (!db) return no("Galleries are not available right now.");
-  const passcode = String(formData.get("passcode") ?? "");
-  if (!passcode.trim()) return no("Enter your passcode.");
-  const ip = await requestIpHash();
-  const rl = await hitRateLimit(db, `portal:${ip}`, Number(process.env.PORTAL_PASSCODE_LIMIT) || 8, 600);
-  if (!rl.allowed) return no("Too many tries. Wait a few minutes and try again.");
-  // Expired and archived galleries are found too: the passcode proves who you are, and the gallery page offers an extension.
-  const g = await gal.findGalleryByPasscode(db, passcode);
-  if (!g) return no("That passcode doesn't match a gallery.");
-  await startPortalSession(g.id);
-  redirect("/client/gallery");
+  const session = await portalSession();
+  if (!db || !session) return null;
+  const [g] = await db
+    .select({ slug: schema.studioGalleries.slug })
+    .from(schema.studioGalleries)
+    .where(eq(schema.studioGalleries.id, session.g));
+  return g?.slug ?? null;
 }
 
+/** Ends the viewer's session and returns to the gallery's front page (where the passcode is asked for again if it is private). */
 export async function leaveGalleryAction() {
+  const slug = await sessionSlug();
   await endPortalSession();
-  redirect("/client");
+  redirect(slug ? `/g/${slug}` : "/");
 }
 
 /** Used when the gallery closes itself after idle time. */
 export async function idleLeaveAction() {
+  const slug = await sessionSlug();
   await endPortalSession();
-  redirect("/client?idle=1");
+  redirect(slug ? `/g/${slug}?idle=1` : "/");
 }
 
 export async function toggleFavoriteAction(mediaId: string, galleryId?: string): Promise<ClientResult> {

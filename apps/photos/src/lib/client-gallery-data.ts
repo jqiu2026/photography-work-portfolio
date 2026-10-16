@@ -1,6 +1,7 @@
 import "server-only";
 import { type Database, schema } from "@jerryqiu/db";
 import * as gal from "@jerryqiu/db/galleries";
+import { getBrand, publicBrand } from "@jerryqiu/db/brand";
 import { type GalleryStyle, readStyle } from "@jerryqiu/db/gallery-security";
 import { type GalleryShop, listProducts, readShop } from "@jerryqiu/db/gallery-shop";
 import { MOCK_CATALOG } from "@jerryqiu/prints";
@@ -13,6 +14,7 @@ export type ClientGalleryData = {
   /** client: the person the gallery was delivered to (proofing, selections). visitor: the public link (view and shop). */
   role: "client" | "visitor";
   slug: string | null;
+  brand: { name: string; website: string; instagram: string; email: string; phone: string; address: string };
   shop: {
     enabled: boolean;
     sellDigital: boolean;
@@ -99,6 +101,7 @@ export async function loadClientGallery(db: Database, a: GalleryAccess): Promise
   return {
     role: a.role,
     slug: g2?.slug ?? null,
+    brand: publicBrand(await getBrand(db)),
     shop: {
       enabled: shopCfg.enabled,
       sellDigital: shopCfg.sellDigital,

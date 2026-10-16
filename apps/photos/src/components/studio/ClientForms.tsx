@@ -3,7 +3,6 @@
 import { useActionState, useState, useTransition } from "react";
 import {
   leaveGalleryAction,
-  openGalleryAction,
   payInvoiceAction,
   signContractAction,
   toggleFavoriteAction,
@@ -17,25 +16,6 @@ const Err = ({ r }: { r: ClientResult | null }) =>
       {r.error}
     </p>
   ) : null;
-
-export function PassForm() {
-  const [r, action, pending] = useActionState(openGalleryAction, null);
-  // controlled inputs: React 19 resets uncontrolled fields after every form action, which would wipe a typo'd passcode
-  const [pass, setPass] = useState("");
-  return (
-    <form action={action} className="st-card st-form" aria-labelledby="pf">
-      <h2 id="pf">Open your gallery</h2>
-      <label>
-        Passcode
-        <input name="passcode" value={pass} onChange={(e) => setPass(e.target.value)} autoComplete="off" required />
-      </label>
-      <Err r={r} />
-      <button className="st-btn" type="submit" disabled={pending}>
-        Open my gallery
-      </button>
-    </form>
-  );
-}
 
 export function LeaveButton() {
   return (

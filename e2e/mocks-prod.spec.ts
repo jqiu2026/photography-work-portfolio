@@ -16,7 +16,6 @@ const mockRoutes = [
   `${flying}/map`,
   `${photos}/studio/overview`,
   `${photos}/studio/shoots`,
-  `${photos}/client/gallery`,
   `${photos}/client/sign/not-a-real-token`,
   `${photos}/client/pay/not-a-real-token`,
 ];
@@ -30,10 +29,12 @@ for (const url of mockRoutes) {
   });
 }
 
-test("the client portal entry shows no passcode form without a database", async ({ page }) => {
-  await page.goto(`${photos}/client`, { waitUntil: "networkidle" });
-  await expect(page.getByRole("note", { name: "Mock notice" })).toHaveCount(0);
-  await expect(page.getByLabel("Passcode", { exact: true })).toHaveCount(0);
+test("the old client entry points send the visitor home", async ({ request }) => {
+  for (const path of ["/client", "/client/login", "/client/home", "/client/gallery"]) {
+    const res = await request.get(`${photos}${path}`, { maxRedirects: 0 });
+    expect([307, 308]).toContain(res.status());
+    expect(new URL(res.headers().location ?? "", photos).pathname).toBe("/");
+  }
 });
 
 test("music and flying homes link to no mock routes in production", async ({ page }) => {

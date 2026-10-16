@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 import sharp from "sharp";
-import { newGallery, publishOpenGallery } from "./gallery-helpers";
+import { clientOpen, enterGallery, newGallery, publishOpenGallery } from "./gallery-helpers";
 import { detectViewerCode } from "../packages/media/src/forensic";
 
 /** Gallery manager: bulk upload with dedupe, albums, settings, proofing, selection limit, PIN-gated downloads, ZIP, expiry. */
@@ -8,6 +8,7 @@ const PHOTOS = "http://localhost:3302";
 const uid = Date.now().toString(36);
 const email = `gal-${uid}@example.test`;
 let PASS = "";
+let SLUG = "";
 test.describe.configure({ mode: "serial" });
 const slow = expect.configure({ timeout: 25_000 });
 const inForm = (page: import("@playwright/test").Page, name: string) => page.getByRole("form", { name });
@@ -51,6 +52,7 @@ test("owner creates a client, a job and an empty gallery, then uploads photograp
 
   const made = await newGallery(page, PHOTOS, `Gal job ${uid}`);
   PASS = made.passcode;
+  SLUG = made.slug;
   galleryUrl = made.url;
 
   await page
@@ -128,16 +130,14 @@ test("the client sees albums, a welcome and the accent; picks within the limit, 
 }) => {
   const ctx = await browser.newContext();
   const c = await ctx.newPage();
-  await c.goto(`${PHOTOS}/client`, { waitUntil: "networkidle" });
-  await c.getByLabel("Passcode").fill(PASS);
-  await c.getByRole("button", { name: "Open my gallery" }).click();
-  await expect(c).toHaveURL(/\/client\/gallery$/, { timeout: 25_000 });
+  await clientOpen(c, PHOTOS, SLUG, PASS);
   await expect(c.getByText("Thank you for coming. Enjoy.")).toBeVisible();
   await expect(c.locator("[data-protected='strict'] img[src^='blob:']").first()).toBeVisible({ timeout: 25_000 });
   await expect(c.locator("img[src*='/api/img/']")).toHaveCount(0);
   await expect(c.getByRole("button", { name: /^Highlights/ })).toBeVisible();
   await c.getByRole("button", { name: /^Highlights/ }).click();
   await expect(c.locator("li[data-media-id]")).toHaveCount(1);
+  await c.getByRole("button", { name: /All albums/ }).click();
   await c.getByRole("button", { name: /^All photos/ }).click();
   await expect(c.locator("li[data-media-id]")).toHaveCount(3);
 
@@ -178,12 +178,14 @@ test("downloads need the PIN; web size is a JPEG carrying the viewer's invisible
 }) => {
   const ctx = await browser.newContext({ storageState: `/tmp/gal-${uid}.json` });
   const c = await ctx.newPage();
-  await c.goto(`${PHOTOS}/client/gallery`, { waitUntil: "networkidle" });
+  await c.goto(`${PHOTOS}/g/${SLUG}`, { waitUntil: "networkidle" });
+  await enterGallery(c);
+  await c.getByRole("button", { name: /^All photos/ }).click();
   // before the PIN: no download links and the route refuses
   await expect(c.getByRole("link", { name: "Web size" })).toHaveCount(0);
   const m = (await c.locator("li[data-media-id]").first().getAttribute("data-media-id")) as string;
   expect((await c.request.get(`${PHOTOS}/client/download?m=${m}&size=full`)).status()).toBe(403);
-  await c.getByRole("button", { name: "Download", exact: true }).click();
+  await c.getByRole("button", { name: "Download all", exact: true }).click();
   const unlock = c.getByRole("dialog", { name: "Downloads" });
   await unlock.getByLabel("Download PIN").fill("0000");
   await unlock.getByRole("button", { name: "Unlock downloads" }).click();
@@ -259,7 +261,7 @@ test("an archived gallery offers the client an extension; paying it brings the g
 
   const ctx = await browser.newContext();
   const c = await ctx.newPage();
-  await c.goto(`${PHOTOS}/client`, { waitUntil: "networkidle" });
+  await c.goto(`${PHOTOS}/g/${SLUG}`, { waitUntil: "networkidle" });
   await c.getByLabel("Passcode").fill(PASS);
   await c.getByRole("button", { name: "Open my gallery" }).click();
   await expect(c.getByText(/has been archived/)).toBeVisible({ timeout: 25_000 });
@@ -278,7 +280,10 @@ test("an archived gallery offers the client an extension; paying it brings the g
   await c.getByLabel("Security code").fill("123");
   await c.getByRole("button", { name: /^Pay/ }).click();
   await slow(c.getByRole("status")).toContainText("Receipt rcpt_mock_");
-  await c.goto(`${PHOTOS}/client/gallery`, { waitUntil: "networkidle" });
+  await c.goto(`${PHOTOS}/g/${SLUG}`, { waitUntil: "networkidle" });
+  await enterGallery(c);
+  const all = c.getByRole("button", { name: /^All photos/ });
+  if (await all.isVisible().catch(() => false)) await all.click();
   await expect(c.locator("li[data-media-id]")).toHaveCount(3);
   await ctx.close();
 });

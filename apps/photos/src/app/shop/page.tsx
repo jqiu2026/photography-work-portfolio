@@ -33,7 +33,8 @@ export default async function Shop() {
           </li>
         </ol>
         <p>
-          If you were given a passcode, <Link href="/client">enter it here</Link> to proof and download what is yours.
+          Your photographer sends the link to your gallery. Open it, and use the passcode you were given to proof and
+          download what is yours.
         </p>
       </section>
       {galleries.length ? (

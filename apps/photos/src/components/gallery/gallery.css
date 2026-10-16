@@ -71,6 +71,71 @@
 .gx[data-font="display"] {
   --gx-head: var(--font-gx-display, Georgia, serif);
 }
+.gx[data-font="inter"] {
+  --gx-font: var(--font-gx-inter, system-ui, sans-serif);
+  --gx-head: var(--font-gx-inter, system-ui, sans-serif);
+}
+.gx[data-font="figtree"] {
+  --gx-font: var(--font-gx-figtree, system-ui, sans-serif);
+  --gx-head: var(--font-gx-figtree, system-ui, sans-serif);
+}
+.gx[data-font="sora"] {
+  --gx-font: var(--font-gx-sora, system-ui, sans-serif);
+  --gx-head: var(--font-gx-sora, system-ui, sans-serif);
+}
+.gx[data-font="urbanist"] {
+  --gx-font: var(--font-gx-urbanist, system-ui, sans-serif);
+  --gx-head: var(--font-gx-urbanist, system-ui, sans-serif);
+}
+.gx[data-font="montserrat"] {
+  --gx-font: var(--font-gx-montserrat, system-ui, sans-serif);
+  --gx-head: var(--font-gx-montserrat, system-ui, sans-serif);
+}
+.gx[data-font="raleway"] {
+  --gx-font: var(--font-gx-raleway, system-ui, sans-serif);
+  --gx-head: var(--font-gx-raleway, system-ui, sans-serif);
+}
+.gx[data-font="lato"] {
+  --gx-font: var(--font-gx-lato, system-ui, sans-serif);
+  --gx-head: var(--font-gx-lato, system-ui, sans-serif);
+}
+.gx[data-font="roboto"] {
+  --gx-font: var(--font-gx-roboto, system-ui, sans-serif);
+  --gx-head: var(--font-gx-roboto, system-ui, sans-serif);
+}
+.gx[data-font="cabin"] {
+  --gx-font: var(--font-gx-cabin, system-ui, sans-serif);
+  --gx-head: var(--font-gx-cabin, system-ui, sans-serif);
+}
+.gx[data-font="quicksand"] {
+  --gx-font: var(--font-gx-quicksand, system-ui, sans-serif);
+  --gx-head: var(--font-gx-quicksand, system-ui, sans-serif);
+}
+.gx[data-font="lora"] {
+  --gx-font: var(--font-gx-lora, system-ui, sans-serif);
+  --gx-head: var(--font-gx-lora, system-ui, sans-serif);
+}
+.gx[data-font="merriweather"] {
+  --gx-font: var(--font-gx-merriweather, system-ui, sans-serif);
+  --gx-head: var(--font-gx-merriweather, system-ui, sans-serif);
+}
+.gx[data-font="spectral"] {
+  --gx-font: var(--font-gx-spectral, system-ui, sans-serif);
+  --gx-head: var(--font-gx-spectral, system-ui, sans-serif);
+}
+.gx[data-font="oswald"] {
+  --gx-font: var(--font-gx-oswald, system-ui, sans-serif);
+  --gx-head: var(--font-gx-oswald, system-ui, sans-serif);
+}
+.gx[data-font="bebas"] {
+  --gx-head: var(--font-gx-bebas, system-ui, sans-serif);
+}
+.gx[data-font="caveat"] {
+  --gx-head: var(--font-gx-caveat, system-ui, sans-serif);
+}
+.gx[data-font="dancing"] {
+  --gx-head: var(--font-gx-dancing, system-ui, sans-serif);
+}
 .gx[data-gap="tight"] {
   --gx-gap: .2rem;
 }
@@ -1014,4 +1079,226 @@ html:has(.gx),
 body:has(.gx) {
   margin: 0;
   background: #000;
+}
+
+.gx-gate {
+  width: min(26rem, 100%);
+  text-align: center;
+}
+.gx-gate h1 {
+  margin: 0;
+  font-size: clamp(1.8rem, 6vw, 2.6rem);
+}
+.gx-gate label {
+  text-align: left;
+}
+
+/* ---------- the quiet frame: banner, top bar with plain tabs, one row of actions ---------- */
+.gx-banner {
+  margin: 0;
+  padding: .65rem 1rem;
+  text-align: center;
+  font-size: .88rem;
+  background: color-mix(in oklab, var(--gx-accent) 22%, var(--gx-bg));
+}
+.gx-banner a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.gx-top {
+  position: sticky;
+  top: 0;
+  z-index: 25;
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 4vw, 3rem);
+  padding: 0 clamp(1rem, 3vw, 2.5rem);
+  min-height: 3.8rem;
+  background: color-mix(in oklab, var(--gx-bg-custom, var(--gx-bg)) 92%, transparent);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--gx-line);
+}
+.gx-top__brand {
+  font-family: var(--gx-head);
+  font-size: .95rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.gx-top__tabs {
+  display: flex;
+  gap: .2rem;
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.gx-top__tabs button {
+  position: relative;
+  flex-shrink: 0;
+  min-height: 3.8rem;
+  padding: 0 .9rem;
+  border: 0;
+  background: none;
+  color: var(--gx-muted);
+  font-size: .95rem;
+  cursor: pointer;
+  transition: color .2s;
+}
+.gx-top__tabs button:hover,
+.gx-top__tabs button[aria-current="page"] {
+  color: var(--gx-fg);
+}
+.gx-top__tabs button[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  left: .9rem;
+  right: .9rem;
+  bottom: 0;
+  height: 2px;
+  background: var(--gx-accent);
+}
+.gx-top__tabs small {
+  margin-left: .25rem;
+  opacity: 0.6;
+  font-size: .72rem;
+}
+.gx-top__right {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  margin-left: auto;
+}
+.gx-cart {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+}
+.gx-cart b {
+  position: absolute;
+  top: 2px;
+  right: 0;
+  min-width: 1.15rem;
+  height: 1.15rem;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--gx-accent);
+  color: var(--gx-on-accent);
+  font-size: .68rem;
+}
+.gx-subbar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1.4rem;
+  padding: .25rem clamp(1rem, 3vw, 2.5rem);
+  border-bottom: 1px solid var(--gx-line);
+}
+.gx-subbar button {
+  min-height: 3rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--gx-muted);
+  font-size: .88rem;
+  cursor: pointer;
+  transition: color .2s;
+}
+.gx-subbar button:hover:not(:disabled) {
+  color: var(--gx-fg);
+}
+.gx-subbar button:disabled {
+  opacity: 0.4;
+}
+.gx-title {
+  margin: 0 0 1.4rem;
+}
+.gx-title h1 {
+  margin: 0;
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.gx-title .gx-count {
+  margin: .4rem 0 0;
+  font-size: .78rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--gx-muted);
+}
+.gx-title .gx-welcome {
+  max-width: 60ch;
+  color: var(--gx-muted);
+}
+.gx-title .gx-link {
+  display: inline-block;
+  margin-top: .7rem;
+  color: var(--gx-muted);
+  font-size: .85rem;
+}
+.gx-rich p {
+  margin: 0 0 .9rem;
+  line-height: 1.6;
+}
+.gx-rich ul {
+  margin: 0 0 .9rem;
+  padding-left: 1.2rem;
+  line-height: 1.6;
+}
+.gx-rich a,
+.gx-about a {
+  color: var(--gx-link, var(--gx-fg));
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.gx-about {
+  max-width: 40rem;
+}
+.gx-about h1 {
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  margin: 0 0 1rem;
+}
+.gx-about ul {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: .4rem;
+}
+.gx-intro .gx-hero {
+  min-height: 100dvh;
+}
+.gx-foot a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+@media (max-width: 700px) {
+  .gx-top {
+    flex-wrap: wrap;
+    gap: .2rem 1rem;
+    padding-top: .6rem;
+  }
+  .gx-top__tabs button {
+    min-height: 2.6rem;
+  }
+  .gx-top__tabs {
+    order: 3;
+    flex-basis: 100%;
+  }
+  .gx-subbar {
+    justify-content: space-between;
+  }
+}
+
+.gx-main .gx-subs {
+  padding: 0 0 1.1rem;
+}
+.gx-album-note {
+  margin-top: .2rem;
 }

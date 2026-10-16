@@ -6,5 +6,4 @@ export const nav = [
   { label: "Packages", href: "/packages" },
   { label: "Features", href: "/features" },
   { label: "Book", href: "/book" },
-  { label: "Clients", href: "/client" },
 ];

@@ -58,7 +58,7 @@ export async function afterPayment(db: Database, invoiceId: string) {
           appt.startsAt,
         ),
         detail: "Your deposit is paid and the time is yours. Reply to this email if anything changes.",
-        link: `${getSite("photos").url}/client`,
+        link: getSite("photos").url,
       },
       { related: { type: "appointment", id: appt.id } },
     );

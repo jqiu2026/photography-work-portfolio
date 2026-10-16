@@ -191,9 +191,10 @@ export const features: Feature[] = [
   {
     id: "F-61",
     group: "Deliver",
-    title: "Password, PIN and magic-link access modes",
+    title:
+      "Passcode, download PIN and per-album passcodes (clients open their gallery from its own link; there is no client login)",
     priority: "P1",
-    status: "preview",
+    status: "live",
   },
   {
     id: "F-62",
@@ -232,7 +233,6 @@ export const features: Feature[] = [
     priority: "P1",
     status: "live",
   },
-  { id: "F-68", group: "Deliver", title: "Delivery status page with ETA", priority: "P2", status: "live" },
   {
     id: "F-69",
     group: "Deliver",
@@ -270,27 +270,6 @@ export const features: Feature[] = [
     group: "Client portal",
     title: "One login: password, magic link, passcode",
     priority: "P1",
-    status: "live",
-  },
-  {
-    id: "F-81",
-    group: "Client portal",
-    title: "Portal home: jobs, galleries, contracts, invoices, questionnaires, quotes, messages (files with M14)",
-    priority: "P1",
-    status: "live",
-  },
-  {
-    id: "F-82",
-    group: "Client portal",
-    title: "Email thread and messages visible in portal; replies routed to a real inbox",
-    priority: "P1",
-    status: "live",
-  },
-  {
-    id: "F-83",
-    group: "Client portal",
-    title: "Self-reschedule and cancel within policy",
-    priority: "P2",
     status: "live",
   },
   { id: "F-84", group: "Client portal", title: "Notification preferences", priority: "P2", status: "live" },

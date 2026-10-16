@@ -14,7 +14,7 @@ const usd = (c: number) => new Intl.NumberFormat("en-US", { style: "currency", c
 /** What each rule says. Reminders link to the portal sign-in (it always works, by password or emailed link). */
 function content(rule: auto.RuleKey, d: auto.Due, custom: string) {
   const base = getSite("photos").url;
-  const portal = `${base}/client/login`;
+  const portal = base;
   const note = custom.trim();
   const m: Record<auto.RuleKey, { title: string; summary: string; link: string; linkLabel: string }> = {
     "invoice-due": {
@@ -38,7 +38,7 @@ function content(rule: auto.RuleKey, d: auto.Due, custom: string) {
     "gallery-expiring": {
       title: `Your gallery expires on ${d.date}`,
       summary: `"${d.title}" ends on ${d.date}. Download what you want to keep, or extend access from the gallery page.`,
-      link: `${base}/client`,
+      link: base,
       linkLabel: "Open my gallery",
     },
     "post-shoot-thanks": {

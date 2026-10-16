@@ -14,8 +14,9 @@ import type { GallerySecurity } from "@jerryqiu/db/gallery-security";
 export function GalleryGuard({
   security,
   galleryId,
+  slug,
   code,
-}: { security: GallerySecurity; galleryId?: string; code: string }) {
+}: { security: GallerySecurity; galleryId?: string; slug?: string; code: string }) {
   const options = useMemo(
     () => ({
       blurOnLeave: security.blurOnLeave,
@@ -24,6 +25,9 @@ export function GalleryGuard({
       blockPrint: security.blockPrint,
       detectDevtools: security.detectDevtools,
       holdToView: security.holdToView,
+      title: security.protectTitle || undefined,
+      message: security.protectMessage || undefined,
+      mobileHalfBlur: security.mobileHalfBlur,
       onEvent: (e: { kind: string; combo: string }) => {
         fetch("/api/client/security-event", {
           method: "POST",
@@ -33,12 +37,12 @@ export function GalleryGuard({
         })
           .then((r) => r.json())
           .then((r: { locked?: boolean }) => {
-            if (r.locked) location.assign("/client?locked=1");
+            if (r.locked) location.assign(slug ? `/g/${slug}?locked=1` : "/");
           })
           .catch(() => {});
       },
     }),
-    [security, galleryId],
+    [security, galleryId, slug],
   );
 
   useEffect(() => {

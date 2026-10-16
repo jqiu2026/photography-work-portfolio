@@ -11,7 +11,6 @@ const FOOTER = [
       ["Packages", "/packages"],
       ["How it works", "/how-it-works"],
       ["Features", "/features"],
-      ["Shop: prints and downloads", "/shop"],
       ["About prints", "/prints"],
       ["FAQ", "/faq"],
       ["Contact", "/contact"],
@@ -19,12 +18,11 @@ const FOOTER = [
     ],
   },
   {
-    title: "Clients",
+    title: "Galleries",
     links: [
-      ["Open a gallery", "/client"],
-      ["Sign in to the portal", "/client/login"],
-      ["Portal tour", "/client-portal"],
+      ["Shop: prints and downloads", "/shop"],
       ["About galleries", "/galleries"],
+      ["How a gallery works", "/client-portal"],
     ],
   },
   {

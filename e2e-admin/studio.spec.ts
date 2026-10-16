@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 import sharp from "sharp";
-import { newGallery, publishOpenGallery, uploadPhotos } from "./gallery-helpers";
+import { enterGallery, newGallery, publishOpenGallery, uploadPhotos } from "./gallery-helpers";
 import { signStripePayload } from "../packages/payments/src/index";
 
 /**
@@ -13,6 +13,7 @@ const PHOTOS = "http://localhost:3302";
 const uid = Date.now().toString(36);
 const email = `client-${uid}@example.test`;
 let galleryPass = "";
+let gallerySlug = "";
 
 test.describe.configure({ mode: "serial" });
 // the first call of each server action compiles it in the dev server
@@ -63,6 +64,7 @@ test("owner creates a client, a job, a gallery with photographs, a contract and 
     .toBuffer();
   const made = await newGallery(page, PHOTOS, `E2E job ${uid}`);
   galleryPass = made.passcode;
+  gallerySlug = made.slug;
   await uploadPhotos(page, [{ name: `studio-${uid}.jpg`, mimeType: "image/jpeg", buffer }]);
   await publishOpenGallery(page);
 });
@@ -71,13 +73,13 @@ test("client opens the gallery with the passcode (wrong one refused), sees stric
   page,
   request,
 }) => {
-  await page.goto(`${PHOTOS}/client`, { waitUntil: "networkidle" });
+  await page.goto(`${PHOTOS}/g/${gallerySlug}`, { waitUntil: "networkidle" });
   await page.getByLabel("Passcode").fill("wrong-code");
   await page.getByRole("button", { name: "Open my gallery" }).click();
   await expectSlow(page.locator("p[role=alert]")).toContainText("doesn't match");
   await page.getByLabel("Passcode").fill(galleryPass.toUpperCase());
   await page.getByRole("button", { name: "Open my gallery" }).click();
-  await expectSlow(page).toHaveURL(/\/client\/gallery$/);
+  await enterGallery(page);
   await expectSlow(page.getByRole("heading", { level: 1 })).toContainText(`E2E job ${uid}`);
   // protected: no file URL in the page source, the image loads through a token as a blob
   const html = await page.content();
@@ -96,10 +98,10 @@ test("client opens the gallery with the passcode (wrong one refused), sees stric
   );
   if (id) expect((await request.get(`${PHOTOS}/api/img/${id}?w=960`)).status()).toBeGreaterThanOrEqual(400);
   // leaving the gallery ends the session
-  await page.getByRole("button", { name: "Close gallery" }).click();
-  await expectSlow(page).toHaveURL(/\/client$/);
-  await page.goto(`${PHOTOS}/client/gallery`);
-  await expectSlow(page).toHaveURL(/\/client$/);
+  await page.getByRole("button", { name: "Sign out" }).click();
+  await expectSlow(page.getByLabel("Passcode")).toBeVisible();
+  await page.goto(`${PHOTOS}/g/${gallerySlug}`, { waitUntil: "networkidle" });
+  await expectSlow(page.getByLabel("Passcode")).toBeVisible();
 });
 
 test("contract: one-time link, name and agreement required, signed once", async ({ page }) => {

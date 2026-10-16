@@ -30,7 +30,7 @@ export async function emailGalleryLink(db: Database, galleryId: string, opts: { 
     {
       name: row.client.name,
       title: row.gallery.title,
-      link: `${getSite("photos").url}/client`,
+      link: `${getSite("photos").url}${row.gallery.slug ? `/g/${row.gallery.slug}` : ""}`,
       linkLabel: "Open your gallery",
     },
     { related: { type: "gallery", id: row.gallery.id } },

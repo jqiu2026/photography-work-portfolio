@@ -13,8 +13,6 @@ import { QuotesView } from "@/components/studio/QuotesView";
 import { FormsView } from "@/components/studio/FormsView";
 import { BillingView } from "@/components/studio/BillingView";
 import * as bill from "@jerryqiu/db/billing";
-import { PortalAdminView } from "@/components/studio/PortalAdminView";
-import * as portalDb from "@jerryqiu/db/portal";
 import { AutomationsView, NotificationsView, TasksView } from "@/components/studio/OpsViews";
 import * as autoDb from "@jerryqiu/db/automation";
 import { OrdersView } from "@/components/studio/OrdersView";
@@ -179,46 +177,6 @@ export default async function StudioSection({ params }: { params: Promise<{ sect
               taxLabel: settings.taxLabel,
               taxIsSample: settings.taxIsSample,
             },
-          }}
-        />
-      </Shell>
-    );
-  }
-  if (section === "portal") {
-    const [threadRows, clients, jobs, accounts] = await Promise.all([
-      portalDb.recentThreads(db),
-      st.listClients(db),
-      st.listJobs(db),
-      db.select().from(schema.clientAccounts),
-    ]);
-    const byClient = new Map<string, typeof threadRows>();
-    for (const r of threadRows) byClient.set(r.client.id, [...(byClient.get(r.client.id) ?? []), r]);
-    const acct = new Map(accounts.map((a) => [a.clientId, a]));
-    return (
-      <Shell>
-        <PortalAdminView
-          user={user.name ?? user.email ?? "owner"}
-          data={{
-            threads: [...byClient].map(([clientId, rows]) => ({
-              clientId,
-              client: rows[0].client.name,
-              unread: rows.filter((r) => r.message.direction === "in" && !r.message.readAt).length,
-              messages: [...rows].reverse().map((r) => ({
-                id: r.message.id,
-                direction: r.message.direction,
-                body: r.message.body,
-                at: r.message.createdAt.toISOString().slice(0, 16).replace("T", " "),
-              })),
-            })),
-            clients: clients.map((c) => ({
-              id: c.id,
-              name: c.name,
-              email: c.email,
-              hasAccount: acct.has(c.id),
-              hasPassword: Boolean(acct.get(c.id)?.passwordHash),
-              lastLogin: acct.get(c.id)?.lastLoginAt?.toISOString().slice(0, 10) ?? null,
-            })),
-            jobs: jobs.map((r) => ({ id: r.job.id, title: r.job.title, status: r.job.status, eta: r.job.deliveryEta })),
           }}
         />
       </Shell>

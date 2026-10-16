@@ -1,6 +1,6 @@
 import { expect, type Page, test } from "@playwright/test";
 import sharp from "sharp";
-import { newGallery, publishOpenGallery, uploadPhotos } from "./gallery-helpers";
+import { clientOpen, newGallery, publishOpenGallery, uploadPhotos } from "./gallery-helpers";
 
 /** Per-gallery security and look: capture-attempt keys, strikes and lock-outs, hold to view, overlay, idle, download cap, styling. */
 const PHOTOS = "http://localhost:3302";
@@ -10,6 +10,7 @@ test.describe.configure({ mode: "serial" });
 const slow = expect.configure({ timeout: 25_000 });
 
 let pass = "";
+let slug = "";
 let url = "";
 const jpeg = (color: string) =>
   sharp({ create: { width: 1602, height: 1000, channels: 3, background: color } })
@@ -17,11 +18,7 @@ const jpeg = (color: string) =>
     .toBuffer();
 const key = (page: Page, init: KeyboardEventInit) =>
   page.evaluate((i) => window.dispatchEvent(new KeyboardEvent("keydown", { ...i, bubbles: true })), init);
-const openAsClient = async (page: Page) => {
-  await page.goto(`${PHOTOS}/client`, { waitUntil: "networkidle" });
-  await page.getByLabel("Passcode").fill(pass);
-  await page.getByRole("button", { name: "Open my gallery" }).click();
-};
+const openAsClient = (page: Page) => clientOpen(page, PHOTOS, slug, pass);
 const studioSetting = async (page: Page, tab: string) => {
   await page.goto(url, { waitUntil: "networkidle" });
   await page.getByRole("tab", { name: tab }).click();
@@ -41,6 +38,7 @@ test("owner makes a gallery and sets its security and look", async ({ page }) =>
 
   const made = await newGallery(page, PHOTOS, `Sec job ${uid}`, `Secure ${uid}`);
   pass = made.passcode;
+  slug = made.slug;
   url = made.url;
   await uploadPhotos(page, [
     { name: "one.jpg", mimeType: "image/jpeg", buffer: await jpeg("#aa4433") },
@@ -86,12 +84,11 @@ test("the client sees the look, the overlay, and the download cap", async ({ bro
   const ctx = await browser.newContext();
   const c = await ctx.newPage();
   await openAsClient(c);
-  await expect(c).toHaveURL(/\/client\/gallery$/, { timeout: 25_000 });
+  await expect(c).toHaveURL(/\/g\/[a-z0-9-]+$/, { timeout: 25_000 });
   const gd = c.locator(".gx");
   await expect(gd).toHaveAttribute("data-font", "serif");
   await expect(gd).toHaveAttribute("data-gap", "wide");
   await expect(gd).toHaveAttribute("data-corners", "round");
-  await expect(c.locator(".gx-hero__img")).toBeVisible();
   await expect(c.getByText(`Studio ${uid}`)).toBeVisible();
   await expect(c.getByText(`Thanks, ${uid}`)).toBeVisible();
   await expect(c.locator(".gx-cap").first()).toContainText(".jpg");
@@ -113,7 +110,7 @@ test("screenshot and save keys: a warning first, the second attempt locks the vi
   const ctx = await browser.newContext();
   const c = await ctx.newPage();
   await openAsClient(c);
-  await expect(c).toHaveURL(/\/client\/gallery$/, { timeout: 25_000 });
+  await expect(c).toHaveURL(/\/g\/[a-z0-9-]+$/, { timeout: 25_000 });
   await c.locator("li[data-media-id]").first().waitFor();
 
   const seen: string[] = [];
@@ -124,15 +121,20 @@ test("screenshot and save keys: a warning first, the second attempt locks the vi
   await expect(c.getByRole("alertdialog")).toBeVisible();
   await expect(c.locator("html")).toHaveClass(/hl-guard-hide/);
   await c.getByRole("button", { name: "OK, I understand" }).click();
-  await expect(c).toHaveURL(/\/client\/gallery$/); // one attempt only warns
+  await expect(c).toHaveURL(/\/g\/[a-z0-9-]+$/); // one attempt only warns
 
   await key(c, { key: "s", code: "KeyS", ctrlKey: true });
-  await expect(c, `events: ${seen.join(" | ")}`).toHaveURL(/\/client\?locked=1$/, { timeout: 25_000 });
+  await expect(c, `events: ${seen.join(" | ")}`).toHaveURL(/\/g\/[a-z0-9-]+\?locked=1$/, { timeout: 25_000 });
   await expect(c.locator("p[role=alert]")).toContainText("closed because a screenshot or save was attempted");
 
   // the same viewer cannot simply come back in with the passcode
-  await openAsClient(c);
-  await expect(c).toHaveURL(/\/client\?locked=1$/, { timeout: 25_000 });
+  await c.goto(`${PHOTOS}/g/${slug}`, { waitUntil: "networkidle" });
+  await c.getByLabel("Passcode").fill(pass);
+  await c.getByRole("button", { name: "Open my gallery" }).click();
+  await expect(c.locator("p[role=alert]")).toContainText("closed because a screenshot or save was attempted", {
+    timeout: 25_000,
+  });
+  await expect(c.locator("li[data-media-id]")).toHaveCount(0);
   // and the photographs are no longer served
   const r = await c.request.post(`${PHOTOS}/api/client/security-event`, { data: { kind: "screenshot" } });
   expect(r.status()).toBe(401);
@@ -155,7 +157,7 @@ test("the studio sees the attempts and the lock, and can let the viewer back in"
   const ctx = await browser.newContext();
   const c = await ctx.newPage();
   await openAsClient(c);
-  await expect(c).toHaveURL(/\/client\/gallery$/, { timeout: 25_000 });
+  await expect(c).toHaveURL(/\/g\/[a-z0-9-]+$/, { timeout: 25_000 });
   await ctx.close();
 });
 
@@ -169,7 +171,7 @@ test("hold to view conceals photographs until the pointer is held; log-only neve
   const ctx = await browser.newContext();
   const c = await ctx.newPage();
   await openAsClient(c);
-  await expect(c).toHaveURL(/\/client\/gallery$/, { timeout: 25_000 });
+  await expect(c).toHaveURL(/\/g\/[a-z0-9-]+$/, { timeout: 25_000 });
   const html = c.locator("html");
   await expect(html).toHaveClass(/hl-guard-conceal/);
   await expect(html).not.toHaveClass(/hl-guard-reveal/);
@@ -180,7 +182,7 @@ test("hold to view conceals photographs until the pointer is held; log-only neve
   await expect(html).not.toHaveClass(/hl-guard-reveal/);
   for (let i = 0; i < 4; i++) await key(c, { key: "PrintScreen", code: "PrintScreen" });
   await c.waitForTimeout(500);
-  await expect(c).toHaveURL(/\/client\/gallery$/); // log-only: never locked
+  await expect(c).toHaveURL(/\/g\/[a-z0-9-]+$/); // log-only: never locked
   await ctx.close();
 });
 
@@ -194,7 +196,7 @@ test("a gallery with protection off has no guard, no overlay and no events", asy
   const ctx = await browser.newContext();
   const c = await ctx.newPage();
   await openAsClient(c);
-  await expect(c).toHaveURL(/\/client\/gallery$/, { timeout: 25_000 });
+  await expect(c).toHaveURL(/\/g\/[a-z0-9-]+$/, { timeout: 25_000 });
   await expect(c.locator("html")).not.toHaveAttribute("data-guard", /.+/);
   await expect(c.locator("[data-viewer-overlay]")).toHaveCount(0);
   await ctx.close();

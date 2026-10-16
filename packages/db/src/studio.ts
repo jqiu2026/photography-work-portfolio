@@ -1,6 +1,7 @@
 import { and, asc, desc, eq, isNull, like, sql } from "drizzle-orm";
 import { confirmForInvoice } from "./calendar";
 import { extendGallery } from "./gallery-expiry";
+import { freeSlug } from "./gallery-link";
 import type { Database } from "./client";
 import { StudioError } from "./errors";
 import * as s from "./schema";
@@ -149,6 +150,7 @@ export async function createGallery(
   const [row] = await db
     .insert(s.studioGalleries)
     .values({
+      slug: await freeSlug(db, input.title?.trim() || j.title),
       jobId: j.id,
       title: (input.title ?? j.title).trim(),
       accessMode: mode,

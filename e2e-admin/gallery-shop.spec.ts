@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 import sharp from "sharp";
-import { newGallery, publishOpenGallery, uploadPhotos } from "./gallery-helpers";
+import { enterGallery, newGallery, publishOpenGallery, uploadPhotos } from "./gallery-helpers";
 
 /**
  * A gallery with its own link: visitors view and shop without a passcode (no proofing), albums nest and lock, an order is
@@ -9,6 +9,7 @@ import { newGallery, publishOpenGallery, uploadPhotos } from "./gallery-helpers"
 const PHOTOS = "http://localhost:3302";
 const uid = Date.now().toString(36);
 const slug = `shop-${uid}`;
+const allPhotos = (v: import("@playwright/test").Page) => v.getByRole("button", { name: /^All photos/ }).click();
 const email = `shop-${uid}@example.test`;
 test.describe.configure({ mode: "serial" });
 const slow = expect.configure({ timeout: 25_000 });
@@ -99,7 +100,7 @@ test("owner builds a gallery with nested and locked albums, a public link and an
   await slow(page.getByRole("status").filter({ hasText: "Product saved" })).toBeVisible();
 
   // link and shop
-  await page.goto(`${galleryUrl}#shop`, { waitUntil: "networkidle" });
+  await page.goto(`${galleryUrl}#share`, { waitUntil: "networkidle" });
   await page.getByLabel("Gallery address").fill("studio");
   await page.getByLabel("Who can open the link").selectOption("link");
   await page.getByRole("button", { name: "Save link" }).click();
@@ -107,6 +108,7 @@ test("owner builds a gallery with nested and locked albums, a public link and an
   await page.getByLabel("Gallery address").fill(slug);
   await page.getByRole("button", { name: "Save link" }).click();
   await slow(page.getByRole("status").filter({ hasText: "Link saved" })).toBeVisible();
+  await page.getByRole("tab", { name: "Shop" }).click();
   await page.getByLabel("Open the shop").check();
   await page.getByRole("button", { name: "Save shop settings" }).click();
   await slow(page.getByRole("status").filter({ hasText: "Shop settings saved" })).toBeVisible();
@@ -119,16 +121,19 @@ test("a visitor opens the link with no passcode: albums, a locked album that ope
   const ctx = await browser.newContext();
   const v = await ctx.newPage();
   await v.goto(`${PHOTOS}/g/${slug}`, { waitUntil: "networkidle" });
+  await enterGallery(v);
   await expect(v.getByRole("heading", { level: 1 })).toContainText(`Shop gallery ${uid}`);
-  // three photographs are open, the locked album's one is not even in the page
+  // albums are cards; three photographs are open, the locked album's one is not even in the page
+  await allPhotos(v);
   await expect(v.locator("li[data-media-id]")).toHaveCount(3);
-  await expect(v.getByRole("button", { name: /^Formals/ })).toContainText("locked");
+  await v.getByRole("button", { name: /All albums/ }).click();
+  await expect(v.getByRole("button", { name: /Formals/ })).toContainText("locked");
   await expect(v.getByRole("button", { name: "Open formals-small.jpg" })).toHaveCount(0);
   // visitors do not proof
   await expect(v.getByRole("button", { name: /to favourites/ })).toHaveCount(0);
-  await expect(v.getByRole("button", { name: "Favourites" })).toHaveCount(0);
-  // the link to the client's passcode sign-in is there
-  await expect(v.getByRole("link", { name: /Client sign-in/ })).toBeVisible();
+  await expect(v.getByRole("button", { name: /^Favorites/ })).toHaveCount(0);
+  // the client signs in with the passcode right here (there is no other login)
+  await expect(v.getByRole("button", { name: "Client sign-in" })).toBeVisible();
 
   // a sub-album shows inside its parent
   await v.getByRole("button", { name: /^Ceremony/ }).click();
@@ -136,18 +141,20 @@ test("a visitor opens the link with no passcode: albums, a locked album that ope
   await expect(v.locator("li[data-media-id]")).toHaveCount(2); // ceremony + vows
   await v.getByRole("button", { name: /^Vows/ }).click();
   await expect(v.locator("li[data-media-id]")).toHaveCount(1);
+  await v.getByRole("button", { name: /Back to Ceremony/ }).click();
+  await v.getByRole("button", { name: /All albums/ }).click();
 
   // the locked album asks for its code, refuses a wrong one, then opens
-  await v.getByRole("button", { name: /^Formals/ }).click();
+  await v.getByRole("button", { name: /Formals/ }).click();
   const dlg = v.getByRole("dialog", { name: /Formals is locked/ });
   await dlg.getByLabel("Album passcode").fill("nope");
   await dlg.getByRole("button", { name: "Open album" }).click();
   await slow(dlg.getByRole("alert")).toContainText("not right");
   await dlg.getByLabel("Album passcode").fill(FORMALS);
   await dlg.getByRole("button", { name: "Open album" }).click();
-  await slow(v.locator("li[data-media-id]")).toHaveCount(1);
-  await expect(v.getByRole("button", { name: "Open formals-small.jpg" })).toBeVisible();
-  await v.getByRole("button", { name: /^All photos/ }).click();
+  await expect(v.getByRole("button", { name: "Open formals-small.jpg" })).toBeVisible({ timeout: 25_000 });
+  await v.getByRole("button", { name: /All albums/ }).click();
+  await allPhotos(v);
   await expect(v.locator("li[data-media-id]")).toHaveCount(4);
 
   // visitors cannot download without buying: no free downloads are on
@@ -173,6 +180,8 @@ test("a visitor buys a download and a print: the shop prices it, nothing ships b
   const ctx = await browser.newContext();
   const v = await ctx.newPage();
   await v.goto(`${PHOTOS}/g/${slug}`, { waitUntil: "networkidle" });
+  await enterGallery(v);
+  await allPhotos(v);
   await v.getByRole("button", { name: "Open vows-big.jpg" }).click();
   const lb = v.getByRole("dialog", { name: "Photograph" });
   // the price the studio set, and a size too big for the photograph is not offered
@@ -260,6 +269,8 @@ test("an unpaid order can be cancelled by the owner, and its invoice is voided",
   const ctx = await browser.newContext();
   const v = await ctx.newPage();
   await v.goto(`${PHOTOS}/g/${slug}`, { waitUntil: "networkidle" });
+  await enterGallery(v);
+  await allPhotos(v);
   await v.getByRole("button", { name: "Open loose-small.jpg" }).click();
   const lb = v.getByRole("dialog", { name: "Photograph" });
   await lb

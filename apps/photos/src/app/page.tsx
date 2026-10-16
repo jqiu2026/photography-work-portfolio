@@ -210,9 +210,6 @@ export default async function Home() {
             <Link href="/book" className="pub-btn">
               Start a booking
             </Link>
-            <Link href="/client" className="pub-btn pub-btn--ghost">
-              Clients: your gallery
-            </Link>
           </div>
         </div>
       </div>

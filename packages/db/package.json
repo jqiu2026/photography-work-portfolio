@@ -23,6 +23,7 @@
     "./galleries": "./src/galleries.ts",
     "./gallery-security": "./src/gallery-security.ts",
     "./gallery-shop": "./src/gallery-shop.ts",
+    "./brand": "./src/brand.ts",
     "./gallery-expiry": "./src/gallery-expiry.ts",
     "./automation": "./src/automation.ts"
   },

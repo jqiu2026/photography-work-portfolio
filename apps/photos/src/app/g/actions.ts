@@ -5,9 +5,10 @@ import * as gal from "@jerryqiu/db/galleries";
 import * as shop from "@jerryqiu/db/gallery-shop";
 import { StudioError } from "@jerryqiu/db/studio";
 import { and, eq } from "drizzle-orm";
+import { verifyPasscode } from "@jerryqiu/db/studio-crypto";
 import { z } from "zod";
 import { galleryAccess, unlockAlbum } from "@/lib/client-gallery";
-import { requestIpHash } from "@/lib/portal";
+import { requestIpHash, startPortalSession } from "@/lib/portal";
 
 export type GResult<T = object> = ({ ok: true } & T) | { ok: false; error: string };
 const no = (error: string) => ({ ok: false as const, error });
@@ -85,4 +86,33 @@ export async function checkoutAction(input: unknown): Promise<GResult<{ url: str
   } catch (e) {
     return no(e instanceof StudioError ? e.message : "Could not start your order.");
   }
+}
+
+const PASS_LIMIT = () => Number(process.env.PORTAL_PASSCODE_LIMIT) || 8;
+
+/**
+ * The one way in for a client: the passcode, on the gallery's own page. It opens THIS gallery only (never a search across
+ * galleries), starts the client's session (proofing, selection, their downloads), and is rate limited per address.
+ */
+export async function enterGalleryAction(input: { slug: string; passcode: string }): Promise<GResult> {
+  const db = getDb();
+  if (!db || !/^[a-z0-9-]{2,48}$/.test(input.slug)) return no("This gallery is not available.");
+  const code = input.passcode.trim();
+  if (!code) return no("Enter your passcode.");
+  const ip = await requestIpHash();
+  if (!(await hitRateLimit(db, `portal:${ip}`, PASS_LIMIT(), 600)).allowed)
+    return no("Too many tries. Wait a few minutes and try again.");
+  const [g] = await db
+    .select()
+    .from(schema.studioGalleries)
+    .where(and(eq(schema.studioGalleries.slug, input.slug)));
+  if (
+    !g ||
+    g.deletedAt ||
+    (g.status !== "published" && g.status !== "archived") ||
+    !(await verifyPasscode(code, g.passcodeHash))
+  )
+    return no("That passcode doesn't match this gallery.");
+  await startPortalSession(g.id, "client");
+  return { ok: true };
 }

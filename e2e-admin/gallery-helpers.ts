@@ -22,7 +22,12 @@ export async function newGallery(page: Page, photos: string, jobTitle: string, t
   expect(passcode.length).toBeGreaterThanOrEqual(6);
   await made.getByRole("button", { name: "Open the gallery" }).click();
   await expect(page).toHaveURL(/\/studio\/gallery\/[0-9a-f-]{36}/, { timeout: 25_000 });
-  return { passcode, url: page.url().split("#")[0] };
+  // the gallery's own address is the one link to share
+  await page.getByRole("tab", { name: "Share" }).click();
+  const slug = await page.getByLabel("Gallery address").inputValue();
+  expect(slug).toMatch(/^[a-z0-9-]{3,48}$/);
+  await page.getByRole("tab", { name: "Photos" }).click();
+  return { passcode, slug, url: page.url().split("#")[0] };
 }
 
 /** Uploads photographs inside the open gallery page and waits for them to be processed. */
@@ -44,4 +49,23 @@ export async function uploadPhotos(page: Page, files: File[], expected = files.l
 export async function publishOpenGallery(page: Page) {
   await page.getByRole("button", { name: "Publish", exact: true }).click();
   await expect(page.getByRole("status").filter({ hasText: "Published" })).toBeVisible({ timeout: 25_000 });
+}
+
+/** Past the cover page and the rules note, if the gallery has them (they appear once per visit). */
+export async function enterGallery(page: Page) {
+  const view = page.getByRole("button", { name: "View Gallery" });
+  const nav = page.getByRole("navigation", { name: "Gallery" });
+  await expect(view.or(nav)).toBeVisible({ timeout: 25_000 });
+  if (await view.isVisible()) await view.click();
+  await expect(nav).toBeVisible({ timeout: 25_000 });
+  const cont = page.getByRole("dialog").getByRole("button", { name: "Continue" });
+  if (await cont.isVisible().catch(() => false)) await cont.click();
+}
+
+/** A client opens their gallery the only way there is: its own link, then the passcode on that page. */
+export async function clientOpen(page: Page, photos: string, slug: string, passcode: string) {
+  await page.goto(`${photos}/g/${slug}`, { waitUntil: "networkidle" });
+  await page.getByLabel("Passcode").fill(passcode);
+  await page.getByRole("button", { name: "Open my gallery" }).click();
+  await enterGallery(page);
 }

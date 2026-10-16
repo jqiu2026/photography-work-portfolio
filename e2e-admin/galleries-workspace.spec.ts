@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 import sharp from "sharp";
-import { newGallery, publishOpenGallery, uploadPhotos } from "./gallery-helpers";
+import { clientOpen, newGallery, publishOpenGallery, uploadPhotos } from "./gallery-helpers";
 
 /** The gallery workspace: list, bulk photo tools, design, sharing, scheduled publishing, duplicate and delete. */
 const PHOTOS = "http://localhost:3302";
@@ -10,6 +10,7 @@ test.describe.configure({ mode: "serial" });
 const slow = expect.configure({ timeout: 25_000 });
 
 let pass = "";
+let slug = "";
 let url = "";
 const jpeg = (color: string) =>
   sharp({ create: { width: 1601, height: 1000, channels: 3, background: color } })
@@ -35,6 +36,7 @@ test("create a gallery from a job, upload inside it, and find it in the list", a
   // no media-library step: a job and a title are all it takes
   const made = await newGallery(page, PHOTOS, `WS job ${uid}`, `Workspace ${uid}`);
   pass = made.passcode;
+  slug = made.slug;
   url = made.url;
   await uploadPhotos(page, [
     { name: "a-first.jpg", mimeType: "image/jpeg", buffer: await jpeg("#aa4433") },
@@ -109,10 +111,7 @@ test("design: rows and light; the client sees them after the gallery is publishe
 
   const ctx = await browser.newContext();
   const c = await ctx.newPage();
-  await c.goto(`${PHOTOS}/client`, { waitUntil: "networkidle" });
-  await c.getByLabel("Passcode").fill(pass);
-  await c.getByRole("button", { name: "Open my gallery" }).click();
-  await expect(c).toHaveURL(/\/client\/gallery$/, { timeout: 25_000 });
+  await clientOpen(c, PHOTOS, slug, pass);
   await expect(c.locator(".gx")).toHaveAttribute("data-layout", "rows");
   await expect(c.locator(".gx")).toHaveAttribute("data-theme", "light");
   await expect(c.getByText(`Welcome ${uid}`)).toBeVisible();
@@ -133,13 +132,17 @@ test("a new passcode locks out the old one; the email goes to the client's addre
 
   const ctx = await browser.newContext();
   const c = await ctx.newPage();
-  await c.goto(`${PHOTOS}/client`, { waitUntil: "networkidle" });
+  await c.goto(`${PHOTOS}/g/${slug}`, { waitUntil: "networkidle" });
   await c.getByLabel("Passcode").fill(pass);
   await c.getByRole("button", { name: "Open my gallery" }).click();
   await expect(c.locator("p[role=alert]")).toContainText("doesn't match", { timeout: 25_000 });
   await c.getByLabel("Passcode").fill(next);
   await c.getByRole("button", { name: "Open my gallery" }).click();
-  await expect(c).toHaveURL(/\/client\/gallery$/, { timeout: 25_000 });
+  await expect(
+    c.getByRole("navigation", { name: "Gallery" }).or(c.getByRole("button", { name: "View Gallery" })),
+  ).toBeVisible({
+    timeout: 25_000,
+  });
   await ctx.close();
   pass = next;
 });

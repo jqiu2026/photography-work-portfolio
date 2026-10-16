@@ -131,7 +131,7 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | F-44 | Questionnaires and intake forms (builder, send, respond) | P1 | done | questionnaires | email | e2e | M7 |
 | F-45 | Gallery expiry and reactivation policy in the contract | P1 | done (policy merge field) | template clause | n/a | unit | M7 |
 | F-46 | Privacy, terms, licensing, accessibility, cookie statement | P1 | done (draft pages for lawyer review; no non-essential cookies) | public pages | n/a | e2e | M11 |
-| F-47 | Data export and delete-my-data tools | P1 | partial (admin export, contact erase) | studio and portal | n/a | e2e | M14 |
+| F-47 | Data export and delete-my-data tools | P1 | partial (admin export, contact erase) | studio | n/a | e2e | M14 |
 | F-48 | Event privacy opt-outs (hide specific people) | P2 | missing | gallery_items.hidden_for | n/a | unit | M14 |
 
 ### Payments
@@ -152,14 +152,13 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | Id | Feature | Pri | Status | Where | Provider / mock | Test | Milestone |
 |---|---|---|---|---|---|---|---|
 | F-60 | Private gallery with passcode, favourites | P1 | done | `/client`, `/client/gallery` | n/a | e2e studio | done |
-| F-61 | Password, PIN and magic-link access modes | P1 | partial (passcode, password and magic link done; separate PIN code for downloads comes with M10) | portal | Resend / outbox | e2e | M9 |
+| F-61 | Passcode, download PIN and per-album passcodes (clients open their gallery from its own link; there is no client login) | P1 | done | `/g/[slug]` | n/a | e2e | M13 |
 | F-62 | Direct-from-browser uploads (Vercel Blob client upload; signed PUT locally), retries with backoff, dedupe by SHA-256 | P1 | done (Blob path written, never run live: needs BLOB_READ_WRITE_TOKEN) | `/api/upload/*`, studio | Blob / local disk | e2e | M10 |
 | F-63 | Pre-generated sizes (480, 960, 1600, 2400 AVIF/WebP, web-size JPEG download, private original) | P1 | done | `@jerryqiu/media` | n/a | unit | M10 |
 | F-64 | Albums and sets, slideshow | P1 | done | albums, lightbox | n/a | e2e | M10 |
 | F-65 | Proofing: comments, ratings, approvals, selection limits, send selection | P1 | done | gallery page | n/a | e2e | M10 |
 | F-66 | Downloads: web, full-res, ZIP parts, per-photo, PIN-gated, download log | P1 | done | `/api/download/*` | n/a | e2e | M10 |
 | F-67 | Gallery expiry, reminders, paid reactivation | P1 | done | cron, reactivation page | Stripe / mock | e2e | M10, M12 |
-| F-68 | Delivery status page with ETA | P2 | done | portal job page | n/a | e2e | M9 |
 | F-69 | Client notifications (gallery ready, viewed, favourited) | P1 | partial (gallery ready, expiring, reminders and preferences done; "viewed" and "favourited" go to the owner as activity) | automations | email | unit | M12 |
 | F-70 | Per-viewer invisible watermark and view logs | P1 | done (spread-spectrum code per viewer, `studio_view_events`, detector) | `@jerryqiu/media` `forensic.ts`, `serve.ts` | n/a | unit | M3 |
 | F-71 | Per-gallery branding | P3 | done (welcome message and accent colour) | gallery settings | n/a | e2e | M10 |
@@ -174,9 +173,6 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | Id | Feature | Pri | Status | Where | Provider / mock | Test | Milestone |
 |---|---|---|---|---|---|---|---|
 | F-80 | One login: password, magic link, passcode | P1 | done | `/client/login` | email | e2e | M9 |
-| F-81 | Portal home: jobs, galleries, contracts, invoices, questionnaires, quotes, messages (files with M14) | P1 | done | `/client/home` | n/a | e2e | M9 |
-| F-82 | Email thread and messages visible in portal; replies routed to a real inbox | P1 | done (messages plus every email sent to the client; owner is emailed on a new message; Reply-To is your inbox) | messages, email_log | Resend / outbox | e2e | M9 |
-| F-83 | Self-reschedule and cancel within policy | P2 | done (policy window from the cancellation days setting) | portal job page | n/a | e2e | M9 |
 | F-84 | Notification preferences | P2 | done | `/client/account` | n/a | e2e | M9 |
 | F-85 | Branded email templates | P1 | done (13 kinds) | `@jerryqiu/email` | Resend / outbox | unit | M4 |
 

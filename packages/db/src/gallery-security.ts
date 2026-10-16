@@ -30,6 +30,11 @@ export const securitySchema = z.object({
   idleMinutes: z.number().int().min(0).max(240).default(0),
   /** Most downloads (single files or ZIP parts) one viewer may make per day (0 = unlimited). */
   maxDownloadsPerDay: z.number().int().min(0).max(1000).default(0),
+  /** Your own wording for the reminder shown on a capture attempt (empty = the standard text). */
+  protectTitle: z.string().trim().max(80).default(""),
+  protectMessage: z.string().trim().max(1000).default(""),
+  /** On touch screens half of each photograph stays blurred; pressing and holding moves the blur away. */
+  mobileHalfBlur: z.boolean().default(false),
   /** Add an entry to the studio activity feed on the first trigger and when someone is locked out. */
   notifyOwner: z.boolean().default(true),
 });
@@ -39,17 +44,48 @@ export const readSecurity = (raw: unknown): GallerySecurity => {
   return r.success ? r.data : securitySchema.parse({});
 };
 
+/** Typeface keys (the studio shows a name for each; the gallery loads the font only when it is chosen). */
+export const GALLERY_FONTS = [
+  "sans",
+  "modern",
+  "serif",
+  "editorial",
+  "classic",
+  "display",
+  "mono",
+  "inter",
+  "figtree",
+  "sora",
+  "urbanist",
+  "montserrat",
+  "raleway",
+  "lato",
+  "roboto",
+  "cabin",
+  "quicksand",
+  "lora",
+  "merriweather",
+  "spectral",
+  "oswald",
+  "bebas",
+  "caveat",
+  "dancing",
+] as const;
+const hex = z
+  .string()
+  .trim()
+  .regex(/^(#[0-9a-fA-F]{6})?$/, "Colours are hex values like #101010.")
+  .default("");
 export const styleSchema = z.object({
-  /** sans | serif | mono, plus editorial (high-contrast serif), classic (light serif), modern (geometric sans), display (soft serif headline). */
-  font: z.enum(["sans", "serif", "mono", "editorial", "classic", "modern", "display"]).default("sans"),
+  font: z.enum(GALLERY_FONTS).default("sans"),
   /** How the gallery opens: a full-bleed cover with the title over it, a cover beside the title, or just the title. */
   header: z.enum(["cinematic", "split", "minimal"]).default("cinematic"),
-  /** With albums: tabs above the photographs, or a landing page of album cards. */
-  albumView: z.enum(["tabs", "cards"]).default("tabs"),
+  /** With albums: tabs above the photographs, or a page of album cards first. */
+  albumView: z.enum(["tabs", "cards"]).default("cards"),
   gap: z.enum(["tight", "normal", "wide"]).default("normal"),
   corners: z.enum(["square", "soft", "round"]).default("soft"),
   showFilenames: z.boolean().default(false),
-  /** Show the cover photograph large above the grid. */
+  /** Legacy: cover above the photographs (the header setting replaces it). */
   heroCover: z.boolean().default(false),
   /** Small line above the title (for example your studio name). */
   brandLine: z.string().trim().max(60).default(""),
@@ -61,6 +97,35 @@ export const styleSchema = z.object({
     .trim()
     .regex(/^(#[0-9a-fA-F]{6})?$/, "The background is a hex colour like #101010.")
     .default(""),
+  /** Colours: primary drives buttons and the active tab (the gallery accent is the same setting), secondary the links. */
+  primary: hex,
+  secondary: hex,
+  /** The cover page a visitor sees first, with a View Gallery button. */
+  introPage: z.boolean().default(true),
+  /** A message shown once per visit before the photographs (rules, a thank-you). Plain text with **bold**, *italic*, [links](https://...) and "- " lists. */
+  introHeadline: z.string().trim().max(60).default("Rules"),
+  introMessage: z.string().trim().max(3000).default(""),
+  /** A line across the top of every page (a call to action). */
+  bannerEnabled: z.boolean().default(false),
+  bannerText: z.string().trim().max(120).default(""),
+  bannerLink: z
+    .string()
+    .trim()
+    .max(300)
+    .refine((v) => v === "" || /^https?:\/\//i.test(v), "A banner link starts with https://")
+    .default(""),
+  bannerExpires: z.string().trim().max(10).default(""),
+  /** About tab text, shown above the brand's contact details. */
+  aboutText: z.string().trim().max(1500).default(""),
+  /** Navigation and actions. */
+  allowSharing: z.boolean().default(true),
+  showDownloadAll: z.boolean().default(true),
+  hideAllPhotos: z.boolean().default(false),
+  hideAlbumCount: z.boolean().default(false),
+  hideAlbums: z.boolean().default(false),
+  /** Music: ids of studio tracks, played in order. */
+  playlist: z.array(z.string().uuid()).max(30).default([]),
+  autoplay: z.boolean().default(false),
 });
 export type GalleryStyle = z.infer<typeof styleSchema>;
 export const readStyle = (raw: unknown): GalleryStyle => {

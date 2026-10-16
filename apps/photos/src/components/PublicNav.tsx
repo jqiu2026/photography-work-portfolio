@@ -39,9 +39,6 @@ export function PublicNav() {
         ))}
       </nav>
       <div className="pub-right">
-        <Link href="/client" className="pub-clients" aria-current={on("/client") ? "page" : undefined}>
-          Clients
-        </Link>
         <Link href="/studio" className="pub-clients" onClick={toStudio}>
           Dashboard
         </Link>

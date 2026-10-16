@@ -187,6 +187,22 @@ export function ScreenshotGuard({ level = "light", children }: { level?: GuardLe
         root.classList.remove("hl-guard-conceal", "hl-guard-reveal");
       };
     }
+    // touch screens: half of every photograph stays blurred; pressing and holding moves the blur away
+    let releaseHalf: (() => void) | undefined;
+    if (o.mobileHalfBlur && matchMedia("(pointer: coarse)").matches) {
+      root.classList.add("hl-guard-half");
+      const on = () => root.classList.add("hl-guard-half-off");
+      const off = () => root.classList.remove("hl-guard-half-off");
+      document.addEventListener("pointerdown", on);
+      document.addEventListener("pointerup", off);
+      document.addEventListener("pointercancel", off);
+      releaseHalf = () => {
+        document.removeEventListener("pointerdown", on);
+        document.removeEventListener("pointerup", off);
+        document.removeEventListener("pointercancel", off);
+        root.classList.remove("hl-guard-half", "hl-guard-half-off");
+      };
+    }
     window.addEventListener("keydown", onKey, true);
     window.addEventListener("keyup", onKeyUp, true);
     window.addEventListener("blur", onLeave);
@@ -204,6 +220,7 @@ export function ScreenshotGuard({ level = "light", children }: { level?: GuardLe
       clearInterval(devtoolsTimer);
       if (media && originalCapture) media.getDisplayMedia = originalCapture;
       releaseHold?.();
+      releaseHalf?.();
       hide(false);
       root.removeAttribute("data-guard");
       root.removeAttribute("data-guard-noselect");
@@ -228,8 +245,8 @@ export function ScreenshotGuard({ level = "light", children }: { level?: GuardLe
             aria-describedby="hl-guard-body"
             onKeyDown={(e) => e.key === "Escape" && dismiss()}
           >
-            <h2 id="hl-guard-title">{guardCopy.title}</h2>
-            <p id="hl-guard-body">{guardCopy.body}</p>
+            <h2 id="hl-guard-title">{optsRef.current.title || guardCopy.title}</h2>
+            <p id="hl-guard-body">{optsRef.current.message || guardCopy.body}</p>
             <p className="hl-guard__note">{guardCopy.note}</p>
             <button ref={ok} type="button" className="hl-btn hl-btn--solid" onClick={dismiss}>
               {guardCopy.action}

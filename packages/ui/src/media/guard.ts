@@ -31,6 +31,11 @@ export type GuardOptions = {
   detectDevtools?: boolean;
   /** Protected media stays blurred until the pointer or Shift is held down. Default false. */
   holdToView?: boolean;
+  /** Your own wording for the reminder dialog (the heading and the message). */
+  title?: string;
+  message?: string;
+  /** On touch screens, half of each photograph stays blurred; pressing and holding moves the blur away. Default false. */
+  mobileHalfBlur?: boolean;
   /** Show the reminder dialog on a trigger. Default true. */
   showDialog?: boolean;
   /** Called for every trigger (the app can log it or lock the session). */

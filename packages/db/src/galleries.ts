@@ -3,6 +3,7 @@ import type { Database } from "./client";
 import { StudioError } from "./errors";
 import { getPolicies } from "./forms";
 import { extendGallery, galleryState } from "./gallery-expiry";
+import { freeSlug } from "./gallery-link";
 import * as s from "./schema";
 import { createInvoice, sendInvoice } from "./studio";
 import { hashPasscode, verifyPasscode } from "./studio-crypto";
@@ -531,6 +532,7 @@ export async function duplicateGallery(db: Database, id: string, by?: string) {
     .insert(s.studioGalleries)
     .values({
       ...keep,
+      slug: await freeSlug(db, `${g.title} copy`),
       title: `${g.title} (copy)`.slice(0, 120),
       status: "draft",
       passcodeHash: await hashPasscode(passcode),

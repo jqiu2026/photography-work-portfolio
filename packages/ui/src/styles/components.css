@@ -1680,6 +1680,17 @@ html.hl-guard-conceal:not(.hl-guard-reveal)::after {
   font-size: 0.85rem;
   pointer-events: none;
 }
+/* touch screens: the lower half of each photograph is blurred until pressed and held */
+html.hl-guard-half:not(.hl-guard-half-off) .hl-img::after,
+html.hl-guard-half:not(.hl-guard-half-off) [data-protected]::after {
+  content: "";
+  position: absolute;
+  inset: 50% 0 0;
+  z-index: 3;
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  pointer-events: none;
+}
 html[data-guard-noselect] body :not(input, textarea, select, [contenteditable]) {
   -webkit-user-select: none;
   user-select: none;

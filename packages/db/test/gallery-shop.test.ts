@@ -61,7 +61,7 @@ describe("albums", () => {
 });
 
 describe("gallery address", () => {
-  it("makes unique slugs, refuses reserved and taken ones, and opens only visible galleries", async () => {
+  it("gives every gallery an address, refuses reserved and taken ones, and finds published galleries by it", async () => {
     expect(shop.slugify("Maker Faire — Coney Island 2025!")).toBe("maker-faire-coney-island-2025");
     const a = await shop.freeSlug(db, "Spring Recital");
     await shop.setLink(db, gid, { slug: a, visibility: "link" });
@@ -69,8 +69,9 @@ describe("gallery address", () => {
     await expect(shop.setLink(db, gid, { slug: "studio" })).rejects.toThrow();
     await expect(shop.setLink(db, gid, { visibility: "everyone" })).rejects.toThrow();
     expect((await shop.galleryBySlug(db, a))?.id).toBe(gid);
+    // the address finds the gallery whatever its visibility; the page decides who may see it
     await shop.setLink(db, gid, { visibility: "passcode" });
-    expect(await shop.galleryBySlug(db, a)).toBeNull();
+    expect((await shop.galleryBySlug(db, a))?.visibility).toBe("passcode");
     await shop.setLink(db, gid, { visibility: "link" });
     expect(await shop.galleryBySlug(db, "../x")).toBeNull();
   });

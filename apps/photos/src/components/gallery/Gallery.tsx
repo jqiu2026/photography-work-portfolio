@@ -3,7 +3,7 @@
 import { ProtectedImage } from "@halation/ui/media";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { toggleFavoriteAction } from "@/app/client/actions";
+import { leaveGalleryAction, toggleFavoriteAction } from "@/app/client/actions";
 import {
   commentAction,
   decideAction,
@@ -12,7 +12,7 @@ import {
   sendSelectionAction,
   unlockDownloadsAction,
 } from "@/app/client/gallery-actions";
-import { checkoutAction, unlockAlbumAction } from "@/app/g/actions";
+import { checkoutAction, enterGalleryAction, unlockAlbumAction } from "@/app/g/actions";
 import type { ClientGalleryData } from "@/lib/client-gallery-data";
 import "./gallery.css";
 
@@ -59,7 +59,29 @@ export function Gallery({ data }: { data: Data }) {
   // a refresh (for example after opening a locked album) brings the server's list of photographs
   useEffect(() => setItems(data.items), [data.items]);
   const [album, setAlbum] = useState("");
-  const [view, setView] = useState<"photos" | "favourites" | "shop">("photos");
+  const [view, setView] = useState<"photos" | "favourites" | "shop" | "about">("photos");
+  const [stage, setStage] = useState<"pending" | "intro" | "gallery">("pending");
+  const [rulesOpen, setRulesOpen] = useState(false);
+  const [signIn, setSignIn] = useState(false);
+  const seenKey = `gx-seen-${data.slug ?? data.galleryId ?? data.title}`;
+  const cover = data.items.find((i) => i.mediaId === data.coverMediaId) ?? data.items[0];
+  // the cover page and the rules note appear once per visit (per browser session); without a cover or note they are skipped
+  useEffect(() => {
+    let seen = false;
+    try {
+      seen = Boolean(sessionStorage.getItem(seenKey));
+    } catch {}
+    const wantsIntro = data.style.introPage && Boolean(cover) && data.style.header !== "minimal";
+    if (seen || !wantsIntro) {
+      setStage("gallery");
+      if (!seen && data.style.introMessage) {
+        setRulesOpen(true);
+        try {
+          sessionStorage.setItem(seenKey, "1");
+        } catch {}
+      }
+    } else setStage("intro");
+  }, [seenKey, cover, data.style.introPage, data.style.header, data.style.introMessage]);
   const [open, setOpen] = useState<number | null>(null);
   const [cartOpen, setCartOpen] = useState(false);
   const [dlOpen, setDlOpen] = useState(false);
@@ -117,7 +139,8 @@ export function Gallery({ data }: { data: Data }) {
   };
 
   const style = {
-    ...(data.accent ? { ["--gx-accent" as string]: data.accent } : {}),
+    ...(data.style.primary || data.accent ? { ["--gx-accent" as string]: data.style.primary || data.accent } : {}),
+    ...(data.style.secondary ? { ["--gx-link" as string]: data.style.secondary } : {}),
     ...(data.style.background ? { ["--gx-bg-custom" as string]: data.style.background } : {}),
   } as React.CSSProperties;
 
@@ -182,127 +205,175 @@ export function Gallery({ data }: { data: Data }) {
       </div>
     );
 
-  const header = data.style.header;
   const crop = data.layout === "grid" || data.layout === "mosaic";
-  const hasCover = Boolean(heroItem) && header !== "minimal";
+  const hasCover = Boolean(heroItem) && data.style.header !== "minimal";
+  const sty = data.style;
+  const hasAlbums = !sty.hideAlbums && top.length > 0;
+  const today = new Date().toISOString().slice(0, 10);
+  const banner = sty.bannerEnabled && sty.bannerText && (!sty.bannerExpires || sty.bannerExpires >= today);
+  const canDownload = client ? data.downloads.web || data.downloads.full : data.downloads.web;
+  const siteUrl = typeof window === "undefined" ? "" : location.origin;
+  async function share() {
+    const url = `${siteUrl}/g/${data.slug}`;
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: data.title, url });
+        return;
+      }
+      await navigator.clipboard.writeText(url);
+      say(true, "Link copied. Send it to anyone who should see this gallery.");
+    } catch {
+      say(false, `Copy this link: ${url}`);
+    }
+  }
+  function enter() {
+    try {
+      sessionStorage.setItem(seenKey, "1");
+    } catch {}
+    setStage("gallery");
+    if (sty.introMessage) setRulesOpen(true);
+  }
+  const photosRoot = view === "photos" && !album && hasAlbums && sty.albumView === "cards";
+  const showGrid = !photosRoot && view !== "shop" && view !== "about";
+
+  if (stage === "pending") return <div className="gx" style={style} data-theme={data.theme} data-font={sty.font} />;
+  if (stage === "intro" && heroItem)
+    return (
+      <div className="gx gx-intro" style={style} data-theme={data.theme} data-font={sty.font}>
+        <header className="gx-hero" data-header={sty.header} data-cover="">
+          <div className="gx-hero__img">
+            <ProtectedImage asset={asset({ ...heroItem })} alt="" fill fit="cover" priority sizes="100vw" />
+          </div>
+          <div className="gx-hero__text">
+            <p className="gx-brand">{sty.brandLine || data.brand.name}</p>
+            <h1>{data.title}</h1>
+            {data.welcome ? <p className="gx-welcome">{data.welcome}</p> : null}
+            <div className="gx-hero__actions">
+              <button type="button" className="gx-btn gx-btn--solid" onClick={enter}>
+                View Gallery
+              </button>
+            </div>
+          </div>
+        </header>
+      </div>
+    );
+
   return (
     <div
       className="gx"
       style={style}
       data-theme={data.theme}
-      data-font={data.style.font}
+      data-font={sty.font}
       data-layout={data.layout}
       data-density={data.density}
-      data-gap={data.style.gap}
-      data-corners={data.style.corners}
-      data-custom-bg={data.style.background ? "" : undefined}
+      data-gap={sty.gap}
+      data-corners={sty.corners}
+      data-custom-bg={sty.background ? "" : undefined}
     >
-      <header className="gx-hero" data-header={header} data-cover={hasCover ? "" : undefined}>
-        {hasCover && heroItem ? (
-          <div className="gx-hero__img">
-            <ProtectedImage asset={asset({ ...heroItem })} alt="" fill fit="cover" priority sizes="100vw" />
-          </div>
-        ) : null}
-        <div className="gx-hero__text">
-          {data.style.brandLine ? <p className="gx-brand">{data.style.brandLine}</p> : null}
-          <h1>{data.title}</h1>
-          {data.welcome ? <p className="gx-welcome">{data.welcome}</p> : null}
-          <p className="gx-count">
-            {items.length} photograph{items.length === 1 ? "" : "s"}
-            {data.albums.length ? ` · ${top.length} album${top.length === 1 ? "" : "s"}` : ""}
-          </p>
-          <div className="gx-hero__actions">
-            <a className="gx-btn gx-btn--solid" href="#gx-main">
-              View photographs
+      {banner ? (
+        <p className="gx-banner">
+          {sty.bannerLink ? (
+            <a href={sty.bannerLink} target="_blank" rel="noreferrer">
+              {sty.bannerText}
             </a>
-            {shopOn ? (
-              <button type="button" className="gx-btn" onClick={() => setView("shop")}>
-                Shop prints and downloads
-              </button>
-            ) : null}
-            {(client && (data.downloads.web || data.downloads.full)) || (!client && data.downloads.web) ? (
-              <button type="button" className="gx-btn" onClick={() => setDlOpen(true)}>
-                Download
-              </button>
-            ) : null}
-          </div>
-          {data.state === "expiring" && client ? (
-            <p className="gx-expiring" role="status">
-              This gallery expires on {data.expiresAt}.{" "}
-              <button type="button" className="gx-link" onClick={reactivate}>
-                Extend access
-              </button>
-            </p>
-          ) : null}
-        </div>
-      </header>
-
-      <nav className="gx-bar" aria-label="Gallery">
-        <div className="gx-bar__tabs" role="toolbar" aria-label="Gallery tools">
+          ) : (
+            sty.bannerText
+          )}
+        </p>
+      ) : null}
+      <header className="gx-top">
+        <a
+          className="gx-top__brand"
+          href={data.slug ? `/g/${data.slug}` : "#"}
+          onClick={() => {
+            setView("photos");
+            setAlbum("");
+          }}
+        >
+          {sty.brandLine || data.brand.name}
+        </a>
+        <nav className="gx-top__tabs" aria-label="Gallery">
           <button
             type="button"
-            className="gx-tab"
-            aria-pressed={view === "photos" && (!album || album === "all-photos")}
+            aria-current={view === "photos" ? "page" : undefined}
             onClick={() => {
-              setAlbum("");
               setView("photos");
+              setAlbum("");
             }}
           >
-            All photos <small>{items.length}</small>
+            Photos
           </button>
-          {top.map((a) => (
-            <button
-              key={a.id}
-              type="button"
-              className="gx-tab"
-              aria-pressed={view === "photos" && (album === a.id || current?.parentId === a.id)}
-              onClick={() => pickAlbum(a.id)}
-            >
-              {a.locked ? <span aria-hidden="true">🔒 </span> : null}
-              {a.name}
-              <small>{a.closed ? "locked" : a.count + kids(a.id).reduce((n, k) => n + k.count, 0)}</small>
+          {shopOn ? (
+            <button type="button" aria-current={view === "shop" ? "page" : undefined} onClick={() => setView("shop")}>
+              Store
             </button>
-          ))}
+          ) : null}
           {client ? (
             <button
               type="button"
-              className="gx-tab"
-              aria-pressed={view === "favourites"}
+              aria-current={view === "favourites" ? "page" : undefined}
               onClick={() => setView("favourites")}
             >
-              Favourites <small>{chosen}</small>
+              Favorites <small>{chosen}</small>
             </button>
           ) : null}
-        </div>
-        <div className="gx-bar__tools">
-          <button type="button" className="gx-tool" disabled={!shown.length} onClick={() => setOpen(0)}>
-            Slideshow
+          <button type="button" aria-current={view === "about" ? "page" : undefined} onClick={() => setView("about")}>
+            About
           </button>
+        </nav>
+        <div className="gx-top__right">
+          {!client && data.slug ? (
+            <button type="button" className="gx-tool" onClick={() => setSignIn(true)}>
+              Client sign-in
+            </button>
+          ) : null}
+          {client ? (
+            <form action={leaveGalleryAction}>
+              <button type="submit" className="gx-tool">
+                Sign out
+              </button>
+            </form>
+          ) : null}
           {shopOn ? (
-            <>
-              <button type="button" className="gx-tool" aria-pressed={view === "shop"} onClick={() => setView("shop")}>
-                Shop
-              </button>
-              <button type="button" className="gx-tool gx-tool--cart" onClick={() => setCartOpen(true)}>
-                Cart <b>{cartCount}</b>
-              </button>
-            </>
+            <button
+              type="button"
+              className="gx-cart"
+              onClick={() => setCartOpen(true)}
+              aria-label={`Cart, ${cartCount} item${cartCount === 1 ? "" : "s"}`}
+            >
+              <svg
+                viewBox="0 0 24 24"
+                width="22"
+                height="22"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                aria-hidden="true"
+              >
+                <path d="M3 4h2.2l2 11h10.6l2-8H6.4" />
+                <circle cx="9" cy="19.5" r="1.2" />
+                <circle cx="17" cy="19.5" r="1.2" />
+              </svg>
+              {cartCount ? <b>{cartCount}</b> : null}
+            </button>
           ) : null}
         </div>
-      </nav>
-      {subs.length && view === "photos" ? (
-        <div className="gx-subs" role="toolbar" aria-label={`In ${parent?.name}`}>
-          <button type="button" aria-pressed={album === parent?.id} onClick={() => parent && pickAlbum(parent.id)}>
-            All of {parent?.name}
+      </header>
+      <div className="gx-subbar" role="toolbar" aria-label="Gallery actions">
+        {sty.allowSharing && data.slug ? (
+          <button type="button" onClick={() => void share()}>
+            Share
           </button>
-          {subs.map((s) => (
-            <button key={s.id} type="button" aria-pressed={album === s.id} onClick={() => pickAlbum(s.id)}>
-              {s.locked ? "🔒 " : ""}
-              {s.name} <small>{s.closed ? "locked" : s.count}</small>
-            </button>
-          ))}
-        </div>
-      ) : null}
+        ) : null}
+        {canDownload && sty.showDownloadAll ? (
+          <button type="button" onClick={() => setDlOpen(true)}>
+            Download all
+          </button>
+        ) : null}
+        <button type="button" disabled={!shown.length} onClick={() => setOpen(0)}>
+          Slideshow
+        </button>
+      </div>
 
       <main id="gx-main" className="gx-main" tabIndex={-1}>
         {msg ? (
@@ -310,75 +381,149 @@ export function Gallery({ data }: { data: Data }) {
             {msg.text}
           </p>
         ) : null}
+        {data.state === "expiring" && client ? (
+          <p className="gx-msg" role="status">
+            This gallery expires on {data.expiresAt}.{" "}
+            <button type="button" className="gx-link" onClick={reactivate}>
+              Extend access
+            </button>
+          </p>
+        ) : null}
 
         {view === "shop" && shopOn ? (
           <ShopView data={data} onAdd={addToCart} onBrowse={() => setView("photos")} />
-        ) : data.style.albumView === "cards" && !album && top.length && view === "photos" ? (
-          <AlbumCards data={data} items={items} onPick={pickAlbum} onAll={() => setAlbum("all-photos")} />
+        ) : view === "about" ? (
+          <About data={data} />
         ) : (
           <>
-            {current?.description ? <p className="gx-album-note">{current.description}</p> : null}
-            <ul className="gx-photos" aria-label="Photographs">
-              {shown.map((i, n) => (
-                <li
-                  key={i.mediaId}
-                  data-media-id={i.mediaId}
-                  data-wide={data.layout === "mosaic" && n % 7 === 0 ? "" : undefined}
-                  style={{ "--ar": i.width / Math.max(1, i.height) } as React.CSSProperties}
-                >
+            <div className="gx-title">
+              <h1>{view === "favourites" ? "Favorites" : current ? current.name : data.title}</h1>
+              <p className="gx-count">
+                {photosRoot
+                  ? `${top.length} album${top.length === 1 ? "" : "s"}`
+                  : `${shown.length} photograph${shown.length === 1 ? "" : "s"}`}
+              </p>
+              {current || album === "all-photos" ? (
+                <button type="button" className="gx-link" onClick={() => setAlbum(current?.parentId ?? "")}>
+                  ←{" "}
+                  {current?.parentId
+                    ? `Back to ${parent?.name}`
+                    : hasAlbums && sty.albumView === "cards"
+                      ? "All albums"
+                      : "All photos"}
+                </button>
+              ) : null}
+              {!current && data.welcome && !album ? <p className="gx-welcome">{data.welcome}</p> : null}
+            </div>
+            {hasAlbums && sty.albumView === "tabs" && view === "photos" ? (
+              <div className="gx-subs" role="toolbar" aria-label="Albums">
+                {sty.hideAllPhotos ? null : (
+                  <button type="button" aria-pressed={!album || album === "all-photos"} onClick={() => setAlbum("")}>
+                    All photos {sty.hideAlbumCount ? null : <small>{items.length}</small>}
+                  </button>
+                )}
+                {top.map((a) => (
                   <button
+                    key={a.id}
                     type="button"
-                    className="gx-open"
-                    onClick={() => setOpen(n)}
-                    aria-label={`Open ${i.filename}`}
-                    style={crop ? undefined : { aspectRatio: `${i.width} / ${i.height}` }}
+                    aria-pressed={album === a.id || current?.parentId === a.id}
+                    onClick={() => pickAlbum(a.id)}
                   >
-                    {crop ? (
-                      <ProtectedImage
-                        asset={asset(i)}
-                        alt={i.filename}
-                        sizes="(min-width: 900px) 30vw, 50vw"
-                        fill
-                        fit="cover"
-                      />
-                    ) : (
-                      <ProtectedImage asset={asset(i)} alt={i.filename} sizes="(min-width: 900px) 30vw, 50vw" />
+                    {a.locked ? "🔒 " : ""}
+                    {a.name}{" "}
+                    {sty.hideAlbumCount ? null : (
+                      <small>{a.closed ? "locked" : a.count + kids(a.id).reduce((n, k) => n + k.count, 0)}</small>
                     )}
                   </button>
-                  {data.style.showFilenames ? <small className="gx-cap">{i.filename}</small> : null}
-                  <div className="gx-tile">
-                    {client ? (
-                      <button
-                        type="button"
-                        className="gx-ico"
-                        aria-pressed={i.favourite}
-                        aria-label={`${i.favourite ? "Remove" : "Add"} ${i.filename} ${i.favourite ? "from" : "to"} favourites`}
-                        disabled={sent}
-                        onClick={() => void fav(i)}
-                      >
-                        {i.favourite ? "♥" : "♡"}
-                      </button>
-                    ) : null}
-                    {shopOn ? (
-                      <button
-                        type="button"
-                        className="gx-ico gx-ico--buy"
-                        aria-label={`Buy ${i.filename}`}
-                        onClick={() => setOpen(n)}
-                      >
-                        Buy
-                      </button>
-                    ) : null}
-                  </div>
-                </li>
-              ))}
-            </ul>
-            {!shown.length ? (
-              <p className="gx-empty">
-                {view === "favourites" ? "Tap the heart on a photograph to keep it here." : "Nothing here yet."}
-              </p>
+                ))}
+              </div>
             ) : null}
-            {client ? (
+            {subs.length && view === "photos" ? (
+              <div className="gx-subs" role="toolbar" aria-label={`In ${parent?.name}`}>
+                <button
+                  type="button"
+                  aria-pressed={album === parent?.id}
+                  onClick={() => parent && pickAlbum(parent.id)}
+                >
+                  All of {parent?.name}
+                </button>
+                {subs.map((sb) => (
+                  <button key={sb.id} type="button" aria-pressed={album === sb.id} onClick={() => pickAlbum(sb.id)}>
+                    {sb.locked ? "🔒 " : ""}
+                    {sb.name} {sty.hideAlbumCount ? null : <small>{sb.closed ? "locked" : sb.count}</small>}
+                  </button>
+                ))}
+              </div>
+            ) : null}
+            {photosRoot ? (
+              <AlbumCards data={data} items={items} onPick={pickAlbum} onAll={() => setAlbum("all-photos")} />
+            ) : null}
+            {showGrid ? (
+              <>
+                {current?.description ? <p className="gx-album-note">{current.description}</p> : null}
+                <ul className="gx-photos" aria-label="Photographs">
+                  {shown.map((i, n) => (
+                    <li
+                      key={i.mediaId}
+                      data-media-id={i.mediaId}
+                      data-wide={data.layout === "mosaic" && n % 7 === 0 ? "" : undefined}
+                      style={{ "--ar": i.width / Math.max(1, i.height) } as React.CSSProperties}
+                    >
+                      <button
+                        type="button"
+                        className="gx-open"
+                        onClick={() => setOpen(n)}
+                        aria-label={`Open ${i.filename}`}
+                        style={crop ? undefined : { aspectRatio: `${i.width} / ${i.height}` }}
+                      >
+                        {crop ? (
+                          <ProtectedImage
+                            asset={asset(i)}
+                            alt={i.filename}
+                            sizes="(min-width: 900px) 30vw, 50vw"
+                            fill
+                            fit="cover"
+                          />
+                        ) : (
+                          <ProtectedImage asset={asset(i)} alt={i.filename} sizes="(min-width: 900px) 30vw, 50vw" />
+                        )}
+                      </button>
+                      {sty.showFilenames ? <small className="gx-cap">{i.filename}</small> : null}
+                      <div className="gx-tile">
+                        {client ? (
+                          <button
+                            type="button"
+                            className="gx-ico"
+                            aria-pressed={i.favourite}
+                            aria-label={`${i.favourite ? "Remove" : "Add"} ${i.filename} ${i.favourite ? "from" : "to"} favourites`}
+                            disabled={sent}
+                            onClick={() => void fav(i)}
+                          >
+                            {i.favourite ? "♥" : "♡"}
+                          </button>
+                        ) : null}
+                        {shopOn ? (
+                          <button
+                            type="button"
+                            className="gx-ico gx-ico--buy"
+                            aria-label={`Buy ${i.filename}`}
+                            onClick={() => setOpen(n)}
+                          >
+                            Buy
+                          </button>
+                        ) : null}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+                {!shown.length ? (
+                  <p className="gx-empty">
+                    {view === "favourites" ? "Tap the heart on a photograph to keep it here." : "Nothing here yet."}
+                  </p>
+                ) : null}
+              </>
+            ) : null}
+            {client && !photosRoot ? (
               <section className="gx-select" aria-label="Your selection">
                 <p role="status">
                   {chosen} favourite{chosen === 1 ? "" : "s"} chosen{data.limit ? ` of ${data.limit}` : ""}.
@@ -401,12 +546,19 @@ export function Gallery({ data }: { data: Data }) {
       </main>
 
       <footer className="gx-foot">
-        {data.style.footer ? <p>{data.style.footer}</p> : null}
-        {!client && data.slug ? (
-          <p>
-            <a href="/client">Client sign-in for proofing</a>
-          </p>
-        ) : null}
+        {sty.footer ? <p>{sty.footer}</p> : null}
+        <p>
+          <a href="/terms">Terms of Use</a> · <a href="/privacy">Privacy Policy</a>
+          {sty.introMessage ? (
+            <>
+              {" "}
+              ·{" "}
+              <button type="button" className="gx-link" onClick={() => setRulesOpen(true)}>
+                {sty.introHeadline || "Rules"}
+              </button>
+            </>
+          ) : null}
+        </p>
       </footer>
 
       {open !== null && shown[open] ? (
@@ -414,7 +566,7 @@ export function Gallery({ data }: { data: Data }) {
           data={data}
           client={client}
           shopOn={shopOn}
-          items={album === "all-photos" ? items : shown}
+          items={shown}
           start={open}
           sent={sent}
           cart={cart}
@@ -451,6 +603,26 @@ export function Gallery({ data }: { data: Data }) {
         />
       ) : null}
       {dlOpen ? <Downloads data={data} client={client} onClose={() => setDlOpen(false)} say={say} /> : null}
+      {rulesOpen ? (
+        <Sheet title={sty.introHeadline || "Rules"} onClose={() => setRulesOpen(false)}>
+          <RichText text={sty.introMessage} />
+          <p style={{ marginTop: "1.2rem" }}>
+            <button type="button" className="gx-btn gx-btn--solid" onClick={() => setRulesOpen(false)}>
+              Continue
+            </button>
+          </p>
+        </Sheet>
+      ) : null}
+      {signIn && data.slug ? (
+        <SignIn
+          slug={data.slug}
+          onClose={() => setSignIn(false)}
+          onDone={() => {
+            setSignIn(false);
+            router.refresh();
+          }}
+        />
+      ) : null}
       {lockFor ? (
         <UnlockAlbum
           galleryId={gid}
@@ -464,6 +636,114 @@ export function Gallery({ data }: { data: Data }) {
         />
       ) : null}
     </div>
+  );
+}
+
+/** Plain text with **bold**, *italic*, [links](https://…) and "- " lists, rendered as safe elements (no HTML is ever injected). */
+function RichText({ text }: { text: string }) {
+  const inline = (line: string) => {
+    const out: React.ReactNode[] = [];
+    const re = /(\*\*[^*]+\*\*|\*[^*]+\*|\[[^\]]+\]\((?:https?:\/\/|mailto:)[^)\s]+\))/g;
+    let last = 0;
+    let k = 0;
+    for (const m of line.matchAll(re)) {
+      if (m.index > last) out.push(line.slice(last, m.index));
+      const t = m[0];
+      if (t.startsWith("**")) out.push(<strong key={k++}>{t.slice(2, -2)}</strong>);
+      else if (t.startsWith("*")) out.push(<em key={k++}>{t.slice(1, -1)}</em>);
+      else {
+        const [, label, href] = /^\[([^\]]+)\]\(([^)]+)\)$/.exec(t) ?? [];
+        out.push(
+          <a key={k++} href={href} target="_blank" rel="noreferrer">
+            {label}
+          </a>,
+        );
+      }
+      last = m.index + t.length;
+    }
+    if (last < line.length) out.push(line.slice(last));
+    return out;
+  };
+  return (
+    <div className="gx-rich">
+      {text.split(/\n{2,}/).map((block, i) => {
+        const lines = block.split("\n").filter(Boolean);
+        if (lines.length && lines.every((l) => l.startsWith("- ")))
+          return (
+            <ul key={i}>
+              {lines.map((l, j) => (
+                <li key={j}>{inline(l.slice(2))}</li>
+              ))}
+            </ul>
+          );
+        return <p key={i}>{inline(lines.join(" "))}</p>;
+      })}
+    </div>
+  );
+}
+
+function About({ data }: { data: Data }) {
+  const b = data.brand;
+  return (
+    <section className="gx-about" aria-labelledby="gx-about-h">
+      <h1 id="gx-about-h">{b.name}</h1>
+      {data.style.aboutText ? <RichText text={data.style.aboutText} /> : null}
+      <ul>
+        {b.website ? (
+          <li>
+            Website: <a href={`https://${b.website.replace(/^https?:\/\//, "")}`}>{b.website}</a>
+          </li>
+        ) : null}
+        {b.instagram ? (
+          <li>
+            Instagram:{" "}
+            <a href={`https://www.instagram.com/${b.instagram.replace(/^@/, "")}`}>@{b.instagram.replace(/^@/, "")}</a>
+          </li>
+        ) : null}
+        {b.email ? (
+          <li>
+            Email: <a href={`mailto:${b.email}`}>{b.email}</a>
+          </li>
+        ) : null}
+        {b.phone ? <li>Phone: {b.phone}</li> : null}
+        {b.address ? <li>{b.address}</li> : null}
+      </ul>
+    </section>
+  );
+}
+
+function SignIn({ slug, onClose, onDone }: { slug: string; onClose: () => void; onDone: () => void }) {
+  const [code, setCode] = useState("");
+  const [err, setErr] = useState("");
+  return (
+    <Sheet title="Client sign-in" onClose={onClose}>
+      <p className="gx-fine">
+        If this is your gallery, enter the passcode you were given. It lets you pick favorites, rate, comment and
+        download what is yours.
+      </p>
+      <form
+        className="gx-form"
+        onSubmit={async (e) => {
+          e.preventDefault();
+          const r = await enterGalleryAction({ slug, passcode: code });
+          if (r.ok) onDone();
+          else setErr(r.error);
+        }}
+      >
+        <label>
+          Passcode
+          <input value={code} onChange={(e) => setCode(e.target.value)} autoComplete="off" />
+        </label>
+        {err ? (
+          <p role="alert" className="gx-msg">
+            {err}
+          </p>
+        ) : null}
+        <button type="submit" className="gx-btn gx-btn--solid">
+          Sign in
+        </button>
+      </form>
+    </Sheet>
   );
 }
 

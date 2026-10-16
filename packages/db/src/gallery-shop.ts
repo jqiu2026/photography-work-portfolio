@@ -4,6 +4,7 @@ import type { Database } from "./client";
 import { StudioError } from "./errors";
 import * as s from "./schema";
 import { createInvoice, sendInvoice } from "./studio";
+import { RESERVED_SLUGS, SLUG_PATTERN, slugify } from "./gallery-link";
 import { newToken, sha256Hex } from "./studio-crypto";
 
 /**
@@ -12,40 +13,14 @@ import { newToken, sha256Hex } from "./studio-crypto";
  * with the client's passcode session: one named person, not every visitor.
  */
 
-/* ---------- address ---------- */
-const SLUG = /^[a-z0-9](?:[a-z0-9-]{1,46}[a-z0-9])$/;
-export const slugify = (text: string) =>
-  text
-    .toLowerCase()
-    .normalize("NFKD")
-    .replace(/\p{M}/gu, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-    .slice(0, 40);
-const RESERVED = new Set(["new", "admin", "studio", "client", "api", "shop", "order", "orders"]);
-
-export async function freeSlug(db: Database, wanted: string, except?: string): Promise<string> {
-  const base = slugify(wanted) || "gallery";
-  for (let i = 0; i < 50; i++) {
-    const cand = i === 0 ? base : `${base.slice(0, 36)}-${i + 1}`;
-    if (RESERVED.has(cand) || !SLUG.test(cand)) continue;
-    const [hit] = await db
-      .select({ id: s.studioGalleries.id })
-      .from(s.studioGalleries)
-      .where(eq(s.studioGalleries.slug, cand));
-    if (!hit || hit.id === except) return cand;
-  }
-  return `${base.slice(0, 30)}-${newToken()
-    .token.slice(0, 6)
-    .toLowerCase()
-    .replace(/[^a-z0-9]/g, "x")}`;
-}
+/* ---------- address (helpers live in gallery-link.ts) ---------- */
+export { freeSlug, RESERVED_SLUGS, slugify, SLUG_PATTERN } from "./gallery-link";
 
 export async function setLink(db: Database, galleryId: string, p: { slug?: string; visibility?: string }) {
   const set: Partial<typeof s.studioGalleries.$inferInsert> = { updatedAt: new Date() };
   if (p.slug !== undefined) {
     const slug = slugify(p.slug);
-    if (!SLUG.test(slug) || RESERVED.has(slug))
+    if (!SLUG_PATTERN.test(slug) || RESERVED_SLUGS.has(slug))
       throw new StudioError("Use 3 to 48 letters, numbers and dashes for the address.");
     const [hit] = await db
       .select({ id: s.studioGalleries.id })
@@ -61,14 +36,14 @@ export async function setLink(db: Database, galleryId: string, p: { slug?: strin
   await db.update(s.studioGalleries).set(set).where(eq(s.studioGalleries.id, galleryId));
 }
 
-/** A gallery by its address, only when it can be opened (published or archived, not deleted). */
+/** A gallery by its address, when it can be opened (published or archived, not deleted). Who may see it is the page's decision. */
 export async function galleryBySlug(db: Database, slug: string) {
   if (!/^[a-z0-9-]{2,48}$/.test(slug)) return null;
   const [g] = await db
     .select()
     .from(s.studioGalleries)
     .where(and(eq(s.studioGalleries.slug, slug), isNull(s.studioGalleries.deletedAt)));
-  return g && (g.status === "published" || g.status === "archived") && g.visibility !== "passcode" ? g : null;
+  return g && (g.status === "published" || g.status === "archived") ? g : null;
 }
 
 /* ---------- settings ---------- */
