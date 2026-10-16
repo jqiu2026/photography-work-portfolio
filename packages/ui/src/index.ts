@@ -4,6 +4,7 @@ export * from "./components/Button";
 export * from "./components/forms";
 export * from "./components/overlays";
 export * from "./components/ThemeProvider";
+export { ThemeScript, themeScript } from "./components/ThemeScript";
 export * from "./components/navigation";
 export * from "./components/footer";
 export * from "./components/content";
