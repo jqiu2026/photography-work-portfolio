@@ -99,7 +99,7 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | F-09 | Gift cards | P2 | partial (issue by owner, redeem on quotes, ledger; online purchase in M13) | gift_cards | Stripe / mock | unit | M6 |
 | F-10 | Discount and promo codes | P2 | done | promo_codes | n/a | unit | M6 |
 | F-11 | Testimonials and reviews with consent | P2 | missing | publish-to-portfolio | n/a | e2e | M14 |
-| F-12 | SEO pages and structured data | P1 | partial (sitemap, robots, JSON-LD on work) | all public pages | n/a | e2e | M11 |
+| F-12 | SEO pages and structured data | P1 | done (sitemap, robots, JSON-LD on home, work and FAQ, text-card link previews) | all public pages | n/a | e2e | M11 |
 | F-13 | Newsletter signup (own stream, unsubscribe) | OPT | missing | footer form | Resend / outbox | e2e | M12 |
 
 ### Sell
@@ -130,7 +130,7 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | F-43 | Model and property releases, minors and parental consent | P2 | done (guardian must sign for a minor) | releases | n/a | e2e | M7 |
 | F-44 | Questionnaires and intake forms (builder, send, respond) | P1 | done | questionnaires | email | e2e | M7 |
 | F-45 | Gallery expiry and reactivation policy in the contract | P1 | done (policy merge field) | template clause | n/a | unit | M7 |
-| F-46 | Privacy, terms, licensing, accessibility, cookie statement | P1 | partial (`/privacy` draft) | public pages | n/a | e2e | M11 |
+| F-46 | Privacy, terms, licensing, accessibility, cookie statement | P1 | done (draft pages for lawyer review; no non-essential cookies) | public pages | n/a | e2e | M11 |
 | F-47 | Data export and delete-my-data tools | P1 | partial (admin export, contact erase) | studio and portal | n/a | e2e | M14 |
 | F-48 | Event privacy opt-outs (hide specific people) | P2 | missing | gallery_items.hidden_for | n/a | unit | M14 |
 
@@ -211,8 +211,8 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | F-113 | Mobile-friendly photographer side, installable PWA | P1 | partial (responsive board and forms; PWA manifest in M18) | studio CSS, manifest | e2e 390px | M5, M18 |
 | F-114 | Dark and light themes | P1 | done | `@halation/ui` | e2e | done |
 | F-115 | WCAG 2.2 AA, performance budgets (Lighthouse mobile 80+, CLS under 0.02) | P1 | partial | all | axe, lighthouse | M18 |
-| F-116 | Error and health pages, seed and demo data | P1 | partial | `/api/health`, seed | e2e | M11 |
-| F-117 | Marketing pages from this table (Live / Preview / Soon badges) | P1 | missing | `/features` etc. | e2e | M11 |
+| F-116 | Error and health pages, seed and demo data | P1 | partial (health API and owner health page done; demo data in M18) | `/api/health`, seed | e2e | M11 |
+| F-117 | Marketing pages from this table (Live / Preview / Soon badges) | P1 | done | `/features` etc. | e2e | M11 |
 
 ## 7. Marketing and showcase rules
 

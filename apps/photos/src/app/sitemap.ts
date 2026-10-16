@@ -7,7 +7,29 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [{ categories, photosIn }, work] = await Promise.all([getPortfolio(), getWork()]);
   const base = getSite("photos").url;
   return [
-    ...["", "/portfolio", "/work", "/video", "/about", "/book", "/client"].map((p) => ({
+    ...[
+      "",
+      "/portfolio",
+      "/work",
+      "/video",
+      "/about",
+      "/book",
+      "/book/schedule",
+      "/book/minis",
+      "/packages",
+      "/features",
+      "/how-it-works",
+      "/client-portal",
+      "/galleries",
+      "/prints",
+      "/faq",
+      "/contact",
+      "/terms",
+      "/accessibility",
+      "/licensing",
+      "/privacy",
+      "/client",
+    ].map((p) => ({
       url: `${base}${p}`,
       lastModified: new Date(),
     })),

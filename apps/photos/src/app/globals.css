@@ -343,3 +343,100 @@
   display: block;
   color: var(--hl-muted);
 }
+
+.mk h2 {
+  font-size: var(--hl-text-2xl);
+  margin: 2.5rem 0 .75rem;
+}
+.mk p,
+.mk li {
+  max-width: 62ch;
+}
+.mk-badge {
+  display: inline-block;
+  padding: .1rem .55rem;
+  border-radius: 999px;
+  font: 600 var(--hl-text-xs) var(--hl-font-mono);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  border: 1px solid var(--hl-line, rgba(255, 255, 255, 0.2));
+  white-space: nowrap;
+}
+.mk-badge[data-status="live"] {
+  border-color: var(--hl-success, #2f9e6b);
+  color: var(--hl-success, #2f9e6b);
+}
+.mk-badge[data-status="preview"] {
+  border-color: var(--hl-warning, #c58a1d);
+  color: var(--hl-warning, #c58a1d);
+}
+.mk-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.mk-list > li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: baseline;
+  padding: .6rem 0;
+  border-top: 1px solid var(--hl-line, rgba(255, 255, 255, 0.14));
+}
+.mk-steps {
+  counter-reset: s;
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+}
+.mk-steps li {
+  counter-increment: s;
+  padding-left: 3rem;
+  position: relative;
+}
+.mk-steps li::before {
+  content: counter(s);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid var(--hl-accent);
+  color: var(--hl-accent-text, var(--hl-accent));
+  font-family: var(--hl-font-mono);
+}
+.mk-cards {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+.mk-cards > li {
+  padding: 1.25rem;
+  border: 1px solid var(--hl-line, rgba(255, 255, 255, 0.14));
+  border-radius: var(--hl-radius-lg, 14px);
+  display: grid;
+  gap: .4rem;
+  align-content: start;
+}
+.mk-cards h3 {
+  margin: 0;
+  font-size: var(--hl-text-lg);
+}
+.mk-count {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+.mk-count strong {
+  font-size: var(--hl-text-3xl);
+  display: block;
+  line-height: 1;
+}

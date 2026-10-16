@@ -8,6 +8,7 @@ import { Aperture } from "@/components/Aperture";
 import { nav } from "@/content/nav";
 import { getPortfolio } from "@/lib/portfolio";
 import { getWork } from "@/lib/work";
+import "./globals.css";
 import "./home.css";
 
 export const metadata: Metadata = {
@@ -39,8 +40,16 @@ export default async function Home() {
   const lead = hero ?? photos[0];
   const hub = getSite("hub");
 
+  const ld = {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    name: "Jerry Qiu Photography",
+    url: getSite("photos").url,
+    description: "Photography by Jerry Qiu: theater, events, street and aviation, shot mostly around New York.",
+  };
   return (
     <StageProvider world="photos" cinema>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
       <a className="hl-skip" href="#main">
         Skip to content
       </a>
@@ -125,6 +134,46 @@ export default async function Home() {
             </div>
           </Scene>
         ) : null}
+
+        <Scene id="platform" label="The platform" className="pg-work">
+          <div className="pg-wrap">
+            <Condense text="The studio behind the pictures." className="pg-h2" />
+            <Settle as="p" className="pg-lede">
+              This site is also a working platform for running a photography business: booking, quotes, contracts,
+              payments, private galleries and a client portal. Every part is listed with an honest status.
+            </Settle>
+            <ul className="mk-cards" aria-label="Platform highlights">
+              <li>
+                <h3>Book</h3>
+                <p>Pick a free time or send an inquiry. Deposits hold your date.</p>
+                <Link href="/how-it-works" className="pg-more">
+                  How it works →
+                </Link>
+              </li>
+              <li>
+                <h3>Deliver</h3>
+                <p>Private, protected galleries with proofing, selections and downloads.</p>
+                <Link href="/galleries" className="pg-more">
+                  Galleries →
+                </Link>
+              </li>
+              <li>
+                <h3>One place for clients</h3>
+                <p>Paperwork, payments, messages and progress in a portal.</p>
+                <Link href="/client-portal" className="pg-more">
+                  Portal tour →
+                </Link>
+              </li>
+              <li>
+                <h3>Every feature, with a status</h3>
+                <p>Live, Preview or Soon: no claim without a badge.</p>
+                <Link href="/features" className="pg-more">
+                  Features →
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </Scene>
 
         <Scene id="video" label="Video" className="pg-video">
           <div className="pg-wrap pg-split">

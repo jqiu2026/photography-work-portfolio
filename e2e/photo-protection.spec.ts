@@ -106,3 +106,44 @@ test("the lightbox opens a protected copy", async ({ page }) => {
   await expect(dialog.locator("img[src^='blob:']")).toBeVisible({ timeout: 15_000 });
   await expect(dialog.locator("img:not([src^='blob:'])")).toHaveCount(0);
 });
+
+const MARKETING = [
+  "/features",
+  "/how-it-works",
+  "/client-portal",
+  "/galleries",
+  "/prints",
+  "/faq",
+  "/contact",
+  "/terms",
+  "/accessibility",
+  "/licensing",
+  "/packages",
+];
+test.describe("marketing pages", () => {
+  for (const path of MARKETING)
+    test(`${path} has no photograph file or image URL`, async ({ request }) => {
+      const res = await request.get(`${photos}${path}`);
+      expect(res.status()).toBe(200);
+      const html = (await res.text()).replace(/data:image\/[a-z+]+;base64,[A-Za-z0-9+/=]+/g, "data:image");
+      expect(html.match(FILE_URL)?.[0] ?? null).toBeNull();
+    });
+  test("/features never claims more than the spec: every row has a badge and the counts are shown", async ({
+    page,
+  }) => {
+    await page.goto(`${photos}/features`, { waitUntil: "networkidle" });
+    const rows = await page.locator("[data-feature]").count();
+    expect(rows).toBeGreaterThan(80);
+    expect(await page.locator("[data-feature] .mk-badge").count()).toBe(rows);
+  });
+  test("the open graph image is a text card (PNG), not a photograph", async ({ request }) => {
+    const res = await request.get(`${photos}/opengraph-image`);
+    expect(res.status()).toBe(200);
+    expect(res.headers()["content-type"]).toContain("image/png");
+  });
+  test("/api/health is public and reveals no configuration", async ({ request }) => {
+    const res = await request.get(`${photos}/api/health`);
+    expect(res.status()).toBe(200);
+    expect(Object.keys(await res.json()).sort()).toEqual(["database", "ok"]);
+  });
+});

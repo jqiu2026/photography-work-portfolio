@@ -6,7 +6,8 @@
     "dev": "node ../../scripts/with-env.mjs dev next dev -p ${PORT:-3002}",
     "build": "node ../../scripts/with-env.mjs prod next build",
     "start": "node ../../scripts/with-env.mjs prod next start -p ${PORT:-3002}",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
   },
   "dependencies": {
     "@halation/ui": "workspace:*",
@@ -38,6 +39,7 @@
     "@types/node": "^24.19.2",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
-    "typescript": "~6.0.3"
+    "typescript": "~6.0.3",
+    "vitest": "5.0.3"
   }
 }
