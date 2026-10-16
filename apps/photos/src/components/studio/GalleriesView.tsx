@@ -3,7 +3,7 @@
 import { ProtectedImage } from "@halation/ui/media";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { newGalleryAction } from "@/app/studio/gallery-actions";
 import { Frame, useAct } from "./StudioFrame";
 import "./galleries.css";
@@ -49,6 +49,10 @@ export function GalleriesView({
   const [filter, setFilter] = useState<(typeof FILTERS)[number][0]>("all");
   const [sort, setSort] = useState("newest");
   const [open, setOpen] = useState(false);
+  // "+ New gallery" in the studio toolbar arrives with ?new=1
+  useEffect(() => {
+    if (new URLSearchParams(location.search).has("new")) setOpen(true);
+  }, []);
   const [job, setJob] = useState(jobs[0]?.id ?? "");
   const [title, setTitle] = useState("");
   const [made, setMade] = useState<{ id: string; passcode: string } | null>(null);

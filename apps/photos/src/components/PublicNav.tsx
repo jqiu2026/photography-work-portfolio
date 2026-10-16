@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 
 const LINKS = [
@@ -15,6 +15,13 @@ const LINKS = [
 /** The site's one navigation: a few text links, the current page marked, and a plain menu on small screens. */
 export function PublicNav() {
   const path = usePathname();
+  const router = useRouter();
+  const toStudio = (e: React.MouseEvent) => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    e.preventDefault();
+    document.documentElement.classList.add("pub-leaving");
+    setTimeout(() => router.push("/studio"), 380);
+  };
   const menu = useRef<HTMLDetailsElement>(null);
   // biome-ignore lint/correctness/useExhaustiveDependencies: close the small-screen menu after every navigation
   useEffect(() => {
@@ -34,7 +41,7 @@ export function PublicNav() {
         <Link href="/client" className="pub-clients" aria-current={on("/client") ? "page" : undefined}>
           Clients
         </Link>
-        <Link href="/studio" className="pub-clients" aria-current={on("/studio") ? "page" : undefined}>
+        <Link href="/studio" className="pub-clients" onClick={toStudio}>
           Dashboard
         </Link>
         <Link href="/book" className="pub-cta">

@@ -956,3 +956,21 @@ body:has(.pub) {
     transform: translateY(-2rem);
   }
 }
+
+/* leaving for the dashboard: the page dims to black first, then the studio's curtain lifts */
+html.pub-leaving body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: #000;
+  animation: pl-in .4s ease forwards;
+}
+@keyframes pl-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

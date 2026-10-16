@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { type ReactNode, useEffect, useRef, ViewTransition } from "react";
 import { groupOf, studioGroups, studioSections } from "./sections";
+import { StudioPalette } from "./StudioPalette";
 import "./studio.css";
 import "./studio-chrome.css";
 import "./studio-dashboard.css";
@@ -119,10 +120,22 @@ export function StudioChrome({ children }: { children: ReactNode }) {
               >
                 {g.label}
               </Link>
+              {g.id === active && g.sections.length > 1 ? (
+                <ul className="st-sub-list" aria-label={`${g.label} pages`}>
+                  {g.sections.map((id) => (
+                    <li key={id}>
+                      <Link href={`/studio/${id}`} aria-current={activeSection(pathname) === id ? "page" : undefined}>
+                        {studioSections.find((x) => x.id === id)?.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
             </li>
           ))}
         </ul>
       </nav>
+      <StudioPalette />
       <div className="st-stage">
         <ViewTransition key={pathname} name="st-page" enter="st-in" exit="st-out" default="none">
           <div className="st-page">{children}</div>

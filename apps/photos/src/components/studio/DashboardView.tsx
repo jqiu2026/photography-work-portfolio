@@ -51,6 +51,25 @@ export function DashboardView({ greeting, data }: { greeting: string; data: Dash
         </nav>
       </header>
 
+      <nav className="db-quick" aria-label="Start something">
+        <Link href="/studio/galleries?new=1">
+          <strong>New gallery</strong>
+          <span>Upload photos and share a link</span>
+        </Link>
+        <Link href="/studio/clients">
+          <strong>Add a client</strong>
+          <span>Then a shoot, quote or invoice</span>
+        </Link>
+        <Link href="/studio/orders">
+          <strong>Shop and orders</strong>
+          <span>Prints and downloads sold</span>
+        </Link>
+        <Link href="/studio/bookings">
+          <strong>Inquiries</strong>
+          <span>{stats.newInquiries ? `${stats.newInquiries} waiting for you` : "Nothing waiting"}</span>
+        </Link>
+      </nav>
+
       <div className="db-stats">
         <div className="db-stat">
           <p className="db-label">Revenue, 30 days</p>
