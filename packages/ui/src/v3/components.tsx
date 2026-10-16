@@ -51,11 +51,7 @@ export function Colossal({
 }
 
 /** A heading split into lines that rise out of a mask. Lines are given, not measured, so the server render is final. */
-export function Lines({
-  as: As = "h2",
-  lines,
-  className,
-}: { as?: ElementType; lines: string[]; className?: string }) {
+export function Lines({ as: As = "h2", lines, className }: { as?: ElementType; lines: string[]; className?: string }) {
   return (
     <As className={cx("hl3-lines", className)} data-reveal>
       {lines.map((l, i) => (
@@ -121,7 +117,12 @@ export function Marquee({ words, className, label }: { words: string[]; classNam
     </span>
   );
   return (
-    <div className={cx("hl3-marquee", className)} role={label ? "img" : undefined} aria-label={label} aria-hidden={label ? undefined : true}>
+    <div
+      className={cx("hl3-marquee", className)}
+      role={label ? "img" : undefined}
+      aria-label={label}
+      aria-hidden={label ? undefined : true}
+    >
       <div className="hl3-marquee__track">
         {run(false)}
         {run(true)}
@@ -131,7 +132,11 @@ export function Marquee({ words, className, label }: { words: string[]; classNam
 }
 
 /** Sticky stack: each panel pins for 100vh and is covered by the next. Works with no JavaScript (native sticky). */
-export function StickyStack({ children, className, label }: { children: ReactNode; className?: string; label?: string }) {
+export function StickyStack({
+  children,
+  className,
+  label,
+}: { children: ReactNode; className?: string; label?: string }) {
   return (
     <div className={cx("hl3-stack", className)} role={label ? "group" : undefined} aria-label={label}>
       {children}
@@ -146,7 +151,11 @@ export function StackPanel({
   return <As className={cx("hl3-stack__panel", className)}>{children}</As>;
 }
 
-export function Wrap({ children, className, as: As = "div" }: { children: ReactNode; className?: string; as?: ElementType }) {
+export function Wrap({
+  children,
+  className,
+  as: As = "div",
+}: { children: ReactNode; className?: string; as?: ElementType }) {
   return <As className={cx("hl3-wrap", className)}>{children}</As>;
 }
 
@@ -163,9 +172,15 @@ export function ArrowLink({
   className?: string;
 } & Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "href" | "className" | "children">) {
   return (
-    <a href={href} className={cx(variant === "link" ? "hl3-link" : "hl3-btn", variant === "ghost" && "hl3-btn--ghost", className)} {...rest}>
+    <a
+      href={href}
+      className={cx(variant === "link" ? "hl3-link" : "hl3-btn", variant === "ghost" && "hl3-btn--ghost", className)}
+      {...rest}
+    >
       <span>{children}</span>
-      <i aria-hidden className="hl3-arrow">→</i>
+      <i aria-hidden className="hl3-arrow">
+        →
+      </i>
     </a>
   );
 }

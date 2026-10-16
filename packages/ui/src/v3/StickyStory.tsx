@@ -31,7 +31,11 @@ export function StickyStory({
   }, []);
   const num = (n: number) => String(n).padStart(2, "0");
   return (
-    <section className={cx("hl3-story", className)} aria-label={label} style={{ "--n": items.length } as React.CSSProperties}>
+    <section
+      className={cx("hl3-story", className)}
+      aria-label={label}
+      style={{ "--n": items.length } as React.CSSProperties}
+    >
       <div className="hl3-story__track">
         <div className="hl3-story__pin">
           <AmbientWash images={items.map((it) => it.wash)} active={i} />
@@ -95,7 +99,7 @@ export function HScroller({
       let d = Infinity;
       kids.forEach((k, idx) => {
         const dist = Math.abs(k.offsetLeft + k.offsetWidth / 2 - mid);
-        if (dist < d) ((d = dist), (best = idx));
+        if (dist < d) (d = dist), (best = idx);
       });
       setN(best + 1);
     };
@@ -116,8 +120,8 @@ export function HScroller({
           const el = ref.current;
           if (!el) return;
           const step = el.clientWidth * 0.6;
-          if (e.key === "ArrowRight") (el.scrollBy({ left: step, behavior: "smooth" }), e.preventDefault());
-          if (e.key === "ArrowLeft") (el.scrollBy({ left: -step, behavior: "smooth" }), e.preventDefault());
+          if (e.key === "ArrowRight") el.scrollBy({ left: step, behavior: "smooth" }), e.preventDefault();
+          if (e.key === "ArrowLeft") el.scrollBy({ left: -step, behavior: "smooth" }), e.preventDefault();
         }}
       >
         {children}

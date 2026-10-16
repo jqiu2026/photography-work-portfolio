@@ -143,7 +143,8 @@ export async function createContractAction(jobId: string) {
     const p = id.safeParse(jobId);
     if (!p.success) return actionError("Unknown job.");
     // TODO(owner, lawyer): replace this sample template with real terms (Q37).
-    const body = `SAMPLE CONTRACT TEMPLATE (have a lawyer review before use)\n\n1. Services. The photographer will photograph the event described in the job.\n2. Delivery. Edited photographs are delivered in an online gallery.\n3. Licence. The client receives a personal, non-commercial licence unless agreed otherwise. All rights are reserved by the photographer.\n4. Payment. The invoice is due as stated; photographs are released when it is paid.\n5. Cancellation. TODO(owner): terms.`;
+    const body =
+      "SAMPLE CONTRACT TEMPLATE (have a lawyer review before use)\n\n1. Services. The photographer will photograph the event described in the job.\n2. Delivery. Edited photographs are delivered in an online gallery.\n3. Licence. The client receives a personal, non-commercial licence unless agreed otherwise. All rights are reserved by the photographer.\n4. Payment. The invoice is due as stated; photographs are released when it is paid.\n5. Cancellation. TODO(owner): terms.";
     try {
       const k = await st.createContract(db, { jobId: p.data, title: "Photography agreement", body });
       await audit({

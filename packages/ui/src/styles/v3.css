@@ -135,7 +135,10 @@ main:focus {
   transition: transform 900ms var(--hl3-e-arrive);
   transition-delay: calc(var(--i, 0) * 80ms);
 }
-:is(html.hl-js:not([data-hl-tier]), html[data-hl-tier="full"]) [data-reveal].is-in :is(.hl3-line, .hl3-colossal__line) > span,
+:is(html.hl-js:not([data-hl-tier]), html[data-hl-tier="full"])
+  [data-reveal].is-in
+  :is(.hl3-line, .hl3-colossal__line)
+  > span,
 :is(html.hl-js:not([data-hl-tier]), html[data-hl-tier="full"]) :is(.hl3-colossal__line)[data-reveal].is-in > span {
   transform: none;
 }
@@ -382,7 +385,7 @@ html[data-hl-tier="static"] .hl3-marquee__run {
   background: var(--hl-accent);
   color: var(--hl-accent-contrast);
   border: 1px solid var(--hl-accent);
-  font: 500 16px/1 var(--hl-font-sans);
+  font: 500 16px / 1 var(--hl-font-sans);
   text-decoration: none;
   cursor: pointer;
   transition: filter 180ms linear;
@@ -469,7 +472,7 @@ html[data-hl-tier="static"] .hl3-marquee__run {
   place-items: center;
   background: var(--hl-accent);
   color: var(--hl-accent-contrast);
-  font: 500 12px/1 var(--hl-font-mono);
+  font: 500 12px / 1 var(--hl-font-mono);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   pointer-events: none;
@@ -502,7 +505,7 @@ html[data-hl-tier="static"] .hl3-marquee__run {
   transition: background-color 240ms linear, border-color 240ms linear;
 }
 .hl3-header__mark {
-  font: 500 20px/1 var(--hl-font-display);
+  font: 500 20px / 1 var(--hl-font-display);
   font-variation-settings: "wdth" 108;
   letter-spacing: -0.02em;
   color: inherit;
@@ -515,7 +518,7 @@ html[data-hl-tier="static"] .hl3-marquee__run {
 }
 .hl3-header__nav a,
 .hl3-menu-btn {
-  font: 400 14px/1 var(--hl-font-sans);
+  font: 400 14px / 1 var(--hl-font-sans);
   color: inherit;
   text-decoration: none;
   padding-block: 8px;

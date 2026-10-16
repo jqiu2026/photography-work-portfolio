@@ -73,7 +73,9 @@ export function SiteFooter({
           {returnHref ? (
             <a className="hl3-btn hl3-btn--ghost hl-return" href={returnHref} data-return-to-hub>
               <span>jerryqiu.com</span>
-              <i aria-hidden className="hl3-arrow">→</i>
+              <i aria-hidden className="hl3-arrow">
+                →
+              </i>
             </a>
           ) : null}
         </div>

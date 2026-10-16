@@ -44,7 +44,8 @@ export function Dissolve({
     if (!playing || n < 2 || !interval) return;
     const id = setInterval(() => {
       const t = document.documentElement.getAttribute("data-hl-tier");
-      if (hold.current || document.hidden || t === "static" || !document.documentElement.classList.contains("hl-js")) return;
+      if (hold.current || document.hidden || t === "static" || !document.documentElement.classList.contains("hl-js"))
+        return;
       setI((c) => {
         const next = (c + 1) % n;
         onChange?.(next);
@@ -78,7 +79,13 @@ export function Dissolve({
       ))}
       {controls && n > 1 ? (
         <div className="hl3-dissolve__bar">
-          {captions?.[i] ? <p className="hl3-mono hl3-dissolve__cap" aria-live="polite">{captions[i]}</p> : <span />}
+          {captions?.[i] ? (
+            <p className="hl3-mono hl3-dissolve__cap" aria-live="polite">
+              {captions[i]}
+            </p>
+          ) : (
+            <span />
+          )}
           <div className="hl3-dissolve__ctl">
             <span className="hl3-mono">
               {num(i + 1)} / {num(n)}
@@ -86,7 +93,11 @@ export function Dissolve({
             <button type="button" onClick={() => go(i - 1)} aria-label="Previous photograph">
               ←
             </button>
-            <button type="button" onClick={() => setPlaying((p) => !p)} aria-label={playing ? "Pause slideshow" : "Play slideshow"}>
+            <button
+              type="button"
+              onClick={() => setPlaying((p) => !p)}
+              aria-label={playing ? "Pause slideshow" : "Play slideshow"}
+            >
               {playing ? "II" : "▶"}
             </button>
             <button type="button" onClick={() => go(i + 1)} aria-label="Next photograph">

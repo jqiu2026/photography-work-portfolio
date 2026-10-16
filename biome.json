@@ -66,5 +66,24 @@
     "formatter": {
       "quoteStyle": "double"
     }
-  }
+  },
+  "overrides": [
+    {
+      "include": ["packages/ui/src/v3/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noCommaOperator": "off"
+          },
+          "suspicious": {
+            "noAssignInExpressions": "off"
+          },
+          "a11y": {
+            "useKeyWithClickEvents": "off",
+            "useValidAriaValues": "off"
+          }
+        }
+      }
+    }
+  ]
 }

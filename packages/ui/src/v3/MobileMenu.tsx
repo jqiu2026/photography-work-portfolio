@@ -24,7 +24,11 @@ export function MobileMenu({ links, current }: { links: NavLink[]; current?: str
           <ul>
             {links.map((l, i) => (
               <li key={l.href} style={{ ["--i" as string]: i }}>
-                <a href={l.href} aria-current={current === l.href ? "page" : undefined} onClick={() => ref.current?.close()}>
+                <a
+                  href={l.href}
+                  aria-current={current === l.href ? "page" : undefined}
+                  onClick={() => ref.current?.close()}
+                >
                   {l.label}
                 </a>
               </li>

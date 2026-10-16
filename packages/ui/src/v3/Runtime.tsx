@@ -61,7 +61,9 @@ export function Runtime() {
       { rootMargin: "0px 0px -22% 0px", threshold: 0.08 },
     );
     document.querySelectorAll<HTMLElement>(REVEAL).forEach((el) => io.observe(el));
-    const mo = new MutationObserver(() => document.querySelectorAll<HTMLElement>(REVEAL).forEach((el) => io.observe(el)));
+    const mo = new MutationObserver(() =>
+      document.querySelectorAll<HTMLElement>(REVEAL).forEach((el) => io.observe(el)),
+    );
     mo.observe(document.body, { childList: true, subtree: true });
     cleanups.push(() => (io.disconnect(), mo.disconnect()));
 
@@ -91,7 +93,9 @@ export function Runtime() {
       addEventListener("scroll", req, { passive: true });
       addEventListener("resize", req);
       req();
-      cleanups.push(() => (removeEventListener("scroll", req), removeEventListener("resize", req), cancelAnimationFrame(raf)));
+      cleanups.push(
+        () => (removeEventListener("scroll", req), removeEventListener("resize", req), cancelAnimationFrame(raf)),
+      );
     }
 
     // Pointer depth for [data-scatter] layers (fine pointers, full tier): up to 14 px opposite the pointer, 800 ms lag.

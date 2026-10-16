@@ -441,7 +441,7 @@ export function StudioApp({ section, user, data }: { section: string; user: stri
         {data.invoices.length ? (
           <ul className="st-list st-list--tall">
             {data.invoices.map((i) => (
-              <li key={i.id}>
+              <li key={i.id} data-invoice-id={i.id}>
                 <span>
                   <strong>
                     {i.number} · {i.jobTitle}
