@@ -587,3 +587,20 @@ export const webhookEvents = pgTable("webhook_events", {
   type: text("type").notNull(),
   receivedAt: timestamp("received_at", { withTimezone: true }).notNull().defaultNow(),
 });
+
+/**
+ * Client-gallery view log: one row per (viewer, photograph) per hour. `code` is the 8-hex invisible-watermark code
+ * embedded in the served derivative, so a leaked image can be traced to a viewer. Never holds the image itself.
+ */
+export const studioViewEvents = pgTable(
+  "studio_view_events",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    mediaId: uuid("media_id").notNull(),
+    viewer: text("viewer").notNull(),
+    code: text("code").notNull(),
+    ipHash: text("ip_hash"),
+    at: timestamp("at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("studio_view_events_code_idx").on(t.code), index("studio_view_events_media_idx").on(t.mediaId)],
+);

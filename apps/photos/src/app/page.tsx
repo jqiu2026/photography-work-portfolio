@@ -1,4 +1,4 @@
-import { Image } from "@halation/ui/media";
+import { ProtectedImage } from "@halation/ui/media";
 import { Condense, Scene, Settle, StageProvider, Streak } from "@halation/ui/stage";
 import { getSite } from "@jerryqiu/sites";
 import { ShellIndex } from "@jerryqiu/sites/index-control";
@@ -34,7 +34,6 @@ export default async function Home() {
     .map((s) => ({ ...s, p: photosIn(s.category)[0] }))
     .filter((s): s is { category: string; text: string; p: NonNullable<(typeof s)["p"]> } => !!s.p);
   const cats = categories
-    .filter((c) => c.level !== "strict")
     .map((c) => ({ ...c, count: photosIn(c.slug).length, cover: photosIn(c.slug)[0] }))
     .filter((c) => c.count);
   const lead = hero ?? photos[0];
@@ -63,7 +62,7 @@ export default async function Home() {
             </div>
             {lead ? (
               <figure className="pg-open__photo">
-                <Image
+                <ProtectedImage
                   asset={lead}
                   alt={lead.alt ?? "A portrait photograph."}
                   sizes="(min-width: 900px) 36vw, 90vw"
@@ -79,7 +78,7 @@ export default async function Home() {
             slides={slides.map((s) => ({
               key: s.category,
               caption: s.text,
-              node: <Image asset={s.p} alt={s.p.alt ?? ""} sizes="(min-width: 900px) 60vw, 100vw" fill />,
+              node: <ProtectedImage asset={s.p} alt={s.p.alt ?? ""} sizes="(min-width: 900px) 60vw, 100vw" fill />,
             }))}
           />
         </Scene>
@@ -91,7 +90,9 @@ export default async function Home() {
               {cats.map((c) => (
                 <li key={c.slug}>
                   <Link href={`/portfolio/${c.slug}`} className="pg-cat">
-                    {c.cover ? <Image asset={c.cover} alt="" sizes="(min-width: 900px) 22vw, 70vw" fill /> : null}
+                    {c.cover ? (
+                      <ProtectedImage asset={c.cover} alt="" sizes="(min-width: 900px) 22vw, 70vw" fill />
+                    ) : null}
                     <span className="pg-cat__label">
                       {c.name}
                       <small>{c.count}</small>
@@ -111,7 +112,7 @@ export default async function Home() {
                 {work.slice(0, 4).map((w) => (
                   <li key={w.slug}>
                     <Link href={`/work/${w.slug}`}>
-                      {w.cover ? <Image asset={w.cover} alt="" sizes="(min-width: 900px) 46vw, 92vw" /> : null}
+                      {w.cover ? <ProtectedImage asset={w.cover} alt="" sizes="(min-width: 900px) 46vw, 92vw" /> : null}
                       <span className="pg-projects__t">{w.title}</span>
                       <span className="hl-eyebrow">{[fmt(w.date), w.summary].filter(Boolean).join(" · ")}</span>
                     </Link>

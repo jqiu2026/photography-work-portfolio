@@ -3,11 +3,20 @@
 import { type ReactNode, createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { guardCopy, type GuardLevel, detectTrigger } from "./guard";
 
-type Ctx = { level: GuardLevel; setScopeLevel: (l: GuardLevel | null) => void };
-const GuardContext = createContext<Ctx>({ level: "off", setScopeLevel: () => {} });
+type Ctx = { level: GuardLevel; setScopeLevel: (l: GuardLevel | null) => void; claim: () => () => void };
+const GuardContext = createContext<Ctx>({ level: "off", setScopeLevel: () => {}, claim: () => () => {} });
 
 /** The protection level currently in force (so images know whether to use the strict path). */
 export const useGuardLevel = () => useContext(GuardContext).level;
+
+/**
+ * A protected photograph calls this while mounted: the guard runs at the strict level for as long as any photograph is
+ * on the page (and drops back to the provider default when the last one goes), so text-only pages stay unrestricted.
+ */
+export function useGuardClaim() {
+  const { claim } = useContext(GuardContext);
+  useEffect(() => claim(), [claim]);
+}
 
 /** Put inside a page to raise or lower the level for just that page (e.g. a strict gallery). */
 export function GuardScope({ level }: { level: GuardLevel }) {
@@ -32,7 +41,12 @@ const PROTECTED = ".hl-img, [data-protected]";
  */
 export function ScreenshotGuard({ level = "light", children }: { level?: GuardLevel; children: ReactNode }) {
   const [scope, setScope] = useState<GuardLevel | null>(null);
-  const effective = scope ?? level;
+  const [claims, setClaims] = useState(0);
+  const effective = scope ?? (claims > 0 ? "strict" : level);
+  const claim = useCallback(() => {
+    setClaims((n) => n + 1);
+    return () => setClaims((n) => Math.max(0, n - 1));
+  }, []);
   const [open, setOpen] = useState<string | null>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const ok = useRef<HTMLButtonElement>(null);
@@ -125,7 +139,7 @@ export function ScreenshotGuard({ level = "light", children }: { level?: GuardLe
     if (open) ok.current?.focus();
   }, [open]);
 
-  const ctx = useMemo(() => ({ level: effective, setScopeLevel: setScope }), [effective]);
+  const ctx = useMemo(() => ({ level: effective, setScopeLevel: setScope, claim }), [effective, claim]);
   return (
     <GuardContext.Provider value={ctx}>
       {children}

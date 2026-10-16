@@ -20,13 +20,12 @@ export async function generateMetadata(): Promise<Metadata> {
       template: `%s · ${general.siteName || "Jerry Qiu Photography"}`,
     },
     description: seo.description || "Photography by Jerry Qiu: theater, events, street and aviation.",
-    ...(seo.ogImageMediaId ? { openGraph: { images: [`/api/img/${seo.ogImageMediaId}?w=1600`] } } : {}),
     other: { "ai-crawlers": "noai, noimageai" },
   };
 }
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
-  const { general, protection } = await photosSettings();
+  const { general } = await photosSettings();
   return (
     <html lang="en" suppressHydrationWarning className={fontVars}>
       <head>
@@ -35,7 +34,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       </head>
       <body className="hl-root">
         <ThemeProvider preset="photos" defaultTheme="dark">
-          <ScreenshotGuard level={protection.level}>
+          <ScreenshotGuard level="off">
             <SmoothScroll>
               {general.maintenance ? <Maintenance message={general.maintenanceMessage} /> : children}
             </SmoothScroll>

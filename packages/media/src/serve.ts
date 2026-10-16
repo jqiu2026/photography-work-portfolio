@@ -11,24 +11,51 @@ import {
 import type { StorageProvider } from "@jerryqiu/storage";
 import { createHash } from "node:crypto";
 import { and, eq, isNull, sql } from "drizzle-orm";
+import { codeHex, embedViewerCode, viewerCode } from "./forensic";
 import { applyWatermark } from "./watermark";
 
 /**
- * Public image delivery (`/api/img/[id]?w=&v=&t=`). Originals are never reachable from here: only the stripped, downscaled
- * derivatives. Two tiers:
- *  - public (galleries set to off/light, and everything not in a strict gallery): no token, cacheable at the CDN. Ids are
- *    random UUIDs, so files are not guessable, but anyone who has the link can fetch it. This is the portfolio.
- *  - strict (the image is in a gallery whose protection is "strict"): needs a valid, unexpired HMAC token bound to this
- *    image and width, a same-site browser fetch, and passes a rate limit. Never cached by shared caches.
- * AI/bulk-scraper user agents are refused in both tiers.
+ * Image delivery (`/api/img/[id]?w=&t=`). Originals are never reachable from here: only the stripped, downscaled
+ * derivatives. On the photo site EVERY photograph needs a valid, unexpired HMAC token bound to this image and width, a
+ * same-site browser fetch, and passes a rate limit. Client-gallery photographs additionally need a token bound to a
+ * viewer (a client session), get an invisible per-viewer watermark and are logged. AI/bulk-scraper agents are refused.
+ * (`publicTier` keeps the old tokenless tier for the hub only.)
  */
+export type ImageSource = {
+  derivatives: { width: number; format: string; key: string }[];
+  get(key: string): Promise<{ body: Uint8Array; contentType: string } | null>;
+};
+
 export type ServeDeps = {
-  db: Database;
+  /** Optional: images bundled with the app (no database row). They are always token-gated and never in a studio gallery. */
+  resolveStatic?: (id: string) => ImageSource | null;
+  db?: Database | null;
   store: StorageProvider;
   env?: Record<string, string | undefined>;
   /** Which site's protection settings (watermark) apply to images served by this deployment. */
   site?: "hub" | "photos";
+  /**
+   * Hub only (legacy): keep the old public tier for images that are not in a strict or client gallery. The photo site
+   * never sets this: every photograph needs a token.
+   */
+  publicTier?: boolean;
+  /**
+   * Token endpoint for client-gallery photographs: returns the viewer id when the request carries a valid client
+   * session that may see this image, otherwise null (no token is minted).
+   */
+  studioViewer?: (request: Request, id: string) => Promise<string | null>;
 };
+
+const memory = new Map<string, { n: number; t: number }>();
+async function hit(db: Database | null | undefined, key: string, limit: number, windowSec: number) {
+  if (db) return hitRateLimit(db, key, limit, windowSec);
+  const now = Date.now();
+  const cur = memory.get(key);
+  const row = !cur || now - cur.t > windowSec * 1000 ? { n: 1, t: now } : { n: cur.n + 1, t: cur.t };
+  memory.set(key, row);
+  if (memory.size > 5000) for (const [k, v] of memory) if (now - v.t > 120_000) memory.delete(k);
+  return { allowed: row.n <= limit, count: row.n };
+}
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const deny = (status: number, why: string) =>
@@ -52,6 +79,16 @@ export async function isStrictImage(db: Database, mediaId: string): Promise<bool
   return rows.length > 0;
 }
 
+/** True when the image is in ANY client (studio) gallery: those photographs need a viewer-bound token. */
+export async function isStudioImage(db: Database, mediaId: string): Promise<boolean> {
+  const r = await db.execute<{ n: number }>(sql`
+    select 1 as n from studio_gallery_items sgi
+    join studio_galleries sg on sg.id = sgi.gallery_id
+    where sgi.media_id = ${mediaId} and sg.deleted_at is null limit 1`);
+  const rows = (Array.isArray(r) ? r : (r as { rows: unknown[] }).rows) as unknown[];
+  return rows.length > 0;
+}
+
 export function pickDerivative(
   derivatives: { width: number; format: string; key: string }[],
   width: number,
@@ -71,24 +108,35 @@ export async function serveImage(request: Request, id: string, deps: ServeDeps):
   const url = new URL(request.url);
   const w = Number(url.searchParams.get("w") ?? 960);
   if (!Number.isInteger(w) || w < 16 || w > 2400) return deny(400, "width");
-  const { db, store } = deps;
+  const { store } = deps;
+  const db = deps.db ?? null;
 
-  const [m] = await db
-    .select({ derivatives: schema.media.derivatives, kind: schema.media.kind })
-    .from(schema.media)
-    .where(and(eq(schema.media.id, id), isNull(schema.media.deletedAt)))
-    .limit(1);
-  if (!m || m.kind !== "image" || !m.derivatives.length) return deny(404, "missing");
+  let source: ImageSource | null = deps.resolveStatic?.(id) ?? null;
+  const fromStatic = Boolean(source);
+  if (!source) {
+    if (!db) return deny(404, "missing");
+    const [m] = await db
+      .select({ derivatives: schema.media.derivatives, kind: schema.media.kind })
+      .from(schema.media)
+      .where(and(eq(schema.media.id, id), isNull(schema.media.deletedAt)))
+      .limit(1);
+    if (!m || m.kind !== "image" || !m.derivatives.length) return deny(404, "missing");
+    source = { derivatives: m.derivatives, get: (k) => store.get(k) };
+  }
 
-  const strict = await isStrictImage(db, id);
-  if (strict) {
+  const studio = !fromStatic && db ? await isStudioImage(db, id) : false;
+  const needsToken = !deps.publicTier || studio || (!fromStatic && db ? await isStrictImage(db, id) : false);
+  let viewer = "";
+  if (needsToken) {
     const ipHash = clientIpHash(request.headers);
-    const limited = await hitRateLimit(db, `img:${ipHash}`, 300, 60);
-    const perImage = await hitRateLimit(db, `img:${ipHash}:${id}`, 40, 60);
+    const limited = await hit(db, `img:${ipHash}`, 900, 60);
+    const perImage = await hit(db, `img:${ipHash}:${id}`, 60, 60);
     if (!limited.allowed || !perImage.allowed) return deny(429, "rate");
     if (!isAllowedWidth(w)) return deny(400, "width");
     const t = verifyImageToken(url.searchParams.get("t"), tokenSecrets(deps.env), { id, width: w });
     if (!t.ok) return deny(403, `token-${t.reason}`);
+    viewer = t.payload.v;
+    if (studio && !viewer) return deny(403, "token-viewer");
     // Browser fetch metadata: an <img>/fetch from one of our pages, not a navigation or another site.
     const site = request.headers.get("sec-fetch-site");
     const dest = request.headers.get("sec-fetch-dest");
@@ -107,10 +155,10 @@ export async function serveImage(request: Request, id: string, deps: ServeDeps):
     }
   }
 
-  const d = pickDerivative(m.derivatives, w, request.headers.get("accept") ?? "");
-  let obj = await store.get(d.key);
+  const d = pickDerivative(source.derivatives, w, request.headers.get("accept") ?? "");
+  let obj = await source.get(d.key);
   if (!obj) return deny(404, "file");
-  const mark = await watermarkFor(deps);
+  const mark = db ? await watermarkFor({ ...deps, db }) : null;
   if (mark && (d.format === "webp" || d.format === "avif")) {
     // Baked once per (text, position, opacity, source file) and cached beside the derivatives.
     const tag = createHash("sha256").update(`${mark.text}|${mark.position}|${mark.opacity}`).digest("hex").slice(0, 12);
@@ -123,6 +171,16 @@ export async function serveImage(request: Request, id: string, deps: ServeDeps):
       obj = { body: baked, contentType: obj.contentType };
     }
   }
+  if (studio && db && viewer && (d.format === "webp" || d.format === "avif") && request.method === "GET") {
+    const code = viewerCode(viewer);
+    obj = { body: await embedViewerCode(obj.body, code, d.format), contentType: obj.contentType };
+    const seen = await hit(db, `view:${viewer}:${id}`, 1, 3600);
+    if (seen.allowed)
+      await db
+        .insert(schema.studioViewEvents)
+        .values({ mediaId: id, viewer, code: codeHex(code), ipHash: clientIpHash(request.headers) })
+        .catch(() => {});
+  }
   const headers: Record<string, string> = {
     "Content-Type": obj.contentType || (d.format === "avif" ? "image/avif" : "image/webp"),
     "Content-Disposition": "inline",
@@ -131,12 +189,13 @@ export async function serveImage(request: Request, id: string, deps: ServeDeps):
     "Content-Length": String(obj.body.byteLength),
     Vary: "Accept",
   };
-  if (strict) {
-    headers["Cache-Control"] = "private, no-store";
+  if (needsToken) {
+    // Studio photographs are never cached; other photographs only privately and briefly (the URL carries a token).
+    headers["Cache-Control"] = studio || deps.publicTier ? "private, no-store" : "private, max-age=120";
     headers["Cross-Origin-Resource-Policy"] = "same-site";
     headers.Vary = "Accept, Sec-Fetch-Dest, Sec-Fetch-Site";
   } else {
-    // `v` changes when an image is replaced in place, so a long cache is safe; a policy change takes up to a day.
+    // Hub legacy tier. `v` changes when an image is replaced in place, so a long cache is safe.
     headers["Cache-Control"] = url.searchParams.has("v")
       ? "public, max-age=86400, stale-while-revalidate=604800"
       : "public, max-age=300";
@@ -144,7 +203,7 @@ export async function serveImage(request: Request, id: string, deps: ServeDeps):
   return new Response(request.method === "HEAD" ? null : Buffer.from(obj.body), { status: 200, headers });
 }
 
-async function watermarkFor(deps: ServeDeps) {
+async function watermarkFor(deps: ServeDeps & { db: Database }) {
   if (!deps.site) return null;
   const rows = await deps.db
     .select({ value: schema.settings.value })
@@ -158,9 +217,11 @@ async function watermarkFor(deps: ServeDeps) {
 }
 
 /**
- * `POST /api/img/token`: a fresh set of signed tokens for a strict image, for a page that has been open longer than the
- * token lifetime. Same trust as loading the page (any visitor gets one), but only for same-origin browser requests, never
- * for known scrapers, and rate limited. Only strict images get tokens; everything else needs none.
+ * `POST /api/img/token` with `{ ids: [uuid, ...] }` (up to 40) or `{ id }`: signed tokens, one per allowed width, for
+ * pages that render photographs without tokens in their HTML (the page stays cacheable) or that have been open longer
+ * than a token lives. Same-origin browser requests only, never known scrapers, rate limited. Photographs in client
+ * galleries only get tokens when `studioViewer` recognises a client session for them, and those tokens are viewer-bound.
+ * Response: `{ tokensById: { [id]: { [width]: token } } }`, plus `{ tokens }` for a single `id`.
  */
 export async function handleTokenRequest(request: Request, deps: ServeDeps): Promise<Response> {
   const json = (status: number, body: unknown) =>
@@ -175,13 +236,42 @@ export async function handleTokenRequest(request: Request, deps: ServeDeps): Pro
   } catch {}
   const site = request.headers.get("sec-fetch-site");
   if (!sameOrigin || (site && site !== "same-origin")) return json(403, { error: "origin" });
-  const body = (await request.json().catch(() => null)) as { id?: unknown } | null;
-  const id = typeof body?.id === "string" ? body.id : "";
-  if (!UUID.test(id)) return json(400, { error: "id" });
+  const body = (await request.json().catch(() => null)) as { id?: unknown; ids?: unknown } | null;
+  const ids = Array.isArray(body?.ids)
+    ? (body.ids as unknown[]).filter((x): x is string => typeof x === "string")
+    : typeof body?.id === "string"
+      ? [body.id]
+      : [];
+  if (!ids.length || ids.length > 40 || ids.some((i) => !UUID.test(i))) return json(400, { error: "id" });
+  const db = deps.db ?? null;
   const ipHash = clientIpHash(request.headers);
-  if (!(await hitRateLimit(deps.db, `imgtok:${ipHash}`, 120, 60)).allowed) return json(429, { error: "rate" });
-  if (!(await isStrictImage(deps.db, id))) return json(404, { error: "not protected" });
+  if (!(await hit(db, `imgtok:${ipHash}`, 600, 60)).allowed) return json(429, { error: "rate" });
   const secrets = tokenSecrets(deps.env);
   if (!secrets.length) return json(503, { error: "not configured" });
-  return json(200, { tokens: mintAllWidths({ id, secrets }) });
+  const tokensById: Record<string, Record<number, string>> = {};
+  for (const id of new Set(ids)) {
+    if (deps.publicTier) {
+      if (db && (await isStrictImage(db, id))) tokensById[id] = mintAllWidths({ id, secrets });
+      continue;
+    }
+    if (deps.resolveStatic?.(id)) {
+      tokensById[id] = mintAllWidths({ id, secrets });
+      continue;
+    }
+    if (!db) continue;
+    if (await isStudioImage(db, id)) {
+      const viewer = await deps.studioViewer?.(request, id);
+      if (viewer) tokensById[id] = mintAllWidths({ id, viewer, secrets });
+      continue;
+    }
+    const [m] = await db
+      .select({ id: schema.media.id })
+      .from(schema.media)
+      .where(and(eq(schema.media.id, id), isNull(schema.media.deletedAt)))
+      .limit(1);
+    if (m) tokensById[id] = mintAllWidths({ id, secrets });
+  }
+  if (!Object.keys(tokensById).length) return json(404, { error: "not protected" });
+  const only = ids.length === 1 ? tokensById[ids[0]] : undefined;
+  return json(200, { tokensById, ...(only ? { tokens: only } : {}) });
 }

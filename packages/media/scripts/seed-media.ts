@@ -11,7 +11,7 @@ import { ingestImage, safeName } from "../src";
 import gallery from "../seed/gallery.json" with { type: "json" };
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../..");
-const photosDir = path.join(root, "apps/photos/public/images/gallery");
+const photosDir = path.join(root, "apps/photos/private/images/gallery");
 const webImages = path.join(root, "apps/web/public/images");
 // Categories without people in them are not flagged; everything else is (school events, performers, portraits).
 const NO_PEOPLE = new Set(["Street", "Macro", "Aviation"]);
@@ -99,7 +99,7 @@ for (const [ci, cat] of cats.entries()) {
 }
 
 // 2. Project images: cover + a gallery block (only once, so owner edits are never overwritten).
-const projectsDir = path.join(root, "apps/photos/public/images/projects");
+const projectsDir = path.join(root, "apps/photos/private/images/projects");
 for (const dirName of readdirSync(projectsDir)) {
   const [p] = await db
     .select()

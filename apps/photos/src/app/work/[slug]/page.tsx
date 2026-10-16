@@ -1,5 +1,5 @@
 import { Breadcrumbs, Container, Eyebrow, Heading, Section, Text } from "@halation/ui";
-import { Gallery, Image, type GalleryImage } from "@halation/ui/media";
+import { ProtectedGallery, ProtectedImage } from "@halation/ui/media";
 import { Blocks, MDX } from "@jerryqiu/render";
 import { getSite } from "@jerryqiu/sites";
 import { person } from "@jerryqiu/sites/profile";
@@ -46,7 +46,7 @@ export default async function Project({ params }: { params: Promise<{ slug: stri
     );
   }
 
-  const images: GalleryImage[] = p.images;
+  const images = p.images;
   const url = `${getSite("photos").url}/work/${p.slug}`;
   const jsonLd = {
     "@context": "https://schema.org",
@@ -56,7 +56,6 @@ export default async function Project({ params }: { params: Promise<{ slug: stri
     dateCreated: p.date,
     url,
     creator: { "@type": "Person", name: person.name },
-    ...(p.cover?.files.length ? { image: `${getSite("photos").url}${p.cover.files.at(-1)?.src}` } : {}),
   };
 
   return (
@@ -86,18 +85,27 @@ export default async function Project({ params }: { params: Promise<{ slug: stri
       </Container>
       {p.cover ? (
         <div className="work-detail__hero" style={{ marginTop: "3rem" }}>
-          <Image asset={p.cover} alt={`${p.title}, cover photograph`} sizes="100vw" priority />
+          <ProtectedImage asset={p.cover} alt={`${p.title}, cover photograph`} sizes="100vw" priority />
         </div>
       ) : null}
       <Section>
         <Container size="md">
-          {p.body.kind === "mdx" ? <MDX source={p.body.source} /> : <Blocks blocks={p.body.blocks} title={p.title} />}
+          {p.body.kind === "mdx" ? (
+            <MDX source={p.body.source} />
+          ) : (
+            <Blocks blocks={p.body.blocks} title={p.title} protectMedia />
+          )}
         </Container>
       </Section>
       {images.length > 1 ? (
         <Section tone="surface">
           <Container>
-            <Gallery images={images} rowHeight={300} />
+            <ProtectedGallery
+              items={images.map((a) => ({ asset: a, alt: a.alt }))}
+              layout="justified"
+              rowHeight={300}
+              lightbox
+            />
           </Container>
         </Section>
       ) : null}

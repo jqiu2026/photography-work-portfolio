@@ -1,22 +1,26 @@
 import { Quote } from "@halation/ui";
 import { EmbedFacade } from "@halation/ui";
-import { Image } from "@halation/ui/media";
+import { ProtectedImage } from "@halation/ui/media";
 import type { ProjectBlockView } from "@jerryqiu/db/queries";
 import { RenderMarkdown } from "./markdown";
 
 /** Renders a project's CMS blocks. Text is Markdown (no raw HTML); images come from the media library by id only. */
-export function Blocks({ blocks, title }: { blocks: ProjectBlockView[]; title: string }) {
+export function Blocks({
+  blocks,
+  title,
+  protectMedia = false,
+}: { blocks: ProjectBlockView[]; title: string; protectMedia?: boolean }) {
   return (
     <>
       {blocks.map((b, i) => {
         const key = `${b.type}-${i}`;
         switch (b.type) {
           case "text":
-            return <RenderMarkdown key={key} source={b.markdown} />;
+            return <RenderMarkdown key={key} source={b.markdown} protectMedia={protectMedia} />;
           case "image":
             return (
               <figure key={key} style={{ margin: "2rem 0" }}>
-                <Image asset={b.asset} alt={b.asset.alt ?? title} sizes="(min-width: 900px) 760px, 92vw" />
+                <ProtectedImage asset={b.asset} alt={b.asset.alt ?? title} sizes="(min-width: 900px) 760px, 92vw" />
                 {b.caption ? <figcaption className="adm-note">{b.caption}</figcaption> : null}
               </figure>
             );
@@ -38,8 +42,8 @@ export function Blocks({ blocks, title }: { blocks: ProjectBlockView[]; title: s
                 key={key}
                 style={{ display: "grid", gap: "2rem", gridTemplateColumns: "repeat(auto-fit, minmax(16rem, 1fr))" }}
               >
-                <RenderMarkdown source={b.left} />
-                <RenderMarkdown source={b.right} />
+                <RenderMarkdown source={b.left} protectMedia={protectMedia} />
+                <RenderMarkdown source={b.right} protectMedia={protectMedia} />
               </div>
             );
         }

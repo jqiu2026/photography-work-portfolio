@@ -121,29 +121,21 @@ test.describe("a strict gallery on the photography site", () => {
   });
 });
 
-test.describe("a light gallery", () => {
-  test("serves cacheable images, blocks right-click on them, and never shows the screenshot dialog", async ({
-    page,
-    request,
-  }) => {
+test.describe("a gallery the CMS marks as light is still protected on the photo site", () => {
+  test("there is no plain image URL, and the file route refuses unsigned requests", async ({ page, request }) => {
     const slug = `light-${uid}`;
     await makeGallery(page, slug, "light");
     await page.waitForTimeout(1500);
     await page.goto(`${PHOTOS}/portfolio/${slug}`, { waitUntil: "networkidle" });
-    const img = page.locator(".hl-img img").first();
-    await expect(img).toBeVisible({ timeout: 20_000 });
-    expect(await img.getAttribute("src")).toMatch(/\/api\/img\/[0-9a-f-]{36}\?w=\d+&v=\d+/);
-    const prevented = await img.evaluate((el) => {
-      const ev = new MouseEvent("contextmenu", { bubbles: true, cancelable: true });
-      el.dispatchEvent(ev);
-      return ev.defaultPrevented;
-    });
-    expect(prevented).toBe(true);
+    await expect(page.locator("[data-protected='strict'] img[src^='blob:']").first()).toBeVisible({ timeout: 20_000 });
+    await expect(page.locator("img[src*='/api/img/']")).toHaveCount(0);
+    const id = (await page.locator("[data-pid]").first().getAttribute("data-pid")) as string;
+    expect((await request.get(`${PHOTOS}/api/img/${id}?w=960&v=1`)).status()).toBe(403);
+    // the guard is on whenever a photograph is on the page
     await page.evaluate(() =>
       window.dispatchEvent(new KeyboardEvent("keydown", { key: "PrintScreen", bubbles: true })),
     );
-    await expect(page.getByRole("alertdialog")).toHaveCount(0);
-    void request;
+    await expect(page.getByRole("alertdialog")).toBeVisible();
   });
 });
 
@@ -155,8 +147,19 @@ test.describe("the watermark setting", () => {
     await page.getByRole("link", { name: new RegExp(`${slug}-1`) }).click();
     await expect(page).toHaveURL(/\/admin\/media\/[0-9a-f-]{36}$/);
     const id = page.url().split("/").pop() as string;
-    const url = `${PHOTOS}/api/img/${id}?w=960&v=1`;
-    const plain = Buffer.from(await (await request.get(url, { headers: { accept: "image/webp" } })).body());
+    const fetchImage = async () => {
+      const tk = await request.post(`${PHOTOS}/api/img/token`, {
+        headers: { origin: PHOTOS, "sec-fetch-site": "same-origin" },
+        data: { ids: [id] },
+      });
+      const t = ((await tk.json()) as { tokensById: Record<string, Record<string, string>> }).tokensById[id]["960"];
+      const r = await request.get(`${PHOTOS}/api/img/${id}?w=960&t=${t}`, {
+        headers: { accept: "image/webp", "sec-fetch-site": "same-origin", "sec-fetch-dest": "image" },
+      });
+      expect(r.status()).toBe(200);
+      return Buffer.from(await r.body());
+    };
+    const plain = await fetchImage();
 
     await page.goto("/admin/settings", { waitUntil: "networkidle" });
     // settings are per site: switch to the photography site first
@@ -168,9 +171,7 @@ test.describe("the watermark setting", () => {
     await card.getByRole("button", { name: "Save" }).click();
     await expect(page.locator(".hl-toast", { hasText: "Saved" })).toBeVisible();
 
-    const marked = Buffer.from(
-      await (await request.get(`${PHOTOS}/api/img/${id}?w=960&v=2`, { headers: { accept: "image/webp" } })).body(),
-    );
+    const marked = await fetchImage();
     expect(marked.equals(plain)).toBe(false);
     expect(marked.length).toBeGreaterThan(0);
 

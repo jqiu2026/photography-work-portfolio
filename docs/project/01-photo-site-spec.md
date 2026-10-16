@@ -38,18 +38,19 @@ Rules: apps never import from other apps; `packages/*` never import from an app.
 
 **Exists (migrations 0000 to 0002):** users, settings, media, galleries and gallery_items (portfolio), projects, pages, inbox_messages, audit_log, redirects, rate_limits, external_connections and external_cache (**dropped in PHOTO-M2**), studio_clients, studio_jobs, studio_galleries, studio_gallery_items, studio_favorites, studio_contracts, studio_invoices, studio_payments, studio_bookings, webhook_events.
 
-**Additive migrations planned** (never edit an applied migration; run only on throwaway or local databases):
+**Additive migrations** (numbers after 0004 are indicative) (never edit an applied migration; run only on throwaway or local databases):
 
 | Migration | Adds |
 |---|---|
 | 0003 `drop_shootproof` | drops external_connections, external_cache |
-| 0004 `leads_calendar` | lead source, score, shoot type on jobs; availability_rules, blackout_dates, appointments |
-| 0005 `commerce` | packages, add_ons, quotes, quote_lines, promo_codes, gift_cards, payment_plans, installments, refunds, tax_lines |
-| 0006 `forms` | contract_templates, questionnaires, questionnaire_responses, releases, usage_rights |
-| 0007 `portal` | client_accounts (password hash, magic tokens), notifications, messages, email_log, outbox |
-| 0008 `galleries_v2` | albums, photo comments and ratings, download_events, view_events, selections, gallery expiry and reactivation fields, upload sessions |
-| 0009 `store` | print_products, print_orders, digital_products, orders, order_items |
-| 0010 `ops` | tasks, automations, automation_runs, expenses, mileage, gear, gear_bookings, team_members, call_sheets, drone_checklists, api_keys, webhook_endpoints |
+| 0004 `view_events` (done in M3) | studio_view_events |
+| 0005 `leads_calendar` | lead source, score, shoot type on jobs; availability_rules, blackout_dates, appointments |
+| 0006 `commerce` | packages, add_ons, quotes, quote_lines, promo_codes, gift_cards, payment_plans, installments, refunds, tax_lines |
+| 0007 `forms` | contract_templates, questionnaires, questionnaire_responses, releases, usage_rights |
+| 0008 `portal` | client_accounts (password hash, magic tokens), notifications, messages, email_log, outbox |
+| 0009 `galleries_v2` | albums, photo comments and ratings, download_events, view_events, selections, gallery expiry and reactivation fields, upload sessions |
+| 0010 `store` | print_products, print_orders, digital_products, orders, order_items |
+| 0011 `ops` | tasks, automations, automation_runs, expenses, mileage, gear, gear_bookings, team_members, call_sheets, drone_checklists, api_keys, webhook_endpoints |
 
 **Routes today:** `/` `/about` `/book` `/portfolio` `/portfolio/[slug]` `/work` `/work/[slug]` `/video` `/privacy` `/sign-in` `/client` `/client/gallery` `/client/pay/[token]` `/client/sign/[token]` `/studio` `/studio/[section]`, `/api/{img/[id],img/token,contact,revalidate,webhooks/stripe,auth/*,authenticate}`, catch-all redirect page.
 
@@ -61,6 +62,7 @@ Anything on a screen can be captured. These measures **deter casual copying and 
 
 Every photograph of the owner or a client, in the portfolio, home page, case studies, marketing pages, client galleries, prints and emails, is delivered like this:
 
+- **As built (PHOTO-M3):** pages carry only opaque ids; a client-side broker batches `POST /api/img/token` (same-origin only, rate limited) and `GET /api/img/[id]?w=&t=` returns bytes that become `blob:` URLs. Bundled photographs live in `apps/photos/private/` (not `public/`), served by the same route; originals are in `private/images` and never served. Client-gallery photographs need a viewer-bound token from a client session, get the invisible per-viewer watermark and are logged. OG images from photographs were removed (a text card replaces them in M11).
 - Originals are never served. Only derivatives (480, 960, 1600, 2400 px AVIF/WebP, GPS and personal EXIF stripped, copyright kept).
 - Opaque ids in the HTML; the browser fetches bytes with a short-lived HMAC token bound to image, width and (for clients) viewer; blob rendering with a transparent shield; blur placeholder; the first image is preloaded.
 - The image route refuses unsigned, expired, wrong-width and wrong-image tokens, scraper and AI user agents, and cross-site fetches; per-IP and per-image rate limits; `X-Robots-Tag: noai, noimageai`; `nosniff`; signed derivatives are cacheable at the CDN where the token allows.
@@ -159,7 +161,7 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | F-67 | Gallery expiry, reminders, paid reactivation | P1 | missing | cron, reactivation page | Stripe / mock | e2e | M10, M12 |
 | F-68 | Delivery status page with ETA | P2 | missing | portal job page | n/a | e2e | M9 |
 | F-69 | Client notifications (gallery ready, viewed, favourited) | P1 | missing | automations | email | unit | M12 |
-| F-70 | Per-viewer invisible watermark and view logs | P1 | partial (visible watermark only) | `@jerryqiu/media` | n/a | unit | M3 |
+| F-70 | Per-viewer invisible watermark and view logs | P1 | done (spread-spectrum code per viewer, `studio_view_events`, detector) | `@jerryqiu/media` `forensic.ts`, `serve.ts` | n/a | unit | M3 |
 | F-71 | Per-gallery branding | P3 | missing | gallery settings | n/a | e2e | M10 |
 | F-72 | Culling helpers: duplicates, blur, closed eyes | P3 | missing | studio uploader | cull mock | unit | M16 |
 | F-73 | Face search (consent-gated, off by default) | OPT | missing | gallery settings | `FaceSearchProvider` / mock | unit | M16 |

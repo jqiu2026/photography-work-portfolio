@@ -3,16 +3,19 @@
 import { Dialog } from "radix-ui";
 import { ChevronLeft, ChevronRight, X, ZoomIn } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import type { ReactNode } from "react";
 import { Image, type ImageAsset } from "./Image";
 
 export type LightboxProps = {
-  images: (ImageAsset & { alt: string })[];
+  images: (ImageAsset & { id?: string; alt: string })[];
+  /** Replace the default image (used for protected, blob-rendered photographs). */
+  renderImage?: (img: ImageAsset & { id?: string; alt: string }) => ReactNode;
   index: number | null;
   onIndexChange: (i: number | null) => void;
 };
 
 /** Full-screen viewer: arrow keys, swipe, click to zoom, Escape to close, focus trapped, caption. */
-export function Lightbox({ images, index, onIndexChange }: LightboxProps) {
+export function Lightbox({ images, index, onIndexChange, renderImage }: LightboxProps) {
   const open = index !== null;
   const [zoom, setZoom] = useState(false);
   const start = useRef<number | null>(null);
@@ -69,7 +72,11 @@ export function Lightbox({ images, index, onIndexChange }: LightboxProps) {
                 onClick={() => setZoom((z) => !z)}
                 aria-label={zoom ? "Zoom out" : "Zoom in"}
               >
-                <Image asset={img} alt={img.alt} sizes="100vw" priority fit="contain" fill />
+                {renderImage ? (
+                  renderImage(img)
+                ) : (
+                  <Image asset={img} alt={img.alt} sizes="100vw" priority fit="contain" fill />
+                )}
               </button>
               <figcaption>
                 {img.caption ?? img.alt}

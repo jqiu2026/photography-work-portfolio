@@ -29,6 +29,13 @@
       "when": 1792114023817,
       "tag": "0003_drop_shootproof",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1792114796644,
+      "tag": "0004_view_events",
+      "breakpoints": true
     }
   ]
 }

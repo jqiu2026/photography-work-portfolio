@@ -14,6 +14,11 @@ export default {
     "@jerryqiu/inbox",
     "@jerryqiu/media",
   ],
+  // Bundled photographs live in private/ (never public/); the manifests are read by pages, the derivatives by the image route.
+  outputFileTracingIncludes: {
+    "/*": ["./private/opt/**/manifest.json"],
+    "/api/img/*": ["./private/opt/**/*"],
+  },
   serverExternalPackages: ["sharp", "pg", "@electric-sql/pglite"],
   // photos.jerryqiu.com is an alias: send every path to the canonical photo.jerryqiu.com (Q57).
   async redirects() {

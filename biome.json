@@ -15,6 +15,7 @@
       "DRAFTS",
       "docs",
       "**/public/opt",
+      "**/private/opt",
       "**/public/sequence",
       "pnpm-lock.yaml",
       "**/*.mdx",

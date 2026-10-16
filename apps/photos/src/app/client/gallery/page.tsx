@@ -7,7 +7,7 @@ import { and, eq, inArray, isNull } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import { Shell } from "@/components/Shell";
 import { FavoriteButton, LeaveButton } from "@/components/studio/ClientForms";
-import { portalSession } from "@/lib/portal";
+import { portalSession, viewerId } from "@/lib/portal";
 import "@/components/studio/studio.css";
 
 export const dynamic = "force-dynamic";
@@ -56,7 +56,7 @@ export default async function ClientGallery() {
                     files: [],
                   }}
                   alt={label}
-                  tokens={mintAllWidths({ id: m.id, viewer: session.v, secrets })}
+                  tokens={mintAllWidths({ id: m.id, viewer: viewerId(session), secrets })}
                 />
                 <FavoriteButton mediaId={m.id} label={label} initial={favs.has(m.id)} />
               </li>

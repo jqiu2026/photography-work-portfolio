@@ -66,7 +66,7 @@ export function MDX({ source }: { source: string }) {
       <MDXRemote
         source={stripTba(source)}
         options={{ blockJS: false }}
-        components={{ h2: heading(2), h3: heading(3), a: A, EmbedGrid, SmartLink: A }}
+        components={{ h2: heading(2), h3: heading(3), a: A, EmbedGrid, SmartLink: A, img: () => null }}
       />
     </Prose>
   );

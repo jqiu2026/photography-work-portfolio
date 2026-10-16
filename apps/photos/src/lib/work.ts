@@ -1,6 +1,6 @@
 import type { ProjectBlockView } from "@jerryqiu/db/queries";
 import { readMdxDir } from "@jerryqiu/render/mdx-files";
-import type { GalleryImage, ImageAsset } from "@halation/ui/media";
+import { type BareAsset, bare, bareBlocks } from "@/lib/protect-asset";
 import { getProjects } from "@/lib/content-db";
 import { getProjectImage } from "@/lib/images";
 
@@ -15,8 +15,8 @@ export type WorkItem = {
   date: string;
   credits: { name: string; role: string }[];
   protectedPage: boolean;
-  cover: ImageAsset | null;
-  images: GalleryImage[];
+  cover: BareAsset | null;
+  images: (BareAsset & { alt: string })[];
   body: { kind: "mdx"; source: string } | { kind: "blocks"; blocks: ProjectBlockView[] };
 };
 
@@ -67,9 +67,9 @@ export async function getWork(): Promise<WorkItem[]> {
         date: p.date ?? new Date(0).toISOString(),
         credits: p.credits.map((c) => ({ name: c.name, role: c.role })),
         protectedPage: p.protectedPage,
-        cover: p.cover,
-        images: images.map((a) => ({ ...a, alt: a.alt ?? p.title })),
-        body: { kind: "blocks" as const, blocks: p.blocks },
+        cover: p.cover ? bare(p.cover) : null,
+        images: images.map((a) => ({ ...bare(a), alt: a.alt ?? p.title })),
+        body: { kind: "blocks" as const, blocks: bareBlocks(p.blocks) },
       };
     })
     .sort(byDate);

@@ -81,3 +81,5 @@ Never block on these. Each has a default already being used. Append new ones at 
 | Q63 | Image protection tiers: `off`/`light` removed | One strict policy for every photograph; non-photograph UI illustrations (sample-data screenshots) are the only plain images | Owner may want a public-portfolio exception (higher CDN cache hit) | spec section 4 |
 | Q64 | Docs set reduced from about 45 files to 8 live docs | Old docs moved with `git mv` to `docs/project/archive/` | restore by moving back | `docs/project/` |
 | Q65 | `@jerryqiu/email`, `prints`, `facesearch` new packages | Created as shared packages, each with a real adapter plus mock | none | `packages/` |
+| Q66 | Link-preview (Open Graph) images from photographs | Removed on the photo site (no unprotected photograph path); a generated text card replaces it in PHOTO-M11 | Owner may accept a small watermarked preview exception | `apps/photos/src/app/layout.tsx` |
+| Q67 | Markdown images from the CMS on the photo site | Only `media:UUID` images render (protected); plain https images are dropped | none | `packages/render/src/markdown.tsx` |

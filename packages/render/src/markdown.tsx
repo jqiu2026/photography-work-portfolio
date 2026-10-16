@@ -1,4 +1,5 @@
 import { EmbedFacade, Link, Prose } from "@halation/ui";
+import { ProtectedImage } from "@halation/ui/media";
 import NextLink from "next/link";
 import type { ReactNode } from "react";
 import ReactMarkdown, { type Components, defaultUrlTransform } from "react-markdown";
@@ -45,6 +46,31 @@ function safeHref(href: string | undefined) {
   return undefined; // javascript:, data:, etc. are dropped
 }
 
+const SERVED_MEDIA = /^\/api\/img\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\?w=1600$/;
+
+/**
+ * `protectMedia`: library images (`media:UUID`) render as protected, token-fetched photographs (the photo site), and
+ * any other markdown image is dropped, so no photograph can reach the page as a plain file URL. Without it (the hub)
+ * they are plain responsive images from the image route.
+ */
+function makeComponents(protectMedia: boolean): Components {
+  return {
+    ...components,
+    img({ src, alt }) {
+      if (protectMedia) {
+        const m = typeof src === "string" ? SERVED_MEDIA.exec(src) : null;
+        // Intrinsic size is unknown in Markdown: a 3:2 frame with the picture contained inside it.
+        return m ? (
+          <ProtectedImage asset={{ id: m[1], width: 1600, height: 1067 }} alt={alt ?? ""} fit="contain" />
+        ) : null;
+      }
+      const s = typeof src === "string" && /^(https:\/\/|\/)/.test(src) ? src : undefined;
+      // eslint-disable-next-line @next/next/no-img-element
+      return s ? <img src={s} alt={alt ?? ""} loading="lazy" /> : null;
+    },
+  };
+}
+
 const components: Components = {
   a({ href, children }) {
     const h = safeHref(href);
@@ -56,11 +82,6 @@ const components: Components = {
         </Link>
       );
     return <Link href={h}>{children}</Link>;
-  },
-  img({ src, alt }) {
-    const s = typeof src === "string" && /^(https:\/\/|\/)/.test(src) ? src : undefined;
-    // eslint-disable-next-line @next/next/no-img-element
-    return s ? <img src={s} alt={alt ?? ""} loading="lazy" /> : null;
   },
   div(props) {
     const p = props as { "data-embed"?: string; "data-ids"?: string; children?: ReactNode };
@@ -86,11 +107,11 @@ const components: Components = {
 };
 
 /** Markdown without the Prose wrapper, for places that already provide one. */
-export function RenderMarkdownBare({ source }: { source: string }) {
+export function RenderMarkdownBare({ source, protectMedia = false }: { source: string; protectMedia?: boolean }) {
   return (
     <ReactMarkdown
       remarkPlugins={[remarkGfm, remarkShortcodes]}
-      components={components}
+      components={makeComponents(protectMedia)}
       urlTransform={transformUrl}
       skipHtml
     >
@@ -99,12 +120,12 @@ export function RenderMarkdownBare({ source }: { source: string }) {
   );
 }
 
-export function RenderMarkdown({ source }: { source: string }) {
+export function RenderMarkdown({ source, protectMedia = false }: { source: string; protectMedia?: boolean }) {
   return (
     <Prose>
       <ReactMarkdown
         remarkPlugins={[remarkGfm, remarkShortcodes]}
-        components={components}
+        components={makeComponents(protectMedia)}
         urlTransform={transformUrl}
         skipHtml
       >

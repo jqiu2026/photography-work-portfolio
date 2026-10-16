@@ -1,5 +1,5 @@
 import { Container, Eyebrow, Heading, Section } from "@halation/ui";
-import { Gallery } from "@halation/ui/media";
+import { ProtectedGallery } from "@halation/ui/media";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Shell } from "@/components/Shell";
@@ -31,7 +31,7 @@ export default async function Portfolio() {
               </Link>
             ))}
           </nav>
-          <Gallery images={photos} layout="masonry" glitch />
+          <ProtectedGallery items={photos.map((p) => ({ asset: p, alt: p.alt }))} layout="masonry" lightbox />
         </Container>
       </Section>
     </Shell>

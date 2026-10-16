@@ -1,7 +1,7 @@
 import { getImage } from "@/lib/images";
 
 /**
- * The static portfolio (Phase 1). Ids match public/opt/gallery/manifest.json (made by scripts/optimize-images.mjs).
+ * The static portfolio (Phase 1). Slugs match private/opt/gallery/manifest.json (made by scripts/optimize-images.mjs).
  * Categories come from the original site. Phase 2 moves this into the CMS.
  * TODO(owner): replace the generic alt text with a real description of each photograph.
  */
@@ -47,10 +47,10 @@ const entries: [id: string, category: string][] = [
 
 const name = (slug: string) => categories.find((c) => c.slug === slug)?.name ?? slug;
 
-export const photos = entries.map(([id, category], i) => ({
-  id,
+export const photos = entries.map(([slug, category], i) => ({
+  slug,
   category,
-  ...getImage(id),
+  ...getImage(slug),
   alt: `${name(category)} photograph ${i + 1}`,
 }));
 
@@ -69,4 +69,4 @@ export const featured = [
   "jry0022-enhanced-nr",
   "jry0126-enhanced-nr",
   "10-19-2025-maker-faire-coney-island-2025-98-1",
-].map((id) => photos.find((p) => p.id === id)!);
+].map((slug) => photos.find((p) => p.slug === slug)!);

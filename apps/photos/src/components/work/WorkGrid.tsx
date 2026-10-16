@@ -1,5 +1,5 @@
 import { TiltCard, InView } from "@halation/ui/motion";
-import { Image } from "@halation/ui/media";
+import { ProtectedImage } from "@halation/ui/media";
 import NextLink from "next/link";
 import type { WorkItem } from "@/lib/work";
 
@@ -16,7 +16,7 @@ export function WorkGrid({ projects }: { projects: WorkItem[] }) {
               <NextLink href={`/work/${p.slug}`} className="work-card">
                 <div className="work-card__media">
                   {cover ? (
-                    <Image asset={cover} alt="" sizes="(min-width: 900px) 40vw, 92vw" />
+                    <ProtectedImage asset={cover} alt="" sizes="(min-width: 900px) 40vw, 92vw" />
                   ) : (
                     <div className="work-card__empty">{p.summary}</div>
                   )}

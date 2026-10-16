@@ -1,11 +1,13 @@
 import "server-only";
 import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 import { clientIpHash, tokenSecrets } from "@jerryqiu/protect";
+import { getDb, schema } from "@jerryqiu/db";
+import { and, eq } from "drizzle-orm";
 import { cookies, headers } from "next/headers";
 
 /**
  * Client portal session: a signed, httpOnly, host-only cookie holding the gallery the visitor opened with its passcode.
- * Separate from the staff session (Auth.js). Scoped to /client, SameSite=Strict, 8 hours. The `viewer` id binds image
+ * Separate from the staff session (Auth.js). Host-only, SameSite=Strict, 8 hours; sent on `/` so the image token endpoint can recognise the session. The `viewer` id binds image
  * tokens to this session so a leaked token is useless elsewhere.
  */
 const COOKIE = "hl_client";
@@ -50,7 +52,7 @@ export function readSessionValue(
 export async function startPortalSession(galleryId: string): Promise<void> {
   const e = Math.floor(Date.now() / 1000) + TTL_SEC;
   (await cookies()).set(COOKIE, signSession({ g: galleryId, v: randomBytes(8).toString("hex"), e }), {
-    path: "/client",
+    path: "/",
     httpOnly: true,
     sameSite: "strict",
     secure: process.env.NODE_ENV === "production",
@@ -63,9 +65,32 @@ export async function portalSession(): Promise<PortalSession | null> {
 }
 
 export async function endPortalSession(): Promise<void> {
-  (await cookies()).delete({ name: COOKIE, path: "/client" });
+  (await cookies()).delete({ name: COOKIE, path: "/" });
 }
 
 export async function requestIpHash(): Promise<string> {
   return clientIpHash(await headers());
+}
+
+/** The viewer id baked into image tokens and the invisible watermark: gallery plus session, so a leak traces to both. */
+export const viewerId = (s: PortalSession) => `${s.g}.${s.v}`;
+
+/** For the image token endpoint: the viewer id when this request's client session may see this photograph. */
+export async function clientGalleryViewer(mediaId: string): Promise<string | null> {
+  const session = await portalSession();
+  const db = getDb();
+  if (!session || !db) return null;
+  const [row] = await db
+    .select({ n: schema.studioGalleryItems.mediaId })
+    .from(schema.studioGalleryItems)
+    .innerJoin(schema.studioGalleries, eq(schema.studioGalleries.id, schema.studioGalleryItems.galleryId))
+    .where(
+      and(
+        eq(schema.studioGalleryItems.galleryId, session.g),
+        eq(schema.studioGalleryItems.mediaId, mediaId),
+        eq(schema.studioGalleries.status, "published"),
+      ),
+    )
+    .limit(1);
+  return row ? viewerId(session) : null;
 }
