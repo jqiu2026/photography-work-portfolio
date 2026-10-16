@@ -95,9 +95,9 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | F-05 | Availability and instant booking with deposit | P1 | done (hold, deposit invoice, mock or Stripe, confirm on payment) | `/book/[type]`, calendar | Stripe / mock | e2e | M5 |
 | F-06 | Mini-sessions and sale-day booking | P2 | done (open slots, one winner each) | slots with capacity | n/a | e2e | M5 |
 | F-07 | Waitlist | P2 | done (join, tell them a spot opened) | appointments.waitlist | email | unit | M5 |
-| F-08 | Referral codes | P2 | missing | promo_codes kind=referral | n/a | unit | M6 |
-| F-09 | Gift cards | P2 | missing | gift_cards | Stripe / mock | unit | M6 |
-| F-10 | Discount and promo codes | P2 | missing | promo_codes | n/a | unit | M6 |
+| F-08 | Referral codes | P2 | done | promo_codes kind=referral | n/a | unit | M6 |
+| F-09 | Gift cards | P2 | partial (issue by owner, redeem on quotes, ledger; online purchase in M13) | gift_cards | Stripe / mock | unit | M6 |
+| F-10 | Discount and promo codes | P2 | done | promo_codes | n/a | unit | M6 |
 | F-11 | Testimonials and reviews with consent | P2 | missing | publish-to-portfolio | n/a | e2e | M14 |
 | F-12 | SEO pages and structured data | P1 | partial (sitemap, robots, JSON-LD on work) | all public pages | n/a | e2e | M11 |
 | F-13 | Newsletter signup (own stream, unsubscribe) | OPT | missing | footer form | Resend / outbox | e2e | M12 |
@@ -106,14 +106,14 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 
 | Id | Feature | Pri | Status | Where | Provider / mock | Test | Milestone |
 |---|---|---|---|---|---|---|---|
-| F-20 | Package builder (deliverables, not editing hours) | P1 | missing | `/studio/packages`, `/packages` | n/a | unit | M6 |
-| F-21 | Tiers plus a la carte add-ons, real standalone add-on prices beside bundles | P1 | missing | add_ons | n/a | unit | M6 |
-| F-22 | Quotes and proposal pages, accept and pay | P1 | missing | `/client/quote/[token]` | Stripe / mock | e2e | M6 |
-| F-23 | Mandatory fees in headline price, optional fees separate | P1 | missing | quote_lines.kind | n/a | unit | M6 |
-| F-24 | Sales tax as its own line (Stripe Tax; mock rate) | P1 | missing | tax_lines | Stripe Tax / mock | unit | M6 |
+| F-20 | Package builder (deliverables, not editing hours) | P1 | done | `/studio/packages`, `/packages` | n/a | unit | M6 |
+| F-21 | Tiers plus a la carte add-ons, real standalone add-on prices beside bundles | P1 | done | add_ons | n/a | unit | M6 |
+| F-22 | Quotes and proposal pages, accept and pay | P1 | done | `/client/quote/[token]` | Stripe / mock | e2e | M6 |
+| F-23 | Mandatory fees in headline price, optional fees separate | P1 | done | quote_lines.kind | n/a | unit | M6 |
+| F-24 | Sales tax as its own line (Stripe Tax adapter; flat SAMPLE rate otherwise) | P1 | done | tax_lines | Stripe Tax / mock | unit | M6 |
 | F-25 | Payment plans and installments | P1 | missing | payment_plans | Stripe / mock | unit | M8 |
-| F-26 | Multi-currency display | P3 | missing | price formatter | n/a | unit | M6 |
-| F-27 | Upsells at checkout | P2 | missing | quote page | n/a | e2e | M6 |
+| F-26 | Multi-currency display | P3 | partial (display-only estimate helper, SAMPLE rates; charges stay USD) | price formatter | n/a | unit | M6 |
+| F-27 | Upsells at checkout | P2 | done (on the quote page, re-priced server-side) | quote page | n/a | e2e | M6 |
 | F-28 | Print and product store (prints, albums, canvases, cards) | P2 | missing | `/client/store/[gallery]` | WHCC / mock | e2e | M13 |
 | F-29 | Digital download sales | P2 | missing | digital_products | Stripe / mock | e2e | M13 |
 | F-30 | Gallery extension and reactivation sales | P1 | missing | expiry flow | Stripe / mock | e2e | M10 |

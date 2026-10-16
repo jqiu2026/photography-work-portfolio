@@ -115,3 +115,40 @@ describe("events", () => {
     expect(stripeConfigured({ STRIPE_SECRET_KEY: "sk_test_x", STRIPE_WEBHOOK_SECRET: "whsec_x" })).toBe(true);
   });
 });
+
+import { createFlatTax, createStripeTax } from "../src/tax";
+
+describe("tax providers", () => {
+  it("the flat provider is labelled SAMPLE and rounds to cents", async () => {
+    const r = await createFlatTax(888).calculate({ amountCents: 10_000, currency: "usd" });
+    expect(r).toMatchObject({ taxCents: 888, rateBp: 888, source: "flat-sample" });
+    expect(r.label).toContain("SAMPLE");
+    expect((await createFlatTax(0).calculate({ amountCents: 10_000, currency: "usd" })).source).toBe("none");
+  });
+  it("Stripe Tax is called with a bearer key and the address, and falls back without an address or on an error", async () => {
+    let seen: { url: string; init: RequestInit } | undefined;
+    const ok = (async (url: string, init: RequestInit) => {
+      seen = { url, init };
+      return new Response(JSON.stringify({ tax_amount_exclusive: 887 }), { status: 200 });
+    }) as unknown as typeof fetch;
+    const flat = createFlatTax(500);
+    const tax = createStripeTax({ secretKey: "sk_test_x", fetch: ok }, flat);
+    const r = await tax.calculate({
+      amountCents: 10_000,
+      currency: "USD",
+      address: { country: "US", state: "NY", postalCode: "10001" },
+    });
+    expect(r).toMatchObject({ taxCents: 887, rateBp: 887, source: "stripe" });
+    expect(seen?.url).toBe("https://api.stripe.com/v1/tax/calculations");
+    expect((seen?.init.headers as Record<string, string>).Authorization).toBe("Bearer sk_test_x");
+    expect(String(seen?.init.body)).toContain("customer_details%5Baddress%5D%5Bpostal_code%5D=10001");
+    expect((await tax.calculate({ amountCents: 10_000, currency: "usd" })).source).toBe("flat-sample");
+    const bad = createStripeTax(
+      { secretKey: "k", fetch: (async () => new Response("{}", { status: 400 })) as unknown as typeof fetch },
+      flat,
+    );
+    expect((await bad.calculate({ amountCents: 10_000, currency: "usd", address: { country: "US" } })).source).toBe(
+      "flat-sample",
+    );
+  });
+});

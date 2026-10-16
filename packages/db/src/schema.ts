@@ -717,3 +717,172 @@ export const waitlist = pgTable("waitlist", {
   notifiedAt: timestamp("notified_at", { withTimezone: true }),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
+
+/* ------------------------------------------------------------------------------------------------------------------
+ * Commerce: packages, add-ons, quotes and proposals, promo and referral codes, gift cards. Money is integer cents.
+ * Every price the owner has not set yet is flagged `isSample` and shown as "$XX" (Q61).
+ * ---------------------------------------------------------------------------------------------------------------- */
+export type PackageDeliverable = { label: string; value: string };
+export type QuoteLine = {
+  kind: "package" | "addon" | "fee" | "optional-fee" | "discount";
+  description: string;
+  qty: number;
+  unitCents: number;
+  amountCents: number;
+  refId?: string;
+  /** The standalone price when this line is bundled (shown next to bundles, e.g. an extension that sells for $30). */
+  standaloneCents?: number;
+};
+
+export const quoteStatusEnum = pgEnum("studio_quote_status", [
+  "draft",
+  "sent",
+  "viewed",
+  "accepted",
+  "declined",
+  "expired",
+  "void",
+]);
+
+export const studioPackages = pgTable(
+  "studio_packages",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    slug: text("slug").notNull(),
+    name: text("name").notNull(),
+    tagline: text("tagline"),
+    /** What the client gets: coverage hours, edited images, gallery time. Deliverables, never editing hours. */
+    deliverables: jsonb("deliverables").notNull().$type<PackageDeliverable[]>().default(sql`'[]'::jsonb`),
+    priceCents: integer("price_cents").notNull().default(0),
+    /** Mandatory fees included in the headline price (travel inside a radius, booking fee). Shown, never hidden. */
+    mandatoryFees: jsonb("mandatory_fees")
+      .notNull()
+      .$type<{ label: string; cents: number }[]>()
+      .default(sql`'[]'::jsonb`),
+    /** Add-on slugs bundled into this package (their standalone price is shown beside the bundle). */
+    includedAddOns: jsonb("included_add_ons").notNull().$type<string[]>().default(sql`'[]'::jsonb`),
+    tier: integer("tier").notNull().default(1),
+    featured: boolean("featured").notNull().default(false),
+    visible: boolean("visible").notNull().default(true),
+    isSample: boolean("is_sample").notNull().default(true),
+    sort: integer("sort").notNull().default(0),
+    ...stamps,
+  },
+  (t) => [uniqueIndex("studio_packages_slug_idx").on(t.slug)],
+);
+
+export const studioAddOns = pgTable(
+  "studio_add_ons",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    slug: text("slug").notNull(),
+    name: text("name").notNull(),
+    description: text("description"),
+    /** The real standalone price, always shown next to bundles. */
+    priceCents: integer("price_cents").notNull().default(0),
+    unit: text("unit").notNull().default("each"),
+    maxQty: integer("max_qty").notNull().default(1),
+    /** An optional fee (travel, rush) rather than a product: listed separately from the headline price. */
+    isFee: boolean("is_fee").notNull().default(false),
+    /** Offered as an upsell on the quote page. */
+    upsell: boolean("upsell").notNull().default(true),
+    visible: boolean("visible").notNull().default(true),
+    isSample: boolean("is_sample").notNull().default(true),
+    sort: integer("sort").notNull().default(0),
+    ...stamps,
+  },
+  (t) => [uniqueIndex("studio_add_ons_slug_idx").on(t.slug)],
+);
+
+export const studioPromoCodes = pgTable(
+  "studio_promo_codes",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    code: text("code").notNull(),
+    /** percent | amount | referral (a percent code owned by a referring client). */
+    kind: text("kind").notNull().default("percent"),
+    percentOff: integer("percent_off"),
+    amountOffCents: integer("amount_off_cents"),
+    minSubtotalCents: integer("min_subtotal_cents").notNull().default(0),
+    maxUses: integer("max_uses"),
+    uses: integer("uses").notNull().default(0),
+    expiresAt: timestamp("expires_at", { withTimezone: true }),
+    active: boolean("active").notNull().default(true),
+    referrerClientId: uuid("referrer_client_id").references(() => studioClients.id),
+    note: text("note"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex("studio_promo_codes_code_idx").on(t.code)],
+);
+
+export const studioGiftCards = pgTable(
+  "studio_gift_cards",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    /** Stored hashed-comparable lowercase code; shown to the buyer once. */
+    code: text("code").notNull(),
+    initialCents: integer("initial_cents").notNull(),
+    balanceCents: integer("balance_cents").notNull(),
+    purchaserEmail: text("purchaser_email"),
+    recipientName: text("recipient_name"),
+    expiresAt: timestamp("expires_at", { withTimezone: true }),
+    status: text("status").notNull().default("active"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex("studio_gift_cards_code_idx").on(t.code)],
+);
+
+export const studioGiftLedger = pgTable("studio_gift_ledger", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  cardId: uuid("card_id")
+    .notNull()
+    .references(() => studioGiftCards.id),
+  deltaCents: integer("delta_cents").notNull(),
+  quoteId: uuid("quote_id"),
+  note: text("note"),
+  at: timestamp("at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+export const studioQuotes = pgTable(
+  "studio_quotes",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    number: text("number").notNull(),
+    clientId: uuid("client_id")
+      .notNull()
+      .references(() => studioClients.id),
+    jobId: uuid("job_id").references(() => studioJobs.id),
+    title: text("title").notNull(),
+    intro: text("intro"),
+    terms: text("terms"),
+    status: quoteStatusEnum("status").notNull().default("draft"),
+    packageId: uuid("package_id").references(() => studioPackages.id),
+    lines: jsonb("lines").notNull().$type<QuoteLine[]>().default(sql`'[]'::jsonb`),
+    subtotalCents: integer("subtotal_cents").notNull().default(0),
+    discountCents: integer("discount_cents").notNull().default(0),
+    taxRateBp: integer("tax_rate_bp").notNull().default(0),
+    taxCents: integer("tax_cents").notNull().default(0),
+    taxLabel: text("tax_label"),
+    totalCents: integer("total_cents").notNull().default(0),
+    giftCents: integer("gift_cents").notNull().default(0),
+    depositCents: integer("deposit_cents").notNull().default(0),
+    currency: text("currency").notNull().default("usd"),
+    promoCode: text("promo_code"),
+    giftCode: text("gift_code"),
+    validUntil: timestamp("valid_until", { withTimezone: true }),
+    tokenHash: text("token_hash"),
+    sentAt: timestamp("sent_at", { withTimezone: true }),
+    viewedAt: timestamp("viewed_at", { withTimezone: true }),
+    acceptedAt: timestamp("accepted_at", { withTimezone: true }),
+    acceptedBy: text("accepted_by"),
+    acceptedIpHash: text("accepted_ip_hash"),
+    /** SHA-256 of the quote content at acceptance, so later edits cannot change what was agreed. */
+    acceptedHash: text("accepted_hash"),
+    invoiceId: uuid("invoice_id").references(() => studioInvoices.id),
+    isSample: boolean("is_sample").notNull().default(false),
+    ...stamps,
+  },
+  (t) => [index("studio_quotes_client_idx").on(t.clientId), uniqueIndex("studio_quotes_number_idx").on(t.number)],
+);
+
+export type StudioQuote = typeof studioQuotes.$inferSelect;

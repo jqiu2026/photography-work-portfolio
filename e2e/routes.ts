@@ -34,6 +34,7 @@ export const routes: { site: string; path: string; base: string }[] = [
     "/portfolio",
     "/portfolio/theater",
     "/book/event",
+    "/packages",
     "/work",
     "/work/stuy-sing-26",
     "/work/stuypa-cny-dinner-26",

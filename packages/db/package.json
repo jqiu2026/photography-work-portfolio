@@ -13,7 +13,9 @@
     "./settings": "./src/settings.ts",
     "./studio": "./src/studio.ts",
     "./studio-crypto": "./src/studio-crypto.ts",
-    "./calendar": "./src/calendar.ts"
+    "./calendar": "./src/calendar.ts",
+    "./commerce": "./src/commerce.ts",
+    "./pricing": "./src/pricing.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

@@ -265,3 +265,81 @@
   color: var(--hl-accent-contrast);
   border-color: transparent;
 }
+
+.pk-note {
+  margin-top: 1.25rem;
+  padding: 0.75rem 1rem;
+  border-left: 3px solid var(--hl-accent);
+  color: var(--hl-muted);
+  max-width: 48ch;
+}
+.pk-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+}
+.pk-card {
+  padding: 1.5rem;
+  border-radius: var(--hl-radius-lg, 16px);
+  border: 1px solid var(--hl-line, rgba(255, 255, 255, 0.14));
+  display: grid;
+  gap: 0.75rem;
+  align-content: start;
+}
+.pk-card[data-featured] {
+  border-color: var(--hl-accent);
+}
+.pk-card h2 {
+  margin: 0;
+  font-size: var(--hl-text-2xl);
+}
+.pk-tag {
+  color: var(--hl-muted);
+  margin: 0;
+}
+.pk-price {
+  font-size: var(--hl-text-3xl);
+  margin: 0;
+}
+.pk-price small {
+  font-size: var(--hl-text-xs);
+  color: var(--hl-muted);
+}
+.pk-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+}
+.pk-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 0;
+  border-top: 1px solid var(--hl-line, rgba(255, 255, 255, 0.14));
+}
+.pk-fee {
+  color: var(--hl-muted);
+  font-size: var(--hl-text-sm);
+  margin: 0;
+}
+.pk-extras {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+  max-width: 44rem;
+}
+.pk-extras li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  border-top: 1px solid var(--hl-line, rgba(255, 255, 255, 0.14));
+}
+.pk-extras small {
+  display: block;
+  color: var(--hl-muted);
+}

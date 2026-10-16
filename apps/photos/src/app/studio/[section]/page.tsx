@@ -8,7 +8,10 @@ import { Shell } from "@/components/Shell";
 import { CalendarView } from "@/components/studio/CalendarView";
 import { PipelineView } from "@/components/studio/PipelineView";
 import { StudioApp, type StudioData } from "@/components/studio/StudioApp";
+import { CatalogView } from "@/components/studio/CatalogView";
+import { QuotesView } from "@/components/studio/QuotesView";
 import { calendarData } from "@/lib/studio-calendar";
+import * as com from "@jerryqiu/db/commerce";
 import { studioSections } from "@/components/studio/sections";
 
 export const dynamic = "force-dynamic";
@@ -40,6 +43,99 @@ export default async function StudioSection({ params }: { params: Promise<{ sect
         <CalendarView user={user.name ?? user.email ?? "owner"} data={await calendarData(db)} />
       </Shell>
     );
+  if (section === "packages") {
+    await com.seedSampleCatalog(db);
+    const [packages, addOns, promos, clients, settings] = await Promise.all([
+      com.listPackages(db),
+      com.listAddOns(db),
+      com.listPromos(db),
+      st.listClients(db),
+      com.getPaymentsSettings(db),
+    ]);
+    return (
+      <Shell>
+        <CatalogView
+          user={user.name ?? user.email ?? "owner"}
+          data={{
+            packages: packages.map((p) => ({
+              id: p.id,
+              name: p.name,
+              tagline: p.tagline,
+              tier: p.tier,
+              priceCents: p.priceCents,
+              deliverables: p.deliverables,
+              mandatoryFees: p.mandatoryFees,
+              includedAddOns: p.includedAddOns,
+              featured: p.featured,
+              visible: p.visible,
+              isSample: p.isSample,
+            })),
+            addOns: addOns.map((a) => ({
+              id: a.id,
+              slug: a.slug,
+              name: a.name,
+              description: a.description,
+              priceCents: a.priceCents,
+              unit: a.unit,
+              maxQty: a.maxQty,
+              isFee: a.isFee,
+              upsell: a.upsell,
+              isSample: a.isSample,
+            })),
+            promos: promos.map((p) => ({
+              id: p.id,
+              code: p.code,
+              kind: p.kind,
+              off: p.percentOff ? `${p.percentOff}% off` : `${((p.amountOffCents ?? 0) / 100).toFixed(2)} off`,
+              uses: p.uses,
+              maxUses: p.maxUses,
+              active: p.active,
+              note: p.note,
+            })),
+            clients: clients.map((c) => ({ id: c.id, name: c.name })),
+            settings: {
+              depositPercent: settings.depositPercent,
+              quoteValidDays: settings.quoteValidDays,
+              taxRate: (settings.taxRateBp / 100).toString(),
+              taxLabel: settings.taxLabel,
+              taxIsSample: settings.taxIsSample,
+            },
+          }}
+        />
+      </Shell>
+    );
+  }
+  if (section === "quotes") {
+    await com.seedSampleCatalog(db);
+    const [quotes, clients, packages, addOns] = await Promise.all([
+      com.listQuotes(db),
+      st.listClients(db),
+      com.listPackages(db),
+      com.listAddOns(db),
+    ]);
+    return (
+      <Shell>
+        <QuotesView
+          user={user.name ?? user.email ?? "owner"}
+          data={{
+            quotes: quotes.map((r) => ({
+              id: r.quote.id,
+              number: r.quote.number,
+              title: r.quote.title,
+              client: r.client.name,
+              status: r.quote.status,
+              totalCents: r.quote.totalCents,
+              isSample: r.quote.isSample,
+              validUntil: r.quote.validUntil?.toISOString().slice(0, 10) ?? null,
+            })),
+            clients: clients.map((c) => ({ id: c.id, name: c.name })),
+            packages: packages.map((p) => ({ id: p.id, name: p.name, priceCents: p.priceCents })),
+            addOns: addOns.map((a) => ({ id: a.id, name: a.name, priceCents: a.priceCents, unit: a.unit })),
+          }}
+        />
+      </Shell>
+    );
+  }
   if (section === "pipeline") {
     const [leads, jobs] = await Promise.all([st.listBookings(db), st.listJobs(db)]);
     return (
