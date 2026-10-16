@@ -78,10 +78,18 @@ export function FavoriteButton({ mediaId, label, initial }: { mediaId: string; l
   );
 }
 
-export function SignForm({ token, body, title }: { token: string; body: string; title: string }) {
+export function SignForm({
+  token,
+  body,
+  title,
+  minor = false,
+  subject,
+}: { token: string; body: string; title: string; minor?: boolean; subject?: string | null }) {
   const [r, action, pending] = useActionState(signContractAction.bind(null, token), null);
   const [name, setName] = useState("");
   const [agree, setAgree] = useState(false);
+  const [consent, setConsent] = useState(false);
+  const [guardian, setGuardian] = useState("");
   if (r?.ok)
     return (
       <section className="st-card">
@@ -99,9 +107,19 @@ export function SignForm({ token, body, title }: { token: string; body: string; 
         Type your full name to sign
         <input name="name" value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" />
       </label>
+      {minor ? (
+        <label>
+          Parent or legal guardian: type your full name{subject ? ` (signing for ${subject})` : ""}
+          <input name="guardian" value={guardian} onChange={(e) => setGuardian(e.target.value)} autoComplete="off" />
+        </label>
+      ) : null}
       <label className="st-check">
         <input type="checkbox" name="agree" checked={agree} onChange={(e) => setAgree(e.target.checked)} /> I agree to
         these terms.
+      </label>
+      <label className="st-check">
+        <input type="checkbox" name="consent" checked={consent} onChange={(e) => setConsent(e.target.checked)} /> I
+        agree to sign, and to keep records of this agreement, electronically.
       </label>
       <Err r={r} />
       <button className="st-btn" type="submit" disabled={pending}>

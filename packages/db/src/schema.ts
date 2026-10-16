@@ -511,6 +511,23 @@ export const studioContracts = pgTable(
     signerUserAgent: text("signer_user_agent"),
     /** sha256 of the exact text that was signed */
     documentSha256: text("document_sha256"),
+    /** contract | model-release | property-release | parental-consent | licence */
+    kind: text("kind").notNull().default("contract"),
+    templateId: uuid("template_id"),
+    /** Who or what a release covers (a person, a property). */
+    subject: text("subject"),
+    minor: boolean("minor").notNull().default(false),
+    guardianName: text("guardian_name"),
+    signerEmail: text("signer_email"),
+    /** ESIGN/UETA: the signer agreed to sign and keep records electronically (captured with the signature). */
+    consentElectronic: boolean("consent_electronic").notNull().default(false),
+    /** Licence terms granted (personal, commercial, term in months; null = no end). Feeds the usage-rights tracker. */
+    usageRights: jsonb("usage_rights").$type<{
+      personal: boolean;
+      commercial: boolean;
+      termMonths: number | null;
+    } | null>(),
+    licenseExpiresAt: timestamp("license_expires_at", { withTimezone: true }),
     ...stamps,
   },
   (t) => [uniqueIndex("studio_contracts_token_idx").on(t.tokenHash), index("studio_contracts_job_idx").on(t.jobId)],
@@ -886,3 +903,73 @@ export const studioQuotes = pgTable(
 );
 
 export type StudioQuote = typeof studioQuotes.$inferSelect;
+
+/* ------------------------------------------------------------------------------------------------------------------
+ * Contract and release templates (merge fields), and questionnaires. Sample text is labelled "sample only: have a lawyer
+ * review" and flagged `is_sample` until the owner edits it.
+ * ---------------------------------------------------------------------------------------------------------------- */
+export const studioContractTemplates = pgTable(
+  "studio_contract_templates",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    slug: text("slug").notNull(),
+    name: text("name").notNull(),
+    /** contract | model-release | property-release | parental-consent | licence */
+    kind: text("kind").notNull().default("contract"),
+    body: text("body").notNull(),
+    usageRights: jsonb("usage_rights").$type<{
+      personal: boolean;
+      commercial: boolean;
+      termMonths: number | null;
+    } | null>(),
+    isSample: boolean("is_sample").notNull().default(true),
+    ...stamps,
+  },
+  (t) => [uniqueIndex("studio_contract_templates_slug_idx").on(t.slug)],
+);
+
+export type QuestionField = {
+  id: string;
+  label: string;
+  type: "text" | "longtext" | "choice" | "yesno" | "date";
+  required?: boolean;
+  options?: string[];
+  hint?: string;
+};
+export const studioQuestionnaires = pgTable(
+  "studio_questionnaires",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    slug: text("slug").notNull(),
+    name: text("name").notNull(),
+    description: text("description"),
+    fields: jsonb("fields").notNull().$type<QuestionField[]>().default(sql`'[]'::jsonb`),
+    isSample: boolean("is_sample").notNull().default(true),
+    ...stamps,
+  },
+  (t) => [uniqueIndex("studio_questionnaires_slug_idx").on(t.slug)],
+);
+
+export const studioQuestionnaireSends = pgTable(
+  "studio_questionnaire_sends",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    questionnaireId: uuid("questionnaire_id")
+      .notNull()
+      .references(() => studioQuestionnaires.id),
+    clientId: uuid("client_id")
+      .notNull()
+      .references(() => studioClients.id),
+    jobId: uuid("job_id").references(() => studioJobs.id),
+    /** A snapshot of the fields at send time, so later edits do not change what was asked. */
+    fields: jsonb("fields").notNull().$type<QuestionField[]>(),
+    title: text("title").notNull(),
+    tokenHash: text("token_hash").notNull(),
+    sentAt: timestamp("sent_at", { withTimezone: true }).notNull().defaultNow(),
+    completedAt: timestamp("completed_at", { withTimezone: true }),
+    answers: jsonb("answers").$type<Record<string, string>>(),
+  },
+  (t) => [uniqueIndex("studio_questionnaire_sends_token_idx").on(t.tokenHash)],
+);
+
+export type StudioContractTemplate = typeof studioContractTemplates.$inferSelect;

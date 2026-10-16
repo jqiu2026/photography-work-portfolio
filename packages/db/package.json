@@ -15,7 +15,8 @@
     "./studio-crypto": "./src/studio-crypto.ts",
     "./calendar": "./src/calendar.ts",
     "./commerce": "./src/commerce.ts",
-    "./pricing": "./src/pricing.ts"
+    "./pricing": "./src/pricing.ts",
+    "./forms": "./src/forms.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

@@ -10,7 +10,10 @@ import { PipelineView } from "@/components/studio/PipelineView";
 import { StudioApp, type StudioData } from "@/components/studio/StudioApp";
 import { CatalogView } from "@/components/studio/CatalogView";
 import { QuotesView } from "@/components/studio/QuotesView";
+import { FormsView } from "@/components/studio/FormsView";
 import { calendarData } from "@/lib/studio-calendar";
+import * as forms from "@jerryqiu/db/forms";
+import { formatMoney } from "@jerryqiu/db/pricing";
 import * as com from "@jerryqiu/db/commerce";
 import { studioSections } from "@/components/studio/sections";
 
@@ -105,6 +108,65 @@ export default async function StudioSection({ params }: { params: Promise<{ sect
       </Shell>
     );
   }
+  if (section === "forms") {
+    await forms.seedSampleTemplates(db);
+    await forms.seedSampleQuestionnaires(db);
+    const [templates, questionnaires, sends, jobs, clients, policies] = await Promise.all([
+      forms.listTemplates(db),
+      forms.listQuestionnaires(db),
+      forms.listSends(db),
+      st.listJobs(db),
+      st.listClients(db),
+      forms.getPolicies(db),
+    ]);
+    return (
+      <Shell>
+        <FormsView
+          user={user.name ?? user.email ?? "owner"}
+          data={{
+            templates: templates.map((t) => ({
+              id: t.id,
+              name: t.name,
+              kind: t.kind,
+              body: t.body,
+              isSample: t.isSample,
+              termMonths: t.usageRights?.termMonths ?? null,
+              personal: t.usageRights?.personal ?? true,
+              commercial: t.usageRights?.commercial ?? false,
+            })),
+            questionnaires: questionnaires.map((q) => ({
+              id: q.id,
+              name: q.name,
+              description: q.description,
+              isSample: q.isSample,
+              fields: q.fields,
+            })),
+            sends: sends.map((r) => ({
+              id: r.send.id,
+              title: r.send.title,
+              client: r.client.name,
+              sentAt: r.send.sentAt.toISOString(),
+              completed: Boolean(r.send.completedAt),
+              answers: r.send.fields.flatMap((fl) =>
+                r.send.answers?.[fl.id] ? [{ label: fl.label, value: r.send.answers[fl.id] }] : [],
+              ),
+            })),
+            jobs: jobs.map((r) => ({ id: r.job.id, title: r.job.title })),
+            clients: clients.map((c) => ({ id: c.id, name: c.name })),
+            policies: {
+              businessName: policies.businessName,
+              galleryAccessMonths: policies.galleryAccessMonths,
+              extensionMonths: policies.extensionMonths,
+              extensionFee: (policies.extensionFeeCents / 100).toFixed(2),
+              cancellationDays: policies.cancellationDays,
+              sample: policies.extensionFeeIsSample,
+            },
+          }}
+        />
+      </Shell>
+    );
+  }
+  void formatMoney;
   if (section === "quotes") {
     await com.seedSampleCatalog(db);
     const [quotes, clients, packages, addOns] = await Promise.all([
@@ -229,6 +291,8 @@ export default async function StudioSection({ params }: { params: Promise<{ sect
     contracts: contracts.map((r) => ({
       id: r.contract.id,
       jobTitle: r.job.title,
+      title: r.contract.title,
+      kind: r.contract.kind,
       status: r.contract.status,
       signedBy: r.contract.signerName,
     })),

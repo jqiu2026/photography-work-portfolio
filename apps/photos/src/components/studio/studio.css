@@ -335,3 +335,16 @@
   display: block;
   color: var(--hl-muted);
 }
+.st-answers {
+  display: grid;
+  gap: .5rem;
+  margin: .75rem 0;
+}
+.st-answers dt {
+  color: var(--hl-muted);
+  font-size: var(--hl-text-sm);
+}
+.st-answers dd {
+  margin: 0 0 .25rem;
+  white-space: pre-wrap;
+}

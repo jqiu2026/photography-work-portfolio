@@ -26,7 +26,7 @@ export default async function SignPage({ params }: { params: Promise<{ token: st
               </p>
             </section>
           ) : (
-            <SignForm token={token} body={k.body} title={k.title} />
+            <SignForm token={token} body={k.body} title={k.title} minor={k.minor} subject={k.subject} />
           )}
         </Container>
       </Section>

@@ -1,6 +1,7 @@
 "use server";
 
 import { actionError } from "@jerryqiu/auth/server";
+import * as forms from "@jerryqiu/db/forms";
 import * as st from "@jerryqiu/db/studio";
 import { getSite } from "@jerryqiu/sites";
 import { revalidatePath } from "next/cache";
@@ -143,11 +144,13 @@ export async function createContractAction(jobId: string) {
   return guarded("studio.access", async ({ db, audit }) => {
     const p = id.safeParse(jobId);
     if (!p.success) return actionError("Unknown job.");
-    // TODO(owner, lawyer): replace this sample template with real terms (Q37).
-    const body =
-      "SAMPLE CONTRACT TEMPLATE (have a lawyer review before use)\n\n1. Services. The photographer will photograph the event described in the job.\n2. Delivery. Edited photographs are delivered in an online gallery.\n3. Licence. The client receives a personal, non-commercial licence unless agreed otherwise. All rights are reserved by the photographer.\n4. Payment. The invoice is due as stated; photographs are released when it is paid.\n5. Cancellation. TODO(owner): terms.";
     try {
-      const k = await st.createContract(db, { jobId: p.data, title: "Photography agreement", body });
+      // The default is the SAMPLE event template (merged with the job, client and policies); pick another on the Forms page.
+      await forms.seedSampleTemplates(db);
+      const templates = await forms.listTemplates(db);
+      const tpl = templates.find((t) => t.slug === "event") ?? templates.find((t) => t.kind === "contract");
+      if (!tpl) return actionError("There is no contract template yet. Add one on the Forms page.");
+      const { contract: k } = await forms.createContractFromTemplate(db, { jobId: p.data, templateId: tpl.id });
       await audit({
         action: "studio.contract.create",
         entity: "studio_contract",
@@ -165,7 +168,6 @@ export async function createContractAction(jobId: string) {
   });
 }
 
-/** Marks the contract sent and returns the signing link. No email is sent in this phase: the owner copies the link. */
 export async function sendContractAction(contractId: string) {
   return guarded("studio.access", async ({ db, audit }) => {
     const p = id.safeParse(contractId);

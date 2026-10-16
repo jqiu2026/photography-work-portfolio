@@ -126,13 +126,21 @@ describe("contracts", () => {
     expect((await st.contractByToken(db, token, now))?.status).toBe("viewed");
     await expect(st.signContract(db, token, { signerName: "A", agree: true })).rejects.toThrow(/full name/);
     await expect(st.signContract(db, token, { signerName: "Sample Client", agree: false })).rejects.toThrow(/agree/);
+    await expect(st.signContract(db, token, { signerName: "Sample Client", agree: true })).rejects.toThrow(
+      /electronically/,
+    );
     const signed = await st.signContract(
       db,
       token,
-      { signerName: "  Sample Client ", agree: true, ipHash: "h", userAgent: "UA" },
+      { signerName: "  Sample Client ", agree: true, consentElectronic: true, ipHash: "h", userAgent: "UA" },
       now,
     );
-    expect(signed).toMatchObject({ status: "signed", signerName: "Sample Client", signerIpHash: "h" });
+    expect(signed).toMatchObject({
+      status: "signed",
+      signerName: "Sample Client",
+      signerIpHash: "h",
+      consentElectronic: true,
+    });
     expect(signed.documentSha256).toMatch(/^[0-9a-f]{64}$/);
     await expect(st.signContract(db, token, { signerName: "Sample Client", agree: true })).rejects.toThrow(
       /already signed/,

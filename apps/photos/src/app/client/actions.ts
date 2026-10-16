@@ -57,6 +57,8 @@ export async function signContractAction(
     await st.signContract(db, token, {
       signerName: String(formData.get("name") ?? ""),
       agree: formData.get("agree") === "on",
+      consentElectronic: formData.get("consent") === "on",
+      guardianName: String(formData.get("guardian") ?? ""),
       ipHash: sha256Hex(ip),
       userAgent: undefined,
     });

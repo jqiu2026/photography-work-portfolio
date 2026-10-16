@@ -130,7 +130,8 @@ test("contract: one-time link, name and agreement required, signed once", async 
   await page.getByLabel("Type your full name to sign").fill("E2E Client");
   await page.getByRole("button", { name: "Sign contract" }).click();
   await expectSlow(page.locator("p[role=alert]")).toContainText("agree");
-  await page.getByLabel(/I agree/).check();
+  await page.getByLabel(/I agree to these terms/).check();
+  await page.getByLabel(/sign, and to keep records/).check();
   await page.getByRole("button", { name: "Sign contract" }).click();
   await expectSlow(page.getByRole("status")).toContainText("Signed");
   await page.reload({ waitUntil: "networkidle" });

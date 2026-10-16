@@ -65,7 +65,7 @@ export type StudioData = {
     error: string | null;
     at: string;
   }[];
-  contracts: { id: string; jobTitle: string; status: string; signedBy: string | null }[];
+  contracts: { id: string; jobTitle: string; title: string; kind: string; status: string; signedBy: string | null }[];
   invoices: { id: string; number: string; jobTitle: string; status: string; totalCents: number; lines: string }[];
   media: { id: string; filename: string }[];
 };
@@ -494,7 +494,7 @@ export function StudioApp({ section, user, data }: { section: string; user: stri
                 <span>
                   <strong>{k.jobTitle}</strong>
                   <small>
-                    {k.status}
+                    {k.title} · {k.status}
                     {k.signedBy ? ` · signed by ${k.signedBy}` : ""}
                   </small>
                 </span>

@@ -249,7 +249,15 @@ export async function contractByToken(db: Database, token: string, now = new Dat
 export async function signContract(
   db: Database,
   token: string,
-  input: { signerName: string; agree: boolean; ipHash?: string; userAgent?: string },
+  input: {
+    signerName: string;
+    agree: boolean;
+    /** ESIGN/UETA: agreed to sign and keep records electronically. */
+    consentElectronic?: boolean;
+    guardianName?: string;
+    ipHash?: string;
+    userAgent?: string;
+  },
   now = new Date(),
 ) {
   const [c] = await db
@@ -260,12 +268,17 @@ export async function signContract(
   if (c.status === "signed") throw new StudioError("This contract is already signed.");
   if (input.signerName.trim().length < 2) throw new StudioError("Type your full name to sign.");
   if (!input.agree) throw new StudioError("Tick the box to agree before signing.");
+  if (!input.consentElectronic) throw new StudioError("Tick the box to agree to sign and keep records electronically.");
+  if (c.minor && (input.guardianName ?? "").trim().length < 2)
+    throw new StudioError("A parent or legal guardian must type their full name for a minor.");
   const [row] = await db
     .update(s.studioContracts)
     .set({
       status: "signed",
       signedAt: now,
       signerName: input.signerName.trim(),
+      consentElectronic: true,
+      guardianName: c.minor ? (input.guardianName ?? "").trim() : c.guardianName,
       signerIpHash: input.ipHash ?? null,
       signerUserAgent: input.userAgent?.slice(0, 300) ?? null,
       documentSha256: sha256Hex(c.body),

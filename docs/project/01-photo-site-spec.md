@@ -125,11 +125,11 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | Id | Feature | Pri | Status | Where | Provider / mock | Test | Milestone |
 |---|---|---|---|---|---|---|---|
 | F-40 | Contracts: send, view, typed e-signature, one-time link, audit (timestamp, IP, hash) | P1 | done | `/client/sign/[token]`, studio | n/a | e2e studio | done |
-| F-41 | Contract templates with merge fields; sample set marked for review | P1 | missing | contract_templates | n/a | unit | M7 |
-| F-42 | Usage-rights and licence terms in contracts, licence tracker with expiry reminders | P1/P2 | missing | usage_rights | email | unit | M7, M14 |
-| F-43 | Model and property releases, minors and parental consent | P2 | missing | releases | n/a | e2e | M7 |
-| F-44 | Questionnaires and intake forms (builder, send, respond) | P1 | missing | questionnaires | email | e2e | M7 |
-| F-45 | Gallery expiry and reactivation policy in the contract | P1 | missing | template clause | n/a | unit | M7 |
+| F-41 | Contract templates with merge fields; sample set marked for review | P1 | done (7 SAMPLE templates) | contract_templates | n/a | unit | M7 |
+| F-42 | Usage-rights and licence terms in contracts, licence tracker with expiry reminders | P1/P2 | partial (rights and licence end date recorded per contract; tracker and reminders in M14) | usage_rights | email | unit | M7, M14 |
+| F-43 | Model and property releases, minors and parental consent | P2 | done (guardian must sign for a minor) | releases | n/a | e2e | M7 |
+| F-44 | Questionnaires and intake forms (builder, send, respond) | P1 | done | questionnaires | email | e2e | M7 |
+| F-45 | Gallery expiry and reactivation policy in the contract | P1 | done (policy merge field) | template clause | n/a | unit | M7 |
 | F-46 | Privacy, terms, licensing, accessibility, cookie statement | P1 | partial (`/privacy` draft) | public pages | n/a | e2e | M11 |
 | F-47 | Data export and delete-my-data tools | P1 | partial (admin export, contact erase) | studio and portal | n/a | e2e | M14 |
 | F-48 | Event privacy opt-outs (hide specific people) | P2 | missing | gallery_items.hidden_for | n/a | unit | M14 |
