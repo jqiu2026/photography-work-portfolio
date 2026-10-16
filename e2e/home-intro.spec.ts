@@ -1,12 +1,12 @@
 import { expect, test } from "@playwright/test";
 import { photos } from "./routes";
 
-/** The home page opens with a short cinematic intro (once per session), then the top bar and the opening text arrive. */
+/** The home page opens with a short cinematic intro (on every fresh load), then the top bar and the opening text arrive. */
 const bar = (page: import("@playwright/test").Page) => page.locator(".pub-bar");
 const barOffset = (page: import("@playwright/test").Page) =>
   bar(page).evaluate((el) => el.getBoundingClientRect().bottom);
 
-test("plays on the first visit: the page waits behind it, Skip ends it, and it does not replay this session", async ({
+test("plays on the first visit: the page waits behind it, Skip ends it, and moving around the site does not replay it", async ({
   page,
 }) => {
   await page.goto(`${photos}/`, { waitUntil: "domcontentloaded" });
@@ -25,11 +25,11 @@ test("plays on the first visit: the page waits behind it, Skip ends it, and it d
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   await expect(page.locator("html")).not.toHaveCSS("overflow", "hidden");
   await expect(page.locator(".pub-bar")).toHaveJSProperty("inert", false);
-  expect(await page.evaluate(() => sessionStorage.getItem("pub-intro"))).toBe("1");
 
+  // a fresh load plays it again
   await page.reload({ waitUntil: "domcontentloaded" });
-  await expect(page.locator(".pub-intro:not([hidden])")).toHaveCount(0);
-  expect(await barOffset(page)).toBeGreaterThan(20);
+  await expect(page.locator(".pub-intro")).toBeVisible();
+  expect(await barOffset(page)).toBeLessThanOrEqual(0);
 });
 
 test("Escape skips it, and left alone it finishes by itself and reveals the page", async ({ browser }) => {
@@ -45,7 +45,7 @@ test("Escape skips it, and left alone it finishes by itself and reveals the page
   const b = await ctx2.newPage();
   await b.goto(`${photos}/`, { waitUntil: "domcontentloaded" });
   await expect(b.locator(".pub-intro")).toBeVisible();
-  await expect(b.locator(".pub-intro:not([hidden])")).toHaveCount(0, { timeout: 9000 });
+  await expect(b.locator(".pub-intro:not([hidden])")).toHaveCount(0, { timeout: 12000 });
   expect(await barOffset(b)).toBeGreaterThan(20);
   await expect(b.getByRole("link", { name: "See the portfolio" })).toBeVisible();
   await ctx2.close();

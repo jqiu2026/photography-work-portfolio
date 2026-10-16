@@ -4,25 +4,22 @@ import { ProtectedImage } from "@halation/ui/media";
 import { type ComponentProps, useEffect, useState } from "react";
 
 type Asset = ComponentProps<typeof ProtectedImage>["asset"];
-const KEY = "pub-intro";
+/** Set once the intro has played in this page load, so moving around the site and back to home does not replay it. */
+let played = false;
 /** Length of the sequence in ms. Keep in step with the `--intro` custom property in public.css. */
-const LENGTH = 4600;
+const LENGTH = 6000;
 
 /**
- * First-visit intro for the home page: a line draws, opens into the lead photograph, the name rises, and the curtain lifts to
+ * Intro for the home page, on every fresh load: a line draws, opens onto a quick cut of three photographs, the name rises, and the curtain lifts to
  * reveal the page while the top bar and the opening text arrive. The whole sequence is CSS (it works the moment the page
- * paints); this component only ends it early (click, key, Escape), remembers it for the session, switches it off for reduced
+ * paints); this component only ends it early (click, key, Escape), plays once per page load, switches it off for reduced
  * motion, and keeps the page behind it from scrolling or taking focus. Without JavaScript a <noscript> rule hides it.
  */
-export function HomeIntro({ lead }: { lead?: Asset }) {
+export function HomeIntro({ shots }: { shots: Asset[] }) {
   const [state, setState] = useState<"playing" | "done" | "skipped" | "gone">("playing");
 
   useEffect(() => {
-    let seen = false;
-    try {
-      seen = Boolean(sessionStorage.getItem(KEY));
-    } catch {}
-    if (seen || matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (played || matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setState("skipped");
       return;
     }
@@ -35,9 +32,7 @@ export function HomeIntro({ lead }: { lead?: Asset }) {
       for (const el of behind) el.inert = false;
     };
     const finish = (how: "done" | "skipped") => {
-      try {
-        sessionStorage.setItem(KEY, "1");
-      } catch {}
+      played = true;
       release();
       setState(how);
     };
@@ -67,9 +62,11 @@ export function HomeIntro({ lead }: { lead?: Asset }) {
     <div className="pub-intro" data-state={state}>
       <div className="pi-line" aria-hidden="true" />
       <div className="pi-frame" aria-hidden="true">
-        <div className="pi-photo">
-          {lead ? <ProtectedImage asset={lead} alt="" fill priority sizes="100vw" /> : null}
-        </div>
+        {shots.map((a, i) => (
+          <div className="pi-photo" key={a.id ?? i}>
+            <ProtectedImage asset={a} alt="" fill priority sizes="100vw" />
+          </div>
+        ))}
       </div>
       <div className="pi-title" aria-hidden="true">
         <h2>

@@ -31,15 +31,6 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
     <html lang="en" suppressHydrationWarning className={fontVars}>
       <head>
         <ThemeScript preset="photos" defaultTheme="dark" />
-        {/* a returning visitor in this session skips the home intro without a flash */}
-        <Script
-          id="intro-seen"
-          strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{
-            __html:
-              'try{if(sessionStorage.getItem("pub-intro"))document.documentElement.setAttribute("data-intro-seen","")}catch(e){}',
-          }}
-        />
         <meta name="robots" content="noai, noimageai" />
       </head>
       <body className="hl-root">

@@ -58,7 +58,15 @@ export default async function Home() {
           }
         </style>
       </noscript>
-      <HomeIntro lead={lead} />
+      <HomeIntro
+        shots={[
+          ...selected
+            .map((x) => x.p)
+            .filter((x) => x.id !== lead?.id)
+            .slice(0, 2),
+          ...(lead ? [lead] : []),
+        ]}
+      />
       <div className="pub-wrap">
         <header className="pub-hero">
           <p className="hl-eyebrow pub-rise" style={{ "--i": 0 } as React.CSSProperties}>
@@ -87,14 +95,15 @@ export default async function Home() {
 
         <ul className="pub-mosaic" aria-label="Selected photographs">
           {mosaic.map((m, i) => (
-            <li key={m.p.id ?? i}>
+            <li key={m.p.id ?? i} data-lead={i === 0 ? "" : undefined}>
               <Link href={m.category ? `/portfolio/${m.category}` : "/portfolio"}>
                 <figure>
                   <ProtectedImage
                     asset={m.p}
                     alt={m.p.alt ?? ""}
-                    sizes="(min-width: 900px) 30vw, 92vw"
+                    sizes={i === 0 ? "(min-width: 900px) 62vw, 92vw" : "(min-width: 900px) 30vw, 92vw"}
                     priority={i < 2}
+                    fill
                   />
                   {m.text ? <figcaption>{m.text}</figcaption> : null}
                 </figure>
@@ -140,15 +149,18 @@ export default async function Home() {
               </Link>
             </div>
             <ul className="pub-projects">
-              {work.slice(0, 4).map((w) => (
-                <li key={w.slug}>
-                  <Link href={`/work/${w.slug}`}>
-                    {w.cover ? <ProtectedImage asset={w.cover} alt="" sizes="(min-width: 900px) 46vw, 92vw" /> : null}
-                    <strong>{w.title}</strong>
-                    <small>{[fmt(w.date), w.summary].filter(Boolean).join(" · ")}</small>
-                  </Link>
-                </li>
-              ))}
+              {work
+                .filter((w) => w.cover)
+                .slice(0, 4)
+                .map((w) => (
+                  <li key={w.slug}>
+                    <Link href={`/work/${w.slug}`}>
+                      {w.cover ? <ProtectedImage asset={w.cover} alt="" sizes="(min-width: 900px) 46vw, 92vw" /> : null}
+                      <strong>{w.title}</strong>
+                      <small>{[fmt(w.date), w.summary].filter(Boolean).join(" · ")}</small>
+                    </Link>
+                  </li>
+                ))}
             </ul>
           </div>
         </section>
