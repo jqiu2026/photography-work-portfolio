@@ -69,7 +69,9 @@
   transform: translateX(calc(var(--k) * 10px)) scale(calc(0.8 + var(--k) * 0.7));
   /* grey when far, white when near or selected */
   color: color-mix(in oklab, var(--st-fg) calc(var(--k) * 100%), var(--st-dim));
-  font-weight: calc(400 + var(--k) * 200);
+  font-weight: 500;
+  will-change: transform;
+  backface-visibility: hidden;
   outline-offset: 6px;
 }
 .st-dock li a:focus-visible {
@@ -139,4 +141,29 @@
 html:has(.st-root),
 body:has(.st-root) {
   background: #000;
+}
+
+/* page changes: the old page fades out, the new one fades in (View Transitions; no support just means no animation) */
+::view-transition-old(.st-out) {
+  animation: st-fade-out .16s ease both;
+}
+::view-transition-new(.st-in) {
+  animation: st-fade-in .34s ease .08s both;
+}
+@keyframes st-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes st-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(.4rem);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(.st-out),
+  ::view-transition-new(.st-in) {
+    animation: none;
+  }
 }

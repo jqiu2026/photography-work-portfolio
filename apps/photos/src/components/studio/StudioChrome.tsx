@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { type ReactNode, useEffect, useRef } from "react";
+import { type ReactNode, useEffect, useRef, ViewTransition } from "react";
 import { groupOf, studioGroups, studioSections } from "./sections";
 import "./studio.css";
 import "./studio-chrome.css";
@@ -51,7 +51,7 @@ export function StudioChrome({ children }: { children: ReactNode }) {
       const rest = 0.1 + 0.3 * Math.exp(-Math.abs(i - activeIndex) / 3);
       let k = rest;
       if (fine && pointer) {
-        const r = items[i].getBoundingClientRect();
+        const r = (items[i].parentElement ?? items[i]).getBoundingClientRect(); // the <li> never moves; the link scales
         const dy = pointer.y - (r.top + r.height / 2);
         const near = Math.max(0, Math.min(1, 1 - (pointer.x - 24) / RANGE));
         k = Math.max(k, 0.92 * Math.exp(-((dy / REACH) ** 2)) * near);
@@ -123,7 +123,11 @@ export function StudioChrome({ children }: { children: ReactNode }) {
           ))}
         </ul>
       </nav>
-      <div className="st-stage">{children}</div>
+      <div className="st-stage">
+        <ViewTransition key={pathname} name="st-page" enter="st-in" exit="st-out" default="none">
+          <div className="st-page">{children}</div>
+        </ViewTransition>
+      </div>
     </div>
   );
 }

@@ -642,9 +642,10 @@ body:has(.pub) {
 }
 .pi-frame {
   position: absolute;
+  transform-origin: 50% 50%;
   inset: 0;
-  clip-path: inset(50% 0 50% 0);
-  animation: pi-open 1.5s var(--ease) .85s forwards;
+  clip-path: ellipse(0% 0% at 50% 50%);
+  animation: pi-open 1.7s var(--ease) .85s forwards;
 }
 .pi-photo {
   position: absolute;
@@ -735,8 +736,18 @@ body:has(.pub) {
   }
 }
 @keyframes pi-open {
-  to {
-    clip-path: inset(0 0 0 0);
+  /* an eye: a lens-shaped slit opens at the exact centre, widens, then the lid sweeps past the corners */
+  0% {
+    clip-path: ellipse(0% 0% at 50% 50%);
+  }
+  30% {
+    clip-path: ellipse(34% 2.5% at 50% 50%);
+  }
+  62% {
+    clip-path: ellipse(58% 26% at 50% 50%);
+  }
+  100% {
+    clip-path: ellipse(110% 110% at 50% 50%);
   }
 }
 @keyframes pi-zoom {
@@ -747,11 +758,11 @@ body:has(.pub) {
 @keyframes pi-cut {
   from {
     opacity: 0;
-    clip-path: inset(0 0 100% 0);
+    clip-path: circle(0% at 50% 50%);
   }
   to {
     opacity: 1;
-    clip-path: inset(0 0 0 0);
+    clip-path: circle(100% at 50% 50%);
   }
 }
 @keyframes pi-rise {
