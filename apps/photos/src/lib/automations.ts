@@ -1,3 +1,4 @@
+import { publishScheduled } from "@/lib/gallery-publish";
 import "server-only";
 import { type Database } from "@jerryqiu/db";
 import * as auto from "@jerryqiu/db/automation";
@@ -101,7 +102,8 @@ export async function runAutomations(db: Database, now = new Date()): Promise<Au
 export async function runScheduled(db: Database, now = new Date()) {
   await cal.releaseExpiredHolds(db, now);
   const billing = await runBillingJobs(db, now);
+  const published = await publishScheduled(db, now);
   const automations = await runAutomations(db, now);
-  return { billing, automations, at: now.toISOString() };
+  return { billing, automations, galleriesPublished: published, at: now.toISOString() };
 }
 void usd;

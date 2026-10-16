@@ -24,6 +24,12 @@ export type GallerySettings = {
   allowComments?: boolean;
   allowRatings?: boolean;
   watermark?: boolean;
+  layout?: "grid" | "masonry" | "rows";
+  theme?: "dark" | "light";
+  density?: "small" | "medium" | "large";
+  /** ISO time to publish at, or null to clear. */
+  publishAt?: string | null;
+  notes?: string;
 };
 export async function updateGallery(db: Database, id: string, p: GallerySettings, by?: string, now = new Date()) {
   const set: Partial<typeof s.studioGalleries.$inferInsert> = { updatedAt: now, updatedBy: by };
@@ -56,6 +62,18 @@ export async function updateGallery(db: Database, id: string, p: GallerySettings
   if (p.allowComments !== undefined) set.allowComments = p.allowComments;
   if (p.allowRatings !== undefined) set.allowRatings = p.allowRatings;
   if (p.watermark !== undefined) set.watermark = p.watermark;
+  if (p.layout) set.layout = p.layout;
+  if (p.theme) set.theme = p.theme;
+  if (p.density) set.density = p.density;
+  if (p.notes !== undefined) set.notes = p.notes.trim().slice(0, 2000) || null;
+  if (p.publishAt !== undefined) {
+    if (p.publishAt === null) set.publishAt = null;
+    else {
+      const at = new Date(p.publishAt);
+      if (Number.isNaN(at.getTime())) throw new StudioError("Enter a valid publish date and time.");
+      set.publishAt = at;
+    }
+  }
   const [row] = await db.update(s.studioGalleries).set(set).where(eq(s.studioGalleries.id, id)).returning();
   if (!row) throw new StudioError("Unknown gallery.");
   return row;
@@ -394,4 +412,209 @@ export async function createExtensionInvoice(db: Database, galleryId: string, no
     })());
   const { token } = await sendInvoice(db, invoice.id, now);
   return { invoice, token, months: p.extensionMonths, cents: p.extensionFeeCents };
+}
+
+/* ---------- the studio's gallery tools ---------- */
+const PASSCODE_CHARS = "abcdefghjkmnpqrstuvwxyz23456789";
+/** A readable random passcode (no look-alike characters), unique among live galleries. */
+export async function freshPasscode(db: Database, length = 8): Promise<string> {
+  const { randomInt } = await import("node:crypto");
+  const all = await db
+    .select({ h: s.studioGalleries.passcodeHash })
+    .from(s.studioGalleries)
+    .where(isNull(s.studioGalleries.deletedAt));
+  for (let tries = 0; tries < 20; tries++) {
+    const code = Array.from({ length }, () => PASSCODE_CHARS[randomInt(PASSCODE_CHARS.length)]).join("");
+    let clash = false;
+    for (const g of all) if (g.h && (await verifyPasscode(code, g.h))) clash = true;
+    if (!clash) return code;
+  }
+  throw new StudioError("Could not make a unique passcode. Try again.");
+}
+
+/** A new draft with the same settings, albums and photographs. Returns the passcode (shown once). */
+export async function duplicateGallery(db: Database, id: string, by?: string) {
+  const [g] = await db
+    .select()
+    .from(s.studioGalleries)
+    .where(and(eq(s.studioGalleries.id, id), isNull(s.studioGalleries.deletedAt)));
+  if (!g) throw new StudioError("Unknown gallery.");
+  const passcode = await freshPasscode(db);
+  const {
+    id: _id,
+    createdAt: _c,
+    updatedAt: _u,
+    passcodeHash: _p,
+    status: _s,
+    selectionSentAt: _sel,
+    deliveredAt: _d,
+    expiryReminderAt: _r,
+    reactivatedAt: _re,
+    publishAt: _pa,
+    ...keep
+  } = g;
+  const [copy] = await db
+    .insert(s.studioGalleries)
+    .values({
+      ...keep,
+      title: `${g.title} (copy)`.slice(0, 120),
+      status: "draft",
+      passcodeHash: await hashPasscode(passcode),
+      updatedBy: by,
+    })
+    .returning();
+  const albums = await listAlbums(db, id);
+  const map = new Map<string, string>();
+  for (const a of albums) {
+    const [n] = await db.insert(s.studioAlbums).values({ galleryId: copy.id, name: a.name, sort: a.sort }).returning();
+    map.set(a.id, n.id);
+  }
+  const items = await db.select().from(s.studioGalleryItems).where(eq(s.studioGalleryItems.galleryId, id));
+  if (items.length)
+    await db.insert(s.studioGalleryItems).values(
+      items.map((i) => ({
+        galleryId: copy.id,
+        mediaId: i.mediaId,
+        sort: i.sort,
+        hidden: i.hidden,
+        albumId: i.albumId ? (map.get(i.albumId) ?? null) : null,
+      })),
+    );
+  return { gallery: copy, passcode };
+}
+
+/** Moves a gallery to the trash (the photographs stay in the media library). */
+export async function deleteGallery(db: Database, id: string, by?: string, now = new Date()) {
+  const [row] = await db
+    .update(s.studioGalleries)
+    .set({ deletedAt: now, updatedAt: now, updatedBy: by })
+    .where(and(eq(s.studioGalleries.id, id), isNull(s.studioGalleries.deletedAt)))
+    .returning();
+  if (!row) throw new StudioError("Unknown gallery.");
+  return row;
+}
+
+export type SortMode = "name" | "newest" | "oldest";
+/** Rewrites the manual order from a rule: filename, or when the photograph was added. */
+export async function sortItems(db: Database, galleryId: string, mode: SortMode) {
+  const rows = await galleryContents(db, galleryId, { includeHidden: true });
+  const sorted = [...rows].sort((a, b) =>
+    mode === "name"
+      ? a.media.filename.localeCompare(b.media.filename, undefined, { numeric: true })
+      : mode === "newest"
+        ? b.media.createdAt.getTime() - a.media.createdAt.getTime()
+        : a.media.createdAt.getTime() - b.media.createdAt.getTime(),
+  );
+  for (const [i, r] of sorted.entries())
+    await db
+      .update(s.studioGalleryItems)
+      .set({ sort: i })
+      .where(and(eq(s.studioGalleryItems.galleryId, galleryId), eq(s.studioGalleryItems.mediaId, r.media.id)));
+  return sorted.length;
+}
+
+/** Puts the chosen photographs first, in the order given (the rest keep their order after them). */
+export async function moveToFront(db: Database, galleryId: string, mediaIds: string[]) {
+  const rows = await galleryContents(db, galleryId, { includeHidden: true });
+  const first = mediaIds.filter((m) => rows.some((r) => r.media.id === m));
+  const order = [...first, ...rows.map((r) => r.media.id).filter((m) => !first.includes(m))];
+  for (const [i, m] of order.entries())
+    await db
+      .update(s.studioGalleryItems)
+      .set({ sort: i })
+      .where(and(eq(s.studioGalleryItems.galleryId, galleryId), eq(s.studioGalleryItems.mediaId, m)));
+}
+
+export async function setHiddenMany(db: Database, galleryId: string, mediaIds: string[], hidden: boolean) {
+  if (!mediaIds.length) return;
+  await db
+    .update(s.studioGalleryItems)
+    .set({ hidden })
+    .where(and(eq(s.studioGalleryItems.galleryId, galleryId), inArray(s.studioGalleryItems.mediaId, mediaIds)));
+}
+export async function removeMany(db: Database, galleryId: string, mediaIds: string[]) {
+  if (!mediaIds.length) return;
+  await db
+    .delete(s.studioGalleryItems)
+    .where(and(eq(s.studioGalleryItems.galleryId, galleryId), inArray(s.studioGalleryItems.mediaId, mediaIds)));
+}
+
+/** The studio previewing its own photographs is not a client view. */
+const notStaff = sql`${s.studioViewEvents.viewer} not like 'staff.%'`;
+
+export type GalleryStats = { photos: number; favourites: number; downloads: number; views: number; viewers: number };
+/** Counts per gallery for the list: photographs, favourites, downloads, and views of its photographs (and distinct viewers). */
+export async function galleryStats(db: Database, ids: string[]): Promise<Map<string, GalleryStats>> {
+  const out = new Map<string, GalleryStats>(
+    ids.map((i) => [i, { photos: 0, favourites: 0, downloads: 0, views: 0, viewers: 0 }]),
+  );
+  if (!ids.length) return out;
+  const photos = await db
+    .select({ id: s.studioGalleryItems.galleryId, n: sql<number>`count(*)::int` })
+    .from(s.studioGalleryItems)
+    .where(inArray(s.studioGalleryItems.galleryId, ids))
+    .groupBy(s.studioGalleryItems.galleryId);
+  for (const r of photos) out.get(r.id)!.photos = r.n;
+  const favs = await db
+    .select({ id: s.studioFavorites.galleryId, n: sql<number>`count(*)::int` })
+    .from(s.studioFavorites)
+    .where(inArray(s.studioFavorites.galleryId, ids))
+    .groupBy(s.studioFavorites.galleryId);
+  for (const r of favs) out.get(r.id)!.favourites = r.n;
+  const dls = await db
+    .select({ id: s.studioDownloadEvents.galleryId, n: sql<number>`count(*)::int` })
+    .from(s.studioDownloadEvents)
+    .where(inArray(s.studioDownloadEvents.galleryId, ids))
+    .groupBy(s.studioDownloadEvents.galleryId);
+  for (const r of dls) out.get(r.id)!.downloads = r.n;
+  const views = await db
+    .select({
+      id: s.studioGalleryItems.galleryId,
+      n: sql<number>`count(*)::int`,
+      v: sql<number>`count(distinct ${s.studioViewEvents.viewer})::int`,
+    })
+    .from(s.studioViewEvents)
+    .innerJoin(s.studioGalleryItems, eq(s.studioGalleryItems.mediaId, s.studioViewEvents.mediaId))
+    .where(and(inArray(s.studioGalleryItems.galleryId, ids), notStaff))
+    .groupBy(s.studioGalleryItems.galleryId);
+  for (const r of views) {
+    const o = out.get(r.id)!;
+    o.views = r.n;
+    o.viewers = r.v;
+  }
+  return out;
+}
+
+/** Drafts whose publish time has passed. The caller publishes and emails each (so the email logic stays in one place). */
+export async function dueToPublish(db: Database, now = new Date()) {
+  return db
+    .select()
+    .from(s.studioGalleries)
+    .where(
+      and(
+        eq(s.studioGalleries.status, "draft"),
+        isNull(s.studioGalleries.deletedAt),
+        sql`${s.studioGalleries.publishAt} is not null and ${s.studioGalleries.publishAt} <= ${now.toISOString()}`,
+      ),
+    );
+}
+
+/** Views of this gallery's photographs: totals, the latest few, and how often each photograph was opened. */
+export async function viewSummary(db: Database, galleryId: string, limit = 40) {
+  const rows = await db
+    .select({ at: s.studioViewEvents.at, viewer: s.studioViewEvents.viewer, mediaId: s.studioViewEvents.mediaId })
+    .from(s.studioViewEvents)
+    .innerJoin(s.studioGalleryItems, eq(s.studioGalleryItems.mediaId, s.studioViewEvents.mediaId))
+    .where(and(eq(s.studioGalleryItems.galleryId, galleryId), notStaff))
+    .orderBy(desc(s.studioViewEvents.at))
+    .limit(2000);
+  const perPhoto: Record<string, number> = {};
+  for (const r of rows) perPhoto[r.mediaId] = (perPhoto[r.mediaId] ?? 0) + 1;
+  return {
+    total: rows.length,
+    viewers: new Set(rows.map((r) => r.viewer)).size,
+    last: rows[0]?.at ?? null,
+    recent: rows.slice(0, limit),
+    perPhoto,
+  };
 }

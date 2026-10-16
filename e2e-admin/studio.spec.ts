@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import sharp from "sharp";
+import { newGallery, publishOpenGallery, uploadPhotos } from "./gallery-helpers";
 import { signStripePayload } from "../packages/payments/src/index";
 
 /**
@@ -11,6 +12,7 @@ const HUB = "http://localhost:3300";
 const PHOTOS = "http://localhost:3302";
 const uid = Date.now().toString(36);
 const email = `client-${uid}@example.test`;
+let galleryPass = "";
 
 test.describe.configure({ mode: "serial" });
 // the first call of each server action compiles it in the dev server
@@ -23,14 +25,6 @@ async function linkFrom(page: import("@playwright/test").Page, path: string) {
 }
 
 test("owner creates a client, a job, a gallery with photographs, a contract and an invoice", async ({ page }) => {
-  // a photograph to put in the gallery (admin media library)
-  await page.goto(`${HUB}/admin/media`, { waitUntil: "networkidle" });
-  const buffer = await sharp({ create: { width: 1600, height: 1000, channels: 3, background: "#7a3ea5" } })
-    .jpeg()
-    .toBuffer();
-  await page.getByLabel("Upload images").setInputFiles({ name: `studio-${uid}.jpg`, mimeType: "image/jpeg", buffer });
-  await expectSlow(page.getByText(/Done/)).toBeVisible({ timeout: 30_000 });
-
   await page.goto(`${PHOTOS}/studio/clients`, { waitUntil: "networkidle" });
   await page.getByLabel("Name").fill(`E2E Client ${uid}`);
   await page.getByLabel("Email").fill("not-an-email");
@@ -64,24 +58,13 @@ test("owner creates a client, a job, a gallery with photographs, a contract and 
   await row.getByRole("button", { name: "New invoice" }).click();
   await expectSlow(page.getByRole("status")).toContainText(/Invoice \d{4}-\d{4} created/);
 
-  await page.goto(`${PHOTOS}/studio/galleries`, { waitUntil: "networkidle" });
-  await page.getByLabel("Job").selectOption({ label: `E2E job ${uid}` });
-  await page.getByLabel(/Passcode/).fill("a");
-  await page.getByRole("button", { name: "Create gallery" }).click();
-  await expectSlow(
-    page
-      .locator("[role=alert]")
-      .filter({ hasText: /6 characters/ })
-      .first(),
-  ).toBeVisible();
-  await page.getByLabel(/Passcode/).fill(`pass-${uid}`);
-  await page.getByLabel(new RegExp(`studio-${uid}`)).check();
-  await page.getByRole("button", { name: "Create gallery" }).click();
-  await expectSlow(page.getByRole("status")).toContainText("Gallery created");
-  const g = page.getByRole("listitem").filter({ hasText: `E2E job ${uid}` });
-  await expectSlow(g).toContainText("1 photographs");
-  await g.getByRole("button", { name: "Publish" }).click();
-  await expectSlow(page.getByRole("status")).toContainText("Gallery published");
+  const buffer = await sharp({ create: { width: 1600, height: 1000, channels: 3, background: "#7a3ea5" } })
+    .jpeg()
+    .toBuffer();
+  const made = await newGallery(page, PHOTOS, `E2E job ${uid}`);
+  galleryPass = made.passcode;
+  await uploadPhotos(page, [{ name: `studio-${uid}.jpg`, mimeType: "image/jpeg", buffer }]);
+  await publishOpenGallery(page);
 });
 
 test("client opens the gallery with the passcode (wrong one refused), sees strict images, and keeps favourites", async ({
@@ -92,7 +75,7 @@ test("client opens the gallery with the passcode (wrong one refused), sees stric
   await page.getByLabel("Passcode").fill("wrong-code");
   await page.getByRole("button", { name: "Open my gallery" }).click();
   await expectSlow(page.locator("p[role=alert]")).toContainText("doesn't match");
-  await page.getByLabel("Passcode").fill(`PASS-${uid}`);
+  await page.getByLabel("Passcode").fill(galleryPass.toUpperCase());
   await page.getByRole("button", { name: "Open my gallery" }).click();
   await expectSlow(page).toHaveURL(/\/client\/gallery$/);
   await expectSlow(page.getByRole("heading", { level: 1 })).toContainText(`E2E job ${uid}`);

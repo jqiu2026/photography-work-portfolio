@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import sharp from "sharp";
+import { newGallery, publishOpenGallery, uploadPhotos } from "./gallery-helpers";
 
 /** The client portal: invite, password, magic link, home, documents by capability link, gallery, appointment, messages, ETA. */
 const HUB = "http://localhost:3300";
@@ -39,13 +40,6 @@ async function latestLink(page: import("@playwright/test").Page, kind: string, p
 test("owner sets up: client, job, a published gallery, an invoice, a contract, a questionnaire, bookable hours", async ({
   page,
 }) => {
-  await page.goto(`${HUB}/admin/media`, { waitUntil: "networkidle" });
-  const buffer = await sharp({ create: { width: 1600, height: 1000, channels: 3, background: "#3ea58a" } })
-    .jpeg()
-    .toBuffer();
-  await page.getByLabel("Upload images").setInputFiles({ name: `portal-${uid}.jpg`, mimeType: "image/jpeg", buffer });
-  await slow(page.getByText(/Done/)).toBeVisible({ timeout: 30_000 });
-
   await page.goto(`${PHOTOS}/studio/clients`, { waitUntil: "networkidle" });
   await page.getByLabel("Name").fill(`Portal Client ${uid}`);
   await page.getByLabel("Email").fill(email);
@@ -78,22 +72,12 @@ test("owner sets up: client, job, a published gallery, an invoice, a contract, a
     .click();
   await slow(page.locator("code").first()).toContainText("/client/sign/");
 
-  await page.goto(`${PHOTOS}/studio/galleries`, { waitUntil: "networkidle" });
-  await page
-    .getByLabel("Job")
-    .selectOption({ label: `Portal job ${uid}` })
-    .catch(() => {});
-  const galleryForm = page.locator("form").filter({ hasText: "passcode" }).first();
-  await galleryForm.getByLabel(/Passcode/).fill(`portal-${uid}`);
-  await galleryForm.getByText(`portal-${uid}.jpg`).click();
-  await galleryForm.getByRole("button", { name: /Create gallery/ }).click();
-  await slow(page.getByRole("status")).toContainText("Gallery created");
-  await page
-    .getByRole("listitem")
-    .filter({ hasText: `Portal job ${uid}` })
-    .getByRole("button", { name: "Publish" })
-    .click();
-  await slow(page.getByRole("status")).toContainText("Gallery published");
+  const buffer = await sharp({ create: { width: 1600, height: 1000, channels: 3, background: "#3ea58a" } })
+    .jpeg()
+    .toBuffer();
+  await newGallery(page, PHOTOS, `Portal job ${uid}`);
+  await uploadPhotos(page, [{ name: `portal-${uid}.jpg`, mimeType: "image/jpeg", buffer }]);
+  await publishOpenGallery(page);
 
   await page.goto(`${PHOTOS}/studio/calendar`, { waitUntil: "networkidle" });
   const hours = page.locator('section[aria-labelledby="cal-hours"]');

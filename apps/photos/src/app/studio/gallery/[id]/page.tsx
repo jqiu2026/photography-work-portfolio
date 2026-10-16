@@ -22,12 +22,20 @@ export default async function GalleryPage({ params }: { params: Promise<{ id: st
     .innerJoin(schema.studioJobs, eq(schema.studioJobs.id, schema.studioGalleries.jobId))
     .where(and(eq(schema.studioGalleries.id, id), isNull(schema.studioGalleries.deletedAt)));
   if (!row) notFound();
-  const [contents, albums, proofs, downloads] = await Promise.all([
+  const g0 = row.g;
+  const [contents, albums, proofs, downloads, views, stats] = await Promise.all([
     gal.galleryContents(db, id, { includeHidden: true }),
     gal.listAlbums(db, id),
     gal.proofSummary(db, id),
     gal.downloadLog(db, id, 60),
+    gal.viewSummary(db, id),
+    gal.galleryStats(db, [id]),
   ]);
+  const [owner] = await db
+    .select({ client: schema.studioClients })
+    .from(schema.studioJobs)
+    .innerJoin(schema.studioClients, eq(schema.studioClients.id, schema.studioJobs.clientId))
+    .where(eq(schema.studioJobs.id, g0.jobId));
   const name = new Map(contents.map((c) => [c.media.id, c.media.filename]));
   const g = row.g;
   return (
@@ -41,11 +49,31 @@ export default async function GalleryPage({ params }: { params: Promise<{ id: st
           status: g.status,
           state: gal.galleryState(g),
           expiresAt: g.expiresAt?.toISOString().slice(0, 10) ?? null,
+          clientName: owner?.client.name ?? "",
+          clientEmail: owner?.client.email ?? "",
+          layout: g.layout,
+          theme: g.theme,
+          density: g.density,
+          publishAt: g.publishAt?.toISOString().slice(0, 16) ?? "",
+          notes: g.notes ?? "",
+          stats: stats.get(id) ?? { photos: 0, favourites: 0, downloads: 0, views: 0, viewers: 0 },
+          views: {
+            total: views.total,
+            viewers: views.viewers,
+            last: when(views.last),
+            recent: views.recent.map((v, i) => ({
+              id: `${i}`,
+              at: when(v.at) ?? "",
+              viewer: v.viewer,
+              file: name.get(v.mediaId) ?? "photograph",
+            })),
+          },
           welcome: g.welcome ?? "",
           accent: g.accent ?? "",
           downloadPolicy: g.downloadPolicy,
           selectionLimit: g.selectionLimit,
           allowComments: g.allowComments,
+          accessMode: g.accessMode,
           allowRatings: g.allowRatings,
           watermark: g.watermark,
           hasPin: Boolean(g.downloadPinHash),
@@ -61,6 +89,7 @@ export default async function GalleryPage({ params }: { params: Promise<{ id: st
             height: c.media.height ?? 800,
             color: c.media.color,
             blur: c.media.blur,
+            views: views.perPhoto[c.media.id] ?? 0,
             rating: proofs.ratings[c.media.id] ?? null,
             approved: proofs.approved.includes(c.media.id),
             rejected: proofs.rejected.includes(c.media.id),

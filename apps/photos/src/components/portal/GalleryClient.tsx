@@ -1,5 +1,6 @@
 "use client";
 
+import "./gallery-design.css";
 import { ProtectedImage } from "@halation/ui/media";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -107,7 +108,13 @@ export function GalleryClient({ data }: { data: ClientGalleryData }) {
     );
 
   return (
-    <div style={style}>
+    <div
+      style={style}
+      className="gd"
+      data-gallery-theme={data.theme}
+      data-gallery-layout={data.layout}
+      data-gallery-density={data.density}
+    >
       <h1 className="st-title">{data.title}</h1>
       {data.welcome ? <p className="st-note">{data.welcome}</p> : null}
       {data.state === "expiring" ? (

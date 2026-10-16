@@ -474,6 +474,14 @@ export const studioGalleries = pgTable(
     /** When the "your gallery expires soon" email last went out (once per expiry date). */
     expiryReminderAt: timestamp("expiry_reminder_at", { withTimezone: true }),
     reactivatedAt: timestamp("reactivated_at", { withTimezone: true }),
+    /** How the client sees the photographs: grid, masonry or rows; dark or light; thumbnail size. */
+    layout: text("layout").notNull().default("grid"),
+    theme: text("theme").notNull().default("dark"),
+    density: text("density").notNull().default("medium"),
+    /** Publishes itself (and emails the client) when this time passes. */
+    publishAt: timestamp("publish_at", { withTimezone: true }),
+    /** Private notes for the studio, never shown to the client. */
+    notes: text("notes"),
     ...stamps,
   },
   (t) => [index("studio_galleries_job_idx").on(t.jobId)],

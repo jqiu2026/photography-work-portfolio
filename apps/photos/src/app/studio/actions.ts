@@ -12,6 +12,7 @@ import { sendTemplate } from "@jerryqiu/email";
 import { eq } from "drizzle-orm";
 import { guarded } from "@/auth";
 import { afterPayment } from "@/lib/after-payment";
+import { publishAndNotify } from "@/lib/gallery-publish";
 
 /**
  * Owner-side studio actions (Phase 3). Every action re-checks the session and role (`studio.access`), rate limits, and
@@ -103,57 +104,11 @@ export async function advanceJobAction(jobId: string) {
   });
 }
 
-export async function createGalleryAction(input: { jobId: string; passcode: string; mediaIds: string[] }) {
-  return guarded("studio.access", async ({ db, audit }) => {
-    const j = id.safeParse(input.jobId);
-    const m = z.array(id).max(500).safeParse(input.mediaIds);
-    if (!j.success || !m.success) return actionError("Pick a job and valid photographs.");
-    try {
-      const g = await st.createGallery(db, { jobId: j.data, passcode: input.passcode, mediaIds: m.data });
-      await audit({
-        action: "studio.gallery.create",
-        entity: "studio_gallery",
-        entityId: g.id,
-        site: "photos",
-        summary: `Created client gallery ${g.title}`,
-      });
-      back();
-      return done("Gallery created (draft). Publish it when it is ready.");
-    } catch (e) {
-      const f = fail(e);
-      if (f) return f;
-      throw e;
-    }
-  });
-}
-
 export async function publishGalleryAction(galleryId: string) {
   return guarded("studio.access", async ({ db, audit }) => {
     const p = id.safeParse(galleryId);
     if (!p.success) return actionError("Unknown gallery.");
-    const g = await st.publishGallery(db, p.data);
-    // Tell the client it is ready (unless they switched "gallery ready" emails off). The passcode is not in the email:
-    // it is stored hashed, so the studio gives it to the client separately.
-    if (g) {
-      const [row] = await db
-        .select({ client: schema.studioClients })
-        .from(schema.studioJobs)
-        .innerJoin(schema.studioClients, eq(schema.studioClients.id, schema.studioJobs.clientId))
-        .where(eq(schema.studioJobs.id, g.jobId));
-      if (row && (await galleryReadyAllowed(db, row.client.id)))
-        await sendTemplate(
-          db,
-          row.client.email,
-          "gallery-ready",
-          {
-            name: row.client.name,
-            title: g.title,
-            link: `${getSite("photos").url}/client`,
-            linkLabel: "Open your gallery",
-          },
-          { related: { type: "gallery", id: g.id } },
-        );
-    }
+    await publishAndNotify(db, p.data);
     await audit({
       action: "studio.gallery.publish",
       entity: "studio_gallery",

@@ -80,10 +80,11 @@ export function Frame({
   section,
   note,
   children,
-}: { section: string; user?: string; note: Result | null; children: ReactNode }) {
+  head = true,
+}: { section: string; user?: string; note: Result | null; children: ReactNode; head?: boolean }) {
   return (
     <div className="st-wrap">
-      <StudioHead section={section} />
+      {head ? <StudioHead section={section} /> : null}
       <Banner note={note} />
       {children}
     </div>

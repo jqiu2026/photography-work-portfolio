@@ -218,3 +218,109 @@ describe("expiry, reactivation and extension payments", () => {
     expect(job.status).not.toBe("paid"); // an extension never marks the whole job paid
   });
 });
+
+describe("studio gallery tools", () => {
+  it("duplicates a gallery as a draft with its albums, items and settings, a fresh passcode, and no schedule", async () => {
+    await gal.updateGallery(db, gid, { layout: "masonry", theme: "light", density: "large", notes: "private" });
+    const album = await gal.createAlbum(db, gid, "Dupe album");
+    await gal.moveToAlbum(db, gid, [media[0]], album.id);
+    const { gallery: copy, passcode } = await gal.duplicateGallery(db, gid, "owner@test");
+    expect(copy.id).not.toBe(gid);
+    expect(copy.status).toBe("draft");
+    expect(copy.title).toMatch(/\(copy\)$/);
+    expect([copy.layout, copy.theme, copy.density, copy.notes]).toEqual(["masonry", "light", "large", "private"]);
+    expect(passcode.length).toBe(8);
+    expect(await gal.checkDownloadPin({ downloadPinHash: null }, "x")).toBe(true);
+    const items = await gal.galleryContents(db, copy.id, { includeHidden: true });
+    expect(items.length).toBe((await gal.galleryContents(db, gid, { includeHidden: true })).length);
+    const copyAlbums = await gal.listAlbums(db, copy.id);
+    expect(copyAlbums.map((a) => a.name)).toContain("Dupe album");
+    // the moved photograph is in the copy's own album, not the original's
+    const moved = items.find((i) => i.media.id === media[0]);
+    expect(copyAlbums.find((a) => a.id === moved?.item.albumId)?.name).toBe("Dupe album");
+  });
+
+  it("generates passcodes that are readable and unique", async () => {
+    const seen = new Set<string>();
+    for (let i = 0; i < 20; i++) seen.add(await gal.freshPasscode(db));
+    expect(seen.size).toBe(20);
+    for (const c of seen) expect(c).toMatch(/^[abcdefghjkmnpqrstuvwxyz23456789]{8}$/);
+  });
+
+  it("sorts by filename, moves chosen photographs to the front, and hides, shows or removes several at once", async () => {
+    const c = await st.createClient(db, { name: "Sort Client", email: "sort@example.com" });
+    const j = await st.createJob(db, { clientId: c.id, title: "Sort job" });
+    const g = await st.createGallery(db, { jobId: j.id, passcode: "sort-pass-12" });
+    await gal.addItems(db, g.id, [media[3], media[1], media[2], media[0]]);
+    await gal.sortItems(db, g.id, "name");
+    expect((await gal.galleryContents(db, g.id)).map((r) => r.media.filename)).toEqual([
+      "p0.jpg",
+      "p1.jpg",
+      "p2.jpg",
+      "p3.jpg",
+    ]);
+    await gal.moveToFront(db, g.id, [media[3], media[2]]);
+    expect((await gal.galleryContents(db, g.id)).map((r) => r.media.filename)).toEqual([
+      "p3.jpg",
+      "p2.jpg",
+      "p0.jpg",
+      "p1.jpg",
+    ]);
+    await gal.setHiddenMany(db, g.id, [media[0], media[1]], true);
+    expect((await gal.galleryContents(db, g.id)).length).toBe(2);
+    expect((await gal.galleryContents(db, g.id, { includeHidden: true })).length).toBe(4);
+    await gal.setHiddenMany(db, g.id, [media[0]], false);
+    await gal.removeMany(db, g.id, [media[2], media[3]]);
+    expect((await gal.galleryContents(db, g.id, { includeHidden: true })).map((r) => r.media.filename)).toEqual([
+      "p0.jpg",
+      "p1.jpg",
+    ]);
+    await gal.setHiddenMany(db, g.id, [], true); // empty lists are fine
+    await gal.removeMany(db, g.id, []);
+  });
+
+  it("schedules publishing: only drafts whose time has passed are due, and a bad date is refused", async () => {
+    const c = await st.createClient(db, { name: "Sched Client", email: "sched@example.com" });
+    const j = await st.createJob(db, { clientId: c.id, title: "Sched job" });
+    const g = await st.createGallery(db, { jobId: j.id, passcode: "sched-pass-1" });
+    await expect(gal.updateGallery(db, g.id, { publishAt: "not a date" })).rejects.toThrow(/valid publish date/);
+    const now = new Date("2026-10-20T12:00:00Z");
+    await gal.updateGallery(db, g.id, { publishAt: "2026-10-20T13:00:00Z" });
+    expect((await gal.dueToPublish(db, now)).map((x) => x.id)).not.toContain(g.id);
+    expect((await gal.dueToPublish(db, new Date("2026-10-20T13:00:01Z"))).map((x) => x.id)).toContain(g.id);
+    await st.publishGallery(db, g.id);
+    expect((await gal.dueToPublish(db, new Date("2026-10-21T00:00:00Z"))).map((x) => x.id)).not.toContain(g.id);
+    await gal.updateGallery(db, g.id, { publishAt: null });
+  });
+
+  it("counts photographs, favourites, downloads and views per gallery, and summarises the views", async () => {
+    const stats = await gal.galleryStats(db, [gid, "00000000-0000-4000-8000-000000000000"]);
+    expect(stats.get(gid)?.photos).toBeGreaterThan(0);
+    expect(stats.get("00000000-0000-4000-8000-000000000000")).toEqual({
+      photos: 0,
+      favourites: 0,
+      downloads: 0,
+      views: 0,
+      viewers: 0,
+    });
+    expect((await gal.galleryStats(db, [])).size).toBe(0);
+    await db.insert(schema.studioViewEvents).values([
+      { mediaId: media[1], viewer: "client:a", code: "c1" },
+      { mediaId: media[1], viewer: "client:a", code: "c1" },
+      { mediaId: media[2], viewer: "client:b", code: "c2" },
+    ]);
+    const v = await gal.viewSummary(db, gid);
+    expect(v.total).toBe(3);
+    expect(v.viewers).toBe(2);
+    expect(v.perPhoto[media[1]]).toBe(2);
+    expect((await gal.galleryStats(db, [gid])).get(gid)).toMatchObject({ views: 3, viewers: 2 });
+  });
+
+  it("deleting a gallery hides it from every list but keeps the photographs", async () => {
+    const { gallery } = await gal.duplicateGallery(db, gid);
+    await gal.deleteGallery(db, gallery.id, "owner");
+    expect((await st.listGalleries(db)).map((r) => r.gallery.id)).not.toContain(gallery.id);
+    expect((await db.select().from(schema.media)).length).toBeGreaterThanOrEqual(5);
+    await expect(gal.deleteGallery(db, gallery.id)).rejects.toThrow(/Unknown gallery/);
+  });
+});

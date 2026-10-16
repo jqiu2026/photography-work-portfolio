@@ -1,12 +1,13 @@
 import { expect, test } from "@playwright/test";
 import sharp from "sharp";
+import { newGallery, publishOpenGallery } from "./gallery-helpers";
 import { detectViewerCode } from "../packages/media/src/forensic";
 
 /** Gallery manager: bulk upload with dedupe, albums, settings, proofing, selection limit, PIN-gated downloads, ZIP, expiry. */
 const PHOTOS = "http://localhost:3302";
 const uid = Date.now().toString(36);
 const email = `gal-${uid}@example.test`;
-const PASS = `gallery-${uid}`;
+let PASS = "";
 test.describe.configure({ mode: "serial" });
 const slow = expect.configure({ timeout: 25_000 });
 const inForm = (page: import("@playwright/test").Page, name: string) => page.getByRole("form", { name });
@@ -48,18 +49,9 @@ test("owner creates a client, a job and an empty gallery, then uploads photograp
   await page.getByRole("button", { name: "Add job" }).click();
   await slow(page.getByRole("listitem").filter({ hasText: `Gal job ${uid}` })).toBeVisible();
 
-  await page.goto(`${PHOTOS}/studio/galleries`, { waitUntil: "networkidle" });
-  await page.getByLabel("Job").selectOption({ label: `Gal job ${uid}` });
-  await page.getByLabel(/Passcode/).fill(PASS);
-  await page.getByRole("button", { name: "Create gallery" }).click();
-  await slow(page.getByRole("status")).toContainText("Gallery created");
-  await page
-    .getByRole("listitem")
-    .filter({ hasText: `Gal job ${uid}` })
-    .getByRole("link", { name: "Manage" })
-    .click();
-  await expect(page).toHaveURL(/\/studio\/gallery\/[0-9a-f-]{36}$/);
-  galleryUrl = page.url();
+  const made = await newGallery(page, PHOTOS, `Gal job ${uid}`);
+  PASS = made.passcode;
+  galleryUrl = made.url;
 
   await page
     .locator("input[type=file]")
@@ -74,7 +66,8 @@ test("owner creates a client, a job and an empty gallery, then uploads photograp
   await expect(page.locator("[data-upload-state=duplicate]")).toHaveCount(1);
   await expect(page.locator("[data-upload-state=done]")).toHaveCount(3);
   await page.reload({ waitUntil: "networkidle" });
-  await expect(page.getByRole("heading", { name: /Photographs \(3\)/ })).toBeVisible();
+  await expect(page.locator("li[data-media-id]")).toHaveCount(3);
+  await expect(page.locator(".gm-stats")).toContainText("Photos3");
   // the studio shows client photographs through the protected pipeline too (they load when scrolled into view)
   await page.getByRole("list", { name: "Gallery photographs" }).scrollIntoViewIfNeeded();
   await expect(page.locator("[data-protected='strict'] img[src^='blob:']").first()).toBeVisible({ timeout: 25_000 });
@@ -89,38 +82,45 @@ test("owner sets up albums, downloads, a PIN, a selection limit, a welcome and a
   await alb.getByLabel("Album name").fill("Highlights");
   await alb.getByRole("button", { name: "Add album" }).click();
   await slow(page.getByRole("status").filter({ hasText: "Album added" })).toBeVisible();
+  await page.getByRole("button", { name: "Open shot-1.jpg" }).click();
   await page.getByLabel("Album for shot-1.jpg").selectOption({ label: "Highlights" });
   await slow(page.getByRole("status").filter({ hasText: "Moved" })).toBeVisible();
+  await page.keyboard.press("Escape");
 
-  const set = inForm(page, "Gallery settings");
-  await set.getByLabel("Welcome message").fill("Thank you for coming. Enjoy.");
-  await set.getByLabel(/Accent colour/).fill("#cc3322");
-  await set.getByLabel("Downloads").selectOption("full");
-  await set.getByLabel(/Access from today/).fill("3");
-  await set.getByLabel(/Selection limit/).fill("2");
-  await set.getByRole("button", { name: "Save settings" }).click();
-  await slow(page.getByRole("status").filter({ hasText: "Gallery settings saved" })).toBeVisible();
-  await set.getByLabel(/Accent colour/).fill("red");
-  await set.getByRole("button", { name: "Save settings" }).click();
+  await page.getByRole("tab", { name: "Design" }).click();
+  await page.getByLabel(/Shown above the photographs/).fill("Thank you for coming. Enjoy.");
+  await page.getByLabel(/Accent colour \(optional/).fill("#cc3322");
+  await page.getByRole("radio", { name: "Masonry" }).click();
+  await page.getByRole("button", { name: "Save design" }).click();
+  await slow(page.getByRole("status").filter({ hasText: "Design saved" })).toBeVisible();
+  await page.getByLabel(/Accent colour \(optional/).fill("red");
+  await page.getByRole("button", { name: "Save design" }).click();
   await slow(page.locator("p.st-error")).toContainText("hex");
-  await inForm(page, "Download PIN")
-    .getByLabel(/Download PIN/)
-    .fill("12");
-  await inForm(page, "Download PIN").getByRole("button", { name: "Save PIN" }).click();
+  await page.getByLabel(/Accent colour \(optional/).fill("#cc3322");
+
+  await page.getByRole("tab", { name: "Share" }).click();
+  await page.getByLabel("What clients can download").selectOption("full");
+  await page.getByRole("button", { name: "Save", exact: true }).click();
+  await slow(page.getByRole("status").filter({ hasText: "Download setting saved" })).toBeVisible();
+  const pin = inForm(page, "Download PIN");
+  await pin.getByLabel(/Download PIN/).fill("12");
+  await pin.getByRole("button", { name: "Save PIN" }).click();
   await slow(page.locator("p.st-error")).toContainText("4 to 8");
-  await inForm(page, "Download PIN")
-    .getByLabel(/Download PIN/)
-    .fill("4821");
-  await inForm(page, "Download PIN").getByRole("button", { name: "Save PIN" }).click();
+  await pin.getByLabel(/Download PIN/).fill("4821");
+  await pin.getByRole("button", { name: "Save PIN" }).click();
   await slow(page.getByRole("status").filter({ hasText: "Download PIN set" })).toBeVisible();
 
-  await page.goto(`${PHOTOS}/studio/galleries`, { waitUntil: "networkidle" });
-  await page
-    .getByRole("listitem")
-    .filter({ hasText: `Gal job ${uid}` })
-    .getByRole("button", { name: "Publish" })
-    .click();
-  await slow(page.getByRole("status")).toContainText("Gallery published");
+  await page.getByRole("tab", { name: "Proofing" }).click();
+  await page.getByLabel(/Selection limit/).fill("2");
+  await page.getByRole("button", { name: "Save", exact: true }).click();
+  await slow(page.getByRole("status").filter({ hasText: "Proofing saved" })).toBeVisible();
+
+  await page.getByRole("tab", { name: "Settings" }).click();
+  await page.getByLabel(/Access from today/).fill("3");
+  await page.getByRole("button", { name: "Save", exact: true }).click();
+  await slow(page.getByRole("status").filter({ hasText: "Publishing saved" })).toBeVisible();
+
+  await publishOpenGallery(page);
 });
 
 test("the client sees albums, a welcome and the accent; picks within the limit, rates, approves, comments, slideshows, sends a selection", async ({
@@ -221,19 +221,22 @@ test("the owner sees the picks, rating, approval, comment and the downloads; rep
   page,
 }) => {
   await page.goto(galleryUrl, { waitUntil: "networkidle" });
-  const proof = page.getByRole("region", { name: "What the client picked and said" });
+  await page.getByRole("tab", { name: "Proofing" }).click();
+  const proof = page.getByRole("tabpanel", { name: "Proofing" });
   await expect(proof).toContainText("2 favourites");
   await expect(proof).toContainText("1 approved");
   await expect(proof).toContainText("Could this one be a little brighter?");
-  const photo = page.locator("li[data-media-id]").filter({ hasText: "shot-1.jpg" });
-  await expect(photo).toContainText("4★");
-  await expect(photo).toContainText("approved");
   await proof.getByLabel(/Reply to shot-1.jpg/).fill("Done, I've brightened it.");
   await proof.getByRole("button", { name: "Reply" }).click();
   await slow(page.getByRole("status").filter({ hasText: "Reply added" })).toBeVisible();
   await page.getByRole("button", { name: "Reopen the selection" }).click();
   await slow(page.getByRole("status").filter({ hasText: "Selection reopened" })).toBeVisible();
-  const dl = page.getByRole("region", { name: "Downloads" });
+  await page.getByRole("tab", { name: "Photos" }).click();
+  const photo = page.locator("li[data-media-id]").filter({ hasText: "shot-1.jpg" });
+  await expect(photo).toContainText("4★");
+  await expect(photo).toContainText("✓");
+  await page.getByRole("tab", { name: "Activity" }).click();
+  const dl = page.getByRole("tabpanel", { name: "Activity" });
   await expect(dl).toContainText("web");
   await expect(dl).toContainText("full");
   await expect(dl).toContainText("zip-web");
@@ -244,6 +247,7 @@ test("an archived gallery offers the client an extension; paying it brings the g
   browser,
 }) => {
   await page.goto(galleryUrl, { waitUntil: "networkidle" });
+  await page.getByRole("tab", { name: "Settings" }).click();
   await page.getByRole("button", { name: "Archive" }).click();
   await slow(page.getByRole("status").filter({ hasText: "Archived" })).toBeVisible();
 

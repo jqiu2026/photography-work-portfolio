@@ -9,10 +9,8 @@ import {
   advanceJobAction,
   convertBookingAction,
   createContractAction,
-  createGalleryAction,
   createInvoiceAction,
   markInvoicePaidAction,
-  publishGalleryAction,
   sendContractAction,
   sendInvoiceAction,
 } from "@/app/studio/actions";
@@ -396,95 +394,6 @@ export function StudioApp({ section, user, data }: { section: string; user: stri
             </label>
             <button className="st-btn" type="submit" disabled={pending || !data.clients.length}>
               Add job
-            </button>
-          </form>
-        </Card>
-      </div>
-    );
-  } else if (section === "galleries") {
-    body = (
-      <div className="st-grid">
-        <Card title="Client galleries" id="st-g">
-          {data.galleries.length ? (
-            <ul className="st-list">
-              {data.galleries.map((g) => (
-                <li key={g.id}>
-                  <span>
-                    <strong>{g.title}</strong>
-                    <small>
-                      {g.jobTitle} · {g.items} photographs · {g.status}
-                    </small>
-                  </span>
-                  <span className="st-actions">
-                    <Link className="st-btn st-btn--ghost" href={`/studio/gallery/${g.id}`}>
-                      Manage
-                    </Link>
-                    {g.status === "draft" ? (
-                      <button
-                        type="button"
-                        className="st-btn"
-                        disabled={pending}
-                        onClick={() => run(() => publishGalleryAction(g.id))}
-                      >
-                        Publish
-                      </button>
-                    ) : null}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="st-note">No galleries yet.</p>
-          )}
-        </Card>
-        <Card title="New gallery" id="st-ng">
-          <form
-            className="st-form"
-            onSubmit={submit(
-              () =>
-                createGalleryAction({
-                  jobId: form.job ?? data.jobs[0]?.id ?? "",
-                  passcode: form.pass ?? "",
-                  mediaIds: picked,
-                }),
-              () => {
-                setForm({});
-                setPicked([]);
-              },
-            )}
-          >
-            <label>
-              Job
-              <select value={form.job ?? data.jobs[0]?.id ?? ""} onChange={set("job")}>
-                {data.jobs.map((j) => (
-                  <option key={j.id} value={j.id}>
-                    {j.title}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label>
-              Passcode (6+ characters)
-              <input value={form.pass ?? ""} onChange={set("pass")} autoComplete="off" />
-            </label>
-            <fieldset className="st-pick">
-              <legend>Photographs from the media library ({picked.length} chosen)</legend>
-              {data.media.map((m) => (
-                <label key={m.id} className="st-check">
-                  <input
-                    type="checkbox"
-                    checked={picked.includes(m.id)}
-                    onChange={(e) => setPicked((p) => (e.target.checked ? [...p, m.id] : p.filter((x) => x !== m.id)))}
-                  />
-                  {m.filename}
-                </label>
-              ))}
-              {!data.media.length ? (
-                <p className="st-note">Upload photographs in the admin media library first.</p>
-              ) : null}
-            </fieldset>
-            <button className="st-btn" type="submit" disabled={pending || !data.jobs.length}>
-              Create gallery
             </button>
           </form>
         </Card>

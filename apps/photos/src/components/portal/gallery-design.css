@@ -1,0 +1,39 @@
+/* How a client sees a gallery: layout, density and theme are set per gallery in the studio. */
+.gd[data-gallery-theme="light"] {
+  --hl-bg: #fff;
+  --hl-surface: #f4f4f5;
+  --hl-text: #111;
+  --hl-ink: #111;
+  --hl-muted: #5b5b63;
+  --hl-line: #e2e2e6;
+  background: #fff;
+  color: #111;
+  padding: clamp(1rem, 3vw, 2rem);
+  border-radius: 1rem;
+}
+.gd[data-gallery-density="small"] .st-photos {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 8.5rem), 1fr));
+}
+.gd[data-gallery-density="large"] .st-photos {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
+}
+.gd[data-gallery-layout="masonry"] .st-photos {
+  display: block;
+  columns: 12rem;
+  column-gap: .75rem;
+}
+.gd[data-gallery-layout="masonry"][data-gallery-density="small"] .st-photos {
+  columns: 8.5rem;
+}
+.gd[data-gallery-layout="masonry"][data-gallery-density="large"] .st-photos {
+  columns: 19rem;
+}
+.gd[data-gallery-layout="masonry"] .st-photos > li {
+  break-inside: avoid;
+  margin-bottom: .75rem;
+}
+.gd[data-gallery-layout="rows"] .st-photos {
+  grid-template-columns: minmax(0, 52rem);
+  justify-content: center;
+  gap: 1.25rem;
+}

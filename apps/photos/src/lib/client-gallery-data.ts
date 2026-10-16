@@ -12,6 +12,9 @@ export type ClientGalleryData = {
   title: string;
   welcome: string;
   accent: string;
+  layout: string;
+  theme: string;
+  density: string;
   state: string;
   expiresAt: string | null;
   allowRatings: boolean;
@@ -55,6 +58,9 @@ export async function loadClientGallery(db: Database, a: GalleryAccess): Promise
     title: g.title,
     welcome: g.welcome ?? "",
     accent: g.accent ?? "",
+    layout: g2?.layout ?? "grid",
+    theme: g2?.theme ?? "dark",
+    density: g2?.density ?? "medium",
     state: a.state,
     expiresAt: g.expiresAt?.toISOString().slice(0, 10) ?? null,
     allowRatings: g.allowRatings,

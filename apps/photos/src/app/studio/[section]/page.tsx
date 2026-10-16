@@ -1,7 +1,7 @@
 import { Container, Heading, Section, Text } from "@halation/ui";
 import { getDb, schema } from "@jerryqiu/db";
 import * as st from "@jerryqiu/db/studio";
-import { desc, eq, isNull } from "drizzle-orm";
+import { desc, eq, inArray, isNull } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import { requirePageUser } from "@/auth";
 import { StudioShell as Shell } from "@/components/studio/StudioShell";
@@ -17,6 +17,8 @@ import { PortalAdminView } from "@/components/studio/PortalAdminView";
 import * as portalDb from "@jerryqiu/db/portal";
 import { AutomationsView, NotificationsView, TasksView } from "@/components/studio/OpsViews";
 import * as autoDb from "@jerryqiu/db/automation";
+import { GalleriesView } from "@/components/studio/GalleriesView";
+import * as galDb from "@jerryqiu/db/galleries";
 import { DashboardView } from "@/components/studio/DashboardView";
 import { dashboardData } from "@/lib/studio-dashboard";
 import { calendarData } from "@/lib/studio-calendar";
@@ -60,6 +62,55 @@ export default async function StudioSection({ params }: { params: Promise<{ sect
     return (
       <Shell>
         <DashboardView greeting={`${greeting}, ${first}`} data={await dashboardData(db)} />
+      </Shell>
+    );
+  }
+  if (section === "galleries") {
+    const [rows, jobRows] = await Promise.all([st.listGalleries(db), st.listJobs(db)]);
+    const stats = await galDb.galleryStats(
+      db,
+      rows.map((r) => r.gallery.id),
+    );
+    // cover: the chosen one, else the first photograph in the gallery
+    const firsts = new Map<string, string>();
+    for (const r of rows)
+      if (!r.gallery.coverMediaId) {
+        const [first] = await galDb.galleryContents(db, r.gallery.id);
+        if (first) firsts.set(r.gallery.id, first.media.id);
+      }
+    const coverIds = [
+      ...new Set(rows.map((r) => r.gallery.coverMediaId ?? firsts.get(r.gallery.id)).filter(Boolean)),
+    ] as string[];
+    const coverRows = coverIds.length
+      ? await db.select().from(schema.media).where(inArray(schema.media.id, coverIds))
+      : [];
+    const cover = new Map(coverRows.map((m) => [m.id, m]));
+    return (
+      <Shell>
+        <GalleriesView
+          galleries={rows.map((r) => {
+            const g = r.gallery;
+            const m = cover.get(g.coverMediaId ?? firsts.get(g.id) ?? "");
+            const sx = stats.get(g.id);
+            return {
+              id: g.id,
+              title: g.title,
+              jobTitle: r.job.title,
+              state: galDb.galleryState(g),
+              expiresAt: g.expiresAt?.toISOString().slice(0, 10) ?? null,
+              publishAt: g.publishAt?.toISOString() ?? null,
+              createdAt: g.createdAt.toISOString(),
+              photos: sx?.photos ?? 0,
+              favourites: sx?.favourites ?? 0,
+              downloads: sx?.downloads ?? 0,
+              views: sx?.views ?? 0,
+              cover: m
+                ? { id: m.id, width: m.width ?? 1200, height: m.height ?? 800, color: m.color, blur: m.blur }
+                : null,
+            };
+          })}
+          jobs={jobRows.map((r) => ({ id: r.job.id, title: r.job.title, client: r.client.name }))}
+        />
       </Shell>
     );
   }
