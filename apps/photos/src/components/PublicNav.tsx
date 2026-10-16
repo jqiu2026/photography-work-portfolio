@@ -10,6 +10,7 @@ const LINKS = [
   { label: "Video", href: "/video" },
   { label: "About", href: "/about" },
   { label: "Packages", href: "/packages" },
+  { label: "Shop", href: "/shop" },
 ];
 
 /** The site's one navigation: a few text links, the current page marked, and a plain menu on small screens. */

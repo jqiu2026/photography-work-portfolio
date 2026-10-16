@@ -164,6 +164,7 @@ export async function saveLinkAction(input: { galleryId: string; slug: string; v
 export async function saveShopAction(input: {
   galleryId: string;
   enabled: boolean;
+  listed?: boolean;
   sellDigital: boolean;
   sellPrints: boolean;
   freeDownloads: string;
@@ -173,6 +174,7 @@ export async function saveShopAction(input: {
   return studio(async ({ db }) => {
     await shop.saveShop(db, gid(input.galleryId), {
       enabled: input.enabled,
+      ...(input.listed === undefined ? {} : { listed: input.listed }),
       sellDigital: input.sellDigital,
       sellPrints: input.sellPrints,
       freeDownloads: input.freeDownloads,

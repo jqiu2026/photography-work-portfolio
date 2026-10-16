@@ -103,6 +103,7 @@ export type GalleryManagerData = {
   visibility: string;
   shop: {
     enabled: boolean;
+    listed: boolean;
     sellDigital: boolean;
     sellPrints: boolean;
     freeDownloads: string;

@@ -52,7 +52,7 @@ test("owner makes a gallery and sets its security and look", async ({ page }) =>
   await page.getByLabel("Typeface").selectOption("serif");
   await page.getByLabel("Spacing").selectOption("wide");
   await page.getByLabel("Corners").selectOption("round");
-  await page.getByLabel(/Show the cover large/).check();
+  await page.getByLabel(/Legacy: cover above/).check();
   await page.getByLabel(/Show filenames/).check();
   await page.getByLabel(/Line above the title/).fill(`Studio ${uid}`);
   await page.getByLabel(/Closing note/).fill(`Thanks, ${uid}`);
@@ -128,7 +128,7 @@ test("screenshot and save keys: a warning first, the second attempt locks the vi
 
   await key(c, { key: "s", code: "KeyS", ctrlKey: true });
   await expect(c, `events: ${seen.join(" | ")}`).toHaveURL(/\/client\?locked=1$/, { timeout: 25_000 });
-  await expect(c.getByRole("alert")).toContainText("closed because a screenshot or save was attempted");
+  await expect(c.locator("p[role=alert]")).toContainText("closed because a screenshot or save was attempted");
 
   // the same viewer cannot simply come back in with the passcode
   await openAsClient(c);

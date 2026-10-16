@@ -113,6 +113,7 @@ const MARKETING = [
   "/client-portal",
   "/galleries",
   "/prints",
+  "/shop",
   "/faq",
   "/contact",
   "/terms",

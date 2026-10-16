@@ -40,6 +40,7 @@ export const routes: { site: string; path: string; base: string }[] = [
     "/client-portal",
     "/galleries",
     "/prints",
+    "/shop",
     "/faq",
     "/contact",
     "/terms",

@@ -75,6 +75,8 @@ export async function galleryBySlug(db: Database, slug: string) {
 export const shopSchema = z.object({
   /** Show the Shop to visitors. */
   enabled: z.boolean().default(false),
+  /** List this gallery on the site's public Shop page (it must also be open to anyone with the link). */
+  listed: z.boolean().default(false),
   /** Sell downloads (web size, full resolution, or the whole gallery). */
   sellDigital: z.boolean().default(true),
   sellPrints: z.boolean().default(true),
@@ -393,4 +395,22 @@ export async function abandonedOrders(db: Database, now = new Date(), afterHours
 }
 export async function markReminded(db: Database, orderId: string, now = new Date()) {
   await db.update(s.studioOrders).set({ reminderAt: now }).where(eq(s.studioOrders.id, orderId));
+}
+
+/** Galleries the owner chose to list on the public Shop page: open by link, shop open, published. */
+export async function listedGalleries(db: Database) {
+  const rows = await db
+    .select()
+    .from(s.studioGalleries)
+    .where(
+      and(
+        eq(s.studioGalleries.visibility, "link"),
+        eq(s.studioGalleries.status, "published"),
+        isNull(s.studioGalleries.deletedAt),
+      ),
+    )
+    .orderBy(desc(s.studioGalleries.updatedAt));
+  return rows
+    .filter((g) => g.slug && readShop(g.shop).enabled && readShop(g.shop).listed)
+    .map((g) => ({ id: g.id, title: g.title, slug: g.slug as string, welcome: g.welcome ?? "" }));
 }

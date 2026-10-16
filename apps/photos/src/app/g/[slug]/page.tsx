@@ -24,7 +24,7 @@ export default async function GalleryByLink({ params }: { params: Promise<{ slug
   if (!access) redirect((await currentLock()) ? "/client?locked=1" : `/g/${slug}/enter`);
   const data = await loadClientGallery(db, access);
   return (
-    <Shell cinema>
+    <Shell bare>
       <GalleryGuard
         security={access.security}
         galleryId={data.galleryId}

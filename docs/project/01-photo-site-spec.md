@@ -114,11 +114,11 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | F-25 | Payment plans and installments | P1 | done | payment_plans | Stripe / mock | unit | M8 |
 | F-26 | Multi-currency display | P3 | partial (display-only estimate helper, SAMPLE rates; charges stay USD) | price formatter | n/a | unit | M6 |
 | F-27 | Upsells at checkout | P2 | done (on the quote page, re-priced server-side) | quote page | n/a | e2e | M6 |
-| F-28 | Print and product store (prints, albums, canvases, cards) | P2 | missing | `/client/store/[gallery]` | WHCC / mock | e2e | M13 |
+| F-28 | Print and product store (prints, albums, canvases, cards) and digital download sales | P2 | done (each gallery has its own shop at `/g/<link>`; prints go to the lab only after payment, only when the photograph is sharp enough; WHCC adapter plus a labelled mock lab) | `/g/[slug]`, `/shop`, `/studio/orders` | WHCC / mock | e2e | M13 |
 | F-29 | Digital download sales | P2 | missing | digital_products | Stripe / mock | e2e | M13 |
 | F-30 | Gallery extension and reactivation sales | P1 | done | expiry flow | Stripe / mock | e2e | M10 |
 | F-31 | Tips | P3 | done | invoice pay | Stripe / mock | unit | M8 |
-| F-32 | Abandoned-cart and unpaid-invoice reminders | P2 | partial (unpaid invoice, overdue and unanswered quote reminders done; abandoned cart arrives with the print store) | automations | email | unit | M12 |
+| F-32 | Abandoned-cart and unpaid-invoice reminders | P2 | done (unpaid invoice, overdue and unanswered quote reminders; a shop order left unpaid for a day gets one reminder) | automations | email | unit | M13 |
 
 ### Contract and comply
 
@@ -140,7 +140,7 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 |---|---|---|---|---|---|---|---|
 | F-50 | Own invoices, pay through Stripe Checkout, webhook updates | P1 | done (mock labelled when no key) | `/client/pay/[token]`, `/api/webhooks/stripe` | Stripe / mock | e2e studio (1 failing webhook test to fix) | M1 |
 | F-51 | Deposits, retainers, recurring invoices | P1 | done (deposit invoices from quotes and bookings, recurring billing for retainers) | invoices.kind | Stripe / mock | unit | M8 |
-| F-52 | Refunds (Stripe) and cancel unstarted print order | P1 | partial (Stripe refunds, dashboard refunds by webhook, proportional tip/surcharge; print-order cancellation arrives with prints in M13) | payments, refunds | Stripe / mock | unit | M8 |
+| F-52 | Refunds (Stripe) and cancel unstarted print order | P1 | partial (Stripe refunds, dashboard refunds by webhook, proportional tip/surcharge; an unpaid shop order can be cancelled and its invoice is voided; cancelling an already-submitted print order after a refund is not built) | payments, refunds | Stripe / mock | unit | M8 |
 | F-53 | ACH option | P1 | done (Checkout offers bank payment when enabled; labelled mock locally) | checkout payment_method_types | Stripe / mock | unit | M8 |
 | F-54 | Receipts by email, PDF invoices | P1 | done (receipt email, invoice and receipt PDFs) | email templates | Resend / outbox | unit | M8 |
 | F-55 | Manual mark paid (cash, Zelle, check) | P1 | done | studio invoices | n/a | e2e | done |
@@ -213,6 +213,10 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | F-115 | WCAG 2.2 AA, performance budgets (Lighthouse mobile 80+, CLS under 0.02) | P1 | partial | all | axe, lighthouse | M18 |
 | F-116 | Error and health pages, seed and demo data | P1 | partial (health API and owner health page done; demo data in M18) | `/api/health`, seed | e2e | M11 |
 | F-117 | Marketing pages from this table (Live / Preview / Soon badges) | P1 | done | `/features` etc. | e2e | M11 |
+| F-118 | Per-gallery web address (`/g/<link>`) with visitor access: view and shop without a passcode, proofing only for the client | P1 | done | `/g/[slug]` | e2e | M13 |
+| F-119 | Albums with sub-albums, locked albums (own passcode), hidden albums, album covers, "All photos", album cards or tabs | P1 | done | gallery Albums tab | e2e, unit | M13 |
+| F-120 | Gallery looks: four themes, seven type options, six arrangements, opening styles, spacing, corners, accent and background colour | P1 | done | gallery Design tab | e2e | M13 |
+| F-121 | Shop price list (one list, SAMPLE until set), orders, buyer order page with download links | P1 | done | `/studio/orders`, `/g/order/[token]` | e2e, unit | M13 |
 
 ## 7. Marketing and showcase rules
 

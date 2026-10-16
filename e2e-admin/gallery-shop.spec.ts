@@ -227,7 +227,7 @@ test("the order page unlocks exactly what was bought; the owner sees the order a
   await b.goto(`${PHOTOS}${orderUrl}`, { waitUntil: "networkidle" });
   await expect(b.getByRole("heading", { level: 1 })).toContainText("Order S-");
   await expect(b.getByText("Paid. Preparing your order").or(b.getByText("Complete"))).toBeVisible();
-  const links = b.getByRole("link", { name: "Download" });
+  const links = b.getByRole("main").getByRole("link", { name: "Download", exact: true });
   await expect(links).toHaveCount(1); // one download was bought
   const href = (await links.first().getAttribute("href")) as string;
   const got = await b.request.get(`${PHOTOS}${href}`);

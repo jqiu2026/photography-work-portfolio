@@ -110,6 +110,7 @@ export default async function GalleryPage({ params }: { params: Promise<{ id: st
           visibility: g.visibility,
           shop: {
             enabled: shopCfg.enabled,
+            listed: shopCfg.listed,
             sellDigital: shopCfg.sellDigital,
             sellPrints: shopCfg.sellPrints,
             freeDownloads: shopCfg.freeDownloads,

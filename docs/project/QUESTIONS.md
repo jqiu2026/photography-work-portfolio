@@ -83,3 +83,10 @@ Never block on these. Each has a default already being used. Append new ones at 
 | Q65 | `@jerryqiu/email`, `prints`, `facesearch` new packages | Created as shared packages, each with a real adapter plus mock | none | `packages/` |
 | Q66 | Link-preview (Open Graph) images from photographs | Removed on the photo site (no unprotected photograph path); a generated text card replaces it in PHOTO-M11 | Owner may accept a small watermarked preview exception | `apps/photos/src/app/layout.tsx` |
 | Q67 | Markdown images from the CMS on the photo site | Only `media:UUID` images render (protected); plain https images are dropped | none | `packages/render/src/markdown.tsx` |
+| Q68 | Gallery link visibility | Two choices: passcode only, or anyone with the link (view and shop; proofing stays with the passcode). No link-plus-passcode mix | Owner may want a visitor passcode too | `gallery-shop.ts` |
+| Q69 | Prices in the shop | Starter price list marked SAMPLE (shown as SAMPLE in the shop and the price list) until the owner saves a real price | Owner sets real prices in Money, Shop | `studio_products` |
+| Q70 | Shipping for prints | Flat SAMPLE rate ($8 plus $2 per extra print, US/CA/MX) until a lab quote replaces it; the amount is computed on the server | Real lab shipping quote | `shippingFor` |
+| Q71 | Shop orders and billing | A shop order is an invoice of kind "shop" under the gallery's job, paid on the existing pay page; it is excluded from client reminders (no due date) | A separate checkout later | `placeOrder` |
+| Q72 | Album nesting | One level of sub-albums (parent and child), enforced in the db layer | Deeper trees | `galleries.ts` |
+| Q73 | Order links | Derived (`order id` + HMAC) so the payment webhook and the receipt email produce the same link; the id alone opens nothing | Stored tokens | `lib/order-link.ts` |
+

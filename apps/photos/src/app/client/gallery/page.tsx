@@ -19,7 +19,7 @@ export default async function ClientGallery() {
   if (!db || !access || access.state === "draft") redirect((await currentLock()) ? "/client?locked=1" : "/client");
   const data = await loadClientGallery(db, access);
   return (
-    <Shell cinema>
+    <Shell bare>
       <GalleryGuard
         security={access.security}
         galleryId={data.galleryId}
