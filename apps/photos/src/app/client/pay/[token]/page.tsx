@@ -4,7 +4,9 @@ import * as st from "@jerryqiu/db/studio";
 import { MockBanner } from "@jerryqiu/sites/mock";
 import { notFound } from "next/navigation";
 import { Shell } from "@/components/Shell";
+import { orderLink } from "@/lib/order-link";
 import { resolveRef } from "@/lib/portal-links";
+import * as shop from "@jerryqiu/db/gallery-shop";
 import * as bill from "@jerryqiu/db/billing";
 import { PayForm } from "@/components/studio/ClientForms";
 import { paymentMode } from "@/lib/payment-config";
@@ -27,6 +29,7 @@ export default async function PayPage({
   if (!inv) notFound();
   const mode = paymentMode();
   const billing = await bill.getBillingSettings(db);
+  const shopOrder = inv.kind === "shop" ? await shop.orderForInvoice(db, inv.id) : null;
   const net = await st.invoiceNetCents(db, inv.id);
   const dueCents = Math.max(0, inv.totalCents - net);
   return (
@@ -48,6 +51,11 @@ export default async function PayPage({
               <p className="st-note">
                 <a href={`/client/pay/${token}/receipt`}>Download the receipt (PDF)</a>
               </p>
+              {shopOrder ? (
+                <p className="st-note">
+                  <a href={`/g/order/${orderLink(shopOrder.id)}`}>Open your order and downloads</a>
+                </p>
+              ) : null}
             </section>
           ) : paid ? (
             <section className="st-card">

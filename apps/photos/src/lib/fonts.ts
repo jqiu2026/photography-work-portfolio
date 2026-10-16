@@ -1,4 +1,13 @@
-import { Anybody, Hanken_Grotesk, Martian_Mono, Newsreader } from "next/font/google";
+import {
+  Anybody,
+  Cormorant_Garamond,
+  DM_Serif_Display,
+  Hanken_Grotesk,
+  Jost,
+  Martian_Mono,
+  Newsreader,
+  Playfair_Display,
+} from "next/font/google";
 
 // SIL Open Font License 1.1, self-hosted by next/font at build time (Q41: licence files verified in R2, see
 // THIRD_PARTY_LICENSES.md). Display: Anybody (variable width axis, driven by scroll velocity). Text: Hanken Grotesk.
@@ -14,4 +23,28 @@ export const voice = Newsreader({
   display: "optional",
 });
 export const mono = Martian_Mono({ subsets: ["latin"], variable: "--font-mono", display: "swap" });
-export const fontVars = [display, sans, voice, mono].map((f) => f.variable).join(" ");
+// Gallery type options (a gallery chooses one in the studio). `preload: false`: only a gallery that uses one downloads it.
+export const gxEditorial = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-gx-editorial",
+  display: "swap",
+  preload: false,
+});
+export const gxClassic = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-gx-classic",
+  display: "swap",
+  preload: false,
+});
+export const gxModern = Jost({ subsets: ["latin"], variable: "--font-gx-modern", display: "swap", preload: false });
+export const gxDisplay = DM_Serif_Display({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-gx-display",
+  display: "swap",
+  preload: false,
+});
+export const fontVars = [display, sans, voice, mono, gxEditorial, gxClassic, gxModern, gxDisplay]
+  .map((f) => f.variable)
+  .join(" ");

@@ -135,27 +135,32 @@ test("the client sees albums, a welcome and the accent; picks within the limit, 
   await expect(c.getByText("Thank you for coming. Enjoy.")).toBeVisible();
   await expect(c.locator("[data-protected='strict'] img[src^='blob:']").first()).toBeVisible({ timeout: 25_000 });
   await expect(c.locator("img[src*='/api/img/']")).toHaveCount(0);
-  await expect(c.getByRole("button", { name: "Highlights" })).toBeVisible();
-  await c.getByRole("button", { name: "Highlights" }).click();
+  await expect(c.getByRole("button", { name: /^Highlights/ })).toBeVisible();
+  await c.getByRole("button", { name: /^Highlights/ }).click();
   await expect(c.locator("li[data-media-id]")).toHaveCount(1);
-  await c.getByRole("button", { name: "All", exact: true }).click();
+  await c.getByRole("button", { name: /^All photos/ }).click();
   await expect(c.locator("li[data-media-id]")).toHaveCount(3);
 
   await c.getByRole("button", { name: "Add shot-1.jpg to favourites" }).click();
   await c.getByRole("button", { name: "Add shot-2.jpg to favourites" }).click();
   await c.getByRole("button", { name: "Add shot-3.jpg to favourites" }).click();
   await expect(c.getByRole("alert").filter({ hasText: "up to 2" })).toBeVisible();
-  await c.getByRole("button", { name: "4 stars for shot-1.jpg" }).click();
-  await expect(c.getByRole("button", { name: "4 stars for shot-1.jpg" })).toHaveAttribute("aria-pressed", "true");
-  await c.getByRole("button", { name: "Approve shot-1.jpg" }).click();
-  await expect(c.getByRole("button", { name: "Approve shot-1.jpg" })).toHaveAttribute("aria-pressed", "true");
-  await c.getByRole("button", { name: "Comments on shot-1.jpg" }).first().click();
-  await c.getByLabel("Your comment").fill("Could this one be a little brighter?");
-  await c.getByRole("button", { name: "Add comment" }).click();
-  await expect(c.getByText("Could this one be a little brighter?")).toBeVisible();
+  // proofing happens in the photograph's panel: stars, approval, comments
+  await c.getByRole("button", { name: "Open shot-1.jpg" }).click();
+  const lb = c.getByRole("dialog", { name: "Photograph" });
+  await expect(lb.locator("img[src^='blob:']")).toBeVisible({ timeout: 25_000 });
+  await lb.getByRole("button", { name: "4 stars for shot-1.jpg" }).click();
+  await expect(lb.getByRole("button", { name: "4 stars for shot-1.jpg" })).toHaveAttribute("aria-pressed", "true");
+  await lb.getByRole("button", { name: "Approve shot-1.jpg" }).click();
+  await expect(lb.getByRole("button", { name: "Approve shot-1.jpg" })).toHaveAttribute("aria-pressed", "true");
+  await lb.getByLabel("Your comment").fill("Could this one be a little brighter?");
+  await lb.getByRole("button", { name: "Add comment" }).click();
+  await expect(lb.getByText("Could this one be a little brighter?")).toBeVisible();
+  await lb.getByRole("button", { name: "Close" }).click();
 
+  // the slideshow is the same viewer, started from the first photograph
   await c.getByRole("button", { name: "Slideshow", exact: true }).click();
-  const show = c.getByRole("dialog", { name: "Slideshow" });
+  const show = c.getByRole("dialog", { name: "Photograph" });
   await expect(show.locator("img[src^='blob:']")).toBeVisible({ timeout: 25_000 });
   await c.keyboard.press("ArrowRight");
   await expect(show.getByText("2 / 3")).toBeVisible();
@@ -178,7 +183,8 @@ test("downloads need the PIN; web size is a JPEG carrying the viewer's invisible
   await expect(c.getByRole("link", { name: "Web size" })).toHaveCount(0);
   const m = (await c.locator("li[data-media-id]").first().getAttribute("data-media-id")) as string;
   expect((await c.request.get(`${PHOTOS}/client/download?m=${m}&size=full`)).status()).toBe(403);
-  const unlock = c.getByRole("region", { name: "Downloads" });
+  await c.getByRole("button", { name: "Download", exact: true }).click();
+  const unlock = c.getByRole("dialog", { name: "Downloads" });
   await unlock.getByLabel("Download PIN").fill("0000");
   await unlock.getByRole("button", { name: "Unlock downloads" }).click();
   await slow(c.getByRole("alert").filter({ hasText: "not right" })).toBeVisible();

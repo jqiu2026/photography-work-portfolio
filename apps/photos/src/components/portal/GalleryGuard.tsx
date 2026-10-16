@@ -1,5 +1,6 @@
 "use client";
 
+import "./gallery-design.css";
 import { GuardScope } from "@halation/ui/media";
 import { useEffect, useMemo } from "react";
 import { idleLeaveAction } from "@/app/client/actions";

@@ -18,6 +18,7 @@
     "@jerryqiu/media": "workspace:*",
     "@jerryqiu/mocks": "workspace:*",
     "@jerryqiu/payments": "workspace:*",
+    "@jerryqiu/prints": "workspace:*",
     "@jerryqiu/protect": "workspace:*",
     "@jerryqiu/render": "workspace:*",
     "@jerryqiu/sites": "workspace:*",

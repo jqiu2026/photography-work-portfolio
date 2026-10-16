@@ -1,10 +1,12 @@
 import { publishScheduled } from "@/lib/gallery-publish";
 import "server-only";
-import { type Database } from "@jerryqiu/db";
+import { type Database, schema } from "@jerryqiu/db";
 import * as auto from "@jerryqiu/db/automation";
 import * as cal from "@jerryqiu/db/calendar";
+import * as shop from "@jerryqiu/db/gallery-shop";
 import { sendTemplate } from "@jerryqiu/email";
 import { getSite } from "@jerryqiu/sites";
+import { eq } from "drizzle-orm";
 import { runBillingJobs } from "@/lib/billing-jobs";
 
 const usd = (c: number) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(c / 100);
@@ -103,7 +105,40 @@ export async function runScheduled(db: Database, now = new Date()) {
   await cal.releaseExpiredHolds(db, now);
   const billing = await runBillingJobs(db, now);
   const published = await publishScheduled(db, now);
+  const carts = await remindAbandonedOrders(db, now);
   const automations = await runAutomations(db, now);
-  return { billing, automations, galleriesPublished: published, at: now.toISOString() };
+  return { billing, automations, galleriesPublished: published, cartReminders: carts, at: now.toISOString() };
 }
 void usd;
+
+/** One reminder, a day after a shop order was started and not paid. The link goes back to the payment page. */
+export async function remindAbandonedOrders(db: Database, now = new Date()) {
+  const rows = await shop.abandonedOrders(db, now, 24);
+  let sent = 0;
+  for (const o of rows) {
+    const [inv] = o.invoiceId
+      ? await db.select().from(schema.studioInvoices).where(eq(schema.studioInvoices.id, o.invoiceId))
+      : [];
+    if (!inv || inv.status === "paid" || inv.status === "void") {
+      await shop.markReminded(db, o.id, now);
+      continue;
+    }
+    // the payment link token is only stored hashed, so the reminder points back to the gallery where the cart is kept
+    const [g] = await db.select().from(schema.studioGalleries).where(eq(schema.studioGalleries.id, o.galleryId));
+    await sendTemplate(
+      db,
+      o.buyerEmail,
+      "order-reminder",
+      {
+        name: o.buyerName,
+        title: o.number,
+        amount: usd(o.totalCents),
+        link: g?.slug ? `${getSite("photos").url}/g/${g.slug}` : getSite("photos").url,
+      },
+      { related: { type: "order", id: o.id } },
+    );
+    await shop.markReminded(db, o.id, now);
+    sent++;
+  }
+  return sent;
+}

@@ -19,6 +19,8 @@ export type TemplateKind =
   | "portal-invite"
   | "client-message"
   | "reminder"
+  | "order-ready"
+  | "order-reminder"
   | "reply";
 
 export type TemplateData = {
@@ -97,6 +99,28 @@ const specs: Record<TemplateKind, Spec> = {
     subject: `Receipt ${d.title || ""}`.trim(),
     heading: "Payment received",
     lines: [`Hi ${d.name || "there"},`, `Thank you. We received ${d.amount ?? "your payment"}.`, d.detail ?? ""],
+  }),
+  "order-ready": (d) => ({
+    subject: `Your order ${d.title || ""} is paid`.trim(),
+    heading: "Thank you for your order",
+    lines: [
+      `Hi ${d.name || "there"},`,
+      `We received ${d.amount ?? "your payment"}. ${d.detail ?? ""}`.trim(),
+      "Keep this email: the link below opens your downloads and order status.",
+    ],
+    cta: "Open your order",
+  }),
+  "order-reminder": (d) => ({
+    subject: `Your photographs are waiting: ${d.title || "your order"}`,
+    heading: "You left something behind",
+    lines: [
+      `Hi ${d.name || "there"},`,
+      `Your order ${d.title ?? ""} (${d.amount ?? ""}) was not finished. The photographs are still here.`.replace(
+        "  ",
+        " ",
+      ),
+    ],
+    cta: "Finish my order",
   }),
   "gallery-ready": (d) => ({
     subject: `Your gallery is ready: ${d.title || ""}`.trim(),

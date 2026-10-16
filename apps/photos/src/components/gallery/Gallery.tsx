@@ -1,0 +1,1140 @@
+"use client";
+
+import { ProtectedImage } from "@halation/ui/media";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { toggleFavoriteAction } from "@/app/client/actions";
+import {
+  commentAction,
+  decideAction,
+  rateAction,
+  reactivateAction,
+  sendSelectionAction,
+  unlockDownloadsAction,
+} from "@/app/client/gallery-actions";
+import { checkoutAction, unlockAlbumAction } from "@/app/g/actions";
+import type { ClientGalleryData } from "@/lib/client-gallery-data";
+import "./gallery.css";
+
+type Data = ClientGalleryData;
+type Item = Data["items"][number];
+type Product = Data["shop"]["products"][number];
+type Line = { productId: string; mediaId: string | null; qty: number };
+
+const usd = (cents: number) =>
+  new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: cents % 100 ? 2 : 0,
+  }).format(cents / 100);
+const DIGITAL = ["digital-web", "digital-full", "digital-all"];
+const PPI_FLOOR = 180; // same floor the print lab check uses on the server
+const fits = (p: Product, it: Item) => {
+  if (!p.size) return true;
+  const long = Math.max(it.width, it.height);
+  const short = Math.min(it.width, it.height);
+  return Math.floor(Math.min(long / p.size[0], short / p.size[1])) >= PPI_FLOOR;
+};
+const shipping = (prints: number) => (prints ? 800 + 200 * (prints - 1) : 0); // SAMPLE rate; the server recomputes it
+const asset = (i: Pick<Item, "width" | "height" | "color" | "blur"> & { mediaId: string }) => ({
+  id: i.mediaId,
+  width: i.width,
+  height: i.height,
+  color: i.color ?? undefined,
+  blur: i.blur ?? undefined,
+  files: [],
+});
+
+/**
+ * The gallery, as the people it is for see it. A cover and title open it; albums (with sub-albums and locked albums) and
+ * "All photos" organise it; the lightbox and the cart sit over the photographs. The client (passcode) also proofs: favourites,
+ * ratings, approvals, comments, a selection to send, and the downloads they are owed. Visitors of the public link view and shop.
+ */
+export function Gallery({ data }: { data: Data }) {
+  const router = useRouter();
+  const client = data.role === "client";
+  const shopOn = data.shop.enabled && (data.shop.sellDigital || data.shop.sellPrints);
+  const gid = data.galleryId;
+  const [items, setItems] = useState(data.items);
+  // a refresh (for example after opening a locked album) brings the server's list of photographs
+  useEffect(() => setItems(data.items), [data.items]);
+  const [album, setAlbum] = useState("");
+  const [view, setView] = useState<"photos" | "favourites" | "shop">("photos");
+  const [open, setOpen] = useState<number | null>(null);
+  const [cartOpen, setCartOpen] = useState(false);
+  const [dlOpen, setDlOpen] = useState(false);
+  const [lockFor, setLockFor] = useState<string | null>(null);
+  const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
+  const [sent, setSent] = useState(data.sent);
+  const [cart, setCart] = useState<Line[]>([]);
+  const storeKey = `gx-cart-${data.slug ?? data.galleryId ?? data.title}`;
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(storeKey);
+      if (raw) setCart(JSON.parse(raw) as Line[]);
+    } catch {}
+  }, [storeKey]);
+  useEffect(() => {
+    try {
+      localStorage.setItem(storeKey, JSON.stringify(cart));
+    } catch {}
+  }, [cart, storeKey]);
+  const say = (ok: boolean, text: string) => setMsg({ ok, text });
+  const upd = (id: string, p: Partial<Item>) =>
+    setItems((all) => all.map((i) => (i.mediaId === id ? { ...i, ...p } : i)));
+
+  const top = data.albums.filter((a) => !a.parentId);
+  const kids = (id: string) => data.albums.filter((a) => a.parentId === id);
+  const current = data.albums.find((a) => a.id === album) ?? null;
+  const parent = current?.parentId ? (data.albums.find((a) => a.id === current.parentId) ?? null) : current;
+  const subs = parent ? kids(parent.id) : [];
+  const inAlbum = (it: Item) => {
+    if (!album || album === "all-photos") return true;
+    if (it.albumId === album) return true;
+    return kids(album).some((k) => k.id === it.albumId);
+  };
+  const shown = items.filter((i) => inAlbum(i) && (view !== "favourites" || i.favourite));
+  const chosen = items.filter((i) => i.favourite).length;
+  const heroItem = items.find((i) => i.mediaId === data.coverMediaId) ?? items[0];
+  const cartCount = cart.reduce((n, l) => n + l.qty, 0);
+  const products = data.shop.products;
+  const byId = new Map(products.map((p) => [p.id, p]));
+  const cartLines = cart
+    .map((l) => ({ ...l, product: byId.get(l.productId), item: items.find((i) => i.mediaId === l.mediaId) }))
+    .filter((l) => l.product);
+  const subtotal = cartLines.reduce((n, l) => n + (l.product?.priceCents ?? 0) * l.qty, 0);
+  const printQty = cartLines.filter((l) => !DIGITAL.includes(l.product?.kind ?? "")).reduce((n, l) => n + l.qty, 0);
+  const addToCart = (productId: string, mediaId: string | null) => {
+    const p = byId.get(productId);
+    if (!p) return;
+    const digital = DIGITAL.includes(p.kind);
+    setCart((c) => {
+      const at = c.findIndex((l) => l.productId === productId && l.mediaId === mediaId);
+      if (at >= 0) return digital ? c : c.map((l, i) => (i === at ? { ...l, qty: Math.min(50, l.qty + 1) } : l));
+      return [...c, { productId, mediaId, qty: 1 }];
+    });
+    say(true, `${p.name} added to your cart.`);
+  };
+
+  const style = {
+    ...(data.accent ? { ["--gx-accent" as string]: data.accent } : {}),
+    ...(data.style.background ? { ["--gx-bg-custom" as string]: data.style.background } : {}),
+  } as React.CSSProperties;
+
+  /* ---- proofing (the client only) ---- */
+  async function fav(i: Item) {
+    const r = await toggleFavoriteAction(i.mediaId, gid);
+    if (r.ok) upd(i.mediaId, { favourite: !i.favourite });
+    else say(false, r.error);
+  }
+  async function rate(i: Item, n: number) {
+    const next = i.rating === n ? null : n;
+    const r = await rateAction({ galleryId: gid, mediaId: i.mediaId, rating: next });
+    if (r.ok) upd(i.mediaId, { rating: next });
+    else say(false, r.error);
+  }
+  async function decide(i: Item, d: "approved" | "rejected") {
+    const next = i.decision === d ? null : d;
+    const r = await decideAction({ galleryId: gid, mediaId: i.mediaId, decision: next });
+    if (r.ok) upd(i.mediaId, { decision: next });
+    else say(false, r.error);
+  }
+  async function submitSelection() {
+    const r = await sendSelectionAction(gid);
+    if (r.ok) {
+      setSent(true);
+      say(true, r.message ?? "Sent.");
+    } else say(false, r.error);
+  }
+  async function reactivate() {
+    const r = await reactivateAction(gid);
+    if (r.ok && r.url) router.push(r.url);
+    else if (!r.ok) say(false, r.error);
+  }
+
+  function pickAlbum(id: string) {
+    const a = data.albums.find((x) => x.id === id);
+    if (a?.closed) return setLockFor(id);
+    setAlbum(id);
+    setView("photos");
+    document.getElementById("gx-main")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  if (data.state === "expired" || data.state === "archived")
+    return (
+      <div className="gx" style={style} data-theme={data.theme} data-font={data.style.font}>
+        <section className="gx-gone" aria-labelledby="gx-exp">
+          <h1 id="gx-exp">{data.title}</h1>
+          <p role="status">
+            This gallery{" "}
+            {data.state === "archived"
+              ? "has been archived"
+              : `expired${data.expiresAt ? ` on ${data.expiresAt}` : ""}`}
+            .{client ? " Your photographs are safe: extend access to bring it back." : ""}
+          </p>
+          {client ? (
+            <button type="button" className="gx-btn" onClick={reactivate}>
+              Extend access
+            </button>
+          ) : null}
+          {msg ? <p role={msg.ok ? "status" : "alert"}>{msg.text}</p> : null}
+        </section>
+      </div>
+    );
+
+  const header = data.style.header;
+  const crop = data.layout === "grid" || data.layout === "mosaic";
+  const hasCover = Boolean(heroItem) && header !== "minimal";
+  return (
+    <div
+      className="gx"
+      style={style}
+      data-theme={data.theme}
+      data-font={data.style.font}
+      data-layout={data.layout}
+      data-density={data.density}
+      data-gap={data.style.gap}
+      data-corners={data.style.corners}
+      data-custom-bg={data.style.background ? "" : undefined}
+    >
+      <header className="gx-hero" data-header={header} data-cover={hasCover ? "" : undefined}>
+        {hasCover && heroItem ? (
+          <div className="gx-hero__img">
+            <ProtectedImage asset={asset({ ...heroItem })} alt="" fill fit="cover" priority sizes="100vw" />
+          </div>
+        ) : null}
+        <div className="gx-hero__text">
+          {data.style.brandLine ? <p className="gx-brand">{data.style.brandLine}</p> : null}
+          <h1>{data.title}</h1>
+          {data.welcome ? <p className="gx-welcome">{data.welcome}</p> : null}
+          <p className="gx-count">
+            {items.length} photograph{items.length === 1 ? "" : "s"}
+            {data.albums.length ? ` · ${top.length} album${top.length === 1 ? "" : "s"}` : ""}
+          </p>
+          <div className="gx-hero__actions">
+            <a className="gx-btn gx-btn--solid" href="#gx-main">
+              View photographs
+            </a>
+            {shopOn ? (
+              <button type="button" className="gx-btn" onClick={() => setView("shop")}>
+                Shop prints and downloads
+              </button>
+            ) : null}
+            {(client && (data.downloads.web || data.downloads.full)) || (!client && data.downloads.web) ? (
+              <button type="button" className="gx-btn" onClick={() => setDlOpen(true)}>
+                Download
+              </button>
+            ) : null}
+          </div>
+          {data.state === "expiring" && client ? (
+            <p className="gx-expiring" role="status">
+              This gallery expires on {data.expiresAt}.{" "}
+              <button type="button" className="gx-link" onClick={reactivate}>
+                Extend access
+              </button>
+            </p>
+          ) : null}
+        </div>
+      </header>
+
+      <nav className="gx-bar" aria-label="Gallery">
+        <div className="gx-bar__tabs" role="toolbar" aria-label="Gallery tools">
+          <button
+            type="button"
+            className="gx-tab"
+            aria-pressed={view === "photos" && (!album || album === "all-photos")}
+            onClick={() => {
+              setAlbum("");
+              setView("photos");
+            }}
+          >
+            All photos <small>{items.length}</small>
+          </button>
+          {top.map((a) => (
+            <button
+              key={a.id}
+              type="button"
+              className="gx-tab"
+              aria-pressed={view === "photos" && (album === a.id || current?.parentId === a.id)}
+              onClick={() => pickAlbum(a.id)}
+            >
+              {a.locked ? <span aria-hidden="true">🔒 </span> : null}
+              {a.name}
+              <small>{a.closed ? "locked" : a.count + kids(a.id).reduce((n, k) => n + k.count, 0)}</small>
+            </button>
+          ))}
+          {client ? (
+            <button
+              type="button"
+              className="gx-tab"
+              aria-pressed={view === "favourites"}
+              onClick={() => setView("favourites")}
+            >
+              Favourites <small>{chosen}</small>
+            </button>
+          ) : null}
+        </div>
+        <div className="gx-bar__tools">
+          <button type="button" className="gx-tool" disabled={!shown.length} onClick={() => setOpen(0)}>
+            Slideshow
+          </button>
+          {shopOn ? (
+            <>
+              <button type="button" className="gx-tool" aria-pressed={view === "shop"} onClick={() => setView("shop")}>
+                Shop
+              </button>
+              <button type="button" className="gx-tool gx-tool--cart" onClick={() => setCartOpen(true)}>
+                Cart <b>{cartCount}</b>
+              </button>
+            </>
+          ) : null}
+        </div>
+      </nav>
+      {subs.length && view === "photos" ? (
+        <div className="gx-subs" role="toolbar" aria-label={`In ${parent?.name}`}>
+          <button type="button" aria-pressed={album === parent?.id} onClick={() => parent && pickAlbum(parent.id)}>
+            All of {parent?.name}
+          </button>
+          {subs.map((s) => (
+            <button key={s.id} type="button" aria-pressed={album === s.id} onClick={() => pickAlbum(s.id)}>
+              {s.locked ? "🔒 " : ""}
+              {s.name} <small>{s.closed ? "locked" : s.count}</small>
+            </button>
+          ))}
+        </div>
+      ) : null}
+
+      <main id="gx-main" className="gx-main" tabIndex={-1}>
+        {msg ? (
+          <p className="gx-msg" role={msg.ok ? "status" : "alert"} data-ok={msg.ok || undefined}>
+            {msg.text}
+          </p>
+        ) : null}
+
+        {view === "shop" && shopOn ? (
+          <ShopView data={data} onAdd={addToCart} onBrowse={() => setView("photos")} />
+        ) : data.style.albumView === "cards" && !album && top.length && view === "photos" ? (
+          <AlbumCards data={data} items={items} onPick={pickAlbum} onAll={() => setAlbum("all-photos")} />
+        ) : (
+          <>
+            {current?.description ? <p className="gx-album-note">{current.description}</p> : null}
+            <ul className="gx-photos" aria-label="Photographs">
+              {shown.map((i, n) => (
+                <li
+                  key={i.mediaId}
+                  data-media-id={i.mediaId}
+                  data-wide={data.layout === "mosaic" && n % 7 === 0 ? "" : undefined}
+                  style={{ "--ar": i.width / Math.max(1, i.height) } as React.CSSProperties}
+                >
+                  <button
+                    type="button"
+                    className="gx-open"
+                    onClick={() => setOpen(n)}
+                    aria-label={`Open ${i.filename}`}
+                    style={crop ? undefined : { aspectRatio: `${i.width} / ${i.height}` }}
+                  >
+                    {crop ? (
+                      <ProtectedImage
+                        asset={asset(i)}
+                        alt={i.filename}
+                        sizes="(min-width: 900px) 30vw, 50vw"
+                        fill
+                        fit="cover"
+                      />
+                    ) : (
+                      <ProtectedImage asset={asset(i)} alt={i.filename} sizes="(min-width: 900px) 30vw, 50vw" />
+                    )}
+                  </button>
+                  {data.style.showFilenames ? <small className="gx-cap">{i.filename}</small> : null}
+                  <div className="gx-tile">
+                    {client ? (
+                      <button
+                        type="button"
+                        className="gx-ico"
+                        aria-pressed={i.favourite}
+                        aria-label={`${i.favourite ? "Remove" : "Add"} ${i.filename} ${i.favourite ? "from" : "to"} favourites`}
+                        disabled={sent}
+                        onClick={() => void fav(i)}
+                      >
+                        {i.favourite ? "♥" : "♡"}
+                      </button>
+                    ) : null}
+                    {shopOn ? (
+                      <button
+                        type="button"
+                        className="gx-ico gx-ico--buy"
+                        aria-label={`Buy ${i.filename}`}
+                        onClick={() => setOpen(n)}
+                      >
+                        Buy
+                      </button>
+                    ) : null}
+                  </div>
+                </li>
+              ))}
+            </ul>
+            {!shown.length ? (
+              <p className="gx-empty">
+                {view === "favourites" ? "Tap the heart on a photograph to keep it here." : "Nothing here yet."}
+              </p>
+            ) : null}
+            {client ? (
+              <section className="gx-select" aria-label="Your selection">
+                <p role="status">
+                  {chosen} favourite{chosen === 1 ? "" : "s"} chosen{data.limit ? ` of ${data.limit}` : ""}.
+                  {sent ? " Your selection was sent." : ""}
+                </p>
+                {!sent ? (
+                  <button
+                    type="button"
+                    className="gx-btn gx-btn--solid"
+                    disabled={!chosen}
+                    onClick={() => void submitSelection()}
+                  >
+                    Send my selection
+                  </button>
+                ) : null}
+              </section>
+            ) : null}
+          </>
+        )}
+      </main>
+
+      <footer className="gx-foot">
+        {data.style.footer ? <p>{data.style.footer}</p> : null}
+        {!client && data.slug ? (
+          <p>
+            <a href="/client">Client sign-in for proofing</a>
+          </p>
+        ) : null}
+      </footer>
+
+      {open !== null && shown[open] ? (
+        <Lightbox
+          data={data}
+          client={client}
+          shopOn={shopOn}
+          items={album === "all-photos" ? items : shown}
+          start={open}
+          sent={sent}
+          cart={cart}
+          onClose={() => setOpen(null)}
+          onAdd={addToCart}
+          onOpenCart={() => {
+            setOpen(null);
+            setCartOpen(true);
+          }}
+          fav={fav}
+          rate={rate}
+          decide={decide}
+          say={say}
+          setItems={setItems}
+        />
+      ) : null}
+      {cartOpen ? (
+        <Cart
+          data={data}
+          lines={cartLines}
+          subtotal={subtotal}
+          printQty={printQty}
+          onClose={() => setCartOpen(false)}
+          onChange={(productId, mediaId, qty) =>
+            setCart((c) =>
+              qty <= 0
+                ? c.filter((l) => !(l.productId === productId && l.mediaId === mediaId))
+                : c.map((l) =>
+                    l.productId === productId && l.mediaId === mediaId ? { ...l, qty: Math.min(50, qty) } : l,
+                  ),
+            )
+          }
+          onDone={() => setCart([])}
+        />
+      ) : null}
+      {dlOpen ? <Downloads data={data} client={client} onClose={() => setDlOpen(false)} say={say} /> : null}
+      {lockFor ? (
+        <UnlockAlbum
+          galleryId={gid}
+          album={data.albums.find((a) => a.id === lockFor)}
+          onClose={() => setLockFor(null)}
+          onOpened={(id) => {
+            setLockFor(null);
+            setAlbum(id);
+            router.refresh();
+          }}
+        />
+      ) : null}
+    </div>
+  );
+}
+
+/** A native dialog with a title, a close button and the page behind it inert. */
+function Sheet({
+  title,
+  onClose,
+  children,
+  wide,
+  side,
+}: { title: string; onClose: () => void; children: React.ReactNode; wide?: boolean; side?: boolean }) {
+  const ref = useRef<HTMLDialogElement>(null);
+  useEffect(() => {
+    ref.current?.showModal();
+    return () => ref.current?.close();
+  }, []);
+  return (
+    // biome-ignore lint/a11y/useKeyWithClickEvents: clicking the backdrop is a mouse shortcut; Escape and the Close button close it for the keyboard
+    <dialog
+      ref={ref}
+      className="gx-sheet"
+      data-wide={wide || undefined}
+      data-side={side || undefined}
+      aria-label={title}
+      onClose={onClose}
+      onClick={(e) => {
+        if (e.target === ref.current) onClose();
+      }}
+    >
+      <div className="gx-sheet__bar">
+        <h2>{title}</h2>
+        <button type="button" className="gx-tool" onClick={onClose}>
+          Close
+        </button>
+      </div>
+      <div className="gx-sheet__body">{children}</div>
+    </dialog>
+  );
+}
+
+function AlbumCards({
+  data,
+  items,
+  onPick,
+  onAll,
+}: { data: Data; items: Item[]; onPick: (id: string) => void; onAll: () => void }) {
+  const top = data.albums.filter((a) => !a.parentId);
+  const cover = (a: Data["albums"][number]) =>
+    a.closed
+      ? null
+      : (items.find((i) => i.mediaId === a.coverMediaId) ?? items.find((i) => i.albumId === a.id) ?? null);
+  return (
+    <ul className="gx-cards" aria-label="Albums">
+      <li>
+        <button type="button" className="gx-card" onClick={onAll}>
+          <span className="gx-card__img">
+            {items[0] ? <ProtectedImage asset={asset(items[0])} alt="" fill fit="cover" /> : null}
+          </span>
+          <span className="gx-card__label">
+            All photos <small>{items.length}</small>
+          </span>
+        </button>
+      </li>
+      {top.map((a) => {
+        const c = cover(a);
+        return (
+          <li key={a.id}>
+            <button type="button" className="gx-card" onClick={() => onPick(a.id)} data-locked={a.closed || undefined}>
+              <span className="gx-card__img">
+                {c ? <ProtectedImage asset={asset(c)} alt="" fill fit="cover" /> : <span className="gx-lock">🔒</span>}
+              </span>
+              <span className="gx-card__label">
+                {a.name} <small>{a.closed ? "locked" : a.count}</small>
+              </span>
+              {a.description ? <span className="gx-card__desc">{a.description}</span> : null}
+            </button>
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
+function ShopView({
+  data,
+  onAdd,
+  onBrowse,
+}: { data: Data; onAdd: (productId: string, mediaId: string | null) => void; onBrowse: () => void }) {
+  const groups: [string, string[]][] = [
+    ["Downloads", ["digital-web", "digital-full", "digital-all"]],
+    ["Prints", ["print"]],
+    ["Canvas", ["canvas"]],
+    ["Cards", ["card"]],
+    ["Albums", ["album"]],
+  ];
+  const sell = (k: string) => (DIGITAL.includes(k) ? data.shop.sellDigital : data.shop.sellPrints);
+  return (
+    <section className="gx-shop" aria-labelledby="gx-shop-h">
+      <h2 id="gx-shop-h">Shop</h2>
+      <p className="gx-shop__lede">Pick a photograph, then choose a size or a download. {data.shop.note}</p>
+      <button type="button" className="gx-btn gx-btn--solid" onClick={onBrowse}>
+        Choose photographs
+      </button>
+      {groups.map(([name, kinds]) => {
+        const list = data.shop.products.filter((p) => kinds.includes(p.kind) && sell(p.kind));
+        if (!list.length) return null;
+        return (
+          <div key={name} className="gx-shop__group">
+            <h3>{name}</h3>
+            <ul>
+              {list.map((p) => (
+                <li key={p.id}>
+                  <span>
+                    <strong>{p.name}</strong>
+                    {p.description ? <small>{p.description}</small> : null}
+                  </span>
+                  <em>
+                    {usd(p.priceCents)}
+                    {p.sample ? <b className="gx-sample">SAMPLE</b> : null}
+                  </em>
+                  {p.kind === "digital-all" ? (
+                    <button type="button" className="gx-btn" onClick={() => onAdd(p.id, null)}>
+                      Add whole gallery
+                    </button>
+                  ) : null}
+                </li>
+              ))}
+            </ul>
+          </div>
+        );
+      })}
+    </section>
+  );
+}
+
+function Lightbox({
+  data,
+  client,
+  shopOn,
+  items,
+  start,
+  sent,
+  cart,
+  onClose,
+  onAdd,
+  onOpenCart,
+  fav,
+  rate,
+  decide,
+  say,
+  setItems,
+}: {
+  data: Data;
+  client: boolean;
+  shopOn: boolean;
+  items: Item[];
+  start: number;
+  sent: boolean;
+  cart: Line[];
+  onClose: () => void;
+  onAdd: (productId: string, mediaId: string | null) => void;
+  onOpenCart: () => void;
+  fav: (i: Item) => Promise<void>;
+  rate: (i: Item, n: number) => Promise<void>;
+  decide: (i: Item, d: "approved" | "rejected") => Promise<void>;
+  say: (ok: boolean, text: string) => void;
+  setItems: React.Dispatch<React.SetStateAction<Item[]>>;
+}) {
+  const ref = useRef<HTMLDialogElement>(null);
+  const [i, setI] = useState(start);
+  const [play, setPlay] = useState(false);
+  const [panel, setPanel] = useState<"buy" | "proof" | null>(shopOn ? "buy" : client ? "proof" : null);
+  const [draft, setDraft] = useState("");
+  useEffect(() => {
+    ref.current?.showModal();
+    return () => ref.current?.close();
+  }, []);
+  useEffect(() => {
+    if (!play) return;
+    const t = setInterval(() => setI((x) => (x + 1) % items.length), 4000);
+    return () => clearInterval(t);
+  }, [play, items.length]);
+  useEffect(() => {
+    const k = (e: KeyboardEvent) => {
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+      if (e.key === "ArrowRight") setI((x) => (x + 1) % items.length);
+      if (e.key === "ArrowLeft") setI((x) => (x - 1 + items.length) % items.length);
+    };
+    addEventListener("keydown", k);
+    return () => removeEventListener("keydown", k);
+  }, [items.length]);
+  const it = items[i];
+  const options = data.shop.products.filter(
+    (p) => p.kind !== "digital-all" && (DIGITAL.includes(p.kind) ? data.shop.sellDigital : data.shop.sellPrints),
+  );
+  const inCart = (productId: string) => cart.some((l) => l.productId === productId && l.mediaId === it.mediaId);
+  async function send() {
+    const r = await commentAction({ galleryId: data.galleryId, mediaId: it.mediaId, body: draft });
+    if (r.ok) {
+      const c = { body: draft.trim(), author: "client", at: new Date().toISOString().slice(0, 10) };
+      setItems((all) => all.map((x) => (x.mediaId === it.mediaId ? { ...x, comments: [...x.comments, c] } : x)));
+      setDraft("");
+    } else say(false, r.error);
+  }
+  const web = data.downloads.web && data.downloads.unlocked;
+  return (
+    <dialog ref={ref} className="gx-lb" aria-label="Photograph" onClose={onClose}>
+      <div className="gx-lb__bar">
+        <span aria-live="polite">
+          {i + 1} / {items.length}
+        </span>
+        <div>
+          <button type="button" className="gx-tool" aria-pressed={play} onClick={() => setPlay((p) => !p)}>
+            {play ? "Pause" : "Play"}
+          </button>
+          <button type="button" className="gx-tool" onClick={onClose}>
+            Close
+          </button>
+        </div>
+      </div>
+      <div className="gx-lb__stage" data-panel={panel ? "" : undefined}>
+        <button
+          type="button"
+          className="gx-lb__nav"
+          aria-label="Previous photograph"
+          onClick={() => setI((x) => (x - 1 + items.length) % items.length)}
+        >
+          ←
+        </button>
+        <div className="gx-lb__photo">
+          <ProtectedImage key={it.mediaId} asset={asset(it)} alt={it.filename} fit="contain" priority />
+        </div>
+        <button
+          type="button"
+          className="gx-lb__nav"
+          aria-label="Next photograph"
+          onClick={() => setI((x) => (x + 1) % items.length)}
+        >
+          →
+        </button>
+        {panel ? (
+          <aside className="gx-lb__panel" aria-label="Photograph options">
+            <div className="gx-lb__tabs" role="tablist">
+              {shopOn ? (
+                <button type="button" role="tab" aria-selected={panel === "buy"} onClick={() => setPanel("buy")}>
+                  Buy
+                </button>
+              ) : null}
+              {client ? (
+                <button type="button" role="tab" aria-selected={panel === "proof"} onClick={() => setPanel("proof")}>
+                  Proof
+                </button>
+              ) : null}
+            </div>
+            {panel === "buy" ? (
+              <div className="gx-buy">
+                <p className="gx-buy__file">{it.filename}</p>
+                {options.length ? (
+                  <ul>
+                    {options.map((p) => {
+                      const ok = fits(p, it);
+                      return (
+                        <li key={p.id}>
+                          <span>
+                            {p.name}
+                            {p.sample ? <b className="gx-sample">SAMPLE</b> : null}
+                            {!ok ? <small>Too small for this size</small> : null}
+                          </span>
+                          <em>{usd(p.priceCents)}</em>
+                          <button
+                            type="button"
+                            className="gx-btn"
+                            disabled={!ok}
+                            onClick={() => onAdd(p.id, it.mediaId)}
+                          >
+                            {inCart(p.id) ? (DIGITAL.includes(p.kind) ? "In cart" : "Add another") : "Add"}
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                ) : (
+                  <p>Nothing is for sale here yet.</p>
+                )}
+                {cart.length ? (
+                  <button type="button" className="gx-btn gx-btn--solid" onClick={onOpenCart}>
+                    Open cart ({cart.reduce((n, l) => n + l.qty, 0)})
+                  </button>
+                ) : null}
+                {web ? (
+                  <a
+                    className="gx-btn"
+                    href={`/client/download?${data.galleryId ? `g=${data.galleryId}&` : ""}m=${it.mediaId}&size=web`}
+                    download
+                  >
+                    Free web-size copy
+                  </a>
+                ) : null}
+              </div>
+            ) : null}
+            {panel === "proof" && client ? (
+              <div className="gx-proof">
+                <button
+                  type="button"
+                  className="gx-btn"
+                  aria-pressed={it.favourite}
+                  disabled={sent}
+                  onClick={() => void fav(it)}
+                  aria-label={`${it.favourite ? "Remove" : "Add"} ${it.filename} ${it.favourite ? "from" : "to"} favourites`}
+                >
+                  {it.favourite ? "♥ Favourite" : "♡ Favourite"}
+                </button>
+                {data.allowRatings ? (
+                  <span role="group" aria-label={`Rate ${it.filename}`} className="gx-stars">
+                    {[1, 2, 3, 4, 5].map((s) => (
+                      <button
+                        key={s}
+                        type="button"
+                        aria-pressed={(it.rating ?? 0) >= s}
+                        aria-label={`${s} star${s > 1 ? "s" : ""} for ${it.filename}`}
+                        onClick={() => void rate(it, s)}
+                      >
+                        {(it.rating ?? 0) >= s ? "★" : "☆"}
+                      </button>
+                    ))}
+                  </span>
+                ) : null}
+                <div className="gx-proof__row">
+                  <button
+                    type="button"
+                    className="gx-btn"
+                    aria-pressed={it.decision === "approved"}
+                    disabled={sent}
+                    onClick={() => void decide(it, "approved")}
+                    aria-label={`Approve ${it.filename}`}
+                  >
+                    Approve
+                  </button>
+                  <button
+                    type="button"
+                    className="gx-btn"
+                    aria-pressed={it.decision === "rejected"}
+                    disabled={sent}
+                    onClick={() => void decide(it, "rejected")}
+                    aria-label={`Not for me: ${it.filename}`}
+                  >
+                    Not this
+                  </button>
+                </div>
+                {data.allowComments ? (
+                  <div className="gx-comments">
+                    <ul>
+                      {it.comments.map((c, k) => (
+                        <li key={`${c.at}-${k}`}>
+                          <strong>{c.author === "client" ? "You" : "Photographer"}</strong> <small>{c.at}</small>
+                          <span>{c.body}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <label>
+                      Your comment
+                      <input value={draft} onChange={(e) => setDraft(e.target.value)} maxLength={1000} />
+                    </label>
+                    <button type="button" className="gx-btn" onClick={() => void send()} disabled={!draft.trim()}>
+                      Add comment
+                    </button>
+                  </div>
+                ) : null}
+                {data.downloads.full && data.downloads.unlocked ? (
+                  <a
+                    className="gx-btn"
+                    href={`/client/download?${data.galleryId ? `g=${data.galleryId}&` : ""}m=${it.mediaId}&size=full`}
+                    download
+                  >
+                    Full size
+                  </a>
+                ) : null}
+                {web ? (
+                  <a
+                    className="gx-btn"
+                    href={`/client/download?${data.galleryId ? `g=${data.galleryId}&` : ""}m=${it.mediaId}&size=web`}
+                    download
+                  >
+                    Web size
+                  </a>
+                ) : null}
+              </div>
+            ) : null}
+          </aside>
+        ) : null}
+      </div>
+    </dialog>
+  );
+}
+
+function Cart({
+  data,
+  lines,
+  subtotal,
+  printQty,
+  onClose,
+  onChange,
+  onDone,
+}: {
+  data: Data;
+  lines: (Line & { product?: Product; item?: Item })[];
+  subtotal: number;
+  printQty: number;
+  onClose: () => void;
+  onChange: (productId: string, mediaId: string | null, qty: number) => void;
+  onDone: () => void;
+}) {
+  const [f, setF] = useState({
+    name: "",
+    email: "",
+    line1: "",
+    line2: "",
+    city: "",
+    region: "",
+    postalCode: "",
+    country: data.shop.shipCountries[0] ?? "US",
+  });
+  const [err, setErr] = useState("");
+  const [busy, setBusy] = useState(false);
+  const set = (k: keyof typeof f) => (e: { target: { value: string } }) => setF((x) => ({ ...x, [k]: e.target.value }));
+  const ship = shipping(printQty);
+  async function go() {
+    setErr("");
+    setBusy(true);
+    const r = await checkoutAction({
+      galleryId: data.galleryId,
+      lines: lines.map((l) => ({ productId: l.productId, mediaId: l.mediaId, qty: l.qty })),
+      buyer: { name: f.name, email: f.email },
+      ship: printQty
+        ? {
+            name: f.name,
+            line1: f.line1,
+            line2: f.line2 || undefined,
+            city: f.city,
+            region: f.region,
+            postalCode: f.postalCode,
+            country: f.country,
+          }
+        : null,
+    });
+    setBusy(false);
+    if (r.ok) {
+      onDone();
+      location.assign(r.url);
+    } else setErr(r.error);
+  }
+  return (
+    <Sheet title="Your cart" onClose={onClose} side>
+      {lines.length ? (
+        <>
+          <ul className="gx-cart">
+            {lines.map((l) => (
+              <li key={`${l.productId}-${l.mediaId}`}>
+                <span>
+                  {l.product?.name}
+                  <small>{l.mediaId ? (l.item?.filename ?? "photograph") : "Whole gallery"}</small>
+                </span>
+                <em>{usd((l.product?.priceCents ?? 0) * l.qty)}</em>
+                <span className="gx-qty">
+                  {DIGITAL.includes(l.product?.kind ?? "") ? null : (
+                    <>
+                      <button
+                        type="button"
+                        aria-label="One fewer"
+                        onClick={() => onChange(l.productId, l.mediaId, l.qty - 1)}
+                      >
+                        −
+                      </button>
+                      <b>{l.qty}</b>
+                      <button
+                        type="button"
+                        aria-label="One more"
+                        onClick={() => onChange(l.productId, l.mediaId, l.qty + 1)}
+                      >
+                        +
+                      </button>
+                    </>
+                  )}
+                  <button type="button" className="gx-link" onClick={() => onChange(l.productId, l.mediaId, 0)}>
+                    Remove
+                  </button>
+                </span>
+              </li>
+            ))}
+          </ul>
+          <dl className="gx-sum">
+            <div>
+              <dt>Subtotal</dt>
+              <dd>{usd(subtotal)}</dd>
+            </div>
+            {ship ? (
+              <div>
+                <dt>Shipping (SAMPLE rate)</dt>
+                <dd>{usd(ship)}</dd>
+              </div>
+            ) : null}
+            <div className="gx-sum__total">
+              <dt>Total</dt>
+              <dd>{usd(subtotal + ship)}</dd>
+            </div>
+          </dl>
+          <form
+            className="gx-form"
+            onSubmit={(e) => {
+              e.preventDefault();
+              void go();
+            }}
+          >
+            <label>
+              Your name
+              <input value={f.name} onChange={set("name")} autoComplete="name" required />
+            </label>
+            <label>
+              Email (your receipt and downloads go here)
+              <input type="email" value={f.email} onChange={set("email")} autoComplete="email" required />
+            </label>
+            {printQty ? (
+              <fieldset>
+                <legend>Ship prints to</legend>
+                <label>
+                  Address
+                  <input value={f.line1} onChange={set("line1")} autoComplete="address-line1" required />
+                </label>
+                <label>
+                  Apartment, suite (optional)
+                  <input value={f.line2} onChange={set("line2")} autoComplete="address-line2" />
+                </label>
+                <div className="gx-form__row">
+                  <label>
+                    City
+                    <input value={f.city} onChange={set("city")} autoComplete="address-level2" required />
+                  </label>
+                  <label>
+                    State
+                    <input value={f.region} onChange={set("region")} autoComplete="address-level1" required />
+                  </label>
+                  <label>
+                    ZIP
+                    <input value={f.postalCode} onChange={set("postalCode")} autoComplete="postal-code" required />
+                  </label>
+                </div>
+                <label>
+                  Country
+                  <select value={f.country} onChange={set("country")}>
+                    {data.shop.shipCountries.map((c) => (
+                      <option key={c} value={c}>
+                        {c === "US" ? "United States" : c === "CA" ? "Canada" : "Mexico"}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </fieldset>
+            ) : null}
+            {err ? (
+              <p role="alert" className="gx-msg">
+                {err}
+              </p>
+            ) : null}
+            <button type="submit" className="gx-btn gx-btn--solid" disabled={busy}>
+              {busy ? "One moment…" : "Continue to payment"}
+            </button>
+            <p className="gx-fine">You pay on the next page. Prints are only ordered once your payment is confirmed.</p>
+          </form>
+        </>
+      ) : (
+        <p>Your cart is empty. Open a photograph and choose a size or a download.</p>
+      )}
+    </Sheet>
+  );
+}
+
+function Downloads({
+  data,
+  client,
+  onClose,
+  say,
+}: { data: Data; client: boolean; onClose: () => void; say: (ok: boolean, t: string) => void }) {
+  const [pin, setPin] = useState("");
+  const [unlocked, setUnlocked] = useState(data.downloads.unlocked);
+  const dl = (q: string) => `/client/download?${data.galleryId ? `g=${data.galleryId}&` : ""}${q}`;
+  async function unlock() {
+    const r = await unlockDownloadsAction({ galleryId: data.galleryId, pin });
+    if (r.ok) {
+      setUnlocked(true);
+      say(true, r.message ?? "Unlocked.");
+    } else say(false, r.error);
+  }
+  return (
+    <Sheet title="Downloads" onClose={onClose}>
+      {data.downloads.pin && !unlocked ? (
+        <div className="gx-form">
+          <label>
+            Download PIN
+            <input inputMode="numeric" value={pin} onChange={(e) => setPin(e.target.value)} autoComplete="off" />
+          </label>
+          <button type="button" className="gx-btn gx-btn--solid" onClick={() => void unlock()}>
+            Unlock downloads
+          </button>
+        </div>
+      ) : (
+        <ul className="gx-dl">
+          {data.downloads.web
+            ? Array.from({ length: data.downloads.webParts }, (_, k) => (
+                <li key={`w${k}`}>
+                  <span>
+                    All photographs, web size
+                    {data.downloads.webParts > 1 ? ` (part ${k + 1} of ${data.downloads.webParts})` : ""}
+                  </span>
+                  <a className="gx-btn" href={dl(`zip=1&size=web&part=${k + 1}`)} download>
+                    Download ZIP
+                  </a>
+                </li>
+              ))
+            : null}
+          {client && data.downloads.full
+            ? Array.from({ length: data.downloads.fullParts }, (_, k) => (
+                <li key={`f${k}`}>
+                  <span>
+                    All photographs, full resolution
+                    {data.downloads.fullParts > 1 ? ` (part ${k + 1} of ${data.downloads.fullParts})` : ""}
+                  </span>
+                  <a className="gx-btn" href={dl(`zip=1&size=full&part=${k + 1}`)} download>
+                    Download ZIP
+                  </a>
+                </li>
+              ))
+            : null}
+        </ul>
+      )}
+    </Sheet>
+  );
+}
+
+function UnlockAlbum({
+  galleryId,
+  album,
+  onClose,
+  onOpened,
+}: { galleryId?: string; album?: Data["albums"][number]; onClose: () => void; onOpened: (id: string) => void }) {
+  const [code, setCode] = useState("");
+  const [err, setErr] = useState("");
+  if (!album) return null;
+  return (
+    <Sheet title={`${album.name} is locked`} onClose={onClose}>
+      <form
+        className="gx-form"
+        onSubmit={async (e) => {
+          e.preventDefault();
+          const r = await unlockAlbumAction({ galleryId, albumId: album.id, passcode: code });
+          if (r.ok) onOpened(album.id);
+          else setErr(r.error);
+        }}
+      >
+        <label>
+          Album passcode
+          <input value={code} onChange={(e) => setCode(e.target.value)} autoComplete="off" />
+        </label>
+        {err ? (
+          <p role="alert" className="gx-msg">
+            {err}
+          </p>
+        ) : null}
+        <button type="submit" className="gx-btn gx-btn--solid">
+          Open album
+        </button>
+      </form>
+    </Sheet>
+  );
+}

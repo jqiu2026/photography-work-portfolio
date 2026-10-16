@@ -18,6 +18,8 @@ async function ctx(galleryId: string | undefined, bucket: string, max: number) {
   const a = await galleryAccess(galleryId);
   if (!db || !a) return null;
   if (a.state === "expired" || a.state === "archived") return null;
+  // proofing, selections and comments belong to the client, not to visitors of the public link
+  if (a.role !== "client") return null;
   const ip = await requestIpHash();
   if (!(await hitRateLimit(db, `${bucket}:${ip}`, max, 600)).allowed) return null;
   return { db, a };

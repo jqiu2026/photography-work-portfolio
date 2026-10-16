@@ -8,6 +8,7 @@ import { getDb, schema } from "@jerryqiu/db";
 import { and, eq } from "drizzle-orm";
 import { cookies, headers } from "next/headers";
 import { accountSession } from "@/lib/account-session";
+import { lockedMediaIds } from "@/lib/client-gallery";
 
 /**
  * Client portal session: a signed, httpOnly, host-only cookie holding the gallery the visitor opened with its passcode.
@@ -17,7 +18,8 @@ import { accountSession } from "@/lib/account-session";
 const COOKIE = "hl_client";
 const TTL_SEC = 8 * 60 * 60;
 
-export type PortalSession = { g: string; v: string; e: number };
+/** `r` is "v" for a visitor who opened the gallery's public link (view and shop); absent for the client's passcode session. */
+export type PortalSession = { g: string; v: string; e: number; r?: "v" };
 
 const b64 = (s: string) => Buffer.from(s).toString("base64url");
 const mac = (secret: string, body: string) => createHmac("sha256", secret).update(body).digest("base64url");
@@ -47,15 +49,22 @@ export function readSessionValue(
   try {
     const p = JSON.parse(Buffer.from(body, "base64url").toString("utf8")) as PortalSession;
     if (typeof p.g !== "string" || typeof p.v !== "string" || typeof p.e !== "number" || p.e * 1000 < now) return null;
+    if (p.r !== undefined && p.r !== "v") return null;
     return p;
   } catch {
     return null;
   }
 }
 
-export async function startPortalSession(galleryId: string): Promise<void> {
+export async function startPortalSession(galleryId: string, role: "client" | "visitor" = "client"): Promise<void> {
   const e = Math.floor(Date.now() / 1000) + TTL_SEC;
-  (await cookies()).set(COOKIE, signSession({ g: galleryId, v: randomBytes(8).toString("hex"), e }), {
+  const session: PortalSession = {
+    g: galleryId,
+    v: randomBytes(8).toString("hex"),
+    e,
+    ...(role === "visitor" ? { r: "v" } : {}),
+  };
+  (await cookies()).set(COOKIE, signSession(session), {
     path: "/",
     httpOnly: true,
     sameSite: "strict",
@@ -101,6 +110,8 @@ export async function clientGalleryViewer(mediaId: string): Promise<string | nul
       )
       .limit(1);
     if (row) {
+      // photographs in a locked album stay closed until its passcode is entered in this browser
+      if ((await lockedMediaIds(db, session.g)).has(mediaId)) return null;
       // a viewer locked out for capture attempts gets no more photographs
       const locked = await lockedUntil(db, session.g, { viewer: viewerId(session), ipHash: await requestIpHash() });
       return locked ? null : viewerId(session);

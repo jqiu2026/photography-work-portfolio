@@ -5,6 +5,7 @@ import { getSite } from "@jerryqiu/sites";
 import { notify } from "@jerryqiu/db/automation";
 import * as cal from "@jerryqiu/db/calendar";
 import { eq } from "drizzle-orm";
+import { afterShopPayment } from "@/lib/shop-fulfil";
 
 const usd = (c: number) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(c / 100);
 
@@ -18,6 +19,11 @@ export async function afterPayment(db: Database, invoiceId: string) {
     .innerJoin(schema.studioClients, eq(schema.studioClients.id, schema.studioJobs.clientId))
     .where(eq(schema.studioJobs.id, inv.jobId));
   if (!row) return;
+  if (inv.kind === "shop") {
+    // a shop order is not the client's invoice: the buyer gets their own email and the studio an order notice
+    await afterShopPayment(db, invoiceId);
+    return;
+  }
   await notify(db, {
     kind: "payment",
     title: `Payment received: ${inv.number}`,

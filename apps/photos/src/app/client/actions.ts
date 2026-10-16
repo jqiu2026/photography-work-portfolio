@@ -49,6 +49,7 @@ export async function toggleFavoriteAction(mediaId: string, galleryId?: string):
   if (!db) return no("Open your gallery again to continue.");
   if (!z.string().uuid().safeParse(mediaId).success) return no("Unknown photograph.");
   // A signed-in portal account may favourite in any published gallery of its own jobs; a passcode session only in its gallery.
+  if (session?.r === "v") return no("Favourites are for the client of this gallery.");
   let gid = session?.g;
   if (galleryId) {
     const me = await accountSession();

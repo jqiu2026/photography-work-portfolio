@@ -431,6 +431,9 @@ importers:
       '@jerryqiu/payments':
         specifier: workspace:*
         version: link:../../packages/payments
+      '@jerryqiu/prints':
+        specifier: workspace:*
+        version: link:../../packages/prints
       '@jerryqiu/protect':
         specifier: workspace:*
         version: link:../../packages/protect

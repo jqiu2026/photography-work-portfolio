@@ -15,6 +15,7 @@ export const studioSections = [
   { id: "contracts", label: "Contracts" },
   { id: "forms", label: "Forms" },
   { id: "invoices", label: "Invoices" },
+  { id: "orders", label: "Shop" },
   { id: "billing", label: "Billing" },
   { id: "automations", label: "Automations" },
 ] as const;
@@ -25,7 +26,7 @@ export const studioGroups = [
   { id: "work", label: "Work", sections: ["pipeline", "calendar", "bookings", "shoots", "tasks"], hue: 38 },
   { id: "clients", label: "Clients", sections: ["clients", "inbox", "portal", "forms", "contracts"], hue: 265 },
   { id: "galleries", label: "Galleries", sections: ["galleries"], hue: 330 },
-  { id: "money", label: "Money", sections: ["quotes", "packages", "invoices", "billing"], hue: 150 },
+  { id: "money", label: "Money", sections: ["quotes", "packages", "orders", "invoices", "billing"], hue: 150 },
   { id: "automations", label: "Automations", sections: ["automations"], hue: 190 },
 ] as const;
 
@@ -46,6 +47,7 @@ export const sectionInfo: Record<string, string> = {
   quotes: "Quotes sent to clients.",
   packages: "What you sell: packages, add-ons and promo codes.",
   invoices: "What is billed and what is paid.",
+  orders: "What visitors can buy from your galleries: the price list and every order.",
   billing: "Payments, refunds, instalments and recurring invoices.",
   automations: "Reminders and follow-ups that run by themselves.",
 };

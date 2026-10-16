@@ -487,7 +487,7 @@ export const studioGalleries = pgTable(
     style: jsonb("style").$type<Record<string, unknown>>().notNull().default({}),
     /** The gallery's own web address: /g/<slug>. Unique, set by the studio. */
     slug: text("slug"),
-    /** passcode: only the client's passcode (/client) | link: anyone with the link | link-passcode: the link plus the passcode. */
+    /** passcode: only the client's passcode (/client) | link: anyone with the link can view and shop (proofing stays with the passcode). */
     visibility: text("visibility").notNull().default("passcode"),
     /** Shop and proofing settings (validated in gallery-shop.ts; empty = defaults). */
     shop: jsonb("shop").$type<Record<string, unknown>>().notNull().default({}),

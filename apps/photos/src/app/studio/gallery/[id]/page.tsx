@@ -1,6 +1,7 @@
 import { getDb, schema } from "@jerryqiu/db";
 import * as gal from "@jerryqiu/db/galleries";
 import { lockedUntil, readSecurity, readStyle, securityLog } from "@jerryqiu/db/gallery-security";
+import { freeSlug, listOrders, readShop } from "@jerryqiu/db/gallery-shop";
 import { and, eq, isNull } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import { requirePageUser } from "@/auth";
@@ -40,6 +41,9 @@ export default async function GalleryPage({ params }: { params: Promise<{ id: st
     .innerJoin(schema.studioClients, eq(schema.studioClients.id, schema.studioJobs.clientId))
     .where(eq(schema.studioJobs.id, g0.jobId));
   const name = new Map(contents.map((c) => [c.media.id, c.media.filename]));
+  const orders = await listOrders(db, id);
+  const shopCfg = readShop(g0.shop);
+  const suggestedSlug = g0.slug ?? (await freeSlug(db, g0.title, id));
   const g = row.g;
   return (
     <Shell>
@@ -93,6 +97,34 @@ export default async function GalleryPage({ params }: { params: Promise<{ id: st
           hasPin: Boolean(g.downloadPinHash),
           selectionSentAt: when(g.selectionSentAt),
           albums: albums.map((a) => ({ id: a.id, name: a.name })),
+          albumList: albums.map((a) => ({
+            id: a.id,
+            name: a.name,
+            description: a.description ?? "",
+            parentId: a.parentId,
+            locked: Boolean(a.passcodeHash),
+            hidden: a.hidden,
+            coverMediaId: a.coverMediaId,
+          })),
+          slug: suggestedSlug,
+          visibility: g.visibility,
+          shop: {
+            enabled: shopCfg.enabled,
+            sellDigital: shopCfg.sellDigital,
+            sellPrints: shopCfg.sellPrints,
+            freeDownloads: shopCfg.freeDownloads,
+            proofing: shopCfg.proofing,
+            note: shopCfg.note,
+          },
+          orders: orders.slice(0, 40).map((o) => ({
+            id: o.order.id,
+            number: o.order.number,
+            status: o.order.status,
+            buyer: o.order.buyerName,
+            totalCents: o.order.totalCents,
+            at: when(o.order.createdAt) ?? "",
+            items: o.items.length,
+          })),
           items: contents.map((c) => ({
             mediaId: c.media.id,
             filename: c.media.filename,

@@ -6,7 +6,8 @@ const PHOTOS = "http://localhost:3302";
 const scaleOf = (page: import("@playwright/test").Page, label: string) =>
   page
     .getByRole("navigation", { name: "Studio sections" })
-    .getByRole("link", { name: label, exact: true })
+    .locator("a[data-dock-item]")
+    .filter({ hasText: new RegExp(`^${label}$`) })
     .evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).a);
 
 test("the studio sidebar: selected entry is largest, the pointer magnifies the nearest, the rest shrink", async ({
@@ -15,7 +16,10 @@ test("the studio sidebar: selected entry is largest, the pointer magnifies the n
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto(`${PHOTOS}/studio/overview`, { waitUntil: "networkidle" });
   const nav = page.getByRole("navigation", { name: "Studio sections" });
-  await expect(nav.getByRole("link", { name: "Overview", exact: true })).toHaveAttribute("aria-current", "page");
+  await expect(nav.getByRole("link", { name: "Overview", exact: true }).first()).toHaveAttribute(
+    "aria-current",
+    "page",
+  );
   await expect(page.getByRole("heading", { level: 1 })).toContainText(/Good (morning|afternoon|evening)/);
 
   // no pointer yet: the selected entry is the largest, far ones are the smallest
@@ -48,7 +52,9 @@ test("the dashboard shows real totals and every other section keeps its heading 
   await page.goto(`${PHOTOS}/studio/overview`, { waitUntil: "networkidle" });
   for (const name of ["Revenue", "Upcoming", "Recent activity", "Needs attention", "Galleries"])
     await expect(page.getByRole("heading", { name, exact: true })).toBeVisible();
-  await expect(page.getByRole("navigation", { name: "Studio sections" }).getByRole("link")).toHaveCount(7); // brand + 6 groups
+  await expect(
+    page.getByRole("navigation", { name: "Studio sections" }).locator("a[data-dock-item], a.st-dock-brand"),
+  ).toHaveCount(7); // brand + 6 groups (the open group also lists its pages)
   for (const id of ["calendar", "packages", "billing", "tasks", "pipeline"]) {
     await page.goto(`${PHOTOS}/studio/${id}`);
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();

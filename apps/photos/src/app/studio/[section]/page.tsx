@@ -17,6 +17,8 @@ import { PortalAdminView } from "@/components/studio/PortalAdminView";
 import * as portalDb from "@jerryqiu/db/portal";
 import { AutomationsView, NotificationsView, TasksView } from "@/components/studio/OpsViews";
 import * as autoDb from "@jerryqiu/db/automation";
+import { OrdersView } from "@/components/studio/OrdersView";
+import * as shopDb from "@jerryqiu/db/gallery-shop";
 import { GalleriesView } from "@/components/studio/GalleriesView";
 import * as galDb from "@jerryqiu/db/galleries";
 import { DashboardView } from "@/components/studio/DashboardView";
@@ -402,6 +404,38 @@ export default async function StudioSection({ params }: { params: Promise<{ sect
     );
   }
   void formatMoney;
+  if (section === "orders") {
+    const [products, orders] = await Promise.all([shopDb.listProducts(db), shopDb.listOrders(db)]);
+    return (
+      <Shell>
+        <OrdersView
+          data={{
+            products: products.map((p) => ({
+              id: p.id,
+              kind: p.kind,
+              name: p.name,
+              description: p.description ?? "",
+              price: (p.priceCents / 100).toFixed(2),
+              sample: p.sample,
+              active: p.active,
+            })),
+            orders: orders.slice(0, 100).map((o) => ({
+              id: o.order.id,
+              number: o.order.number,
+              gallery: o.gallery.title,
+              galleryId: o.gallery.id,
+              status: o.order.status,
+              buyer: `${o.order.buyerName} <${o.order.buyerEmail}>`,
+              totalCents: o.order.totalCents,
+              at: o.order.createdAt.toISOString().slice(0, 16).replace("T", " "),
+              lab: o.order.labOrderId,
+              items: o.items.map((i) => `${i.name}${i.qty > 1 ? ` × ${i.qty}` : ""}`),
+            })),
+          }}
+        />
+      </Shell>
+    );
+  }
   if (section === "quotes") {
     await com.seedSampleCatalog(db);
     const [quotes, clients, packages, addOns] = await Promise.all([

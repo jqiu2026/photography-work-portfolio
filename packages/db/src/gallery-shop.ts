@@ -55,7 +55,7 @@ export async function setLink(db: Database, galleryId: string, p: { slug?: strin
     set.slug = slug;
   }
   if (p.visibility !== undefined) {
-    if (!["passcode", "link", "link-passcode"].includes(p.visibility)) throw new StudioError("Unknown visibility.");
+    if (!["passcode", "link"].includes(p.visibility)) throw new StudioError("Unknown visibility.");
     set.visibility = p.visibility;
   }
   await db.update(s.studioGalleries).set(set).where(eq(s.studioGalleries.id, galleryId));

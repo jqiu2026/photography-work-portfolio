@@ -7,7 +7,8 @@ import { StudioError, createGallery } from "@jerryqiu/db/studio";
 import { sendTemplate } from "@jerryqiu/email";
 import { getSite } from "@jerryqiu/sites";
 import { eq } from "drizzle-orm";
-import { clearLocks, saveSecurity, saveStyle } from "@jerryqiu/db/gallery-security";
+import { type GalleryStyle, clearLocks, saveSecurity, saveStyle } from "@jerryqiu/db/gallery-security";
+import * as shop from "@jerryqiu/db/gallery-shop";
 import { z } from "zod";
 import { emailGalleryLink, publishAndNotify } from "@/lib/gallery-publish";
 import { studio } from "@/lib/studio-run";
@@ -56,8 +57,12 @@ export async function saveGallerySettingsAction(input: {
         allowComments: input.allowComments,
         allowRatings: input.allowRatings,
         watermark: input.watermark,
-        ...(input.layout ? { layout: (["grid", "masonry", "rows"] as const).find((x) => x === input.layout) } : {}),
-        ...(input.theme ? { theme: input.theme === "light" ? ("light" as const) : ("dark" as const) } : {}),
+        ...(input.layout
+          ? { layout: (["grid", "masonry", "rows", "story", "mosaic"] as const).find((x) => x === input.layout) }
+          : {}),
+        ...(input.theme
+          ? { theme: (["dark", "light", "paper", "slate"] as const).find((x) => x === input.theme) ?? "dark" }
+          : {}),
         ...(input.density ? { density: (["small", "medium", "large"] as const).find((x) => x === input.density) } : {}),
         ...(input.publishAt !== undefined ? { publishAt: input.publishAt ? input.publishAt : null } : {}),
         ...(input.notes !== undefined ? { notes: input.notes } : {}),
@@ -107,10 +112,99 @@ export async function setDownloadPinAction(input: { galleryId: string; pin: stri
   });
 }
 
-export async function createAlbumAction(input: { galleryId: string; name: string }) {
+export async function createAlbumAction(input: { galleryId: string; name: string; parentId?: string }) {
   return studio(async ({ db }) => {
-    await gal.createAlbum(db, gid(input.galleryId), input.name);
-    return { message: "Album added" };
+    await gal.createAlbum(db, gid(input.galleryId), input.name, input.parentId ? mid(input.parentId) : null);
+    return { message: input.parentId ? "Sub-album added" : "Album added" };
+  });
+}
+export async function updateAlbumAction(input: {
+  galleryId: string;
+  albumId: string;
+  name?: string;
+  description?: string;
+  hidden?: boolean;
+  parentId?: string | null;
+  coverMediaId?: string | null;
+  passcode?: string;
+}) {
+  return studio(async ({ db }) => {
+    await gal.updateAlbum(db, gid(input.galleryId), mid(input.albumId), {
+      name: input.name,
+      description: input.description,
+      hidden: input.hidden,
+      parentId: input.parentId === undefined ? undefined : input.parentId ? mid(input.parentId) : null,
+      coverMediaId: input.coverMediaId === undefined ? undefined : input.coverMediaId ? mid(input.coverMediaId) : null,
+      passcode: input.passcode,
+    });
+    return {
+      message:
+        input.passcode === undefined
+          ? "Album saved"
+          : input.passcode
+            ? "Album locked with that passcode"
+            : "Album unlocked",
+    };
+  });
+}
+export async function sortAlbumsAction(input: { galleryId: string; ids: string[] }) {
+  return studio(async ({ db }) => {
+    await gal.sortAlbums(db, gid(input.galleryId), input.ids.map(mid));
+    return { message: "Order saved" };
+  });
+}
+
+/* ---- the gallery's own address, shop and price list ---- */
+export async function saveLinkAction(input: { galleryId: string; slug: string; visibility: string }) {
+  return studio(async ({ db }) => {
+    await shop.setLink(db, gid(input.galleryId), { slug: input.slug, visibility: input.visibility });
+    return { message: "Link saved" };
+  });
+}
+export async function saveShopAction(input: {
+  galleryId: string;
+  enabled: boolean;
+  sellDigital: boolean;
+  sellPrints: boolean;
+  freeDownloads: string;
+  proofing: boolean;
+  note: string;
+}) {
+  return studio(async ({ db }) => {
+    await shop.saveShop(db, gid(input.galleryId), {
+      enabled: input.enabled,
+      sellDigital: input.sellDigital,
+      sellPrints: input.sellPrints,
+      freeDownloads: input.freeDownloads,
+      proofing: input.proofing,
+      note: input.note,
+    });
+    return { message: "Shop settings saved" };
+  });
+}
+export async function saveProductAction(input: {
+  id: string;
+  name?: string;
+  description?: string;
+  price?: string;
+  active?: boolean;
+}) {
+  return studio(async ({ db }) => {
+    const cents = input.price === undefined ? undefined : Math.round(Number(input.price.replace(/[$,\s]/g, "")) * 100);
+    if (cents !== undefined && !Number.isFinite(cents)) throw new StudioError("Enter a price like 12.50.");
+    await shop.saveProduct(db, mid(input.id), {
+      name: input.name,
+      description: input.description,
+      priceCents: cents,
+      active: input.active,
+    });
+    return { message: "Product saved" };
+  });
+}
+export async function cancelOrderAction(orderId: string) {
+  return studio(async ({ db }) => {
+    await shop.cancelOrder(db, mid(orderId));
+    return { message: "Order cancelled" };
   });
 }
 export async function deleteAlbumAction(input: { galleryId: string; albumId: string }) {
@@ -443,6 +537,8 @@ export async function saveSecurityAction(input: {
 export async function saveStyleAction(input: {
   galleryId: string;
   font: string;
+  header?: string;
+  albumView?: string;
   gap: string;
   corners: string;
   showFilenames: boolean;
@@ -453,7 +549,9 @@ export async function saveStyleAction(input: {
 }) {
   return studio(async ({ db }) => {
     await saveStyle(db, gid(input.galleryId), {
-      font: input.font as "sans" | "serif" | "mono",
+      font: input.font as GalleryStyle["font"],
+      ...(input.header ? { header: input.header as GalleryStyle["header"] } : {}),
+      ...(input.albumView ? { albumView: input.albumView as GalleryStyle["albumView"] } : {}),
       gap: input.gap as "tight" | "normal" | "wide",
       corners: input.corners as "square" | "soft" | "round",
       showFilenames: input.showFilenames,

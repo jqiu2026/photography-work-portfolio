@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import { getDb } from "@jerryqiu/db";
 import { redirect } from "next/navigation";
-import { GalleryClient } from "@/components/portal/GalleryClient";
+import { Gallery } from "@/components/gallery/Gallery";
 import { LeaveButton } from "@/components/studio/ClientForms";
 import { Shell } from "@/components/Shell";
 import { GalleryGuard } from "@/components/portal/GalleryGuard";
@@ -25,12 +25,9 @@ export default async function ClientGallery() {
         galleryId={data.galleryId}
         code={`${data.title.slice(0, 12)} · ${createHash("sha256").update(access.viewer).digest("hex").slice(0, 8)}`}
       />
-      <div className="st-wrap">
-        <p className="hl-eyebrow">Your gallery</p>
-        <GalleryClient data={data} />
-        <div style={{ marginTop: "2rem" }}>
-          <LeaveButton />
-        </div>
+      <Gallery data={data} />
+      <div className="st-wrap" style={{ paddingTop: 0 }}>
+        <LeaveButton />
       </div>
     </Shell>
   );

@@ -40,7 +40,12 @@ export const readSecurity = (raw: unknown): GallerySecurity => {
 };
 
 export const styleSchema = z.object({
-  font: z.enum(["sans", "serif", "mono"]).default("sans"),
+  /** sans | serif | mono, plus editorial (high-contrast serif), classic (light serif), modern (geometric sans), display (soft serif headline). */
+  font: z.enum(["sans", "serif", "mono", "editorial", "classic", "modern", "display"]).default("sans"),
+  /** How the gallery opens: a full-bleed cover with the title over it, a cover beside the title, or just the title. */
+  header: z.enum(["cinematic", "split", "minimal"]).default("cinematic"),
+  /** With albums: tabs above the photographs, or a landing page of album cards. */
+  albumView: z.enum(["tabs", "cards"]).default("tabs"),
   gap: z.enum(["tight", "normal", "wide"]).default("normal"),
   corners: z.enum(["square", "soft", "round"]).default("soft"),
   showFilenames: z.boolean().default(false),

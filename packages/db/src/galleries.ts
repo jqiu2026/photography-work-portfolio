@@ -24,8 +24,8 @@ export type GallerySettings = {
   allowComments?: boolean;
   allowRatings?: boolean;
   watermark?: boolean;
-  layout?: "grid" | "masonry" | "rows";
-  theme?: "dark" | "light";
+  layout?: "grid" | "masonry" | "rows" | "story" | "mosaic";
+  theme?: "dark" | "light" | "paper" | "slate";
   density?: "small" | "medium" | "large";
   /** ISO time to publish at, or null to clear. */
   publishAt?: string | null;

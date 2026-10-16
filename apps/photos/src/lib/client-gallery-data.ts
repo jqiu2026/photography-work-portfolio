@@ -2,12 +2,35 @@ import "server-only";
 import { type Database, schema } from "@jerryqiu/db";
 import * as gal from "@jerryqiu/db/galleries";
 import { type GalleryStyle, readStyle } from "@jerryqiu/db/gallery-security";
+import { type GalleryShop, listProducts, readShop } from "@jerryqiu/db/gallery-shop";
+import { MOCK_CATALOG } from "@jerryqiu/prints";
 import { eq } from "drizzle-orm";
 import type { GalleryAccess } from "@/lib/client-gallery";
-import { downloadsUnlocked } from "@/lib/client-gallery";
+import { downloadsUnlocked, lockedMediaIds, unlockedAlbums } from "@/lib/client-gallery";
 import { zipPlan } from "@/lib/downloads";
 
 export type ClientGalleryData = {
+  /** client: the person the gallery was delivered to (proofing, selections). visitor: the public link (view and shop). */
+  role: "client" | "visitor";
+  slug: string | null;
+  shop: {
+    enabled: boolean;
+    sellDigital: boolean;
+    sellPrints: boolean;
+    freeDownloads: GalleryShop["freeDownloads"];
+    note: string;
+    shipCountries: string[];
+    products: {
+      id: string;
+      kind: string;
+      name: string;
+      description: string;
+      priceCents: number;
+      sample: boolean;
+      /** Print size in inches (long side, short side), for the resolution check. */
+      size: [number, number] | null;
+    }[];
+  };
   /** Present only for a portal account (the passcode session already knows its gallery). */
   galleryId?: string;
   title: string;
@@ -25,7 +48,17 @@ export type ClientGalleryData = {
   limit: number | null;
   sent: boolean;
   downloads: { web: boolean; full: boolean; pin: boolean; unlocked: boolean; webParts: number; fullParts: number };
-  albums: { id: string; name: string }[];
+  albums: {
+    id: string;
+    name: string;
+    description: string;
+    parentId: string | null;
+    locked: boolean;
+    /** Locked and not yet opened in this browser: its photographs are not in `items`. */
+    closed: boolean;
+    count: number;
+    coverMediaId: string | null;
+  }[];
   items: {
     mediaId: string;
     filename: string;
@@ -43,11 +76,17 @@ export type ClientGalleryData = {
 
 export async function loadClientGallery(db: Database, a: GalleryAccess): Promise<ClientGalleryData> {
   const g = a.gallery;
-  const [contents, albums, proofs] = await Promise.all([
+  const [allContents, albums, proofs, shut, open] = await Promise.all([
     gal.galleryContents(db, g.id),
     gal.listAlbums(db, g.id),
     gal.proofSummary(db, g.id),
+    lockedMediaIds(db, g.id),
+    unlockedAlbums(g.id),
   ]);
+  // photographs in locked albums that this browser has not opened never reach the page
+  const contents = allContents.filter((c) => !shut.has(c.media.id));
+  const shopCfg = readShop(a.gallery.shop);
+  const products = shopCfg.enabled ? await listProducts(db, { activeOnly: true }) : [];
   const fav = new Set(proofs.favourites);
   const live = a.state === "live" || a.state === "expiring";
   const plan = (size: "web" | "full") =>
@@ -56,7 +95,30 @@ export async function loadClientGallery(db: Database, a: GalleryAccess): Promise
       size,
     ).length;
   const [g2] = await db.select().from(schema.studioGalleries).where(eq(schema.studioGalleries.id, g.id));
+  const countIn = (id: string) => allContents.filter((c) => c.item.albumId === id).length;
   return {
+    role: a.role,
+    slug: g2?.slug ?? null,
+    shop: {
+      enabled: shopCfg.enabled,
+      sellDigital: shopCfg.sellDigital,
+      sellPrints: shopCfg.sellPrints,
+      freeDownloads: shopCfg.freeDownloads,
+      note: shopCfg.note,
+      shipCountries: shopCfg.shipCountries,
+      products: products.map((p) => ({
+        id: p.id,
+        kind: p.kind,
+        name: p.name,
+        description: p.description ?? "",
+        priceCents: p.priceCents,
+        sample: p.sample,
+        size: (() => {
+          const c = MOCK_CATALOG.find((x) => x.sku === p.sku);
+          return c ? ([Math.max(c.widthIn, c.heightIn), Math.min(c.widthIn, c.heightIn)] as [number, number]) : null;
+        })(),
+      })),
+    },
     galleryId: a.via === "account" ? g.id : undefined,
     title: g.title,
     welcome: g.welcome ?? "",
@@ -73,14 +135,25 @@ export async function loadClientGallery(db: Database, a: GalleryAccess): Promise
     limit: g.selectionLimit,
     sent: Boolean(g2?.selectionSentAt),
     downloads: {
-      web: live && gal.downloadAllowed(g, "web"),
-      full: live && gal.downloadAllowed(g, "full"),
-      pin: Boolean(g.downloadPinHash),
-      unlocked: !g.downloadPinHash || (await downloadsUnlocked(g.id)),
+      web: live && (a.role === "visitor" ? shopCfg.freeDownloads === "web" : gal.downloadAllowed(g, "web")),
+      full: live && a.role === "client" && gal.downloadAllowed(g, "full"),
+      pin: a.role === "client" && Boolean(g.downloadPinHash),
+      unlocked: a.role === "visitor" || !g.downloadPinHash || (await downloadsUnlocked(g.id)),
       webParts: plan("web"),
       fullParts: plan("full"),
     },
-    albums: albums.map((x) => ({ id: x.id, name: x.name })),
+    albums: albums
+      .filter((x) => !x.hidden)
+      .map((x) => ({
+        id: x.id,
+        name: x.name,
+        description: x.description ?? "",
+        parentId: x.parentId,
+        locked: Boolean(x.passcodeHash),
+        closed: Boolean(x.passcodeHash) && !open.includes(x.id),
+        count: countIn(x.id),
+        coverMediaId: x.passcodeHash && !open.includes(x.id) ? null : x.coverMediaId,
+      })),
     items: live
       ? contents.map((c) => ({
           mediaId: c.media.id,

@@ -32,6 +32,8 @@ import {
   sortGalleryAction,
   unpublishAction,
 } from "@/app/studio/gallery-actions";
+import { GalleryAlbums } from "./GalleryAlbums";
+import { GalleryShopPanel } from "./GalleryShopPanel";
 import { GalleryUploader } from "./GalleryUploader";
 import { Frame, useAct } from "./StudioFrame";
 import "./gallery-manager.css";
@@ -88,6 +90,34 @@ export type GalleryManagerData = {
     recent: { id: string; at: string; viewer: string; file: string }[];
   };
   albums: { id: string; name: string }[];
+  albumList: {
+    id: string;
+    name: string;
+    description: string;
+    parentId: string | null;
+    locked: boolean;
+    hidden: boolean;
+    coverMediaId: string | null;
+  }[];
+  slug: string;
+  visibility: string;
+  shop: {
+    enabled: boolean;
+    sellDigital: boolean;
+    sellPrints: boolean;
+    freeDownloads: string;
+    proofing: boolean;
+    note: string;
+  };
+  orders: {
+    id: string;
+    number: string;
+    status: string;
+    buyer: string;
+    totalCents: number;
+    at: string;
+    items: number;
+  }[];
   items: Item[];
   comments: { id: string; mediaId: string; filename: string; body: string; author: string; at: string }[];
   downloads: { id: string; kind: string; part: number | null; file: string | null; at: string; bytes: number | null }[];
@@ -96,6 +126,8 @@ export type GalleryManagerData = {
 
 const TABS = [
   ["photos", "Photos"],
+  ["albums", "Albums"],
+  ["shop", "Shop"],
   ["share", "Share"],
   ["design", "Design"],
   ["security", "Security"],
@@ -688,6 +720,45 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
           </dialog>
         </section>
 
+        {/* ---------------- Albums ---------------- */}
+        <section
+          id="gm-albums"
+          role="tabpanel"
+          aria-labelledby="gm-tab-albums"
+          hidden={tab !== "albums"}
+          className="gm-panel"
+        >
+          <GalleryAlbums
+            galleryId={gid}
+            albums={data.albumList}
+            items={data.items.map((i) => ({ mediaId: i.mediaId, filename: i.filename, albumId: i.albumId }))}
+            run={run}
+            pending={pending}
+          />
+        </section>
+
+        {/* ---------------- Shop ---------------- */}
+        <section
+          id="gm-shop"
+          role="tabpanel"
+          aria-labelledby="gm-tab-shop"
+          hidden={tab !== "shop"}
+          className="gm-panel"
+        >
+          <GalleryShopPanel
+            galleryId={gid}
+            link={{ slug: data.slug, visibility: data.visibility }}
+            shop={data.shop}
+            orders={data.orders}
+            live={live}
+            origin={origin}
+            run={run}
+            pending={pending}
+            copy={copy}
+            copied={copied}
+          />
+        </section>
+
         {/* ---------------- Share ---------------- */}
         <section
           id="gm-share"
@@ -829,7 +900,7 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
           <div className="gm-block">
             <h2>Layout</h2>
             <div className="gm-choice" role="radiogroup" aria-label="Layout">
-              {(["grid", "masonry", "rows"] as const).map((k) => (
+              {(["grid", "masonry", "rows", "mosaic", "story"] as const).map((k) => (
                 <button
                   key={k}
                   type="button"
@@ -864,6 +935,8 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
                 <select value={f.theme} onChange={(e) => upd("theme", e.target.value)}>
                   <option value="dark">Dark</option>
                   <option value="light">Light</option>
+                  <option value="paper">Paper (warm)</option>
+                  <option value="slate">Slate (cool)</option>
                 </select>
               </label>
               <label>
@@ -902,9 +975,31 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
               <label>
                 Typeface
                 <select value={sty.font} onChange={(e) => updSty("font", e.target.value as GalleryStyle["font"])}>
-                  <option value="sans">Sans</option>
-                  <option value="serif">Serif</option>
+                  <option value="sans">Sans (clean)</option>
+                  <option value="modern">Modern (geometric)</option>
+                  <option value="serif">Serif (Georgia)</option>
+                  <option value="editorial">Editorial (high contrast headlines)</option>
+                  <option value="classic">Classic (light, elegant)</option>
+                  <option value="display">Display (soft headlines)</option>
                   <option value="mono">Mono</option>
+                </select>
+              </label>
+              <label>
+                Opening
+                <select value={sty.header} onChange={(e) => updSty("header", e.target.value as GalleryStyle["header"])}>
+                  <option value="cinematic">Cinematic (full cover, title over it)</option>
+                  <option value="split">Split (cover beside the title)</option>
+                  <option value="minimal">Minimal (title only)</option>
+                </select>
+              </label>
+              <label>
+                Albums are shown as
+                <select
+                  value={sty.albumView}
+                  onChange={(e) => updSty("albumView", e.target.value as GalleryStyle["albumView"])}
+                >
+                  <option value="tabs">Tabs above the photographs</option>
+                  <option value="cards">A page of album cards first</option>
                 </select>
               </label>
               <label>
@@ -949,7 +1044,7 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
                   checked={sty.heroCover}
                   onChange={(e) => updSty("heroCover", e.target.checked)}
                 />{" "}
-                Show the cover large above the photographs
+                Legacy: cover above the photographs (the Opening setting replaces this)
               </label>
               <label className="gm-check">
                 <input

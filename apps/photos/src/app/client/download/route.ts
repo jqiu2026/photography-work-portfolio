@@ -1,11 +1,12 @@
 import { getDb, hitRateLimit } from "@jerryqiu/db";
 import * as gal from "@jerryqiu/db/galleries";
+import { readShop } from "@jerryqiu/db/gallery-shop";
 import { downloadsInLastDay } from "@jerryqiu/db/gallery-security";
-import { embedViewerCode, viewerCode, zipStream } from "@jerryqiu/media";
+import { zipStream } from "@jerryqiu/media";
 import { clientIpHash } from "@jerryqiu/protect";
-import { downloadsUnlocked, galleryAccess } from "@/lib/client-gallery";
+import { downloadsUnlocked, galleryAccess, lockedMediaIds } from "@/lib/client-gallery";
 import { baseName, zipPlan } from "@/lib/downloads";
-import { derivativesStore, originalsStore } from "@/lib/storage";
+import { fullFile, webFile } from "@/lib/gallery-files";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -30,8 +31,13 @@ export async function GET(request: Request) {
   if (a.state === "expired" || a.state === "archived" || a.state === "draft")
     return deny(403, "This gallery has expired. Extend it to download.");
   const g = a.gallery;
-  if (!gal.downloadAllowed(g, size)) return deny(403, "Downloads are not enabled for this gallery.");
-  if (g.downloadPinHash && !(await downloadsUnlocked(g.id))) return deny(403, "Enter the download PIN first.");
+  if (a.role === "visitor") {
+    // visitors of the public link only get free web-size copies, and only when the studio allows them
+    if (size !== "web" || readShop(g.shop).freeDownloads !== "web")
+      return deny(403, "Downloads are available in the shop.");
+  } else if (!gal.downloadAllowed(g, size)) return deny(403, "Downloads are not enabled for this gallery.");
+  if (a.role === "client" && g.downloadPinHash && !(await downloadsUnlocked(g.id)))
+    return deny(403, "Enter the download PIN first.");
   const ip = clientIpHash(request.headers);
   const zip = u.searchParams.get("zip") === "1";
   const cap = a.security.maxDownloadsPerDay;
@@ -39,31 +45,16 @@ export async function GET(request: Request) {
     return deny(429, `The daily download limit (${cap}) has been reached. Try again tomorrow.`);
   if (!(await hitRateLimit(db, `dl:${zip ? "zip" : "one"}:${ip}`, zip ? 12 : 120, 600)).allowed)
     return deny(429, "Too many downloads. Wait a few minutes.");
-  const contents = await gal.galleryContents(db, g.id);
+  const shut = await lockedMediaIds(db, g.id);
+  const contents = (await gal.galleryContents(db, g.id)).filter((c) => !shut.has(c.media.id));
   const headers = {
     "Cache-Control": "private, no-store",
     "X-Content-Type-Options": "nosniff",
     "X-Robots-Tag": "noindex, noai, noimageai",
   };
 
-  const web = async (mediaId: string) => {
-    const c = contents.find((x) => x.media.id === mediaId);
-    if (!c) return null;
-    const d =
-      [...c.media.derivatives].filter((x) => x.format === "webp").sort((x, y) => y.width - x.width)[0] ??
-      [...c.media.derivatives].sort((x, y) => y.width - x.width)[0];
-    const obj = d ? await derivativesStore().get(d.key) : null;
-    if (!obj) return null;
-    return {
-      name: `${baseName(c.media.filename)}-web.jpg`,
-      bytes: await embedViewerCode(obj.body, viewerCode(a.viewer), "jpeg"),
-    };
-  };
-  const full = async (mediaId: string) => {
-    const c = contents.find((x) => x.media.id === mediaId);
-    const obj = c ? await originalsStore().get(c.media.originalKey) : null;
-    return c && obj ? { name: c.media.filename, bytes: Buffer.from(obj.body), type: c.media.mime } : null;
-  };
+  const web = (mediaId: string) => webFile(contents, mediaId, a.viewer);
+  const full = (mediaId: string) => fullFile(contents, mediaId);
 
   if (!zip) {
     const mediaId = u.searchParams.get("m") ?? "";

@@ -113,8 +113,8 @@ test("design: rows and light; the client sees them after the gallery is publishe
   await c.getByLabel("Passcode").fill(pass);
   await c.getByRole("button", { name: "Open my gallery" }).click();
   await expect(c).toHaveURL(/\/client\/gallery$/, { timeout: 25_000 });
-  await expect(c.locator(".gd")).toHaveAttribute("data-gallery-layout", "rows");
-  await expect(c.locator(".gd")).toHaveAttribute("data-gallery-theme", "light");
+  await expect(c.locator(".gx")).toHaveAttribute("data-layout", "rows");
+  await expect(c.locator(".gx")).toHaveAttribute("data-theme", "light");
   await expect(c.getByText(`Welcome ${uid}`)).toBeVisible();
   await ctx.close();
 });

@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import { getDb } from "@jerryqiu/db";
 import { notFound } from "next/navigation";
-import { GalleryClient } from "@/components/portal/GalleryClient";
+import { Gallery } from "@/components/gallery/Gallery";
 import { GalleryGuard } from "@/components/portal/GalleryGuard";
 import { PortalFrame } from "@/components/portal/PortalFrame";
 import { galleryAccess } from "@/lib/client-gallery";
@@ -26,7 +26,7 @@ export default async function PortalGallery({ params }: { params: Promise<{ id: 
         galleryId={id}
         code={`${data.title.slice(0, 12)} · ${createHash("sha256").update(access.viewer).digest("hex").slice(0, 8)}`}
       />
-      <GalleryClient data={data} />
+      <Gallery data={data} />
     </PortalFrame>
   );
 }

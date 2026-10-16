@@ -7,6 +7,7 @@ export default {
     "@jerryqiu/render",
     "@jerryqiu/mocks",
     "@jerryqiu/payments",
+    "@jerryqiu/prints",
     "@jerryqiu/auth",
     "@jerryqiu/db",
     "@jerryqiu/protect",

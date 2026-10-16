@@ -1,10 +1,10 @@
 import "server-only";
 import { createHmac, timingSafeEqual } from "node:crypto";
-import { getDb, schema } from "@jerryqiu/db";
+import { type Database, getDb, schema } from "@jerryqiu/db";
 import { galleryState } from "@jerryqiu/db/gallery-expiry";
 import { type GallerySecurity, lockedUntil, readSecurity } from "@jerryqiu/db/gallery-security";
 import { tokenSecrets } from "@jerryqiu/protect";
-import { and, eq, isNull } from "drizzle-orm";
+import { and, eq, inArray, isNotNull, isNull } from "drizzle-orm";
 import { cookies } from "next/headers";
 import { accountSession } from "@/lib/account-session";
 import { portalSession, requestIpHash, viewerId } from "@/lib/portal";
@@ -14,6 +14,8 @@ export type GalleryAccess = {
   gallery: typeof schema.studioGalleries.$inferSelect;
   viewer: string;
   via: "passcode" | "account";
+  /** client: the person the gallery was delivered to (proofing, selections, their downloads). visitor: opened the public link (view, shop). */
+  role: "client" | "visitor";
   state: ReturnType<typeof galleryState>;
   clientId: string | null;
   security: GallerySecurity;
@@ -50,6 +52,7 @@ export async function galleryAccess(galleryId?: string): Promise<GalleryAccess |
       gallery: row.g,
       viewer: me.viewer,
       via: "account",
+      role: "client",
       state: galleryState(row.g),
       clientId: me.client.id,
       security: readSecurity(row.g.security),
@@ -67,6 +70,7 @@ export async function galleryAccess(galleryId?: string): Promise<GalleryAccess |
     gallery: g,
     viewer: viewerId(session),
     via: "passcode",
+    role: session.r === "v" ? "visitor" : "client",
     state: galleryState(g),
     clientId: null,
     security: readSecurity(g.security),
@@ -106,4 +110,60 @@ export async function downloadsUnlocked(galleryId: string): Promise<boolean> {
   } catch {
     return false;
   }
+}
+
+/** Signed cookie holding which locked albums this browser has opened, per gallery (8 hours). */
+const ALBUMS = "hl_alb";
+export async function unlockAlbum(galleryId: string, albumId: string) {
+  const secret = tokenSecrets()[0];
+  if (!secret) throw new Error("No signing secret configured");
+  const have = await unlockedAlbums(galleryId);
+  const e = Math.floor(Date.now() / 1000) + 8 * 3600;
+  const body = Buffer.from(
+    JSON.stringify({ g: galleryId, a: [...new Set([...have, albumId])].slice(-40), e }),
+  ).toString("base64url");
+  (await cookies()).set(ALBUMS, `${body}.${mac(secret, body)}`, {
+    path: "/",
+    httpOnly: true,
+    sameSite: "strict",
+    secure: process.env.NODE_ENV === "production",
+    maxAge: 8 * 3600,
+  });
+}
+export async function unlockedAlbums(galleryId: string): Promise<string[]> {
+  const raw = (await cookies()).get(ALBUMS)?.value;
+  if (!raw || raw.length > 2000) return [];
+  const [body, sig] = raw.split(".");
+  if (!body || !sig) return [];
+  const ok = tokenSecrets().some((s) => {
+    const want = Buffer.from(mac(s, body));
+    const got = Buffer.from(sig);
+    return want.length === got.length && timingSafeEqual(want, got);
+  });
+  if (!ok) return [];
+  try {
+    const p = JSON.parse(Buffer.from(body, "base64url").toString("utf8")) as { g: string; a: string[]; e: number };
+    return p.g === galleryId && p.e * 1000 > Date.now() && Array.isArray(p.a)
+      ? p.a.filter((x) => typeof x === "string")
+      : [];
+  } catch {
+    return [];
+  }
+}
+
+/** Photographs in locked albums that this browser has not opened: kept out of the page, the downloads and the image tokens. */
+export async function lockedMediaIds(db: Database, galleryId: string): Promise<Set<string>> {
+  const locked = await db
+    .select({ id: schema.studioAlbums.id })
+    .from(schema.studioAlbums)
+    .where(and(eq(schema.studioAlbums.galleryId, galleryId), isNotNull(schema.studioAlbums.passcodeHash)));
+  if (!locked.length) return new Set();
+  const open = new Set(await unlockedAlbums(galleryId));
+  const shut = locked.map((l) => l.id).filter((id) => !open.has(id));
+  if (!shut.length) return new Set();
+  const rows = await db
+    .select({ m: schema.studioGalleryItems.mediaId })
+    .from(schema.studioGalleryItems)
+    .where(and(eq(schema.studioGalleryItems.galleryId, galleryId), inArray(schema.studioGalleryItems.albumId, shut)));
+  return new Set(rows.map((r) => r.m));
 }

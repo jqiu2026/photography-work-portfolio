@@ -8,6 +8,8 @@ import * as cal from "@jerryqiu/db/calendar";
 import * as com from "@jerryqiu/db/commerce";
 import * as forms from "@jerryqiu/db/forms";
 import * as gal from "@jerryqiu/db/galleries";
+import { saveStyle } from "@jerryqiu/db/gallery-security";
+import * as shopDb from "@jerryqiu/db/gallery-shop";
 import * as portal from "@jerryqiu/db/portal";
 import * as st from "@jerryqiu/db/studio";
 import { createStorage } from "@jerryqiu/storage";
@@ -30,12 +32,69 @@ const at = (n: number, hour: number) => {
   return d;
 };
 
+/** Gives the sample galleries their own links, albums (one inside another, one locked) and an open shop. Safe to repeat. */
+async function enrichGalleries() {
+  const rows = await db.select().from(schema.studioGalleries);
+  const wedding = rows.find((g) => g.title === "SAMPLE Okafor wedding");
+  const family = rows.find((g) => g.title === "SAMPLE Reyes family portraits");
+  if (wedding && !wedding.slug) {
+    await shopDb.setLink(db, wedding.id, { slug: "okafor-wedding", visibility: "link" });
+    await shopDb.saveShop(db, wedding.id, { enabled: true, note: "SAMPLE shop: prices are placeholders." });
+    await saveStyle(db, wedding.id, {
+      font: "editorial",
+      header: "cinematic",
+      albumView: "cards",
+      gap: "normal",
+      corners: "soft",
+      brandLine: "SAMPLE Studio",
+    });
+    const albums = await gal.listAlbums(db, wedding.id);
+    const ceremony = albums.find((a) => a.name === "Ceremony");
+    const items = await gal.galleryContents(db, wedding.id);
+    if (ceremony) {
+      const vows = await gal.createAlbum(db, wedding.id, "Vows", ceremony.id);
+      await gal.moveToAlbum(
+        db,
+        wedding.id,
+        items.slice(0, 2).map((i) => i.media.id),
+        vows.id,
+      );
+      await gal.updateAlbum(db, wedding.id, ceremony.id, { description: "SAMPLE: the ceremony, in order." });
+    }
+    const formals = await gal.createAlbum(db, wedding.id, "Family formals");
+    await gal.moveToAlbum(
+      db,
+      wedding.id,
+      items.slice(8, 11).map((i) => i.media.id),
+      formals.id,
+    );
+    await gal.updateAlbum(db, wedding.id, formals.id, {
+      passcode: "formals-2026",
+      description: "SAMPLE locked album. Passcode: formals-2026",
+    });
+    console.log("Sample gallery link: /g/okafor-wedding (locked album passcode: formals-2026)");
+  }
+  if (family && !family.slug) {
+    await shopDb.setLink(db, family.id, { slug: "reyes-family", visibility: "link" });
+    await shopDb.saveShop(db, family.id, {
+      enabled: true,
+      freeDownloads: "web",
+      note: "SAMPLE: web-size copies are free.",
+    });
+    await saveStyle(db, family.id, { font: "classic", header: "split", brandLine: "SAMPLE Studio" });
+    await gal.updateGallery(db, family.id, { theme: "paper", layout: "mosaic" });
+    await st.publishGallery(db, family.id).catch(() => {});
+    console.log("Sample gallery link: /g/reyes-family");
+  }
+}
+
 const existing = await db
   .select()
   .from(schema.studioClients)
   .where(eq(schema.studioClients.email, "sample-maya@example.test"));
 if (existing.length) {
-  console.log("Sample data is already there. Nothing to do.");
+  await enrichGalleries();
+  console.log("Sample data is already there. Nothing more to add.");
   process.exit(0);
 }
 
@@ -335,6 +394,7 @@ if (qs[0])
     .catch(() => {});
 
 console.log(
-  "Sample data added. Client galleries open at /client with the passcodes sample-demo-1 (published) and sample-demo-2 (draft).",
+  "Sample data added. Client galleries open at /client with the passcodes sample-demo-1 (published) and sample-demo-2. Public links: /g/okafor-wedding and /g/reyes-family (locked album passcode: formals-2026).",
 );
+await enrichGalleries();
 process.exit(0);
