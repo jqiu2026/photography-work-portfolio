@@ -135,24 +135,98 @@ export async function setHidden(db: Database, galleryId: string, mediaId: string
     .set({ hidden })
     .where(and(eq(s.studioGalleryItems.galleryId, galleryId), eq(s.studioGalleryItems.mediaId, mediaId)));
 }
-export async function createAlbum(db: Database, galleryId: string, name: string) {
+export async function createAlbum(db: Database, galleryId: string, name: string, parentId?: string | null) {
   if (name.trim().length < 2) throw new StudioError("Name the album.");
+  if (parentId) {
+    const [p] = await db
+      .select()
+      .from(s.studioAlbums)
+      .where(and(eq(s.studioAlbums.id, parentId), eq(s.studioAlbums.galleryId, galleryId)));
+    if (!p) throw new StudioError("That parent album is not in this gallery.");
+    if (p.parentId) throw new StudioError("Albums nest one level: choose a top-level album as the parent.");
+  }
   const [{ n }] = await db
     .select({ n: sql<number>`coalesce(max(${s.studioAlbums.sort}), -1) + 1` })
     .from(s.studioAlbums)
     .where(eq(s.studioAlbums.galleryId, galleryId));
   const [row] = await db
     .insert(s.studioAlbums)
-    .values({ galleryId, name: name.trim().slice(0, 60), sort: Number(n) })
+    .values({ galleryId, name: name.trim().slice(0, 60), sort: Number(n), parentId: parentId ?? null })
     .returning();
   return row;
 }
+export type AlbumPatch = {
+  name?: string;
+  description?: string;
+  hidden?: boolean;
+  parentId?: string | null;
+  coverMediaId?: string | null;
+  /** A passcode locks the album; "" removes the lock; undefined leaves it as it is. */
+  passcode?: string;
+};
+export async function updateAlbum(db: Database, galleryId: string, albumId: string, p: AlbumPatch) {
+  const [cur] = await db
+    .select()
+    .from(s.studioAlbums)
+    .where(and(eq(s.studioAlbums.id, albumId), eq(s.studioAlbums.galleryId, galleryId)));
+  if (!cur) throw new StudioError("Unknown album.");
+  const set: Partial<typeof s.studioAlbums.$inferInsert> = {};
+  if (p.name !== undefined) {
+    if (p.name.trim().length < 2) throw new StudioError("Name the album.");
+    set.name = p.name.trim().slice(0, 60);
+  }
+  if (p.description !== undefined) set.description = p.description.trim().slice(0, 400) || null;
+  if (p.hidden !== undefined) set.hidden = p.hidden;
+  if (p.coverMediaId !== undefined) set.coverMediaId = p.coverMediaId;
+  if (p.parentId !== undefined) {
+    if (p.parentId === albumId) throw new StudioError("An album cannot sit inside itself.");
+    if (p.parentId) {
+      const [par] = await db
+        .select()
+        .from(s.studioAlbums)
+        .where(and(eq(s.studioAlbums.id, p.parentId), eq(s.studioAlbums.galleryId, galleryId)));
+      if (!par) throw new StudioError("That parent album is not in this gallery.");
+      if (par.parentId) throw new StudioError("Albums nest one level: choose a top-level album as the parent.");
+      const kids = await db
+        .select({ id: s.studioAlbums.id })
+        .from(s.studioAlbums)
+        .where(eq(s.studioAlbums.parentId, albumId));
+      if (kids.length) throw new StudioError("This album has sub-albums, so it cannot become one itself.");
+    }
+    set.parentId = p.parentId;
+  }
+  if (p.passcode !== undefined) {
+    const code = p.passcode.trim();
+    if (code && code.length < 4) throw new StudioError("An album passcode needs at least 4 characters.");
+    set.passcodeHash = code ? await hashPasscode(code) : null;
+  }
+  if (Object.keys(set).length) await db.update(s.studioAlbums).set(set).where(eq(s.studioAlbums.id, albumId));
+}
 export async function deleteAlbum(db: Database, galleryId: string, albumId: string) {
+  const [cur] = await db
+    .select()
+    .from(s.studioAlbums)
+    .where(and(eq(s.studioAlbums.id, albumId), eq(s.studioAlbums.galleryId, galleryId)));
+  if (!cur) return;
+  // photographs and sub-albums move up one level; nothing is deleted with the album
   await db
     .update(s.studioGalleryItems)
-    .set({ albumId: null })
+    .set({ albumId: cur.parentId })
     .where(and(eq(s.studioGalleryItems.galleryId, galleryId), eq(s.studioGalleryItems.albumId, albumId)));
+  await db.update(s.studioAlbums).set({ parentId: cur.parentId }).where(eq(s.studioAlbums.parentId, albumId));
   await db.delete(s.studioAlbums).where(and(eq(s.studioAlbums.id, albumId), eq(s.studioAlbums.galleryId, galleryId)));
+}
+/** Puts the albums in the given order (ids not listed keep their place after them). */
+export async function sortAlbums(db: Database, galleryId: string, orderedIds: string[]) {
+  let i = 0;
+  for (const id of orderedIds)
+    await db
+      .update(s.studioAlbums)
+      .set({ sort: i++ })
+      .where(and(eq(s.studioAlbums.id, id), eq(s.studioAlbums.galleryId, galleryId)));
+}
+export async function checkAlbumPasscode(album: Pick<s.StudioAlbum, "passcodeHash">, passcode: string) {
+  return album.passcodeHash ? verifyPasscode(passcode, album.passcodeHash) : true;
 }
 export async function moveToAlbum(db: Database, galleryId: string, mediaIds: string[], albumId: string | null) {
   if (!mediaIds.length) return;

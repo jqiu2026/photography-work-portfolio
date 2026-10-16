@@ -485,9 +485,15 @@ export const studioGalleries = pgTable(
     /** Protection settings and look (validated in galleries.ts; empty = defaults). */
     security: jsonb("security").$type<Record<string, unknown>>().notNull().default({}),
     style: jsonb("style").$type<Record<string, unknown>>().notNull().default({}),
+    /** The gallery's own web address: /g/<slug>. Unique, set by the studio. */
+    slug: text("slug"),
+    /** passcode: only the client's passcode (/client) | link: anyone with the link | link-passcode: the link plus the passcode. */
+    visibility: text("visibility").notNull().default("passcode"),
+    /** Shop and proofing settings (validated in gallery-shop.ts; empty = defaults). */
+    shop: jsonb("shop").$type<Record<string, unknown>>().notNull().default({}),
     ...stamps,
   },
-  (t) => [index("studio_galleries_job_idx").on(t.jobId)],
+  (t) => [index("studio_galleries_job_idx").on(t.jobId), uniqueIndex("studio_galleries_slug_idx").on(t.slug)],
 );
 
 export const studioGalleryItems = pgTable(
@@ -1135,6 +1141,14 @@ export const studioAlbums = pgTable(
       .references(() => studioGalleries.id, { onDelete: "cascade" }),
     name: text("name").notNull(),
     sort: integer("sort").notNull().default(0),
+    /** A sub-album sits under another album of the same gallery (one level of nesting in the studio, any in the schema). */
+    parentId: uuid("parent_id"),
+    description: text("description"),
+    coverMediaId: uuid("cover_media_id"),
+    /** scrypt hash of a passcode that unlocks this album; null = open. A locked album's photographs stay hidden until then. */
+    passcodeHash: text("passcode_hash"),
+    /** Hidden albums are not listed; their photographs still show under "All photos" unless also hidden. */
+    hidden: boolean("hidden").notNull().default(false),
   },
   (t) => [index("studio_albums_gallery_idx").on(t.galleryId)],
 );
@@ -1260,3 +1274,82 @@ export const studioSecurityEvents = pgTable(
   },
   (t) => [index("studio_security_events_gallery_idx").on(t.galleryId, t.at)],
 );
+
+/* ------------------------------------------------------------------------------------------------------------------
+ * Shop: a price list (downloads and prints), orders placed from a gallery, and what each order contains. An order is
+ * paid through an invoice (kind "shop"), so payments, receipts and refunds use the one billing path.
+ * ---------------------------------------------------------------------------------------------------------------- */
+export const studioProducts = pgTable(
+  "studio_products",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    /** digital-web | digital-full | digital-all | print | canvas | album | card */
+    kind: text("kind").notNull(),
+    /** For prints: the print lab's product code (see @jerryqiu/prints). */
+    sku: text("sku"),
+    name: text("name").notNull(),
+    description: text("description"),
+    priceCents: integer("price_cents").notNull().default(0),
+    /** True until the owner has set a real price: the shop shows it as SAMPLE. */
+    sample: boolean("sample").notNull().default(true),
+    active: boolean("active").notNull().default(true),
+    sort: integer("sort").notNull().default(0),
+    ...stamps,
+  },
+  (t) => [index("studio_products_kind_idx").on(t.kind)],
+);
+
+export const studioOrders = pgTable(
+  "studio_orders",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    number: text("number").notNull(),
+    galleryId: uuid("gallery_id")
+      .notNull()
+      .references(() => studioGalleries.id),
+    invoiceId: uuid("invoice_id").references(() => studioInvoices.id),
+    /** pending (awaiting payment) | paid | fulfilled | cancelled | refunded */
+    status: text("status").notNull().default("pending"),
+    buyerName: text("buyer_name").notNull(),
+    buyerEmail: text("buyer_email").notNull(),
+    ship: jsonb("ship").$type<Record<string, string>>(),
+    subtotalCents: integer("subtotal_cents").notNull().default(0),
+    shippingCents: integer("shipping_cents").notNull().default(0),
+    totalCents: integer("total_cents").notNull().default(0),
+    /** sha256 of the link that opens the buyer's downloads. */
+    tokenHash: text("token_hash").notNull(),
+    /** Print lab order id once submitted (after payment only). */
+    labOrderId: text("lab_order_id"),
+    reminderAt: timestamp("reminder_at", { withTimezone: true }),
+    paidAt: timestamp("paid_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    uniqueIndex("studio_orders_number_idx").on(t.number),
+    uniqueIndex("studio_orders_token_idx").on(t.tokenHash),
+    index("studio_orders_gallery_idx").on(t.galleryId),
+  ],
+);
+
+export const studioOrderItems = pgTable(
+  "studio_order_items",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    orderId: uuid("order_id")
+      .notNull()
+      .references(() => studioOrders.id, { onDelete: "cascade" }),
+    productId: uuid("product_id").references(() => studioProducts.id),
+    /** Kept so the order still reads right if the price list changes later. */
+    kind: text("kind").notNull(),
+    name: text("name").notNull(),
+    sku: text("sku"),
+    mediaId: uuid("media_id"),
+    qty: integer("qty").notNull().default(1),
+    unitCents: integer("unit_cents").notNull(),
+  },
+  (t) => [index("studio_order_items_order_idx").on(t.orderId)],
+);
+export type StudioAlbum = typeof studioAlbums.$inferSelect;
+export type StudioProduct = typeof studioProducts.$inferSelect;
+export type StudioOrder = typeof studioOrders.$inferSelect;
+export type StudioOrderItem = typeof studioOrderItems.$inferSelect;
