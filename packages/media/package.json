@@ -11,7 +11,8 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "seed": "node ../../scripts/with-env.mjs dev tsx scripts/seed-media.ts"
+    "seed": "node ../../scripts/with-env.mjs dev tsx scripts/seed-media.ts",
+    "seed:demo": "node ../../scripts/with-env.mjs dev tsx scripts/seed-demo.ts"
   },
   "dependencies": {
     "@jerryqiu/db": "workspace:*",
