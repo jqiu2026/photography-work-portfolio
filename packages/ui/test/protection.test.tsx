@@ -1,6 +1,6 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { guardCopy, ProtectedImage, ScreenshotGuard, detectTrigger } from "../src/media";
+import { GuardScope, ProtectedImage, ScreenshotGuard, detectTrigger, devtoolsDocked, guardCopy } from "../src/media";
 
 const asset = {
   id: "0b7f3d52-6a41-4c8e-9a2b-1f3c5d7e9a01",
@@ -27,6 +27,12 @@ describe("detectTrigger: every combination from the plan", () => {
     ["Ctrl+Shift+J", { key: "J", code: "KeyJ", ctrlKey: true, shiftKey: true }, "devtools"],
     ["Ctrl+Shift+C", { key: "C", code: "KeyC", ctrlKey: true, shiftKey: true }, "devtools"],
     ["F12", { key: "F12" }, "devtools"],
+    [
+      "Ctrl+Cmd+Shift+4 (to clipboard)",
+      { key: "$", code: "Digit4", metaKey: true, ctrlKey: true, shiftKey: true },
+      "screenshot",
+    ],
+    ["Firefox Ctrl+Shift+S", { key: "S", code: "KeyS", ctrlKey: true, shiftKey: true }, "screenshot"],
     ["Cmd+Opt+I", { key: "i", code: "KeyI", metaKey: true, altKey: true }, "devtools"],
     ["Cmd+Opt+J", { key: "j", code: "KeyJ", metaKey: true, altKey: true }, "devtools"],
     ["Cmd+Opt+C", { key: "c", code: "KeyC", metaKey: true, altKey: true }, "devtools"],
@@ -207,5 +213,125 @@ describe("ProtectedImage on the photo site (no tokens in the HTML)", () => {
     expect(urls[0]).toBe("/api/img/token");
     expect(urls[1]).toMatch(new RegExp(`^/api/img/${bare.id}\\?w=\\d+&t=t\\d+$`));
     vi.unstubAllGlobals();
+  });
+});
+
+describe("ScreenshotGuard options", () => {
+  beforeEach(() => vi.useFakeTimers());
+  afterEach(() => vi.useRealTimers());
+
+  it("reports every trigger to onEvent with its kind, and showDialog=false hides media without a dialog", () => {
+    const events: { kind: string; combo: string }[] = [];
+    render(
+      <ScreenshotGuard level="off">
+        <GuardScope level="strict" options={{ onEvent: (e) => events.push(e), showDialog: false }} />
+        <p>page</p>
+      </ScreenshotGuard>,
+    );
+    fireEvent.keyDown(window, { key: "PrintScreen" });
+    fireEvent.keyDown(window, { key: "s", code: "KeyS", ctrlKey: true });
+    fireEvent.keyDown(window, { key: "F12" });
+    expect(events).toEqual([
+      { kind: "screenshot", combo: "PrintScreen" },
+      { kind: "save", combo: "Ctrl+S" },
+      { kind: "devtools", combo: "F12" },
+    ]);
+    expect(screen.queryByRole("alertdialog")).toBeNull();
+    expect(document.documentElement).toHaveClass("hl-guard-hide");
+    act(() => {
+      vi.advanceTimersByTime(1600);
+    });
+    expect(document.documentElement).not.toHaveClass("hl-guard-hide");
+  });
+
+  it("blockPrint=false lets Ctrl+S and Ctrl+P through (still reported); blockSelection and blurOnLeave can be switched off", () => {
+    render(
+      <ScreenshotGuard level="off">
+        <GuardScope
+          level="strict"
+          options={{ blockPrint: false, blockSelection: false, blurOnLeave: false, showDialog: false }}
+        />
+        <p>page</p>
+      </ScreenshotGuard>,
+    );
+    expect(fireEvent.keyDown(window, { key: "p", code: "KeyP", ctrlKey: true })).toBe(true);
+    expect(document.documentElement).not.toHaveAttribute("data-guard-noselect");
+    act(() => {
+      vi.advanceTimersByTime(1600);
+    });
+    fireEvent.blur(window);
+    expect(document.documentElement).not.toHaveClass("hl-guard-hide");
+  });
+
+  it("blocks selection by default in strict mode and removes it on unmount", () => {
+    const { unmount } = render(
+      <ScreenshotGuard level="strict">
+        <p>page</p>
+      </ScreenshotGuard>,
+    );
+    expect(document.documentElement).toHaveAttribute("data-guard-noselect");
+    unmount();
+    expect(document.documentElement).not.toHaveAttribute("data-guard-noselect");
+  });
+
+  it("hold to view: media is concealed until the pointer or Shift is held, and concealed again on release", () => {
+    const { unmount } = render(
+      <ScreenshotGuard level="off">
+        <GuardScope level="strict" options={{ holdToView: true }} />
+        <p>page</p>
+      </ScreenshotGuard>,
+    );
+    const root = document.documentElement;
+    expect(root).toHaveClass("hl-guard-conceal");
+    expect(root).not.toHaveClass("hl-guard-reveal");
+    fireEvent.pointerDown(document);
+    expect(root).toHaveClass("hl-guard-reveal");
+    fireEvent.pointerUp(document);
+    expect(root).not.toHaveClass("hl-guard-reveal");
+    fireEvent.keyDown(document, { key: "Shift" });
+    expect(root).toHaveClass("hl-guard-reveal");
+    fireEvent.keyUp(document, { key: "Shift" });
+    expect(root).not.toHaveClass("hl-guard-reveal");
+    unmount();
+    expect(root).not.toHaveClass("hl-guard-conceal");
+  });
+
+  it("a page asking to share the screen is reported and refused, and the original is restored afterwards", async () => {
+    const original = vi.fn(() => Promise.resolve({} as MediaStream));
+    Object.defineProperty(navigator, "mediaDevices", { configurable: true, value: { getDisplayMedia: original } });
+    const events: string[] = [];
+    const { unmount } = render(
+      <ScreenshotGuard level="off">
+        <GuardScope level="strict" options={{ onEvent: (e) => events.push(e.kind), showDialog: false }} />
+      </ScreenshotGuard>,
+    );
+    await expect(navigator.mediaDevices.getDisplayMedia()).rejects.toThrow(/not allowed/);
+    expect(events).toEqual(["capture"]);
+    expect(original).not.toHaveBeenCalled();
+    unmount();
+    expect(navigator.mediaDevices.getDisplayMedia).toBe(
+      original.mock.contexts ? navigator.mediaDevices.getDisplayMedia : original,
+    );
+    await navigator.mediaDevices.getDisplayMedia();
+    expect(original).toHaveBeenCalledTimes(1);
+  });
+
+  it("the devtools size heuristic needs a big gap and is opt-in", () => {
+    expect(devtoolsDocked({ outerWidth: 1400, innerWidth: 1400, outerHeight: 900, innerHeight: 800 })).toBe(false);
+    expect(devtoolsDocked({ outerWidth: 1400, innerWidth: 1000, outerHeight: 900, innerHeight: 800 })).toBe(true);
+    expect(devtoolsDocked({ outerWidth: 1400, innerWidth: 1400, outerHeight: 900, innerHeight: 500 })).toBe(true);
+    const events: string[] = [];
+    render(
+      <ScreenshotGuard level="off">
+        <GuardScope
+          level="strict"
+          options={{ detectDevtools: true, onEvent: (e) => events.push(e.kind), showDialog: false }}
+        />
+      </ScreenshotGuard>,
+    );
+    act(() => {
+      vi.advanceTimersByTime(1100);
+    });
+    expect(events).toEqual([]); // jsdom reports equal outer and inner sizes
   });
 });

@@ -1,7 +1,8 @@
-import { GuardScope } from "@halation/ui/media";
+import { createHash } from "node:crypto";
 import { getDb } from "@jerryqiu/db";
 import { notFound } from "next/navigation";
 import { GalleryClient } from "@/components/portal/GalleryClient";
+import { GalleryGuard } from "@/components/portal/GalleryGuard";
 import { PortalFrame } from "@/components/portal/PortalFrame";
 import { galleryAccess } from "@/lib/client-gallery";
 import { loadClientGallery } from "@/lib/client-gallery-data";
@@ -20,7 +21,11 @@ export default async function PortalGallery({ params }: { params: Promise<{ id: 
   const data = await loadClientGallery(db, access);
   return (
     <PortalFrame current="home" name={me.client.name} unread={unread}>
-      <GuardScope level="strict" />
+      <GalleryGuard
+        security={access.security}
+        galleryId={id}
+        code={`${data.title.slice(0, 12)} · ${createHash("sha256").update(access.viewer).digest("hex").slice(0, 8)}`}
+      />
       <GalleryClient data={data} />
     </PortalFrame>
   );

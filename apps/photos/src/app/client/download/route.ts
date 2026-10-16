@@ -1,5 +1,6 @@
 import { getDb, hitRateLimit } from "@jerryqiu/db";
 import * as gal from "@jerryqiu/db/galleries";
+import { downloadsInLastDay } from "@jerryqiu/db/gallery-security";
 import { embedViewerCode, viewerCode, zipStream } from "@jerryqiu/media";
 import { clientIpHash } from "@jerryqiu/protect";
 import { downloadsUnlocked, galleryAccess } from "@/lib/client-gallery";
@@ -33,6 +34,9 @@ export async function GET(request: Request) {
   if (g.downloadPinHash && !(await downloadsUnlocked(g.id))) return deny(403, "Enter the download PIN first.");
   const ip = clientIpHash(request.headers);
   const zip = u.searchParams.get("zip") === "1";
+  const cap = a.security.maxDownloadsPerDay;
+  if (cap && (await downloadsInLastDay(db, g.id, a.viewer)) >= cap)
+    return deny(429, `The daily download limit (${cap}) has been reached. Try again tomorrow.`);
   if (!(await hitRateLimit(db, `dl:${zip ? "zip" : "one"}:${ip}`, zip ? 12 : 120, 600)).allowed)
     return deny(429, "Too many downloads. Wait a few minutes.");
   const contents = await gal.galleryContents(db, g.id);

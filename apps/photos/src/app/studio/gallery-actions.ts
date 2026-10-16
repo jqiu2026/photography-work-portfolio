@@ -7,6 +7,7 @@ import { StudioError, createGallery } from "@jerryqiu/db/studio";
 import { sendTemplate } from "@jerryqiu/email";
 import { getSite } from "@jerryqiu/sites";
 import { eq } from "drizzle-orm";
+import { clearLocks, saveSecurity, saveStyle } from "@jerryqiu/db/gallery-security";
 import { z } from "zod";
 import { emailGalleryLink, publishAndNotify } from "@/lib/gallery-publish";
 import { studio } from "@/lib/studio-run";
@@ -385,5 +386,98 @@ export async function bulkPhotosAction(input: {
       input.op
     ];
     return { message: `${verb} ${ids.length} photograph${ids.length === 1 ? "" : "s"}` };
+  });
+}
+
+const num = (v: string | number | undefined) => (v === undefined || v === "" ? undefined : Number(v));
+
+/** Protection settings for one gallery (what the page guard does and how strictly). Validated by the schema in the db package. */
+export async function saveSecurityAction(input: {
+  galleryId: string;
+  level: string;
+  onTrigger: string;
+  strikes: string;
+  lockMinutes: string;
+  blurOnLeave: boolean;
+  blockSelection: boolean;
+  blockContextMenu: boolean;
+  blockPrint: boolean;
+  detectDevtools: boolean;
+  holdToView: boolean;
+  viewerOverlay: boolean;
+  overlayOpacity: string;
+  idleMinutes: string;
+  maxDownloadsPerDay: string;
+  notifyOwner: boolean;
+}) {
+  return studio(async ({ db }) => {
+    await saveSecurity(db, gid(input.galleryId), {
+      level: input.level as "off" | "light" | "strict",
+      onTrigger: input.onTrigger as "log" | "warn" | "lock",
+      strikes: num(input.strikes),
+      lockMinutes: num(input.lockMinutes),
+      blurOnLeave: input.blurOnLeave,
+      blockSelection: input.blockSelection,
+      blockContextMenu: input.blockContextMenu,
+      blockPrint: input.blockPrint,
+      detectDevtools: input.detectDevtools,
+      holdToView: input.holdToView,
+      viewerOverlay: input.viewerOverlay,
+      overlayOpacity: num(input.overlayOpacity),
+      idleMinutes: num(input.idleMinutes) ?? 0,
+      maxDownloadsPerDay: num(input.maxDownloadsPerDay) ?? 0,
+      notifyOwner: input.notifyOwner,
+    });
+    return {
+      message: "Security settings saved",
+      audit: {
+        action: "studio.gallery.security",
+        entity: "studio_gallery",
+        entityId: input.galleryId,
+        summary: "Changed gallery security settings",
+      },
+    };
+  });
+}
+
+export async function saveStyleAction(input: {
+  galleryId: string;
+  font: string;
+  gap: string;
+  corners: string;
+  showFilenames: boolean;
+  heroCover: boolean;
+  brandLine: string;
+  footer: string;
+  background: string;
+}) {
+  return studio(async ({ db }) => {
+    await saveStyle(db, gid(input.galleryId), {
+      font: input.font as "sans" | "serif" | "mono",
+      gap: input.gap as "tight" | "normal" | "wide",
+      corners: input.corners as "square" | "soft" | "round",
+      showFilenames: input.showFilenames,
+      heroCover: input.heroCover,
+      brandLine: input.brandLine,
+      footer: input.footer,
+      background: input.background.trim(),
+    });
+    return { message: "Look saved" };
+  });
+}
+
+/** Lets locked-out viewers back in straight away. */
+export async function clearLocksAction(galleryId: string) {
+  return studio(async ({ db }) => {
+    const n = await clearLocks(db, gid(galleryId));
+    return {
+      message: n ? "Let them back in" : "Nobody is locked out",
+      audit: {
+        action: "studio.gallery.unlock",
+        entity: "studio_gallery",
+        entityId: galleryId,
+        summary: "Cleared gallery lock-outs",
+      },
+    };
   });
 }

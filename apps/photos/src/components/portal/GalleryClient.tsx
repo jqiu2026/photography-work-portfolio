@@ -33,7 +33,11 @@ export function GalleryClient({ data }: { data: ClientGalleryData }) {
   const shown = items.filter((i) => (!album || i.albumId === album) && (!onlyFav || i.favourite));
   const chosen = items.filter((i) => i.favourite).length;
   const gid = data.galleryId;
-  const style = data.accent ? ({ ["--hl-accent" as string]: data.accent } as React.CSSProperties) : undefined;
+  const style = {
+    ...(data.accent ? { ["--hl-accent" as string]: data.accent } : {}),
+    ...(data.style.background ? { ["--gd-bg" as string]: data.style.background } : {}),
+  } as React.CSSProperties;
+  const heroItem = data.items.find((i) => i.mediaId === data.coverMediaId) ?? data.items[0];
   const upd = (id: string, p: Partial<Item>) =>
     setItems((all) => all.map((i) => (i.mediaId === id ? { ...i, ...p } : i)));
   const say = (ok: boolean, text: string) => setMsg({ ok, text });
@@ -114,7 +118,29 @@ export function GalleryClient({ data }: { data: ClientGalleryData }) {
       data-gallery-theme={data.theme}
       data-gallery-layout={data.layout}
       data-gallery-density={data.density}
+      data-gallery-font={data.style.font}
+      data-gallery-gap={data.style.gap}
+      data-gallery-corners={data.style.corners}
+      data-gallery-names={data.style.showFilenames || undefined}
     >
+      {data.style.heroCover && heroItem ? (
+        <div className="gd-hero">
+          <ProtectedImage
+            asset={{
+              id: heroItem.mediaId,
+              width: heroItem.width,
+              height: heroItem.height,
+              color: heroItem.color ?? undefined,
+              blur: heroItem.blur ?? undefined,
+              files: [],
+            }}
+            alt=""
+            fill
+            fit="cover"
+          />
+        </div>
+      ) : null}
+      {data.style.brandLine ? <p className="gd-brand">{data.style.brandLine}</p> : null}
       <h1 className="st-title">{data.title}</h1>
       {data.welcome ? <p className="st-note">{data.welcome}</p> : null}
       {data.state === "expiring" ? (
@@ -177,6 +203,7 @@ export function GalleryClient({ data }: { data: ClientGalleryData }) {
                 alt={i.filename}
               />
             </button>
+            {data.style.showFilenames ? <small className="gd-cap">{i.filename}</small> : null}
             <div className="st-tools">
               <button
                 type="button"
@@ -335,6 +362,7 @@ export function GalleryClient({ data }: { data: ClientGalleryData }) {
           {msg.text}
         </p>
       ) : null}
+      {data.style.footer ? <p className="gd-footer">{data.style.footer}</p> : null}
 
       {open !== null && shown[open] ? <Slideshow items={shown} start={open} onClose={() => setOpen(null)} /> : null}
     </div>

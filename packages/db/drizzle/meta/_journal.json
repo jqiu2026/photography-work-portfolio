@@ -99,6 +99,13 @@
       "when": 1792169170562,
       "tag": "0013_gallery_design",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1792171818790,
+      "tag": "0014_gallery_security",
+      "breakpoints": true
     }
   ]
 }

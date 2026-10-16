@@ -21,6 +21,7 @@
     "./billing": "./src/billing.ts",
     "./portal": "./src/portal.ts",
     "./galleries": "./src/galleries.ts",
+    "./gallery-security": "./src/gallery-security.ts",
     "./gallery-expiry": "./src/gallery-expiry.ts",
     "./automation": "./src/automation.ts"
   },

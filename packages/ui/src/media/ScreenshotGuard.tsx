@@ -1,9 +1,20 @@
 "use client";
 
 import { type ReactNode, createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
-import { guardCopy, type GuardLevel, detectTrigger } from "./guard";
+import {
+  type GuardEventKind,
+  type GuardLevel,
+  type GuardOptions,
+  detectTrigger,
+  devtoolsDocked,
+  guardCopy,
+} from "./guard";
 
-type Ctx = { level: GuardLevel; setScopeLevel: (l: GuardLevel | null) => void; claim: () => () => void };
+type Ctx = {
+  level: GuardLevel;
+  setScopeLevel: (l: GuardLevel | null, options?: GuardOptions) => void;
+  claim: () => () => void;
+};
 const GuardContext = createContext<Ctx>({ level: "off", setScopeLevel: () => {}, claim: () => () => {} });
 
 /** The protection level currently in force (so images know whether to use the strict path). */
@@ -18,11 +29,13 @@ export function useGuardClaim() {
   useEffect(() => claim(), [claim]);
 }
 
-/** Put inside a page to raise or lower the level for just that page (e.g. a strict gallery). */
-export function GuardScope({ level }: { level: GuardLevel }) {
+/** Put inside a page to raise or lower the level (and tune the options) for just that page, e.g. a strict gallery. */
+export function GuardScope({ level, options }: { level: GuardLevel; options?: GuardOptions }) {
   const { setScopeLevel } = useContext(GuardContext);
+  const opts = useRef(options);
+  opts.current = options;
   useEffect(() => {
-    setScopeLevel(level);
+    setScopeLevel(level, opts.current);
     return () => setScopeLevel(null);
   }, [level, setScopeLevel]);
   return null;
@@ -40,7 +53,12 @@ const PROTECTED = ".hl-img, [data-protected]";
  * recorders, and it is switched off by disabling JavaScript. Alt text and keyboard use are never affected.
  */
 export function ScreenshotGuard({ level = "light", children }: { level?: GuardLevel; children: ReactNode }) {
-  const [scope, setScope] = useState<GuardLevel | null>(null);
+  const [scope, setScopeState] = useState<GuardLevel | null>(null);
+  const optsRef = useRef<GuardOptions>({});
+  const setScope = useCallback((l: GuardLevel | null, options?: GuardOptions) => {
+    optsRef.current = l === null ? {} : (options ?? {});
+    setScopeState(l);
+  }, []);
   const [claims, setClaims] = useState(0);
   const effective = scope ?? (claims > 0 ? "strict" : level);
   const claim = useCallback(() => {
@@ -57,8 +75,14 @@ export function ScreenshotGuard({ level = "light", children }: { level?: GuardLe
   }, []);
 
   const trigger = useCallback(
-    (combo: string) => {
+    (combo: string, kind: GuardEventKind = "screenshot") => {
+      optsRef.current.onEvent?.({ kind, combo });
       hide(true);
+      if (optsRef.current.showDialog === false) {
+        clearTimeout(timer.current);
+        timer.current = setTimeout(() => hide(false), 1500);
+        return;
+      }
       dialogOpen.current = true;
       setOpen(combo);
       clearTimeout(timer.current);
@@ -85,7 +109,10 @@ export function ScreenshotGuard({ level = "light", children }: { level?: GuardLe
       return;
     }
     root.setAttribute("data-guard", effective);
+    const o = optsRef.current;
+    if (effective === "strict" && o.blockSelection !== false) root.setAttribute("data-guard-noselect", "");
     const onMenu = (e: Event) => {
+      if (o.blockContextMenu === false && effective === "strict") return;
       if ((e.target as Element | null)?.closest?.(PROTECTED)) e.preventDefault();
     };
     document.addEventListener("contextmenu", onMenu);
@@ -100,22 +127,66 @@ export function ScreenshotGuard({ level = "light", children }: { level?: GuardLe
     const onKey = (e: KeyboardEvent) => {
       const t = detectTrigger(e);
       if (!t) return;
-      if (t.kind === "save" || t.kind === "print") e.preventDefault();
-      trigger(t.combo);
+      if ((t.kind === "save" || t.kind === "print") && o.blockPrint !== false) e.preventDefault();
+      trigger(t.combo, t.kind);
     };
     const onKeyUp = (e: KeyboardEvent) => {
       if (e.key === "PrintScreen") {
         navigator.clipboard?.writeText("").catch(() => {});
-        trigger("PrintScreen");
+        trigger("PrintScreen", "screenshot");
       }
     };
     let restore: ReturnType<typeof setTimeout> | undefined;
-    const onLeave = () => hide(true);
+    const onLeave = () => o.blurOnLeave !== false && hide(true);
     const onReturn = () => {
       clearTimeout(restore);
       restore = setTimeout(() => dialogOpen.current || hide(false), 300);
     };
     const onVisibility = () => (document.visibilityState === "hidden" ? onLeave() : onReturn());
+    // a page asking to record or share the screen is a capture attempt (it cannot see other tabs or other apps)
+    const media = navigator.mediaDevices as
+      | (MediaDevices & { getDisplayMedia?: MediaDevices["getDisplayMedia"] })
+      | undefined;
+    const originalCapture = media?.getDisplayMedia?.bind(media);
+    if (media && originalCapture) {
+      media.getDisplayMedia = () => {
+        trigger("Screen capture API", "capture");
+        return Promise.reject(new DOMException("Screen capture is not allowed on this page.", "NotAllowedError"));
+      };
+    }
+    // docked devtools (best effort, off unless asked for): once per time it opens
+    let devtoolsOpen = false;
+    const devtoolsTimer = o.detectDevtools
+      ? setInterval(() => {
+          const docked = devtoolsDocked(window);
+          if (docked && !devtoolsOpen) trigger("DevTools open", "devtools-open");
+          devtoolsOpen = docked;
+        }, 1000)
+      : undefined;
+    // hold to view: media is blurred until the pointer (or Shift) is held down
+    let releaseHold: (() => void) | undefined;
+    if (o.holdToView) {
+      root.classList.add("hl-guard-conceal");
+      const reveal = () => root.classList.add("hl-guard-reveal");
+      const conceal = () => root.classList.remove("hl-guard-reveal");
+      const keyDown = (e: KeyboardEvent) => e.key === "Shift" && reveal();
+      const keyUp = (e: KeyboardEvent) => e.key === "Shift" && conceal();
+      document.addEventListener("pointerdown", reveal);
+      document.addEventListener("pointerup", conceal);
+      document.addEventListener("pointercancel", conceal);
+      document.addEventListener("keydown", keyDown);
+      document.addEventListener("keyup", keyUp);
+      window.addEventListener("blur", conceal);
+      releaseHold = () => {
+        document.removeEventListener("pointerdown", reveal);
+        document.removeEventListener("pointerup", conceal);
+        document.removeEventListener("pointercancel", conceal);
+        document.removeEventListener("keydown", keyDown);
+        document.removeEventListener("keyup", keyUp);
+        window.removeEventListener("blur", conceal);
+        root.classList.remove("hl-guard-conceal", "hl-guard-reveal");
+      };
+    }
     window.addEventListener("keydown", onKey, true);
     window.addEventListener("keyup", onKeyUp, true);
     window.addEventListener("blur", onLeave);
@@ -130,8 +201,12 @@ export function ScreenshotGuard({ level = "light", children }: { level?: GuardLe
       window.removeEventListener("focus", onReturn);
       document.removeEventListener("visibilitychange", onVisibility);
       clearTimeout(restore);
+      clearInterval(devtoolsTimer);
+      if (media && originalCapture) media.getDisplayMedia = originalCapture;
+      releaseHold?.();
       hide(false);
       root.removeAttribute("data-guard");
+      root.removeAttribute("data-guard-noselect");
     };
   }, [effective, hide, trigger]);
 
@@ -139,12 +214,12 @@ export function ScreenshotGuard({ level = "light", children }: { level?: GuardLe
     if (open) ok.current?.focus();
   }, [open]);
 
-  const ctx = useMemo(() => ({ level: effective, setScopeLevel: setScope, claim }), [effective, claim]);
+  const ctx = useMemo(() => ({ level: effective, setScopeLevel: setScope, claim }), [effective, claim, setScope]);
   return (
     <GuardContext.Provider value={ctx}>
       {children}
       {open ? (
-        <div className="hl-guard" role="presentation">
+        <div className="hl-guard" role="presentation" data-guard-dialog>
           <div
             className="hl-guard__box"
             role="alertdialog"

@@ -12,7 +12,7 @@ const slow = expect.configure({ timeout: 25_000 });
 let pass = "";
 let url = "";
 const jpeg = (color: string) =>
-  sharp({ create: { width: 1600, height: 1000, channels: 3, background: color } })
+  sharp({ create: { width: 1601, height: 1000, channels: 3, background: color } })
     .jpeg()
     .toBuffer();
 const localStamp = (d: Date) => {

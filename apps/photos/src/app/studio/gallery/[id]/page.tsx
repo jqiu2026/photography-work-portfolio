@@ -1,5 +1,6 @@
 import { getDb, schema } from "@jerryqiu/db";
 import * as gal from "@jerryqiu/db/galleries";
+import { lockedUntil, readSecurity, readStyle, securityLog } from "@jerryqiu/db/gallery-security";
 import { and, eq, isNull } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import { requirePageUser } from "@/auth";
@@ -23,14 +24,16 @@ export default async function GalleryPage({ params }: { params: Promise<{ id: st
     .where(and(eq(schema.studioGalleries.id, id), isNull(schema.studioGalleries.deletedAt)));
   if (!row) notFound();
   const g0 = row.g;
-  const [contents, albums, proofs, downloads, views, stats] = await Promise.all([
+  const [contents, albums, proofs, downloads, views, stats, events] = await Promise.all([
     gal.galleryContents(db, id, { includeHidden: true }),
     gal.listAlbums(db, id),
     gal.proofSummary(db, id),
     gal.downloadLog(db, id, 60),
     gal.viewSummary(db, id),
     gal.galleryStats(db, [id]),
+    securityLog(db, id, 60),
   ]);
+  void lockedUntil;
   const [owner] = await db
     .select({ client: schema.studioClients })
     .from(schema.studioJobs)
@@ -68,6 +71,17 @@ export default async function GalleryPage({ params }: { params: Promise<{ id: st
               file: name.get(v.mediaId) ?? "photograph",
             })),
           },
+          security: readSecurity(g.security),
+          style: readStyle(g.style),
+          lockedNow: events.some((e) => e.kind === "lock" && e.until && e.until > new Date()),
+          securityEvents: events.map((e) => ({
+            id: e.id,
+            kind: e.kind,
+            combo: e.combo,
+            action: e.action,
+            viewer: e.viewer.slice(-8),
+            at: when(e.at) ?? "",
+          })),
           welcome: g.welcome ?? "",
           accent: g.accent ?? "",
           downloadPolicy: g.downloadPolicy,

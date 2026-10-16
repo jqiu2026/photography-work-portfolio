@@ -1,10 +1,11 @@
-import { GuardScope } from "@halation/ui/media";
+import { createHash } from "node:crypto";
 import { getDb } from "@jerryqiu/db";
 import { redirect } from "next/navigation";
 import { GalleryClient } from "@/components/portal/GalleryClient";
 import { LeaveButton } from "@/components/studio/ClientForms";
 import { Shell } from "@/components/Shell";
-import { galleryAccess } from "@/lib/client-gallery";
+import { GalleryGuard } from "@/components/portal/GalleryGuard";
+import { currentLock, galleryAccess } from "@/lib/client-gallery";
 import { loadClientGallery } from "@/lib/client-gallery-data";
 import "@/components/studio/studio.css";
 
@@ -15,11 +16,15 @@ export const metadata = { title: "Your gallery", robots: { index: false, follow:
 export default async function ClientGallery() {
   const db = getDb();
   const access = await galleryAccess();
-  if (!db || !access || access.state === "draft") redirect("/client");
+  if (!db || !access || access.state === "draft") redirect((await currentLock()) ? "/client?locked=1" : "/client");
   const data = await loadClientGallery(db, access);
   return (
     <Shell cinema>
-      <GuardScope level="strict" />
+      <GalleryGuard
+        security={access.security}
+        galleryId={data.galleryId}
+        code={`${data.title.slice(0, 12)} · ${createHash("sha256").update(access.viewer).digest("hex").slice(0, 8)}`}
+      />
       <div className="st-wrap">
         <p className="hl-eyebrow">Your gallery</p>
         <GalleryClient data={data} />

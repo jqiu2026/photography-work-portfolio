@@ -18,8 +18,9 @@ import { ingestImage } from "../src";
 const url = process.env.DATABASE_URL ?? "";
 if (!url || /neon\.tech|neon\.build/.test(url) || process.env.NODE_ENV === "production")
   throw new Error("The demo seed only runs against a local development database.");
-const db = getDb();
-if (!db) throw new Error("DATABASE_URL is not set");
+const found = getDb();
+if (!found) throw new Error("DATABASE_URL is not set");
+const db = found;
 
 const day = (n: number) => new Date(Date.now() + n * 86_400_000);
 const ymd = (n: number) => day(n).toISOString().slice(0, 10);

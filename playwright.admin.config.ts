@@ -55,6 +55,8 @@ export default defineConfig({
         NEXT_DIST_DIR: ".next-e2e",
         STRIPE_WEBHOOK_SECRET: "whsec_e2e_secret",
         CRON_SECRET: "e2e-cron-secret-0123456789",
+        // the specs open many galleries from one address; production keeps the default of 8 tries per 10 minutes
+        PORTAL_PASSCODE_LIMIT: "500",
       },
       reuseExistingServer: false,
       timeout: 180_000,

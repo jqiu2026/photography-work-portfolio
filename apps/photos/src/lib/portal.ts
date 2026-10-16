@@ -1,3 +1,4 @@
+import { lockedUntil } from "@jerryqiu/db/gallery-security";
 import "server-only";
 import { createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 import { can } from "@jerryqiu/auth";
@@ -99,7 +100,11 @@ export async function clientGalleryViewer(mediaId: string): Promise<string | nul
         ),
       )
       .limit(1);
-    if (row) return viewerId(session);
+    if (row) {
+      // a viewer locked out for capture attempts gets no more photographs
+      const locked = await lockedUntil(db, session.g, { viewer: viewerId(session), ipHash: await requestIpHash() });
+      return locked ? null : viewerId(session);
+    }
   }
   const me = await accountSession();
   if (!me) return staffViewer(mediaId);

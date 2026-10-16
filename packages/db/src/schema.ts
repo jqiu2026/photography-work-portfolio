@@ -482,6 +482,9 @@ export const studioGalleries = pgTable(
     publishAt: timestamp("publish_at", { withTimezone: true }),
     /** Private notes for the studio, never shown to the client. */
     notes: text("notes"),
+    /** Protection settings and look (validated in galleries.ts; empty = defaults). */
+    security: jsonb("security").$type<Record<string, unknown>>().notNull().default({}),
+    style: jsonb("style").$type<Record<string, unknown>>().notNull().default({}),
     ...stamps,
   },
   (t) => [index("studio_galleries_job_idx").on(t.jobId)],
@@ -1234,4 +1237,26 @@ export const studioNotifications = pgTable(
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [index("studio_notifications_created_idx").on(t.createdAt)],
+);
+
+/** What the page guard noticed while a client had a gallery open (screenshot keys, save, print, devtools, capture attempts), and the locks that followed. */
+export const studioSecurityEvents = pgTable(
+  "studio_security_events",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    galleryId: uuid("gallery_id")
+      .notNull()
+      .references(() => studioGalleries.id, { onDelete: "cascade" }),
+    viewer: text("viewer").notNull(),
+    /** screenshot | save | print | source | devtools | capture | devtools-open | lock | idle */
+    kind: text("kind").notNull(),
+    combo: text("combo"),
+    /** What the studio did about it: logged | warned | locked */
+    action: text("action").notNull().default("logged"),
+    ipHash: text("ip_hash"),
+    /** Only on a lock: the gallery is closed to this viewer (and address) until then. */
+    until: timestamp("until", { withTimezone: true }),
+    at: timestamp("at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("studio_security_events_gallery_idx").on(t.galleryId, t.at)],
 );

@@ -1,12 +1,14 @@
 "use client";
 
 import { ProtectedImage } from "@halation/ui/media";
+import type { GallerySecurity, GalleryStyle } from "@jerryqiu/db/gallery-security";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   archiveGalleryAction,
   bulkPhotosAction,
+  clearLocksAction,
   createAlbumAction,
   deleteAlbumAction,
   deleteGalleryAction,
@@ -19,6 +21,8 @@ import {
   reopenSelectionAction,
   replyCommentAction,
   saveGallerySettingsAction,
+  saveSecurityAction,
+  saveStyleAction,
   sendExtensionInvoiceAction,
   sendGalleryLinkAction,
   setCoverAction,
@@ -60,6 +64,10 @@ export type GalleryManagerData = {
   expiresAt: string | null;
   publishAt: string;
   notes: string;
+  security: GallerySecurity;
+  style: GalleryStyle;
+  lockedNow: boolean;
+  securityEvents: { id: string; kind: string; combo: string | null; action: string; viewer: string; at: string }[];
   layout: string;
   theme: string;
   density: string;
@@ -90,6 +98,7 @@ const TABS = [
   ["photos", "Photos"],
   ["share", "Share"],
   ["design", "Design"],
+  ["security", "Security"],
   ["proofing", "Proofing"],
   ["activity", "Activity"],
   ["settings", "Settings"],
@@ -186,6 +195,32 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
         notes: f.notes,
       }).then((r) => (r.ok && message ? { ...r, message } : r)),
     );
+  const [sec, setSec] = useState(data.security);
+  const updSec = <K extends keyof GallerySecurity>(k: K, v: GallerySecurity[K]) => setSec((x) => ({ ...x, [k]: v }));
+  const [sty, setSty] = useState(data.style);
+  const updSty = <K extends keyof GalleryStyle>(k: K, v: GalleryStyle[K]) => setSty((x) => ({ ...x, [k]: v }));
+  const saveSec = () =>
+    run(() =>
+      saveSecurityAction({
+        galleryId: gid,
+        level: sec.level,
+        onTrigger: sec.onTrigger,
+        strikes: String(sec.strikes),
+        lockMinutes: String(sec.lockMinutes),
+        blurOnLeave: sec.blurOnLeave,
+        blockSelection: sec.blockSelection,
+        blockContextMenu: sec.blockContextMenu,
+        blockPrint: sec.blockPrint,
+        detectDevtools: sec.detectDevtools,
+        holdToView: sec.holdToView,
+        viewerOverlay: sec.viewerOverlay,
+        overlayOpacity: String(sec.overlayOpacity),
+        idleMinutes: String(sec.idleMinutes),
+        maxDownloadsPerDay: String(sec.maxDownloadsPerDay),
+        notifyOwner: sec.notifyOwner,
+      }),
+    );
+  const saveLook = () => run(() => saveStyleAction({ galleryId: gid, ...sty }));
   const [misc, setMisc] = useState<Record<string, string>>({});
   const m = (k: string) => ({
     value: misc[k] ?? "",
@@ -861,6 +896,267 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
               Save design
             </button>
           </div>
+          <div className="gm-block">
+            <h2>Look</h2>
+            <div className="gm-fields">
+              <label>
+                Typeface
+                <select value={sty.font} onChange={(e) => updSty("font", e.target.value as GalleryStyle["font"])}>
+                  <option value="sans">Sans</option>
+                  <option value="serif">Serif</option>
+                  <option value="mono">Mono</option>
+                </select>
+              </label>
+              <label>
+                Spacing
+                <select value={sty.gap} onChange={(e) => updSty("gap", e.target.value as GalleryStyle["gap"])}>
+                  <option value="tight">Tight</option>
+                  <option value="normal">Normal</option>
+                  <option value="wide">Wide</option>
+                </select>
+              </label>
+              <label>
+                Corners
+                <select
+                  value={sty.corners}
+                  onChange={(e) => updSty("corners", e.target.value as GalleryStyle["corners"])}
+                >
+                  <option value="square">Square</option>
+                  <option value="soft">Soft</option>
+                  <option value="round">Round</option>
+                </select>
+              </label>
+              <label>
+                Background colour (optional)
+                <span className="gm-colour">
+                  <input
+                    type="color"
+                    aria-label="Pick background colour"
+                    value={/^#[0-9a-f]{6}$/i.test(sty.background) ? sty.background : "#000000"}
+                    onChange={(e) => updSty("background", e.target.value)}
+                  />
+                  <input
+                    aria-label="Background colour (hex, optional)"
+                    placeholder="#101010"
+                    value={sty.background}
+                    onChange={(e) => updSty("background", e.target.value)}
+                  />
+                </span>
+              </label>
+              <label className="gm-check">
+                <input
+                  type="checkbox"
+                  checked={sty.heroCover}
+                  onChange={(e) => updSty("heroCover", e.target.checked)}
+                />{" "}
+                Show the cover large above the photographs
+              </label>
+              <label className="gm-check">
+                <input
+                  type="checkbox"
+                  checked={sty.showFilenames}
+                  onChange={(e) => updSty("showFilenames", e.target.checked)}
+                />{" "}
+                Show filenames under photographs
+              </label>
+              <label className="gm-wide">
+                Line above the title (for example your studio name)
+                <input maxLength={60} value={sty.brandLine} onChange={(e) => updSty("brandLine", e.target.value)} />
+              </label>
+              <label className="gm-wide">
+                Closing note under the photographs
+                <textarea
+                  rows={2}
+                  maxLength={300}
+                  value={sty.footer}
+                  onChange={(e) => updSty("footer", e.target.value)}
+                />
+              </label>
+            </div>
+            <button type="button" className="st-btn" disabled={pending} onClick={saveLook}>
+              Save look
+            </button>
+          </div>
+        </section>
+
+        {/* ---------------- Security ---------------- */}
+        <section
+          id="gm-security"
+          role="tabpanel"
+          aria-labelledby="gm-tab-security"
+          hidden={tab !== "security"}
+          className="gm-panel"
+        >
+          <p className="st-note">
+            These settings deter and trace; they cannot stop everything. A web page can see screenshot, save and print
+            keys, a screen-capture request from the page itself, and when the window loses focus. It cannot see a phone
+            camera, another device or most recording tools. What it can do is hide the photographs, warn, log, and lock
+            the viewer out.
+          </p>
+          <div className="gm-block">
+            <h2>Protection</h2>
+            <div className="gm-fields">
+              <label>
+                Level
+                <select value={sec.level} onChange={(e) => updSec("level", e.target.value as GallerySecurity["level"])}>
+                  <option value="off">Off</option>
+                  <option value="light">Light: no right-click or drag on photographs</option>
+                  <option value="strict">Strict: also watches for screenshot, save, print and devtools keys</option>
+                </select>
+              </label>
+              <label>
+                When a key or capture attempt is seen
+                <select
+                  value={sec.onTrigger}
+                  onChange={(e) => updSec("onTrigger", e.target.value as GallerySecurity["onTrigger"])}
+                  disabled={sec.level !== "strict"}
+                >
+                  <option value="log">Log it only (hide photographs briefly)</option>
+                  <option value="warn">Warn the viewer</option>
+                  <option value="lock">Warn, then lock them out after repeated attempts</option>
+                </select>
+              </label>
+              {sec.onTrigger === "lock" ? (
+                <>
+                  <label>
+                    Attempts before a lock
+                    <input
+                      inputMode="numeric"
+                      value={sec.strikes}
+                      onChange={(e) => updSec("strikes", Number(e.target.value) || 1)}
+                    />
+                  </label>
+                  <label>
+                    Lock for (minutes)
+                    <input
+                      inputMode="numeric"
+                      value={sec.lockMinutes}
+                      onChange={(e) => updSec("lockMinutes", Number(e.target.value) || 1)}
+                    />
+                  </label>
+                </>
+              ) : null}
+            </div>
+          </div>
+          <div className="gm-block">
+            <h2>What the page does</h2>
+            <div className="gm-fields">
+              <label className="gm-check">
+                <input
+                  type="checkbox"
+                  checked={sec.holdToView}
+                  onChange={(e) => updSec("holdToView", e.target.checked)}
+                />{" "}
+                Photographs stay blurred until the viewer presses and holds (or holds Shift)
+              </label>
+              <label className="gm-check">
+                <input
+                  type="checkbox"
+                  checked={sec.blurOnLeave}
+                  onChange={(e) => updSec("blurOnLeave", e.target.checked)}
+                />{" "}
+                Hide photographs when the window or tab loses focus
+              </label>
+              <label className="gm-check">
+                <input
+                  type="checkbox"
+                  checked={sec.blockSelection}
+                  onChange={(e) => updSec("blockSelection", e.target.checked)}
+                />{" "}
+                No text selection
+              </label>
+              <label className="gm-check">
+                <input
+                  type="checkbox"
+                  checked={sec.blockContextMenu}
+                  onChange={(e) => updSec("blockContextMenu", e.target.checked)}
+                />{" "}
+                No right-click menu or dragging photographs
+              </label>
+              <label className="gm-check">
+                <input
+                  type="checkbox"
+                  checked={sec.blockPrint}
+                  onChange={(e) => updSec("blockPrint", e.target.checked)}
+                />{" "}
+                Cancel Save and Print shortcuts
+              </label>
+              <label className="gm-check">
+                <input
+                  type="checkbox"
+                  checked={sec.detectDevtools}
+                  onChange={(e) => updSec("detectDevtools", e.target.checked)}
+                />{" "}
+                Treat a docked developer-tools panel as an attempt (can misfire)
+              </label>
+              <label className="gm-check">
+                <input
+                  type="checkbox"
+                  checked={sec.viewerOverlay}
+                  onChange={(e) => updSec("viewerOverlay", e.target.checked)}
+                />{" "}
+                Tile a faint viewer code over the page (traces a photographed screen)
+              </label>
+              {sec.viewerOverlay ? (
+                <label>
+                  Overlay strength
+                  <input
+                    type="range"
+                    min={0.04}
+                    max={0.4}
+                    step={0.02}
+                    value={sec.overlayOpacity}
+                    onChange={(e) => updSec("overlayOpacity", Number(e.target.value))}
+                    aria-label="Overlay strength"
+                  />
+                </label>
+              ) : null}
+            </div>
+          </div>
+          <div className="gm-block">
+            <h2>Sessions and downloads</h2>
+            <div className="gm-fields">
+              <label>
+                Close after idle minutes (0 = never)
+                <input
+                  inputMode="numeric"
+                  value={sec.idleMinutes}
+                  onChange={(e) => updSec("idleMinutes", Number(e.target.value) || 0)}
+                />
+              </label>
+              <label>
+                Most downloads per viewer per day (0 = unlimited)
+                <input
+                  inputMode="numeric"
+                  value={sec.maxDownloadsPerDay}
+                  onChange={(e) => updSec("maxDownloadsPerDay", Number(e.target.value) || 0)}
+                />
+              </label>
+              <label className="gm-check">
+                <input
+                  type="checkbox"
+                  checked={sec.notifyOwner}
+                  onChange={(e) => updSec("notifyOwner", e.target.checked)}
+                />{" "}
+                Tell me in the activity feed (first attempt and every lock)
+              </label>
+            </div>
+            <div className="gm-row">
+              <button type="button" className="st-btn" disabled={pending} onClick={saveSec}>
+                Save security
+              </button>
+              {data.lockedNow ? (
+                <button
+                  type="button"
+                  className="st-btn st-btn--ghost"
+                  disabled={pending}
+                  onClick={() => run(() => clearLocksAction(gid))}
+                >
+                  Let locked-out viewers back in
+                </button>
+              ) : null}
+            </div>
+          </div>
         </section>
 
         {/* ---------------- Proofing ---------------- */}
@@ -992,6 +1288,26 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
                 </li>
               ))}
               {!data.views.recent.length ? <li className="st-note">Nobody has opened a photograph yet.</li> : null}
+            </ul>
+          </div>
+          <div className="gm-block">
+            <h2>Capture attempts</h2>
+            <ul className="gm-list" aria-label="Capture attempts">
+              {data.securityEvents.map((e) => (
+                <li key={e.id}>
+                  <span>
+                    {e.kind === "lock"
+                      ? "Locked out"
+                      : e.kind === "idle"
+                        ? "Closed after idle time"
+                        : `${e.kind}${e.combo ? ` · ${e.combo}` : ""}`}
+                    <small>
+                      viewer …{e.viewer} · {e.action} · {e.at}
+                    </small>
+                  </span>
+                </li>
+              ))}
+              {!data.securityEvents.length ? <li className="st-note">No attempts logged.</li> : null}
             </ul>
           </div>
           <div className="gm-block">

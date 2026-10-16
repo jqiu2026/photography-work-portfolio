@@ -1,6 +1,7 @@
 import "server-only";
 import { type Database, schema } from "@jerryqiu/db";
 import * as gal from "@jerryqiu/db/galleries";
+import { type GalleryStyle, readStyle } from "@jerryqiu/db/gallery-security";
 import { eq } from "drizzle-orm";
 import type { GalleryAccess } from "@/lib/client-gallery";
 import { downloadsUnlocked } from "@/lib/client-gallery";
@@ -15,6 +16,8 @@ export type ClientGalleryData = {
   layout: string;
   theme: string;
   density: string;
+  style: GalleryStyle;
+  coverMediaId: string | null;
   state: string;
   expiresAt: string | null;
   allowRatings: boolean;
@@ -61,6 +64,8 @@ export async function loadClientGallery(db: Database, a: GalleryAccess): Promise
     layout: g2?.layout ?? "grid",
     theme: g2?.theme ?? "dark",
     density: g2?.density ?? "medium",
+    style: readStyle(g2?.style),
+    coverMediaId: g2?.coverMediaId ?? null,
     state: a.state,
     expiresAt: g.expiresAt?.toISOString().slice(0, 10) ?? null,
     allowRatings: g.allowRatings,

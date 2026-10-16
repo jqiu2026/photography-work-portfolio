@@ -14,6 +14,36 @@ export type KeyLike = {
 };
 
 export type GuardLevel = "off" | "light" | "strict";
+/** What the guard noticed. `capture` is a page calling the screen-capture API; `devtools-open` is the docked-devtools size heuristic. */
+export type GuardEventKind = Trigger["kind"] | "capture" | "devtools-open";
+export type GuardEvent = { kind: GuardEventKind; combo: string };
+/** Per-use settings. Every field defaults to the strict behaviour described on ScreenshotGuard. */
+export type GuardOptions = {
+  /** Hide protected media while the tab or window is not focused (capture tools take focus). Default true. */
+  blurOnLeave?: boolean;
+  /** No text selection on the page (form fields excepted). Default true. */
+  blockSelection?: boolean;
+  /** No right-click menu or drag on protected media. Default true. */
+  blockContextMenu?: boolean;
+  /** Cancel Ctrl/Cmd+S and +P. Default true. */
+  blockPrint?: boolean;
+  /** Treat a docked devtools panel (a large gap between outer and inner window size) as a trigger. Default false: it can misfire. */
+  detectDevtools?: boolean;
+  /** Protected media stays blurred until the pointer or Shift is held down. Default false. */
+  holdToView?: boolean;
+  /** Show the reminder dialog on a trigger. Default true. */
+  showDialog?: boolean;
+  /** Called for every trigger (the app can log it or lock the session). */
+  onEvent?: (e: GuardEvent) => void;
+};
+
+/** True when the window looks like it has a docked devtools panel. Pure, so it is unit-tested. */
+export function devtoolsDocked(
+  w: { outerWidth: number; innerWidth: number; outerHeight: number; innerHeight: number },
+  gap = 200,
+) {
+  return w.outerWidth - w.innerWidth > gap || w.outerHeight - w.innerHeight > gap;
+}
 export type Trigger = { kind: "screenshot" | "save" | "print" | "source" | "devtools"; combo: string };
 
 const digit = (e: KeyLike) => (e.code?.startsWith("Digit") ? e.code.slice(5) : e.key);
@@ -24,10 +54,12 @@ export function detectTrigger(e: KeyLike): Trigger | null {
   const mod = Boolean(e.ctrlKey || e.metaKey);
   if (e.key === "PrintScreen" || e.code === "PrintScreen") return { kind: "screenshot", combo: "PrintScreen" };
   // macOS: Cmd+Shift+3 / 4 / 5 / 6 (the page often sees the keydown before the OS takes over)
-  if (e.metaKey && e.shiftKey && !e.ctrlKey && !e.altKey && ["3", "4", "5", "6"].includes(digit(e)))
+  if (e.metaKey && e.shiftKey && ["3", "4", "5", "6"].includes(digit(e)))
     return { kind: "screenshot", combo: `Cmd+Shift+${digit(e)}` };
   // Windows: Win+Shift+S (Snipping Tool)
   if (e.metaKey && e.shiftKey && letter(e) === "s") return { kind: "screenshot", combo: "Win+Shift+S" };
+  // Firefox built-in screenshot tool
+  if (e.ctrlKey && e.shiftKey && !e.metaKey && letter(e) === "s") return { kind: "screenshot", combo: "Ctrl+Shift+S" };
   if (e.key === "F12") return { kind: "devtools", combo: "F12" };
   // Chrome/Edge/Firefox devtools: Ctrl+Shift+I/J/C ; Safari/Chrome on macOS: Cmd+Opt+I/J/C
   if (e.ctrlKey && e.shiftKey && ["i", "j", "c"].includes(letter(e)))

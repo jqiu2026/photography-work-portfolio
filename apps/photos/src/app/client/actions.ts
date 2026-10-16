@@ -23,7 +23,7 @@ export async function openGalleryAction(_prev: ClientResult | null, formData: Fo
   const passcode = String(formData.get("passcode") ?? "");
   if (!passcode.trim()) return no("Enter your passcode.");
   const ip = await requestIpHash();
-  const rl = await hitRateLimit(db, `portal:${ip}`, 8, 600);
+  const rl = await hitRateLimit(db, `portal:${ip}`, Number(process.env.PORTAL_PASSCODE_LIMIT) || 8, 600);
   if (!rl.allowed) return no("Too many tries. Wait a few minutes and try again.");
   // Expired and archived galleries are found too: the passcode proves who you are, and the gallery page offers an extension.
   const g = await gal.findGalleryByPasscode(db, passcode);
@@ -35,6 +35,12 @@ export async function openGalleryAction(_prev: ClientResult | null, formData: Fo
 export async function leaveGalleryAction() {
   await endPortalSession();
   redirect("/client");
+}
+
+/** Used when the gallery closes itself after idle time. */
+export async function idleLeaveAction() {
+  await endPortalSession();
+  redirect("/client?idle=1");
 }
 
 export async function toggleFavoriteAction(mediaId: string, galleryId?: string): Promise<ClientResult> {

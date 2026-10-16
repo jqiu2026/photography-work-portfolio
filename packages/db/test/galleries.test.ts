@@ -324,3 +324,91 @@ describe("studio gallery tools", () => {
     await expect(gal.deleteGallery(db, gallery.id)).rejects.toThrow(/Unknown gallery/);
   });
 });
+
+import * as sec from "../src/gallery-security";
+
+describe("gallery security", () => {
+  it("reads settings through defaults, rejects bad values, and merges patches", async () => {
+    expect(sec.readSecurity({})).toMatchObject({
+      level: "strict",
+      onTrigger: "warn",
+      strikes: 3,
+      holdToView: false,
+      notifyOwner: true,
+    });
+    expect(sec.readSecurity({ strikes: 999, level: "weird" })).toMatchObject({ strikes: 3, level: "strict" }); // invalid input falls back wholesale
+    expect(sec.readStyle(null)).toMatchObject({ font: "sans", gap: "normal", corners: "soft", background: "" });
+    const c = await st.createClient(db, { name: "Sec Client", email: "sec@example.com" });
+    const j = await st.createJob(db, { clientId: c.id, title: "Sec job" });
+    const g = await st.createGallery(db, { jobId: j.id, passcode: "secure-pass-9" });
+    const saved = await sec.saveSecurity(db, g.id, { onTrigger: "lock", strikes: 2, holdToView: true });
+    expect(saved).toMatchObject({ onTrigger: "lock", strikes: 2, holdToView: true, lockMinutes: 30 });
+    expect(await sec.saveSecurity(db, g.id, { lockMinutes: 60 })).toMatchObject({ strikes: 2, lockMinutes: 60 }); // earlier values kept
+    await expect(sec.saveSecurity(db, g.id, { strikes: 0 })).rejects.toThrow();
+    await expect(sec.saveStyle(db, g.id, { background: "red" })).rejects.toThrow(/hex/);
+    expect(await sec.saveStyle(db, g.id, { font: "serif", footer: "Thanks" })).toMatchObject({
+      font: "serif",
+      footer: "Thanks",
+    });
+  });
+
+  it("counts strikes per viewer, locks at the limit (by viewer or address), tells the owner, and can be cleared", async () => {
+    const c = await st.createClient(db, { name: "Lock Client", email: "lock@example.com" });
+    const j = await st.createJob(db, { clientId: c.id, title: "Lock job" });
+    const g = await st.createGallery(db, { jobId: j.id, passcode: "lock-pass-77" });
+    await sec.saveSecurity(db, g.id, { onTrigger: "lock", strikes: 3, lockMinutes: 10 });
+    const now = new Date("2026-10-20T12:00:00Z");
+    const who = { viewer: "v1", ipHash: "ip1" };
+    const a = await sec.recordSecurityEvent(
+      db,
+      { galleryId: g.id, ...who, kind: "screenshot", combo: "PrintScreen" },
+      now,
+    );
+    expect(a).toMatchObject({ action: "warned", strikes: 1, locked: false });
+    await sec.recordSecurityEvent(db, { galleryId: g.id, ...who, kind: "save", combo: "Ctrl+S" }, now);
+    expect(await sec.lockedUntil(db, g.id, who, now)).toBeNull();
+    const c3 = await sec.recordSecurityEvent(db, { galleryId: g.id, ...who, kind: "devtools", combo: "F12" }, now);
+    expect(c3).toMatchObject({ action: "locked", strikes: 3, locked: true });
+    expect(c3.until?.toISOString()).toBe("2026-10-20T12:10:00.000Z");
+    expect(await sec.lockedUntil(db, g.id, who, now)).not.toBeNull();
+    // the same address with a fresh session is still locked; another address and viewer is not
+    expect(await sec.lockedUntil(db, g.id, { viewer: "v2", ipHash: "ip1" }, now)).not.toBeNull();
+    expect(await sec.lockedUntil(db, g.id, { viewer: "v3", ipHash: "ip3" }, now)).toBeNull();
+    // the lock ends by itself
+    expect(await sec.lockedUntil(db, g.id, who, new Date("2026-10-20T12:11:00Z"))).toBeNull();
+    // strikes are counted over 24 hours only
+    const later = await sec.recordSecurityEvent(
+      db,
+      { galleryId: g.id, viewer: "v1", kind: "screenshot" },
+      new Date("2026-10-22T12:00:00Z"),
+    );
+    expect(later.strikes).toBe(1);
+    // unknown kinds are stored as a screenshot trigger, never as free text
+    const log = await sec.securityLog(db, g.id);
+    expect(log.every((e) => ["screenshot", "save", "devtools", "lock"].includes(e.kind))).toBe(true);
+    // the owner heard about the first trigger and the lock, not every key press
+    const notes = (await db.select().from(schema.studioNotifications)).filter((n) => n.kind === "security");
+    expect(notes.map((n) => n.title).some((t) => t.startsWith("Locked a viewer out"))).toBe(true);
+    expect(notes.filter((n) => n.title.startsWith("Capture attempt")).length).toBeGreaterThanOrEqual(1);
+    expect(await sec.clearLocks(db, g.id, now)).toBe(1);
+    expect(await sec.lockedUntil(db, g.id, who, now)).toBeNull();
+  });
+
+  it("log-only and warn modes never lock; a daily download cap counts the viewer's downloads", async () => {
+    const c = await st.createClient(db, { name: "Warn Client", email: "warn@example.com" });
+    const j = await st.createJob(db, { clientId: c.id, title: "Warn job" });
+    const g = await st.createGallery(db, { jobId: j.id, passcode: "warn-pass-55" });
+    for (let i = 0; i < 6; i++) {
+      const r = await sec.recordSecurityEvent(db, { galleryId: g.id, viewer: "w", kind: "print" });
+      expect(r.locked).toBe(false);
+    }
+    await sec.saveSecurity(db, g.id, { onTrigger: "log" });
+    expect((await sec.recordSecurityEvent(db, { galleryId: g.id, viewer: "w", kind: "print" })).action).toBe("logged");
+    await gal.logDownload(db, { galleryId: g.id, kind: "web", viewer: "w" });
+    await gal.logDownload(db, { galleryId: g.id, kind: "web", viewer: "w" });
+    await gal.logDownload(db, { galleryId: g.id, kind: "web", viewer: "someone-else" });
+    expect(await sec.downloadsInLastDay(db, g.id, "w")).toBe(2);
+    expect(await sec.activeLockCount(db, [g.id])).toBe(0);
+    expect(await sec.activeLockCount(db, [])).toBe(0);
+  });
+});
