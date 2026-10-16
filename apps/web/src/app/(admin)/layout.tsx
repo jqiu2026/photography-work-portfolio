@@ -1,5 +1,6 @@
 import "@halation/ui/styles.css";
-import { ThemeProvider, ThemeScript, ToastProvider, TooltipProvider } from "@halation/ui";
+import { ThemeScript } from "@jerryqiu/sites/theme-script";
+import { ThemeProvider, ToastProvider, TooltipProvider } from "@halation/ui";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { fontVars } from "@/lib/fonts";

@@ -9,6 +9,7 @@
     ".": "./src/index.ts",
     "./profile": "./src/profile.ts",
     "./shell": "./src/SiteShell.tsx",
+    "./theme-script": "./src/ThemeScript.tsx",
     "./contact": "./src/ContactForm.tsx",
     "./index-control": "./src/ShellIndex.tsx",
     "./mock": "./src/MockBanner.tsx"

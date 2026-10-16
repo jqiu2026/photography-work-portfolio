@@ -1,7 +1,8 @@
 import "@halation/ui/styles.css";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { ThemeProvider, ThemeScript } from "@halation/ui";
+import { ThemeScript } from "@jerryqiu/sites/theme-script";
+import { ThemeProvider } from "@halation/ui";
 import { ScreenshotGuard } from "@halation/ui/media";
 import { SmoothScroll } from "@halation/ui/motion";
 import type { Metadata } from "next";

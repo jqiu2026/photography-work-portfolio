@@ -1,5 +1,6 @@
 import "@halation/ui/styles.css";
-import { ThemeProvider, ThemeScript } from "@halation/ui";
+import { ThemeScript } from "@jerryqiu/sites/theme-script";
+import { ThemeProvider } from "@halation/ui";
 import { ScreenshotGuard } from "@halation/ui/media";
 import { SmoothScroll } from "@halation/ui/motion";
 import { Analytics } from "@vercel/analytics/next";
