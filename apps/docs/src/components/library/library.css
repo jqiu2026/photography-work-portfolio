@@ -1,0 +1,225 @@
+/* Library showcase. Hides the docs sidebar and runs full-bleed; re-resolves the font roles on .lib (next/font variables). */
+body:has(.lib) .docs-side {
+  display: none;
+}
+body:has(.lib) .docs-shell {
+  display: block;
+}
+body:has(.lib) .docs-main {
+  max-width: none;
+  padding: 0;
+}
+.lib {
+  --hl-font-display: var(--font-display, "Anybody"), "Arial Narrow", ui-sans-serif, system-ui, sans-serif;
+  --hl-font-sans: var(--font-sans, "Hanken Grotesk"), ui-sans-serif, system-ui, sans-serif;
+  --hl-font-voice: var(--font-voice, "Newsreader"), Georgia, serif;
+  --hl-font-mono: var(--font-mono, "Martian Mono"), ui-monospace, monospace;
+  /* v3 shape: 6 px controls */
+  --hl-radius-sm: 4px;
+  --hl-radius-md: 6px;
+  --hl-radius-lg: 10px;
+  --hl-radius-control: 6px;
+  background: var(--hl-field);
+  color: var(--hl-ink);
+  font-family: var(--hl-font-sans);
+  min-height: 100dvh;
+}
+.lib h1,
+.lib h2,
+.lib h3 {
+  font-family: var(--hl-font-display);
+  font-weight: 400;
+}
+.lib-bar {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  align-items: center;
+  padding: 10px var(--hl3-gutter);
+  background: color-mix(in srgb, var(--hl-field) 92%, transparent);
+  border-bottom: 1px solid var(--hl3-line);
+}
+.lib-bar nav {
+  display: flex;
+  gap: 4px 16px;
+  flex-wrap: wrap;
+  margin-right: auto;
+}
+.lib-bar a {
+  font: 400 13px/1 var(--hl-font-sans);
+  color: var(--hl-dim);
+  text-decoration: none;
+  padding: 8px 0;
+}
+.lib-bar a:hover {
+  color: var(--hl-ink);
+}
+.lib-seg {
+  display: inline-flex;
+  border: 1px solid var(--hl3-line);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.lib-seg button {
+  font: 500 11px/1 var(--hl-font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 10px 12px;
+  background: none;
+  color: var(--hl-dim);
+  border: 0;
+  cursor: pointer;
+}
+.lib-seg button[aria-pressed="true"] {
+  background: var(--hl-ink);
+  color: var(--hl-field);
+}
+.lib-hero {
+  padding: calc(var(--hl3-pad) * 0.7) 0 calc(var(--hl3-pad) * 0.5);
+  overflow: hidden;
+}
+.lib-sec {
+  padding-block: clamp(56px, 9vh, 120px);
+  border-top: 1px solid var(--hl3-line);
+  position: relative;
+}
+.lib-sec > .hl3-wrap > header {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 40px;
+  max-width: 70ch;
+}
+.lib-sec header p {
+  margin: 0;
+  color: var(--hl-dim);
+}
+.lib-grid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+}
+.lib-card {
+  border: 1px solid var(--hl3-line);
+  border-radius: 10px;
+  padding: 24px;
+  display: grid;
+  gap: 16px;
+  align-content: start;
+  min-width: 0;
+}
+.lib-card > h3 {
+  font: 500 12px/1 var(--hl-font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--hl-dim);
+  margin: 0;
+}
+.lib-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+.lib-swatches {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+}
+.lib-sw {
+  border: 1px solid var(--hl3-line);
+  border-radius: 6px;
+  overflow: hidden;
+  font: 400 11px/1.5 var(--hl-font-mono);
+}
+.lib-sw i {
+  display: block;
+  height: 72px;
+}
+.lib-sw span {
+  display: block;
+  padding: 8px 10px;
+}
+.lib-stage {
+  position: relative;
+  border: 1px solid var(--hl3-line);
+  border-radius: 10px;
+  overflow: hidden;
+  isolation: isolate;
+}
+.lib-stage--tall {
+  height: 70vh;
+  min-height: 420px;
+}
+.lib-note {
+  font: 400 12px/1.5 var(--hl-font-mono);
+  color: var(--hl-dim);
+}
+.lib-fixedbox {
+  position: relative;
+  transform: translateZ(0); /* contains the fixed header / dialog-like chrome */
+  height: 150px;
+  border: 1px solid var(--hl3-line);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.lib-fixedbox--footer {
+  height: auto;
+  overflow: hidden;
+}
+.lib-fixedbox .hl3-header {
+  position: absolute;
+}
+.lib-stack .hl3-stack__panel {
+  height: 62vh;
+}
+.lib-panel {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-content: end;
+  padding: 24px;
+  color: #fff;
+}
+.lib-photo {
+  aspect-ratio: 4 / 5;
+  position: relative;
+}
+.lib-photo--wide {
+  aspect-ratio: 16 / 9;
+}
+.lib-cursorzone {
+  display: grid;
+  place-items: center;
+  height: 220px;
+  border: 1px dashed var(--hl-dim);
+  border-radius: 10px;
+  font: 400 12px/1 var(--hl-font-mono);
+  color: var(--hl-dim);
+}
+.lib-depth {
+  position: relative;
+  height: 60vh;
+  min-height: 380px;
+  overflow: hidden;
+}
+.lib-depth figure {
+  position: absolute;
+  margin: 0;
+}
+/* the docs shell styles every h1; colossal type must win */
+.docs-main .lib h1.hl3-colossal,
+.docs-main .lib h2.hl3-colossal {
+  font-size: clamp(5rem, 18vw, 22rem);
+  line-height: 0.86;
+  letter-spacing: -0.04em;
+  margin: 0;
+}
+.docs-main .lib h1.hl3-colossal--hero {
+  font-size: clamp(5rem, 24vw, 30rem);
+}
+.docs-main .lib h1.hl3-colossal--lg {
+  font-size: clamp(4rem, 13vw, 15rem);
+}

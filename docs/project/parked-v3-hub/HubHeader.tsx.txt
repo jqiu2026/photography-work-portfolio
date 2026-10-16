@@ -1,0 +1,13 @@
+import { SiteHeader } from "@halation/ui/v3";
+import { nav as defaultNav } from "@/content/site";
+import { siteSettings } from "@/lib/site-settings";
+
+const extra = [{ label: "Connect", href: "/connect" }];
+
+/** Hub header: wordmark and this site's own text links. */
+export async function HubHeader({ current, overHero = true }: { current?: string; overHero?: boolean }) {
+  const { nav: custom } = await siteSettings("hub");
+  const nav = custom.items.length ? custom.items : defaultNav;
+  const links = [...nav, ...extra.filter((e) => !nav.some((n) => n.href === e.href))];
+  return <SiteHeader name="Jerry Qiu" links={links} current={current} overHero={overHero} />;
+}
