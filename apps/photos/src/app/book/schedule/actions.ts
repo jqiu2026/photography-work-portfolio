@@ -1,6 +1,7 @@
 "use server";
 
 import { getDb, hitRateLimit, schema } from "@jerryqiu/db";
+import { notify } from "@jerryqiu/db/automation";
 import * as cal from "@jerryqiu/db/calendar";
 import * as st from "@jerryqiu/db/studio";
 import { sendTemplate } from "@jerryqiu/email";
@@ -94,6 +95,7 @@ export async function bookSlotAction(raw: z.input<typeof input>): Promise<HoldRe
         },
         { related: { type: "appointment", id: a.id } },
       );
+      await notify(db, { kind: "booking", title: `Booked: ${a.title}`, link: "/studio/calendar" });
       return { ok: true, message: "You're booked. A confirmation is on its way to your inbox." };
     }
 

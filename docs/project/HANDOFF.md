@@ -6,9 +6,9 @@ Self-contained state for a fresh chat. Read `README.md`, `08-operating-rules.md`
 
 ## State (update at every milestone)
 
-Done and committed: PHOTO-M1 foundation, M2 ShootProof removed, M3 protection everywhere (every photograph is token-gated and blob-rendered; bundled photos live in `apps/photos/private/`), M4 email package and scored leads, M5 pipeline, calendar, booking, mini-sessions, `.ics`, M6 packages, quotes, codes, tax line, M7 contract and release templates, questionnaires, M8 payment plans, recurring billing, tips, ACH, surcharge flag, refunds, PDFs, M9 client portal (accounts, magic link, documents by signed links, messages, reschedule), M10 galleries v2 (uploader, albums, proofing, PIN downloads, ZIP, expiry and paid reactivation).
+Done and committed: PHOTO-M1 foundation, M2 ShootProof removed, M3 protection everywhere (every photograph is token-gated and blob-rendered; bundled photos live in `apps/photos/private/`), M4 email package and scored leads, M5 pipeline, calendar, booking, mini-sessions, `.ics`, M6 packages, quotes, codes, tax line, M7 contract and release templates, questionnaires, M8 payment plans, recurring billing, tips, ACH, surcharge flag, refunds, PDFs, M9 client portal (accounts, magic link, documents by signed links, messages, reschedule), M10 galleries v2 (uploader, albums, proofing, PIN downloads, ZIP, expiry and paid reactivation), M11 platform showcase (features page generated from the spec via `python3 scripts/gen-features.py`; re-run it after editing a status), M12 cron, automations, tasks, activity feed.
 
-**Next (see PROGRESS.md table):** M11 platform showcase pages from `content/features.ts`, M12 cron and automations, M13 prints and digital sales, M14 reports/expenses/usage-rights/privacy/export, M15 ops, M16 face search and culling mocks, M17 deployment prep, M18 polish and accessibility.
+**Next (see PROGRESS.md table):** M13 prints and digital sales, M14 reports/expenses/usage-rights/privacy/export, M15 ops, M16 face search and culling mocks, M17 deployment prep, M18 polish and accessibility.
 
 ## How to work here
 

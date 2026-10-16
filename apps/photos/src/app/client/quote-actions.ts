@@ -1,6 +1,7 @@
 "use server";
 
 import { getDb, hitRateLimit } from "@jerryqiu/db";
+import { notify } from "@jerryqiu/db/automation";
 import * as com from "@jerryqiu/db/commerce";
 import { StudioError } from "@jerryqiu/db/studio";
 import { sha256Hex } from "@jerryqiu/db/studio-crypto";
@@ -38,6 +39,7 @@ export async function acceptQuoteAction(token: string, name: string, agreed: boo
   if (!agreed) return { ok: false, error: "Please tick the box to accept the quote and its terms." };
   try {
     const r = await com.acceptQuote(g.db, g.ref, { name, ipHash: sha256Hex(g.ip) });
+    await notify(g.db, { kind: "quote", title: `Quote accepted by ${name.trim()}`, link: "/studio/quotes" });
     const { sendTemplate } = await import("@jerryqiu/email");
     const q = await com.quoteByToken(g.db, g.ref);
     if (q) {

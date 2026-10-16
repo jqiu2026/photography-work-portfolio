@@ -3,6 +3,7 @@
 import { getDb, hitRateLimit, schema } from "@jerryqiu/db";
 import { and, eq } from "drizzle-orm";
 import { accountSession } from "@/lib/account-session";
+import { notify } from "@jerryqiu/db/automation";
 import * as bill from "@jerryqiu/db/billing";
 import * as gal from "@jerryqiu/db/galleries";
 import * as st from "@jerryqiu/db/studio";
@@ -82,13 +83,19 @@ export async function signContractAction(
   const ref = await resolveRef(token, "contract");
   if (!ref) return no("This signing link is not valid.");
   try {
-    await st.signContract(db, ref, {
+    const signed = await st.signContract(db, ref, {
       signerName: String(formData.get("name") ?? ""),
       agree: formData.get("agree") === "on",
       consentElectronic: formData.get("consent") === "on",
       guardianName: String(formData.get("guardian") ?? ""),
       ipHash: sha256Hex(ip),
       userAgent: undefined,
+    });
+    await notify(db, {
+      kind: "contract",
+      title: `Contract signed: ${signed.title}`,
+      body: `Signed by ${signed.signerName}`,
+      link: "/studio/contracts",
     });
     return { ok: true, message: "Signed. Thank you." };
   } catch (e) {

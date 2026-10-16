@@ -1,6 +1,7 @@
 "use server";
 
 import { getDb, hitRateLimit, schema } from "@jerryqiu/db";
+import { notify } from "@jerryqiu/db/automation";
 import * as gal from "@jerryqiu/db/galleries";
 import { StudioError } from "@jerryqiu/db/studio";
 import { sendTemplate } from "@jerryqiu/email";
@@ -61,6 +62,12 @@ export async function commentAction(input: {
   if (!c) return no("Open your gallery again to continue.");
   try {
     await gal.comment(c.db, c.a.gallery.id, input.mediaId, input.body, "client");
+    await notify(c.db, {
+      kind: "gallery",
+      title: `New comment in ${c.a.gallery.title}`,
+      body: input.body.slice(0, 200),
+      link: `/studio/gallery/${c.a.gallery.id}`,
+    });
     return { ok: true, message: "Comment added" };
   } catch (e) {
     return no(e instanceof StudioError ? e.message : "Could not add the comment.");
@@ -73,6 +80,12 @@ export async function sendSelectionAction(galleryId?: string): Promise<GalleryRe
   if (!c) return no("Open your gallery again to continue.");
   try {
     const r = await gal.sendSelection(c.db, c.a.gallery.id);
+    await notify(c.db, {
+      kind: "selection",
+      title: `Selection sent: ${r.gallery.title}`,
+      body: `${r.count} photographs`,
+      link: `/studio/gallery/${r.gallery.id}`,
+    });
     const favs = await c.db
       .select({ m: schema.studioFavorites.mediaId })
       .from(schema.studioFavorites)

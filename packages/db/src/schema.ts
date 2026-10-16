@@ -1173,3 +1173,57 @@ export const studioDownloadEvents = pgTable(
 );
 
 export type StudioGallery = typeof studioGalleries.$inferSelect;
+
+/* ------------------------------------------------------------------------------------------------------------------
+ * Operations: tasks, automation runs (the dedupe log: one run per key, ever), the owner's notification centre.
+ * ---------------------------------------------------------------------------------------------------------------- */
+export const studioTasks = pgTable(
+  "studio_tasks",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    title: text("title").notNull(),
+    dueOn: date("due_on"),
+    notes: text("notes"),
+    jobId: uuid("job_id").references(() => studioJobs.id),
+    clientId: uuid("client_id").references(() => studioClients.id),
+    doneAt: timestamp("done_at", { withTimezone: true }),
+    /** Set when an automation or the system made the task. */
+    source: text("source"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("studio_tasks_due_idx").on(t.dueOn)],
+);
+
+export const studioAutomationRuns = pgTable(
+  "studio_automation_runs",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    /** e.g. `invoice-due:<invoiceId>:2027-03-01`. Unique: a rule never acts twice on the same thing and date. */
+    dedupeKey: text("dedupe_key").notNull(),
+    rule: text("rule").notNull(),
+    entityType: text("entity_type"),
+    entityId: text("entity_id"),
+    status: text("status").notNull().default("done"),
+    detail: text("detail"),
+    at: timestamp("at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    uniqueIndex("studio_automation_runs_key_idx").on(t.dedupeKey),
+    index("studio_automation_runs_rule_idx").on(t.rule),
+  ],
+);
+
+export const studioNotifications = pgTable(
+  "studio_notifications",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    /** inquiry | payment | contract | quote | message | selection | gallery | booking | system */
+    kind: text("kind").notNull(),
+    title: text("title").notNull(),
+    body: text("body"),
+    link: text("link"),
+    readAt: timestamp("read_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("studio_notifications_created_idx").on(t.createdAt)],
+);

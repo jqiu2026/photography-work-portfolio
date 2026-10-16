@@ -97,7 +97,13 @@ export const features: Feature[] = [
   { id: "F-29", group: "Sell", title: "Digital download sales", priority: "P2", status: "soon" },
   { id: "F-30", group: "Sell", title: "Gallery extension and reactivation sales", priority: "P1", status: "live" },
   { id: "F-31", group: "Sell", title: "Tips", priority: "P3", status: "live" },
-  { id: "F-32", group: "Sell", title: "Abandoned-cart and unpaid-invoice reminders", priority: "P2", status: "soon" },
+  {
+    id: "F-32",
+    group: "Sell",
+    title: "Abandoned-cart and unpaid-invoice reminders",
+    priority: "P2",
+    status: "preview",
+  },
   {
     id: "F-40",
     group: "Contract and comply",
@@ -230,7 +236,7 @@ export const features: Feature[] = [
     group: "Deliver",
     title: "Gallery expiry, reminders, paid reactivation",
     priority: "P1",
-    status: "preview",
+    status: "live",
   },
   { id: "F-68", group: "Deliver", title: "Delivery status page with ETA", priority: "P2", status: "live" },
   {
@@ -238,7 +244,7 @@ export const features: Feature[] = [
     group: "Deliver",
     title: "Client notifications (gallery ready, viewed, favourited)",
     priority: "P1",
-    status: "soon",
+    status: "preview",
   },
   {
     id: "F-70",
@@ -293,7 +299,7 @@ export const features: Feature[] = [
     priority: "P2",
     status: "live",
   },
-  { id: "F-84", group: "Client portal", title: "Notification preferences", priority: "P2", status: "preview" },
+  { id: "F-84", group: "Client portal", title: "Notification preferences", priority: "P2", status: "live" },
   { id: "F-85", group: "Client portal", title: "Branded email templates", priority: "P1", status: "live" },
   {
     id: "F-90",
@@ -317,7 +323,7 @@ export const features: Feature[] = [
     status: "live",
   },
   { id: "F-93", group: "Run the business", title: "`.ics` calendar feeds", priority: "P1", status: "live" },
-  { id: "F-94", group: "Run the business", title: "Tasks and reminders", priority: "P2", status: "soon" },
+  { id: "F-94", group: "Run the business", title: "Tasks and reminders", priority: "P2", status: "live" },
   {
     id: "F-95",
     group: "Run the business",
@@ -330,7 +336,7 @@ export const features: Feature[] = [
     group: "Run the business",
     title: "Automations: trigger, condition, action on Vercel Cron",
     priority: "P2",
-    status: "soon",
+    status: "live",
   },
   { id: "F-97", group: "Run the business", title: "Shot lists and call sheets", priority: "P3", status: "soon" },
   {
@@ -390,7 +396,7 @@ export const features: Feature[] = [
     group: "Platform quality",
     title: "Notifications centre and activity feed",
     priority: "P3",
-    status: "soon",
+    status: "preview",
   },
   {
     id: "F-113",

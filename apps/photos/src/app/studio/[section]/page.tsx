@@ -15,6 +15,8 @@ import { BillingView } from "@/components/studio/BillingView";
 import * as bill from "@jerryqiu/db/billing";
 import { PortalAdminView } from "@/components/studio/PortalAdminView";
 import * as portalDb from "@jerryqiu/db/portal";
+import { AutomationsView, NotificationsView, TasksView } from "@/components/studio/OpsViews";
+import * as autoDb from "@jerryqiu/db/automation";
 import { calendarData } from "@/lib/studio-calendar";
 import * as forms from "@jerryqiu/db/forms";
 import { formatMoney } from "@jerryqiu/db/pricing";
@@ -147,6 +149,68 @@ export default async function StudioSection({ params }: { params: Promise<{ sect
               lastLogin: acct.get(c.id)?.lastLoginAt?.toISOString().slice(0, 10) ?? null,
             })),
             jobs: jobs.map((r) => ({ id: r.job.id, title: r.job.title, status: r.job.status, eta: r.job.deliveryEta })),
+          }}
+        />
+      </Shell>
+    );
+  }
+  if (section === "tasks") {
+    const today = new Date().toISOString().slice(0, 10);
+    const tasks = await autoDb.listTasks(db);
+    return (
+      <Shell>
+        <TasksView
+          user={user.name ?? user.email ?? "owner"}
+          data={{
+            tasks: tasks.map((t) => ({
+              id: t.id,
+              title: t.title,
+              dueOn: t.dueOn,
+              notes: t.notes,
+              done: Boolean(t.doneAt),
+              overdue: !t.doneAt && Boolean(t.dueOn) && (t.dueOn as string) < today,
+            })),
+          }}
+        />
+      </Shell>
+    );
+  }
+  if (section === "automations") {
+    const [rules, runs] = await Promise.all([autoDb.ruleConfig(db), autoDb.recentRuns(db, 40)]);
+    return (
+      <Shell>
+        <AutomationsView
+          user={user.name ?? user.email ?? "owner"}
+          data={{
+            rules,
+            runs: runs.map((r) => ({
+              id: r.id,
+              rule: r.rule,
+              entity: `${r.entityType ?? ""} ${r.entityId?.slice(0, 8) ?? ""}`.trim(),
+              at: r.at.toISOString().slice(0, 16).replace("T", " "),
+              status: r.status,
+            })),
+          }}
+        />
+      </Shell>
+    );
+  }
+  if (section === "activity") {
+    const items = await autoDb.listNotifications(db);
+    return (
+      <Shell>
+        <NotificationsView
+          user={user.name ?? user.email ?? "owner"}
+          data={{
+            items: items.map((n) => ({
+              id: n.id,
+              kind: n.kind,
+              title: n.title,
+              body: n.body,
+              link: n.link,
+              read: Boolean(n.readAt),
+              at: n.createdAt.toISOString().slice(0, 16).replace("T", " "),
+            })),
           }}
         />
       </Shell>

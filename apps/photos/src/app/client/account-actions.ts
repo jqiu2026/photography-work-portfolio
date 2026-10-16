@@ -1,6 +1,7 @@
 "use server";
 
 import { getDb, hitRateLimit, schema } from "@jerryqiu/db";
+import { notify } from "@jerryqiu/db/automation";
 import * as cal from "@jerryqiu/db/calendar";
 import * as forms from "@jerryqiu/db/forms";
 import * as portal from "@jerryqiu/db/portal";
@@ -160,6 +161,12 @@ export async function sendMessageAction(_prev: AccountResult | null, formData: F
       jobId: /^[0-9a-f-]{36}$/i.test(jobId) ? jobId : null,
       direction: "in",
       body: String(formData.get("body") ?? ""),
+    });
+    await notify(db, {
+      kind: "message",
+      title: `Message from ${me.client.name}`,
+      body: String(formData.get("body") ?? "").slice(0, 200),
+      link: "/studio/portal",
     });
     const owner = process.env.CONTACT_TO_EMAIL?.trim();
     if (owner || process.env.NODE_ENV !== "production")

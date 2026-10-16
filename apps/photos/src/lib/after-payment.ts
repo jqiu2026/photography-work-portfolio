@@ -2,6 +2,7 @@ import "server-only";
 import { type Database, schema } from "@jerryqiu/db";
 import { sendTemplate } from "@jerryqiu/email";
 import { getSite } from "@jerryqiu/sites";
+import { notify } from "@jerryqiu/db/automation";
 import * as cal from "@jerryqiu/db/calendar";
 import { eq } from "drizzle-orm";
 
@@ -17,6 +18,12 @@ export async function afterPayment(db: Database, invoiceId: string) {
     .innerJoin(schema.studioClients, eq(schema.studioClients.id, schema.studioJobs.clientId))
     .where(eq(schema.studioJobs.id, inv.jobId));
   if (!row) return;
+  await notify(db, {
+    kind: "payment",
+    title: `Payment received: ${inv.number}`,
+    body: `${row.client.name}, ${usd(inv.totalCents)}`,
+    link: "/studio/billing",
+  });
   const related = { type: "invoice", id: inv.id };
   if (inv.status === "paid")
     await sendTemplate(

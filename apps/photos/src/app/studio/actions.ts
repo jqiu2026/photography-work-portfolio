@@ -6,6 +6,10 @@ import * as st from "@jerryqiu/db/studio";
 import { getSite } from "@jerryqiu/sites";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
+import { schema } from "@jerryqiu/db";
+import { galleryReadyAllowed } from "@jerryqiu/db/automation";
+import { sendTemplate } from "@jerryqiu/email";
+import { eq } from "drizzle-orm";
 import { guarded } from "@/auth";
 import { afterPayment } from "@/lib/after-payment";
 
@@ -127,7 +131,29 @@ export async function publishGalleryAction(galleryId: string) {
   return guarded("studio.access", async ({ db, audit }) => {
     const p = id.safeParse(galleryId);
     if (!p.success) return actionError("Unknown gallery.");
-    await st.publishGallery(db, p.data);
+    const g = await st.publishGallery(db, p.data);
+    // Tell the client it is ready (unless they switched "gallery ready" emails off). The passcode is not in the email:
+    // it is stored hashed, so the studio gives it to the client separately.
+    if (g) {
+      const [row] = await db
+        .select({ client: schema.studioClients })
+        .from(schema.studioJobs)
+        .innerJoin(schema.studioClients, eq(schema.studioClients.id, schema.studioJobs.clientId))
+        .where(eq(schema.studioJobs.id, g.jobId));
+      if (row && (await galleryReadyAllowed(db, row.client.id)))
+        await sendTemplate(
+          db,
+          row.client.email,
+          "gallery-ready",
+          {
+            name: row.client.name,
+            title: g.title,
+            link: `${getSite("photos").url}/client`,
+            linkLabel: "Open your gallery",
+          },
+          { related: { type: "gallery", id: g.id } },
+        );
+    }
     await audit({
       action: "studio.gallery.publish",
       entity: "studio_gallery",

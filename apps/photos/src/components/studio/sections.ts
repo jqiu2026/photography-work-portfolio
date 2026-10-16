@@ -3,6 +3,8 @@ export const studioSections = [
   { id: "pipeline", label: "Pipeline" },
   { id: "calendar", label: "Calendar" },
   { id: "bookings", label: "Inquiries" },
+  { id: "activity", label: "Activity" },
+  { id: "tasks", label: "Tasks" },
   { id: "inbox", label: "Inbox" },
   { id: "portal", label: "Portal" },
   { id: "quotes", label: "Quotes" },
@@ -14,4 +16,5 @@ export const studioSections = [
   { id: "forms", label: "Forms" },
   { id: "invoices", label: "Invoices" },
   { id: "billing", label: "Billing" },
+  { id: "automations", label: "Automations" },
 ] as const;

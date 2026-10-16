@@ -21,7 +21,8 @@
     "./billing": "./src/billing.ts",
     "./portal": "./src/portal.ts",
     "./galleries": "./src/galleries.ts",
-    "./gallery-expiry": "./src/gallery-expiry.ts"
+    "./gallery-expiry": "./src/gallery-expiry.ts",
+    "./automation": "./src/automation.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

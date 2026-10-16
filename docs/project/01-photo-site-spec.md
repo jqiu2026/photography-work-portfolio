@@ -118,7 +118,7 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | F-29 | Digital download sales | P2 | missing | digital_products | Stripe / mock | e2e | M13 |
 | F-30 | Gallery extension and reactivation sales | P1 | done | expiry flow | Stripe / mock | e2e | M10 |
 | F-31 | Tips | P3 | done | invoice pay | Stripe / mock | unit | M8 |
-| F-32 | Abandoned-cart and unpaid-invoice reminders | P2 | missing | automations | email | unit | M12 |
+| F-32 | Abandoned-cart and unpaid-invoice reminders | P2 | partial (unpaid invoice, overdue and unanswered quote reminders done; abandoned cart arrives with the print store) | automations | email | unit | M12 |
 
 ### Contract and comply
 
@@ -158,9 +158,9 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | F-64 | Albums and sets, slideshow | P1 | done | albums, lightbox | n/a | e2e | M10 |
 | F-65 | Proofing: comments, ratings, approvals, selection limits, send selection | P1 | done | gallery page | n/a | e2e | M10 |
 | F-66 | Downloads: web, full-res, ZIP parts, per-photo, PIN-gated, download log | P1 | done | `/api/download/*` | n/a | e2e | M10 |
-| F-67 | Gallery expiry, reminders, paid reactivation | P1 | partial (expiry, archive, paid extension and reactivation done; reminder emails in M12) | cron, reactivation page | Stripe / mock | e2e | M10, M12 |
+| F-67 | Gallery expiry, reminders, paid reactivation | P1 | done | cron, reactivation page | Stripe / mock | e2e | M10, M12 |
 | F-68 | Delivery status page with ETA | P2 | done | portal job page | n/a | e2e | M9 |
-| F-69 | Client notifications (gallery ready, viewed, favourited) | P1 | missing | automations | email | unit | M12 |
+| F-69 | Client notifications (gallery ready, viewed, favourited) | P1 | partial (gallery ready, expiring, reminders and preferences done; "viewed" and "favourited" go to the owner as activity) | automations | email | unit | M12 |
 | F-70 | Per-viewer invisible watermark and view logs | P1 | done (spread-spectrum code per viewer, `studio_view_events`, detector) | `@jerryqiu/media` `forensic.ts`, `serve.ts` | n/a | unit | M3 |
 | F-71 | Per-gallery branding | P3 | done (welcome message and accent colour) | gallery settings | n/a | e2e | M10 |
 | F-72 | Culling helpers: duplicates, blur, closed eyes | P3 | missing | studio uploader | cull mock | unit | M16 |
@@ -177,7 +177,7 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | F-81 | Portal home: jobs, galleries, contracts, invoices, questionnaires, quotes, messages (files with M14) | P1 | done | `/client/home` | n/a | e2e | M9 |
 | F-82 | Email thread and messages visible in portal; replies routed to a real inbox | P1 | done (messages plus every email sent to the client; owner is emailed on a new message; Reply-To is your inbox) | messages, email_log | Resend / outbox | e2e | M9 |
 | F-83 | Self-reschedule and cancel within policy | P2 | done (policy window from the cancellation days setting) | portal job page | n/a | e2e | M9 |
-| F-84 | Notification preferences | P2 | partial (saved; honoured by reminders in M12) | `/client/account` | n/a | e2e | M9 |
+| F-84 | Notification preferences | P2 | done | `/client/account` | n/a | e2e | M9 |
 | F-85 | Branded email templates | P1 | done (13 kinds) | `@jerryqiu/email` | Resend / outbox | unit | M4 |
 
 ### Run the business
@@ -188,9 +188,9 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | F-91 | Visual pipeline and kanban (inquiry, booked, shot, editing, delivered, paid) | P1 | done | `/studio/pipeline` | n/a | e2e | M5 |
 | F-92 | Calendar with availability, buffers, travel time, no double-booking | P1 | done (DB exclusion constraint) | `/studio/calendar` | n/a | unit | M5 |
 | F-93 | `.ics` calendar feeds | P1 | done (secret URL) | `/api/ics/[token]` | n/a | unit | M5 |
-| F-94 | Tasks and reminders | P2 | missing | tasks | n/a | e2e | M12 |
+| F-94 | Tasks and reminders | P2 | done | tasks | n/a | e2e | M12 |
 | F-95 | Email templates and threads in studio | P1 | partial (templates and a studio inbox of every email; threads with replies in M9) | `/studio/inbox` | Resend / outbox | e2e | M4 |
-| F-96 | Automations: trigger, condition, action on Vercel Cron | P2 | missing | automations | cron | unit | M12 |
+| F-96 | Automations: trigger, condition, action on Vercel Cron | P2 | done (7 rules, tunable, deduped, hourly cron) | automations | cron | unit | M12 |
 | F-97 | Shot lists and call sheets | P3 | missing | call_sheets | n/a | e2e | M15 |
 | F-98 | Roles: second shooter, assistant; job assignment | P3 | missing | team_members | n/a | unit | M15 |
 | F-99 | Gear inventory, double-booking warnings | P3 | missing | gear | n/a | unit | M15 |
@@ -207,7 +207,7 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 |---|---|---|---|---|---|---|
 | F-110 | Roles and sessions, rate limits | P1 | done (owner/editor, per-IP limits) | auth, db | unit | done |
 | F-111 | Webhooks in (Stripe) and out (owner endpoints), owner API | P3 | partial (in only) | `/api/v1/*` | unit | M15 |
-| F-112 | Notifications centre and activity feed | P3 | missing | studio | e2e | M15 |
+| F-112 | Notifications centre and activity feed | P3 | partial (owner activity feed with unread; client notification centre is the portal home) | studio | e2e | M15 |
 | F-113 | Mobile-friendly photographer side, installable PWA | P1 | partial (responsive board and forms; PWA manifest in M18) | studio CSS, manifest | e2e 390px | M5, M18 |
 | F-114 | Dark and light themes | P1 | done | `@halation/ui` | e2e | done |
 | F-115 | WCAG 2.2 AA, performance budgets (Lighthouse mobile 80+, CLS under 0.02) | P1 | partial | all | axe, lighthouse | M18 |

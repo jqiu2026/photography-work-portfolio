@@ -53,6 +53,7 @@ export default defineConfig({
         PORT: "3302",
         NEXT_DIST_DIR: ".next-e2e",
         STRIPE_WEBHOOK_SECRET: "whsec_e2e_secret",
+        CRON_SECRET: "e2e-cron-secret-0123456789",
       },
       reuseExistingServer: false,
       timeout: 180_000,
