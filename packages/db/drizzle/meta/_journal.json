@@ -120,6 +120,13 @@
       "when": 1792187844119,
       "tag": "0016_gallery_links",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1792189667861,
+      "tag": "0017_gallery_settings",
+      "breakpoints": true
     }
   ]
 }

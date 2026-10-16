@@ -61,6 +61,16 @@ export const shopSchema = z.object({
   proofing: z.boolean().default(true),
   /** A line shown at the top of the shop (turnaround, shipping notes). */
   note: z.string().trim().max(240).default(""),
+  /** Which price sheet this gallery sells from ("" = the default sheet). */
+  priceSheetId: z.string().default(""),
+  /** The least an order may come to, in cents (0 = no minimum). */
+  minOrderCents: z.number().int().min(0).max(1_000_000).default(0),
+  /** Email a reminder when an order is left unpaid for a day. */
+  abandonedCart: z.boolean().default(true),
+  /** A line shown at checkout (shipping times, thanks). */
+  checkoutMessage: z.string().trim().max(1000).default(""),
+  /** A licence delivered with every order (shown on the buyer's order page). */
+  printRelease: z.string().trim().max(7500).default(""),
   /** Where print orders ship from. Other countries are refused. */
   shipCountries: z.array(z.enum(["US", "CA", "MX"])).default(["US"]),
 });
@@ -114,21 +124,80 @@ const STARTER: Omit<typeof s.studioProducts.$inferInsert, "id">[] = [
   { kind: "card", sku: "MOCK-CARD-5X7", name: "Flat card 5 × 7 in", priceCents: 500, sort: 30 },
   { kind: "album", sku: "MOCK-ALBUM-8X8", name: "Album 8 × 8 in, 20 pages", priceCents: 24000, sort: 40 },
 ];
-export async function listProducts(db: Database, opts: { activeOnly?: boolean } = {}) {
-  let rows = await db
+/** The default price sheet (created with the starter prices the first time it is needed). */
+export async function defaultSheet(db: Database) {
+  let [sheet] = await db
     .select()
-    .from(s.studioProducts)
-    .where(isNull(s.studioProducts.deletedAt))
-    .orderBy(asc(s.studioProducts.sort));
-  if (!rows.length) {
-    await db.insert(s.studioProducts).values(STARTER);
-    rows = await db
+    .from(s.studioPriceSheets)
+    .where(and(eq(s.studioPriceSheets.isDefault, true), isNull(s.studioPriceSheets.deletedAt)));
+  if (!sheet) {
+    [sheet] = await db.insert(s.studioPriceSheets).values({ name: "Standard", isDefault: true }).returning();
+    await db.update(s.studioProducts).set({ sheetId: sheet.id }).where(isNull(s.studioProducts.sheetId));
+  }
+  return sheet;
+}
+export async function listSheets(db: Database) {
+  await defaultSheet(db);
+  return db
+    .select()
+    .from(s.studioPriceSheets)
+    .where(isNull(s.studioPriceSheets.deletedAt))
+    .orderBy(desc(s.studioPriceSheets.isDefault), asc(s.studioPriceSheets.createdAt));
+}
+export async function listProducts(db: Database, opts: { activeOnly?: boolean; sheetId?: string } = {}) {
+  const def = await defaultSheet(db);
+  const sheetId = opts.sheetId && opts.sheetId !== def.id ? opts.sheetId : def.id;
+  const read = () =>
+    db
       .select()
       .from(s.studioProducts)
-      .where(isNull(s.studioProducts.deletedAt))
+      .where(and(isNull(s.studioProducts.deletedAt), eq(s.studioProducts.sheetId, sheetId)))
       .orderBy(asc(s.studioProducts.sort));
+  let rows = await read();
+  if (!rows.length && sheetId === def.id) {
+    await db.insert(s.studioProducts).values(STARTER.map((p) => ({ ...p, sheetId })));
+    rows = await read();
   }
   return opts.activeOnly ? rows.filter((r) => r.active) : rows;
+}
+export async function createSheet(db: Database, name: string, copyFrom?: string) {
+  const n = name.trim().slice(0, 60);
+  if (n.length < 2) throw new StudioError("Name the price sheet.");
+  const def = await defaultSheet(db);
+  const [sheet] = await db.insert(s.studioPriceSheets).values({ name: n }).returning();
+  const from = await listProducts(db, { sheetId: copyFrom ?? def.id });
+  if (from.length)
+    await db.insert(s.studioProducts).values(
+      from.map((p) => ({
+        kind: p.kind,
+        sku: p.sku,
+        name: p.name,
+        description: p.description,
+        priceCents: p.priceCents,
+        sample: p.sample,
+        active: p.active,
+        sort: p.sort,
+        sheetId: sheet.id,
+      })),
+    );
+  return sheet;
+}
+export async function renameSheet(db: Database, id: string, name: string) {
+  const n = name.trim().slice(0, 60);
+  if (n.length < 2) throw new StudioError("Name the price sheet.");
+  await db.update(s.studioPriceSheets).set({ name: n, updatedAt: new Date() }).where(eq(s.studioPriceSheets.id, id));
+}
+export async function makeDefaultSheet(db: Database, id: string) {
+  await db.update(s.studioPriceSheets).set({ isDefault: false });
+  await db.update(s.studioPriceSheets).set({ isDefault: true }).where(eq(s.studioPriceSheets.id, id));
+}
+export async function deleteSheet(db: Database, id: string) {
+  const [sheet] = await db.select().from(s.studioPriceSheets).where(eq(s.studioPriceSheets.id, id));
+  if (!sheet) return;
+  if (sheet.isDefault)
+    throw new StudioError("The default price sheet cannot be deleted. Make another sheet the default first.");
+  await db.update(s.studioProducts).set({ deletedAt: new Date() }).where(eq(s.studioProducts.sheetId, id));
+  await db.update(s.studioPriceSheets).set({ deletedAt: new Date() }).where(eq(s.studioPriceSheets.id, id));
 }
 export async function saveProduct(
   db: Database,
@@ -198,7 +267,9 @@ export async function placeOrder(
   if (!g) throw new StudioError("Unknown gallery.");
   const shop = readShop(g.shop);
   if (!shop.enabled) throw new StudioError("This gallery's shop is closed.");
-  const products = new Map((await listProducts(db, { activeOnly: true })).map((p) => [p.id, p]));
+  const products = new Map(
+    (await listProducts(db, { activeOnly: true, sheetId: shop.priceSheetId || undefined })).map((p) => [p.id, p]),
+  );
   const items = await db
     .select({ mediaId: s.studioGalleryItems.mediaId })
     .from(s.studioGalleryItems)
@@ -241,6 +312,8 @@ export async function placeOrder(
       throw new StudioError("The print lab cannot ship to a PO box.");
   }
   const subtotal = lines.reduce((n, r) => n + r.product.priceCents * r.qty, 0);
+  if (shop.minOrderCents && subtotal < shop.minOrderCents)
+    throw new StudioError(`The smallest order here is $${(shop.minOrderCents / 100).toFixed(2)}.`);
   const shipping = shippingFor(printQty);
   const [job] = await db.select().from(s.studioJobs).where(eq(s.studioJobs.id, g.jobId));
   if (!job) throw new StudioError("This gallery has no job.");

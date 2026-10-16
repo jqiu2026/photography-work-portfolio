@@ -487,6 +487,13 @@ export const studioGalleries = pgTable(
     style: jsonb("style").$type<Record<string, unknown>>().notNull().default({}),
     /** The gallery's own web address: /g/<slug>. Unique, set by the studio. */
     slug: text("slug"),
+    /** The date of the shoot or event, and the date client orders are due (both optional). */
+    shootDate: date("shoot_date"),
+    orderDueDate: date("order_due_date"),
+    /** Visitors give their email address before they can view the gallery. */
+    emailRequired: boolean("email_required").notNull().default(false),
+    /** Archive the gallery by itself when its expiry date passes. */
+    autoArchive: boolean("auto_archive").notNull().default(false),
     /** passcode: only the client's passcode (/client) | link: anyone with the link can view and shop (proofing stays with the passcode). */
     visibility: text("visibility").notNull().default("passcode"),
     /** Shop and proofing settings (validated in gallery-shop.ts; empty = defaults). */
@@ -1294,10 +1301,20 @@ export const studioProducts = pgTable(
     sample: boolean("sample").notNull().default(true),
     active: boolean("active").notNull().default(true),
     sort: integer("sort").notNull().default(0),
+    /** The price sheet this product belongs to (null = the default sheet). */
+    sheetId: uuid("sheet_id"),
     ...stamps,
   },
   (t) => [index("studio_products_kind_idx").on(t.kind)],
 );
+
+/** A named price list. A gallery picks one; the default sheet is used when it does not. */
+export const studioPriceSheets = pgTable("studio_price_sheets", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  name: text("name").notNull(),
+  isDefault: boolean("is_default").notNull().default(false),
+  ...stamps,
+});
 
 export const studioOrders = pgTable(
   "studio_orders",
@@ -1353,3 +1370,89 @@ export type StudioAlbum = typeof studioAlbums.$inferSelect;
 export type StudioProduct = typeof studioProducts.$inferSelect;
 export type StudioOrder = typeof studioOrders.$inferSelect;
 export type StudioOrderItem = typeof studioOrderItems.$inferSelect;
+
+/* ------------------------------------------------------------------------------------------------------------------
+ * Gallery extras: visitors who gave their email, free-download rules, watermarks, music, plan charges.
+ * ---------------------------------------------------------------------------------------------------------------- */
+export const studioVisitors = pgTable(
+  "studio_visitors",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    galleryId: uuid("gallery_id")
+      .notNull()
+      .references(() => studioGalleries.id, { onDelete: "cascade" }),
+    email: text("email").notNull(),
+    name: text("name"),
+    visits: integer("visits").notNull().default(1),
+    firstAt: timestamp("first_at", { withTimezone: true }).notNull().defaultNow(),
+    lastAt: timestamp("last_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex("studio_visitors_gallery_email_idx").on(t.galleryId, t.email)],
+);
+
+export const studioWatermarks = pgTable("studio_watermarks", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  name: text("name").notNull(),
+  /** text | image */
+  kind: text("kind").notNull().default("text"),
+  text: text("text"),
+  /** Storage key of an uploaded PNG (kind image). */
+  imageKey: text("image_key"),
+  /** center | bottom-right | bottom-left | top-right | top-left | tile */
+  position: text("position").notNull().default("bottom-right"),
+  opacity: integer("opacity").notNull().default(45),
+  /** Width of the mark as a percent of the picture's width. */
+  sizePct: integer("size_pct").notNull().default(22),
+  isDefault: boolean("is_default").notNull().default(false),
+  ...stamps,
+});
+
+/** Who may download what for free: a size, a limit per visitor, an optional watermark and PIN, for a whole gallery or one album. */
+export const studioDownloadRules = pgTable(
+  "studio_download_rules",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    galleryId: uuid("gallery_id")
+      .notNull()
+      .references(() => studioGalleries.id, { onDelete: "cascade" }),
+    albumId: uuid("album_id"),
+    name: text("name").notNull(),
+    /** Longest side in pixels; null = the original file. */
+    maxPx: integer("max_px"),
+    /** Most downloads per visitor under this rule; null = unlimited. */
+    perVisitor: integer("per_visitor"),
+    watermarkId: uuid("watermark_id"),
+    pinHash: text("pin_hash"),
+    /** A licence the visitor must accept before downloading. */
+    printRelease: text("print_release"),
+    showAll: boolean("show_all").notNull().default(true),
+    sort: integer("sort").notNull().default(0),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("studio_download_rules_gallery_idx").on(t.galleryId)],
+);
+
+export const studioTracks = pgTable("studio_tracks", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  title: text("title").notNull(),
+  artist: text("artist"),
+  storageKey: text("storage_key").notNull(),
+  mime: text("mime").notNull().default("audio/mpeg"),
+  bytes: integer("bytes").notNull().default(0),
+  ...stamps,
+});
+
+/** What the studio is billed for its own plan (the owner's Full Frame plan is comped at 100% off, so its charges are $0). */
+export const studioPlanCharges = pgTable("studio_plan_charges", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  description: text("description").notNull(),
+  amountCents: integer("amount_cents").notNull().default(0),
+  /** paid | free | failed */
+  status: text("status").notNull().default("paid"),
+  at: timestamp("at", { withTimezone: true }).notNull().defaultNow(),
+});
+export type StudioVisitor = typeof studioVisitors.$inferSelect;
+export type StudioWatermark = typeof studioWatermarks.$inferSelect;
+export type StudioDownloadRule = typeof studioDownloadRules.$inferSelect;
+export type StudioTrack = typeof studioTracks.$inferSelect;
+export type StudioPriceSheet = typeof studioPriceSheets.$inferSelect;

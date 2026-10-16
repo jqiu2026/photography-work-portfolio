@@ -31,7 +31,13 @@ export type GallerySettings = {
   /** ISO time to publish at, or null to clear. */
   publishAt?: string | null;
   notes?: string;
+  /** yyyy-mm-dd, or "" to clear. */
+  shootDate?: string;
+  orderDueDate?: string;
+  emailRequired?: boolean;
+  autoArchive?: boolean;
 };
+const DAY = /^\d{4}-\d{2}-\d{2}$/;
 export async function updateGallery(db: Database, id: string, p: GallerySettings, by?: string, now = new Date()) {
   const set: Partial<typeof s.studioGalleries.$inferInsert> = { updatedAt: now, updatedBy: by };
   if (p.title !== undefined) {
@@ -67,6 +73,18 @@ export async function updateGallery(db: Database, id: string, p: GallerySettings
   if (p.theme) set.theme = p.theme;
   if (p.density) set.density = p.density;
   if (p.notes !== undefined) set.notes = p.notes.trim().slice(0, 2000) || null;
+  for (const [key, col, label] of [
+    ["shootDate", "shootDate", "shoot date"],
+    ["orderDueDate", "orderDueDate", "order due date"],
+  ] as const) {
+    const v = p[key];
+    if (v === undefined) continue;
+    if (v && (!DAY.test(v) || Number.isNaN(new Date(v).getTime())))
+      throw new StudioError(`Enter the ${label} as a real date.`);
+    set[col] = v || null;
+  }
+  if (p.emailRequired !== undefined) set.emailRequired = p.emailRequired;
+  if (p.autoArchive !== undefined) set.autoArchive = p.autoArchive;
   if (p.publishAt !== undefined) {
     if (p.publishAt === null) set.publishAt = null;
     else {
@@ -117,6 +135,12 @@ export async function addItems(db: Database, galleryId: string, mediaIds: string
     .insert(s.studioGalleryItems)
     .values(mediaIds.map((mediaId, i) => ({ galleryId, mediaId, sort: Number(n) + i, albumId: albumId ?? null })))
     .onConflictDoNothing();
+  // a new album with no cover takes its first photograph as the cover
+  if (albumId)
+    await db
+      .update(s.studioAlbums)
+      .set({ coverMediaId: mediaIds[0] })
+      .where(and(eq(s.studioAlbums.id, albumId), isNull(s.studioAlbums.coverMediaId)));
   return mediaIds.length;
 }
 export async function removeItem(db: Database, galleryId: string, mediaId: string) {
@@ -541,10 +565,39 @@ export async function duplicateGallery(db: Database, id: string, by?: string) {
     .returning();
   const albums = await listAlbums(db, id);
   const map = new Map<string, string>();
-  for (const a of albums) {
-    const [n] = await db.insert(s.studioAlbums).values({ galleryId: copy.id, name: a.name, sort: a.sort }).returning();
+  // parents first, so every sub-album can point at its new parent
+  for (const a of [...albums].sort((x, y) => Number(Boolean(x.parentId)) - Number(Boolean(y.parentId)))) {
+    const [n] = await db
+      .insert(s.studioAlbums)
+      .values({
+        galleryId: copy.id,
+        name: a.name,
+        sort: a.sort,
+        parentId: a.parentId ? (map.get(a.parentId) ?? null) : null,
+        description: a.description,
+        coverMediaId: a.coverMediaId,
+        passcodeHash: a.passcodeHash,
+        hidden: a.hidden,
+      })
+      .returning();
     map.set(a.id, n.id);
   }
+  const rules = await db.select().from(s.studioDownloadRules).where(eq(s.studioDownloadRules.galleryId, id));
+  if (rules.length)
+    await db.insert(s.studioDownloadRules).values(
+      rules.map((r) => ({
+        galleryId: copy.id,
+        albumId: r.albumId ? (map.get(r.albumId) ?? null) : null,
+        name: r.name,
+        maxPx: r.maxPx,
+        perVisitor: r.perVisitor,
+        watermarkId: r.watermarkId,
+        pinHash: r.pinHash,
+        printRelease: r.printRelease,
+        showAll: r.showAll,
+        sort: r.sort,
+      })),
+    );
   const items = await db.select().from(s.studioGalleryItems).where(eq(s.studioGalleryItems.galleryId, id));
   if (items.length)
     await db.insert(s.studioGalleryItems).values(
@@ -693,4 +746,19 @@ export async function viewSummary(db: Database, galleryId: string, limit = 40) {
     recent: rows.slice(0, limit),
     perPhoto,
   };
+}
+
+/** Galleries whose expiry has passed and that asked to be archived by themselves. */
+export async function dueToArchive(db: Database, now = new Date()) {
+  return db
+    .select()
+    .from(s.studioGalleries)
+    .where(
+      and(
+        eq(s.studioGalleries.autoArchive, true),
+        eq(s.studioGalleries.status, "published"),
+        isNull(s.studioGalleries.deletedAt),
+        sql`${s.studioGalleries.expiresAt} is not null and ${s.studioGalleries.expiresAt} <= ${now.toISOString()}`,
+      ),
+    );
 }
