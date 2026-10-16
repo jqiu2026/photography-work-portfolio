@@ -3,7 +3,7 @@ import { getDb } from "@jerryqiu/db";
 import { galleryBySlug } from "@jerryqiu/db/gallery-shop";
 import { notFound, redirect } from "next/navigation";
 import { Gallery } from "@/components/gallery/Gallery";
-import { GalleryGate } from "@/components/gallery/GalleryGate";
+import { EmailGate, GalleryGate } from "@/components/gallery/GalleryGate";
 import { GalleryGuard } from "@/components/portal/GalleryGuard";
 import { Shell } from "@/components/Shell";
 import { currentLock, galleryAccess } from "@/lib/client-gallery";
@@ -36,6 +36,12 @@ export default async function GalleryByLink({
       </Shell>
     );
   }
+  if (session?.r === "v" && g.emailRequired && !session.m)
+    return (
+      <Shell bare>
+        <EmailGate slug={slug} title={g.title} />
+      </Shell>
+    );
   const access = await galleryAccess();
   if (!access) {
     const lockedNow = await currentLock();

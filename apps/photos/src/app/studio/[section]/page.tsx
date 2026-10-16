@@ -16,6 +16,20 @@ import * as bill from "@jerryqiu/db/billing";
 import { AutomationsView, NotificationsView, TasksView } from "@/components/studio/OpsViews";
 import * as autoDb from "@jerryqiu/db/automation";
 import { OrdersView } from "@/components/studio/OrdersView";
+import {
+  BrandView,
+  MusicView,
+  PlanView,
+  UsersView,
+  VisitorsView,
+  WatermarksView,
+} from "@/components/studio/AdminViews";
+import { ReportsView } from "@/components/studio/ReportsView";
+import * as brandDb from "@jerryqiu/db/brand";
+import * as extras from "@jerryqiu/db/gallery-extras";
+import * as planDb from "@jerryqiu/db/plan";
+import * as reportsDb from "@jerryqiu/db/reports";
+import { mocksEnabled } from "@jerryqiu/mocks";
 import * as shopDb from "@jerryqiu/db/gallery-shop";
 import { GalleriesView } from "@/components/studio/GalleriesView";
 import * as galDb from "@jerryqiu/db/galleries";
@@ -31,8 +45,12 @@ export const dynamic = "force-dynamic";
 export const metadata = { title: "Studio", robots: { index: false, follow: false } };
 
 /** Studio (Phase 3): clients, jobs, client galleries, contracts, invoices, bookings. Owner only; data lives in the database. */
-export default async function StudioSection({ params }: { params: Promise<{ section: string }> }) {
+export default async function StudioSection({
+  params,
+  searchParams,
+}: { params: Promise<{ section: string }>; searchParams: Promise<{ tab?: string; days?: string }> }) {
   const { section } = await params;
+  const q = await searchParams;
   if (!studioSections.some((s) => s.id === section)) notFound();
   const user = await requirePageUser("studio.access", `/studio/${section}`);
   const db = getDb();
@@ -363,13 +381,17 @@ export default async function StudioSection({ params }: { params: Promise<{ sect
   }
   void formatMoney;
   if (section === "orders") {
-    const [products, orders] = await Promise.all([shopDb.listProducts(db), shopDb.listOrders(db)]);
+    const sheets = await shopDb.listSheets(db);
+    const perSheet = await Promise.all(sheets.map((x) => shopDb.listProducts(db, { sheetId: x.id })));
+    const orders = await shopDb.listOrders(db);
     return (
       <Shell>
         <OrdersView
           data={{
-            products: products.map((p) => ({
+            sheets: sheets.map((x) => ({ id: x.id, name: x.name, isDefault: x.isDefault })),
+            products: perSheet.flat().map((p) => ({
               id: p.id,
+              sheetId: p.sheetId ?? sheets[0].id,
               kind: p.kind,
               name: p.name,
               description: p.description ?? "",
@@ -391,6 +413,222 @@ export default async function StudioSection({ params }: { params: Promise<{ sect
             })),
           }}
         />
+      </Shell>
+    );
+  }
+  if (section === "visitors") {
+    const rows = await extras.listVisitors(db);
+    return (
+      <Shell>
+        <VisitorsView
+          rows={rows.map((r) => ({
+            id: r.visitor.id,
+            email: r.visitor.email,
+            name: r.visitor.name ?? "",
+            gallery: r.gallery.title,
+            galleryId: r.gallery.id,
+            visits: r.visitor.visits,
+            last: r.visitor.lastAt.toISOString().slice(0, 10),
+          }))}
+        />
+      </Shell>
+    );
+  }
+  if (section === "music") {
+    const tracks = await extras.listTracks(db);
+    const { limits } = await planDb.planOverview(db);
+    return (
+      <Shell>
+        <MusicView
+          allowed={limits.music}
+          tracks={tracks.map((t) => ({
+            id: t.id,
+            title: t.title,
+            artist: t.artist ?? "",
+            mb: (t.bytes / 1_048_576).toFixed(1),
+          }))}
+        />
+      </Shell>
+    );
+  }
+  if (section === "watermarks") {
+    const marks = await extras.listWatermarks(db);
+    return (
+      <Shell>
+        <WatermarksView
+          marks={marks.map((m) => ({
+            id: m.id,
+            name: m.name,
+            kind: m.kind,
+            text: m.text ?? "",
+            position: m.position,
+            opacity: m.opacity,
+            sizePct: m.sizePct,
+            isDefault: m.isDefault,
+          }))}
+        />
+      </Shell>
+    );
+  }
+  if (section === "brand") {
+    const brand = await brandDb.getBrand(db);
+    return (
+      <Shell>
+        <BrandView brand={brand} />
+      </Shell>
+    );
+  }
+  if (section === "users") {
+    const rows = await db.select().from(schema.users).orderBy(schema.users.createdAt);
+    return (
+      <Shell>
+        <UsersView
+          users={rows.map((u) => ({
+            id: u.id,
+            name: u.name ?? "",
+            email: u.email,
+            role: u.role,
+            active: u.active,
+            since: u.createdAt.toISOString().slice(0, 10),
+          }))}
+        />
+      </Shell>
+    );
+  }
+  if (section === "plan") {
+    await planDb.billThisMonth(db).catch(() => null);
+    const o = await planDb.planOverview(db);
+    const charges = await planDb.listPlanCharges(db);
+    const lines = (k: "free" | "fullframe") => {
+      const l = planDb.PLANS[k];
+      return [
+        l.galleries === null ? "Unlimited active galleries" : `${l.galleries} active galleries`,
+        `${Math.round(l.storageBytes / 1024 ** 3).toLocaleString()} GB of photographs`,
+        `${l.photosPerGallery.toLocaleString()} photographs per gallery`,
+        l.shop ? "Store: prints and downloads" : "No store",
+        l.music ? "Gallery music" : "No gallery music",
+        l.reports ? "Reports" : "No reports",
+        `${l.downloadRules} free-download rule${l.downloadRules === 1 ? "" : "s"} per gallery`,
+      ];
+    };
+    return (
+      <Shell>
+        <PlanView
+          data={{
+            plan: o.state.plan,
+            name: o.limits.name,
+            discountPct: o.state.discountPct,
+            since: o.state.since,
+            dueCents: o.due,
+            priceCents: o.limits.priceCents,
+            usage: o.usage,
+            limits: o.limits,
+            plans: (["free", "fullframe"] as const).map((k) => ({
+              key: k,
+              name: planDb.PLANS[k].name,
+              tagline: planDb.PLANS[k].tagline,
+              priceCents: planDb.PLANS[k].priceCents,
+              lines: lines(k),
+            })),
+            charges: charges.map((c) => ({
+              id: c.id,
+              description: c.description,
+              amountCents: c.amountCents,
+              status: c.status,
+              at: c.at.toISOString().slice(0, 10),
+            })),
+            billing:
+              process.env.STRIPE_SECRET_KEY && process.env.STRIPE_PRICE_FULLFRAME
+                ? "stripe"
+                : mocksEnabled()
+                  ? "mock"
+                  : "none",
+          }}
+        />
+      </Shell>
+    );
+  }
+  if (section === "reports") {
+    const o = await planDb.planOverview(db);
+    const tab = (["sales", "orders", "files", "products", "invoices"] as const).find((t) => t === q.tab) ?? "sales";
+    const days = [7, 30, 90, 365].includes(Number(q.days)) ? Number(q.days) : 30;
+    const range = reportsDb.lastDays(days);
+    const usd = (c: number) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(c / 100);
+    let summary: { label: string; value: string }[] = [];
+    let table = { head: [] as string[], rows: [] as string[][] };
+    if (o.limits.reports) {
+      if (tab === "sales") {
+        const r = await reportsDb.salesReport(db, range);
+        summary = [
+          { label: "Received", value: usd(r.totalCents) },
+          { label: "From the store", value: usd(r.shopCents) },
+          { label: "Refunded", value: usd(r.refundedCents) },
+          { label: "Net", value: usd(r.netCents) },
+        ];
+        table = {
+          head: ["Day", "Store", "Other", "Refunded"],
+          rows: r.days.map((d) => [d.day, usd(d.shopCents), usd(d.otherCents), usd(d.refundedCents)]),
+        };
+      } else if (tab === "orders") {
+        const r = await reportsDb.ordersReport(db, range);
+        summary = [
+          { label: "Orders", value: String(r.length) },
+          {
+            label: "Paid",
+            value: String(r.filter((x) => x.order.status === "paid" || x.order.status === "fulfilled").length),
+          },
+          { label: "Waiting for payment", value: String(r.filter((x) => x.order.status === "pending").length) },
+        ];
+        table = {
+          head: ["Order", "Date", "Gallery", "Buyer", "Items", "Total", "Status"],
+          rows: r.map((x) => [
+            x.order.number,
+            x.order.createdAt.toISOString().slice(0, 10),
+            x.gallery.title,
+            x.order.buyerName,
+            String(x.items.length),
+            usd(x.order.totalCents),
+            x.order.status,
+          ]),
+        };
+      } else if (tab === "files") {
+        const r = await reportsDb.orderFilesReport(db, range);
+        summary = [
+          { label: "Downloads", value: String(r.reduce((n, x) => n + x.n, 0)) },
+          { label: "Data delivered", value: `${(r.reduce((n, x) => n + x.bytes, 0) / 1_048_576).toFixed(1)} MB` },
+        ];
+        table = {
+          head: ["Gallery", "Kind", "Downloads", "Size"],
+          rows: r.map((x) => [x.gallery, x.kind, String(x.n), `${(x.bytes / 1_048_576).toFixed(1)} MB`]),
+        };
+      } else if (tab === "products") {
+        const r = await reportsDb.productsReport(db, range);
+        summary = [
+          { label: "Units sold", value: String(r.reduce((n, x) => n + x.units, 0)) },
+          { label: "Revenue", value: usd(r.reduce((n, x) => n + x.cents, 0)) },
+        ];
+        table = {
+          head: ["Product", "Kind", "Units", "Revenue"],
+          rows: r.map((x) => [x.name, x.kind, String(x.units), usd(x.cents)]),
+        };
+      } else {
+        const r = await reportsDb.invoicesReport(db, range);
+        summary = r.totals.map((t) => ({ label: `${t.status} (${t.n})`, value: usd(t.cents) }));
+        table = {
+          head: ["Number", "Date", "Job", "Total", "Status"],
+          rows: r.rows.map((x) => [
+            x.invoice.number,
+            x.invoice.createdAt.toISOString().slice(0, 10),
+            x.job.title,
+            usd(x.invoice.totalCents),
+            x.invoice.status,
+          ]),
+        };
+      }
+    }
+    return (
+      <Shell>
+        <ReportsView data={{ tab, days, allowed: o.limits.reports, summary, table }} />
       </Shell>
     );
   }

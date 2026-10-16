@@ -89,7 +89,7 @@ test("owner sets up albums, downloads, a PIN, a selection limit, a welcome and a
   await slow(page.getByRole("status").filter({ hasText: "Moved" })).toBeVisible();
   await page.keyboard.press("Escape");
 
-  await page.getByRole("tab", { name: "Design" }).click();
+  await page.getByRole("tab", { name: "Branding" }).click();
   await page.getByLabel(/Shown above the photographs/).fill("Thank you for coming. Enjoy.");
   await page.getByLabel(/Accent colour \(optional/).fill("#cc3322");
   await page.getByRole("radio", { name: "Masonry" }).click();
@@ -100,7 +100,7 @@ test("owner sets up albums, downloads, a PIN, a selection limit, a welcome and a
   await slow(page.locator("p.st-error")).toContainText("hex");
   await page.getByLabel(/Accent colour \(optional/).fill("#cc3322");
 
-  await page.getByRole("tab", { name: "Share" }).click();
+  await page.getByRole("tab", { name: "Downloads" }).click();
   await page.getByLabel("What clients can download").selectOption("full");
   await page.getByRole("button", { name: "Save", exact: true }).click();
   await slow(page.getByRole("status").filter({ hasText: "Download setting saved" })).toBeVisible();

@@ -2,12 +2,13 @@ import "server-only";
 import { type Database, schema } from "@jerryqiu/db";
 import * as gal from "@jerryqiu/db/galleries";
 import { getBrand, publicBrand } from "@jerryqiu/db/brand";
+import { listRules, tracksByIds } from "@jerryqiu/db/gallery-extras";
 import { type GalleryStyle, readStyle } from "@jerryqiu/db/gallery-security";
 import { type GalleryShop, listProducts, readShop } from "@jerryqiu/db/gallery-shop";
 import { MOCK_CATALOG } from "@jerryqiu/prints";
 import { eq } from "drizzle-orm";
 import type { GalleryAccess } from "@/lib/client-gallery";
-import { downloadsUnlocked, lockedMediaIds, unlockedAlbums } from "@/lib/client-gallery";
+import { downloadsUnlocked, lockedMediaIds, unlockedAlbums, unlockedRules } from "@/lib/client-gallery";
 import { zipPlan } from "@/lib/downloads";
 
 export type ClientGalleryData = {
@@ -21,6 +22,8 @@ export type ClientGalleryData = {
     sellPrints: boolean;
     freeDownloads: GalleryShop["freeDownloads"];
     note: string;
+    checkoutMessage: string;
+    minOrderCents: number;
     shipCountries: string[];
     products: {
       id: string;
@@ -49,6 +52,20 @@ export type ClientGalleryData = {
   allowComments: boolean;
   limit: number | null;
   sent: boolean;
+  /** Free-download rules a visitor may use (the client has their own downloads, below). */
+  rules: {
+    id: string;
+    name: string;
+    albumId: string | null;
+    maxPx: number | null;
+    perVisitor: number | null;
+    hasPin: boolean;
+    unlocked: boolean;
+    printRelease: string;
+    showAll: boolean;
+    watermarked: boolean;
+  }[];
+  tracks: { id: string; title: string; artist: string }[];
   downloads: { web: boolean; full: boolean; pin: boolean; unlocked: boolean; webParts: number; fullParts: number };
   albums: {
     id: string;
@@ -88,7 +105,12 @@ export async function loadClientGallery(db: Database, a: GalleryAccess): Promise
   // photographs in locked albums that this browser has not opened never reach the page
   const contents = allContents.filter((c) => !shut.has(c.media.id));
   const shopCfg = readShop(a.gallery.shop);
-  const products = shopCfg.enabled ? await listProducts(db, { activeOnly: true }) : [];
+  const products = shopCfg.enabled
+    ? await listProducts(db, { activeOnly: true, sheetId: shopCfg.priceSheetId || undefined })
+    : [];
+  const ruleRows = a.role === "visitor" ? await listRules(db, g.id) : [];
+  const openRules = ruleRows.length ? await unlockedRules(g.id) : [];
+  const trackRows = await tracksByIds(db, readStyle(g.style).playlist);
   const fav = new Set(proofs.favourites);
   const live = a.state === "live" || a.state === "expiring";
   const plan = (size: "web" | "full") =>
@@ -98,8 +120,22 @@ export async function loadClientGallery(db: Database, a: GalleryAccess): Promise
     ).length;
   const [g2] = await db.select().from(schema.studioGalleries).where(eq(schema.studioGalleries.id, g.id));
   const countIn = (id: string) => allContents.filter((c) => c.item.albumId === id).length;
+  const hasRules = ruleRows.length > 0;
   return {
     role: a.role,
+    rules: ruleRows.map((r) => ({
+      id: r.id,
+      name: r.name,
+      albumId: r.albumId,
+      maxPx: r.maxPx,
+      perVisitor: r.perVisitor,
+      hasPin: Boolean(r.pinHash),
+      unlocked: !r.pinHash || openRules.includes(r.id),
+      printRelease: r.printRelease ?? "",
+      showAll: r.showAll,
+      watermarked: Boolean(r.watermarkId),
+    })),
+    tracks: trackRows.map((t) => ({ id: t.id, title: t.title, artist: t.artist ?? "" })),
     slug: g2?.slug ?? null,
     brand: publicBrand(await getBrand(db)),
     shop: {
@@ -108,6 +144,8 @@ export async function loadClientGallery(db: Database, a: GalleryAccess): Promise
       sellPrints: shopCfg.sellPrints,
       freeDownloads: shopCfg.freeDownloads,
       note: shopCfg.note,
+      checkoutMessage: shopCfg.checkoutMessage,
+      minOrderCents: shopCfg.minOrderCents,
       shipCountries: shopCfg.shipCountries,
       products: products.map((p) => ({
         id: p.id,
@@ -138,7 +176,7 @@ export async function loadClientGallery(db: Database, a: GalleryAccess): Promise
     limit: g.selectionLimit,
     sent: Boolean(g2?.selectionSentAt),
     downloads: {
-      web: live && (a.role === "visitor" ? shopCfg.freeDownloads === "web" : gal.downloadAllowed(g, "web")),
+      web: live && (a.role === "visitor" ? hasRules || shopCfg.freeDownloads === "web" : gal.downloadAllowed(g, "web")),
       full: live && a.role === "client" && gal.downloadAllowed(g, "full"),
       pin: a.role === "client" && Boolean(g.downloadPinHash),
       unlocked: a.role === "visitor" || !g.downloadPinHash || (await downloadsUnlocked(g.id)),

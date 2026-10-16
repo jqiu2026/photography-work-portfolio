@@ -167,3 +167,42 @@ export async function lockedMediaIds(db: Database, galleryId: string): Promise<S
     .where(and(eq(schema.studioGalleryItems.galleryId, galleryId), inArray(schema.studioGalleryItems.albumId, shut)));
   return new Set(rows.map((r) => r.m));
 }
+
+/** Signed cookie holding which download rules (with a PIN) this browser has unlocked, per gallery (8 hours). */
+const RULES = "hl_rule";
+export async function unlockRule(galleryId: string, ruleId: string) {
+  const secret = tokenSecrets()[0];
+  if (!secret) throw new Error("No signing secret configured");
+  const have = await unlockedRules(galleryId);
+  const e = Math.floor(Date.now() / 1000) + 8 * 3600;
+  const body = Buffer.from(JSON.stringify({ g: galleryId, a: [...new Set([...have, ruleId])].slice(-40), e })).toString(
+    "base64url",
+  );
+  (await cookies()).set(RULES, `${body}.${mac(secret, body)}`, {
+    path: "/",
+    httpOnly: true,
+    sameSite: "strict",
+    secure: process.env.NODE_ENV === "production",
+    maxAge: 8 * 3600,
+  });
+}
+export async function unlockedRules(galleryId: string): Promise<string[]> {
+  const raw = (await cookies()).get(RULES)?.value;
+  if (!raw || raw.length > 2000) return [];
+  const [body, sig] = raw.split(".");
+  if (!body || !sig) return [];
+  const ok = tokenSecrets().some((s) => {
+    const want = Buffer.from(mac(s, body));
+    const got = Buffer.from(sig);
+    return want.length === got.length && timingSafeEqual(want, got);
+  });
+  if (!ok) return [];
+  try {
+    const p = JSON.parse(Buffer.from(body, "base64url").toString("utf8")) as { g: string; a: string[]; e: number };
+    return p.g === galleryId && p.e * 1000 > Date.now() && Array.isArray(p.a)
+      ? p.a.filter((x) => typeof x === "string")
+      : [];
+  } catch {
+    return [];
+  }
+}

@@ -33,8 +33,10 @@ import {
   unpublishAction,
 } from "@/app/studio/gallery-actions";
 import { GalleryAlbums } from "./GalleryAlbums";
+import { GalleryBranding } from "./GalleryBranding";
+import { type DownloadRuleRow, GalleryDownloads } from "./GalleryDownloads";
 import { GalleryLinkPanel } from "./GalleryLinkPanel";
-import { GalleryShopPanel } from "./GalleryShopPanel";
+import { GalleryShopPanel, type StoreSettings } from "./GalleryShopPanel";
 import { GalleryUploader } from "./GalleryUploader";
 import { Frame, useAct } from "./StudioFrame";
 import "./gallery-manager.css";
@@ -66,6 +68,13 @@ export type GalleryManagerData = {
   accessMode: string;
   expiresAt: string | null;
   publishAt: string;
+  shootDate: string;
+  orderDueDate: string;
+  emailRequired: boolean;
+  autoArchive: boolean;
+  rules: DownloadRuleRow[];
+  watermarks: { id: string; name: string }[];
+  tracks: { id: string; title: string; artist: string }[];
   notes: string;
   security: GallerySecurity;
   style: GalleryStyle;
@@ -102,15 +111,8 @@ export type GalleryManagerData = {
   }[];
   slug: string;
   visibility: string;
-  shop: {
-    enabled: boolean;
-    listed: boolean;
-    sellDigital: boolean;
-    sellPrints: boolean;
-    freeDownloads: string;
-    proofing: boolean;
-    note: string;
-  };
+  shop: StoreSettings;
+  sheets: { id: string; name: string; isDefault: boolean }[];
   orders: {
     id: string;
     number: string;
@@ -129,9 +131,10 @@ export type GalleryManagerData = {
 const TABS = [
   ["photos", "Photos"],
   ["albums", "Albums"],
-  ["shop", "Shop"],
   ["share", "Share"],
-  ["design", "Design"],
+  ["design", "Branding"],
+  ["downloads", "Downloads"],
+  ["shop", "Store"],
   ["security", "Security"],
   ["proofing", "Proofing"],
   ["activity", "Activity"],
@@ -202,6 +205,10 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
     theme: data.theme,
     density: data.density,
     publishAt: data.publishAt,
+    shootDate: data.shootDate,
+    orderDueDate: data.orderDueDate,
+    emailRequired: data.emailRequired,
+    autoArchive: data.autoArchive,
     notes: data.notes,
     comments: data.allowComments,
     ratings: data.allowRatings,
@@ -225,6 +232,10 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
         theme: f.theme,
         density: f.density,
         publishAt: f.publishAt ? new Date(f.publishAt).toISOString() : "",
+        shootDate: f.shootDate,
+        orderDueDate: f.orderDueDate,
+        emailRequired: f.emailRequired,
+        autoArchive: f.autoArchive,
         notes: f.notes,
       }).then((r) => (r.ok && message ? { ...r, message } : r)),
     );
@@ -746,7 +757,14 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
           hidden={tab !== "shop"}
           className="gm-panel"
         >
-          <GalleryShopPanel galleryId={gid} shop={data.shop} orders={data.orders} run={run} pending={pending} />
+          <GalleryShopPanel
+            galleryId={gid}
+            shop={data.shop}
+            sheets={data.sheets}
+            orders={data.orders}
+            run={run}
+            pending={pending}
+          />
         </section>
 
         {/* ---------------- Share ---------------- */}
@@ -816,6 +834,45 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
               </button>
             </form>
           </div>
+          <div className="gm-block">
+            <h2>Access and privacy</h2>
+            <div className="gm-fields">
+              <label className="gm-check">
+                <input
+                  type="checkbox"
+                  checked={f.emailRequired}
+                  onChange={(e) => upd("emailRequired", e.target.checked)}
+                />{" "}
+                Ask visitors for their email address before they see the gallery
+              </label>
+            </div>
+            <p className="st-note">
+              Their emails are collected under Galleries, Visitors.{" "}
+              {live ? "The gallery is live." : "The gallery is not live yet."} Publish and unpublish are at the top of
+              this page.
+            </p>
+            <button type="button" className="st-btn" disabled={pending} onClick={() => save("Access settings saved")}>
+              Save
+            </button>
+          </div>
+        </section>
+
+        {/* ---------------- Downloads ---------------- */}
+        <section
+          id="gm-downloads"
+          role="tabpanel"
+          aria-labelledby="gm-tab-downloads"
+          hidden={tab !== "downloads"}
+          className="gm-panel"
+        >
+          <GalleryDownloads
+            galleryId={gid}
+            rules={data.rules}
+            albums={data.albums}
+            watermarks={data.watermarks}
+            run={run}
+            pending={pending}
+          />
           <div className="gm-block">
             <h2>Downloads</h2>
             <div className="gm-fields">
@@ -1011,22 +1068,6 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
                   />
                 </span>
               </label>
-              <label className="gm-check">
-                <input
-                  type="checkbox"
-                  checked={sty.heroCover}
-                  onChange={(e) => updSty("heroCover", e.target.checked)}
-                />{" "}
-                Legacy: cover above the photographs (the Opening setting replaces this)
-              </label>
-              <label className="gm-check">
-                <input
-                  type="checkbox"
-                  checked={sty.showFilenames}
-                  onChange={(e) => updSty("showFilenames", e.target.checked)}
-                />{" "}
-                Show filenames under photographs
-              </label>
               <label className="gm-wide">
                 Line above the title (for example your studio name)
                 <input maxLength={60} value={sty.brandLine} onChange={(e) => updSty("brandLine", e.target.value)} />
@@ -1045,6 +1086,7 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
               Save look
             </button>
           </div>
+          <GalleryBranding sty={sty} updSty={updSty} tracks={data.tracks} onSave={saveLook} pending={pending} />
         </section>
 
         {/* ---------------- Security ---------------- */}
@@ -1415,13 +1457,47 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
                 Private notes (never shown to the client)
                 <textarea rows={2} value={f.notes} onChange={(e) => upd("notes", e.target.value)} />
               </label>
+              <label>
+                Shoot date
+                <input type="date" value={f.shootDate} onChange={(e) => upd("shootDate", e.target.value)} />
+              </label>
+              <label>
+                Orders due by (optional)
+                <input type="date" value={f.orderDueDate} onChange={(e) => upd("orderDueDate", e.target.value)} />
+              </label>
               <label className="gm-check">
                 <input type="checkbox" checked={f.watermark} onChange={(e) => upd("watermark", e.target.checked)} />{" "}
                 Visible watermark on previews
               </label>
+              <label className="gm-check">
+                <input type="checkbox" checked={f.autoArchive} onChange={(e) => upd("autoArchive", e.target.checked)} />{" "}
+                Archive the gallery by itself after it expires
+              </label>
             </div>
             <button type="button" className="st-btn" disabled={pending} onClick={() => save("Gallery settings saved")}>
               Save settings
+            </button>
+          </div>
+          <div className="gm-block">
+            <h2>Advanced</h2>
+            <div className="gm-fields">
+              {(
+                [
+                  ["allowSharing", "Show the Share button"],
+                  ["showDownloadAll", "Show the Download all button"],
+                  ["showFilenames", "Show filenames under photographs"],
+                  ["hideAllPhotos", 'Hide the "All photos" album'],
+                  ["hideAlbumCount", "Hide the photo count on albums"],
+                  ["hideAlbums", 'Hide albums (visitors only see "All photos")'],
+                ] as const
+              ).map(([k, label]) => (
+                <label key={k} className="gm-check">
+                  <input type="checkbox" checked={sty[k]} onChange={(e) => updSty(k, e.target.checked)} /> {label}
+                </label>
+              ))}
+            </div>
+            <button type="button" className="st-btn" disabled={pending} onClick={saveLook}>
+              Save advanced settings
             </button>
           </div>
           <div className="gm-block">

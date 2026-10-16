@@ -431,6 +431,80 @@ export const features: Feature[] = [
     priority: "P1",
     status: "live",
   },
+  {
+    id: "F-122",
+    group: "Platform quality",
+    title:
+      "Gallery cover page, rules note (once per visit), banner, About tab, Share and Download all, sticky top bar with plain tabs",
+    priority: "P1",
+    status: "live",
+  },
+  {
+    id: "F-123",
+    group: "Platform quality",
+    title:
+      "Free-download rules (size in pixels, per-visitor limit, visible watermark, PIN, licence to accept) per gallery or album",
+    priority: "P1",
+    status: "live",
+  },
+  {
+    id: "F-124",
+    group: "Platform quality",
+    title: "Watermarks (words or PNG; position, opacity, size; a default)",
+    priority: "P1",
+    status: "live",
+  },
+  {
+    id: "F-125",
+    group: "Platform quality",
+    title: "Gallery music (studio uploads, per-gallery playlist, player with pause and next)",
+    priority: "P2",
+    status: "live",
+  },
+  {
+    id: "F-126",
+    group: "Platform quality",
+    title: "Visitor email gate and the Visitors list (CSV)",
+    priority: "P2",
+    status: "live",
+  },
+  {
+    id: "F-127",
+    group: "Platform quality",
+    title: "Price sheets (several lists; each gallery picks one; minimum order; checkout message; print release)",
+    priority: "P1",
+    status: "live",
+  },
+  {
+    id: "F-128",
+    group: "Platform quality",
+    title: "Reports: sales, orders, order files, products, invoices, with CSV",
+    priority: "P2",
+    status: "live",
+  },
+  {
+    id: "F-129",
+    group: "Platform quality",
+    title: "Brand and contact details shown in galleries; users list",
+    priority: "P2",
+    status: "live",
+  },
+  {
+    id: "F-130",
+    group: "Platform quality",
+    title:
+      "Two plans (Free and Full Frame) with limits, usage, billing history and a Stripe subscription adapter (mock until keys; the owner is comped at 100% off)",
+    priority: "P1",
+    status: "preview",
+  },
+  {
+    id: "F-131",
+    group: "Platform quality",
+    title:
+      "Custom typefaces (24), colours, header styles, layouts, album cards or tabs; pasted HTML notes converted to safe text",
+    priority: "P1",
+    status: "live",
+  },
 ];
 
 export const statusLabel: Record<FeatureStatus, string> = { live: "Live", preview: "Preview", soon: "Soon" };

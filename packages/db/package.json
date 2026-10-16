@@ -26,6 +26,7 @@
     "./brand": "./src/brand.ts",
     "./gallery-extras": "./src/gallery-extras.ts",
     "./plan": "./src/plan.ts",
+    "./reports": "./src/reports.ts",
     "./gallery-expiry": "./src/gallery-expiry.ts",
     "./automation": "./src/automation.ts"
   },

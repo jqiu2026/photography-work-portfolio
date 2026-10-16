@@ -9,6 +9,7 @@ import * as com from "@jerryqiu/db/commerce";
 import * as forms from "@jerryqiu/db/forms";
 import * as gal from "@jerryqiu/db/galleries";
 import { saveStyle } from "@jerryqiu/db/gallery-security";
+import * as extras from "@jerryqiu/db/gallery-extras";
 import * as shopDb from "@jerryqiu/db/gallery-shop";
 import * as portal from "@jerryqiu/db/portal";
 import * as st from "@jerryqiu/db/studio";
@@ -88,12 +89,52 @@ async function enrichGalleries() {
   }
 }
 
+/** Rules note, banner, About text, a watermark and free-download rules on the sample galleries. Safe to repeat. */
+async function enrichSettings() {
+  const rows = await db.select().from(schema.studioGalleries);
+  const wedding = rows.find((g) => g.title === "SAMPLE Okafor wedding");
+  if (!wedding) return;
+  let marks = await extras.listWatermarks(db);
+  if (!marks.length) {
+    await extras.saveWatermark(db, { name: "SAMPLE watermark", text: "SAMPLE · Jerry Qiu", position: "bottom-right" });
+    marks = await extras.listWatermarks(db);
+  }
+  if (!(await extras.listRules(db, wedding.id)).length) {
+    await extras.saveRule(db, {
+      galleryId: wedding.id,
+      name: "Free downloads (720 px)",
+      maxPx: 720,
+      watermarkId: marks[0].id,
+    });
+    await extras.saveRule(db, {
+      galleryId: wedding.id,
+      name: "High resolution (PIN 2468)",
+      maxPx: 2500,
+      pin: "2468",
+      perVisitor: 5,
+      printRelease: "SAMPLE licence: personal use only. **Credit the photographer** when sharing.",
+    });
+    await saveStyle(db, wedding.id, {
+      introHeadline: "Rules",
+      introMessage:
+        "**Hi, thanks for looking!** Please read this first.\n\nThese are SAMPLE words. Free downloads are limited in size; use the Store for prints.\n\n- Keep the watermark visible\n- Credit the photographer\n- Personal use only",
+      bannerEnabled: true,
+      bannerText: "SAMPLE banner: looking for a photographer? Let's talk.",
+      aboutText: "SAMPLE About text: a few lines about the photographer and the day.",
+    });
+    console.log(
+      "Sample gallery settings added to /g/okafor-wedding (rules note, banner, About, free-download rules; PIN 2468)",
+    );
+  }
+}
+
 const existing = await db
   .select()
   .from(schema.studioClients)
   .where(eq(schema.studioClients.email, "sample-maya@example.test"));
 if (existing.length) {
   await enrichGalleries();
+  await enrichSettings();
   console.log("Sample data is already there. Nothing more to add.");
   process.exit(0);
 }
@@ -397,4 +438,5 @@ console.log(
   "Sample data added. Galleries have their own links; the passcodes are sample-demo-1 and sample-demo-2. Public links: /g/okafor-wedding and /g/reyes-family (locked album passcode: formals-2026).",
 );
 await enrichGalleries();
+await enrichSettings();
 process.exit(0);

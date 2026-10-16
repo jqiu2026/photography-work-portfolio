@@ -19,7 +19,7 @@ const COOKIE = "hl_client";
 const TTL_SEC = 8 * 60 * 60;
 
 /** `r` is "v" for a visitor who opened the gallery's public link (view and shop); absent for the client's passcode session. */
-export type PortalSession = { g: string; v: string; e: number; r?: "v" };
+export type PortalSession = { g: string; v: string; e: number; r?: "v"; m?: string };
 
 const b64 = (s: string) => Buffer.from(s).toString("base64url");
 const mac = (secret: string, body: string) => createHmac("sha256", secret).update(body).digest("base64url");
@@ -50,19 +50,25 @@ export function readSessionValue(
     const p = JSON.parse(Buffer.from(body, "base64url").toString("utf8")) as PortalSession;
     if (typeof p.g !== "string" || typeof p.v !== "string" || typeof p.e !== "number" || p.e * 1000 < now) return null;
     if (p.r !== undefined && p.r !== "v") return null;
+    if (p.m !== undefined && typeof p.m !== "string") return null;
     return p;
   } catch {
     return null;
   }
 }
 
-export async function startPortalSession(galleryId: string, role: "client" | "visitor" = "client"): Promise<void> {
+export async function startPortalSession(
+  galleryId: string,
+  role: "client" | "visitor" = "client",
+  extra: { visitorId?: string } = {},
+): Promise<void> {
   const e = Math.floor(Date.now() / 1000) + TTL_SEC;
   const session: PortalSession = {
     g: galleryId,
     v: randomBytes(8).toString("hex"),
     e,
     ...(role === "visitor" ? { r: "v" } : {}),
+    ...(extra.visitorId ? { m: extra.visitorId } : {}),
   };
   (await cookies()).set(COOKIE, signSession(session), {
     path: "/",

@@ -1,5 +1,6 @@
 import { getDb, schema } from "@jerryqiu/db";
 import * as shop from "@jerryqiu/db/gallery-shop";
+import { RichTextBlock } from "@/components/gallery/RichTextBlock";
 import { eq, inArray } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import { Shell } from "@/components/Shell";
@@ -104,6 +105,12 @@ export default async function OrderPage({ params }: { params: Promise<{ token: s
               ? "Your prints were sent to the lab. They ship to the address you gave, and a tracking email follows."
               : "Your prints are being prepared. I'll email you when they ship."}
           </p>
+        ) : null}
+        {paid && g && shop.readShop(g.shop).printRelease ? (
+          <section aria-labelledby="ord-lic">
+            <h2 id="ord-lic">Print release</h2>
+            <RichTextBlock text={shop.readShop(g.shop).printRelease} />
+          </section>
         ) : null}
         {order.status === "pending" ? (
           <p className="ord-note">Finish paying from the link in your email to unlock this order.</p>

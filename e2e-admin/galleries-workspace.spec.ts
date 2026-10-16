@@ -101,7 +101,7 @@ test("select several photographs: hide, show, make the cover; sort; open one and
 
 test("design: rows and light; the client sees them after the gallery is published", async ({ page, browser }) => {
   await page.goto(url, { waitUntil: "networkidle" });
-  await page.getByRole("tab", { name: "Design" }).click();
+  await page.getByRole("tab", { name: "Branding" }).click();
   await page.getByRole("radio", { name: "Rows" }).click();
   await page.getByLabel("Theme").selectOption("light");
   await page.getByLabel(/Shown above the photographs/).fill(`Welcome ${uid}`);

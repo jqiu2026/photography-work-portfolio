@@ -9,8 +9,11 @@ import { getSite } from "@jerryqiu/sites";
 import { eq } from "drizzle-orm";
 import { type GalleryStyle, clearLocks, saveSecurity, saveStyle } from "@jerryqiu/db/gallery-security";
 import * as shop from "@jerryqiu/db/gallery-shop";
+import * as extras from "@jerryqiu/db/gallery-extras";
+import { assertPlan } from "@jerryqiu/db/plan";
 import { z } from "zod";
 import { emailGalleryLink, publishAndNotify } from "@/lib/gallery-publish";
+import { htmlToText } from "@/lib/html-text";
 import { studio } from "@/lib/studio-run";
 
 const id = z.string().uuid();
@@ -41,8 +44,13 @@ export async function saveGallerySettingsAction(input: {
   density?: string;
   publishAt?: string;
   notes?: string;
+  shootDate?: string;
+  orderDueDate?: string;
+  emailRequired?: boolean;
+  autoArchive?: boolean;
 }) {
   return studio(async ({ db, user }) => {
+    if (input.emailRequired) await assertPlan(db, "emailGate");
     const policy = (["none", "preview", "web", "full"] as const).find((p) => p === input.downloadPolicy) ?? "preview";
     const limit = input.selectionLimit.trim() ? Number(input.selectionLimit) : null;
     await gal.updateGallery(
@@ -66,6 +74,10 @@ export async function saveGallerySettingsAction(input: {
         ...(input.density ? { density: (["small", "medium", "large"] as const).find((x) => x === input.density) } : {}),
         ...(input.publishAt !== undefined ? { publishAt: input.publishAt ? input.publishAt : null } : {}),
         ...(input.notes !== undefined ? { notes: input.notes } : {}),
+        ...(input.shootDate !== undefined ? { shootDate: input.shootDate } : {}),
+        ...(input.orderDueDate !== undefined ? { orderDueDate: input.orderDueDate } : {}),
+        ...(input.emailRequired !== undefined ? { emailRequired: input.emailRequired } : {}),
+        ...(input.autoArchive !== undefined ? { autoArchive: input.autoArchive } : {}),
         ...(input.accessMonths.trim() ? { accessMonths: Number(input.accessMonths) } : {}),
       },
       user.email ?? undefined,
@@ -167,21 +179,35 @@ export async function saveShopAction(input: {
   listed?: boolean;
   sellDigital: boolean;
   sellPrints: boolean;
-  freeDownloads: string;
-  proofing: boolean;
+  freeDownloads?: string;
+  proofing?: boolean;
   note: string;
+  priceSheetId?: string;
+  minOrder?: string;
+  abandonedCart?: boolean;
+  checkoutMessage?: string;
+  printRelease?: string;
 }) {
   return studio(async ({ db }) => {
+    if (input.enabled) await assertPlan(db, "shop");
+    const minDollars = input.minOrder?.trim() ? Number(input.minOrder.replace(/[$,\s]/g, "")) : 0;
+    if (!Number.isFinite(minDollars) || minDollars < 0)
+      throw new StudioError("Enter the smallest order as an amount like 25.");
     await shop.saveShop(db, gid(input.galleryId), {
       enabled: input.enabled,
       ...(input.listed === undefined ? {} : { listed: input.listed }),
       sellDigital: input.sellDigital,
       sellPrints: input.sellPrints,
-      freeDownloads: input.freeDownloads,
-      proofing: input.proofing,
+      ...(input.freeDownloads === undefined ? {} : { freeDownloads: input.freeDownloads }),
+      ...(input.proofing === undefined ? {} : { proofing: input.proofing }),
       note: input.note,
+      ...(input.priceSheetId === undefined ? {} : { priceSheetId: input.priceSheetId }),
+      ...(input.minOrder === undefined ? {} : { minOrderCents: Math.round(minDollars * 100) }),
+      ...(input.abandonedCart === undefined ? {} : { abandonedCart: input.abandonedCart }),
+      ...(input.checkoutMessage === undefined ? {} : { checkoutMessage: input.checkoutMessage }),
+      ...(input.printRelease === undefined ? {} : { printRelease: htmlToText(input.printRelease) }),
     });
-    return { message: "Shop settings saved" };
+    return { message: "Store settings saved" };
   });
 }
 export async function saveProductAction(input: {
@@ -337,6 +363,7 @@ export async function newGalleryAction(input: { jobId: string; title: string }) 
   return studio(async ({ db, user }) => {
     const job = id.safeParse(input.jobId);
     if (!job.success) throw new StudioError("Pick a job.");
+    await assertPlan(db, "galleries");
     const passcode = await gal.freshPasscode(db);
     const g = await createGallery(
       db,
@@ -425,6 +452,7 @@ export async function sendGalleryLinkAction(galleryId: string) {
 
 export async function duplicateGalleryAction(galleryId: string) {
   return studio(async ({ db, user }) => {
+    await assertPlan(db, "galleries");
     const r = await gal.duplicateGallery(db, gid(galleryId), user.email ?? undefined);
     return {
       message: "Duplicated as a draft",
@@ -536,32 +564,15 @@ export async function saveSecurityAction(input: {
   });
 }
 
-export async function saveStyleAction(input: {
-  galleryId: string;
-  font: string;
-  header?: string;
-  albumView?: string;
-  gap: string;
-  corners: string;
-  showFilenames: boolean;
-  heroCover: boolean;
-  brandLine: string;
-  footer: string;
-  background: string;
-}) {
+/** Saves any of the gallery's look and branding fields (validated and merged by the db layer). Plain-text messages may arrive as simple HTML and are converted. */
+export async function saveStyleAction(input: { galleryId: string } & Partial<Record<keyof GalleryStyle, unknown>>) {
   return studio(async ({ db }) => {
-    await saveStyle(db, gid(input.galleryId), {
-      font: input.font as GalleryStyle["font"],
-      ...(input.header ? { header: input.header as GalleryStyle["header"] } : {}),
-      ...(input.albumView ? { albumView: input.albumView as GalleryStyle["albumView"] } : {}),
-      gap: input.gap as "tight" | "normal" | "wide",
-      corners: input.corners as "square" | "soft" | "round",
-      showFilenames: input.showFilenames,
-      heroCover: input.heroCover,
-      brandLine: input.brandLine,
-      footer: input.footer,
-      background: input.background.trim(),
-    });
+    const { galleryId, ...patch } = input;
+    const clean = { ...patch } as Record<string, unknown>;
+    for (const k of ["introMessage", "aboutText"] as const)
+      if (typeof clean[k] === "string") clean[k] = htmlToText(clean[k] as string);
+    if (Array.isArray(clean.playlist) && clean.playlist.length) await assertPlan(db, "music");
+    await saveStyle(db, gid(galleryId), clean as Partial<GalleryStyle>);
     return { message: "Look saved" };
   });
 }
@@ -579,5 +590,85 @@ export async function clearLocksAction(galleryId: string) {
         summary: "Cleared gallery lock-outs",
       },
     };
+  });
+}
+
+/* ---- free downloads: rules per gallery or album ---- */
+export async function saveRuleAction(input: {
+  galleryId: string;
+  id?: string;
+  albumId?: string;
+  name: string;
+  maxPx: string;
+  perVisitor: string;
+  watermarkId?: string;
+  pin?: string;
+  printRelease?: string;
+  showAll?: boolean;
+}) {
+  return studio(async ({ db }) => {
+    await extras.saveRule(db, {
+      id: input.id,
+      galleryId: gid(input.galleryId),
+      albumId: input.albumId ? mid(input.albumId) : null,
+      name: input.name,
+      maxPx: input.maxPx.trim() ? Number(input.maxPx) : null,
+      perVisitor: input.perVisitor.trim() ? Number(input.perVisitor) : null,
+      watermarkId: input.watermarkId ? mid(input.watermarkId) : null,
+      pin: input.pin,
+      printRelease: input.printRelease === undefined ? undefined : htmlToText(input.printRelease),
+      showAll: input.showAll,
+    });
+    return { message: "Download rule saved" };
+  });
+}
+export async function deleteRuleAction(input: { galleryId: string; id: string }) {
+  return studio(async ({ db }) => {
+    await extras.deleteRule(db, gid(input.galleryId), mid(input.id));
+    return { message: "Rule removed" };
+  });
+}
+
+/* ---- watermarks, music and price sheets (studio-wide) ---- */
+export async function setDefaultWatermarkAction(id: string) {
+  return studio(async ({ db }) => {
+    await extras.setDefaultWatermark(db, mid(id));
+    return { message: "Default watermark set" };
+  });
+}
+export async function deleteWatermarkAction(id: string) {
+  return studio(async ({ db }) => {
+    await extras.deleteWatermark(db, mid(id));
+    return { message: "Watermark deleted" };
+  });
+}
+export async function deleteTrackAction(id: string) {
+  return studio(async ({ db }) => {
+    await extras.deleteTrack(db, mid(id));
+    return { message: "Track removed" };
+  });
+}
+export async function createSheetAction(input: { name: string; copyFrom?: string }) {
+  return studio(async ({ db }) => {
+    await shop.createSheet(db, input.name, input.copyFrom ? mid(input.copyFrom) : undefined);
+    return { message: "Price sheet created" };
+  });
+}
+export async function renameSheetAction(input: { id: string; name: string }) {
+  return studio(async ({ db }) => {
+    await shop.renameSheet(db, mid(input.id), input.name);
+    return { message: "Price sheet renamed" };
+  });
+}
+export async function makeDefaultSheetAction(id: string) {
+  return studio(async ({ db }) => {
+    await shop.makeDefaultSheet(db, mid(id));
+    return { message: "Default price sheet changed" };
+  });
+}
+export async function deleteSheetAction(id: string) {
+  return studio(async ({ db }) => {
+    await shop.deleteSheet(db, mid(id));
+    return { message: "Price sheet deleted" };
   });
 }

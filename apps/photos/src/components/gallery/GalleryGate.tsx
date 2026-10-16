@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { enterGalleryAction } from "@/app/g/actions";
+import { enterGalleryAction, registerVisitorAction } from "@/app/g/actions";
 import "./gallery.css";
 
 /** The front door of a private gallery: its title and one field for the passcode. */
@@ -56,6 +56,54 @@ export function GalleryGate({
           {busy ? "One moment…" : "Open my gallery"}
         </button>
         <p className="gx-fine">Your photographer gave you this passcode with the link.</p>
+      </form>
+    </div>
+  );
+}
+
+/** Asked before an open gallery when the studio collects visitors' email addresses. */
+export function EmailGate({ slug, title }: { slug: string; title: string }) {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [err, setErr] = useState("");
+  const [busy, setBusy] = useState(false);
+  return (
+    <div className="gx" data-theme="dark" style={{ display: "grid", placeItems: "center", padding: "2rem" }}>
+      <form
+        className="gx-form gx-gate"
+        noValidate
+        onSubmit={async (e) => {
+          e.preventDefault();
+          setBusy(true);
+          setErr("");
+          const r = await registerVisitorAction({ slug, email, name });
+          setBusy(false);
+          if (r.ok) router.refresh();
+          else setErr(r.error);
+        }}
+      >
+        <p className="gx-brand">Welcome</p>
+        <h1>{title}</h1>
+        <p className="gx-fine">
+          Enter your email address to view this gallery. The photographer may use it to send you news about it.
+        </p>
+        <label>
+          Email
+          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" required />
+        </label>
+        <label>
+          Name (optional)
+          <input value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" />
+        </label>
+        {err ? (
+          <p role="alert" className="gx-msg">
+            {err}
+          </p>
+        ) : null}
+        <button type="submit" className="gx-btn gx-btn--solid" disabled={busy}>
+          {busy ? "One moment…" : "Open the gallery"}
+        </button>
       </form>
     </div>
   );

@@ -108,10 +108,10 @@ test("owner builds a gallery with nested and locked albums, a public link and an
   await page.getByLabel("Gallery address").fill(slug);
   await page.getByRole("button", { name: "Save link" }).click();
   await slow(page.getByRole("status").filter({ hasText: "Link saved" })).toBeVisible();
-  await page.getByRole("tab", { name: "Shop" }).click();
-  await page.getByLabel("Open the shop").check();
-  await page.getByRole("button", { name: "Save shop settings" }).click();
-  await slow(page.getByRole("status").filter({ hasText: "Shop settings saved" })).toBeVisible();
+  await page.getByRole("tab", { name: "Store" }).click();
+  await page.getByLabel("Open the store in this gallery").check();
+  await page.getByRole("button", { name: "Save store settings" }).click();
+  await slow(page.getByRole("status").filter({ hasText: "Store settings saved" })).toBeVisible();
   await publishOpenGallery(page);
 });
 

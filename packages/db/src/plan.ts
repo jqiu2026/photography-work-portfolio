@@ -135,7 +135,7 @@ export async function setPlan(
   const next: PlanState = {
     ...cur,
     plan,
-    discountPct: opts.discountPct ?? (plan === "free" ? 0 : cur.discountPct),
+    discountPct: opts.discountPct ?? cur.discountPct, // a discount (the owner's 100%) survives a switch to Free and back
     since: now.toISOString().slice(0, 10),
     customerId: opts.ids?.customerId ?? cur.customerId,
     subscriptionId: opts.ids?.subscriptionId ?? cur.subscriptionId,

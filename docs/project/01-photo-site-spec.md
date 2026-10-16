@@ -213,6 +213,16 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | F-119 | Albums with sub-albums, locked albums (own passcode), hidden albums, album covers, "All photos", album cards or tabs | P1 | done | gallery Albums tab | e2e, unit | M13 |
 | F-120 | Gallery looks: four themes, seven type options, six arrangements, opening styles, spacing, corners, accent and background colour | P1 | done | gallery Design tab | e2e | M13 |
 | F-121 | Shop price list (one list, SAMPLE until set), orders, buyer order page with download links | P1 | done | `/studio/orders`, `/g/order/[token]` | e2e, unit | M13 |
+| F-122 | Gallery cover page, rules note (once per visit), banner, About tab, Share and Download all, sticky top bar with plain tabs | P1 | done | `/g/[slug]` | e2e | M13 |
+| F-123 | Free-download rules (size in pixels, per-visitor limit, visible watermark, PIN, licence to accept) per gallery or album | P1 | done | gallery Downloads tab | e2e, unit | M13 |
+| F-124 | Watermarks (words or PNG; position, opacity, size; a default) | P1 | done | `/studio/watermarks` | e2e, unit | M13 |
+| F-125 | Gallery music (studio uploads, per-gallery playlist, player with pause and next) | P2 | done | `/studio/music`, gallery Branding tab | e2e | M13 |
+| F-126 | Visitor email gate and the Visitors list (CSV) | P2 | done | gallery Share tab, `/studio/visitors` | e2e, unit | M13 |
+| F-127 | Price sheets (several lists; each gallery picks one; minimum order; checkout message; print release) | P1 | done | `/studio/orders`, gallery Store tab | e2e, unit | M13 |
+| F-128 | Reports: sales, orders, order files, products, invoices, with CSV | P2 | done | `/studio/reports` | unit | M13 |
+| F-129 | Brand and contact details shown in galleries; users list | P2 | done | `/studio/brand`, `/studio/users` | e2e | M13 |
+| F-130 | Two plans (Free and Full Frame) with limits, usage, billing history and a Stripe subscription adapter (mock until keys; the owner is comped at 100% off) | P1 | partial (limits enforced; paid upgrades need STRIPE_PRICE_FULLFRAME and keys) | `/studio/plan` | Stripe / mock | e2e, unit | M13 |
+| F-131 | Custom typefaces (24), colours, header styles, layouts, album cards or tabs; pasted HTML notes converted to safe text | P1 | done | gallery Branding tab | e2e, unit | M13 |
 
 ## 7. Marketing and showcase rules
 

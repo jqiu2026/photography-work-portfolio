@@ -4,6 +4,8 @@ import {
   createCheckoutSession,
   formEncode,
   paymentFromEvent,
+  planFromEvent,
+  subscriptionBody,
   signStripePayload,
   stripeConfigured,
   verifyStripeSignature,
@@ -232,5 +234,51 @@ describe("checkout extras, refunds", () => {
     await expect(
       createRefund({ secretKey: "sk_test_abc", fetch: f }, { paymentIntent: "pi", amountCents: 0 }, "k"),
     ).rejects.toThrow();
+  });
+});
+
+describe("the platform subscription", () => {
+  it("builds a subscription checkout that the invoice webhook will not mistake for a payment", () => {
+    const b = new URLSearchParams(
+      subscriptionBody({
+        priceId: "price_123",
+        plan: "fullframe",
+        successUrl: "https://x/ok",
+        cancelUrl: "https://x/no",
+      }),
+    );
+    expect(b.get("mode")).toBe("subscription");
+    expect(b.get("line_items[0][price]")).toBe("price_123");
+    expect(b.get("metadata[kind]")).toBe("plan");
+    expect(b.has("client_reference_id")).toBe(false);
+    expect(() =>
+      subscriptionBody({ priceId: "nope", plan: "fullframe", successUrl: "https://x", cancelUrl: "https://x" }),
+    ).toThrow(/price id/);
+  });
+  it("reads plan events and ignores invoice events", () => {
+    const done = {
+      id: "evt_p",
+      type: "checkout.session.completed",
+      data: { object: { metadata: { kind: "plan", plan: "fullframe" }, customer: "cus_1", subscription: "sub_1" } },
+    };
+    expect(planFromEvent(done)).toEqual({
+      plan: "fullframe",
+      customerId: "cus_1",
+      subscriptionId: "sub_1",
+      ended: false,
+    });
+    const gone = {
+      id: "evt_q",
+      type: "customer.subscription.deleted",
+      data: { object: { id: "sub_1", customer: "cus_1", metadata: { kind: "plan", plan: "fullframe" } } },
+    };
+    expect(planFromEvent(gone)?.ended).toBe(true);
+    expect(
+      planFromEvent({
+        id: "e",
+        type: "checkout.session.completed",
+        data: { object: { metadata: { invoice_id: "x" } } },
+      }),
+    ).toBeNull();
   });
 });

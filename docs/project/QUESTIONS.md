@@ -89,4 +89,10 @@ Never block on these. Each has a default already being used. Append new ones at 
 | Q71 | Shop orders and billing | A shop order is an invoice of kind "shop" under the gallery's job, paid on the existing pay page; it is excluded from client reminders (no due date) | A separate checkout later | `placeOrder` |
 | Q72 | Album nesting | One level of sub-albums (parent and child), enforced in the db layer | Deeper trees | `galleries.ts` |
 | Q73 | Order links | Derived (`order id` + HMAC) so the payment webhook and the receipt email produce the same link; the id alone opens nothing | Stored tokens | `lib/order-link.ts` |
+| Q74 | Client login | Retired. Clients only use their gallery's link; documents (invoices, contracts, quotes, questionnaires) still open from emailed links | A portal later | `app/client/*` redirects |
+| Q75 | Link visibility values | passcode (private: asked on the link) or link (open: view and shop) | A password for open galleries | `gallery-shop.ts` |
+| Q76 | Plans | Free and Full Frame; Full Frame price is SAMPLE ($29/month) until set; the owner is comped at 100% | Real tiers and prices | `plan.ts` |
+| Q77 | Free-download limits | Counted per browser session or network address over 24 hours, not per person | Per email once the email gate is on | `rule-download.ts` |
+| Q78 | Notes written as HTML | Converted to plain text with bold, italic, links and lists; nothing else is kept | Rich text | `lib/html-text.ts` |
+| Q79 | Music rights | The studio uploads tracks it may play; no licensed catalogue is connected | A music licensing partner | `/studio/music` |
 

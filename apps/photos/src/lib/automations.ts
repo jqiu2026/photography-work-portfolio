@@ -3,6 +3,7 @@ import "server-only";
 import { type Database, schema } from "@jerryqiu/db";
 import * as auto from "@jerryqiu/db/automation";
 import * as cal from "@jerryqiu/db/calendar";
+import * as gal from "@jerryqiu/db/galleries";
 import * as shop from "@jerryqiu/db/gallery-shop";
 import { sendTemplate } from "@jerryqiu/email";
 import { getSite } from "@jerryqiu/sites";
@@ -106,8 +107,16 @@ export async function runScheduled(db: Database, now = new Date()) {
   const billing = await runBillingJobs(db, now);
   const published = await publishScheduled(db, now);
   const carts = await remindAbandonedOrders(db, now);
+  const archived = await archiveExpired(db, now);
   const automations = await runAutomations(db, now);
-  return { billing, automations, galleriesPublished: published, cartReminders: carts, at: now.toISOString() };
+  return {
+    billing,
+    automations,
+    galleriesPublished: published,
+    cartReminders: carts,
+    galleriesArchived: archived,
+    at: now.toISOString(),
+  };
 }
 void usd;
 
@@ -125,6 +134,10 @@ export async function remindAbandonedOrders(db: Database, now = new Date()) {
     }
     // the payment link token is only stored hashed, so the reminder points back to the gallery where the cart is kept
     const [g] = await db.select().from(schema.studioGalleries).where(eq(schema.studioGalleries.id, o.galleryId));
+    if (g && !shop.readShop(g.shop).abandonedCart) {
+      await shop.markReminded(db, o.id, now); // this gallery's store switched reminders off
+      continue;
+    }
     await sendTemplate(
       db,
       o.buyerEmail,
@@ -141,4 +154,15 @@ export async function remindAbandonedOrders(db: Database, now = new Date()) {
     sent++;
   }
   return sent;
+}
+
+/** Galleries set to archive themselves after they expire. */
+export async function archiveExpired(db: Database, now = new Date()) {
+  const due = await gal.dueToArchive(db, now);
+  for (const g of due)
+    await db
+      .update(schema.studioGalleries)
+      .set({ status: "archived", updatedAt: now, updatedBy: "schedule" })
+      .where(eq(schema.studioGalleries.id, g.id));
+  return due.length;
 }

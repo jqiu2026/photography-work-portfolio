@@ -12,9 +12,10 @@ import {
   sendSelectionAction,
   unlockDownloadsAction,
 } from "@/app/client/gallery-actions";
-import { checkoutAction, enterGalleryAction, unlockAlbumAction } from "@/app/g/actions";
+import { checkoutAction, enterGalleryAction, unlockAlbumAction, unlockRuleAction } from "@/app/g/actions";
 import type { ClientGalleryData } from "@/lib/client-gallery-data";
 import "./gallery.css";
+import { RichTextBlock as RichText } from "./RichTextBlock";
 
 type Data = ClientGalleryData;
 type Item = Data["items"][number];
@@ -51,6 +52,60 @@ const asset = (i: Pick<Item, "width" | "height" | "color" | "blur"> & { mediaId:
  * ratings, approvals, comments, a selection to send, and the downloads they are owed. Visitors of the public link view and shop.
  */
 export function Gallery({ data }: { data: Data }) {
+  return (
+    <>
+      <GalleryView data={data} />
+      {data.tracks.length ? (
+        <MusicPlayer tracks={data.tracks} autoplay={data.style.autoplay} theme={data.theme} />
+      ) : null}
+    </>
+  );
+}
+
+/** Gallery music: the studio's tracks in order, with play, pause and next. Autoplay waits for the visitor's first tap (browsers require it). */
+function MusicPlayer({ tracks, autoplay, theme }: { tracks: Data["tracks"]; autoplay: boolean; theme: string }) {
+  const ref = useRef<HTMLAudioElement>(null);
+  const [i, setI] = useState(0);
+  const [playing, setPlaying] = useState(false);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: the track index changes the source, which must restart playback
+  useEffect(() => {
+    const a = ref.current;
+    if (!a) return;
+    if (playing) a.play().catch(() => setPlaying(false));
+    else a.pause();
+  }, [playing, i]);
+  useEffect(() => {
+    if (!autoplay) return;
+    const go = () => setPlaying(true);
+    window.addEventListener("pointerdown", go, { once: true });
+    return () => window.removeEventListener("pointerdown", go);
+  }, [autoplay]);
+  const t = tracks[i % tracks.length];
+  return (
+    <div className="gx gx-music" data-theme={theme} role="group" aria-label="Music">
+      <audio ref={ref} src={`/g/audio/${t.id}`} preload="none" onEnded={() => setI((n) => (n + 1) % tracks.length)} />
+      <button
+        type="button"
+        onClick={() => setPlaying((p) => !p)}
+        aria-pressed={playing}
+        aria-label={playing ? "Pause music" : "Play music"}
+      >
+        {playing ? "❚❚" : "▶"}
+      </button>
+      <span>
+        ♪ {t.title}
+        {t.artist ? <small> · {t.artist}</small> : null}
+      </span>
+      {tracks.length > 1 ? (
+        <button type="button" onClick={() => setI((n) => (n + 1) % tracks.length)} aria-label="Next track">
+          ›|
+        </button>
+      ) : null}
+    </div>
+  );
+}
+
+function GalleryView({ data }: { data: Data }) {
   const router = useRouter();
   const client = data.role === "client";
   const shopOn = data.shop.enabled && (data.shop.sellDigital || data.shop.sellPrints);
@@ -639,49 +694,6 @@ export function Gallery({ data }: { data: Data }) {
   );
 }
 
-/** Plain text with **bold**, *italic*, [links](https://…) and "- " lists, rendered as safe elements (no HTML is ever injected). */
-function RichText({ text }: { text: string }) {
-  const inline = (line: string) => {
-    const out: React.ReactNode[] = [];
-    const re = /(\*\*[^*]+\*\*|\*[^*]+\*|\[[^\]]+\]\((?:https?:\/\/|mailto:)[^)\s]+\))/g;
-    let last = 0;
-    let k = 0;
-    for (const m of line.matchAll(re)) {
-      if (m.index > last) out.push(line.slice(last, m.index));
-      const t = m[0];
-      if (t.startsWith("**")) out.push(<strong key={k++}>{t.slice(2, -2)}</strong>);
-      else if (t.startsWith("*")) out.push(<em key={k++}>{t.slice(1, -1)}</em>);
-      else {
-        const [, label, href] = /^\[([^\]]+)\]\(([^)]+)\)$/.exec(t) ?? [];
-        out.push(
-          <a key={k++} href={href} target="_blank" rel="noreferrer">
-            {label}
-          </a>,
-        );
-      }
-      last = m.index + t.length;
-    }
-    if (last < line.length) out.push(line.slice(last));
-    return out;
-  };
-  return (
-    <div className="gx-rich">
-      {text.split(/\n{2,}/).map((block, i) => {
-        const lines = block.split("\n").filter(Boolean);
-        if (lines.length && lines.every((l) => l.startsWith("- ")))
-          return (
-            <ul key={i}>
-              {lines.map((l, j) => (
-                <li key={j}>{inline(l.slice(2))}</li>
-              ))}
-            </ul>
-          );
-        return <p key={i}>{inline(lines.join(" "))}</p>;
-      })}
-    </div>
-  );
-}
-
 function About({ data }: { data: Data }) {
   const b = data.brand;
   return (
@@ -915,7 +927,9 @@ function Lightbox({
   const ref = useRef<HTMLDialogElement>(null);
   const [i, setI] = useState(start);
   const [play, setPlay] = useState(false);
-  const [panel, setPanel] = useState<"buy" | "proof" | null>(shopOn ? "buy" : client ? "proof" : null);
+  const [panel, setPanel] = useState<"buy" | "proof" | null>(
+    shopOn || (!client && data.rules.length) ? "buy" : client ? "proof" : null,
+  );
   const [draft, setDraft] = useState("");
   useEffect(() => {
     ref.current?.showModal();
@@ -936,6 +950,8 @@ function Lightbox({
     return () => removeEventListener("keydown", k);
   }, [items.length]);
   const it = items[i];
+  const own = data.rules.filter((r) => r.albumId && r.albumId === it.albumId);
+  const freeRules = own.length ? own : data.rules.filter((r) => !r.albumId);
   const options = data.shop.products.filter(
     (p) => p.kind !== "digital-all" && (DIGITAL.includes(p.kind) ? data.shop.sellDigital : data.shop.sellPrints),
   );
@@ -987,9 +1003,9 @@ function Lightbox({
         {panel ? (
           <aside className="gx-lb__panel" aria-label="Photograph options">
             <div className="gx-lb__tabs" role="tablist">
-              {shopOn ? (
+              {shopOn || (!client && data.rules.length) ? (
                 <button type="button" role="tab" aria-selected={panel === "buy"} onClick={() => setPanel("buy")}>
-                  Buy
+                  {shopOn ? "Buy" : "Download"}
                 </button>
               ) : null}
               {client ? (
@@ -1001,7 +1017,7 @@ function Lightbox({
             {panel === "buy" ? (
               <div className="gx-buy">
                 <p className="gx-buy__file">{it.filename}</p>
-                {options.length ? (
+                {shopOn && options.length ? (
                   <ul>
                     {options.map((p) => {
                       const ok = fits(p, it);
@@ -1025,15 +1041,24 @@ function Lightbox({
                       );
                     })}
                   </ul>
-                ) : (
+                ) : shopOn ? (
                   <p>Nothing is for sale here yet.</p>
-                )}
-                {cart.length ? (
+                ) : null}
+                {shopOn && cart.length ? (
                   <button type="button" className="gx-btn gx-btn--solid" onClick={onOpenCart}>
                     Open cart ({cart.reduce((n, l) => n + l.qty, 0)})
                   </button>
                 ) : null}
-                {web ? (
+                {!client && freeRules.length ? (
+                  <div className="gx-free">
+                    <h3>Free downloads</h3>
+                    <ul>
+                      {freeRules.map((r) => (
+                        <PhotoRule key={r.id} rule={r} mediaId={it.mediaId} data={data} say={say} />
+                      ))}
+                    </ul>
+                  </div>
+                ) : web ? (
                   <a
                     className="gx-btn"
                     href={`/client/download?${data.galleryId ? `g=${data.galleryId}&` : ""}m=${it.mediaId}&size=web`}
@@ -1307,7 +1332,18 @@ function Cart({
                 {err}
               </p>
             ) : null}
-            <button type="submit" className="gx-btn gx-btn--solid" disabled={busy}>
+            {data.shop.minOrderCents && subtotal < data.shop.minOrderCents ? (
+              <p role="status" className="gx-msg">
+                The smallest order here is {usd(data.shop.minOrderCents)}. Add {usd(data.shop.minOrderCents - subtotal)}{" "}
+                more to continue.
+              </p>
+            ) : null}
+            {data.shop.checkoutMessage ? <p className="gx-fine">{data.shop.checkoutMessage}</p> : null}
+            <button
+              type="submit"
+              className="gx-btn gx-btn--solid"
+              disabled={busy || (data.shop.minOrderCents > 0 && subtotal < data.shop.minOrderCents)}
+            >
               {busy ? "One moment…" : "Continue to payment"}
             </button>
             <p className="gx-fine">You pay on the next page. Prints are only ordered once your payment is confirmed.</p>
@@ -1326,6 +1362,7 @@ function Downloads({
   onClose,
   say,
 }: { data: Data; client: boolean; onClose: () => void; say: (ok: boolean, t: string) => void }) {
+  const router = useRouter();
   const [pin, setPin] = useState("");
   const [unlocked, setUnlocked] = useState(data.downloads.unlocked);
   const dl = (q: string) => `/client/download?${data.galleryId ? `g=${data.galleryId}&` : ""}${q}`;
@@ -1336,6 +1373,19 @@ function Downloads({
       say(true, r.message ?? "Unlocked.");
     } else say(false, r.error);
   }
+  if (!client && data.rules.length)
+    return (
+      <Sheet title="Download all" onClose={onClose}>
+        <ul className="gx-dl">
+          {data.rules
+            .filter((r) => r.showAll)
+            .map((r) => (
+              <RuleRow key={r.id} rule={r} data={data} dl={dl} onUnlocked={() => router.refresh()} say={say} />
+            ))}
+        </ul>
+        {data.rules.every((r) => !r.showAll) ? <p>Open a photograph to download it.</p> : null}
+      </Sheet>
+    );
   return (
     <Sheet title="Downloads" onClose={onClose}>
       {data.downloads.pin && !unlocked ? (
@@ -1379,6 +1429,154 @@ function Downloads({
         </ul>
       )}
     </Sheet>
+  );
+}
+
+/** One free-download rule: its name and size, its PIN if it has one, its licence to accept, then the ZIP links. */
+function RuleRow({
+  rule,
+  data,
+  dl,
+  onUnlocked,
+  say,
+}: {
+  rule: Data["rules"][number];
+  data: Data;
+  dl: (q: string) => string;
+  onUnlocked: () => void;
+  say: (ok: boolean, t: string) => void;
+}) {
+  const [pin, setPin] = useState("");
+  const [open, setOpen] = useState(rule.unlocked);
+  const [ok, setOk] = useState(!rule.printRelease);
+  const covered = data.items.filter((i) =>
+    rule.albumId ? i.albumId === rule.albumId : !data.rules.some((r) => r.albumId && r.albumId === i.albumId),
+  ).length;
+  const parts = Math.max(1, Math.ceil(covered / 150));
+  return (
+    <li className="gx-rule">
+      <span>
+        <strong>{rule.name}</strong>
+        <small>
+          {rule.maxPx ? `${rule.maxPx} px` : "Original size"}
+          {rule.perVisitor ? ` · up to ${rule.perVisitor} per visit` : ""}
+          {rule.watermarked ? " · watermarked" : ""}
+        </small>
+      </span>
+      {!open ? (
+        <form
+          className="gx-form gx-form--inline"
+          onSubmit={async (e) => {
+            e.preventDefault();
+            const r = await unlockRuleAction({ galleryId: data.galleryId, ruleId: rule.id, pin });
+            if (r.ok) {
+              setOpen(true);
+              onUnlocked();
+            } else say(false, r.error);
+          }}
+        >
+          <label>
+            PIN
+            <input value={pin} onChange={(e) => setPin(e.target.value)} autoComplete="off" />
+          </label>
+          <button type="submit" className="gx-btn">
+            Unlock
+          </button>
+        </form>
+      ) : (
+        <>
+          {rule.printRelease ? (
+            <details className="gx-release">
+              <summary>Licence</summary>
+              <RichText text={rule.printRelease} />
+              <label className="gx-check">
+                <input type="checkbox" checked={ok} onChange={(e) => setOk(e.target.checked)} /> I accept this licence
+              </label>
+            </details>
+          ) : null}
+          <span className="gx-rule__links">
+            {Array.from({ length: parts }, (_, k) =>
+              ok ? (
+                <a key={`${rule.id}-${k}`} className="gx-btn" href={dl(`zip=1&rule=${rule.id}&part=${k + 1}`)} download>
+                  Download ZIP{parts > 1 ? ` (part ${k + 1} of ${parts})` : ""}
+                </a>
+              ) : (
+                <button key={`${rule.id}-${k}`} type="button" className="gx-btn" disabled>
+                  Accept the licence to download
+                </button>
+              ),
+            )}
+          </span>
+        </>
+      )}
+    </li>
+  );
+}
+
+/** One rule for one photograph: unlock with its PIN, accept its licence, then download the resized copy. */
+function PhotoRule({
+  rule,
+  mediaId,
+  data,
+  say,
+}: { rule: Data["rules"][number]; mediaId: string; data: Data; say: (ok: boolean, t: string) => void }) {
+  const router = useRouter();
+  const [pin, setPin] = useState("");
+  const [open, setOpen] = useState(rule.unlocked);
+  const [ok, setOk] = useState(!rule.printRelease);
+  const href = `/client/download?${data.galleryId ? `g=${data.galleryId}&` : ""}m=${mediaId}&rule=${rule.id}`;
+  return (
+    <li className="gx-rule">
+      <span>
+        {rule.name}
+        <small>
+          {rule.maxPx ? `${rule.maxPx} px` : "original size"}
+          {rule.watermarked ? ", watermarked" : ""}
+        </small>
+      </span>
+      {!open ? (
+        <form
+          className="gx-form gx-form--inline"
+          onSubmit={async (e) => {
+            e.preventDefault();
+            const r = await unlockRuleAction({ galleryId: data.galleryId, ruleId: rule.id, pin });
+            if (r.ok) {
+              setOpen(true);
+              router.refresh();
+            } else say(false, r.error);
+          }}
+        >
+          <label>
+            PIN
+            <input value={pin} onChange={(e) => setPin(e.target.value)} autoComplete="off" />
+          </label>
+          <button type="submit" className="gx-btn">
+            Unlock
+          </button>
+        </form>
+      ) : (
+        <>
+          {rule.printRelease ? (
+            <details className="gx-release">
+              <summary>Licence</summary>
+              <RichText text={rule.printRelease} />
+              <label className="gx-check">
+                <input type="checkbox" checked={ok} onChange={(e) => setOk(e.target.checked)} /> I accept this licence
+              </label>
+            </details>
+          ) : null}
+          {ok ? (
+            <a className="gx-btn" href={href} download>
+              Download
+            </a>
+          ) : (
+            <button type="button" className="gx-btn" disabled>
+              Accept the licence first
+            </button>
+          )}
+        </>
+      )}
+    </li>
   );
 }
 

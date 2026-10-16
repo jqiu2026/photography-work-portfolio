@@ -1,7 +1,8 @@
 import { getDb, schema } from "@jerryqiu/db";
 import * as gal from "@jerryqiu/db/galleries";
 import { lockedUntil, readSecurity, readStyle, securityLog } from "@jerryqiu/db/gallery-security";
-import { freeSlug, listOrders, readShop } from "@jerryqiu/db/gallery-shop";
+import { freeSlug, listOrders, listSheets, readShop } from "@jerryqiu/db/gallery-shop";
+import { listRules, listTracks, listWatermarks } from "@jerryqiu/db/gallery-extras";
 import { and, eq, isNull } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import { requirePageUser } from "@/auth";
@@ -42,6 +43,12 @@ export default async function GalleryPage({ params }: { params: Promise<{ id: st
     .where(eq(schema.studioJobs.id, g0.jobId));
   const name = new Map(contents.map((c) => [c.media.id, c.media.filename]));
   const orders = await listOrders(db, id);
+  const [rules, watermarks, tracks, sheets] = await Promise.all([
+    listRules(db, id),
+    listWatermarks(db),
+    listTracks(db),
+    listSheets(db),
+  ]);
   const shopCfg = readShop(g0.shop);
   const suggestedSlug = g0.slug ?? (await freeSlug(db, g0.title, id));
   const g = row.g;
@@ -113,10 +120,31 @@ export default async function GalleryPage({ params }: { params: Promise<{ id: st
             listed: shopCfg.listed,
             sellDigital: shopCfg.sellDigital,
             sellPrints: shopCfg.sellPrints,
-            freeDownloads: shopCfg.freeDownloads,
-            proofing: shopCfg.proofing,
             note: shopCfg.note,
+            priceSheetId: shopCfg.priceSheetId,
+            minOrder: shopCfg.minOrderCents ? (shopCfg.minOrderCents / 100).toFixed(2) : "",
+            abandonedCart: shopCfg.abandonedCart,
+            checkoutMessage: shopCfg.checkoutMessage,
+            printRelease: shopCfg.printRelease,
           },
+          sheets: sheets.map((x) => ({ id: x.id, name: x.name, isDefault: x.isDefault })),
+          shootDate: g.shootDate ?? "",
+          orderDueDate: g.orderDueDate ?? "",
+          emailRequired: g.emailRequired,
+          autoArchive: g.autoArchive,
+          rules: rules.map((r) => ({
+            id: r.id,
+            albumId: r.albumId,
+            name: r.name,
+            maxPx: r.maxPx,
+            perVisitor: r.perVisitor,
+            watermarkId: r.watermarkId,
+            hasPin: Boolean(r.pinHash),
+            printRelease: r.printRelease ?? "",
+            showAll: r.showAll,
+          })),
+          watermarks: watermarks.map((w) => ({ id: w.id, name: w.name })),
+          tracks: tracks.map((t) => ({ id: t.id, title: t.title, artist: t.artist ?? "" })),
           orders: orders.slice(0, 40).map((o) => ({
             id: o.order.id,
             number: o.order.number,

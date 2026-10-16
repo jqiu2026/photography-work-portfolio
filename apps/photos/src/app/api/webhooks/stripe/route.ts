@@ -2,7 +2,14 @@ import { afterPayment } from "@/lib/after-payment";
 import { getDb } from "@jerryqiu/db";
 import * as st from "@jerryqiu/db/studio";
 import * as bill from "@jerryqiu/db/billing";
-import { type StripeEvent, paymentFromEvent, refundFromEvent, verifyStripeSignature } from "@jerryqiu/payments";
+import { PLANS, recordPlanCharge, setPlan } from "@jerryqiu/db/plan";
+import {
+  type StripeEvent,
+  paymentFromEvent,
+  planFromEvent,
+  refundFromEvent,
+  verifyStripeSignature,
+} from "@jerryqiu/payments";
 
 export const dynamic = "force-dynamic";
 
@@ -25,6 +32,28 @@ export async function POST(request: Request) {
   }
   const db = getDb();
   if (!db) return new Response("No database", { status: 503 });
+  // the platform's own subscription (Full Frame): switch the plan; it is never treated as an invoice payment
+  const planEvent = planFromEvent(event);
+  if (planEvent) {
+    try {
+      if (planEvent.ended)
+        await setPlan(db, "free", {
+          ids: { customerId: planEvent.customerId, subscriptionId: planEvent.subscriptionId },
+        });
+      else {
+        await setPlan(db, "fullframe", {
+          discountPct: 0,
+          ids: { customerId: planEvent.customerId, subscriptionId: planEvent.subscriptionId },
+        });
+        await recordPlanCharge(db, `Full Frame, ${new Date().toISOString().slice(0, 7)}`, PLANS.fullframe.priceCents);
+      }
+    } catch (error) {
+      console.error("[stripe] could not record the plan change", event.id, String(error));
+      return new Response("Could not record", { status: 500 });
+    }
+    await st.claimWebhookEvent(db, event.id, "stripe", event.type);
+    return Response.json({ received: true });
+  }
   const p = paymentFromEvent(event);
   if (p) {
     try {

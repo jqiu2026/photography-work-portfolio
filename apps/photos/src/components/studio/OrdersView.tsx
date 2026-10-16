@@ -2,12 +2,20 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { cancelOrderAction, saveProductAction } from "@/app/studio/gallery-actions";
+import {
+  cancelOrderAction,
+  createSheetAction,
+  deleteSheetAction,
+  makeDefaultSheetAction,
+  renameSheetAction,
+  saveProductAction,
+} from "@/app/studio/gallery-actions";
 import { Frame, useAct } from "./StudioFrame";
 import "./galleries.css";
 
 type Product = {
   id: string;
+  sheetId: string;
   kind: string;
   name: string;
   description: string;
@@ -15,6 +23,7 @@ type Product = {
   sample: boolean;
   active: boolean;
 };
+type Sheet = { id: string; name: string; isDefault: boolean };
 type Order = {
   id: string;
   number: string;
@@ -39,9 +48,13 @@ const KIND: Record<string, string> = {
 };
 
 /** The shop: one price list for every gallery, and the orders that came in. Prices marked SAMPLE are placeholders until you set them. */
-export function OrdersView({ data }: { data: { products: Product[]; orders: Order[] } }) {
+export function OrdersView({ data }: { data: { products: Product[]; sheets: Sheet[]; orders: Order[] } }) {
   const { pending, note, act } = useAct();
   const [edit, setEdit] = useState<Record<string, Partial<Product>>>({});
+  const [sheetId, setSheetId] = useState(data.sheets[0]?.id ?? "");
+  const [newName, setNewName] = useState("");
+  const [rename, setRename] = useState("");
+  const sheet = data.sheets.find((x) => x.id === sheetId) ?? data.sheets[0];
   const val = (p: Product, k: keyof Product) => (edit[p.id]?.[k] as string | undefined) ?? (p[k] as string);
   const set = (id: string, k: keyof Product, v: string) => setEdit((e) => ({ ...e, [id]: { ...e[id], [k]: v } }));
   const paid = data.orders.filter((o) => o.status === "paid" || o.status === "fulfilled");
@@ -64,61 +77,149 @@ export function OrdersView({ data }: { data: { products: Product[]; orders: Orde
       </div>
 
       <section className="st-card" aria-labelledby="ord-prices">
-        <h2 id="ord-prices">Price list</h2>
+        <h2 id="ord-prices">Price sheets</h2>
         <p className="st-note">
-          One list for every gallery. Print costs come from your lab; check each price covers the lab's cost, shipping
-          and the card fee. A price marked SAMPLE is a placeholder: set yours and it disappears.
+          A price sheet is a list of what you sell and for how much. Each gallery picks one (its Store tab); the default
+          is used when it does not. Print costs come from your lab; check each price covers the lab's cost, shipping and
+          the card fee. A price marked SAMPLE is a placeholder: set yours and it disappears.
         </p>
-        <ul className="st-list">
-          {data.products.map((p) => (
-            <li key={p.id}>
-              <span style={{ display: "grid", gap: ".3rem", flex: 1 }}>
-                <small>{KIND[p.kind] ?? p.kind}</small>
-                <input
-                  aria-label={`Name of ${p.name}`}
-                  value={val(p, "name")}
-                  onChange={(e) => set(p.id, "name", e.target.value)}
-                />
-              </span>
-              <span>
-                <input
-                  aria-label={`Price of ${p.name}`}
-                  inputMode="decimal"
-                  style={{ width: "6rem" }}
-                  value={val(p, "price")}
-                  onChange={(e) => set(p.id, "price", e.target.value)}
-                />{" "}
-                {p.sample && !edit[p.id]?.price ? <small>SAMPLE</small> : null}
-              </span>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={edit[p.id]?.active === undefined ? p.active : Boolean(edit[p.id]?.active)}
-                  onChange={(e) => setEdit((x) => ({ ...x, [p.id]: { ...x[p.id], active: e.target.checked } }))}
-                />{" "}
-                For sale
-              </label>
+        <div className="gm-row" role="tablist" aria-label="Price sheets">
+          {data.sheets.map((x) => (
+            <button
+              key={x.id}
+              type="button"
+              role="tab"
+              aria-selected={x.id === sheet?.id}
+              className="st-btn st-btn--ghost"
+              onClick={() => setSheetId(x.id)}
+            >
+              {x.name}
+              {x.isDefault ? " (default)" : ""}
+            </button>
+          ))}
+        </div>
+        <div className="gm-row">
+          <input
+            aria-label="Rename this sheet"
+            placeholder={sheet?.name}
+            value={rename}
+            onChange={(e) => setRename(e.target.value)}
+          />
+          <button
+            type="button"
+            className="st-btn st-btn--ghost"
+            disabled={pending || !rename.trim() || !sheet}
+            onClick={() =>
+              sheet &&
+              act(
+                () => renameSheetAction({ id: sheet.id, name: rename }),
+                () => setRename(""),
+              )
+            }
+          >
+            Rename
+          </button>
+          {sheet && !sheet.isDefault ? (
+            <>
               <button
                 type="button"
-                className="st-btn"
-                disabled={pending || !edit[p.id]}
+                className="st-btn st-btn--ghost"
+                disabled={pending}
+                onClick={() => act(() => makeDefaultSheetAction(sheet.id))}
+              >
+                Make default
+              </button>
+              <button
+                type="button"
+                className="st-btn st-btn--ghost"
+                disabled={pending}
                 onClick={() =>
+                  confirm(`Delete the price sheet "${sheet.name}"?`) &&
                   act(
-                    () =>
-                      saveProductAction({
-                        id: p.id,
-                        name: edit[p.id]?.name,
-                        price: edit[p.id]?.price,
-                        active: edit[p.id]?.active,
-                      }),
-                    () => setEdit((x) => ({ ...x, [p.id]: undefined as never })),
+                    () => deleteSheetAction(sheet.id),
+                    () => setSheetId(data.sheets[0]?.id ?? ""),
                   )
                 }
               >
-                Save
+                Delete sheet
               </button>
-            </li>
-          ))}
+            </>
+          ) : null}
+        </div>
+        <form
+          className="gm-inline"
+          aria-label="New price sheet"
+          noValidate
+          onSubmit={(e) => {
+            e.preventDefault();
+            act(
+              () => createSheetAction({ name: newName, copyFrom: sheet?.id }),
+              () => setNewName(""),
+            );
+          }}
+        >
+          <input
+            aria-label="New sheet name"
+            placeholder="New sheet (copies this one)"
+            value={newName}
+            onChange={(e) => setNewName(e.target.value)}
+          />
+          <button type="submit" className="st-btn" disabled={pending}>
+            Add sheet
+          </button>
+        </form>
+        <ul className="st-list">
+          {data.products
+            .filter((p) => p.sheetId === sheet?.id)
+            .map((p) => (
+              <li key={p.id}>
+                <span style={{ display: "grid", gap: ".3rem", flex: 1 }}>
+                  <small>{KIND[p.kind] ?? p.kind}</small>
+                  <input
+                    aria-label={`Name of ${p.name}`}
+                    value={val(p, "name")}
+                    onChange={(e) => set(p.id, "name", e.target.value)}
+                  />
+                </span>
+                <span>
+                  <input
+                    aria-label={`Price of ${p.name}`}
+                    inputMode="decimal"
+                    style={{ width: "6rem" }}
+                    value={val(p, "price")}
+                    onChange={(e) => set(p.id, "price", e.target.value)}
+                  />{" "}
+                  {p.sample && !edit[p.id]?.price ? <small>SAMPLE</small> : null}
+                </span>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={edit[p.id]?.active === undefined ? p.active : Boolean(edit[p.id]?.active)}
+                    onChange={(e) => setEdit((x) => ({ ...x, [p.id]: { ...x[p.id], active: e.target.checked } }))}
+                  />{" "}
+                  For sale
+                </label>
+                <button
+                  type="button"
+                  className="st-btn"
+                  disabled={pending || !edit[p.id]}
+                  onClick={() =>
+                    act(
+                      () =>
+                        saveProductAction({
+                          id: p.id,
+                          name: edit[p.id]?.name,
+                          price: edit[p.id]?.price,
+                          active: edit[p.id]?.active,
+                        }),
+                      () => setEdit((x) => ({ ...x, [p.id]: undefined as never })),
+                    )
+                  }
+                >
+                  Save
+                </button>
+              </li>
+            ))}
         </ul>
       </section>
 

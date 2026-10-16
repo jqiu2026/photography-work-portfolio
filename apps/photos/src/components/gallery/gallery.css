@@ -1302,3 +1302,91 @@ body:has(.gx) {
 .gx-album-note {
   margin-top: .2rem;
 }
+
+.gx-free h3 {
+  margin: .8rem 0 .2rem;
+  font-size: .95rem;
+  font-family: var(--gx-font);
+  color: var(--gx-muted);
+  font-weight: 500;
+}
+.gx-free ul,
+.gx-dl {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.gx-rule {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem 1rem;
+  padding: .8rem 0;
+  border-bottom: 1px solid var(--gx-line);
+}
+.gx-rule > span:first-child {
+  display: grid;
+  gap: .15rem;
+  flex: 1 1 10rem;
+}
+.gx-rule small {
+  color: var(--gx-muted);
+  font-size: .78rem;
+}
+.gx-rule__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+}
+.gx-release {
+  flex-basis: 100%;
+  font-size: .86rem;
+}
+.gx-release summary {
+  cursor: pointer;
+  color: var(--gx-muted);
+}
+.gx-check {
+  display: flex;
+  gap: .5rem;
+  align-items: center;
+  margin-top: .5rem;
+}
+.gx-form--inline {
+  display: flex;
+  align-items: end;
+  gap: .5rem;
+}
+
+.gx-music {
+  position: fixed;
+  left: 1rem;
+  bottom: 1rem;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  min-height: 0;
+  padding: .35rem .6rem;
+  border: 1px solid var(--gx-line);
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--gx-bg) 90%, transparent);
+  backdrop-filter: blur(10px);
+  font-size: .8rem;
+  max-width: calc(100vw - 2rem);
+}
+.gx-music button {
+  min-width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--gx-accent);
+  color: var(--gx-on-accent);
+  cursor: pointer;
+}
+.gx-music span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

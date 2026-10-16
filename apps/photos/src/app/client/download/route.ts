@@ -7,6 +7,7 @@ import { clientIpHash } from "@jerryqiu/protect";
 import { downloadsUnlocked, galleryAccess, lockedMediaIds } from "@/lib/client-gallery";
 import { baseName, zipPlan } from "@/lib/downloads";
 import { fullFile, webFile } from "@/lib/gallery-files";
+import { ruleDownload } from "@/lib/rule-download";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -31,11 +32,15 @@ export async function GET(request: Request) {
   if (a.state === "expired" || a.state === "archived" || a.state === "draft")
     return deny(403, "This gallery has expired. Extend it to download.");
   const g = a.gallery;
-  if (a.role === "visitor") {
-    // visitors of the public link only get free web-size copies, and only when the studio allows them
-    if (size !== "web" || readShop(g.shop).freeDownloads !== "web")
-      return deny(403, "Downloads are available in the shop.");
-  } else if (!gal.downloadAllowed(g, size)) return deny(403, "Downloads are not enabled for this gallery.");
+  // a visitor's free download under one of the gallery's rules is checked in ruleDownload; without a rule they only get the
+  // legacy free web-size copies, and only when the studio allows them
+  const viaRule = a.role === "visitor" && u.searchParams.has("rule");
+  if (!viaRule) {
+    if (a.role === "visitor") {
+      if (size !== "web" || readShop(g.shop).freeDownloads !== "web")
+        return deny(403, "Downloads are available in the shop.");
+    } else if (!gal.downloadAllowed(g, size)) return deny(403, "Downloads are not enabled for this gallery.");
+  }
   if (a.role === "client" && g.downloadPinHash && !(await downloadsUnlocked(g.id)))
     return deny(403, "Enter the download PIN first.");
   const ip = clientIpHash(request.headers);
@@ -52,6 +57,8 @@ export async function GET(request: Request) {
     "X-Content-Type-Options": "nosniff",
     "X-Robots-Tag": "noindex, noai, noimageai",
   };
+
+  if (viaRule) return ruleDownload({ db, a, url: u, contents, ip, headers });
 
   const web = (mediaId: string) => webFile(contents, mediaId, a.viewer);
   const full = (mediaId: string) => fullFile(contents, mediaId);

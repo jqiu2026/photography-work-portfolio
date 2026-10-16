@@ -1,5 +1,7 @@
 import { getDb, schema } from "@jerryqiu/db";
 import * as gal from "@jerryqiu/db/galleries";
+import { assertUpload } from "@jerryqiu/db/plan";
+import { StudioError } from "@jerryqiu/db/studio";
 import { safeName } from "@jerryqiu/media";
 import { and, eq, isNull } from "drizzle-orm";
 import { NextResponse } from "next/server";
@@ -54,6 +56,12 @@ export const POST = guardedRoute(
         .where(and(eq(schema.studioGalleryItems.galleryId, galleryId), eq(schema.studioGalleryItems.mediaId, same.id)));
       if (!already.length) await gal.addItems(db, galleryId, [same.id], albumId ?? null);
       return NextResponse.json({ duplicate: true, added: !already.length, mediaId: same.id });
+    }
+    try {
+      await assertUpload(db, galleryId, parsed.data.size);
+    } catch (e) {
+      if (e instanceof StudioError) return NextResponse.json({ error: e.message }, { status: 402 });
+      throw e;
     }
     const id = crypto.randomUUID();
     const key = `orig/${id}/${safeName(filename)}`;

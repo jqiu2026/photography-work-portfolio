@@ -207,3 +207,73 @@ export async function createRefund(
 
 export const stripeConfigured = (env: Record<string, string | undefined> = process.env) =>
   Boolean(env.STRIPE_SECRET_KEY && env.STRIPE_WEBHOOK_SECRET);
+
+/* ---------- the platform's own subscription (Full Frame) ---------- */
+export type SubscriptionInput = {
+  /** A Stripe Price id for the monthly plan (STRIPE_PRICE_FULLFRAME). */
+  priceId: string;
+  plan: string;
+  successUrl: string;
+  cancelUrl: string;
+  customerEmail?: string;
+};
+export function subscriptionBody(i: SubscriptionInput): string {
+  if (!/^price_[A-Za-z0-9_]+$/.test(i.priceId)) throw new Error("STRIPE_PRICE_FULLFRAME is not a Stripe price id.");
+  return formEncode({
+    mode: "subscription",
+    success_url: i.successUrl,
+    cancel_url: i.cancelUrl,
+    customer_email: i.customerEmail,
+    "line_items[0][price]": i.priceId,
+    "line_items[0][quantity]": 1,
+    // not client_reference_id: the payment webhook reads that as an invoice id
+    "metadata[kind]": "plan",
+    "metadata[plan]": i.plan,
+    "subscription_data[metadata][kind]": "plan",
+    "subscription_data[metadata][plan]": i.plan,
+    allow_promotion_codes: "true",
+  });
+}
+export async function createSubscriptionSession(
+  cfg: StripeConfig,
+  input: SubscriptionInput,
+  idempotencyKey: string,
+): Promise<{ id: string; url: string }> {
+  if (!/^sk_(test|live)_/.test(cfg.secretKey)) throw new Error("STRIPE_SECRET_KEY is not a Stripe secret key.");
+  const res = await (cfg.fetch ?? fetch)(`${cfg.apiBase ?? "https://api.stripe.com"}/v1/checkout/sessions`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${cfg.secretKey}`,
+      "Content-Type": "application/x-www-form-urlencoded",
+      "Idempotency-Key": idempotencyKey,
+    },
+    body: subscriptionBody(input),
+  });
+  if (!res.ok) throw new Error(`Stripe responded ${res.status}`);
+  const j = (await res.json()) as { id?: string; url?: string };
+  if (!j.id || !j.url) throw new Error("Stripe returned no session url.");
+  return { id: j.id, url: j.url };
+}
+/** What the studio needs from a plan event: which plan, and the Stripe customer and subscription, or that it ended. */
+export function planFromEvent(
+  e: StripeEvent,
+): { plan: string; customerId: string; subscriptionId: string; ended: boolean } | null {
+  const o = e.data.object;
+  const meta = (o.metadata ?? {}) as Record<string, string>;
+  if (meta.kind !== "plan") return null;
+  if (e.type === "checkout.session.completed")
+    return {
+      plan: meta.plan ?? "fullframe",
+      customerId: String(o.customer ?? ""),
+      subscriptionId: String(o.subscription ?? ""),
+      ended: false,
+    };
+  if (e.type === "customer.subscription.deleted")
+    return {
+      plan: meta.plan ?? "fullframe",
+      customerId: String(o.customer ?? ""),
+      subscriptionId: String(o.id ?? ""),
+      ended: true,
+    };
+  return null;
+}

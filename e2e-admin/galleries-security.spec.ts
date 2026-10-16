@@ -46,12 +46,10 @@ test("owner makes a gallery and sets its security and look", async ({ page }) =>
   ]);
 
   // look
-  await page.getByRole("tab", { name: "Design" }).click();
+  await page.getByRole("tab", { name: "Branding" }).click();
   await page.getByLabel("Typeface").selectOption("serif");
   await page.getByLabel("Spacing").selectOption("wide");
   await page.getByLabel("Corners").selectOption("round");
-  await page.getByLabel(/Legacy: cover above/).check();
-  await page.getByLabel(/Show filenames/).check();
   await page.getByLabel(/Line above the title/).fill(`Studio ${uid}`);
   await page.getByLabel(/Closing note/).fill(`Thanks, ${uid}`);
   await page.getByLabel("Background colour (hex, optional)").fill("red");
@@ -61,8 +59,14 @@ test("owner makes a gallery and sets its security and look", async ({ page }) =>
   await page.getByRole("button", { name: "Save look" }).click();
   await slow(page.getByRole("status").filter({ hasText: "Look saved" })).toBeVisible();
 
+  // filenames shown (Settings, Advanced)
+  await page.getByRole("tab", { name: "Settings" }).click();
+  await page.getByLabel(/Show filenames/).check();
+  await page.getByRole("button", { name: "Save advanced settings" }).click();
+  await slow(page.getByRole("status").filter({ hasText: "Look saved" })).toBeVisible();
+
   // downloads allowed, capped at one a day
-  await page.getByRole("tab", { name: "Share" }).click();
+  await page.getByRole("tab", { name: "Downloads" }).click();
   await page.getByLabel("What clients can download").selectOption("web");
   await page.getByRole("button", { name: "Save", exact: true }).click();
   await slow(page.getByRole("status").filter({ hasText: "Download setting saved" })).toBeVisible();
