@@ -1,0 +1,26 @@
+{
+ "day-one-cover": {
+  "width": 5707,
+  "height": 3620,
+  "color": "rgb(88, 103, 102)",
+  "blur": "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAAAwAgCdASoQAAoAA4BaJQBdj+ADL++Yz1q9VAD7yVk8ljQEqlsAJsk+g6RJjsoHDQKOtzSYm2baBmqHvAvOBlZyE4wS6wuAI9QNUWUafEbj4UZ6ufy1HW9JjcAAAA==",
+  "files": [
+   {
+    "width": 480,
+    "src": "/opt/blogs/day-one-cover-480.webp"
+   },
+   {
+    "width": 960,
+    "src": "/opt/blogs/day-one-cover-960.webp"
+   },
+   {
+    "width": 1600,
+    "src": "/opt/blogs/day-one-cover-1600.webp"
+   },
+   {
+    "width": 2400,
+    "src": "/opt/blogs/day-one-cover-2400.webp"
+   }
+  ]
+ }
+}

@@ -29,7 +29,7 @@
 -- extra note from jerry: I'm not sure what the flying page will look like yet, but it would be fine to log tail numbers etc if i needed to. music page would just include my musical background and act like a music portfolio. 
 -- also, im in a grey zone with displaying photos of minors. i of course will use them sparingly but i should be fine since i took those images and the rights transfer over to personal portfolio. the photos used are mostly all posted publicly anyways so no terrible difficiultuies. a lot taken when i was minor as well.  dont worry too much about legal and compliance for now.
 
-## Studio (`photos.jerryqiu.com`), Phase 3 additions
+## Studio (`photo.jerryqiu.com`), Phase 3 additions
 
 (Documented here so Phase 2 designs leave room for them.)
 

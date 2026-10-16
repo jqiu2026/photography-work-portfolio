@@ -16,8 +16,6 @@ export type SiteInfo = {
   preset: Preset;
   /** The site's accent colour (a dash of colour in the switcher and footer). */
   color: "blue" | "red" | "green" | "yellow";
-  /** Path form that works in dev on the hub app (music/flying). */
-  devPath?: string;
 };
 
 const isProd = process.env.NODE_ENV === "production";
@@ -43,7 +41,7 @@ export function getSites(): SiteInfo[] {
       description: "Portfolio and galleries",
       preset: "photos",
       color: "red",
-      url: origin(process.env.NEXT_PUBLIC_PHOTOS_URL, "http://localhost:3002", "https://photos.jerryqiu.com"),
+      url: origin(process.env.NEXT_PUBLIC_PHOTOS_URL, "http://localhost:3002", "https://photo.jerryqiu.com"),
     },
     {
       id: "music",
@@ -51,8 +49,7 @@ export function getSites(): SiteInfo[] {
       description: "What I play and where to hear it",
       preset: "music",
       color: "yellow",
-      url: origin(process.env.NEXT_PUBLIC_MUSIC_URL, `${hub}/music`, "https://music.jerryqiu.com"),
-      devPath: "/music",
+      url: origin(process.env.NEXT_PUBLIC_MUSIC_URL, "http://localhost:3003", "https://music.jerryqiu.com"),
     },
     {
       id: "flying",
@@ -60,8 +57,7 @@ export function getSites(): SiteInfo[] {
       description: "Notes and photos about flying",
       preset: "flying",
       color: "green",
-      url: origin(process.env.NEXT_PUBLIC_FLYING_URL, `${hub}/flying`, "https://flying.jerryqiu.com"),
-      devPath: "/flying",
+      url: origin(process.env.NEXT_PUBLIC_FLYING_URL, "http://localhost:3004", "https://flying.jerryqiu.com"),
     },
   ];
 }
@@ -73,17 +69,9 @@ export function getSite(id: SiteId): SiteInfo {
 }
 
 /**
- * Link path for a page of a site. When a site shares the hub's origin (dev: localhost:3000/music) its pages
- * live under /music and /flying (path mode); when it has its own origin (production: music.jerryqiu.com)
- * paths are root-relative (host mode) and proxy.ts rewrites them.
+ * Link path for a page of a site. Every site has its own origin (and its own deployment), so paths are always
+ * root-relative within that site.
  */
-export function sitePath(id: SiteId, path = "/"): string {
-  const prefix =
-    id === "music" || id === "flying"
-      ? new URL(getSite(id).url).origin === new URL(getSite("hub").url).origin
-        ? `/${id}`
-        : ""
-      : "";
-  const p = path === "/" ? "" : path;
-  return `${prefix}${p}` || "/";
+export function sitePath(_id: SiteId, path = "/"): string {
+  return path === "" ? "/" : path;
 }

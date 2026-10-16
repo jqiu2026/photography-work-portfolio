@@ -1,7 +1,7 @@
 export type AdminSite = "hub" | "photos" | "music" | "flying";
 export const adminSites: { id: AdminSite; label: string; note: string }[] = [
   { id: "hub", label: "Hub", note: "jerryqiu.com" },
-  { id: "photos", label: "Photography", note: "photos." },
+  { id: "photos", label: "Photography", note: "photo." },
   { id: "music", label: "Music", note: "music." },
   { id: "flying", label: "Flying", note: "flying." },
 ];

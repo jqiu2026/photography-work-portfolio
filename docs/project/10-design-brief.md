@@ -50,9 +50,9 @@ jerryqiu.com            HUB (main page; may link to the three worlds)
   /writing, /writing/[slug]   Blog (featured post + list on the home)
   /connect              Contact form (stored in the inbox) + accounts
   /privacy /terms /licensing /accessibility   Legal, canonical here
-  (old /work and /work/[slug] redirect to photos.jerryqiu.com)
+  (old /work and /work/[slug] redirect to photo.jerryqiu.com)
 
-photos.jerryqiu.com     PHOTOGRAPHY (footer: one button back to jerryqiu.com)
+photo.jerryqiu.com     PHOTOGRAPHY (footer: one button back to jerryqiu.com)
   /                     Immersive product-page style home
   /portfolio, /portfolio/[slug]   Photo galleries
   /video, /video/[slug]           Video gallery

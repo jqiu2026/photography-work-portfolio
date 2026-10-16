@@ -17,6 +17,8 @@ const env = {
   STORAGE_DIR: path.join(DATA, "storage"),
   NEXT_PUBLIC_HUB_URL: "http://localhost:3300",
   NEXT_PUBLIC_PHOTOS_URL: "http://localhost:3302",
+  NEXT_PUBLIC_MUSIC_URL: "http://localhost:3304",
+  NEXT_PUBLIC_FLYING_URL: "http://localhost:3305",
   REVALIDATE_SECRET: "e2e-revalidate-secret-0123456789",
 };
 
@@ -46,7 +48,13 @@ export default defineConfig({
     {
       command: "pnpm --filter @jerryqiu/photos dev",
       port: 3302,
-      env: { ...env, PORT: "3302", NEXT_DIST_DIR: ".next-e2e", SHOOTPROOF_MODE: "mock" },
+      env: {
+        ...env,
+        PORT: "3302",
+        NEXT_DIST_DIR: ".next-e2e",
+        SHOOTPROOF_MODE: "mock",
+        STRIPE_WEBHOOK_SECRET: "whsec_e2e_secret",
+      },
       reuseExistingServer: false,
       timeout: 180_000,
     },
@@ -55,6 +63,20 @@ export default defineConfig({
       command: "pnpm --filter @jerryqiu/photos dev",
       port: 3303,
       env: { ...env, PORT: "3303", NEXT_DIST_DIR: ".next-e2e-b", NEXT_PUBLIC_PHOTOS_URL: "http://localhost:3303" },
+      reuseExistingServer: false,
+      timeout: 180_000,
+    },
+    {
+      command: "pnpm --filter @jerryqiu/music dev",
+      port: 3304,
+      env: { ...env, PORT: "3304", NEXT_DIST_DIR: ".next-e2e" },
+      reuseExistingServer: false,
+      timeout: 180_000,
+    },
+    {
+      command: "pnpm --filter @jerryqiu/flying dev",
+      port: 3305,
+      env: { ...env, PORT: "3305", NEXT_DIST_DIR: ".next-e2e" },
       reuseExistingServer: false,
       timeout: 180_000,
     },

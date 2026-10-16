@@ -111,17 +111,17 @@ describe("safeCallback", () => {
 });
 
 describe("safeCallback across our own sites", () => {
-  const origins = ["https://photos.jerryqiu.com", "http://localhost:3002"];
+  const origins = ["https://photo.jerryqiu.com", "http://localhost:3002"];
   it("allows absolute URLs only for known origins", () => {
-    expect(safeCallback("https://photos.jerryqiu.com/studio", "/admin", origins)).toBe(
-      "https://photos.jerryqiu.com/studio",
+    expect(safeCallback("https://photo.jerryqiu.com/studio", "/admin", origins)).toBe(
+      "https://photo.jerryqiu.com/studio",
     );
     expect(safeCallback("http://localhost:3002/studio", "/admin", origins)).toBe("http://localhost:3002/studio");
     for (const bad of [
-      "https://photos.jerryqiu.com.evil.com/x",
+      "https://photo.jerryqiu.com.evil.com/x",
       "https://evil.com/studio",
-      "http://photos.jerryqiu.com/x",
-      "javascript://photos.jerryqiu.com/%0Aalert(1)",
+      "http://photo.jerryqiu.com/x",
+      "javascript://photo.jerryqiu.com/%0Aalert(1)",
       "ftp://localhost:3002/x",
     ])
       expect(safeCallback(bad, "/admin", origins)).toBe("/admin");

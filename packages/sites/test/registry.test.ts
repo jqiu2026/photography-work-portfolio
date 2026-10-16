@@ -7,20 +7,21 @@ async function load() {
 afterEach(() => vi.unstubAllEnvs());
 
 describe("site registry", () => {
-  it("defaults to localhost in development: music and flying live under the hub (path mode)", async () => {
+  it("defaults to localhost in development: every site has its own port", async () => {
     vi.stubEnv("NODE_ENV", "development");
     const { getSite, sitePath } = await load();
     expect(getSite("hub").url).toBe("http://localhost:3000");
     expect(getSite("photos").url).toBe("http://localhost:3002");
-    expect(getSite("music").url).toBe("http://localhost:3000/music");
-    expect(sitePath("music", "/listen")).toBe("/music/listen");
-    expect(sitePath("flying")).toBe("/flying");
+    expect(getSite("music").url).toBe("http://localhost:3003");
+    expect(getSite("flying").url).toBe("http://localhost:3004");
+    expect(sitePath("music", "/listen")).toBe("/listen");
+    expect(sitePath("flying")).toBe("/");
     expect(sitePath("hub", "/about")).toBe("/about");
   });
-  it("uses the real subdomains in production and root-relative paths (host mode)", async () => {
+  it("uses the real subdomains in production and root-relative paths", async () => {
     vi.stubEnv("NODE_ENV", "production");
     const { getSite, sitePath } = await load();
-    expect(getSite("photos").url).toBe("https://photos.jerryqiu.com");
+    expect(getSite("photos").url).toBe("https://photo.jerryqiu.com");
     expect(getSite("music").url).toBe("https://music.jerryqiu.com");
     expect(sitePath("music", "/listen")).toBe("/listen");
     expect(sitePath("music")).toBe("/");

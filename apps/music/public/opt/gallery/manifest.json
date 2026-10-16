@@ -1,0 +1,26 @@
+{
+ "jry0473": {
+  "width": 5313,
+  "height": 3542,
+  "color": "rgb(198, 126, 216)",
+  "blur": "data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAADwAQCdASoQAAsAA4BaJbACdLoAAXX0DAAA/rXuPyU1x6ouomjyZxAgMQEftC5ukuSIsWpZXmZefLGYHPBtSUWvmJMmTbZWAXZPm/wE7EhKK0xlG7AB8kTdyJPRHTwAAAA=",
+  "files": [
+   {
+    "width": 480,
+    "src": "/opt/gallery/jry0473-480.webp"
+   },
+   {
+    "width": 960,
+    "src": "/opt/gallery/jry0473-960.webp"
+   },
+   {
+    "width": 1600,
+    "src": "/opt/gallery/jry0473-1600.webp"
+   },
+   {
+    "width": 2400,
+    "src": "/opt/gallery/jry0473-2400.webp"
+   }
+  ]
+ }
+}

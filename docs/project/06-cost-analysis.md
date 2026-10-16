@@ -2,6 +2,8 @@
 
 Prices are approximate, gathered from third-party sources in October 2026. **Re-verify each on the vendor's own pricing page when implementing**, and update this file.
 
+> **Update 2026-10-15:** owner decisions ([13](13-feature-list-2026-10-15.md), Q51 to Q61): Vercel Blob only (R2 dropped), website-only costs up to about $20/month, Stripe and WHCC fees passed to clients. The R2 rows and totals below are superseded and not yet rewritten. Re-verify Blob pricing at the real library size.
+
 ## Owner's budget
 
 - Vercel Pro: accepted (about $20/month per seat).

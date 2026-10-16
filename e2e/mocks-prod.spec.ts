@@ -1,19 +1,19 @@
 import { expect, test } from "@playwright/test";
-import { hub, photos } from "./routes";
+import { flying, music, photos } from "./routes";
 
 /**
  * Mocks are disabled in production builds: the score store and the flight map are 404 and nothing in the navigation points
  * at them. The studio and client pages are real (database-backed): without a database or a session they redirect or 404.
  */
 const mockRoutes = [
-  `${hub}/music/compositions`,
-  `${hub}/music/compositions/sample-window-music`,
-  `${hub}/music/scores`,
-  `${hub}/music/scores/cart`,
-  `${hub}/music/scores/checkout`,
-  `${hub}/music/scores/library`,
-  `${hub}/music/scores/sample-window-music`,
-  `${hub}/flying/map`,
+  `${music}/compositions`,
+  `${music}/compositions/sample-window-music`,
+  `${music}/scores`,
+  `${music}/scores/cart`,
+  `${music}/scores/checkout`,
+  `${music}/scores/library`,
+  `${music}/scores/sample-window-music`,
+  `${flying}/map`,
   `${photos}/studio/overview`,
   `${photos}/studio/shoots`,
   `${photos}/client/gallery`,
@@ -37,7 +37,7 @@ test("the client portal entry shows no passcode form without a database", async 
 });
 
 test("music and flying homes link to no mock routes in production", async ({ page }) => {
-  for (const url of [`${hub}/music`, `${hub}/flying`]) {
+  for (const url of [`${music}`, `${flying}`]) {
     await page.goto(url, { waitUntil: "networkidle" });
     const hrefs = await page.$$eval("a[href]", (as) => as.map((a) => (a as HTMLAnchorElement).pathname));
     expect(hrefs.filter((h) => /\/(compositions|scores|map)(\/|$)/.test(h))).toEqual([]);

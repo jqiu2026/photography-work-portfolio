@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { hub, photos } from "./routes";
+import { flying, hub, music, photos } from "./routes";
 
 /**
  * The static tier is complete: with no JavaScript, with reduced motion, and with the Calm choice, every home shows all of
@@ -14,8 +14,8 @@ const homes = [
     h1: /Pictures of people at work/i,
     texts: [/Everything I've shot/i, /Say hello/i],
   },
-  { name: "music", url: `${hub}/music`, h1: /Music/, texts: [/Say hello/i] },
-  { name: "flying", url: `${hub}/flying`, h1: /Flying/, texts: [/Say hello/i, /The log/i] },
+  { name: "music", url: `${music}/`, h1: /Music/, texts: [/Say hello/i] },
+  { name: "flying", url: `${flying}/`, h1: /Flying/, texts: [/Say hello/i, /The log/i] },
 ];
 
 for (const h of homes) {

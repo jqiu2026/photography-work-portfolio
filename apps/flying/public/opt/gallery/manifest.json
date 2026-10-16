@@ -1,0 +1,50 @@
+{
+ "jetblue-a220-300-1": {
+  "width": 8936,
+  "height": 4679,
+  "color": "rgb(187, 193, 205)",
+  "blur": "data:image/webp;base64,UklGRlYAAABXRUJQVlA4IEoAAADQAQCdASoQAAgAA4BaJYwCdAEPfhrlhAD+yj5iF1zvk3blo+0rmWKYKzbS6Cr4fIr01+TfVjbi/8D4AFerH31mzHTiLNGXxpwAAA==",
+  "files": [
+   {
+    "width": 480,
+    "src": "/opt/gallery/jetblue-a220-300-1-480.webp"
+   },
+   {
+    "width": 960,
+    "src": "/opt/gallery/jetblue-a220-300-1-960.webp"
+   },
+   {
+    "width": 1600,
+    "src": "/opt/gallery/jetblue-a220-300-1-1600.webp"
+   },
+   {
+    "width": 2400,
+    "src": "/opt/gallery/jetblue-a220-300-1-2400.webp"
+   }
+  ]
+ },
+ "jetblue-a321neo-1": {
+  "width": 5969,
+  "height": 3125,
+  "color": "rgb(199, 199, 202)",
+  "blur": "data:image/webp;base64,UklGRkgAAABXRUJQVlA4IDwAAADQAQCdASoQAAgAA4BaJZwAAiGl2hcYoAD+8eBf7evcKx3GlMlv4LfpuXa23jx/Zl/lLR9eYGoaAxSAAAA=",
+  "files": [
+   {
+    "width": 480,
+    "src": "/opt/gallery/jetblue-a321neo-1-480.webp"
+   },
+   {
+    "width": 960,
+    "src": "/opt/gallery/jetblue-a321neo-1-960.webp"
+   },
+   {
+    "width": 1600,
+    "src": "/opt/gallery/jetblue-a321neo-1-1600.webp"
+   },
+   {
+    "width": 2400,
+    "src": "/opt/gallery/jetblue-a321neo-1-2400.webp"
+   }
+  ]
+ }
+}

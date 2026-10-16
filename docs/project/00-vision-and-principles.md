@@ -9,7 +9,7 @@ Jerry Qiu's site began as a Next.js portfolio on Once UI with MDX content. It is
 | Site | Domain | Role |
 |---|---|---|
 | **Hub** | `jerryqiu.com` | The main page and the only place that introduces the others. A cinematic, navbar-less story of who Jerry is (photographer, builder, drone pilot, musician, New York), then the three worlds as dimensions you pass into, then the blog (a featured post flowing into a list), then "Say hello." It also carries about, connect and the legal pages. |
-| **Photography** | `photos.jerryqiu.com` | Photo and video portfolio and gallery, project case studies, booking, and the studio platform behind it (galleries, clients, contracts, invoices; built in Phase 3, designed and mocked first). Apple-product-page immersion with crafted, unusual words. ShootProof serves this hostname until the owner switches DNS after Phase 3 is verified. |
+| **Photography** | `photo.jerryqiu.com` | Photo and video portfolio and gallery, project case studies, booking, and the studio platform behind it (galleries, clients, contracts, invoices; built in Phase 3, designed and mocked first). Apple-product-page immersion with crafted, unusual words. ShootProof serves this hostname until the owner switches DNS after Phase 3 is verified. |
 | **Music** | `music.jerryqiu.com` | Compositions; listen when a performance recording exists; preview and buy scores, kept separate from listening. Each page has its own vibe: stage and spotlight, typographic score, minimal listening room. |
 | **Flying** | `flying.jerryqiu.com` | A flying journal: involvement, writing, aircraft, a map of past flights, instrument-like details; a quiet, off-by-default slot for CFI services someday. |
 

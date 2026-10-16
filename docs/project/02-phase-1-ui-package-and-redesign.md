@@ -2,7 +2,7 @@
 
 > **Status 2026-10-12:** Phase 1 is complete and archived. Its visual outcome (Instrument Sans, neutral grayscale, handwritten `--hl-*` CSS, header-based pages) is being **replaced from scratch** in Phase 2.5 by an original, sellable UI system; see [12-vision-v2.md](12-vision-v2.md) and [HANDOFF.md](HANDOFF.md). Engineering parts (workspace layout, tests, docs-coverage rule, rename script, accessibility test rig) carry over.
 
-**Goal:** an open-source, documented UI package, and the family of sites rebuilt on it: the hub (profile-style, `jerryqiu.com`), the photography portfolio (`photos.jerryqiu.com`), and the music and flying sites. Squarespace-grade polish with a restrained Apple-style motion layer ([10](10-design-brief.md)). No Once UI left when done. Must **not** resemble the StuyAviators site.
+**Goal:** an open-source, documented UI package, and the family of sites rebuilt on it: the hub (profile-style, `jerryqiu.com`), the photography portfolio (`photo.jerryqiu.com`), and the music and flying sites. Squarespace-grade polish with a restrained Apple-style motion layer ([10](10-design-brief.md)). No Once UI left when done. Must **not** resemble the StuyAviators site.
 
 **Exit:** all acceptance criteria below pass, [PROGRESS.md](PROGRESS.md) is updated, then continue straight into Phase 2.
 
@@ -15,7 +15,7 @@
    /
      apps/web        hub (jerryqiu.com) + music + flying sites via host routing (:3000)
                      (moved from current root: src/, public/, next.config.mjs)
-     apps/photos     photography site (photos.jerryqiu.com) (:3002). Phase 1: public portfolio
+     apps/photos     photography site (photo.jerryqiu.com) (:3002). Phase 1: public portfolio
      apps/docs       docs site for the UI package (:3001)
      packages/sites  site registry (hostnames, nav, theme presets, cross-site links)
      packages/ui     the library (placeholder name)
@@ -105,7 +105,7 @@ Migrate route by route, replacing Once UI with the new package. Keep old URLs wo
 
 **Music (`/music` in dev, music.jerryqiu.com in prod) and Flying (`/flying`, flying.jerryqiu.com):** built on the shared interest-site template (hero, intro, highlights, timeline, media) with their own theme presets and the site switcher. Music: story, instruments, click-to-load recordings/performances, repertoire. Flying: journey in plain terms, milestones/flight log with photos, aircraft, StuyAviators connection. Host routing via `proxy.ts` ([01](01-decisions-and-assumptions.md) A33; verify Next 16 docs). Facts are placeholders until supplied; production hides empty fields.
 
-**Photography (`apps/photos`, photos.jerryqiu.com):** the existing photography content moves here: cinematic portfolio home, curated galleries with lightbox and category tabs (static from the repo in Phase 1), about the photographer, book/inquiry (form + mailto), a "Client galleries" button pointing at the current ShootProof URL via env (placeholder). The hub's `/gallery` redirects to the photos site (in dev, to `localhost:3002`).
+**Photography (`apps/photos`, photo.jerryqiu.com):** the existing photography content moves here: cinematic portfolio home, curated galleries with lightbox and category tabs (static from the repo in Phase 1), about the photographer, book/inquiry (form + mailto), a "Client galleries" button pointing at the current ShootProof URL via env (placeholder). The hub's `/gallery` redirects to the photos site (in dev, to `localhost:3002`).
 
 **All sites:** shared header with site switcher, shared footer with "More from me", shared legal links to the hub's canonical pages, one UI package, per-site theme presets, host-aware sitemap/robots/OG.
 

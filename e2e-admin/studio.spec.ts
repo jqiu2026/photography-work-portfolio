@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import sharp from "sharp";
+import { signStripePayload } from "../packages/payments/src/index";
 
 /**
  * Studio (Phase 3, database-backed): clients, jobs, client gallery with a passcode and strict-tier images, contract signed
@@ -159,12 +160,48 @@ test("invoice: payment link, declined then successful mock card, then marked pai
   await expectSlow(page.getByRole("listitem").filter({ hasText: `E2E job ${uid}` })).toContainText("paid");
 });
 
-test("the Stripe webhook refuses unsigned and mis-signed requests (and is off when not configured)", async ({
+test("the Stripe webhook: bad signatures refused, a signed event pays the invoice once, a replay changes nothing", async ({
+  page,
   request,
 }) => {
-  const res = await request.post(`${PHOTOS}/api/webhooks/stripe`, {
+  const secret = "whsec_e2e_secret";
+  const bad = await request.post(`${PHOTOS}/api/webhooks/stripe`, {
     data: "{}",
     headers: { "stripe-signature": "t=1,v1=bad" },
   });
-  expect([400, 503]).toContain(res.status());
+  expect(bad.status()).toBe(400);
+
+  await page.goto(`${PHOTOS}/studio/shoots`, { waitUntil: "networkidle" });
+  const job = page.getByRole("listitem").filter({ hasText: `E2E job ${uid}` });
+  await job.getByRole("button", { name: "New invoice" }).click();
+  await expectSlow(page.getByRole("status")).toContainText(/Invoice \d{4}-\d{4} created/);
+  await page.goto(`${PHOTOS}/studio/invoices`, { waitUntil: "networkidle" });
+  const open = page.locator("li[data-invoice-id]").filter({ hasText: /draft/ }).first();
+  const invoiceId = await open.getAttribute("data-invoice-id");
+  expect(invoiceId).toBeTruthy();
+  const event = JSON.stringify({
+    id: `evt_${uid}`,
+    type: "checkout.session.completed",
+    data: {
+      object: {
+        id: `cs_${uid}`,
+        client_reference_id: invoiceId,
+        payment_status: "paid",
+        amount_total: 30000,
+        payment_intent: `pi_${uid}`,
+      },
+    },
+  });
+  const send = () =>
+    request.post(`${PHOTOS}/api/webhooks/stripe`, {
+      data: event,
+      headers: { "stripe-signature": signStripePayload(event, secret), "content-type": "application/json" },
+    });
+  const first = await send();
+  expect(first.status()).toBe(200);
+  expect((await first.json()).duplicate).toBe(false);
+  const replay = await send();
+  expect((await replay.json()).duplicate).toBe(true);
+  await page.goto(`${PHOTOS}/studio/invoices`, { waitUntil: "networkidle" });
+  await expectSlow(page.locator(`li[data-invoice-id="${invoiceId}"]`)).toContainText("paid");
 });

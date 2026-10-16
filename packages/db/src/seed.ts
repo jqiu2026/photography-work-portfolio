@@ -104,7 +104,7 @@ export async function seed(db: Database, opts: SeedOptions) {
 
   // Old hub URLs for work now live on the photography site (R1). The static redirects in the hub's next.config handle the
   // normal case; these rows are the fallback the catch-all 404 reads, and the owner can edit them in the admin.
-  const photosUrl = (process.env.NEXT_PUBLIC_PHOTOS_URL || "https://photos.jerryqiu.com").replace(/\/$/, "");
+  const photosUrl = (process.env.NEXT_PUBLIC_PHOTOS_URL || "https://photo.jerryqiu.com").replace(/\/$/, "");
   for (const from of ["/work", ...projects.map((p) => `/work/${p.slug}`)]) {
     await db
       .insert(s.redirects)

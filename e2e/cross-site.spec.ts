@@ -1,15 +1,15 @@
 import { expect, test } from "@playwright/test";
-import { hub, photos, routes } from "./routes";
+import { flying, hub, music, photos, routes } from "./routes";
 
 /**
  * Cross-site rule (12-vision-v2.md): photography, music and flying reference nothing else in the family. The ONLY link
  * that leaves a world is the single footer button back to the hub (data-return-to-hub). No switcher, no "More from me".
- * Music and flying share the hub's origin in tests (path mode), so "inside the world" means inside /music or /flying.
+ * Every site is its own deployment with its own origin, so "inside the world" means the site's own origin.
  */
 const worlds = {
   photos: { origin: new URL(photos).origin, prefix: "" },
-  music: { origin: new URL(hub).origin, prefix: "/music" },
-  flying: { origin: new URL(hub).origin, prefix: "/flying" },
+  music: { origin: new URL(music).origin, prefix: "" },
+  flying: { origin: new URL(flying).origin, prefix: "" },
 } as const;
 
 for (const r of routes.filter((x) => x.site in worlds)) {
@@ -50,5 +50,18 @@ test("hub /work URLs redirect (301) to the photography site", async ({ request }
     const res = await request.get(`${hub}${p}`, { maxRedirects: 0 });
     expect(res.status(), p).toBe(301);
     expect(res.headers().location, p).toBe(`${photos}${p}`);
+  }
+});
+
+test("hub /music and /flying URLs redirect (308) to their own sites", async ({ request }) => {
+  for (const [base, p] of [
+    [music, "/music"],
+    [music, "/music/listen"],
+    [flying, "/flying"],
+    [flying, "/flying/log"],
+  ] as const) {
+    const res = await request.get(`${hub}${p}`, { maxRedirects: 0 });
+    expect(res.status(), p).toBe(308);
+    expect(res.headers().location, p).toBe(`${base}${p.replace(/^\/(music|flying)/, "") || "/"}`);
   }
 });

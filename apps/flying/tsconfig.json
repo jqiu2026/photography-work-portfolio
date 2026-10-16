@@ -1,0 +1,9 @@
+{
+  "extends": "@jerryqiu/config/tsconfig.next.json",
+  "compilerOptions": {
+    "typeRoots": ["./types", "./node_modules/@types"],
+    "paths": { "@/*": ["./src/*"] }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", ".next/dev/types/**/*.ts"],
+  "exclude": ["node_modules", "vitest.config.mts", "test"]
+}

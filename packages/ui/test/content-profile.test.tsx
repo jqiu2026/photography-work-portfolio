@@ -5,7 +5,7 @@ import { Avatar, Breadcrumbs, EmbedFacade, Header, Link, Pagination, SocialLinks
 
 const sites = [
   { id: "hub", name: "Jerry Qiu", description: "About me", url: "https://jerryqiu.com" },
-  { id: "photos", name: "Photography", description: "Portfolio", url: "https://photos.jerryqiu.com" },
+  { id: "photos", name: "Photography", description: "Portfolio", url: "https://photo.jerryqiu.com" },
   { id: "music", name: "Music", description: "Listen", url: "https://music.jerryqiu.com" },
 ];
 

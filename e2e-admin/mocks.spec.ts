@@ -4,24 +4,25 @@ import { expect, test } from "@playwright/test";
  * Clickable local mocks (Phase 2.5): score store and flight map (the studio and client portal are real as of Phase 3: studio.spec.ts). Everything is labelled MOCK, runs
  * against the dev servers (mocks are off in production builds: see e2e/mocks-prod.spec.ts) and uses the Stripe test card.
  */
-const HUB = "http://localhost:3300";
+const MUSIC = "http://localhost:3304";
+const FLYING = "http://localhost:3305";
 const uid = Date.now().toString(36);
 
 test.describe("score store mock", () => {
   test("browse, preview, buy with the test card, download the placeholder file; listen and score stay separate", async ({
     page,
   }) => {
-    await page.goto(`${HUB}/music/compositions`, { waitUntil: "networkidle" });
+    await page.goto(`${MUSIC}/compositions`, { waitUntil: "networkidle" });
     await expect(page.getByRole("note", { name: "Mock notice" })).toContainText("MOCK");
     await page.getByRole("link", { name: /Halation Study/ }).click();
     // a piece with a recording but no score: listen path only
     await expect(page.getByRole("heading", { name: "Listen" })).toBeVisible();
     await expect(page.getByText("This score is not for sale.")).toBeVisible();
-    await page.goto(`${HUB}/music/compositions/sample-nocturne-for-brass`, { waitUntil: "networkidle" });
+    await page.goto(`${MUSIC}/compositions/sample-nocturne-for-brass`, { waitUntil: "networkidle" });
     // a piece with a score but no recording: score path only
     await expect(page.getByText("No performance recording exists yet.")).toBeVisible();
 
-    await page.goto(`${HUB}/music/scores`, { waitUntil: "networkidle" });
+    await page.goto(`${MUSIC}/scores`, { waitUntil: "networkidle" });
     await page.getByRole("link", { name: /Window Music/ }).click();
     await expect(page.getByRole("img", { name: /Preview page 1 of 14, watermarked/ })).toBeVisible();
     await page.getByRole("button", { name: "Add score to cart" }).click();
@@ -38,7 +39,7 @@ test.describe("score store mock", () => {
     await page.getByLabel(/Expiry/).fill("12 / 34");
     await page.getByLabel("Security code").fill("123");
     await page.getByRole("button", { name: /^Pay/ }).click();
-    await expect(page).toHaveURL(/\/music\/scores\/library$/);
+    await expect(page).toHaveURL(/\/scores\/library$/);
     const [download] = await Promise.all([
       page.waitForEvent("download"),
       page
@@ -54,7 +55,7 @@ test.describe("flight map mock", () => {
   test("shows sample flights as a map and a table, with no tail numbers and the latest landing held back", async ({
     page,
   }) => {
-    await page.goto(`${HUB}/flying/map`, { waitUntil: "networkidle" });
+    await page.goto(`${FLYING}/map`, { waitUntil: "networkidle" });
     await expect(page.getByRole("note", { name: "Mock notice" })).toContainText("SAMPLE");
     await expect(page.getByRole("img", { name: /sample flight routes/ })).toBeVisible();
     const rows = page.locator("table.fm__table tbody tr");
@@ -67,6 +68,6 @@ test.describe("flight map mock", () => {
     await page.keyboard.press("ArrowRight");
   });
   test("the instruction slot is hidden by default", async ({ request }) => {
-    expect((await request.get(`${HUB}/flying/instruction`)).status()).toBe(404);
+    expect((await request.get(`${FLYING}/instruction`)).status()).toBe(404);
   });
 });

@@ -32,7 +32,7 @@ One CMS for every site: a site selector at the top scopes content (hub / photos 
 0. **Profile & timeline:** profile header (name, headline, location, "currently", portrait), **social/account links** (label, URL, icon, order, where shown), skills & interests tags, **timeline entries** (category work/education/leadership/volunteering/flying/music/photography/other, dates, org, description, link, visibility), resume PDF generated from the timeline, "now" note, optional testimonials.
 1. **Posts** (writing): markdown/MDX editor with toolbar, live preview, image insert from media library, tags, cover image, SEO fields (title, description, OG image override), slug management with redirects when changed, draft / scheduled / published, reading time, featured flag.
 2. **Projects** (work, any `type`): title, summary, date, client, role, category, cover, **block-based body** (text, image, gallery, quote, video embed, two-column), credits, related projects, order/featured.
-3. **Portfolio / Galleries** (public showcase on photos.jerryqiu.com): create galleries, bulk-upload with progress, drag to reorder, captions, alt text (with optional free autofill), per-image "hide", cover selection, categories.
+3. **Portfolio / Galleries** (public showcase on photo.jerryqiu.com): create galleries, bulk-upload with progress, drag to reorder, captions, alt text (with optional free autofill), per-image "hide", cover selection, categories.
 3b. **Music:** recordings and performances (title, date, venue/ensemble, notes, cover, embed URL or uploaded audio, featured), instruments, repertoire.
 3c. **Flying:** milestones and flight-log entries (date, title, story, photos, aircraft, safe-to-publish checks), aircraft list, ratings (all optional; empty fields hidden publicly; no live location, no tail numbers by default).
 4. **Pages and settings (per site):** home hero copy and featured items, about text, social links, contact info, navigation, SEO defaults, theme accent choice, protection settings (see 2.5), maintenance mode.
@@ -71,7 +71,7 @@ Implement `@halation/ui/media` `ProtectedImage` and the server pieces:
 
 ## 2.6 ShootProof temporary bridge (in `apps/photos`)
 
-It is a photography concern, so it lives at `photos.jerryqiu.com`'s studio admin (`/studio`), not the hub.
+It is a photography concern, so it lives at `photo.jerryqiu.com`'s studio admin (`/studio`), not the hub.
 
 - Build an adapter `ShootProofSource` behind an `ExternalGallerySource` interface in `apps/photos/src/lib/external/`.
 - Verify the current API at `developer.shootproof.com` (OpenAPI 3.0, three-legged OAuth 2.0; client ID has to be requested from ShootProof support). Implement OAuth connect flow in admin ("Connect ShootProof"), token storage encrypted with `AUTH_SECRET`-derived key (port `crypto.ts`), refresh handling, brand/event/album/photo listing.

@@ -53,3 +53,6 @@ examples/*/dist/
 .next-e2e*/
 
 test-results/
+
+# dev log
+docs/project/.docs-dev.log

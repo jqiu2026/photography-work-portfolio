@@ -17,7 +17,7 @@ At the top of the sidebar, pick **Hub**, **Photography**, **Music** or **Flying*
 
 - **Write a post:** Hub, Posts, Add post. Write in Markdown (toolbar and live preview). Add a summary, choose Published, press Publish. It is live within seconds. Choose Scheduled to publish later. Version history lets you restore an earlier draft. Changing a post's URL adds a redirect automatically.
 - **Add a video to a post:** put `[[youtube VIDEOID]]` on its own line. Nothing from YouTube loads until a visitor presses play.
-- **Publish a project (case study):** Photography, Projects. Projects live on the photography site (photos.jerryqiu.com/work); the old jerryqiu.com/work links redirect there. Build the page from blocks (text, image, gallery, quote, video, two columns), add credits, choose Published.
+- **Publish a project (case study):** Photography, Projects. Projects live on the photography site (photo.jerryqiu.com/work); the old jerryqiu.com/work links redirect there. Build the page from blocks (text, image, gallery, quote, video, two columns), add credits, choose Published.
 - **Upload a gallery:** Photography, Galleries, Add gallery, then drop photos into "Upload into this gallery". Drag to reorder (or use the arrows), write alt text, hide a photo, pick the cover. Large files upload straight to storage with a progress bar.
 - **Change image protection:** per gallery ("Image protection") and as the site default in Pages & settings. *Off* does nothing, *Light* stops right-click and drag, *Strict* also reacts to screenshot and save shortcuts, hides the photos while the window is out of focus and in print, and keeps the image address out of the page. This is a deterrent: it cannot stop a phone camera or an operating-system screenshot. A visible watermark can be added in Pages & settings.
 - **Edit your profile, links and timeline:** Hub, Profile & links, and Timeline.
@@ -29,7 +29,7 @@ At the top of the sidebar, pick **Hub**, **Photography**, **Music** or **Flying*
 
 ## The studio and ShootProof
 
-`photos.jerryqiu.com/studio` is the owner-only studio. The ShootProof bridge lets you show an event from ShootProof for 24 hours. It is off until you have an API client ID; the steps are on that page and in `docs/shootproof-bridge.md`. Client galleries, contracts, invoices and payments are Phase 3 and are not built yet.
+`photo.jerryqiu.com/studio` is the owner-only studio. The ShootProof bridge lets you show an event from ShootProof for 24 hours. It is off until you have an API client ID; the steps are on that page and in `docs/shootproof-bridge.md`. Client galleries, contracts, invoices and payments are Phase 3 and are not built yet.
 
 ## Things that need your accounts (nothing is set up for you)
 

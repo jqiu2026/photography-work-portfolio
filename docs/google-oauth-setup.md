@@ -37,7 +37,7 @@ The admin (`/admin` on jerryqiu.com) and the studio (`/studio` on photos.) sign 
 3. Try a personal Gmail account: you get "That Google account isn't authorized".
 4. Try a `@jerryqiu.com` account that is **not** on the list: same denial.
 5. As owner, remove the editor. In their still-open window click any link or save: they are bounced to sign-in (no waiting for the cookie to expire).
-6. Visit `https://photos.jerryqiu.com/studio` while signed in to the hub: you are in, no second login. Signed out: you are sent to the hub's sign-in and returned afterwards.
+6. Visit `https://photo.jerryqiu.com/studio` while signed in to the hub: you are in, no second login. Signed out: you are sent to the hub's sign-in and returned afterwards.
 7. Open `/admin` signed out: redirect to `/sign-in?callbackUrl=%2Fadmin`.
 
 ## Passkeys / TOTP

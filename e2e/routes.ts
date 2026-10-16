@@ -1,6 +1,8 @@
 export const hub = "http://localhost:4000";
 export const photos = "http://localhost:4002";
 export const docs = "http://localhost:4001";
+export const music = "http://localhost:4003";
+export const flying = "http://localhost:4004";
 
 /** Every public route of every site. */
 export const routes: { site: string; path: string; base: string }[] = [
@@ -17,15 +19,15 @@ export const routes: { site: string; path: string; base: string }[] = [
     "/accessibility",
     "/nope",
   ].map((path) => ({ site: "hub", path, base: hub })),
-  ...["/music", "/music/listen", "/music/performances", "/music/about"].map((path) => ({
+  ...["/", "/listen", "/performances", "/about"].map((path) => ({
     site: "music",
     path,
-    base: hub,
+    base: music,
   })),
-  ...["/flying", "/flying/log", "/flying/aircraft", "/flying/about"].map((path) => ({
+  ...["/", "/log", "/aircraft", "/about"].map((path) => ({
     site: "flying",
     path,
-    base: hub,
+    base: flying,
   })),
   ...[
     "/",

@@ -89,7 +89,7 @@ function NotConnected() {
         </li>
         <li>
           Redirect URL to give them:{" "}
-          <code>{`${process.env.NEXT_PUBLIC_PHOTOS_URL ?? "https://photos.jerryqiu.com"}/studio/shootproof/callback`}</code>
+          <code>{`${process.env.NEXT_PUBLIC_PHOTOS_URL ?? "https://photo.jerryqiu.com"}/studio/shootproof/callback`}</code>
         </li>
         <li>
           Set <code>SHOOTPROOF_CLIENT_ID</code> in the photography project's environment and redeploy.

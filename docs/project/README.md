@@ -9,6 +9,12 @@ IMPORTANT: DO NOT CO-AUTHOR ANYTHING WHATSOEVER. DO NOT CO-AUTHOR COMMITS. DO NO
 | # | Doc | What it is |
 |---|---|---|
 | 12 | [Owner vision v2](12-vision-v2.md) | **Source of truth (2026-10-12):** the ten answers, structure, four worlds, scope. Read first. |
+| 13 | [Feature list (2026-10-15)](13-feature-list-2026-10-15.md) | Owner's planned feature wishlist with P1/P2/P3 tags, and how it differs from earlier docs. |
+| 18 | [Design prompt v3](18-design-prompt-v3.md) | Exact visual spec for hub, music and photo; replaces the streak, aperture and portal direction. |
+| 14 | [Sites and deployment](14-sites-and-deployment.md) | Hosts, separate Vercel projects, shared master folder rules. |
+| 15 | [Music site](15-music-site.md) | Catalog, listening, score store, rights. |
+| 16 | [Flying site](16-flying-site.md) | Tools-and-timeline plan, privacy. |
+| 17 | [Make site](17-make-site.md) | New makerspace-themed showcase. |
 | 00 | [Vision and principles](00-vision-and-principles.md) | What we are building, phases, principles |
 | 01 | [Decisions and assumptions](01-decisions-and-assumptions.md) | Every default chosen, and every open question with its placeholder |
 | 02 | [Phase 1: UI package and redesign](02-phase-1-ui-package-and-redesign.md) | Build the open-source UI package, rebuild the site on it |

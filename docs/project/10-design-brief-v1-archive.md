@@ -64,7 +64,7 @@ jerryqiu.com            THE HUB ("ME")
   /connect              All social accounts + contact form + email (keep /contact as redirect)
   /privacy /terms /accessibility /licensing   Legal, canonical here (see 11)
 
-photos.jerryqiu.com     PHOTOGRAPHY (apps/photos)
+photo.jerryqiu.com     PHOTOGRAPHY (apps/photos)
   /                     Cinematic portfolio home, categories
   /portfolio/[slug]     Curated galleries with lightbox
   /about                About the photographer
@@ -105,7 +105,7 @@ The home page and `/about` borrow what makes a good professional profile useful,
 
 - **Music (`music.jerryqiu.com`):** what he plays, a short story, featured recordings and performances (cards with date, venue/ensemble, note), click-to-load embeds (Spotify, SoundCloud, YouTube, Bandcamp; no third-party scripts load until clicked, for privacy and speed), optional audio player for self-hosted clips, repertoire list, upcoming performances if any. Photos/video from performances.
 - **Flying (`flying.jerryqiu.com`):** the journey in plain terms: how it started, certificates and ratings, aircraft flown, a few memorable flights with photos from the cockpit, involvement with the StuyAviators club, safety-minded tone. **Never invent facts**: hours, ratings, dates and aircraft are `TODO(owner):` placeholders until supplied (shown as clearly fake sample values only in dev, never in production builds; production hides empty fields). Do not publish real-time location, tail numbers or exact times of flights.
-- **Photography (`photos.jerryqiu.com`):** curated portfolio, then booking and client galleries (Phase 3). The hub only previews it.
+- **Photography (`photo.jerryqiu.com`):** curated portfolio, then booking and client galleries (Phase 3). The hub only previews it.
 - Music and Flying share one **interest-site template** (hero, intro, highlights, timeline, media) so they stay consistent and the CMS stays simple.
 
 ### Tone and copy guide (non-boastful)

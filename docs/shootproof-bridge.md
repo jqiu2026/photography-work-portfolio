@@ -1,7 +1,7 @@
 # ShootProof bridge
 
 A temporary bridge so client galleries that still live on ShootProof can be shown from the photography studio
-(`photos.jerryqiu.com/studio/shootproof`) until Phase 3 replaces ShootProof. Code: `packages/shootproof`, UI in
+(`photo.jerryqiu.com/studio/shootproof`) until Phase 3 replaces ShootProof. Code: `packages/shootproof`, UI in
 `apps/photos/src/app/studio/shootproof`.
 
 ## State today: built, mocked, not live
@@ -16,7 +16,7 @@ flow on sample data.
 
 1. Email **support@shootproof.com** asking for a Studio API client ID. They ask for: your name or company, a support email,
    the app name, a public description (255 characters max), a website, a 500×500 avatar, and one or more redirect URLs.
-2. Redirect URL to give them: `https://photos.jerryqiu.com/studio/shootproof/callback` (and
+2. Redirect URL to give them: `https://photo.jerryqiu.com/studio/shootproof/callback` (and
    `http://localhost:3002/studio/shootproof/callback` for local tests, if they accept it).
 3. Set in the photography Vercel project: `SHOOTPROOF_CLIENT_ID`. Optional: `SHOOTPROOF_SCOPE` (default `studio`, which the
    guide says must be included; `studio.brand.read-only` exists and would be the least-privilege choice if ShootProof

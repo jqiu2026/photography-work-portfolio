@@ -6,11 +6,13 @@
 > - **Flying**: journal, map of past flights (airport-level, delayed; never live), and a hidden-by-default CFI services slot (inquiry form only until the owner decides).
 > Hard rules still apply: never spend money, no live keys, no live third-party calls without the owner.
 
+> **Feature list update 2026-10-15:** the owner's newer feature list is in [13-feature-list-2026-10-15.md](13-feature-list-2026-10-15.md). It adds packages and quotes, gallery expiry with paid reactivation, WHCC prints, expense tracking and more, and uses Stripe for payments, Vercel Blob only, no after-collection tax work, and password plus magic-link login (Q51 to Q61). Where 13 and this file differ, 13 is newer; defaults are in QUESTIONS.md.
+
 > **NOT STARTED. Do not begin this phase unless the owner explicitly says so.** This document is the plan so the next chat can start immediately.
 
 **Goal:** the owner cancels ShootProof (about 30 GB of photos today) and runs client delivery and business admin on their own infrastructure, for roughly the cost in [06](06-cost-analysis.md).
 
-All of Phase 3 lives in `apps/photos` at **`photos.jerryqiu.com`** (the public portfolio is already there from Phase 1). Client area under `/client`, owner area under `/studio`, booking under `/book`. Everything uses the UI package and the shared auth, storage, db and protection packages from Phases 1-2. **DNS cut-over is the owner's manual step**: ShootProof keeps serving that hostname until the migration is verified; provide a written checklist, never touch DNS.
+All of Phase 3 lives in `apps/photos` at **`photo.jerryqiu.com`** (the public portfolio is already there from Phase 1). Client area under `/client`, owner area under `/studio`, booking under `/book`. Everything uses the UI package and the shared auth, storage, db and protection packages from Phases 1-2. **DNS cut-over is the owner's manual step**: ShootProof keeps serving that hostname until the migration is verified; provide a written checklist, never touch DNS.
 
 ## 3.1 Data model (Drizzle)
 
@@ -46,7 +48,7 @@ All of Phase 3 lives in `apps/photos` at **`photos.jerryqiu.com`** (the public p
 
 ## 3.6 Studio management
 
-- Clients CRM (notes, tags, history), jobs pipeline (inquiry -> booked -> shot -> delivered -> paid), booking calendar with availability (iCal feed export, `ics` like stuyaviators), booking page at `photos.jerryqiu.com/book` (linked from the hub) with deposit payment, task reminders.
+- Clients CRM (notes, tags, history), jobs pipeline (inquiry -> booked -> shot -> delivered -> paid), booking calendar with availability (iCal feed export, `ics` like stuyaviators), booking page at `photo.jerryqiu.com/book` (linked from the hub) with deposit payment, task reminders.
 - Dashboard: revenue, outstanding invoices, upcoming shoots, gallery views and downloads, storage used vs budget.
 - Reports CSV export (income, taxes).
 

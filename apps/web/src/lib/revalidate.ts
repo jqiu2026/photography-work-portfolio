@@ -2,8 +2,8 @@ import { revalidatePath, revalidateTag } from "next/cache";
 
 /**
  * Public pages read through unstable_cache with these tags (see lib/content-db.ts). After a change the affected tags
- * expire immediately, so the owner sees it on the next request. The photography app is a separate deployment: its tags
- * are poked over HTTP (see lib/revalidate-photos.ts, added with the public-site switch in M15).
+ * expire immediately, so the owner sees it on the next request. The photography, music and flying apps are separate deployments:
+ * their tags are poked over HTTP (each has an /api/revalidate route guarded by REVALIDATE_SECRET).
  */
 export const TAGS = [
   "posts",
@@ -21,29 +21,39 @@ export const TAGS = [
 ] as const;
 export type Tag = (typeof TAGS)[number];
 
-/** Tags the photography app caches; changing any of them pokes that deployment too. */
-const PHOTOS_TAGS = ["galleries", "projects", "media", "settings", "redirects", "pages"] as const;
+/** Each separately deployed site, the env var that holds its origin, and the tags it caches. */
+const SITES = [
+  {
+    env: "NEXT_PUBLIC_PHOTOS_URL",
+    label: "photography",
+    tags: ["galleries", "projects", "media", "settings", "redirects", "pages"],
+  },
+  { env: "NEXT_PUBLIC_MUSIC_URL", label: "music", tags: ["music", "media", "settings", "redirects", "pages"] },
+  { env: "NEXT_PUBLIC_FLYING_URL", label: "flying", tags: ["flying", "media", "settings", "redirects", "pages"] },
+] as const;
 
-/** Fire-and-forget: a slow or unreachable photos site must never slow down or fail an admin save. */
-function pokePhotos(tags: Tag[], extraPaths: string[]) {
+/** Fire-and-forget: a slow or unreachable site must never slow down or fail an admin save. */
+function pokeSites(tags: Tag[], photosPaths: string[]) {
   const secret = process.env.REVALIDATE_SECRET;
-  const base = process.env.NEXT_PUBLIC_PHOTOS_URL;
-  const relevant = tags.filter((t): t is (typeof PHOTOS_TAGS)[number] =>
-    (PHOTOS_TAGS as readonly string[]).includes(t),
-  );
-  if (!secret || !base || !relevant.length) return;
-  const paths = [...(relevant.includes("galleries") ? ["/", "/portfolio"] : []), ...extraPaths];
-  fetch(`${base.replace(/\/$/, "")}/api/revalidate`, {
-    method: "POST",
-    headers: { Authorization: `Bearer ${secret}`, "Content-Type": "application/json" },
-    body: JSON.stringify({ tags: relevant, paths }),
-    signal: AbortSignal.timeout(4000),
-  }).catch((error) => console.warn("[revalidate] could not reach the photography site", String(error)));
+  if (!secret) return;
+  for (const site of SITES) {
+    const base = process.env[site.env];
+    const relevant = tags.filter((t) => (site.tags as readonly string[]).includes(t));
+    if (!base || !relevant.length) continue;
+    const isPhotos = site.label === "photography";
+    const paths = isPhotos ? [...(relevant.includes("galleries") ? ["/", "/portfolio"] : []), ...photosPaths] : [];
+    fetch(`${base.replace(/\/$/, "")}/api/revalidate`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${secret}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ tags: relevant, paths }),
+      signal: AbortSignal.timeout(4000),
+    }).catch((error) => console.warn(`[revalidate] could not reach the ${site.label} site`, String(error)));
+  }
 }
 
 /** `photosPaths` are paths on the photography site (e.g. "/work") to refresh there. */
 export function touch(tags: Tag[], paths: string[] = [], photosPaths: string[] = []) {
   for (const t of tags) revalidateTag(t, { expire: 0 });
   for (const p of paths) revalidatePath(p);
-  pokePhotos(tags, photosPaths);
+  pokeSites(tags, photosPaths);
 }

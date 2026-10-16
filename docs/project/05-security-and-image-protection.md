@@ -29,7 +29,7 @@ Our strategy is layered, in order of real value:
 8. Auth: server-side checks everywhere; domain check on ID-token claims; no client-side only gating; CSRF via Server Actions/same-site cookies; strict `Content-Security-Policy`, `Referrer-Policy`, `Permissions-Policy`, `X-Frame-Options`/`frame-ancestors`, HSTS (Vercel handles TLS).
 9. Webhooks (Stripe): signature verification, idempotency keys, replay window.
 10. Secrets only in env/Vercel; `.env.example` has names only. Add a pre-commit secret scan (e.g. `gitleaks` config or a simple regex hook) if free and quick.
-11. Subdomains: staff cookie on `.jerryqiu.com` is `Secure`, `HttpOnly`, `SameSite=Lax`; client cookies (Phase 3) are host-only on `photos.jerryqiu.com`. No CORS between sites except explicit allow-lists. CSP `frame-ancestors` denies embedding of admin and client areas. Beware subdomain takeover: record in the owner checklist that unused subdomains must not dangle in DNS.
+11. Subdomains: staff cookie on `.jerryqiu.com` is `Secure`, `HttpOnly`, `SameSite=Lax`; client cookies (Phase 3) are host-only on `photo.jerryqiu.com`. No CORS between sites except explicit allow-lists. CSP `frame-ancestors` denies embedding of admin and client areas. Beware subdomain takeover: record in the owner checklist that unused subdomains must not dangle in DNS.
 12. Dependency hygiene: `pnpm audit` in CI (non-blocking at first), Dependabot config.
 
 ## The screenshot popup, precisely

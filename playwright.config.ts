@@ -1,8 +1,8 @@
 import { defineConfig } from "@playwright/test";
 
 /**
- * Runs against production builds on ports 4000 (hub, music, flying), 4001 (docs), 4002 (photos).
- * Build first with the test URLs: `pnpm test:e2e` does it. Sibling-site URLs point at these ports (path mode).
+ * Runs against production builds on ports 4000 (hub), 4001 (docs), 4002 (photo), 4003 (music), 4004 (flying).
+ * Build first with the test URLs: `pnpm test:e2e` does it. Sibling-site URLs point at these ports.
  */
 export default defineConfig({
   testDir: "./e2e",
@@ -31,6 +31,20 @@ export default defineConfig({
       command: "pnpm --filter @jerryqiu/photos start",
       port: 4002,
       env: { PORT: "4002", AUTH_SECRET: "e2e-only-secret-0123456789abcdefghijklmnop", DASHBOARD_OPEN_SIGNIN: "true" },
+      reuseExistingServer: true,
+      timeout: 120_000,
+    },
+    {
+      command: "pnpm --filter @jerryqiu/music start",
+      port: 4003,
+      env: { PORT: "4003" },
+      reuseExistingServer: true,
+      timeout: 120_000,
+    },
+    {
+      command: "pnpm --filter @jerryqiu/flying start",
+      port: 4004,
+      env: { PORT: "4004" },
       reuseExistingServer: true,
       timeout: 120_000,
     },

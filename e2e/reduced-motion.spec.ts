@@ -1,12 +1,12 @@
 import { expect, test } from "@playwright/test";
-import { hub, photos } from "./routes";
+import { flying, hub, photos } from "./routes";
 
 test.use({ reducedMotion: "reduce" });
 
 for (const [name, url] of [
   ["hub home", `${hub}/`],
   ["photos home", `${photos}/`],
-  ["flying", `${hub}/flying`],
+  ["flying", `${flying}/`],
 ] as const) {
   test(`reduced motion: ${name} is complete and static`, async ({ page }) => {
     await page.goto(url, { waitUntil: "networkidle" });
