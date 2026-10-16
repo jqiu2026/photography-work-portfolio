@@ -6,15 +6,17 @@ import { StudioError } from "@jerryqiu/db/studio";
 import { sha256Hex } from "@jerryqiu/db/studio-crypto";
 import { revalidatePath } from "next/cache";
 import { requestIpHash } from "@/lib/portal";
+import { resolveRef } from "@/lib/portal-links";
 
 export type QuoteResult = { ok: true; message?: string; payUrl?: string } | { ok: false; error: string };
 
 async function gate(token: string) {
   const db = getDb();
-  if (!db || token.length > 80) return null;
+  const ref = await resolveRef(token, "quote");
+  if (!db || !ref) return null;
   const ip = await requestIpHash();
   if (!(await hitRateLimit(db, `quote:${ip}`, 40, 600)).allowed) return null;
-  return { db, ip };
+  return { db, ip, ref };
 }
 
 /** Upsells: the client chooses extras; the quote is re-priced on the server from the catalogue. */
@@ -22,7 +24,7 @@ export async function repriceQuoteAction(token: string, extra: { id: string; qty
   const g = await gate(token);
   if (!g) return { ok: false, error: "Try again in a moment." };
   try {
-    await com.repriceQuote(g.db, token, extra.slice(0, 20));
+    await com.repriceQuote(g.db, g.ref, extra.slice(0, 20));
     revalidatePath(`/client/quote/${token}`);
     return { ok: true, message: "Updated" };
   } catch (e) {
@@ -35,9 +37,9 @@ export async function acceptQuoteAction(token: string, name: string, agreed: boo
   if (!g) return { ok: false, error: "Try again in a moment." };
   if (!agreed) return { ok: false, error: "Please tick the box to accept the quote and its terms." };
   try {
-    const r = await com.acceptQuote(g.db, token, { name, ipHash: sha256Hex(g.ip) });
+    const r = await com.acceptQuote(g.db, g.ref, { name, ipHash: sha256Hex(g.ip) });
     const { sendTemplate } = await import("@jerryqiu/email");
-    const q = await com.quoteByToken(g.db, token);
+    const q = await com.quoteByToken(g.db, g.ref);
     if (q) {
       const { getSite } = await import("@jerryqiu/sites");
       const { schema } = await import("@jerryqiu/db");
@@ -69,7 +71,7 @@ export async function declineQuoteAction(token: string): Promise<QuoteResult> {
   const g = await gate(token);
   if (!g) return { ok: false, error: "Try again in a moment." };
   try {
-    await com.declineQuote(g.db, token);
+    await com.declineQuote(g.db, g.ref);
     revalidatePath(`/client/quote/${token}`);
     return { ok: true, message: "Declined. Thank you for letting me know." };
   } catch (e) {

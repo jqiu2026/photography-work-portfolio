@@ -3,6 +3,7 @@ import { getDb } from "@jerryqiu/db";
 import * as st from "@jerryqiu/db/studio";
 import { notFound } from "next/navigation";
 import { Shell } from "@/components/Shell";
+import { resolveRef } from "@/lib/portal-links";
 import { SignForm } from "@/components/studio/ClientForms";
 
 export const dynamic = "force-dynamic";
@@ -11,8 +12,9 @@ export const metadata = { title: "Sign your contract", robots: { index: false, f
 export default async function SignPage({ params }: { params: Promise<{ token: string }> }) {
   const { token } = await params;
   const db = getDb();
-  if (!db || token.length > 80) notFound();
-  const k = await st.contractByToken(db, token);
+  const ref = await resolveRef(token, "contract");
+  if (!db || !ref) notFound();
+  const k = await st.contractByToken(db, ref);
   if (!k) notFound();
   return (
     <Shell>

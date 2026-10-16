@@ -1,12 +1,15 @@
 "use server";
 
-import { getDb, hitRateLimit } from "@jerryqiu/db";
+import { getDb, hitRateLimit, schema } from "@jerryqiu/db";
+import { and, eq } from "drizzle-orm";
+import { accountSession } from "@/lib/account-session";
 import * as bill from "@jerryqiu/db/billing";
 import * as st from "@jerryqiu/db/studio";
 import { sha256Hex } from "@jerryqiu/db/studio-crypto";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { endPortalSession, portalSession, requestIpHash, startPortalSession } from "@/lib/portal";
+import { resolveRef } from "@/lib/portal-links";
 
 /** Client-side actions: no staff login. Everything is bound to a link token or a portal session cookie. */
 export type ClientResult = { ok: true; message?: string } | { ok: false; error: string };
@@ -31,13 +34,33 @@ export async function leaveGalleryAction() {
   redirect("/client");
 }
 
-export async function toggleFavoriteAction(mediaId: string): Promise<ClientResult> {
+export async function toggleFavoriteAction(mediaId: string, galleryId?: string): Promise<ClientResult> {
   const db = getDb();
   const session = await portalSession();
-  if (!db || !session) return no("Open your gallery again to continue.");
+  if (!db) return no("Open your gallery again to continue.");
   if (!z.string().uuid().safeParse(mediaId).success) return no("Unknown photograph.");
+  // A signed-in portal account may favourite in any published gallery of its own jobs; a passcode session only in its gallery.
+  let gid = session?.g;
+  if (galleryId) {
+    const me = await accountSession();
+    if (!z.string().uuid().safeParse(galleryId).success || !me) return no("Open your gallery again to continue.");
+    const [row] = await db
+      .select({ id: schema.studioGalleries.id })
+      .from(schema.studioGalleries)
+      .innerJoin(schema.studioJobs, eq(schema.studioJobs.id, schema.studioGalleries.jobId))
+      .where(
+        and(
+          eq(schema.studioGalleries.id, galleryId),
+          eq(schema.studioGalleries.status, "published"),
+          eq(schema.studioJobs.clientId, me.client.id),
+        ),
+      );
+    if (!row) return no("Open your gallery again to continue.");
+    gid = row.id;
+  }
+  if (!gid) return no("Open your gallery again to continue.");
   try {
-    await st.toggleFavorite(db, session.g, mediaId);
+    await st.toggleFavorite(db, gid, mediaId);
     return { ok: true };
   } catch (e) {
     return no(e instanceof st.StudioError ? e.message : "Could not save your favourite.");
@@ -54,8 +77,10 @@ export async function signContractAction(
   const ip = await requestIpHash();
   const rl = await hitRateLimit(db, `sign:${ip}`, 20, 600);
   if (!rl.allowed) return no("Too many tries. Wait a few minutes and try again.");
+  const ref = await resolveRef(token, "contract");
+  if (!ref) return no("This signing link is not valid.");
   try {
-    await st.signContract(db, token, {
+    await st.signContract(db, ref, {
       signerName: String(formData.get("name") ?? ""),
       agree: formData.get("agree") === "on",
       consentElectronic: formData.get("consent") === "on",
@@ -84,7 +109,8 @@ export async function payInvoiceAction(
   const ip = await requestIpHash();
   const rl = await hitRateLimit(db, `pay:${ip}`, 20, 600);
   if (!rl.allowed) return no("Too many tries. Wait a few minutes and try again.");
-  const inv = await st.invoiceByToken(db, token);
+  const ref = await resolveRef(token, "invoice");
+  const inv = ref ? await st.invoiceByToken(db, ref) : null;
   if (!inv) return no("This payment link is not valid.");
   if (inv.status === "paid") return no("This invoice is already paid.");
   const mode = paymentMode();

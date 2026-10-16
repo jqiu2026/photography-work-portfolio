@@ -15,6 +15,9 @@ export type TemplateKind =
   | "gallery-expiring"
   | "questionnaire-sent"
   | "magic-link"
+  | "password-reset"
+  | "portal-invite"
+  | "client-message"
   | "reminder"
   | "reply";
 
@@ -127,6 +130,30 @@ const specs: Record<TemplateKind, Spec> = {
       "Use this link to sign in. It works once and expires soon. If you didn't ask for it, ignore this email.",
     ],
     cta: "Sign in",
+  }),
+  "password-reset": (d) => ({
+    subject: "Reset your password",
+    heading: "Reset your password",
+    lines: [
+      `Hi ${d.name || "there"},`,
+      "Use this link to choose a new password. It works once and expires in an hour. If you didn't ask for it, ignore this email.",
+    ],
+    cta: "Choose a new password",
+  }),
+  "portal-invite": (d) => ({
+    subject: "Your client portal",
+    heading: "Your client portal is ready",
+    lines: [
+      `Hi ${d.name || "there"},`,
+      "Your galleries, contracts, invoices and messages are in one place. Use this link to set a password; it works for a week.",
+    ],
+    cta: "Set up my portal",
+  }),
+  "client-message": (d) => ({
+    subject: d.title || "New message",
+    heading: d.title || "New message",
+    lines: [d.summary ?? "", d.detail ?? ""],
+    cta: d.linkLabel || "Open",
   }),
   reminder: (d) => ({
     subject: d.title || "A reminder",

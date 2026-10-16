@@ -4,6 +4,7 @@ import { clientIpHash, tokenSecrets } from "@jerryqiu/protect";
 import { getDb, schema } from "@jerryqiu/db";
 import { and, eq } from "drizzle-orm";
 import { cookies, headers } from "next/headers";
+import { accountSession } from "@/lib/account-session";
 
 /**
  * Client portal session: a signed, httpOnly, host-only cookie holding the gallery the visitor opened with its passcode.
@@ -75,22 +76,43 @@ export async function requestIpHash(): Promise<string> {
 /** The viewer id baked into image tokens and the invisible watermark: gallery plus session, so a leak traces to both. */
 export const viewerId = (s: PortalSession) => `${s.g}.${s.v}`;
 
-/** For the image token endpoint: the viewer id when this request's client session may see this photograph. */
+/**
+ * For the image token endpoint: the viewer id when this request may see this client photograph, either through a gallery
+ * passcode session (that one gallery) or a portal account session (any published gallery of that client's jobs).
+ */
 export async function clientGalleryViewer(mediaId: string): Promise<string | null> {
-  const session = await portalSession();
   const db = getDb();
-  if (!session || !db) return null;
+  if (!db) return null;
+  const session = await portalSession();
+  if (session) {
+    const [row] = await db
+      .select({ n: schema.studioGalleryItems.mediaId })
+      .from(schema.studioGalleryItems)
+      .innerJoin(schema.studioGalleries, eq(schema.studioGalleries.id, schema.studioGalleryItems.galleryId))
+      .where(
+        and(
+          eq(schema.studioGalleryItems.galleryId, session.g),
+          eq(schema.studioGalleryItems.mediaId, mediaId),
+          eq(schema.studioGalleries.status, "published"),
+        ),
+      )
+      .limit(1);
+    if (row) return viewerId(session);
+  }
+  const me = await accountSession();
+  if (!me) return null;
   const [row] = await db
     .select({ n: schema.studioGalleryItems.mediaId })
     .from(schema.studioGalleryItems)
     .innerJoin(schema.studioGalleries, eq(schema.studioGalleries.id, schema.studioGalleryItems.galleryId))
+    .innerJoin(schema.studioJobs, eq(schema.studioJobs.id, schema.studioGalleries.jobId))
     .where(
       and(
-        eq(schema.studioGalleryItems.galleryId, session.g),
         eq(schema.studioGalleryItems.mediaId, mediaId),
         eq(schema.studioGalleries.status, "published"),
+        eq(schema.studioJobs.clientId, me.client.id),
       ),
     )
     .limit(1);
-  return row ? viewerId(session) : null;
+  return row ? me.viewer : null;
 }

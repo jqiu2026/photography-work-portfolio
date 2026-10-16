@@ -5,7 +5,7 @@ import type { Database } from "./client";
 import { StudioError } from "./errors";
 import { formatMoney } from "./pricing";
 import * as s from "./schema";
-import { hashToken, newToken } from "./studio-crypto";
+import { hashToken, isIdRef, newToken } from "./studio-crypto";
 
 /**
  * Contract and release templates with merge fields, the policies they quote (gallery access and reactivation), and
@@ -415,7 +415,11 @@ export async function questionnaireByToken(db: Database, token: string) {
   const [row] = await db
     .select()
     .from(s.studioQuestionnaireSends)
-    .where(eq(s.studioQuestionnaireSends.tokenHash, hashToken(token)));
+    .where(
+      isIdRef(token)
+        ? eq(s.studioQuestionnaireSends.id, token.slice(3))
+        : eq(s.studioQuestionnaireSends.tokenHash, hashToken(token)),
+    );
   return row ?? null;
 }
 

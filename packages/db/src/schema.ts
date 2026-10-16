@@ -435,6 +435,8 @@ export const studioJobs = pgTable(
     status: jobStatusEnum("status").notNull().default("inquiry"),
     feeCents: integer("fee_cents").notNull().default(0),
     notes: text("notes"),
+    /** Estimated delivery date shown to the client on the delivery status page. */
+    deliveryEta: date("delivery_eta"),
     ...stamps,
   },
   (t) => [index("studio_jobs_client_idx").on(t.clientId), index("studio_jobs_status_idx").on(t.status)],
@@ -1027,3 +1029,66 @@ export const studioRecurring = pgTable("studio_recurring", {
   active: boolean("active").notNull().default(true),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
+
+/* ------------------------------------------------------------------------------------------------------------------
+ * Client portal: accounts (password and/or magic link), one-time login tokens, messages.
+ * ---------------------------------------------------------------------------------------------------------------- */
+export type PortalPrefs = { galleryReady: boolean; reminders: boolean; news: boolean };
+export const clientAccounts = pgTable(
+  "client_accounts",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    clientId: uuid("client_id")
+      .notNull()
+      .references(() => studioClients.id),
+    email: text("email").notNull(),
+    /** scrypt "salt:hash"; null until the client sets a password (a magic link always works). */
+    passwordHash: text("password_hash"),
+    prefs: jsonb("prefs")
+      .notNull()
+      .$type<PortalPrefs>()
+      .default(sql`'{"galleryReady":true,"reminders":true,"news":false}'::jsonb`),
+    failedAttempts: integer("failed_attempts").notNull().default(0),
+    lockedUntil: timestamp("locked_until", { withTimezone: true }),
+    lastLoginAt: timestamp("last_login_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    uniqueIndex("client_accounts_client_idx").on(t.clientId),
+    uniqueIndex("client_accounts_email_idx").on(t.email),
+  ],
+);
+
+export const clientLoginTokens = pgTable(
+  "client_login_tokens",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    accountId: uuid("account_id")
+      .notNull()
+      .references(() => clientAccounts.id),
+    /** magic | reset | invite */
+    kind: text("kind").notNull(),
+    tokenHash: text("token_hash").notNull(),
+    expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+    usedAt: timestamp("used_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex("client_login_tokens_hash_idx").on(t.tokenHash)],
+);
+
+export const studioMessages = pgTable(
+  "studio_messages",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    clientId: uuid("client_id")
+      .notNull()
+      .references(() => studioClients.id),
+    jobId: uuid("job_id").references(() => studioJobs.id),
+    /** in = from the client, out = from the studio */
+    direction: text("direction").notNull(),
+    body: text("body").notNull(),
+    readAt: timestamp("read_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("studio_messages_client_idx").on(t.clientId)],
+);

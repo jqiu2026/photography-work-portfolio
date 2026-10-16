@@ -4,6 +4,7 @@ import * as st from "@jerryqiu/db/studio";
 import { MockBanner } from "@jerryqiu/sites/mock";
 import { notFound } from "next/navigation";
 import { Shell } from "@/components/Shell";
+import { resolveRef } from "@/lib/portal-links";
 import * as bill from "@jerryqiu/db/billing";
 import { PayForm } from "@/components/studio/ClientForms";
 import { paymentMode } from "@/lib/payment-config";
@@ -20,8 +21,9 @@ export default async function PayPage({
 }: { params: Promise<{ token: string }>; searchParams: Promise<{ paid?: string }> }) {
   const [{ token }, { paid }] = await Promise.all([params, searchParams]);
   const db = getDb();
-  if (!db || token.length > 80) notFound();
-  const inv = await st.invoiceByToken(db, token);
+  const ref = await resolveRef(token, "invoice");
+  if (!db || !ref) notFound();
+  const inv = await st.invoiceByToken(db, ref);
   if (!inv) notFound();
   const mode = paymentMode();
   const billing = await bill.getBillingSettings(db);

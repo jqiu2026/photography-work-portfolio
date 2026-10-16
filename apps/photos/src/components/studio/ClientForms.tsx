@@ -47,7 +47,12 @@ export function LeaveButton() {
   );
 }
 
-export function FavoriteButton({ mediaId, label, initial }: { mediaId: string; label: string; initial: boolean }) {
+export function FavoriteButton({
+  mediaId,
+  label,
+  initial,
+  galleryId,
+}: { mediaId: string; label: string; initial: boolean; galleryId?: string }) {
   const [fav, setFav] = useState(initial);
   const [err, setErr] = useState<string>();
   const [pending, start] = useTransition();
@@ -61,7 +66,7 @@ export function FavoriteButton({ mediaId, label, initial }: { mediaId: string; l
         disabled={pending}
         onClick={() =>
           start(async () => {
-            const r = await toggleFavoriteAction(mediaId);
+            const r = await toggleFavoriteAction(mediaId, galleryId);
             if (r.ok) setFav((f) => !f);
             else setErr(r.error);
           })

@@ -152,14 +152,14 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | Id | Feature | Pri | Status | Where | Provider / mock | Test | Milestone |
 |---|---|---|---|---|---|---|---|
 | F-60 | Private gallery with passcode, favourites | P1 | done | `/client`, `/client/gallery` | n/a | e2e studio | done |
-| F-61 | Password, PIN and magic-link access modes | P1 | partial (schema only) | portal | Resend / outbox | e2e | M9 |
+| F-61 | Password, PIN and magic-link access modes | P1 | partial (passcode, password and magic link done; separate PIN code for downloads comes with M10) | portal | Resend / outbox | e2e | M9 |
 | F-62 | Direct-from-browser resumable uploads to Vercel Blob, dedupe by hash | P1 | missing | `/api/upload/*`, studio | Blob / local disk | e2e | M10 |
 | F-63 | Pre-generated sizes (thumb, display, web, original) | P1 | partial (portfolio pipeline) | `@jerryqiu/media` | n/a | unit | M10 |
 | F-64 | Albums and sets, slideshow | P1 | missing | albums, lightbox | n/a | e2e | M10 |
 | F-65 | Proofing: comments, ratings, approvals, selection limits, send selection | P1 | partial (favourites only) | gallery page | n/a | e2e | M10 |
 | F-66 | Downloads: web, full-res, ZIP, per-photo, PIN-gated, download log | P1 | missing | `/api/download/*` | n/a | e2e | M10 |
 | F-67 | Gallery expiry, reminders, paid reactivation | P1 | missing | cron, reactivation page | Stripe / mock | e2e | M10, M12 |
-| F-68 | Delivery status page with ETA | P2 | missing | portal job page | n/a | e2e | M9 |
+| F-68 | Delivery status page with ETA | P2 | done | portal job page | n/a | e2e | M9 |
 | F-69 | Client notifications (gallery ready, viewed, favourited) | P1 | missing | automations | email | unit | M12 |
 | F-70 | Per-viewer invisible watermark and view logs | P1 | done (spread-spectrum code per viewer, `studio_view_events`, detector) | `@jerryqiu/media` `forensic.ts`, `serve.ts` | n/a | unit | M3 |
 | F-71 | Per-gallery branding | P3 | missing | gallery settings | n/a | e2e | M10 |
@@ -173,11 +173,11 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 
 | Id | Feature | Pri | Status | Where | Provider / mock | Test | Milestone |
 |---|---|---|---|---|---|---|---|
-| F-80 | One login: password, magic link, passcode | P1 | partial (passcode) | `/client/login` | email | e2e | M9 |
-| F-81 | Portal home: jobs, galleries, contracts, invoices, questionnaires, messages, files | P1 | missing | `/client/home` | n/a | e2e | M9 |
-| F-82 | Email thread and messages visible in portal; replies routed to a real inbox | P1 | missing | messages, email_log | Resend / outbox | e2e | M9 |
-| F-83 | Self-reschedule and cancel within policy | P2 | missing | portal job page | n/a | e2e | M9 |
-| F-84 | Notification preferences | P2 | missing | `/client/account` | n/a | e2e | M9 |
+| F-80 | One login: password, magic link, passcode | P1 | done | `/client/login` | email | e2e | M9 |
+| F-81 | Portal home: jobs, galleries, contracts, invoices, questionnaires, quotes, messages (files with M14) | P1 | done | `/client/home` | n/a | e2e | M9 |
+| F-82 | Email thread and messages visible in portal; replies routed to a real inbox | P1 | done (messages plus every email sent to the client; owner is emailed on a new message; Reply-To is your inbox) | messages, email_log | Resend / outbox | e2e | M9 |
+| F-83 | Self-reschedule and cancel within policy | P2 | done (policy window from the cancellation days setting) | portal job page | n/a | e2e | M9 |
+| F-84 | Notification preferences | P2 | partial (saved; honoured by reminders in M12) | `/client/account` | n/a | e2e | M9 |
 | F-85 | Branded email templates | P1 | done (13 kinds) | `@jerryqiu/email` | Resend / outbox | unit | M4 |
 
 ### Run the business

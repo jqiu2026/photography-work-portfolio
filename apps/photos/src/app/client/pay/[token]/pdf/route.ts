@@ -1,5 +1,6 @@
 import { getDb } from "@jerryqiu/db";
 import * as st from "@jerryqiu/db/studio";
+import { resolveRef } from "@/lib/portal-links";
 import { invoicePdf } from "@/lib/invoice-pdf";
 
 export const dynamic = "force-dynamic";
@@ -8,8 +9,9 @@ export const dynamic = "force-dynamic";
 export async function GET(_request: Request, ctx: { params: Promise<{ token: string }> }) {
   const db = getDb();
   const { token } = await ctx.params;
-  if (!db || token.length > 80) return new Response(null, { status: 404 });
-  const inv = await st.invoiceByToken(db, token);
+  const ref = await resolveRef(token, "invoice");
+  if (!db || !ref) return new Response(null, { status: 404 });
+  const inv = await st.invoiceByToken(db, ref);
   if (!inv) return new Response(null, { status: 404 });
   return new Response(Buffer.from(await invoicePdf(db, inv.id)), {
     headers: {

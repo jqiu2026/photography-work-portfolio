@@ -26,6 +26,11 @@ export default function Client() {
             </div>
           ) : null}
           <div style={{ marginTop: "2rem", display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
+            {portal ? (
+              <Button as="a" href="/client/login" variant="ghost">
+                Sign in to my portal
+              </Button>
+            ) : null}
             <Button as="a" href={`mailto:${person.bookingEmail}`} variant="ghost">
               Can't find it? Email me
             </Button>

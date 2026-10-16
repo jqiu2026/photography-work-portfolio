@@ -7,7 +7,7 @@ import { StudioError } from "./errors";
 import { type PriceResult, priceQuote } from "./pricing";
 import * as s from "./schema";
 import { createInvoice, createJob, sendInvoice } from "./studio";
-import { hashToken, newToken, sha256Hex } from "./studio-crypto";
+import { hashToken, isIdRef, newToken, sha256Hex } from "./studio-crypto";
 
 /** Packages, add-ons, promo and gift codes, and quotes with accept-and-pay. Plain functions; callers add auth and audit. */
 
@@ -431,7 +431,7 @@ export async function quoteByToken(db: Database, token: string, now = new Date()
   const [q] = await db
     .select()
     .from(s.studioQuotes)
-    .where(eq(s.studioQuotes.tokenHash, hashToken(token)));
+    .where(isIdRef(token) ? eq(s.studioQuotes.id, token.slice(3)) : eq(s.studioQuotes.tokenHash, hashToken(token)));
   if (!q || q.status === "draft" || q.status === "void" || q.deletedAt) return null;
   if ((q.status === "sent" || q.status === "viewed") && q.validUntil && q.validUntil < now) {
     await db.update(s.studioQuotes).set({ status: "expired" }).where(eq(s.studioQuotes.id, q.id));

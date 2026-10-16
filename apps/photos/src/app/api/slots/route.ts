@@ -15,16 +15,20 @@ export async function GET(request: Request) {
   const u = new URL(request.url);
   const kind = scheduleKind(u.searchParams.get("kind") ?? "");
   const date = u.searchParams.get("date") ?? "";
-  if (!kind || !/^\d{4}-\d{2}-\d{2}$/.test(date)) return json(400, { error: "Pick a kind and a date." });
+  // `minutes` (15 to 480) lets the portal ask for slots as long as an existing appointment, for rescheduling.
+  const minutesParam = Number(u.searchParams.get("minutes") ?? "");
+  const custom = Number.isInteger(minutesParam) && minutesParam >= 15 && minutesParam <= 480 ? minutesParam : null;
+  if ((!kind && !custom) || !/^\d{4}-\d{2}-\d{2}$/.test(date)) return json(400, { error: "Pick a kind and a date." });
   if (!(await hitRateLimit(db, `slots:${clientIpHash(request.headers)}`, 60, 60)).allowed)
     return json(429, { error: "Slow down." });
   const c = await cal.getCalendarSettings(db);
-  const slots = await cal.slotsForDate(db, date, { durationMin: c.durations[kind.durationKey], settings: c });
+  const duration = custom ?? c.durations[(kind as NonNullable<typeof kind>).durationKey];
+  const slots = await cal.slotsForDate(db, date, { durationMin: duration, settings: c });
   const fmt = new Intl.DateTimeFormat("en-US", { timeZone: c.timezone, hour: "numeric", minute: "2-digit" });
   return json(200, {
     timezone: c.timezone,
-    minutes: c.durations[kind.durationKey],
-    deposit: kind.deposit ? c.depositCents : 0,
+    minutes: duration,
+    deposit: kind?.deposit && !custom ? c.depositCents : 0,
     slots: slots.map((s) => ({ start: s.startsAt.toISOString(), label: fmt.format(s.startsAt) })),
   });
 }

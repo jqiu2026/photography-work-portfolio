@@ -4,6 +4,7 @@ import * as forms from "@jerryqiu/db/forms";
 import { notFound } from "next/navigation";
 import { QuestionnaireForm } from "@/components/QuestionnaireForm";
 import { Shell } from "@/components/Shell";
+import { resolveRef } from "@/lib/portal-links";
 import "@/components/studio/studio.css";
 
 export const dynamic = "force-dynamic";
@@ -12,8 +13,9 @@ export const metadata = { title: "A few questions", robots: { index: false, foll
 export default async function QuestionnairePage({ params }: { params: Promise<{ token: string }> }) {
   const { token } = await params;
   const db = getDb();
-  if (!db || token.length > 80) notFound();
-  const q = await forms.questionnaireByToken(db, token);
+  const ref = await resolveRef(token, "questionnaire");
+  if (!db || !ref) notFound();
+  const q = await forms.questionnaireByToken(db, ref);
   if (!q) notFound();
   return (
     <Shell>

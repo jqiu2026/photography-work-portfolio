@@ -6,6 +6,7 @@ import { MockBanner } from "@jerryqiu/sites/mock";
 import { notFound } from "next/navigation";
 import { QuoteActions } from "@/components/QuoteActions";
 import { Shell } from "@/components/Shell";
+import { resolveRef } from "@/lib/portal-links";
 import "@/components/studio/studio.css";
 
 export const dynamic = "force-dynamic";
@@ -14,8 +15,9 @@ export const metadata = { title: "Your quote", robots: { index: false, follow: f
 export default async function QuotePage({ params }: { params: Promise<{ token: string }> }) {
   const { token } = await params;
   const db = getDb();
-  if (!db || token.length > 80) notFound();
-  const q = await com.quoteByToken(db, token);
+  const ref = await resolveRef(token, "quote");
+  if (!db || !ref) notFound();
+  const q = await com.quoteByToken(db, ref);
   if (!q) notFound();
   const money = (c: number) => formatMoney(c, q.currency);
   const open = q.status === "sent" || q.status === "viewed";

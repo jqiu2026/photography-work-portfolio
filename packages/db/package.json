@@ -18,7 +18,8 @@
     "./pricing": "./src/pricing.ts",
     "./forms": "./src/forms.ts",
     "./pdf": "./src/pdf.ts",
-    "./billing": "./src/billing.ts"
+    "./billing": "./src/billing.ts",
+    "./portal": "./src/portal.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

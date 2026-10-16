@@ -3,7 +3,16 @@ import { confirmForInvoice } from "./calendar";
 import type { Database } from "./client";
 import { StudioError } from "./errors";
 import * as s from "./schema";
-import { hashPasscode, hashToken, invoiceNumber, newToken, sha256Hex, totalOf, verifyPasscode } from "./studio-crypto";
+import {
+  hashPasscode,
+  hashToken,
+  isIdRef,
+  invoiceNumber,
+  newToken,
+  sha256Hex,
+  totalOf,
+  verifyPasscode,
+} from "./studio-crypto";
 
 /**
  * Studio repository (Phase 3). Plain async functions over the shared schema; callers (server actions) add authorization,
@@ -238,7 +247,9 @@ export async function contractByToken(db: Database, token: string, now = new Dat
   const [c] = await db
     .select()
     .from(s.studioContracts)
-    .where(eq(s.studioContracts.tokenHash, hashToken(token)));
+    .where(
+      isIdRef(token) ? eq(s.studioContracts.id, token.slice(3)) : eq(s.studioContracts.tokenHash, hashToken(token)),
+    );
   if (!c || c.status === "void" || c.status === "draft") return null;
   if (c.status === "sent") {
     await db.update(s.studioContracts).set({ status: "viewed", viewedAt: now }).where(eq(s.studioContracts.id, c.id));
@@ -263,7 +274,9 @@ export async function signContract(
   const [c] = await db
     .select()
     .from(s.studioContracts)
-    .where(eq(s.studioContracts.tokenHash, hashToken(token)));
+    .where(
+      isIdRef(token) ? eq(s.studioContracts.id, token.slice(3)) : eq(s.studioContracts.tokenHash, hashToken(token)),
+    );
   if (!c || c.status === "void" || c.status === "draft") throw new StudioError("This signing link is not valid.");
   if (c.status === "signed") throw new StudioError("This contract is already signed.");
   if (input.signerName.trim().length < 2) throw new StudioError("Type your full name to sign.");
@@ -348,7 +361,7 @@ export async function invoiceByToken(db: Database, token: string) {
   const [i] = await db
     .select()
     .from(s.studioInvoices)
-    .where(eq(s.studioInvoices.tokenHash, hashToken(token)));
+    .where(isIdRef(token) ? eq(s.studioInvoices.id, token.slice(3)) : eq(s.studioInvoices.tokenHash, hashToken(token)));
   return i && i.status !== "void" && i.status !== "draft" ? i : null;
 }
 export async function listInvoices(db: Database) {
