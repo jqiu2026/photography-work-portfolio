@@ -1,7 +1,21 @@
-import { expect, test } from "@playwright/test";
+import { type Page, expect, test } from "@playwright/test";
 import sharp from "sharp";
 
 const uid = Date.now().toString(36);
+
+// After an admin save the first request may still be served stale while Next regenerates the page in the background,
+// so load the page until the expected text (or its absence) shows.
+async function gotoUntil(page: Page, path: string, text: string, present = true) {
+  await expect
+    .poll(
+      async () => {
+        await page.goto(path);
+        return (await page.getByText(text).count()) > 0;
+      },
+      { timeout: 30_000, intervals: [500, 1000, 2000] },
+    )
+    .toBe(present);
+}
 
 // The public sites read the CMS: what is published in the admin appears without a redeploy, and what is unpublished or
 // trashed disappears. These run against the dev server and the throwaway database.
@@ -67,8 +81,7 @@ test.describe("the public site follows the CMS", () => {
     await g.getByLabel("Maintenance message").fill(`Updating ${uid}`);
     await g.getByRole("button", { name: "Save" }).click();
     await expect(page.getByText("Saved").first()).toBeVisible();
-    await page.goto("/about");
-    await expect(page.getByText(`Updating ${uid}`)).toBeVisible({ timeout: 30_000 });
+    await gotoUntil(page, "/about", `Updating ${uid}`);
     await page.goto("/admin/settings", { waitUntil: "networkidle" });
     await expect(page.getByRole("heading", { name: "Pages & settings" })).toBeVisible();
     // turn it off again so later tests see the site
@@ -76,8 +89,7 @@ test.describe("the public site follows the CMS", () => {
     await g2.getByLabel("Maintenance mode").uncheck();
     await g2.getByRole("button", { name: "Save" }).click();
     await expect(page.getByText("Saved").first()).toBeVisible();
-    await page.goto("/about");
-    await expect(page.getByText(`Updating ${uid}`)).toHaveCount(0);
+    await gotoUntil(page, "/about", `Updating ${uid}`, false);
   });
 
   test("the profile headline edited in the admin shows on the About page", async ({ page }) => {
@@ -85,8 +97,7 @@ test.describe("the public site follows the CMS", () => {
     await page.getByLabel("Headline").fill(`Headline ${uid}`);
     await page.getByRole("button", { name: "Save" }).first().click();
     await expect(page.getByText("Saved").first()).toBeVisible();
-    await page.goto("/about");
-    await expect(page.getByText(`Headline ${uid}`).first()).toBeVisible({ timeout: 30_000 });
+    await gotoUntil(page, "/about", `Headline ${uid}`);
   });
 
   test("images are served by the image route: derivatives only, cacheable, no original path", async ({ page }) => {

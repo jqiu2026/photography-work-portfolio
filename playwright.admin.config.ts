@@ -39,7 +39,8 @@ export default defineConfig({
       timeout: 120_000,
     },
     {
-      command: "pnpm --filter @jerryqiu/web dev",
+      // the data cache of earlier runs lives in .next-e2e and outlasts the wiped database, so start clean
+      command: "rm -rf apps/web/.next-e2e && pnpm --filter @jerryqiu/web dev",
       port: 3300,
       env: { ...env, PORT: "3300", NEXT_DIST_DIR: ".next-e2e" },
       reuseExistingServer: false,

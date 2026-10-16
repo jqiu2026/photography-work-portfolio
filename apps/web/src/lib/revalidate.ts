@@ -55,5 +55,7 @@ function pokeSites(tags: Tag[], photosPaths: string[]) {
 export function touch(tags: Tag[], paths: string[] = [], photosPaths: string[] = []) {
   for (const t of tags) revalidateTag(t, { expire: 0 });
   for (const p of paths) revalidatePath(p);
+  // Settings (maintenance mode, SEO, protection) are read by the root layout, so every page under it must refresh.
+  if (tags.includes("settings")) revalidatePath("/", "layout");
   pokeSites(tags, photosPaths);
 }
