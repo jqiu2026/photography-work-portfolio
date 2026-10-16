@@ -17,6 +17,7 @@ import {
   sendInvoiceAction,
 } from "@/app/studio/actions";
 import "./studio.css";
+import { StudioHead } from "./StudioFrame";
 import { studioSections } from "./sections";
 
 const JOB_STEPS = ["inquiry", "booked", "shot", "editing", "delivered", "paid"] as const;
@@ -570,10 +571,7 @@ export function StudioApp({ section, user, data }: { section: string; user: stri
 
   return (
     <div className="st-wrap">
-      <header className="st-head">
-        <p className="hl-eyebrow">Studio · {user}</p>
-        <h1 className="st-title">{studioSections.find((x) => x.id === section)?.label ?? "Studio"}</h1>
-      </header>
+      <StudioHead section={section} />
       <Banner note={note} />
       {body}
     </div>

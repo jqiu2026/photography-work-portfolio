@@ -2,7 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { type FormEvent, type ReactNode, useState, useTransition } from "react";
-import { studioSections } from "./sections";
+import Link from "next/link";
+import { groupOf, sectionInfo, studioSections } from "./sections";
 import "./studio.css";
 import "./studio-chrome.css";
 import "./studio-dashboard.css";
@@ -53,19 +54,36 @@ export function Card({ title, children, id }: { title: string; children: ReactNo
   );
 }
 
-export function Frame({
-  section,
-  user,
-  note,
-  children,
-}: { section: string; user: string; note: Result | null; children: ReactNode }) {
+/** Page header: where you are, what this page is for, and its siblings as quiet tabs. */
+export function StudioHead({ section }: { section: string }) {
+  const group = groupOf(section);
   const label = studioSections.find((x) => x.id === section)?.label ?? "Studio";
   return (
+    <header className="st-head" style={{ "--hue": group.hue } as React.CSSProperties}>
+      <p className="st-crumb">{group.label}</p>
+      <h1 className="st-title">{label}</h1>
+      <p className="st-sub">{sectionInfo[section]}</p>
+      {group.sections.length > 1 ? (
+        <nav className="st-tabs" aria-label={`${group.label} pages`}>
+          {group.sections.map((id) => (
+            <Link key={id} href={`/studio/${id}`} aria-current={id === section ? "page" : undefined}>
+              {studioSections.find((x) => x.id === id)?.label}
+            </Link>
+          ))}
+        </nav>
+      ) : null}
+    </header>
+  );
+}
+
+export function Frame({
+  section,
+  note,
+  children,
+}: { section: string; user?: string; note: Result | null; children: ReactNode }) {
+  return (
     <div className="st-wrap">
-      <header className="st-head">
-        <p className="hl-eyebrow">Studio · {user}</p>
-        <h1 className="st-title">{label}</h1>
-      </header>
+      <StudioHead section={section} />
       <Banner note={note} />
       {children}
     </div>

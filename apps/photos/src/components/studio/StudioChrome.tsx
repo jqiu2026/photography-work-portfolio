@@ -3,10 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { type ReactNode, useEffect, useRef } from "react";
-import { studioSections } from "./sections";
+import { groupOf, studioGroups, studioSections } from "./sections";
+import "./studio.css";
 import "./studio-chrome.css";
 import "./studio-dashboard.css";
-import "./studio.css";
 
 /** Which sidebar entry a path belongs to (a single gallery page counts as Galleries). */
 export function activeSection(pathname: string): string {
@@ -17,7 +17,7 @@ export function activeSection(pathname: string): string {
   return rest !== undefined || studioSections.some((s) => s.id === seg) ? seg : "overview";
 }
 
-const REACH = 92; // px of vertical distance over which the pointer magnifies an entry
+const REACH = 96; // px of vertical distance over which the pointer magnifies an entry
 const RANGE = 300; // px from the left edge within which the pointer counts as "near the dock"
 
 /**
@@ -27,18 +27,17 @@ const RANGE = 300; // px from the left edge within which the pointer counts as "
  */
 export function StudioChrome({ children }: { children: ReactNode }) {
   const pathname = usePathname();
-  const active = activeSection(pathname);
+  const active = groupOf(activeSection(pathname)).id;
   const dock = useRef<HTMLElement>(null);
   const root = useRef<HTMLDivElement>(null);
   const activeIndex = Math.max(
     0,
-    studioSections.findIndex((s) => s.id === active),
+    studioGroups.findIndex((g) => g.id === active),
   );
 
   useEffect(() => {
     const el = dock.current;
-    const rootEl = root.current;
-    if (!el || !rootEl) return;
+    if (!el) return;
     const items = Array.from(el.querySelectorAll<HTMLElement>("[data-dock-item]"));
     const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
     const fine = matchMedia("(hover: hover) and (pointer: fine)").matches;
@@ -75,8 +74,6 @@ export function StudioChrome({ children }: { children: ReactNode }) {
     };
     const move = (e: PointerEvent) => {
       pointer = { x: e.clientX, y: e.clientY };
-      rootEl.style.setProperty("--mx", `${e.clientX}px`);
-      rootEl.style.setProperty("--my", `${e.clientY}px`);
       kick();
     };
     const leave = () => {
@@ -107,32 +104,20 @@ export function StudioChrome({ children }: { children: ReactNode }) {
 
   return (
     <div className="st-root" ref={root}>
-      <div className="st-atmos" aria-hidden="true">
-        <i className="st-blob st-blob--a" />
-        <i className="st-blob st-blob--b" />
-        <i className="st-blob st-blob--c" />
-        <i className="st-grid-bg" />
-        <i className="st-spot" />
-        <i className="st-scan" />
-      </div>
       <nav className="st-dock" aria-label="Studio sections" ref={dock}>
         <Link href="/" className="st-dock-brand">
-          <span>Studio</span>
-          <small>Jerry Qiu Photography</small>
+          Studio
         </Link>
         <ul>
-          {studioSections.map((x, i) => (
-            <li key={x.id} style={{ "--i": i } as React.CSSProperties}>
+          {studioGroups.map((g, i) => (
+            <li key={g.id} style={{ "--i": i } as React.CSSProperties}>
               <Link
-                href={`/studio/${x.id}`}
+                href={`/studio/${g.sections[0]}`}
                 data-dock-item
-                aria-current={x.id === active ? "page" : undefined}
-                style={{ "--k": x.id === active ? 1 : 0.2 } as React.CSSProperties}
+                aria-current={g.id === active ? "page" : undefined}
+                style={{ "--k": g.id === active ? 1 : 0.2 } as React.CSSProperties}
               >
-                <span className="st-dock-mark" aria-hidden="true" />
-                <span className="st-dock-label" data-text={x.label}>
-                  {x.label}
-                </span>
+                {g.label}
               </Link>
             </li>
           ))}

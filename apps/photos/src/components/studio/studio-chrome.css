@@ -1,178 +1,50 @@
-/* Studio chrome: holographic backdrop and the see-through, pointer-reactive sidebar. */
-@property --st-angle {
-  syntax: "<angle>";
-  inherits: false;
-  initial-value: 0deg;
-}
+/* Studio chrome: black page, quiet sidebar. Entries are small and grey until the pointer comes close, then they grow and turn white. */
 .st-root {
-  --st-cyan: 188 100% 68%;
-  --st-violet: 268 95% 72%;
-  --st-pink: 322 95% 72%;
-  --st-lime: 96 90% 66%;
-  --mx: 30vw;
-  --my: 30vh;
+  --st-bg: #000;
+  --st-fg: #f2f2f3;
+  --st-dim: #6f6f76;
+  --st-line: #1c1c1f;
+  --hl-bg: var(--st-bg);
+  --hl-surface: #0b0b0c;
+  --hl-text: var(--st-fg);
+  --hl-ink: var(--st-fg);
+  --hl-muted: #8b8b92;
+  --hl-line: var(--st-line);
   position: relative;
   min-height: 100dvh;
-  isolation: isolate;
+  background: var(--st-bg);
+  color: var(--st-fg);
+  color-scheme: dark;
 }
 .st-stage {
-  position: relative;
-  z-index: 1;
-  padding-left: clamp(13rem, 19vw, 17rem);
+  padding-left: clamp(11rem, 16vw, 14rem);
 }
 
-/* ---------- backdrop ---------- */
-.st-atmos {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-.st-blob {
-  position: absolute;
-  width: 62vmax;
-  height: 62vmax;
-  border-radius: 50%;
-  filter: blur(90px);
-  opacity: 0.22;
-  mix-blend-mode: screen;
-  animation: st-drift 26s ease-in-out infinite alternate;
-}
-.st-blob--a {
-  background: hsl(var(--st-violet));
-  top: -28vmax;
-  left: -18vmax;
-}
-.st-blob--b {
-  background: hsl(var(--st-cyan));
-  right: -26vmax;
-  top: 8vmax;
-  animation-duration: 34s;
-  animation-direction: alternate-reverse;
-}
-.st-blob--c {
-  background: hsl(var(--st-pink));
-  bottom: -34vmax;
-  left: 22vmax;
-  animation-duration: 40s;
-  opacity: 0.16;
-}
-.st-grid-bg {
-  position: absolute;
-  inset: 0;
-  background-image: linear-gradient(hsl(var(--st-cyan) / 0.09) 1px, transparent 1px),
-    linear-gradient(90deg, hsl(var(--st-cyan) / 0.09) 1px, transparent 1px);
-  background-size: 54px 54px;
-  mask-image: radial-gradient(34rem circle at var(--mx) var(--my), #000, transparent 70%);
-  -webkit-mask-image: radial-gradient(34rem circle at var(--mx) var(--my), #000, transparent 70%);
-  animation: st-grid-pan 30s linear infinite;
-}
-.st-spot {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    26rem circle at var(--mx) var(--my),
-    hsl(var(--st-violet) / 0.16),
-    hsl(var(--st-cyan) / 0.06) 45%,
-    transparent 70%
-  );
-}
-.st-scan {
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 22vh;
-  top: -22vh;
-  background: linear-gradient(transparent, hsl(var(--st-cyan) / 0.07), transparent);
-  animation: st-scan 9s linear infinite;
-}
-@keyframes st-drift {
-  to {
-    transform: translate3d(9vmax, 7vmax, 0) scale(1.18) rotate(14deg);
-  }
-}
-@keyframes st-grid-pan {
-  to {
-    background-position: 54px 54px, 54px 54px;
-  }
-}
-@keyframes st-scan {
-  to {
-    transform: translateY(150vh);
-  }
-}
-
-/* ---------- sidebar ---------- */
 .st-dock {
   position: fixed;
   z-index: 5;
   inset: 0 auto 0 0;
-  width: clamp(13rem, 19vw, 17rem);
+  width: clamp(11rem, 16vw, 14rem);
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 1rem 0 1rem clamp(1rem, 2.4vw, 2rem);
-  background: none;
+  padding-left: clamp(1.4rem, 2.6vw, 2.4rem);
   pointer-events: none;
-}
-.st-dock::before {
-  /* a thin iridescent rail the labels hang from */
-  content: "";
-  position: absolute;
-  left: clamp(.55rem, 1.4vw, 1.1rem);
-  top: 12%;
-  bottom: 12%;
-  width: 1px;
-  background: linear-gradient(
-    transparent,
-    hsl(var(--st-cyan) / 0.7),
-    hsl(var(--st-violet) / 0.7),
-    hsl(var(--st-pink) / 0.7),
-    transparent
-  );
-  background-size: 100% 300%;
-  animation: st-rail 6s linear infinite;
-  box-shadow: 0 0 12px hsl(var(--st-cyan) / 0.5);
-}
-@keyframes st-rail {
-  to {
-    background-position: 0 -300%;
-  }
 }
 .st-dock-brand {
   pointer-events: auto;
   position: absolute;
-  top: 1.2rem;
-  left: clamp(1rem, 2.4vw, 2rem);
-  display: grid;
-  gap: .1rem;
-  text-decoration: none;
-  color: var(--hl-text);
-}
-.st-dock-brand span {
-  font-family: var(--hl-font-display);
-  font-size: 1.05rem;
-  letter-spacing: .14em;
+  top: 1.5rem;
+  left: clamp(1.4rem, 2.6vw, 2.4rem);
+  font-size: .72rem;
+  letter-spacing: .22em;
   text-transform: uppercase;
-  background: linear-gradient(
-    100deg,
-    hsl(var(--st-cyan)),
-    hsl(var(--st-violet)),
-    hsl(var(--st-pink)),
-    hsl(var(--st-cyan))
-  );
-  background-size: 250% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: st-holo 5s linear infinite;
+  color: var(--st-dim);
+  text-decoration: none;
+  transition: color .2s;
 }
-.st-dock-brand small {
-  font-size: .62rem;
-  letter-spacing: .08em;
-  color: var(--hl-muted);
-  opacity: 0.7;
+.st-dock-brand:hover {
+  color: var(--st-fg);
 }
 .st-dock ul {
   list-style: none;
@@ -181,95 +53,51 @@
   display: grid;
 }
 .st-dock li {
-  height: clamp(1.5rem, 4.4vh, 2.15rem);
+  height: clamp(2.6rem, 6.4vh, 3.4rem);
   display: flex;
   align-items: center;
-  animation: st-dock-in .8s cubic-bezier(0.2, 0.8, 0.2, 1) both;
-  animation-delay: calc(var(--i) * 45ms + 150ms);
 }
-@keyframes st-dock-in {
-  from {
-    opacity: 0;
-    transform: translateX(-1.6rem) skewX(-14deg);
-    filter: blur(6px);
-  }
-}
-.st-dock a {
+.st-dock li a {
   --k: 0.2;
   pointer-events: auto;
-  display: flex;
-  align-items: center;
-  gap: .55rem;
-  padding-right: 1rem;
-  color: inherit;
-  text-decoration: none;
-  font-size: .76rem;
-  letter-spacing: .02em;
+  display: block;
+  font-size: 1rem;
+  letter-spacing: .01em;
   white-space: nowrap;
+  text-decoration: none;
   transform-origin: left center;
-  transform: translateX(calc(var(--k) * 12px)) scale(calc(0.74 + var(--k) * 1.22));
-  opacity: calc(0.3 + var(--k) * 0.7);
-  color: color-mix(in oklab, var(--hl-text) calc(var(--k) * 100%), var(--hl-muted));
-  text-shadow: calc(var(--k) * -1.4px) 0 hsl(var(--st-cyan) / calc(var(--k) * 0.75)), calc(var(--k) * 1.4px) 0
-    hsl(var(--st-pink) / calc(var(--k) * 0.75)), 0 0 calc(var(--k) * 20px) hsl(var(--st-violet) / calc(var(--k) * 0.8));
-  outline-offset: 4px;
+  transform: translateX(calc(var(--k) * 10px)) scale(calc(0.8 + var(--k) * 0.7));
+  /* grey when far, white when near or selected */
+  color: color-mix(in oklab, var(--st-fg) calc(var(--k) * 100%), var(--st-dim));
+  font-weight: calc(400 + var(--k) * 200);
+  outline-offset: 6px;
 }
-.st-dock a:focus-visible {
-  outline: 1px solid hsl(var(--st-cyan));
-  border-radius: 6px;
+.st-dock li a:focus-visible {
+  outline: 1px solid var(--st-fg);
+  border-radius: 4px;
 }
-.st-dock-mark {
-  flex: none;
-  width: calc(.3rem + var(--k) * .22rem);
-  aspect-ratio: 1;
-  background: hsl(var(--st-cyan));
-  transform: rotate(45deg);
-  box-shadow: 0 0 calc(var(--k) * 14px) hsl(var(--st-cyan));
-  margin-left: -.28rem;
+.st-dock li a[aria-current="page"]::before {
+  content: "";
+  position: absolute;
+  left: calc(clamp(1.4rem, 2.6vw, 2.4rem) - 1rem);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--st-fg);
 }
-.st-dock a[aria-current="page"] .st-dock-mark {
-  background: linear-gradient(135deg, hsl(var(--st-cyan)), hsl(var(--st-pink)));
-  animation: st-pulse 2.2s ease-in-out infinite, st-spin 9s linear infinite;
+.st-dock li a {
+  position: relative;
 }
-.st-dock a[aria-current="page"] .st-dock-label {
-  font-family: var(--hl-font-display);
-  background: linear-gradient(
-    100deg,
-    var(--hl-text) 10%,
-    hsl(var(--st-cyan)) 30%,
-    hsl(var(--st-violet)) 50%,
-    hsl(var(--st-pink)) 70%,
-    var(--hl-text) 90%
-  );
-  background-size: 260% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  text-shadow: none;
-  filter: drop-shadow(0 0 10px hsl(var(--st-violet) / 0.7));
-  animation: st-holo 4.5s linear infinite;
-}
-@keyframes st-holo {
-  to {
-    background-position: -260% 0;
-  }
-}
-@keyframes st-pulse {
-  50% {
-    box-shadow: 0 0 22px 4px hsl(var(--st-pink) / 0.8);
-  }
-}
-@keyframes st-spin {
-  to {
-    rotate: 360deg;
-  }
+.st-dock li a[aria-current="page"]::before {
+  left: -.9rem;
+  top: 50%;
+  translate: 0 -50%;
 }
 
-/* ---------- small screens: the dock becomes a strip along the top ---------- */
 @media (max-width: 860px) {
   .st-stage {
     padding-left: 0;
-    padding-top: 3.4rem;
+    padding-top: 3.2rem;
   }
   .st-dock {
     inset: 0 0 auto 0;
@@ -280,45 +108,35 @@
     align-items: center;
     overflow-x: auto;
     scrollbar-width: none;
-    background: color-mix(in oklab, var(--hl-bg) 70%, transparent);
-    backdrop-filter: blur(14px);
+    background: #000;
+    border-bottom: 1px solid var(--st-line);
     pointer-events: auto;
   }
-  .st-dock::before,
-  .st-dock-brand {
+  .st-dock-brand,
+  .st-dock li a::before {
     display: none;
   }
   .st-dock ul {
     display: flex;
-    gap: 1.1rem;
+    gap: 1.4rem;
   }
   .st-dock li {
     height: auto;
   }
-  .st-dock a,
-  .st-dock a[aria-current="page"] {
-    --k: 0.45 !important;
+  .st-dock li a {
     transform: none;
-    font-size: .85rem;
+    --k: 0.5 !important;
+    font-size: .9rem;
     min-height: 44px;
+    display: inline-flex;
+    align-items: center;
   }
-  .st-dock a[aria-current="page"] {
+  .st-dock li a[aria-current="page"] {
     --k: 1 !important;
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .st-blob,
-  .st-grid-bg,
-  .st-scan,
-  .st-dock::before,
-  .st-dock li,
-  .st-dock-brand span,
-  .st-dock a[aria-current="page"] .st-dock-mark,
-  .st-dock a[aria-current="page"] .st-dock-label {
-    animation: none;
-  }
-  .st-scan {
-    display: none;
-  }
+html:has(.st-root),
+body:has(.st-root) {
+  background: #000;
 }
