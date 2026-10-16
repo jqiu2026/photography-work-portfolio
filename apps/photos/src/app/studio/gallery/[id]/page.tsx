@@ -3,7 +3,7 @@ import * as gal from "@jerryqiu/db/galleries";
 import { and, eq, isNull } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import { requirePageUser } from "@/auth";
-import { Shell } from "@/components/Shell";
+import { StudioShell as Shell } from "@/components/studio/StudioShell";
 import { GalleryManager } from "@/components/studio/GalleryManager";
 
 export const dynamic = "force-dynamic";

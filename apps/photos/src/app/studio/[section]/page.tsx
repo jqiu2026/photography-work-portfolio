@@ -4,7 +4,7 @@ import * as st from "@jerryqiu/db/studio";
 import { desc, eq, isNull } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import { requirePageUser } from "@/auth";
-import { Shell } from "@/components/Shell";
+import { StudioShell as Shell } from "@/components/studio/StudioShell";
 import { CalendarView } from "@/components/studio/CalendarView";
 import { PipelineView } from "@/components/studio/PipelineView";
 import { StudioApp, type StudioData } from "@/components/studio/StudioApp";
@@ -17,6 +17,8 @@ import { PortalAdminView } from "@/components/studio/PortalAdminView";
 import * as portalDb from "@jerryqiu/db/portal";
 import { AutomationsView, NotificationsView, TasksView } from "@/components/studio/OpsViews";
 import * as autoDb from "@jerryqiu/db/automation";
+import { DashboardView } from "@/components/studio/DashboardView";
+import { dashboardData } from "@/lib/studio-dashboard";
 import { calendarData } from "@/lib/studio-calendar";
 import * as forms from "@jerryqiu/db/forms";
 import { formatMoney } from "@jerryqiu/db/pricing";
@@ -46,6 +48,21 @@ export default async function StudioSection({ params }: { params: Promise<{ sect
         </Container>
       </Shell>
     );
+  if (section === "overview") {
+    const first = (user.name ?? user.email ?? "there").split(/[ @]/)[0];
+    const hour = Number(
+      new Intl.DateTimeFormat("en-US", { hour: "numeric", hour12: false, timeZone: "America/New_York" }).format(
+        new Date(),
+      ),
+    );
+    const greeting =
+      hour < 5 ? "Good evening" : hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
+    return (
+      <Shell>
+        <DashboardView greeting={`${greeting}, ${first}`} data={await dashboardData(db)} />
+      </Shell>
+    );
+  }
   if (section === "calendar")
     return (
       <Shell>

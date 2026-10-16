@@ -1,7 +1,7 @@
 import { Container, Eyebrow, Heading, Section, Text } from "@halation/ui";
 import Link from "next/link";
 import { studioSections } from "@/components/studio/sections";
-import { Shell } from "@/components/Shell";
+import { StudioShell as Shell } from "@/components/studio/StudioShell";
 import { requirePageUser } from "@/auth";
 import "../globals.css";
 

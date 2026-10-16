@@ -1,10 +1,11 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type FormEvent, type ReactNode, useState, useTransition } from "react";
 import { studioSections } from "./sections";
 import "./studio.css";
+import "./studio-chrome.css";
+import "./studio-dashboard.css";
 
 export type Result = { ok: boolean; message?: string; error?: string; link?: string };
 
@@ -58,16 +59,13 @@ export function Frame({
   note,
   children,
 }: { section: string; user: string; note: Result | null; children: ReactNode }) {
+  const label = studioSections.find((x) => x.id === section)?.label ?? "Studio";
   return (
     <div className="st-wrap">
-      <p className="hl-eyebrow">Studio · {user}</p>
-      <nav className="st-nav" aria-label="Studio sections">
-        {studioSections.map((x) => (
-          <Link key={x.id} href={`/studio/${x.id}`} aria-current={x.id === section ? "page" : undefined}>
-            {x.label}
-          </Link>
-        ))}
-      </nav>
+      <header className="st-head">
+        <p className="hl-eyebrow">Studio · {user}</p>
+        <h1 className="st-title">{label}</h1>
+      </header>
       <Banner note={note} />
       {children}
     </div>

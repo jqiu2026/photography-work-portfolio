@@ -570,14 +570,10 @@ export function StudioApp({ section, user, data }: { section: string; user: stri
 
   return (
     <div className="st-wrap">
-      <p className="hl-eyebrow">Studio · {user}</p>
-      <nav className="st-nav" aria-label="Studio sections">
-        {studioSections.map((x) => (
-          <Link key={x.id} href={`/studio/${x.id}`} aria-current={x.id === section ? "page" : undefined}>
-            {x.label}
-          </Link>
-        ))}
-      </nav>
+      <header className="st-head">
+        <p className="hl-eyebrow">Studio · {user}</p>
+        <h1 className="st-title">{studioSections.find((x) => x.id === section)?.label ?? "Studio"}</h1>
+      </header>
       <Banner note={note} />
       {body}
     </div>

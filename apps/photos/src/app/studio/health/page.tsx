@@ -1,7 +1,7 @@
 import { getDb } from "@jerryqiu/db";
 import { Container, Heading, Section } from "@halation/ui";
 import { requirePageUser } from "@/auth";
-import { Shell } from "@/components/Shell";
+import { StudioShell as Shell } from "@/components/studio/StudioShell";
 import "@/components/studio/studio.css";
 
 export const dynamic = "force-dynamic";
