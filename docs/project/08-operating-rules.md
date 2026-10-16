@@ -12,10 +12,10 @@ The owner intends to leave Claude running unattended until all tasks complete or
 
 ## Autonomy and questions
 
-- The owner is away. **Do not stop to ask.** When a decision is open, pick the default in [01](01-decisions-and-assumptions.md) (or the best-judgment option if none), proceed, and append the question to [QUESTIONS.md](QUESTIONS.md) with: the question, the default chosen, the impact if the owner chooses otherwise, and where in code it lives.
-- Use placeholders for things you can't have: API keys, ShootProof client ID, real footage, final name, logo. Make the placeholder obvious and swappable (`TODO(owner):` marker, listed in QUESTIONS.md).
+- The owner is away. **Do not stop to ask.** When a decision is open, pick the default in [03](03-decisions.md) (or the best-judgment option if none), proceed, and append the question to [QUESTIONS.md](QUESTIONS.md) with: the question, the default chosen, the impact if the owner chooses otherwise, and where in code it lives.
+- Use placeholders for things you can't have: API keys, real footage, final name, logo. Make the placeholder obvious and swappable (`TODO(owner):` marker, listed in QUESTIONS.md).
 - External-facing or destructive actions are never taken without the owner (see Git). Local file edits, installs, builds, tests, running dev servers are fine.
-- The live view: keep `pnpm dev` running on `http://localhost:3000` (run it in the background) and keep `/_progress` current. Sites: hub `:3000`, music `:3000/music`, flying `:3000/flying`, photos `:3002`, docs `:3001`.
+- The live view: keep `cd apps/photos && pnpm dev` running in the background for a live preview at `http://localhost:3002`. Ports: hub 3000, photo 3002, music 3003, flying 3004, make 3005; docs on 3010 (3001 is an unrelated project).
 
 ## Progress tracking
 
@@ -32,7 +32,7 @@ The owner intends to leave Claude running unattended until all tasks complete or
 
 - Watch for any usage/rate-limit indicator the harness shows. **At about 98% usage (or a hard limit warning), stop starting new work.** Finish or safely revert the in-flight edit so the tree builds, commit, and then:
   1. Update PROGRESS.md.
-  2. Write `docs/project/HANDOFF.md` following [HANDOFF_TEMPLATE.md](HANDOFF_TEMPLATE.md): a self-contained "todo list" prompt for the next fresh chat.
+  2. Write `docs/project/HANDOFF.md` following `archive/HANDOFF_TEMPLATE.md`: a self-contained "todo list" prompt for the next fresh chat.
   3. Print that prompt in the final message too, in a fenced block.
 - Because usage cannot always be observed precisely, **refresh HANDOFF.md at every milestone commit** (cheap, a few lines). Then an abrupt stop still leaves a usable handoff.
 
@@ -44,8 +44,9 @@ The owner intends to leave Claude running unattended until all tasks complete or
 - Report faithfully in PROGRESS.md: if something is skipped, partial, or failing, say so.
 - Verify library behavior against installed versions' docs (Next 16, Auth.js v5 beta, Tailwind 4, `motion`), not memory.
 
-## Phase boundaries
+## Scope boundaries (updated 2026-10-15)
 
-- Phase 1 and Phase 2 are complete.
-- **Phase 2.5 (owner-authorized on 2026-10-12): redesign, the blog/photography split, and working local mocks of the studio, score store, client portal and flight map** (see [12-vision-v2.md](12-vision-v2.md), [HANDOFF.md](HANDOFF.md)). Finish with `PHASE-2.5-SUMMARY.md`, then **STOP**.
-- **Do not start Phase 3** (real payments, e-signatures, live providers, ShootProof go-live), not even "just the schema", until the owner says so. Mocks must be labelled `MOCK`, sit behind interfaces, use no live keys or third-party calls, and be disabled in production builds.
+- Phases 1, 2, 2.5 and the P3 studio base are done. The current scope is the **photo site** (see [01-photo-site-spec.md](01-photo-site-spec.md)). Do not start the hub, music, flying or make redesigns (shared-package changes are fine if every app still passes).
+- Missing keys: build the real adapter behind an interface plus a labelled mock, read the key from an env var, add the **name** to `.env.example`, mark `TODO(owner): needs <KEY>`, and list it in PROGRESS.md "Owner to-do". Never call live third-party services. Never read or print `.env*` files.
+- Mocks are labelled MOCK/SAMPLE, sit behind interfaces and are disabled in production builds (`mocksEnabled()`). All prices are placeholders (`$XX` or SAMPLE).
+- Migrations are additive and run only on throwaway or local databases.

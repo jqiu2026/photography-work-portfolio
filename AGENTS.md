@@ -7,17 +7,17 @@ Rules for AI agents and contributors. Project plan, status and hard rules live i
 - Work on branch `feat/custom-ui-cms` only. No co-author trailers, no "Generated with" text in commits or PRs.
 - Never push, merge to `main`, deploy, publish, change DNS, create cloud resources, or spend money.
 - Never block on questions: use the documented default and log it in `docs/project/QUESTIONS.md`.
-- Phases 1 and 2 are done; Phase 2.5 (redesign + local mocks) is authorized (`docs/project/12-vision-v2.md`, `HANDOFF.md`); stop after it. Phase 3 is not started.
+- Current scope: the photo site, `apps/photos` (`docs/project/01-photo-site-spec.md`, `HANDOFF.md`). Do not start the hub, music, flying or make redesigns. The v3 design is paused.
 - Never invent facts about the owner. Use `todo("...")` (dev-only placeholder) or a `TODO(owner):` comment.
 
 ## Repo layout
 
-`apps/web` hub + music + flying (:3000), `apps/photos` photography and studio (:3002), `apps/docs` UI docs, `packages/ui` (`@halation/ui`, **Halation UI**: the original design system; licence undecided, Q32), `packages/sites` site registry and shared chrome (`SiteShell`), `packages/render` (Markdown, MDX, project blocks), `packages/mocks` (labelled local mocks of Phase 3 services), plus `db`, `auth`, `storage`, `protect`, `media`, `inbox`, `shootproof`, `config`.
+`apps/web` hub (:3000), `apps/music` (:3003), `apps/flying` (:3004), `apps/make` (:3005), `apps/photos` photography and studio (:3002), `apps/docs` UI docs, `packages/ui` (`@halation/ui`, **Halation UI**: the original design system; licence undecided, Q32), `packages/sites` site registry and shared chrome (`SiteShell`), `packages/render` (Markdown, MDX, project blocks), `packages/mocks` (labelled local mocks of Phase 3 services), plus `db`, `auth`, `storage`, `protect`, `media`, `inbox`, `payments`, `config`.
 
 ## Working with the UI package (`packages/ui`, Halation UI)
 
 - Prefix `hl` (`--hl-*` variables, `hl-*` classes), set by `brand.config.json` and `pnpm rename`. Handwritten CSS in `src/styles/` (`tokens.css`, `themes.css`, `base.css`, `components.css`, `stage.css`). No Tailwind, no CSS-in-JS. Never hard-code colours in apps; use tokens (Night, Day, Cinema; world accents blue/red/amber/green). `scripts/contrast.mjs` must stay green.
-- The idea is **Flow** (docs/project/redesign-brief.md, design-language.md): one persistent stage (`@halation/ui/stage`: `StageProvider`, `Scene`, `IndexControl`, `Condense`/`Streak`/`Settle`, `Threshold`), one motion language (`--hl-ease-glide|pour|drain`, `--hl-dur-*`, springs `settle` and `droplet`), quality tiers (full, reduced, static) from `src/stage/tier.ts`. **No navbar anywhere**: the floating index control, a skip link and landmarks.
+- The idea is **Flow** (docs/project/archive/redesign-brief.md, design-language.md; paused for the photo site, see 00-vision-and-design.md): one persistent stage (`@halation/ui/stage`: `StageProvider`, `Scene`, `IndexControl`, `Condense`/`Streak`/`Settle`, `Threshold`), one motion language (`--hl-ease-glide|pour|drain`, `--hl-dur-*`, springs `settle` and `droplet`), quality tiers (full, reduced, static) from `src/stage/tier.ts`. **No navbar anywhere**: the floating index control, a skip link and landmarks.
 - Content is always real DOM; the stage is decoration. Anything hidden for a reveal must be gated by `html.hl-js` (set by `ThemeScript`, never under reduced motion, Save-Data or no JS). Every effect needs a static equivalent and a test. Heavy code (ogl, the fluid renderer) is lazy-loaded after first paint.
 - Subpath exports: `@halation/ui` (primitives), `/stage`, `/motion`, `/media`, `/webgl`, `/styles.css`, `/tokens`. Do not pass functions from server components to client components (use declarative props such as `param={[from, to]}`).
 - Every exported component needs a docs entry in `apps/docs/src/content/components.ts` (enforced by `apps/docs/test/coverage.test.ts`; uppercase non-component exports break it, so keep helpers lowercase or unexported).

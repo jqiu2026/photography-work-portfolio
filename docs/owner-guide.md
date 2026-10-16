@@ -27,13 +27,13 @@ At the top of the sidebar, pick **Hub**, **Photography**, **Music** or **Flying*
 - **Fix a mistake:** Trash holds deleted items for 30 days; press Restore. Redirects lets you send an old address to a new one. The Audit log shows who changed what.
 - **Back up:** Pages & settings, "Download a full export" gives a zip of everything as JSON and Markdown. In a terminal, `pnpm db:backup` writes the same to `~/jerryqiu-backups`. The zip contains visitors' messages, so keep it private.
 
-## The studio and ShootProof
+## The studio
 
-`photo.jerryqiu.com/studio` is the owner-only studio. The ShootProof bridge lets you show an event from ShootProof for 24 hours. It is off until you have an API client ID; the steps are on that page and in `docs/shootproof-bridge.md`. Client galleries, contracts, invoices and payments are Phase 3 and are not built yet.
+`photo.jerryqiu.com/studio` is the owner-only studio. It holds clients, shoots, galleries, contracts, invoices and payments (see `docs/project/01-photo-site-spec.md` for what is built).
 
 ## Things that need your accounts (nothing is set up for you)
 
-See `docs/project/DEPLOYMENT.md` for the full checklist: Vercel projects and domains, Neon database, storage (Cloudflare R2), Google sign-in, Resend email, the shared secrets, and DNS. Open questions with their current defaults are in `docs/project/QUESTIONS.md`.
+See `docs/project/02-sites-and-deployment.md` for the full checklist: Vercel projects and domains, Neon database, storage (Vercel Blob), Google sign-in, Resend email, the shared secrets, and DNS. Open questions with their current defaults are in `docs/project/QUESTIONS.md`.
 
 ## The new look and the studio mocks (Phase 2.5)
 
