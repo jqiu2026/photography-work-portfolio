@@ -808,3 +808,140 @@ body:has(.pub) {
     animation: none !important;
   }
 }
+
+/* ---- motion: hover response everywhere, scroll reveals where the browser supports scroll-driven animation ---- */
+@media (prefers-reduced-motion: no-preference) {
+  .pub-mosaic :is(img, canvas),
+  .pub-cat :is(img, canvas),
+  .pub-projects :is(img, canvas) {
+    transition: transform .9s var(--glide), filter .5s ease;
+  }
+  .pub-mosaic li:hover :is(img, canvas),
+  .pub-cat:hover :is(img, canvas),
+  .pub-projects a:hover :is(img, canvas) {
+    transform: scale(1.045);
+  }
+  .pub-mosaic li {
+    transition: transform .5s var(--glide);
+  }
+  .pub-mosaic:hover li:not(:hover) {
+    opacity: 0.72;
+  }
+  .pub-mosaic li {
+    transition: transform .5s var(--glide), opacity .5s ease;
+  }
+  .pub-mosaic figcaption {
+    transform: translateY(.35rem);
+    opacity: 0.0;
+    transition: transform .5s var(--glide), opacity .4s ease;
+  }
+  .pub-mosaic li:hover figcaption,
+  .pub-mosaic li:focus-within figcaption {
+    transform: none;
+    opacity: 1;
+  }
+  .pub-cat span {
+    transition: transform .5s var(--glide);
+  }
+  .pub-cat:hover span {
+    transform: translateY(-.25rem);
+  }
+  .pub-link,
+  .pub-studio a {
+    transition: letter-spacing .4s var(--glide), color .2s ease;
+  }
+  .pub-link:hover,
+  .pub-studio a:hover {
+    letter-spacing: .03em;
+  }
+  .pub-btn {
+    transition: transform .35s var(--glide), background .2s ease, color .2s ease, border-color .2s ease;
+  }
+  .pub-btn:hover {
+    transform: translateY(-2px);
+  }
+  .pub-studio > div {
+    background: linear-gradient(var(--pub-fg, #fff), var(--pub-fg, #fff)) top left / 0 1px no-repeat;
+    transition: background-size .8s var(--glide);
+  }
+  .pub-studio > div:hover {
+    background-size: 100% 1px;
+  }
+  @media (pointer: coarse) {
+    .pub-mosaic figcaption {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @supports (animation-timeline: view()) {
+    .pub-mosaic li,
+    .pub-cat,
+    .pub-projects li,
+    .pub-studio > div,
+    .pub-head-row,
+    .pub-cta-band {
+      animation: sv-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 55%;
+    }
+    .pub-head-row h2 {
+      animation: sv-track linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 70%;
+    }
+    .pub-cat:nth-child(3n + 2),
+    .pub-projects li:nth-child(2) {
+      animation-range: entry 8% entry 63%;
+    }
+    .pub-cat:nth-child(3n),
+    .pub-projects li:nth-child(3) {
+      animation-range: entry 16% entry 71%;
+    }
+    .pub-mosaic li :is(img, canvas) {
+      animation: sv-drift linear both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 100%;
+    }
+    .pub-mosaic li:hover :is(img, canvas) {
+      animation: none;
+    }
+    .pub-hero {
+      animation: sv-hero linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 60vh;
+    }
+  }
+}
+@keyframes sv-up {
+  from {
+    opacity: 0;
+    transform: translateY(2.2rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes sv-track {
+  from {
+    letter-spacing: .18em;
+  }
+  to {
+    letter-spacing: normal;
+  }
+}
+@keyframes sv-drift {
+  from {
+    transform: scale(1.12) translateY(-4%);
+  }
+  to {
+    transform: scale(1.12) translateY(4%);
+  }
+}
+@keyframes sv-hero {
+  to {
+    opacity: 0.25;
+    transform: translateY(-2rem);
+  }
+}
