@@ -15,6 +15,11 @@ export type CheckoutInput = {
   successUrl: string;
   cancelUrl: string;
   customerEmail?: string;
+  /** Payment methods to offer. Bank (ACH) needs it enabled in the Stripe account. Default: card only. */
+  methods?: ("card" | "us_bank_account")[];
+  /** Optional tip and card surcharge, charged as their own line items and recorded in the metadata. */
+  tipCents?: number;
+  surchargeCents?: number;
 };
 
 export type StripeConfig = { secretKey: string; apiBase?: string; fetch?: typeof fetch };
@@ -29,7 +34,31 @@ export function formEncode(obj: Record<string, string | number | undefined>): st
 
 export function checkoutBody(i: CheckoutInput): string {
   if (!Number.isInteger(i.amountCents) || i.amountCents < 50) throw new Error("Amount must be at least 50 cents.");
+  const tip = i.tipCents ?? 0;
+  const surcharge = i.surchargeCents ?? 0;
+  if (tip < 0 || surcharge < 0 || !Number.isInteger(tip) || !Number.isInteger(surcharge))
+    throw new Error("Tip and surcharge must be whole cents.");
+  const extras: Record<string, string | number> = {};
+  let n = 1;
+  for (const [name, cents] of [
+    ["Tip", tip],
+    ["Card surcharge", surcharge],
+  ] as const) {
+    if (!cents) continue;
+    extras[`line_items[${n}][quantity]`] = 1;
+    extras[`line_items[${n}][price_data][currency]`] = i.currency;
+    extras[`line_items[${n}][price_data][unit_amount]`] = cents;
+    extras[`line_items[${n}][price_data][product_data][name]`] = name;
+    n++;
+  }
+  const methods = Object.fromEntries((i.methods ?? ["card"]).map((m, k) => [`payment_method_types[${k}]`, m]));
   return formEncode({
+    ...methods,
+    ...extras,
+    "metadata[tip_cents]": tip || undefined,
+    "metadata[surcharge_cents]": surcharge || undefined,
+    "payment_intent_data[metadata][tip_cents]": tip || undefined,
+    "payment_intent_data[metadata][surcharge_cents]": surcharge || undefined,
     mode: "payment",
     success_url: i.successUrl,
     cancel_url: i.cancelUrl,
@@ -103,9 +132,13 @@ export function paymentFromEvent(e: StripeEvent): {
   providerRef: string;
   receiptRef?: string;
   status: "succeeded" | "failed";
+  tipCents: number;
+  surchargeCents: number;
 } | null {
   const o = e.data.object;
   const meta = (o.metadata ?? {}) as Record<string, string>;
+  const tipCents = Number(meta.tip_cents ?? 0) || 0;
+  const surchargeCents = Number(meta.surcharge_cents ?? 0) || 0;
   if (e.type === "checkout.session.completed") {
     const invoiceId = (o.client_reference_id as string | undefined) ?? meta.invoice_id;
     if (!invoiceId || o.payment_status !== "paid") return null;
@@ -114,6 +147,8 @@ export function paymentFromEvent(e: StripeEvent): {
       amountCents: Number(o.amount_total),
       providerRef: String(o.payment_intent ?? o.id),
       status: "succeeded",
+      tipCents,
+      surchargeCents,
     };
   }
   if (e.type === "payment_intent.succeeded" && meta.invoice_id)
@@ -123,10 +158,51 @@ export function paymentFromEvent(e: StripeEvent): {
       providerRef: String(o.id),
       receiptRef: (o.latest_charge as string | undefined) ?? undefined,
       status: "succeeded",
+      tipCents,
+      surchargeCents,
     };
   if (e.type === "payment_intent.payment_failed" && meta.invoice_id)
-    return { invoiceId: meta.invoice_id, amountCents: Number(o.amount), providerRef: String(o.id), status: "failed" };
+    return {
+      invoiceId: meta.invoice_id,
+      amountCents: Number(o.amount),
+      providerRef: String(o.id),
+      status: "failed",
+      tipCents: 0,
+      surchargeCents: 0,
+    };
   return null;
+}
+
+/** `charge.refunded`: which payment (by payment_intent) and the TOTAL refunded so far, in cents. */
+export function refundFromEvent(e: StripeEvent): { providerRef: string; refundedCents: number } | null {
+  if (e.type !== "charge.refunded") return null;
+  const o = e.data.object;
+  const ref = o.payment_intent as string | undefined;
+  if (!ref) return null;
+  return { providerRef: ref, refundedCents: Number(o.amount_refunded ?? 0) };
+}
+
+/** Refunds (part of) a payment through Stripe. Idempotent per `idempotencyKey`. Throws on any non-2xx. */
+export async function createRefund(
+  cfg: StripeConfig,
+  input: { paymentIntent: string; amountCents: number; reason?: string },
+  idempotencyKey: string,
+): Promise<{ id: string }> {
+  if (!/^sk_(test|live)_/.test(cfg.secretKey)) throw new Error("STRIPE_SECRET_KEY is not a Stripe secret key.");
+  if (!Number.isInteger(input.amountCents) || input.amountCents < 1) throw new Error("Refund at least one cent.");
+  const res = await (cfg.fetch ?? fetch)(`${cfg.apiBase ?? "https://api.stripe.com"}/v1/refunds`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${cfg.secretKey}`,
+      "Content-Type": "application/x-www-form-urlencoded",
+      "Idempotency-Key": idempotencyKey,
+    },
+    body: formEncode({ payment_intent: input.paymentIntent, amount: input.amountCents, reason: input.reason }),
+  });
+  if (!res.ok) throw new Error(`Stripe responded ${res.status}`);
+  const j = (await res.json()) as { id?: string };
+  if (!j.id) throw new Error("Stripe returned no refund id.");
+  return { id: j.id };
 }
 
 export const stripeConfigured = (env: Record<string, string | undefined> = process.env) =>

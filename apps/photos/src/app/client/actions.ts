@@ -1,6 +1,7 @@
 "use server";
 
 import { getDb, hitRateLimit } from "@jerryqiu/db";
+import * as bill from "@jerryqiu/db/billing";
 import * as st from "@jerryqiu/db/studio";
 import { sha256Hex } from "@jerryqiu/db/studio-crypto";
 import { redirect } from "next/navigation";
@@ -88,6 +89,24 @@ export async function payInvoiceAction(
   if (inv.status === "paid") return no("This invoice is already paid.");
   const mode = paymentMode();
   if (mode === "none") return no("Online payment is not set up yet. Please contact the photographer.");
+  const billing = await bill.getBillingSettings(db);
+  const net = await st.invoiceNetCents(db, inv.id);
+  const due = inv.totalCents - net;
+  if (due <= 0) return no("This invoice is already paid.");
+  // Tip, method and surcharge are decided here from the settings; the browser only says which option was picked.
+  const method = String(formData.get("method") ?? "card") === "ach" && billing.achEnabled ? "ach" : "card";
+  const tipChoice = String(formData.get("tip") ?? "0");
+  let tipCents = 0;
+  if (billing.tipsEnabled) {
+    if (/^\d+$/.test(tipChoice) && billing.tipPercents.includes(Number(tipChoice)))
+      tipCents = bill.tipFor(due, Number(tipChoice));
+    else if (tipChoice === "custom") {
+      const d = Number(String(formData.get("tipCustom") ?? "").replace(/[$,\s]/g, ""));
+      if (Number.isFinite(d) && d > 0) tipCents = Math.min(Math.round(d * 100), due);
+    }
+  }
+  const surchargeCents =
+    method === "card" && billing.surchargeEnabled ? bill.surchargeFor(due, billing.surchargeBp) : 0;
   if (mode === "stripe") {
     let url: string;
     try {
@@ -97,13 +116,16 @@ export async function payInvoiceAction(
         {
           invoiceId: inv.id,
           invoiceNumber: inv.number,
-          amountCents: inv.totalCents,
+          amountCents: due,
           currency: inv.currency,
           description: inv.lines.map((l) => l.description).join(", "),
+          methods: method === "ach" ? ["us_bank_account"] : ["card"],
+          tipCents,
+          surchargeCents,
           successUrl: `${base}/client/pay/${token}?paid=1`,
           cancelUrl: `${base}/client/pay/${token}`,
         },
-        `inv-${inv.id}-${inv.updatedAt.getTime()}`,
+        `inv-${inv.id}-${inv.updatedAt.getTime()}-${method}-${tipCents}-${surchargeCents}`,
       );
       url = session.url;
     } catch (error) {
@@ -115,21 +137,30 @@ export async function payInvoiceAction(
   // mock
   const provider = new MockPaymentProvider();
   const intent = await provider.createIntent({
-    amount: inv.totalCents,
+    amount: due + tipCents + surchargeCents,
     description: `Invoice ${inv.number}`,
     metadata: { invoice: inv.id },
   });
-  const r = await provider.confirm(intent, {
-    number: String(formData.get("number") ?? ""),
-    exp: String(formData.get("exp") ?? ""),
-    cvc: String(formData.get("cvc") ?? ""),
-  });
+  // Mock bank transfer: no card to check. Mock card: only 4242 succeeds.
+  const r = await provider.confirm(
+    intent,
+    method === "ach"
+      ? { number: "4242 4242 4242 4242", exp: "12 / 99", cvc: "123" }
+      : {
+          number: String(formData.get("number") ?? ""),
+          exp: String(formData.get("exp") ?? ""),
+          cvc: String(formData.get("cvc") ?? ""),
+        },
+  );
   if (!r.ok) return no(r.error);
   const rec = await st.recordPayment(db, {
     invoiceId: inv.id,
     provider: "mock",
     providerRef: r.intent.id,
-    amountCents: inv.totalCents,
+    amountCents: due + tipCents + surchargeCents,
+    tipCents,
+    surchargeCents,
+    method,
     status: "succeeded",
     receiptRef: r.receiptId,
   });

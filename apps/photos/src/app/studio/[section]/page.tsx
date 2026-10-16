@@ -11,6 +11,8 @@ import { StudioApp, type StudioData } from "@/components/studio/StudioApp";
 import { CatalogView } from "@/components/studio/CatalogView";
 import { QuotesView } from "@/components/studio/QuotesView";
 import { FormsView } from "@/components/studio/FormsView";
+import { BillingView } from "@/components/studio/BillingView";
+import * as bill from "@jerryqiu/db/billing";
 import { calendarData } from "@/lib/studio-calendar";
 import * as forms from "@jerryqiu/db/forms";
 import { formatMoney } from "@jerryqiu/db/pricing";
@@ -103,6 +105,65 @@ export default async function StudioSection({ params }: { params: Promise<{ sect
               taxLabel: settings.taxLabel,
               taxIsSample: settings.taxIsSample,
             },
+          }}
+        />
+      </Shell>
+    );
+  }
+  if (section === "billing") {
+    const [payments, plans, recurring, jobs, settings, invoiceRows] = await Promise.all([
+      bill.listPayments(db),
+      bill.listPlans(db),
+      bill.listRecurring(db),
+      st.listJobs(db),
+      bill.getBillingSettings(db),
+      st.listInvoices(db),
+    ]);
+    const paidByPlan = new Map<string, number>();
+    for (const r of invoiceRows)
+      if (r.invoice.planId && r.invoice.status === "paid")
+        paidByPlan.set(r.invoice.planId, (paidByPlan.get(r.invoice.planId) ?? 0) + 1);
+    return (
+      <Shell>
+        <BillingView
+          user={user.name ?? user.email ?? "owner"}
+          data={{
+            payments: payments.map((r) => ({
+              id: r.payment.id,
+              invoice: r.invoice.number,
+              provider: r.payment.provider,
+              method: r.payment.method,
+              amountCents: r.payment.amountCents,
+              tipCents: r.payment.tipCents,
+              surchargeCents: r.payment.surchargeCents,
+              refundedCents: r.payment.refundedCents,
+              status: r.payment.status,
+              at: (r.payment.paidAt ?? r.payment.createdAt).toISOString().slice(0, 16).replace("T", " "),
+            })),
+            plans: plans.map((p) => ({
+              id: p.id,
+              name: p.name,
+              totalCents: p.totalCents,
+              count: p.count,
+              paid: paidByPlan.get(p.id) ?? 0,
+            })),
+            recurring: recurring.map((r) => ({
+              id: r.id,
+              description: r.description,
+              amountCents: r.amountCents,
+              months: r.intervalMonths,
+              next: r.nextRunOn,
+              active: r.active,
+            })),
+            jobs: jobs.map((r) => ({ id: r.job.id, title: r.job.title })),
+            settings: {
+              tips: settings.tipsEnabled,
+              percents: settings.tipPercents.join(", "),
+              ach: settings.achEnabled,
+              surcharge: settings.surchargeEnabled,
+              surchargePercent: (settings.surchargeBp / 100).toString(),
+            },
+            stripe: Boolean(process.env.STRIPE_SECRET_KEY),
           }}
         />
       </Shell>

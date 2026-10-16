@@ -373,11 +373,19 @@ export async function recordPayment(
     status: "succeeded" | "failed" | "pending" | "refunded";
     receiptRef?: string;
     raw?: Record<string, unknown>;
+    /** Parts of `amountCents` that are a tip or a card surcharge: they do not count toward the invoice. */
+    tipCents?: number;
+    surchargeCents?: number;
+    method?: "card" | "ach" | "manual" | "mock";
   },
   now = new Date(),
 ) {
   const [inv] = await db.select().from(s.studioInvoices).where(eq(s.studioInvoices.id, input.invoiceId));
   if (!inv) throw new StudioError("Unknown invoice.");
+  const tip = input.tipCents ?? 0;
+  const surcharge = input.surchargeCents ?? 0;
+  if (tip < 0 || surcharge < 0 || tip + surcharge > input.amountCents)
+    throw new StudioError("The tip and surcharge cannot exceed the payment.");
   const inserted = await db
     .insert(s.studioPayments)
     .values({
@@ -388,17 +396,16 @@ export async function recordPayment(
       status: input.status,
       receiptRef: input.receiptRef ?? null,
       raw: input.raw ?? null,
+      tipCents: tip,
+      surchargeCents: surcharge,
+      method: input.method ?? (input.provider === "manual" ? "manual" : input.provider === "mock" ? "mock" : "card"),
       paidAt: input.status === "succeeded" ? now : null,
     })
     .onConflictDoNothing()
     .returning();
   const duplicate = inserted.length === 0;
   if (!duplicate && input.status === "succeeded") {
-    const paid = await db
-      .select({ a: s.studioPayments.amountCents })
-      .from(s.studioPayments)
-      .where(and(eq(s.studioPayments.invoiceId, inv.id), eq(s.studioPayments.status, "succeeded")));
-    const sum = paid.reduce((n, p) => n + p.a, 0);
+    const sum = await invoiceNetCents(db, inv.id);
     const status = sum >= inv.totalCents ? "paid" : "partial";
     await db
       .update(s.studioInvoices)
@@ -511,4 +518,22 @@ export async function convertBooking(db: Database, id: string, by?: string) {
 export async function claimWebhookEvent(db: Database, id: string, provider: string, type: string): Promise<boolean> {
   const r = await db.insert(s.webhookEvents).values({ id, provider, type }).onConflictDoNothing().returning();
   return r.length > 0;
+}
+
+/**
+ * What an invoice has actually been paid: the credited part of each succeeded payment (amount minus tip and surcharge),
+ * less refunds (spread proportionally over the credited and the tip/surcharge parts).
+ */
+export async function invoiceNetCents(db: Database, invoiceId: string): Promise<number> {
+  const rows = await db
+    .select()
+    .from(s.studioPayments)
+    .where(and(eq(s.studioPayments.invoiceId, invoiceId), sql`${s.studioPayments.status} in ('succeeded','refunded')`));
+  let net = 0;
+  for (const p of rows) {
+    const credited = p.amountCents - p.tipCents - p.surchargeCents;
+    const refundedCredit = p.amountCents ? Math.round((p.refundedCents * credited) / p.amountCents) : 0;
+    net += credited - refundedCredit;
+  }
+  return net;
 }

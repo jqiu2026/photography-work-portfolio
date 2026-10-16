@@ -111,13 +111,13 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | F-22 | Quotes and proposal pages, accept and pay | P1 | done | `/client/quote/[token]` | Stripe / mock | e2e | M6 |
 | F-23 | Mandatory fees in headline price, optional fees separate | P1 | done | quote_lines.kind | n/a | unit | M6 |
 | F-24 | Sales tax as its own line (Stripe Tax adapter; flat SAMPLE rate otherwise) | P1 | done | tax_lines | Stripe Tax / mock | unit | M6 |
-| F-25 | Payment plans and installments | P1 | missing | payment_plans | Stripe / mock | unit | M8 |
+| F-25 | Payment plans and installments | P1 | done | payment_plans | Stripe / mock | unit | M8 |
 | F-26 | Multi-currency display | P3 | partial (display-only estimate helper, SAMPLE rates; charges stay USD) | price formatter | n/a | unit | M6 |
 | F-27 | Upsells at checkout | P2 | done (on the quote page, re-priced server-side) | quote page | n/a | e2e | M6 |
 | F-28 | Print and product store (prints, albums, canvases, cards) | P2 | missing | `/client/store/[gallery]` | WHCC / mock | e2e | M13 |
 | F-29 | Digital download sales | P2 | missing | digital_products | Stripe / mock | e2e | M13 |
 | F-30 | Gallery extension and reactivation sales | P1 | missing | expiry flow | Stripe / mock | e2e | M10 |
-| F-31 | Tips | P3 | missing | invoice pay | Stripe / mock | unit | M8 |
+| F-31 | Tips | P3 | done | invoice pay | Stripe / mock | unit | M8 |
 | F-32 | Abandoned-cart and unpaid-invoice reminders | P2 | missing | automations | email | unit | M12 |
 
 ### Contract and comply
@@ -139,12 +139,12 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | Id | Feature | Pri | Status | Where | Provider / mock | Test | Milestone |
 |---|---|---|---|---|---|---|---|
 | F-50 | Own invoices, pay through Stripe Checkout, webhook updates | P1 | done (mock labelled when no key) | `/client/pay/[token]`, `/api/webhooks/stripe` | Stripe / mock | e2e studio (1 failing webhook test to fix) | M1 |
-| F-51 | Deposits, retainers, recurring invoices | P1 | missing | invoices.kind | Stripe / mock | unit | M8 |
-| F-52 | Refunds (Stripe) and cancel unstarted print order | P1 | missing | payments, refunds | Stripe / mock | unit | M8 |
-| F-53 | ACH option | P1 | missing | checkout payment_method_types | Stripe / mock | unit | M8 |
-| F-54 | Receipts by email, PDF invoices | P1 | missing | email templates | Resend / outbox | unit | M8 |
+| F-51 | Deposits, retainers, recurring invoices | P1 | done (deposit invoices from quotes and bookings, recurring billing for retainers) | invoices.kind | Stripe / mock | unit | M8 |
+| F-52 | Refunds (Stripe) and cancel unstarted print order | P1 | partial (Stripe refunds, dashboard refunds by webhook, proportional tip/surcharge; print-order cancellation arrives with prints in M13) | payments, refunds | Stripe / mock | unit | M8 |
+| F-53 | ACH option | P1 | done (Checkout offers bank payment when enabled; labelled mock locally) | checkout payment_method_types | Stripe / mock | unit | M8 |
+| F-54 | Receipts by email, PDF invoices | P1 | done (receipt email, invoice and receipt PDFs) | email templates | Resend / outbox | unit | M8 |
 | F-55 | Manual mark paid (cash, Zelle, check) | P1 | done | studio invoices | n/a | e2e | done |
-| F-56 | Optional card surcharge, default off | P2 | missing | settings | Stripe | unit | M8 |
+| F-56 | Optional card surcharge, default off | P2 | done (off by default, capped at 3%, disclosed before paying, cards only) | settings | Stripe | unit | M8 |
 | F-57 | Revenue reports from Stripe data, CSV export, tax-export | P2 | missing | `/studio/reports` | n/a | unit | M14 |
 
 ### Deliver

@@ -129,9 +129,18 @@ export function SignForm({
   );
 }
 
-export function PayForm({ token, mode, amount }: { token: string; mode: "stripe" | "mock"; amount: string }) {
+export type PayOptions = { tips: number[]; ach: boolean; surchargeBp: number };
+
+export function PayForm({
+  token,
+  mode,
+  amount,
+  options = { tips: [], ach: false, surchargeBp: 0 },
+}: { token: string; mode: "stripe" | "mock"; amount: string; options?: PayOptions }) {
   const [r, action, pending] = useActionState(payInvoiceAction.bind(null, token), null);
   const [card, setCard] = useState({ number: "", exp: "", cvc: "" });
+  const [method, setMethod] = useState<"card" | "ach">("card");
+  const [tip, setTip] = useState("0");
   if (r?.ok)
     return (
       <section className="st-card">
@@ -144,7 +153,76 @@ export function PayForm({ token, mode, amount }: { token: string; mode: "stripe"
   return (
     <form action={action} className="st-card st-form">
       <h1 className="st-title">Pay {amount}</h1>
-      {mode === "mock" ? (
+      {options.ach ? (
+        <fieldset className="st-fieldset">
+          <legend>How would you like to pay?</legend>
+          <label className="st-check">
+            <input
+              type="radio"
+              name="method"
+              value="card"
+              checked={method === "card"}
+              onChange={() => setMethod("card")}
+            />{" "}
+            Card
+            {options.surchargeBp
+              ? ` (a ${(options.surchargeBp / 100).toFixed(2)}% surcharge applies to credit cards, never debit)`
+              : ""}
+          </label>
+          <label className="st-check">
+            <input
+              type="radio"
+              name="method"
+              value="ach"
+              checked={method === "ach"}
+              onChange={() => setMethod("ach")}
+            />{" "}
+            Bank transfer (ACH)
+            {options.surchargeBp ? ": no surcharge" : ""}
+          </label>
+        </fieldset>
+      ) : options.surchargeBp ? (
+        <p className="st-note" role="note">
+          A {(options.surchargeBp / 100).toFixed(2)}% surcharge applies to credit cards (never debit cards). It is shown
+          before you pay.
+        </p>
+      ) : null}
+      {options.tips.length ? (
+        <fieldset className="st-fieldset">
+          <legend>Add a tip (optional)</legend>
+          <label className="st-check">
+            <input type="radio" name="tip" value="0" checked={tip === "0"} onChange={() => setTip("0")} /> No tip
+          </label>
+          {options.tips.map((t) => (
+            <label key={t} className="st-check">
+              <input
+                type="radio"
+                name="tip"
+                value={String(t)}
+                checked={tip === String(t)}
+                onChange={() => setTip(String(t))}
+              />{" "}
+              {t}%
+            </label>
+          ))}
+          <label className="st-check">
+            <input
+              type="radio"
+              name="tip"
+              value="custom"
+              checked={tip === "custom"}
+              onChange={() => setTip("custom")}
+            />{" "}
+            Other amount
+            {tip === "custom" ? (
+              <input name="tipCustom" inputMode="decimal" aria-label="Tip in dollars" style={{ width: "6rem" }} />
+            ) : null}
+          </label>
+        </fieldset>
+      ) : null}
+      {mode === "mock" && method === "ach" ? (
+        <p className="st-note">Mock bank transfer: no bank account is used and nothing is charged.</p>
+      ) : mode === "mock" ? (
         <>
           <p className="st-note">
             Mock payment. Use the test card 4242 4242 4242 4242, any future expiry, any 3 digits. No card is charged.

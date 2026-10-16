@@ -1,7 +1,8 @@
 import { afterPayment } from "@/lib/after-payment";
 import { getDb } from "@jerryqiu/db";
 import * as st from "@jerryqiu/db/studio";
-import { type StripeEvent, paymentFromEvent, verifyStripeSignature } from "@jerryqiu/payments";
+import * as bill from "@jerryqiu/db/billing";
+import { type StripeEvent, paymentFromEvent, refundFromEvent, verifyStripeSignature } from "@jerryqiu/payments";
 
 export const dynamic = "force-dynamic";
 
@@ -34,12 +35,27 @@ export async function POST(request: Request) {
         amountCents: p.amountCents,
         status: p.status,
         receiptRef: p.receiptRef,
+        tipCents: p.tipCents,
+        surchargeCents: p.surchargeCents,
         raw: { event: event.id, type: event.type },
       });
       if (!rec.duplicate && p.status === "succeeded")
         await afterPayment(db, p.invoiceId).catch((e) => console.error("[after-payment]", String(e)));
     } catch (error) {
       console.error("[stripe] could not record payment", event.id, String(error));
+      return new Response("Could not record", { status: 500 });
+    }
+  }
+  const rf = refundFromEvent(event);
+  if (rf) {
+    try {
+      await bill.syncRefundedTotal(db, {
+        provider: "stripe",
+        providerRef: rf.providerRef,
+        refundedCents: rf.refundedCents,
+      });
+    } catch (error) {
+      console.error("[stripe] could not record refund", event.id, String(error));
       return new Response("Could not record", { status: 500 });
     }
   }

@@ -16,7 +16,9 @@
     "./calendar": "./src/calendar.ts",
     "./commerce": "./src/commerce.ts",
     "./pricing": "./src/pricing.ts",
-    "./forms": "./src/forms.ts"
+    "./forms": "./src/forms.ts",
+    "./pdf": "./src/pdf.ts",
+    "./billing": "./src/billing.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

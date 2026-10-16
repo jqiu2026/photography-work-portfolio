@@ -92,7 +92,14 @@ describe("events", () => {
           },
         },
       }),
-    ).toEqual({ invoiceId: "inv-1", amountCents: 35000, providerRef: "pi_1", status: "succeeded" });
+    ).toEqual({
+      invoiceId: "inv-1",
+      amountCents: 35000,
+      providerRef: "pi_1",
+      status: "succeeded",
+      tipCents: 0,
+      surchargeCents: 0,
+    });
     expect(
       paymentFromEvent({
         id: "e",
@@ -150,5 +157,80 @@ describe("tax providers", () => {
     expect((await bad.calculate({ amountCents: 10_000, currency: "usd", address: { country: "US" } })).source).toBe(
       "flat-sample",
     );
+  });
+});
+
+import { createRefund, refundFromEvent } from "../src/index";
+
+describe("checkout extras, refunds", () => {
+  const base = {
+    invoiceId: "i",
+    invoiceNumber: "1",
+    amountCents: 10000,
+    currency: "usd",
+    description: "d",
+    successUrl: "https://x/ok",
+    cancelUrl: "https://x/no",
+  };
+  it("offers card by default, ACH when asked, and adds tip and surcharge as their own lines with metadata", () => {
+    const plain = decodeURIComponent(checkoutBody(base));
+    expect(plain).toContain("payment_method_types[0]=card");
+    expect(plain).not.toContain("line_items[1]");
+    const rich = decodeURIComponent(
+      checkoutBody({ ...base, methods: ["card", "us_bank_account"], tipCents: 1500, surchargeCents: 300 }),
+    );
+    expect(rich).toContain("payment_method_types[1]=us_bank_account");
+    expect(rich).toContain("line_items[1][price_data][unit_amount]=1500");
+    expect(rich).toContain("line_items[1][price_data][product_data][name]=Tip");
+    expect(rich).toContain("line_items[2][price_data][product_data][name]=Card surcharge");
+    expect(rich).toContain("metadata[tip_cents]=1500");
+    expect(() => checkoutBody({ ...base, tipCents: -1 })).toThrow();
+  });
+  it("reads tip and surcharge back from a completed session, and the refunded total from charge.refunded", () => {
+    const p = paymentFromEvent({
+      id: "e",
+      type: "checkout.session.completed",
+      data: {
+        object: {
+          id: "cs",
+          client_reference_id: "inv",
+          payment_status: "paid",
+          amount_total: 11800,
+          payment_intent: "pi_1",
+          metadata: { tip_cents: "1500", surcharge_cents: "300" },
+        },
+      },
+    });
+    expect(p).toMatchObject({ amountCents: 11800, tipCents: 1500, surchargeCents: 300, providerRef: "pi_1" });
+    expect(
+      refundFromEvent({
+        id: "e",
+        type: "charge.refunded",
+        data: { object: { payment_intent: "pi_1", amount_refunded: 4000 } },
+      }),
+    ).toEqual({ providerRef: "pi_1", refundedCents: 4000 });
+    expect(refundFromEvent({ id: "e", type: "other", data: { object: {} } })).toBeNull();
+  });
+  it("creates a refund with a bearer key and an idempotency key, and refuses bad keys or amounts", async () => {
+    let seen: { url: string; init: RequestInit } | undefined;
+    const f = (async (url: string, init: RequestInit) => {
+      seen = { url, init };
+      return new Response(JSON.stringify({ id: "re_1" }), { status: 200 });
+    }) as unknown as typeof fetch;
+    const r = await createRefund(
+      { secretKey: "sk_test_abc", fetch: f },
+      { paymentIntent: "pi_1", amountCents: 2500, reason: "requested_by_customer" },
+      "ref-1",
+    );
+    expect(r.id).toBe("re_1");
+    expect(seen?.url).toBe("https://api.stripe.com/v1/refunds");
+    expect((seen?.init.headers as Record<string, string>)["Idempotency-Key"]).toBe("ref-1");
+    expect(String(seen?.init.body)).toContain("payment_intent=pi_1");
+    await expect(
+      createRefund({ secretKey: "nope", fetch: f }, { paymentIntent: "pi", amountCents: 1 }, "k"),
+    ).rejects.toThrow(/secret key/);
+    await expect(
+      createRefund({ secretKey: "sk_test_abc", fetch: f }, { paymentIntent: "pi", amountCents: 0 }, "k"),
+    ).rejects.toThrow();
   });
 });

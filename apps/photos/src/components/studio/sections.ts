@@ -12,4 +12,5 @@ export const studioSections = [
   { id: "contracts", label: "Contracts" },
   { id: "forms", label: "Forms" },
   { id: "invoices", label: "Invoices" },
+  { id: "billing", label: "Billing" },
 ] as const;

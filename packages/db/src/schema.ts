@@ -401,6 +401,7 @@ export const invoiceStatusEnum = pgEnum("studio_invoice_status", [
   "partial",
   "paid",
   "void",
+  "refunded",
 ]);
 export const paymentStatusEnum = pgEnum("studio_payment_status", ["pending", "succeeded", "failed", "refunded"]);
 export const bookingStatusEnum = pgEnum("studio_booking_status", ["new", "converted", "archived"]);
@@ -549,6 +550,12 @@ export const studioInvoices = pgTable(
     totalCents: integer("total_cents").notNull().default(0),
     status: invoiceStatusEnum("status").notNull().default("draft"),
     dueDate: date("due_date"),
+    /** standard | deposit | balance | installment | recurring | retainer */
+    kind: text("kind").notNull().default("standard"),
+    planId: uuid("plan_id"),
+    installmentNo: integer("installment_no"),
+    installmentOf: integer("installment_of"),
+    recurringId: uuid("recurring_id"),
     /** sha256 of the payment link token. */
     tokenHash: text("token_hash"),
     sentAt: timestamp("sent_at", { withTimezone: true }),
@@ -577,6 +584,12 @@ export const studioPayments = pgTable(
     status: paymentStatusEnum("status").notNull().default("pending"),
     receiptRef: text("receipt_ref"),
     raw: jsonb("raw").$type<Record<string, unknown>>(),
+    /** Part of `amount_cents` that is a tip or a card surcharge (not credited to the invoice). */
+    tipCents: integer("tip_cents").notNull().default(0),
+    surchargeCents: integer("surcharge_cents").notNull().default(0),
+    /** card | ach | manual | mock */
+    method: text("method"),
+    refundedCents: integer("refunded_cents").notNull().default(0),
     paidAt: timestamp("paid_at", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
@@ -973,3 +986,44 @@ export const studioQuestionnaireSends = pgTable(
 );
 
 export type StudioContractTemplate = typeof studioContractTemplates.$inferSelect;
+
+export const studioRefunds = pgTable("studio_refunds", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  paymentId: uuid("payment_id")
+    .notNull()
+    .references(() => studioPayments.id),
+  amountCents: integer("amount_cents").notNull(),
+  reason: text("reason"),
+  /** Provider refund id (re_...), or "manual". */
+  providerRef: text("provider_ref"),
+  by: text("by"),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+/** An instalment plan: one invoice per instalment, the first sent at once, the rest sent as they come due. */
+export const studioPaymentPlans = pgTable("studio_payment_plans", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  jobId: uuid("job_id")
+    .notNull()
+    .references(() => studioJobs.id),
+  name: text("name").notNull(),
+  totalCents: integer("total_cents").notNull(),
+  count: integer("count").notNull(),
+  status: text("status").notNull().default("active"),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+/** Recurring billing (a retainer, a monthly service): an invoice every `interval_months` until it ends. */
+export const studioRecurring = pgTable("studio_recurring", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  jobId: uuid("job_id")
+    .notNull()
+    .references(() => studioJobs.id),
+  description: text("description").notNull(),
+  amountCents: integer("amount_cents").notNull(),
+  intervalMonths: integer("interval_months").notNull().default(1),
+  nextRunOn: date("next_run_on").notNull(),
+  endsOn: date("ends_on"),
+  active: boolean("active").notNull().default(true),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});

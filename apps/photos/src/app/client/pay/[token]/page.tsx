@@ -4,6 +4,7 @@ import * as st from "@jerryqiu/db/studio";
 import { MockBanner } from "@jerryqiu/sites/mock";
 import { notFound } from "next/navigation";
 import { Shell } from "@/components/Shell";
+import * as bill from "@jerryqiu/db/billing";
 import { PayForm } from "@/components/studio/ClientForms";
 import { paymentMode } from "@/lib/payment-config";
 
@@ -23,6 +24,9 @@ export default async function PayPage({
   const inv = await st.invoiceByToken(db, token);
   if (!inv) notFound();
   const mode = paymentMode();
+  const billing = await bill.getBillingSettings(db);
+  const net = await st.invoiceNetCents(db, inv.id);
+  const dueCents = Math.max(0, inv.totalCents - net);
   return (
     <Shell>
       {mode === "mock" ? (
@@ -30,11 +34,17 @@ export default async function PayPage({
       ) : null}
       <Section>
         <Container size="md">
+          <p className="st-note">
+            <a href={`/client/pay/${token}/pdf`}>Download the invoice (PDF)</a>
+          </p>
           {inv.status === "paid" ? (
             <section className="st-card">
               <h1 className="st-title">Paid</h1>
               <p className="st-note" role="status">
                 Invoice {inv.number} is paid. Thank you.
+              </p>
+              <p className="st-note">
+                <a href={`/client/pay/${token}/receipt`}>Download the receipt (PDF)</a>
               </p>
             </section>
           ) : paid ? (
@@ -52,7 +62,16 @@ export default async function PayPage({
               </p>
             </section>
           ) : (
-            <PayForm token={token} mode={mode} amount={usd(inv.totalCents)} />
+            <PayForm
+              token={token}
+              mode={mode}
+              amount={usd(dueCents || inv.totalCents)}
+              options={{
+                tips: billing.tipsEnabled ? billing.tipPercents : [],
+                ach: billing.achEnabled,
+                surchargeBp: billing.surchargeEnabled ? billing.surchargeBp : 0,
+              }}
+            />
           )}
         </Container>
       </Section>
