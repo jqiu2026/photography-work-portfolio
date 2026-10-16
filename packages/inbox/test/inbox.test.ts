@@ -59,3 +59,54 @@ describe("contact submissions", () => {
     expect(left.length).toBe(0);
   });
 });
+
+describe("booking inquiries", () => {
+  const base = {
+    name: "Grace Hopper",
+    email: "Grace@Example.com",
+    shootType: "performance",
+    eventDate: "2027-03-01",
+    location: "Brooklyn",
+    message: "A spring concert with about 120 people. Looking for coverage and a gallery.",
+    consent: true,
+  };
+  it("stores a scored lead and logs a confirmation and an owner notification", async () => {
+    const { submitInquiry } = await import("../src");
+    const r = await submitInquiry(db, base, { ipHash: "iq1", baseUrl: "https://photo.test" });
+    expect(r.ok).toBe(true);
+    const leads = await db.select().from(schema.studioBookings);
+    const lead = leads.find((l) => l.email === "grace@example.com");
+    expect(lead).toMatchObject({ shootType: "performance", location: "Brooklyn", status: "new" });
+    expect(lead?.score).toBeGreaterThan(30);
+    const mails = await db.select().from(schema.emailLog);
+    const mine = mails.filter((m) => m.relatedId === lead?.id);
+    expect(mine.map((m) => m.kind).sort()).toEqual(["inquiry-owner", "inquiry-received"]);
+    expect(mine.find((m) => m.kind === "inquiry-received")?.toEmail).toBe("grace@example.com");
+    expect(mine.find((m) => m.kind === "inquiry-owner")?.bodyText).toContain("https://photo.test/studio/bookings");
+  });
+  it("needs consent and valid fields, ignores bots, and archives link spam without emailing", async () => {
+    const { submitInquiry } = await import("../src");
+    const bad = await submitInquiry(db, { ...base, consent: false }, { ipHash: "iq2" });
+    expect(bad).toMatchObject({ ok: false, status: 400 });
+    expect((bad as { fieldErrors?: Record<string, string> }).fieldErrors?.consent).toBeTruthy();
+    const before = (await db.select().from(schema.studioBookings)).length;
+    expect(await submitInquiry(db, { ...base, website: "http://bot" }, { ipHash: "iq3" })).toEqual({ ok: true });
+    expect((await db.select().from(schema.studioBookings)).length).toBe(before);
+    const spam = await submitInquiry(
+      db,
+      { ...base, email: "spam@example.com", message: "buy http://a.co http://b.co http://c.co now" },
+      { ipHash: "iq4" },
+    );
+    expect(spam.ok).toBe(true);
+    const row = (await db.select().from(schema.studioBookings)).find((l) => l.email === "spam@example.com");
+    expect(row?.status).toBe("archived");
+    expect((await db.select().from(schema.emailLog)).filter((m) => m.relatedId === row?.id)).toHaveLength(0);
+  });
+  it("rate limits per address", async () => {
+    const { submitInquiry } = await import("../src");
+    let last: Awaited<ReturnType<typeof submitInquiry>> = { ok: true };
+    for (let i = 0; i < 7; i++)
+      last = await submitInquiry(db, { ...base, email: `r${i}@example.com` }, { ipHash: "iq5" });
+    expect(last).toMatchObject({ ok: false, status: 429 });
+  });
+});

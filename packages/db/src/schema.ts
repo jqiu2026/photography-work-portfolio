@@ -569,6 +569,10 @@ export const studioPayments = pgTable(
   ],
 );
 
+/**
+ * Inquiries (leads). A public inquiry form creates one; the owner converts it to a client and a job. `score` is a 0 to 100
+ * explainable lead score (see `scoreLead` in studio.ts); `source` records where the visitor came from.
+ */
 export const studioBookings = pgTable("studio_bookings", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: text("name").notNull(),
@@ -577,8 +581,46 @@ export const studioBookings = pgTable("studio_bookings", {
   message: text("message").notNull(),
   status: bookingStatusEnum("status").notNull().default("new"),
   clientId: uuid("client_id").references(() => studioClients.id),
+  phone: text("phone"),
+  shootType: text("shoot_type"),
+  eventDate: date("event_date"),
+  location: text("location"),
+  budget: text("budget"),
+  guests: integer("guests"),
+  source: text("source"),
+  referrer: text("referrer"),
+  utm: jsonb("utm").$type<Record<string, string>>(),
+  details: jsonb("details").$type<Record<string, string>>(),
+  score: integer("score").notNull().default(0),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
+
+/**
+ * Every email the platform sends or would send. `status`: sent (provider accepted), mock (recorded by the labelled
+ * outbox, nothing left the machine), skipped (no provider configured in production), failed. Bodies are kept so the
+ * studio inbox and the client portal can show the thread.
+ */
+export const emailLog = pgTable(
+  "email_log",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    kind: text("kind").notNull(),
+    toEmail: text("to_email").notNull(),
+    fromEmail: text("from_email").notNull(),
+    replyTo: text("reply_to"),
+    subject: text("subject").notNull(),
+    bodyText: text("body_text").notNull(),
+    bodyHtml: text("body_html"),
+    provider: text("provider").notNull(),
+    status: text("status").notNull(),
+    providerId: text("provider_id"),
+    error: text("error"),
+    relatedType: text("related_type"),
+    relatedId: text("related_id"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("email_log_to_idx").on(t.toEmail), index("email_log_related_idx").on(t.relatedType, t.relatedId)],
+);
 
 /** Provider webhook events already processed (idempotency). */
 export const webhookEvents = pgTable("webhook_events", {

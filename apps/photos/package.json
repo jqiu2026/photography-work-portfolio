@@ -12,6 +12,7 @@
     "@halation/ui": "workspace:*",
     "@jerryqiu/auth": "workspace:*",
     "@jerryqiu/db": "workspace:*",
+    "@jerryqiu/email": "workspace:*",
     "@jerryqiu/inbox": "workspace:*",
     "@jerryqiu/media": "workspace:*",
     "@jerryqiu/mocks": "workspace:*",

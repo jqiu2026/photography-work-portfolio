@@ -88,10 +88,10 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 
 | Id | Feature | Pri | Status | Where | Provider / mock | Test | Milestone |
 |---|---|---|---|---|---|---|---|
-| F-01 | Booking inquiry form creates a stored lead | P1 | partial (inbox stores it, no lead) | `/book`, `@jerryqiu/inbox` | email: Resend / outbox | e2e book | M4 |
-| F-02 | Inquiry form per shoot type | P1 | missing | `/book/[type]` | n/a | e2e | M4 |
+| F-01 | Booking inquiry form creates a stored, scored lead and emails confirmations | P1 | done | `/book`, `@jerryqiu/inbox` | email: Resend / outbox | e2e book | M4 |
+| F-02 | Inquiry form per shoot type | P1 | done (8 types, `content/shoot-types.ts`) | `/book/[type]` | n/a | e2e | M4 |
 | F-03 | Embeddable inquiry widget | P2 | missing | `/embed/inquiry` (frame-ancestors allow-list) | n/a | e2e | M5 |
-| F-04 | Lead source tracking (UTM, referrer) and lead score | P2 | missing | jobs.source, score | n/a | unit | M4 |
+| F-04 | Lead source tracking (UTM, referrer) and lead score | P2 | done | jobs.source, score | n/a | unit | M4 |
 | F-05 | Availability and instant booking with deposit | P1 | missing | `/book/[type]`, calendar | Stripe / mock | e2e | M5 |
 | F-06 | Mini-sessions and sale-day booking | P2 | missing | slots with capacity | n/a | e2e | M5 |
 | F-07 | Waitlist | P2 | missing | appointments.waitlist | email | unit | M5 |
@@ -178,7 +178,7 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | F-82 | Email thread and messages visible in portal; replies routed to a real inbox | P1 | missing | messages, email_log | Resend / outbox | e2e | M9 |
 | F-83 | Self-reschedule and cancel within policy | P2 | missing | portal job page | n/a | e2e | M9 |
 | F-84 | Notification preferences | P2 | missing | `/client/account` | n/a | e2e | M9 |
-| F-85 | Branded email templates | P1 | missing | `@jerryqiu/email` | Resend / outbox | unit | M4 |
+| F-85 | Branded email templates | P1 | done (13 kinds) | `@jerryqiu/email` | Resend / outbox | unit | M4 |
 
 ### Run the business
 
@@ -189,7 +189,7 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | F-92 | Calendar with availability, buffers, travel time, no double-booking | P1 | missing | `/studio/calendar` | n/a | unit | M5 |
 | F-93 | `.ics` calendar feeds | P1 | missing | `/api/ics/[token]` | n/a | unit | M5 |
 | F-94 | Tasks and reminders | P2 | missing | tasks | n/a | e2e | M12 |
-| F-95 | Email templates and threads in studio | P1 | missing | `/studio/inbox` | Resend / outbox | e2e | M4 |
+| F-95 | Email templates and threads in studio | P1 | partial (templates and a studio inbox of every email; threads with replies in M9) | `/studio/inbox` | Resend / outbox | e2e | M4 |
 | F-96 | Automations: trigger, condition, action on Vercel Cron | P2 | missing | automations | cron | unit | M12 |
 | F-97 | Shot lists and call sheets | P3 | missing | call_sheets | n/a | e2e | M15 |
 | F-98 | Roles: second shooter, assistant; job assignment | P3 | missing | team_members | n/a | unit | M15 |

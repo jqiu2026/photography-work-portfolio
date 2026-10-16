@@ -1,6 +1,7 @@
 export const studioSections = [
   { id: "overview", label: "Overview" },
-  { id: "bookings", label: "Bookings" },
+  { id: "bookings", label: "Inquiries" },
+  { id: "inbox", label: "Inbox" },
   { id: "clients", label: "Clients" },
   { id: "shoots", label: "Shoots" },
   { id: "galleries", label: "Galleries" },

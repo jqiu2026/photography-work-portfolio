@@ -12,6 +12,7 @@ export default {
     "@jerryqiu/protect",
     "@jerryqiu/storage",
     "@jerryqiu/inbox",
+    "@jerryqiu/email",
     "@jerryqiu/media",
   ],
   // Bundled photographs live in private/ (never public/); the manifests are read by pages, the derivatives by the image route.

@@ -16,7 +16,8 @@
     "@jerryqiu/db": "workspace:*",
     "@jerryqiu/protect": "workspace:*",
     "drizzle-orm": "^0.45.4",
-    "zod": "^4.0.0"
+    "zod": "^4.0.0",
+    "@jerryqiu/email": "workspace:*"
   },
   "devDependencies": {
     "@electric-sql/pglite": "^0.5.8",

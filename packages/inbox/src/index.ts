@@ -1,5 +1,7 @@
 import { type Database, getDb, hitRateLimit, schema } from "@jerryqiu/db";
+import { sendTemplate } from "@jerryqiu/email";
 import { clientIpHash } from "@jerryqiu/protect";
+import * as st from "@jerryqiu/db/studio";
 import { sql } from "drizzle-orm";
 import { z } from "zod";
 
@@ -159,4 +161,137 @@ export async function deleteContactData(db: Database, email: string): Promise<nu
     .where(sql`lower(${schema.inboxMessages.email}) = ${e}`)
     .returning({ id: schema.inboxMessages.id });
   return res.length;
+}
+
+/* ------------------------------------------------------------------------------------------------------------------
+ * Booking inquiries (leads): `POST /api/inquiry` on the photo site. Stored as a lead with a score and source, the visitor
+ * gets a confirmation email and the owner a notification (through @jerryqiu/email: Resend, or the labelled outbox).
+ * ---------------------------------------------------------------------------------------------------------------- */
+const opt = (max: number) => z.string().trim().max(max).optional().default("");
+export const inquirySchema = z.object({
+  name: z.string().trim().min(2, "Please tell me your name.").max(120),
+  email: z
+    .string()
+    .trim()
+    .max(200)
+    .regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "That doesn't look like an email address."),
+  phone: opt(40),
+  shootType: opt(40),
+  eventDate: z
+    .string()
+    .trim()
+    .regex(/^(\d{4}-\d{2}-\d{2})?$/, "Use the date picker.")
+    .optional()
+    .default(""),
+  location: opt(200),
+  budget: opt(60),
+  guests: z.coerce.number().int().min(0).max(100000).optional(),
+  message: z.string().trim().min(5, "Tell me a little about the shoot.").max(5000),
+  source: opt(80),
+  referrer: opt(300),
+  utm: z.record(z.string().max(40), z.string().max(120)).optional(),
+  details: z.record(z.string().max(60), z.string().max(500)).optional(),
+  consent: z.literal(true, { error: "Please tick the box so I can store your message." }),
+  website: z.string().max(500).optional().default(""),
+  turnstileToken: z.string().max(4000).optional(),
+});
+
+export async function submitInquiry(
+  db: Database,
+  raw: unknown,
+  ctx: { ipHash: string; ip?: string; baseUrl?: string },
+): Promise<ContactResult & { id?: string }> {
+  const parsed = inquirySchema.safeParse(raw);
+  if (!parsed.success) {
+    const fieldErrors: Record<string, string> = {};
+    for (const i of parsed.error.issues) fieldErrors[String(i.path[0] ?? "form")] ??= i.message;
+    return { ok: false, status: 400, error: "Please check the form.", fieldErrors };
+  }
+  const v = parsed.data;
+  if (v.website) return { ok: true };
+  const limited = await hitRateLimit(db, `inquiry:${ctx.ipHash}`, 5, 600);
+  const global = await hitRateLimit(db, "inquiry:all", 300, 3600);
+  if (!limited.allowed || !global.allowed)
+    return { ok: false, status: 429, error: "Too many messages. Please try again later." };
+  if (!(await verifyTurnstile(v.turnstileToken, ctx.ip)))
+    return { ok: false, status: 400, error: "The spam check failed. Reload the page and try again." };
+  const spam = looksLikeSpam(v);
+  const lead = await st.addInquiry(db, {
+    name: v.name,
+    email: v.email,
+    message: v.message,
+    phone: v.phone,
+    shootType: v.shootType,
+    eventDate: v.eventDate || null,
+    location: v.location,
+    budget: v.budget,
+    guests: v.guests ?? null,
+    source: v.source,
+    referrer: v.referrer,
+    utm: v.utm,
+    details: v.details,
+  });
+  if (spam) {
+    await db
+      .update(schema.studioBookings)
+      .set({ status: "archived" })
+      .where(sql`${schema.studioBookings.id} = ${lead.id}`);
+    return { ok: true, id: lead.id };
+  }
+  const related = { type: "booking", id: lead.id };
+  const summary = [v.shootType, v.eventDate, v.location].filter(Boolean).join(" · ");
+  await sendTemplate(db, v.email, "inquiry-received", { name: v.name, summary }, { related });
+  const owner = process.env.CONTACT_TO_EMAIL?.trim();
+  if (owner || process.env.NODE_ENV !== "production")
+    await sendTemplate(
+      db,
+      owner || "owner@photo.invalid",
+      "inquiry-owner",
+      {
+        name: v.name,
+        title: v.shootType || "photography",
+        summary: `${v.name} <${v.email}>${summary ? ` · ${summary}` : ""} · lead score ${lead.score}`,
+        detail: v.message,
+        link: ctx.baseUrl ? `${ctx.baseUrl}/studio/bookings` : undefined,
+      },
+      { related, replyTo: v.email },
+    );
+  return { ok: true, id: lead.id };
+}
+
+/** Route handler body for `POST /api/inquiry` (same-origin, JSON only). */
+export async function handleInquiryRequest(request: Request, opts: { baseUrl?: string } = {}): Promise<Response> {
+  const json = (status: number, body: unknown) =>
+    Response.json(body, { status, headers: { "Cache-Control": "no-store" } });
+  const origin = request.headers.get("origin");
+  const host = request.headers.get("host");
+  if (origin) {
+    let ok = false;
+    try {
+      ok = new URL(origin).host === host;
+    } catch {}
+    if (!ok) return json(403, { error: "Not allowed." });
+  }
+  if (!(request.headers.get("content-type") ?? "").includes("application/json"))
+    return json(415, { error: "Send JSON." });
+  const text = await request.text();
+  if (text.length > MAX_BODY) return json(413, { error: "Message is too long." });
+  let body: unknown;
+  try {
+    body = JSON.parse(text);
+  } catch {
+    return json(400, { error: "Invalid request." });
+  }
+  const db = getDb();
+  if (!db)
+    return json(503, { error: "Inquiries can't be stored right now. Please email me directly.", fallback: "mailto" });
+  const ipHash = clientIpHash(request.headers);
+  const ip = (request.headers.get("x-forwarded-for") ?? "").split(",")[0]?.trim() || undefined;
+  try {
+    const r = await submitInquiry(db, body, { ipHash, ip, baseUrl: opts.baseUrl });
+    return r.ok ? json(200, { ok: true }) : json(r.status, { error: r.error, fieldErrors: r.fieldErrors });
+  } catch (error) {
+    console.error("[inbox] inquiry failed", error);
+    return json(500, { error: "Something went wrong. Please try again." });
+  }
 }

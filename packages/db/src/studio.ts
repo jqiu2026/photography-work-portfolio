@@ -401,24 +401,75 @@ export async function recordPayment(
   return { duplicate, payment: inserted[0] ?? null };
 }
 
-/* ---- bookings ---- */
+/* ---- bookings (inquiries / leads) ---- */
+export type InquiryInput = {
+  name: string;
+  email: string;
+  message: string;
+  topic?: string;
+  phone?: string;
+  shootType?: string;
+  eventDate?: string | null;
+  location?: string;
+  budget?: string;
+  guests?: number | null;
+  source?: string;
+  referrer?: string;
+  utm?: Record<string, string>;
+  details?: Record<string, string>;
+};
+
+/**
+ * Explainable 0 to 100 lead score: a base of 10, plus 20 for a date within a year, 15 for a stated budget, 10 each for a
+ * phone number, a known shoot type, a location and a message of 80+ characters, and 15 for a referral or returning client.
+ */
+export function scoreLead(i: InquiryInput, now = new Date()): number {
+  let n = 10;
+  if (i.eventDate) {
+    const days = (new Date(i.eventDate).getTime() - now.getTime()) / 86_400_000;
+    if (days >= -1 && days <= 365) n += 20;
+  }
+  if (i.budget?.trim()) n += 15;
+  if (i.phone?.trim()) n += 10;
+  if (i.shootType?.trim()) n += 10;
+  if (i.location?.trim()) n += 10;
+  if (i.message.trim().length >= 80) n += 10;
+  if (/referral|returning|friend/i.test(i.source ?? "")) n += 15;
+  return Math.min(100, n);
+}
+
+export async function addInquiry(db: Database, input: InquiryInput, now = new Date()) {
+  if (input.name.trim().length < 2) throw new StudioError("Enter your name.");
+  if (!isEmail(input.email)) throw new StudioError("Enter a valid email address.");
+  if (input.message.trim().length < 5) throw new StudioError("Tell me a little about the shoot.");
+  const clean = (v?: string | null, max = 200) => (v?.trim() ? v.trim().slice(0, max) : null);
+  const [row] = await db
+    .insert(s.studioBookings)
+    .values({
+      name: input.name.trim().slice(0, 120),
+      email: email(input.email),
+      topic: input.topic?.trim().slice(0, 60) || input.shootType?.trim().slice(0, 60) || "General",
+      message: input.message.trim().slice(0, 5000),
+      phone: clean(input.phone, 40),
+      shootType: clean(input.shootType, 40),
+      eventDate: input.eventDate && /^\d{4}-\d{2}-\d{2}$/.test(input.eventDate) ? input.eventDate : null,
+      location: clean(input.location),
+      budget: clean(input.budget, 60),
+      guests: Number.isInteger(input.guests) && (input.guests as number) >= 0 ? (input.guests as number) : null,
+      source: clean(input.source, 80),
+      referrer: clean(input.referrer, 300),
+      utm: input.utm ?? null,
+      details: input.details ?? null,
+      score: scoreLead(input, now),
+    })
+    .returning();
+  return row;
+}
 export async function addBooking(
   db: Database,
   input: { name: string; email: string; topic?: string; message: string },
 ) {
-  if (input.name.trim().length < 2) throw new StudioError("Enter your name.");
-  if (!isEmail(input.email)) throw new StudioError("Enter a valid email address.");
-  if (input.message.trim().length < 5) throw new StudioError("Tell me a little about the shoot.");
-  const [row] = await db
-    .insert(s.studioBookings)
-    .values({
-      name: input.name.trim(),
-      email: email(input.email),
-      topic: input.topic?.trim() || "General",
-      message: input.message.trim(),
-    })
-    .returning();
-  return row;
+  return addInquiry(db, input);
 }
 export async function listBookings(db: Database) {
   return db.select().from(s.studioBookings).orderBy(desc(s.studioBookings.createdAt));

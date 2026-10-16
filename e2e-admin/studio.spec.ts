@@ -205,3 +205,44 @@ test("the Stripe webhook: bad signatures refused, a signed event pays the invoic
   await page.goto(`${PHOTOS}/studio/invoices`, { waitUntil: "networkidle" });
   await expectSlow(page.locator(`li[data-invoice-id="${invoiceId}"]`)).toContainText("paid");
 });
+
+test("an inquiry becomes a scored lead, the visitor and the owner get email (labelled mock outbox), and the lead can be converted", async ({
+  page,
+}) => {
+  const who = `Lead ${uid}`;
+  await page.goto(`${PHOTOS}/book`, { waitUntil: "networkidle" });
+  await page.getByRole("link", { name: /Performances/ }).click();
+  await expect(page).toHaveURL(/\/book\/performance$/);
+  await page.getByLabel("Your name").fill(who);
+  await page.getByRole("textbox", { name: "Email", exact: true }).fill(`lead-${uid}@example.com`);
+  await page.getByLabel("Date (if you have one)").fill("2027-03-01");
+  await page.getByLabel("Where").fill("Brooklyn");
+  await page.getByLabel("Production or ensemble").fill("Spring concert");
+  await page
+    .getByLabel("Tell me about it")
+    .fill("A spring concert with about 120 people; I'd like coverage and a gallery.");
+  await page.getByRole("button", { name: "Send inquiry" }).click();
+  await expect(page.getByText("Please tick the box")).toBeVisible();
+  await page.getByLabel(/I agree that my message is stored/).check();
+  await page.getByRole("button", { name: "Send inquiry" }).click();
+  await expectSlow(page.getByRole("status")).toContainText("Thanks, I got your message");
+
+  await page.goto(`${PHOTOS}/studio/bookings`, { waitUntil: "networkidle" });
+  const lead = page.locator("li[data-lead-id]").filter({ hasText: who });
+  await expect(lead).toContainText("performance");
+  await expect(lead).toContainText(/score \d+/);
+  await expect(lead).toContainText("Spring concert");
+
+  await page.goto(`${PHOTOS}/studio/inbox`, { waitUntil: "networkidle" });
+  const mails = page.locator("li").filter({ hasText: `lead-${uid}@example.com` });
+  await expect(mails.first()).toContainText("mock");
+  await expect(page.getByText("New inquiry: performance").first()).toBeVisible();
+
+  await page.goto(`${PHOTOS}/studio/bookings`, { waitUntil: "networkidle" });
+  await page
+    .locator("li[data-lead-id]")
+    .filter({ hasText: who })
+    .getByRole("button", { name: "Convert to client" })
+    .click();
+  await expectSlow(page.getByRole("status")).toContainText(/client/i);
+});

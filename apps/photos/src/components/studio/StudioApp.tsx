@@ -36,7 +36,35 @@ export type StudioData = {
     feeCents: number;
   }[];
   galleries: { id: string; jobTitle: string; title: string; status: string; items: number }[];
-  bookings: { id: string; name: string; email: string; topic: string; message: string; status: string }[];
+  bookings: {
+    id: string;
+    name: string;
+    email: string;
+    topic: string;
+    message: string;
+    status: string;
+    phone: string | null;
+    shootType: string | null;
+    eventDate: string | null;
+    location: string | null;
+    budget: string | null;
+    guests: number | null;
+    source: string | null;
+    score: number;
+    details: Record<string, string>;
+    createdAt: string;
+  }[];
+  emails: {
+    id: string;
+    kind: string;
+    to: string;
+    subject: string;
+    text: string;
+    status: string;
+    provider: string;
+    error: string | null;
+    at: string;
+  }[];
   contracts: { id: string; jobTitle: string; status: string; signedBy: string | null }[];
   invoices: { id: string; number: string; jobTitle: string; status: string; totalCents: number; lines: string }[];
   media: { id: string; filename: string }[];
@@ -134,15 +162,38 @@ export function StudioApp({ section, user, data }: { section: string; user: stri
       </div>
     );
   } else if (section === "bookings") {
+    const sorted = [...data.bookings].sort((x, y) => y.score - x.score || y.createdAt.localeCompare(x.createdAt));
     body = (
-      <Card title="Bookings" id="st-b">
-        {data.bookings.length ? (
-          <ul className="st-list">
-            {data.bookings.map((b) => (
-              <li key={b.id}>
+      <Card title="Inquiries" id="st-b">
+        <p className="st-note">
+          Highest lead score first. The score is explained in docs/project/01-photo-site-spec.md.
+        </p>
+        {sorted.length ? (
+          <ul className="st-list st-list--tall">
+            {sorted.map((b) => (
+              <li key={b.id} data-lead-id={b.id}>
                 <span>
-                  <strong>{b.name}</strong> · {b.topic}
+                  <strong>{b.name}</strong> · {b.shootType ?? b.topic} · <span title="Lead score">score {b.score}</span>
+                  <small>
+                    {[
+                      b.eventDate,
+                      b.location,
+                      b.budget,
+                      b.guests ? `${b.guests} guests` : "",
+                      b.phone,
+                      b.source && `via ${b.source}`,
+                    ]
+                      .filter(Boolean)
+                      .join(" · ")}
+                  </small>
                   <small>{b.message}</small>
+                  {Object.entries(b.details).length ? (
+                    <small>
+                      {Object.entries(b.details)
+                        .map(([k, v]) => `${k}: ${v}`)
+                        .join(" · ")}
+                    </small>
+                  ) : null}
                 </span>
                 {b.status === "new" ? (
                   <button
@@ -160,7 +211,37 @@ export function StudioApp({ section, user, data }: { section: string; user: stri
             ))}
           </ul>
         ) : (
-          <p className="st-note">No bookings yet.</p>
+          <p className="st-note">No inquiries yet.</p>
+        )}
+      </Card>
+    );
+  } else if (section === "inbox") {
+    body = (
+      <Card title="Inbox" id="st-in">
+        <p className="st-note">
+          Every email the platform sends. <strong>mock</strong> means the labelled development outbox recorded it and
+          nothing was sent; <strong>skipped</strong> means no email provider is configured (TODO(owner): needs
+          RESEND_API_KEY and EMAIL_FROM).
+        </p>
+        {data.emails.length ? (
+          <ul className="st-list st-list--tall">
+            {data.emails.map((m) => (
+              <li key={m.id}>
+                <details>
+                  <summary>
+                    <strong>{m.subject}</strong> · {m.to} · <em>{m.status}</em> · {m.kind}
+                  </summary>
+                  <pre className="st-pre">{m.text}</pre>
+                  {m.error ? <p className="st-error">{m.error}</p> : null}
+                  <small>
+                    {m.provider} · {m.at.slice(0, 16).replace("T", " ")}
+                  </small>
+                </details>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="st-note">No email yet.</p>
         )}
       </Card>
     );

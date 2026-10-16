@@ -1,0 +1,5 @@
+{
+  "extends": "@jerryqiu/config/tsconfig.base.json",
+  "compilerOptions": { "types": ["node"], "resolveJsonModule": true },
+  "include": ["src", "test", "scripts"]
+}

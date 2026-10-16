@@ -215,3 +215,45 @@ describe("invoices and payments", () => {
     expect(await st.claimWebhookEvent(db, "evt_1", "stripe", "payment_intent.succeeded")).toBe(false);
   });
 });
+
+describe("inquiries (leads)", () => {
+  it("scores a detailed inquiry higher than a bare one and stores the lead fields", async () => {
+    const now = new Date("2026-10-15T12:00:00Z");
+    const bare = st.scoreLead({ name: "A", email: "a@b.co", message: "hi there" }, now);
+    const rich = st.scoreLead(
+      {
+        name: "A",
+        email: "a@b.co",
+        message: "x".repeat(90),
+        phone: "555",
+        shootType: "event",
+        eventDate: "2026-12-01",
+        location: "NYC",
+        budget: "$XX",
+        source: "referral",
+      },
+      now,
+    );
+    expect(bare).toBe(10);
+    expect(rich).toBe(100);
+    const row = await st.addInquiry(db, {
+      name: "Lead Person",
+      email: "Lead@Example.com",
+      message: "A school performance in the spring",
+      shootType: "performance",
+      eventDate: "2027-03-01",
+      location: "Brooklyn",
+      guests: 120,
+      utm: { utm_source: "ig" },
+    });
+    expect(row).toMatchObject({
+      email: "lead@example.com",
+      shootType: "performance",
+      eventDate: "2027-03-01",
+      guests: 120,
+      status: "new",
+    });
+    expect(row.score).toBeGreaterThan(10);
+    await expect(st.addInquiry(db, { name: "A", email: "nope", message: "hello world" })).rejects.toThrow();
+  });
+});
