@@ -123,7 +123,7 @@ export async function payInvoiceAction(
     cvc: String(formData.get("cvc") ?? ""),
   });
   if (!r.ok) return no(r.error);
-  await st.recordPayment(db, {
+  const rec = await st.recordPayment(db, {
     invoiceId: inv.id,
     provider: "mock",
     providerRef: r.intent.id,
@@ -131,5 +131,9 @@ export async function payInvoiceAction(
     status: "succeeded",
     receiptRef: r.receiptId,
   });
+  if (!rec.duplicate) {
+    const { afterPayment } = await import("@/lib/after-payment");
+    await afterPayment(db, inv.id).catch((e) => console.error("[after-payment]", String(e)));
+  }
   return { ok: true, message: `Paid. Receipt ${r.receiptId} (mock).` };
 }

@@ -22,6 +22,15 @@ export default {
   },
   serverExternalPackages: ["sharp", "pg", "@electric-sql/pglite"],
   // photos.jerryqiu.com is an alias: send every path to the canonical photo.jerryqiu.com (Q57).
+  // Embedding: only /embed/* may be framed, and only by the owner's own sites (EMBED_ALLOWED_ORIGINS adds more).
+  async headers() {
+    const extra = (process.env.EMBED_ALLOWED_ORIGINS ?? "").split(/[\s,]+/).filter(Boolean);
+    const allowed = ["'self'", "https://jerryqiu.com", "https://www.jerryqiu.com", ...extra].join(" ");
+    return [
+      { source: "/embed/:path*", headers: [{ key: "Content-Security-Policy", value: `frame-ancestors ${allowed}` }] },
+      { source: "/((?!embed).*)", headers: [{ key: "Content-Security-Policy", value: "frame-ancestors 'self'" }] },
+    ];
+  },
   async redirects() {
     return [
       {

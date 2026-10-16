@@ -646,3 +646,74 @@ export const studioViewEvents = pgTable(
   },
   (t) => [index("studio_view_events_code_idx").on(t.code), index("studio_view_events_media_idx").on(t.mediaId)],
 );
+
+/* ------------------------------------------------------------------------------------------------------------------
+ * Calendar and booking. Times are timestamptz (UTC); the studio time zone lives in studio_settings ("calendar").
+ * `blocked_start`/`blocked_end` are the appointment widened by its buffers and travel time; a Postgres EXCLUDE constraint
+ * (added in migration 0006) makes overlapping live appointments impossible even under concurrent requests.
+ * ---------------------------------------------------------------------------------------------------------------- */
+export const appointmentKindEnum = pgEnum("appointment_kind", ["shoot", "consult", "minislot", "block"]);
+export const appointmentStatusEnum = pgEnum("appointment_status", ["open", "hold", "confirmed", "cancelled"]);
+
+/** Key/value studio configuration (calendar, deposit, policies...). `value` is validated by zod in code. */
+export const studioSettings = pgTable("studio_settings", {
+  key: text("key").primaryKey(),
+  value: jsonb("value").notNull().$type<unknown>(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+/** Weekly bookable hours (weekday 0 = Sunday). A day can have several windows. */
+export const availabilityRules = pgTable("availability_rules", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  weekday: integer("weekday").notNull(),
+  startMinute: integer("start_minute").notNull(),
+  endMinute: integer("end_minute").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+export const blackoutDates = pgTable("blackout_dates", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  date: date("date").notNull().unique(),
+  reason: text("reason"),
+});
+
+export const appointments = pgTable(
+  "appointments",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    kind: appointmentKindEnum("kind").notNull().default("shoot"),
+    status: appointmentStatusEnum("status").notNull().default("confirmed"),
+    title: text("title").notNull(),
+    startsAt: timestamp("starts_at", { withTimezone: true }).notNull(),
+    endsAt: timestamp("ends_at", { withTimezone: true }).notNull(),
+    bufferBeforeMin: integer("buffer_before_min").notNull().default(0),
+    bufferAfterMin: integer("buffer_after_min").notNull().default(0),
+    travelMin: integer("travel_min").notNull().default(0),
+    blockedStart: timestamp("blocked_start", { withTimezone: true }).notNull(),
+    blockedEnd: timestamp("blocked_end", { withTimezone: true }).notNull(),
+    location: text("location"),
+    notes: text("notes"),
+    jobId: uuid("job_id").references(() => studioJobs.id),
+    clientId: uuid("client_id").references(() => studioClients.id),
+    bookingId: uuid("booking_id").references(() => studioBookings.id),
+    invoiceId: uuid("invoice_id").references(() => studioInvoices.id),
+    /** Mini-session group: slots created together share a label ("Fall minis, Oct 25"). */
+    groupLabel: text("group_label"),
+    /** A hold lapses at this time unless the deposit is paid. */
+    holdUntil: timestamp("hold_until", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("appointments_start_idx").on(t.startsAt), index("appointments_job_idx").on(t.jobId)],
+);
+
+export const waitlist = pgTable("waitlist", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  /** A date (YYYY-MM-DD) or a mini-session group label the person is waiting for. */
+  wanted: text("wanted").notNull(),
+  shootType: text("shoot_type"),
+  notifiedAt: timestamp("notified_at", { withTimezone: true }),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});

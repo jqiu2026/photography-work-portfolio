@@ -1,3 +1,4 @@
+import { afterPayment } from "@/lib/after-payment";
 import { getDb } from "@jerryqiu/db";
 import * as st from "@jerryqiu/db/studio";
 import { type StripeEvent, paymentFromEvent, verifyStripeSignature } from "@jerryqiu/payments";
@@ -26,7 +27,7 @@ export async function POST(request: Request) {
   const p = paymentFromEvent(event);
   if (p) {
     try {
-      await st.recordPayment(db, {
+      const rec = await st.recordPayment(db, {
         invoiceId: p.invoiceId,
         provider: "stripe",
         providerRef: p.providerRef,
@@ -35,6 +36,8 @@ export async function POST(request: Request) {
         receiptRef: p.receiptRef,
         raw: { event: event.id, type: event.type },
       });
+      if (!rec.duplicate && p.status === "succeeded")
+        await afterPayment(db, p.invoiceId).catch((e) => console.error("[after-payment]", String(e)));
     } catch (error) {
       console.error("[stripe] could not record payment", event.id, String(error));
       return new Response("Could not record", { status: 500 });

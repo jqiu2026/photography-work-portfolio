@@ -12,7 +12,8 @@
     "./export": "./src/export.ts",
     "./settings": "./src/settings.ts",
     "./studio": "./src/studio.ts",
-    "./studio-crypto": "./src/studio-crypto.ts"
+    "./studio-crypto": "./src/studio-crypto.ts",
+    "./calendar": "./src/calendar.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

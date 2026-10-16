@@ -29,7 +29,15 @@ export default function Book() {
               </li>
             ))}
           </ul>
-          <Text size="sm" tone="muted" style={{ marginTop: "2rem" }}>
+          <p style={{ marginTop: "2rem", display: "flex", gap: "1.25rem", flexWrap: "wrap" }}>
+            <Link href="/book/schedule" className="hl-link">
+              Pick a time online
+            </Link>
+            <Link href="/book/minis" className="hl-link">
+              Mini-sessions
+            </Link>
+          </p>
+          <Text size="sm" tone="muted" style={{ marginTop: "1rem" }}>
             Prefer email? <a href={`mailto:${person.bookingEmail}`}>{person.bookingEmail}</a>
           </Text>
         </Container>

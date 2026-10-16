@@ -5,7 +5,10 @@ import { desc, eq, isNull } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import { requirePageUser } from "@/auth";
 import { Shell } from "@/components/Shell";
+import { CalendarView } from "@/components/studio/CalendarView";
+import { PipelineView } from "@/components/studio/PipelineView";
 import { StudioApp, type StudioData } from "@/components/studio/StudioApp";
+import { calendarData } from "@/lib/studio-calendar";
 import { studioSections } from "@/components/studio/sections";
 
 export const dynamic = "force-dynamic";
@@ -31,6 +34,38 @@ export default async function StudioSection({ params }: { params: Promise<{ sect
         </Container>
       </Shell>
     );
+  if (section === "calendar")
+    return (
+      <Shell>
+        <CalendarView user={user.name ?? user.email ?? "owner"} data={await calendarData(db)} />
+      </Shell>
+    );
+  if (section === "pipeline") {
+    const [leads, jobs] = await Promise.all([st.listBookings(db), st.listJobs(db)]);
+    return (
+      <Shell>
+        <PipelineView
+          user={user.name ?? user.email ?? "owner"}
+          data={{
+            leads: leads
+              .filter((b) => b.status === "new")
+              .sort((a, b) => b.score - a.score)
+              .map((b) => ({ id: b.id, name: b.name, shootType: b.shootType, score: b.score, eventDate: b.eventDate })),
+            jobs: jobs
+              .filter((r) => r.job.status !== "cancelled")
+              .map((r) => ({
+                id: r.job.id,
+                title: r.job.title,
+                client: r.client.name,
+                status: r.job.status,
+                date: r.job.date,
+                feeCents: r.job.feeCents,
+              })),
+          }}
+        />
+      </Shell>
+    );
+  }
   const [clients, jobs, galleries, bookings, contracts, invoices, media, emails] = await Promise.all([
     st.listClients(db),
     st.listJobs(db),

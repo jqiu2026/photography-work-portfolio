@@ -6,6 +6,7 @@ import { getSite } from "@jerryqiu/sites";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { guarded } from "@/auth";
+import { afterPayment } from "@/lib/after-payment";
 
 /**
  * Owner-side studio actions (Phase 3). Every action re-checks the session and role (`studio.access`), rate limits, and
@@ -251,7 +252,7 @@ export async function markInvoicePaidAction(invoiceId: string) {
     const inv = rows.find((r) => r.invoice.id === p.data)?.invoice;
     if (!inv) return actionError("Unknown invoice.");
     // Manual payments (cash, Zelle, cheque): one record per invoice, idempotent by reference.
-    await st.recordPayment(db, {
+    const rec = await st.recordPayment(db, {
       invoiceId: inv.id,
       provider: "manual",
       providerRef: `manual:${inv.id}`,
@@ -259,6 +260,7 @@ export async function markInvoicePaidAction(invoiceId: string) {
       status: "succeeded",
       receiptRef: `by ${user.email}`,
     });
+    if (!rec.duplicate) await afterPayment(db, inv.id).catch((e) => console.error("[after-payment]", String(e)));
     await audit({
       action: "studio.invoice.paid-manual",
       entity: "studio_invoice",

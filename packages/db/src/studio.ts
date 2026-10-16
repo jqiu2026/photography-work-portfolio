@@ -1,5 +1,7 @@
 import { and, asc, desc, eq, isNull, like, sql } from "drizzle-orm";
+import { confirmForInvoice } from "./calendar";
 import type { Database } from "./client";
+import { StudioError } from "./errors";
 import * as s from "./schema";
 import { hashPasscode, hashToken, invoiceNumber, newToken, sha256Hex, totalOf, verifyPasscode } from "./studio-crypto";
 
@@ -10,7 +12,7 @@ import { hashPasscode, hashToken, invoiceNumber, newToken, sha256Hex, totalOf, v
 export const JOB_STEPS = ["inquiry", "booked", "shot", "editing", "delivered", "paid"] as const;
 export type JobStep = (typeof JOB_STEPS)[number];
 
-export class StudioError extends Error {}
+export { StudioError };
 
 const email = (v: string) => v.trim().toLowerCase();
 const isEmail = (v: string) => /^\S+@\S+\.\S+$/.test(v.trim());
@@ -389,7 +391,9 @@ export async function recordPayment(
       .update(s.studioInvoices)
       .set({ status, paidAt: status === "paid" ? now : null, updatedAt: now })
       .where(eq(s.studioInvoices.id, inv.id));
-    if (status === "paid") {
+    // A paid deposit confirms the held appointment and books the job (it does not mark the whole job paid).
+    const confirmed = status === "paid" ? await confirmForInvoice(db, inv.id, now) : [];
+    if (status === "paid" && !confirmed.length) {
       const siblings = await db
         .select({ st: s.studioInvoices.status })
         .from(s.studioInvoices)

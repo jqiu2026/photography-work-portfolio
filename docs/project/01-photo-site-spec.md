@@ -90,11 +90,11 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 |---|---|---|---|---|---|---|---|
 | F-01 | Booking inquiry form creates a stored, scored lead and emails confirmations | P1 | done | `/book`, `@jerryqiu/inbox` | email: Resend / outbox | e2e book | M4 |
 | F-02 | Inquiry form per shoot type | P1 | done (8 types, `content/shoot-types.ts`) | `/book/[type]` | n/a | e2e | M4 |
-| F-03 | Embeddable inquiry widget | P2 | missing | `/embed/inquiry` (frame-ancestors allow-list) | n/a | e2e | M5 |
+| F-03 | Embeddable inquiry widget | P2 | done (`/embed/inquiry`, frame-ancestors allow-list) | `/embed/inquiry` (frame-ancestors allow-list) | n/a | e2e | M5 |
 | F-04 | Lead source tracking (UTM, referrer) and lead score | P2 | done | jobs.source, score | n/a | unit | M4 |
-| F-05 | Availability and instant booking with deposit | P1 | missing | `/book/[type]`, calendar | Stripe / mock | e2e | M5 |
-| F-06 | Mini-sessions and sale-day booking | P2 | missing | slots with capacity | n/a | e2e | M5 |
-| F-07 | Waitlist | P2 | missing | appointments.waitlist | email | unit | M5 |
+| F-05 | Availability and instant booking with deposit | P1 | done (hold, deposit invoice, mock or Stripe, confirm on payment) | `/book/[type]`, calendar | Stripe / mock | e2e | M5 |
+| F-06 | Mini-sessions and sale-day booking | P2 | done (open slots, one winner each) | slots with capacity | n/a | e2e | M5 |
+| F-07 | Waitlist | P2 | done (join, tell them a spot opened) | appointments.waitlist | email | unit | M5 |
 | F-08 | Referral codes | P2 | missing | promo_codes kind=referral | n/a | unit | M6 |
 | F-09 | Gift cards | P2 | missing | gift_cards | Stripe / mock | unit | M6 |
 | F-10 | Discount and promo codes | P2 | missing | promo_codes | n/a | unit | M6 |
@@ -185,9 +185,9 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | Id | Feature | Pri | Status | Where | Provider / mock | Test | Milestone |
 |---|---|---|---|---|---|---|---|
 | F-90 | CRM: clients, contacts, notes, tags, history, segments | P1 | partial (clients with notes and tags) | `/studio/clients` | n/a | e2e | M5, M15 |
-| F-91 | Visual pipeline and kanban (inquiry, booked, shot, editing, delivered, paid) | P1 | partial (step trail) | `/studio/pipeline` | n/a | e2e | M5 |
-| F-92 | Calendar with availability, buffers, travel time, no double-booking | P1 | missing | `/studio/calendar` | n/a | unit | M5 |
-| F-93 | `.ics` calendar feeds | P1 | missing | `/api/ics/[token]` | n/a | unit | M5 |
+| F-91 | Visual pipeline and kanban (inquiry, booked, shot, editing, delivered, paid) | P1 | done | `/studio/pipeline` | n/a | e2e | M5 |
+| F-92 | Calendar with availability, buffers, travel time, no double-booking | P1 | done (DB exclusion constraint) | `/studio/calendar` | n/a | unit | M5 |
+| F-93 | `.ics` calendar feeds | P1 | done (secret URL) | `/api/ics/[token]` | n/a | unit | M5 |
 | F-94 | Tasks and reminders | P2 | missing | tasks | n/a | e2e | M12 |
 | F-95 | Email templates and threads in studio | P1 | partial (templates and a studio inbox of every email; threads with replies in M9) | `/studio/inbox` | Resend / outbox | e2e | M4 |
 | F-96 | Automations: trigger, condition, action on Vercel Cron | P2 | missing | automations | cron | unit | M12 |
@@ -208,7 +208,7 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | F-110 | Roles and sessions, rate limits | P1 | done (owner/editor, per-IP limits) | auth, db | unit | done |
 | F-111 | Webhooks in (Stripe) and out (owner endpoints), owner API | P3 | partial (in only) | `/api/v1/*` | unit | M15 |
 | F-112 | Notifications centre and activity feed | P3 | missing | studio | e2e | M15 |
-| F-113 | Mobile-friendly photographer side, installable PWA | P1 | missing | studio CSS, manifest | e2e 390px | M5, M18 |
+| F-113 | Mobile-friendly photographer side, installable PWA | P1 | partial (responsive board and forms; PWA manifest in M18) | studio CSS, manifest | e2e 390px | M5, M18 |
 | F-114 | Dark and light themes | P1 | done | `@halation/ui` | e2e | done |
 | F-115 | WCAG 2.2 AA, performance budgets (Lighthouse mobile 80+, CLS under 0.02) | P1 | partial | all | axe, lighthouse | M18 |
 | F-116 | Error and health pages, seed and demo data | P1 | partial | `/api/health`, seed | e2e | M11 |
