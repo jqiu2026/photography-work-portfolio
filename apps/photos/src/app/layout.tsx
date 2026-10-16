@@ -1,8 +1,8 @@
 import "@halation/ui/styles.css";
 import { ThemeScript } from "@jerryqiu/sites/theme-script";
+import Script from "next/script";
 import { ThemeProvider } from "@halation/ui";
 import { ScreenshotGuard } from "@halation/ui/media";
-import { SmoothScroll } from "@halation/ui/motion";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { getSite } from "@jerryqiu/sites";
@@ -31,14 +31,21 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
     <html lang="en" suppressHydrationWarning className={fontVars}>
       <head>
         <ThemeScript preset="photos" defaultTheme="dark" />
+        {/* a returning visitor in this session skips the home intro without a flash */}
+        <Script
+          id="intro-seen"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html:
+              'try{if(sessionStorage.getItem("pub-intro"))document.documentElement.setAttribute("data-intro-seen","")}catch(e){}',
+          }}
+        />
         <meta name="robots" content="noai, noimageai" />
       </head>
       <body className="hl-root">
         <ThemeProvider preset="photos" defaultTheme="dark">
           <ScreenshotGuard level="off">
-            <SmoothScroll>
-              {general.maintenance ? <Maintenance message={general.maintenanceMessage} /> : children}
-            </SmoothScroll>
+            {general.maintenance ? <Maintenance message={general.maintenanceMessage} /> : children}
           </ScreenshotGuard>
         </ThemeProvider>
         <Analytics />

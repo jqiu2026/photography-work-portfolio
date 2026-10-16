@@ -1,11 +1,7 @@
-import { SiteShell } from "@jerryqiu/sites/shell";
 import type { ReactNode } from "react";
-import { nav } from "@/content/nav";
+import { PublicChrome } from "./PublicChrome";
 
-export function Shell({ children, cinema = false }: { children: ReactNode; cinema?: boolean }) {
-  return (
-    <SiteShell currentId="photos" links={[{ label: "Home", href: "/" }, ...nav]} cinema={cinema}>
-      {children}
-    </SiteShell>
-  );
+/** Frame for every public page and the client pages. (`cinema` is kept so older call sites compile; the black page is the default.) */
+export function Shell({ children }: { children: ReactNode; cinema?: boolean }) {
+  return <PublicChrome>{children}</PublicChrome>;
 }

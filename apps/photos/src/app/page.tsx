@@ -1,15 +1,12 @@
 import { ProtectedImage } from "@halation/ui/media";
-import { Condense, Scene, Settle, StageProvider, Streak } from "@halation/ui/stage";
 import { getSite } from "@jerryqiu/sites";
-import { ShellIndex } from "@jerryqiu/sites/index-control";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Aperture } from "@/components/Aperture";
-import { nav } from "@/content/nav";
+import { HomeIntro } from "@/components/HomeIntro";
+import { Shell } from "@/components/Shell";
 import { getPortfolio } from "@/lib/portfolio";
 import { getWork } from "@/lib/work";
 import "./globals.css";
-import "./home.css";
 
 export const metadata: Metadata = {
   title: { absolute: "Photography · Jerry Qiu" },
@@ -18,7 +15,7 @@ export const metadata: Metadata = {
 
 // Draft captions, one per kind of photograph (the first photograph of that gallery). TODO(owner): rewrite every line
 // in your voice and check it against the photograph.
-const slidePlan: { category: string; text: string }[] = [
+const captions: { category: string; text: string }[] = [
   { category: "theater", text: "Stage light is generous, and brief." },
   { category: "event", text: "Most of this job is waiting for the half second where someone forgets I'm there." },
   { category: "street", text: "Snow edits the city for free." },
@@ -29,16 +26,20 @@ const slidePlan: { category: string; text: string }[] = [
 const fmt = (d: string) => new Date(d).toLocaleDateString("en-US", { month: "long", year: "numeric" });
 
 export default async function Home() {
-  const { photos, hero, categories, photosIn } = await getPortfolio();
+  const { categories, photosIn, hero, photos } = await getPortfolio();
   const work = await getWork();
-  const slides = slidePlan
-    .map((s) => ({ ...s, p: photosIn(s.category)[0] }))
-    .filter((s): s is { category: string; text: string; p: NonNullable<(typeof s)["p"]> } => !!s.p);
+  const selected = captions
+    .map((c) => ({ ...c, p: photosIn(c.category)[0] }))
+    .filter((c): c is { category: string; text: string; p: NonNullable<(typeof c)["p"]> } => !!c.p);
+  const lead = hero ?? photos[0];
+  // the lead photograph first, then the rest of the selection without repeating it
+  const mosaic = [
+    ...(lead ? [{ category: "", text: "", p: lead }] : []),
+    ...selected.filter((s) => s.p.id !== lead?.id),
+  ].slice(0, 6);
   const cats = categories
     .map((c) => ({ ...c, count: photosIn(c.slug).length, cover: photosIn(c.slug)[0] }))
     .filter((c) => c.count);
-  const lead = hero ?? photos[0];
-  const hub = getSite("hub");
 
   const ld = {
     "@context": "https://schema.org",
@@ -48,192 +49,161 @@ export default async function Home() {
     description: "Photography by Jerry Qiu: theater, events, street and aviation, shot mostly around New York.",
   };
   return (
-    <StageProvider world="photos" cinema>
+    <Shell>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
-      <a className="hl-skip" href="#main">
-        Skip to content
-      </a>
-      <ShellIndex routes={[{ label: "Home", href: "/" }, ...nav]} />
-      <main id="main" className="pg">
-        <Scene id="open" label="Photography" as="header" className="pg-open">
-          <div className="pg-wrap pg-open__grid">
-            <div>
-              <p className="hl-eyebrow">Jerry Qiu · Photography</p>
-              <Streak as="h1" text="Pictures of people at work." className="pg-title" />
-              {/* TODO(owner): rewrite in your voice. Existing owner text from the original site. */}
-              <Settle as="p" className="pg-lede" when="load">
-                Photography is how I started, and it is still how I pay attention. I make pictures of people at work,
-                then spend a long time trying to make them honest.
-              </Settle>
-              <Settle as="p" className="pg-places" when="load">
-                Theater · Events · Street · Aviation · New York
-              </Settle>
-            </div>
-            {lead ? (
-              <figure className="pg-open__photo">
-                <ProtectedImage
-                  asset={lead}
-                  alt={lead.alt ?? "A portrait photograph."}
-                  sizes="(min-width: 900px) 36vw, 90vw"
-                  priority
-                />
-              </figure>
-            ) : null}
+      <noscript>
+        <style>
+          {
+            ".pub-intro{display:none!important}.pub .pub-bar,.pub .pub-rise{transform:none!important;opacity:1!important;animation:none!important}"
+          }
+        </style>
+      </noscript>
+      <HomeIntro lead={lead} />
+      <div className="pub-wrap">
+        <header className="pub-hero">
+          <p className="hl-eyebrow pub-rise" style={{ "--i": 0 } as React.CSSProperties}>
+            Photography · New York
+          </p>
+          <h1 className="pub-rise" style={{ "--i": 1 } as React.CSSProperties}>
+            Pictures of people at work.
+          </h1>
+          {/* TODO(owner): rewrite in your voice. Existing owner text from the original site. */}
+          <p className="pub-lede pub-rise" style={{ "--i": 2 } as React.CSSProperties}>
+            Photography is how I started, and it is still how I pay attention. I make pictures of people at work, then
+            spend a long time trying to make them honest.
+          </p>
+          <p className="pub-places pub-rise" style={{ "--i": 3 } as React.CSSProperties}>
+            Theater · Events · Street · Aviation
+          </p>
+          <div className="pub-actions pub-rise" style={{ "--i": 4 } as React.CSSProperties}>
+            <Link href="/portfolio" className="pub-btn">
+              See the portfolio
+            </Link>
+            <Link href="/book" className="pub-btn pub-btn--ghost">
+              Book a shoot
+            </Link>
           </div>
-        </Scene>
+        </header>
 
-        <Scene id="aperture" label="Aperture" pin={slides.length * 1.1} className="pg-aperture">
-          <Aperture
-            slides={slides.map((s) => ({
-              key: s.category,
-              caption: s.text,
-              node: <ProtectedImage asset={s.p} alt={s.p.alt ?? ""} sizes="(min-width: 900px) 60vw, 100vw" fill />,
-            }))}
-          />
-        </Scene>
+        <ul className="pub-mosaic" aria-label="Selected photographs">
+          {mosaic.map((m, i) => (
+            <li key={m.p.id ?? i}>
+              <Link href={m.category ? `/portfolio/${m.category}` : "/portfolio"}>
+                <figure>
+                  <ProtectedImage
+                    asset={m.p}
+                    alt={m.p.alt ?? ""}
+                    sizes="(min-width: 900px) 30vw, 92vw"
+                    priority={i < 2}
+                  />
+                  {m.text ? <figcaption>{m.text}</figcaption> : null}
+                </figure>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
 
-        <Scene id="portfolio" label="Photographs" className="pg-portfolio">
-          <div className="pg-wrap">
-            <Condense text="Everything I've shot, by kind." className="pg-h2" />
-            <ul className="pg-cats">
-              {cats.map((c) => (
-                <li key={c.slug}>
-                  <Link href={`/portfolio/${c.slug}`} className="pg-cat">
-                    {c.cover ? (
-                      <ProtectedImage asset={c.cover} alt="" sizes="(min-width: 900px) 22vw, 70vw" fill />
-                    ) : null}
-                    <span className="pg-cat__label">
-                      {c.name}
-                      <small>{c.count}</small>
-                    </span>
+      <section className="pub-section" aria-labelledby="by-kind">
+        <div className="pub-wrap">
+          <div className="pub-head-row">
+            <h2 id="by-kind">By kind</h2>
+            <Link href="/portfolio" className="pub-link">
+              All photographs →
+            </Link>
+          </div>
+          <ul className="pub-cats">
+            {cats.map((c) => (
+              <li key={c.slug}>
+                <Link href={`/portfolio/${c.slug}`} className="pub-cat">
+                  {c.cover ? (
+                    <ProtectedImage asset={c.cover} alt="" sizes="(min-width: 900px) 16vw, 45vw" fill />
+                  ) : null}
+                  <span>
+                    {c.name}
+                    <small>{c.count}</small>
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {work.length ? (
+        <section className="pub-section" aria-labelledby="projects">
+          <div className="pub-wrap">
+            <div className="pub-head-row">
+              <h2 id="projects">Projects</h2>
+              <Link href="/work" className="pub-link">
+                All projects →
+              </Link>
+            </div>
+            <ul className="pub-projects">
+              {work.slice(0, 4).map((w) => (
+                <li key={w.slug}>
+                  <Link href={`/work/${w.slug}`}>
+                    {w.cover ? <ProtectedImage asset={w.cover} alt="" sizes="(min-width: 900px) 46vw, 92vw" /> : null}
+                    <strong>{w.title}</strong>
+                    <small>{[fmt(w.date), w.summary].filter(Boolean).join(" · ")}</small>
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
-        </Scene>
+        </section>
+      ) : null}
 
-        {work.length ? (
-          <Scene id="work" label="Projects" className="pg-work">
-            <div className="pg-wrap">
-              <Condense text="Projects, start to finish." className="pg-h2" />
-              <ul className="pg-projects">
-                {work.slice(0, 4).map((w) => (
-                  <li key={w.slug}>
-                    <Link href={`/work/${w.slug}`}>
-                      {w.cover ? <ProtectedImage asset={w.cover} alt="" sizes="(min-width: 900px) 46vw, 92vw" /> : null}
-                      <span className="pg-projects__t">{w.title}</span>
-                      <span className="hl-eyebrow">{[fmt(w.date), w.summary].filter(Boolean).join(" · ")}</span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-              <Link href="/work" className="pg-more">
-                All projects →
-              </Link>
-            </div>
-          </Scene>
-        ) : null}
-
-        <Scene id="platform" label="The platform" className="pg-work">
-          <div className="pg-wrap">
-            <Condense text="The studio behind the pictures." className="pg-h2" />
-            <Settle as="p" className="pg-lede">
-              This site is also a working platform for running a photography business: booking, quotes, contracts,
-              payments, private galleries and a client portal. Every part is listed with an honest status.
-            </Settle>
-            <ul className="mk-cards" aria-label="Platform highlights">
-              <li>
-                <h3>Book</h3>
-                <p>Pick a free time or send an inquiry. Deposits hold your date.</p>
-                <Link href="/how-it-works" className="pg-more">
-                  How it works →
-                </Link>
-              </li>
-              <li>
-                <h3>Deliver</h3>
-                <p>Private, protected galleries with proofing, selections and downloads.</p>
-                <Link href="/galleries" className="pg-more">
-                  Galleries →
-                </Link>
-              </li>
-              <li>
-                <h3>One place for clients</h3>
-                <p>Paperwork, payments, messages and progress in a portal.</p>
-                <Link href="/client-portal" className="pg-more">
-                  Portal tour →
-                </Link>
-              </li>
-              <li>
-                <h3>Every feature, with a status</h3>
-                <p>Live, Preview or Soon: no claim without a badge.</p>
-                <Link href="/features" className="pg-more">
-                  Features →
-                </Link>
-              </li>
-            </ul>
+      <section className="pub-section" aria-labelledby="studio">
+        <div className="pub-wrap">
+          <div className="pub-head-row">
+            <h2 id="studio">Working with me</h2>
+            <Link href="/features" className="pub-link">
+              Everything the studio does →
+            </Link>
           </div>
-        </Scene>
-
-        <Scene id="video" label="Video" className="pg-video">
-          <div className="pg-wrap pg-split">
-            <Condense text="Moving pictures." className="pg-h2" />
+          <div className="pub-studio">
             <div>
-              <Settle as="p" className="pg-lede">
-                Video work lives on its own page.
-              </Settle>
-              <Link href="/video" className="pg-more">
-                Watch →
-              </Link>
+              <h3>Book</h3>
+              <p>Pick a free time or send an inquiry. A deposit holds your date.</p>
+              <Link href="/how-it-works">How it works →</Link>
             </div>
-          </div>
-        </Scene>
-
-        <Scene id="book" label="Book a shoot" className="pg-book">
-          <div className="pg-wrap pg-split">
-            <Condense text="Book a shoot." className="pg-h2" />
             <div>
-              {/* TODO(owner): rewrite in your voice. */}
-              <Settle as="p" className="pg-lede">
-                Tell me about the event or the idea. I'll reply by email.
-              </Settle>
-              <div className="pg-actions">
-                <Link href="/book" className="pg-btn">
-                  Start a booking
-                </Link>
-                <Link href="/client" className="pg-btn pg-btn--ghost">
-                  Clients: your gallery
-                </Link>
-              </div>
+              <h3>Deliver</h3>
+              <p>Private, protected galleries with proofing, selections and downloads.</p>
+              <Link href="/galleries">About galleries →</Link>
+            </div>
+            <div>
+              <h3>Stay in one place</h3>
+              <p>Paperwork, payments, messages and progress in a client portal.</p>
+              <Link href="/client-portal">Portal tour →</Link>
+            </div>
+            <div>
+              <h3>Know the cost</h3>
+              <p>Packages list what you receive. Prices are set per shoot.</p>
+              <Link href="/packages">Packages →</Link>
             </div>
           </div>
-        </Scene>
-
-        <Scene id="hello" label="Say hello" className="pg-hello">
-          <div className="pg-wrap">
-            <Condense text="Say hello." className="pg-hello__t" />
-            <Settle as="p" className="pg-lede">
-              A question about a photograph, a licence, a rehearsal? Write.
-            </Settle>
-            <div className="pg-actions">
-              <Link href="/book" className="pg-btn">
-                Get in touch
-              </Link>
-            </div>
-          </div>
-        </Scene>
-      </main>
-      <footer className="hl-footer">
-        <div className="hl-footer__in">
-          <p className="hl-footer__note">
-            © {new Date().getFullYear()} Jerry Qiu. All photographs are © Jerry Qiu, all rights reserved, unless stated.
-          </p>
-          <Link href="/privacy">Privacy</Link>
-          <a className="hl-return" href={hub.url} data-return-to-hub>
-            jerryqiu.com
-          </a>
         </div>
-      </footer>
-    </StageProvider>
+      </section>
+
+      <div className="pub-wrap">
+        <div className="pub-cta-band">
+          <div>
+            <h2>Book a shoot</h2>
+            {/* TODO(owner): rewrite in your voice. */}
+            <p>Tell me about the event or the idea. I'll reply by email.</p>
+          </div>
+          <div className="pub-actions" style={{ margin: 0 }}>
+            <Link href="/book" className="pub-btn">
+              Start a booking
+            </Link>
+            <Link href="/client" className="pub-btn pub-btn--ghost">
+              Clients: your gallery
+            </Link>
+          </div>
+        </div>
+      </div>
+    </Shell>
   );
 }
