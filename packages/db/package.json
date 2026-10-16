@@ -19,7 +19,9 @@
     "./forms": "./src/forms.ts",
     "./pdf": "./src/pdf.ts",
     "./billing": "./src/billing.ts",
-    "./portal": "./src/portal.ts"
+    "./portal": "./src/portal.ts",
+    "./galleries": "./src/galleries.ts",
+    "./gallery-expiry": "./src/gallery-expiry.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

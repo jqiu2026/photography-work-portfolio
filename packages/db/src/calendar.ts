@@ -301,6 +301,7 @@ export async function slotsForDate(
   const earliest = now.getTime() + c.minNoticeHours * 3600_000;
   const latest = now.getTime() + c.maxAdvanceDays * 86_400_000;
   const out: Slot[] = [];
+  const seen = new Set<number>(); // overlapping or repeated weekly windows must not offer the same time twice
   for (const r of rules)
     for (let m = r.startMinute; m + opts.durationMin <= r.endMinute; m += c.stepMin) {
       const startsAt = zonedToUtc(date, m, c.timezone);
@@ -314,9 +315,11 @@ export async function slotsForDate(
         travelMin: opts.travelMin,
       });
       if (live.some((a) => a.blockedStart < b.end && a.blockedEnd > b.start)) continue;
+      if (seen.has(startsAt.getTime())) continue;
+      seen.add(startsAt.getTime());
       out.push({ startsAt, endsAt });
     }
-  return out;
+  return out.sort((x, y) => x.startsAt.getTime() - y.startsAt.getTime());
 }
 
 /* ---------- mini-sessions ---------- */

@@ -33,6 +33,14 @@ describe("forensic viewer watermark", () => {
     expect(found.confidence).toBeGreaterThan(0.3);
   });
 
+  it("survives being delivered as a JPEG (web-size downloads) and a second JPEG save", async () => {
+    const code = viewerCode("download-viewer");
+    const jpeg = await embedViewerCode(await photoLike(), code, "jpeg");
+    expect((await detectViewerCode(jpeg)).code).toBe(code);
+    const resaved = await sharp(jpeg).jpeg({ quality: 85 }).toBuffer();
+    expect((await detectViewerCode(resaved)).code).toBe(code);
+  });
+
   it("does not claim a code on an unmarked image", async () => {
     const found = await detectViewerCode(await photoLike());
     expect(found.confidence).toBeLessThan(0.3);

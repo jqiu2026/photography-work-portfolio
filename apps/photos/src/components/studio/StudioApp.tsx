@@ -414,16 +414,21 @@ export function StudioApp({ section, user, data }: { section: string; user: stri
                       {g.jobTitle} · {g.items} photographs · {g.status}
                     </small>
                   </span>
-                  {g.status === "draft" ? (
-                    <button
-                      type="button"
-                      className="st-btn"
-                      disabled={pending}
-                      onClick={() => run(() => publishGalleryAction(g.id))}
-                    >
-                      Publish
-                    </button>
-                  ) : null}
+                  <span className="st-actions">
+                    <Link className="st-btn st-btn--ghost" href={`/studio/gallery/${g.id}`}>
+                      Manage
+                    </Link>
+                    {g.status === "draft" ? (
+                      <button
+                        type="button"
+                        className="st-btn"
+                        disabled={pending}
+                        onClick={() => run(() => publishGalleryAction(g.id))}
+                      >
+                        Publish
+                      </button>
+                    ) : null}
+                  </span>
                 </li>
               ))}
             </ul>

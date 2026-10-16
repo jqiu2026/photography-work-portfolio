@@ -1,5 +1,6 @@
 import { and, asc, desc, eq, isNull, like, sql } from "drizzle-orm";
 import { confirmForInvoice } from "./calendar";
+import { extendGallery } from "./gallery-expiry";
 import type { Database } from "./client";
 import { StudioError } from "./errors";
 import * as s from "./schema";
@@ -190,6 +191,10 @@ export async function galleryItems(db: Database, galleryId: string) {
     .orderBy(asc(s.studioGalleryItems.sort));
 }
 export async function toggleFavorite(db: Database, galleryId: string, mediaId: string): Promise<string[]> {
+  const [gal] = await db.select().from(s.studioGalleries).where(eq(s.studioGalleries.id, galleryId));
+  if (!gal) throw new StudioError("Unknown gallery.");
+  if (gal.selectionSentAt)
+    throw new StudioError("You already sent your selection. Message me if you want to change it.");
   const inGallery = await db
     .select()
     .from(s.studioGalleryItems)
@@ -203,7 +208,14 @@ export async function toggleFavorite(db: Database, galleryId: string, mediaId: s
     await db
       .delete(s.studioFavorites)
       .where(and(eq(s.studioFavorites.galleryId, galleryId), eq(s.studioFavorites.mediaId, mediaId)));
-  else await db.insert(s.studioFavorites).values({ galleryId, mediaId });
+  else {
+    if (gal.selectionLimit !== null) {
+      const have = (await db.select().from(s.studioFavorites).where(eq(s.studioFavorites.galleryId, galleryId))).length;
+      if (have >= gal.selectionLimit)
+        throw new StudioError(`You can choose up to ${gal.selectionLimit} photographs. Remove one first.`);
+    }
+    await db.insert(s.studioFavorites).values({ galleryId, mediaId });
+  }
   return (
     await db
       .select({ m: s.studioFavorites.mediaId })
@@ -426,7 +438,12 @@ export async function recordPayment(
       .where(eq(s.studioInvoices.id, inv.id));
     // A paid deposit confirms the held appointment and books the job (it does not mark the whole job paid).
     const confirmed = status === "paid" ? await confirmForInvoice(db, inv.id, now) : [];
-    if (status === "paid" && !confirmed.length) {
+    // A paid extension or reactivation invoice extends that gallery (once: only the first recording of this payment gets here).
+    if (status === "paid" && inv.galleryId && inv.kind === "extension") {
+      const months = Number(/\((\d+) months?\)/.exec(inv.lines[0]?.description ?? "")?.[1] ?? 0) || 3;
+      await extendGallery(db, inv.galleryId, months, now);
+    }
+    if (status === "paid" && !confirmed.length && inv.kind !== "extension") {
       const siblings = await db
         .select({ st: s.studioInvoices.status })
         .from(s.studioInvoices)

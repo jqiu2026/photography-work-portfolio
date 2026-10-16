@@ -129,6 +129,25 @@ describe("availability and slots", () => {
   });
 });
 
+describe("repeated availability windows", () => {
+  it("never offer the same start time twice", async () => {
+    // Tuesdays 10:00-12:00 added twice, plus an overlapping 11:00-13:00 window
+    for (const [a, b] of [
+      [600, 720],
+      [600, 720],
+      [660, 780],
+    ])
+      await cal.addRule(db, { weekday: 2, startMinute: a, endMinute: b });
+    const now = new Date("2028-01-01T12:00:00Z");
+    const settings = cal.calendarSettingsSchema.parse({ minNoticeHours: 0, defaultBufferMin: 0, stepMin: 30 });
+    const slots = await cal.slotsForDate(db, "2028-01-11", { durationMin: 60, now, settings }); // a Tuesday
+    const starts = slots.map((s) => s.startsAt.toISOString());
+    expect(new Set(starts).size).toBe(starts.length);
+    expect(starts).toEqual([...starts].sort());
+    expect(starts).toHaveLength(5); // 10:00 10:30 11:00 11:30 12:00
+  });
+});
+
 describe("mini-sessions, deposit confirmation, waitlist", () => {
   it("creates consecutive open slots and only one booker wins each", async () => {
     const made = await cal.createMinislots(db, {

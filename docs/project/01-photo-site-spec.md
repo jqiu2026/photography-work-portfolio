@@ -116,7 +116,7 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | F-27 | Upsells at checkout | P2 | done (on the quote page, re-priced server-side) | quote page | n/a | e2e | M6 |
 | F-28 | Print and product store (prints, albums, canvases, cards) | P2 | missing | `/client/store/[gallery]` | WHCC / mock | e2e | M13 |
 | F-29 | Digital download sales | P2 | missing | digital_products | Stripe / mock | e2e | M13 |
-| F-30 | Gallery extension and reactivation sales | P1 | missing | expiry flow | Stripe / mock | e2e | M10 |
+| F-30 | Gallery extension and reactivation sales | P1 | done | expiry flow | Stripe / mock | e2e | M10 |
 | F-31 | Tips | P3 | done | invoice pay | Stripe / mock | unit | M8 |
 | F-32 | Abandoned-cart and unpaid-invoice reminders | P2 | missing | automations | email | unit | M12 |
 
@@ -153,16 +153,16 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 |---|---|---|---|---|---|---|---|
 | F-60 | Private gallery with passcode, favourites | P1 | done | `/client`, `/client/gallery` | n/a | e2e studio | done |
 | F-61 | Password, PIN and magic-link access modes | P1 | partial (passcode, password and magic link done; separate PIN code for downloads comes with M10) | portal | Resend / outbox | e2e | M9 |
-| F-62 | Direct-from-browser resumable uploads to Vercel Blob, dedupe by hash | P1 | missing | `/api/upload/*`, studio | Blob / local disk | e2e | M10 |
-| F-63 | Pre-generated sizes (thumb, display, web, original) | P1 | partial (portfolio pipeline) | `@jerryqiu/media` | n/a | unit | M10 |
-| F-64 | Albums and sets, slideshow | P1 | missing | albums, lightbox | n/a | e2e | M10 |
-| F-65 | Proofing: comments, ratings, approvals, selection limits, send selection | P1 | partial (favourites only) | gallery page | n/a | e2e | M10 |
-| F-66 | Downloads: web, full-res, ZIP, per-photo, PIN-gated, download log | P1 | missing | `/api/download/*` | n/a | e2e | M10 |
-| F-67 | Gallery expiry, reminders, paid reactivation | P1 | missing | cron, reactivation page | Stripe / mock | e2e | M10, M12 |
+| F-62 | Direct-from-browser uploads (Vercel Blob client upload; signed PUT locally), retries with backoff, dedupe by SHA-256 | P1 | done (Blob path written, never run live: needs BLOB_READ_WRITE_TOKEN) | `/api/upload/*`, studio | Blob / local disk | e2e | M10 |
+| F-63 | Pre-generated sizes (480, 960, 1600, 2400 AVIF/WebP, web-size JPEG download, private original) | P1 | done | `@jerryqiu/media` | n/a | unit | M10 |
+| F-64 | Albums and sets, slideshow | P1 | done | albums, lightbox | n/a | e2e | M10 |
+| F-65 | Proofing: comments, ratings, approvals, selection limits, send selection | P1 | done | gallery page | n/a | e2e | M10 |
+| F-66 | Downloads: web, full-res, ZIP parts, per-photo, PIN-gated, download log | P1 | done | `/api/download/*` | n/a | e2e | M10 |
+| F-67 | Gallery expiry, reminders, paid reactivation | P1 | partial (expiry, archive, paid extension and reactivation done; reminder emails in M12) | cron, reactivation page | Stripe / mock | e2e | M10, M12 |
 | F-68 | Delivery status page with ETA | P2 | done | portal job page | n/a | e2e | M9 |
 | F-69 | Client notifications (gallery ready, viewed, favourited) | P1 | missing | automations | email | unit | M12 |
 | F-70 | Per-viewer invisible watermark and view logs | P1 | done (spread-spectrum code per viewer, `studio_view_events`, detector) | `@jerryqiu/media` `forensic.ts`, `serve.ts` | n/a | unit | M3 |
-| F-71 | Per-gallery branding | P3 | missing | gallery settings | n/a | e2e | M10 |
+| F-71 | Per-gallery branding | P3 | done (welcome message and accent colour) | gallery settings | n/a | e2e | M10 |
 | F-72 | Culling helpers: duplicates, blur, closed eyes | P3 | missing | studio uploader | cull mock | unit | M16 |
 | F-73 | Face search (consent-gated, off by default) | OPT | missing | gallery settings | `FaceSearchProvider` / mock | unit | M16 |
 | F-74 | Video delivery | P3 | missing | gallery video items | Blob | e2e | M16 |

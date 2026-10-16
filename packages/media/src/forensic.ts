@@ -25,7 +25,11 @@ function pattern(x: number, y: number, bit: number): number {
 }
 const plane = (x: number, y: number) => (Math.imul(x, 31) + Math.imul(y, 17) + (x >> 3) * 5) % BITS;
 
-export async function embedViewerCode(input: Uint8Array, code: number, format: "webp" | "avif"): Promise<Buffer> {
+export async function embedViewerCode(
+  input: Uint8Array,
+  code: number,
+  format: "webp" | "avif" | "jpeg",
+): Promise<Buffer> {
   const { data, info } = await sharp(input).removeAlpha().raw().toBuffer({ resolveWithObject: true });
   const { width, height, channels } = info;
   const out = Buffer.from(data);
@@ -38,6 +42,7 @@ export async function embedViewerCode(input: Uint8Array, code: number, format: "
       for (let c = 0; c < 3; c++) out[i + c] = Math.max(0, Math.min(255, out[i + c] + delta));
     }
   const img = sharp(out, { raw: { width, height, channels } });
+  if (format === "jpeg") return img.jpeg({ quality: 90 }).toBuffer();
   return format === "avif" ? img.avif({ quality: 70 }).toBuffer() : img.webp({ quality: 85 }).toBuffer();
 }
 

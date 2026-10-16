@@ -2,8 +2,8 @@ import { del, head, list, put } from "@vercel/blob";
 import { type StorageProvider, assertSafeKey } from "./types";
 
 /**
- * Vercel Blob. Objects are public-by-URL, so use it for derivatives only, never for private originals
- * (createStorage refuses to use it for the "originals" store).
+ * Vercel Blob. Objects are public-by-URL: the only protection for an original is that its key contains a random id and
+ * that no code ever returns the URL to a browser (see createStorage). Use `prefix` to keep originals apart from derivatives.
  */
 export function blobProvider(opts: { token: string; prefix?: string }): StorageProvider {
   const k = (key: string) => {

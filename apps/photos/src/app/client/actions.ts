@@ -4,6 +4,7 @@ import { getDb, hitRateLimit, schema } from "@jerryqiu/db";
 import { and, eq } from "drizzle-orm";
 import { accountSession } from "@/lib/account-session";
 import * as bill from "@jerryqiu/db/billing";
+import * as gal from "@jerryqiu/db/galleries";
 import * as st from "@jerryqiu/db/studio";
 import { sha256Hex } from "@jerryqiu/db/studio-crypto";
 import { redirect } from "next/navigation";
@@ -23,7 +24,8 @@ export async function openGalleryAction(_prev: ClientResult | null, formData: Fo
   const ip = await requestIpHash();
   const rl = await hitRateLimit(db, `portal:${ip}`, 8, 600);
   if (!rl.allowed) return no("Too many tries. Wait a few minutes and try again.");
-  const g = await st.openGalleryWithPasscode(db, passcode);
+  // Expired and archived galleries are found too: the passcode proves who you are, and the gallery page offers an extension.
+  const g = await gal.findGalleryByPasscode(db, passcode);
   if (!g) return no("That passcode doesn't match a gallery.");
   await startPortalSession(g.id);
   redirect("/client/gallery");

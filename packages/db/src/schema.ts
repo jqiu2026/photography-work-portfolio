@@ -121,6 +121,8 @@ export const media = pgTable(
     color: text("color"),
     blur: text("blur"),
     phash: text("phash"),
+    /** SHA-256 of the original file (hex): exact-duplicate detection on upload. */
+    sha256: text("sha256"),
     /** Private storage key of the original (never exposed). */
     originalKey: text("original_key").notNull(),
     /** Public-safe derivatives: [{ width, format, key }] with GPS/personal EXIF stripped. */
@@ -458,6 +460,20 @@ export const studioGalleries = pgTable(
     watermark: boolean("watermark").notNull().default(true),
     coverMediaId: uuid("cover_media_id").references(() => media.id),
     expiresAt: timestamp("expires_at", { withTimezone: true }),
+    /** Shown above the photographs (a thank-you, instructions). Per-gallery branding: accent colour too. */
+    welcome: text("welcome"),
+    accent: text("accent"),
+    /** scrypt hash of a PIN that must be entered before any download (optional). */
+    downloadPinHash: text("download_pin_hash"),
+    /** Most photographs a client may pick (album picks); null = no limit. */
+    selectionLimit: integer("selection_limit"),
+    selectionSentAt: timestamp("selection_sent_at", { withTimezone: true }),
+    allowComments: boolean("allow_comments").notNull().default(true),
+    allowRatings: boolean("allow_ratings").notNull().default(true),
+    deliveredAt: timestamp("delivered_at", { withTimezone: true }),
+    /** When the "your gallery expires soon" email last went out (once per expiry date). */
+    expiryReminderAt: timestamp("expiry_reminder_at", { withTimezone: true }),
+    reactivatedAt: timestamp("reactivated_at", { withTimezone: true }),
     ...stamps,
   },
   (t) => [index("studio_galleries_job_idx").on(t.jobId)],
@@ -474,6 +490,7 @@ export const studioGalleryItems = pgTable(
       .references(() => media.id),
     sort: integer("sort").notNull().default(0),
     hidden: boolean("hidden").notNull().default(false),
+    albumId: uuid("album_id"),
   },
   (t) => [primaryKey({ columns: [t.galleryId, t.mediaId] })],
 );
@@ -558,6 +575,8 @@ export const studioInvoices = pgTable(
     installmentNo: integer("installment_no"),
     installmentOf: integer("installment_of"),
     recurringId: uuid("recurring_id"),
+    /** Set on a gallery extension or reactivation invoice: paying it extends that gallery. */
+    galleryId: uuid("gallery_id"),
     /** sha256 of the payment link token. */
     tokenHash: text("token_hash"),
     sentAt: timestamp("sent_at", { withTimezone: true }),
@@ -1092,3 +1111,65 @@ export const studioMessages = pgTable(
   },
   (t) => [index("studio_messages_client_idx").on(t.clientId)],
 );
+
+/* ------------------------------------------------------------------------------------------------------------------
+ * Galleries v2: albums, proofing (ratings, approvals, comments), download log.
+ * ---------------------------------------------------------------------------------------------------------------- */
+export const studioAlbums = pgTable(
+  "studio_albums",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    galleryId: uuid("gallery_id")
+      .notNull()
+      .references(() => studioGalleries.id, { onDelete: "cascade" }),
+    name: text("name").notNull(),
+    sort: integer("sort").notNull().default(0),
+  },
+  (t) => [index("studio_albums_gallery_idx").on(t.galleryId)],
+);
+
+/** A client's rating (1 to 5) and approval per photograph (one row), plus any number of comments. `kind` says which. */
+export const studioProofs = pgTable(
+  "studio_proofs",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    galleryId: uuid("gallery_id")
+      .notNull()
+      .references(() => studioGalleries.id, { onDelete: "cascade" }),
+    mediaId: uuid("media_id")
+      .notNull()
+      .references(() => media.id),
+    /** rating | approval | comment */
+    kind: text("kind").notNull(),
+    rating: integer("rating"),
+    /** approved | rejected */
+    decision: text("decision"),
+    body: text("body"),
+    /** client | studio */
+    author: text("author").notNull().default("client"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("studio_proofs_gallery_idx").on(t.galleryId, t.mediaId)],
+);
+
+export const studioDownloadEvents = pgTable(
+  "studio_download_events",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    galleryId: uuid("gallery_id")
+      .notNull()
+      .references(() => studioGalleries.id, { onDelete: "cascade" }),
+    mediaId: uuid("media_id"),
+    /** web | full | zip-web | zip-full */
+    kind: text("kind").notNull(),
+    /** Which ZIP part (1-based) for zip kinds. */
+    part: integer("part"),
+    viewer: text("viewer"),
+    ipHash: text("ip_hash"),
+    bytes: integer("bytes"),
+    at: timestamp("at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("studio_download_events_gallery_idx").on(t.galleryId)],
+);
+
+export type StudioGallery = typeof studioGalleries.$inferSelect;

@@ -51,11 +51,10 @@ describe("local storage", () => {
 });
 
 describe("factory", () => {
-  it("defaults to local and never uses Blob for originals", () => {
+  it("defaults to local, and puts Blob originals under a private/ prefix (the owner dropped R2)", () => {
     expect(createStorage("originals", {}).name).toBe("local");
-    expect(() => createStorage("originals", { STORAGE_DRIVER: "blob", BLOB_READ_WRITE_TOKEN: "t" })).toThrow(
-      /private originals/,
-    );
+    const blob = createStorage("originals", { STORAGE_DRIVER: "blob", BLOB_READ_WRITE_TOKEN: "t" });
+    expect(blob.name).toBe("blob");
   });
   it("falls back to local (with a warning) when credentials are missing", () => {
     expect(createStorage("public", { STORAGE_DRIVER: "r2" }).name).toBe("local");

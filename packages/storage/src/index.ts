@@ -13,7 +13,7 @@ export type Store = "originals" | "public";
 
 /**
  * Env:
- *   STORAGE_DRIVER   local | r2 | blob   (default local; "blob" is allowed for the public store only)
+ *   STORAGE_DRIVER   local | r2 | blob   (default local; "blob" holds originals under a private/ prefix, see below)
  *   STORAGE_DIR      local directory (default ~/.jerryqiu-dev/storage, outside the repo so dev rebuilds are not triggered)
  *   R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET_ORIGINALS, R2_BUCKET_PUBLIC
  *   BLOB_READ_WRITE_TOKEN
@@ -51,11 +51,11 @@ export function createStorage(store: Store, env: Record<string, string | undefin
     return local();
   }
   if (driver === "blob") {
-    if (store === "originals")
-      throw new Error(
-        "Vercel Blob is public by URL and must not hold private originals. Use r2 or local for the originals store.",
-      );
-    if (env.BLOB_READ_WRITE_TOKEN) return blobProvider({ token: env.BLOB_READ_WRITE_TOKEN });
+    // Vercel Blob only (owner decision Q51). Objects are public by URL, so originals live under a "private/" prefix with
+    // random-id keys (`orig/<uuid>/...`) and are NEVER linked or returned to a browser: they are read server-side only
+    // (downloads and derivatives go through our routes). That is capability-URL privacy, not access control: say so.
+    if (env.BLOB_READ_WRITE_TOKEN)
+      return blobProvider({ token: env.BLOB_READ_WRITE_TOKEN, prefix: store === "originals" ? "private/" : "" });
     warn("STORAGE_DRIVER=blob but BLOB_READ_WRITE_TOKEN is missing; using local storage.");
   }
   return local();

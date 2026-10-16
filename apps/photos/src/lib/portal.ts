@@ -1,5 +1,7 @@
 import "server-only";
-import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
+import { createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypto";
+import { can } from "@jerryqiu/auth";
+import { currentUser } from "@/auth";
 import { clientIpHash, tokenSecrets } from "@jerryqiu/protect";
 import { getDb, schema } from "@jerryqiu/db";
 import { and, eq } from "drizzle-orm";
@@ -100,7 +102,7 @@ export async function clientGalleryViewer(mediaId: string): Promise<string | nul
     if (row) return viewerId(session);
   }
   const me = await accountSession();
-  if (!me) return null;
+  if (!me) return staffViewer(mediaId);
   const [row] = await db
     .select({ n: schema.studioGalleryItems.mediaId })
     .from(schema.studioGalleryItems)
@@ -114,5 +116,32 @@ export async function clientGalleryViewer(mediaId: string): Promise<string | nul
       ),
     )
     .limit(1);
-  return row ? me.viewer : null;
+  return row ? me.viewer : staffViewer(mediaId);
+}
+
+/**
+ * The studio owner looking at client photographs in the studio: the same protected, viewer-bound delivery (with the
+ * invisible watermark), for photographs that are in some client gallery.
+ */
+async function staffViewer(mediaId: string): Promise<string | null> {
+  const db = getDb();
+  if (!db) return null;
+  let user: Awaited<ReturnType<typeof currentUser>> | null = null;
+  try {
+    user = await currentUser();
+  } catch {
+    return null;
+  }
+  if (!user || !can(user.role, "studio.access")) return null;
+  const [row] = await db
+    .select({ n: schema.studioGalleryItems.mediaId })
+    .from(schema.studioGalleryItems)
+    .where(eq(schema.studioGalleryItems.mediaId, mediaId))
+    .limit(1);
+  return row
+    ? `staff.${createHash("sha256")
+        .update(user.email ?? "owner")
+        .digest("hex")
+        .slice(0, 12)}`
+    : null;
 }
