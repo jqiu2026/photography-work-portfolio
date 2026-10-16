@@ -34,6 +34,9 @@ export function PublicNav() {
         <Link href="/client" className="pub-clients" aria-current={on("/client") ? "page" : undefined}>
           Clients
         </Link>
+        <Link href="/studio" className="pub-clients" aria-current={on("/studio") ? "page" : undefined}>
+          Dashboard
+        </Link>
         <Link href="/book" className="pub-cta">
           Book a shoot
         </Link>
@@ -42,7 +45,12 @@ export function PublicNav() {
             <span aria-hidden="true" />
           </summary>
           <nav aria-label="Menu">
-            {[...LINKS, { label: "Book a shoot", href: "/book" }, { label: "Clients", href: "/client" }].map((l) => (
+            {[
+              ...LINKS,
+              { label: "Book a shoot", href: "/book" },
+              { label: "Clients", href: "/client" },
+              { label: "Dashboard", href: "/studio" },
+            ].map((l) => (
               <Link key={l.href} href={l.href} aria-current={on(l.href) ? "page" : undefined}>
                 {l.label}
               </Link>

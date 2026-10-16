@@ -37,6 +37,7 @@ test("Escape skips it, and left alone it finishes by itself and reveals the page
   const a = await ctx.newPage();
   await a.goto(`${photos}/`, { waitUntil: "domcontentloaded" });
   await expect(a.locator(".pub-intro")).toBeVisible();
+  await a.waitForFunction(() => "__skipIntro" in window); // hydrated
   await a.keyboard.press("Escape");
   await expect(a.locator(".pub-intro:not([hidden])")).toHaveCount(0);
   await ctx.close();

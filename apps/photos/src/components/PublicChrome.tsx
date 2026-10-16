@@ -14,6 +14,7 @@ const FOOTER = [
       ["Prints", "/prints"],
       ["FAQ", "/faq"],
       ["Contact", "/contact"],
+      ["Dashboard (owner)", "/studio"],
     ],
   },
   {
