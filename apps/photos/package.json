@@ -18,7 +18,6 @@
     "@jerryqiu/payments": "workspace:*",
     "@jerryqiu/protect": "workspace:*",
     "@jerryqiu/render": "workspace:*",
-    "@jerryqiu/shootproof": "workspace:*",
     "@jerryqiu/sites": "workspace:*",
     "@jerryqiu/storage": "workspace:*",
     "@vercel/analytics": "^2.0.1",

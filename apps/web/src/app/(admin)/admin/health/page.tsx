@@ -66,13 +66,6 @@ async function checks(): Promise<Check[]> {
     detail: env("RESEND_API_KEY") ? "key present" : "RESEND_API_KEY not set; contact notifications are off",
   });
   out.push({
-    name: "ShootProof",
-    ok: env("SHOOTPROOF_CLIENT_ID") ? true : "warn",
-    detail: env("SHOOTPROOF_CLIENT_ID")
-      ? "client id present"
-      : "not connected (mocked); request API access from ShootProof support",
-  });
-  out.push({
     name: "Cron secret",
     ok: env("CRON_SECRET") ? true : "warn",
     detail: env("CRON_SECRET") ? "set" : "not set; purge routes refuse requests",

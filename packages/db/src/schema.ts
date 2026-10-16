@@ -370,33 +370,6 @@ export const rateLimits = pgTable("rate_limits", {
   windowStart: timestamp("window_start", { withTimezone: true }).notNull().defaultNow(),
 });
 
-/** Encrypted third-party connections (ShootProof OAuth tokens). Values are AES-256-GCM, key derived from AUTH_SECRET. */
-export const externalConnections = pgTable("external_connections", {
-  provider: text("provider").primaryKey(),
-  data: text("data").notNull(),
-  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
-});
-
-/** Temporarily imported external photos (derivatives only, TTL). Purged by a cron route. */
-export const externalCache = pgTable(
-  "external_cache",
-  {
-    id: uuid("id").primaryKey().defaultRandom(),
-    provider: text("provider").notNull(),
-    externalId: text("external_id").notNull(),
-    title: text("title"),
-    storageKey: text("storage_key").notNull(),
-    width: integer("width"),
-    height: integer("height"),
-    expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
-    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
-  },
-  (t) => [
-    uniqueIndex("external_cache_unique").on(t.provider, t.externalId),
-    index("external_cache_expiry_idx").on(t.expiresAt),
-  ],
-);
-
 /* ------------------------------------------------------------------------------------------------------------------
  * Phase 3: photography studio (clients, jobs, client galleries, contracts, invoices, payments, bookings).
  * Money is integer cents. Link tokens and passcodes are stored only as hashes. `studio_id` stays nullable and unused.

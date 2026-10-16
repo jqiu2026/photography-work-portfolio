@@ -4,7 +4,6 @@ import { person } from "@jerryqiu/sites/profile";
 import type { Metadata } from "next";
 import { Shell } from "@/components/Shell";
 import { PassForm } from "@/components/studio/ClientForms";
-import { shootproofUrl } from "@/content/nav";
 import "../globals.css";
 
 export const metadata: Metadata = { title: "Client galleries" };
@@ -27,11 +26,6 @@ export default function Client() {
             </div>
           ) : null}
           <div style={{ marginTop: "2rem", display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
-            {shootproofUrl ? (
-              <Button as="a" href={shootproofUrl}>
-                Galleries still on ShootProof
-              </Button>
-            ) : null}
             <Button as="a" href={`mailto:${person.bookingEmail}`} variant="ghost">
               Can't find it? Email me
             </Button>

@@ -1,6 +1,4 @@
 import { Container, Eyebrow, Heading, Section, Text } from "@halation/ui";
-import { sourceFromEnv } from "@jerryqiu/shootproof";
-import { can } from "@jerryqiu/auth";
 import Link from "next/link";
 import { studioSections } from "@/components/studio/sections";
 import { Shell } from "@/components/Shell";
@@ -15,12 +13,10 @@ const roadmap = [
   "Emailed links (Resend) instead of copying them",
   "Stripe live payments (test mode needs your Stripe key)",
   "Signed PDF contracts and a booking calendar",
-  "Migrating galleries from ShootProof",
 ];
 
 export default async function Studio() {
   const user = await requirePageUser("studio.access", "/studio");
-  const sp = sourceFromEnv();
   return (
     <Shell>
       <Container className="page-head">
@@ -50,31 +46,10 @@ export default async function Studio() {
           </div>
           <div className="studio-card">
             <Heading as="h2" size="2xl">
-              ShootProof bridge
-            </Heading>
-            <Text tone="muted" style={{ margin: "0.5rem 0 1rem" }}>
-              {sp.state === "unconfigured"
-                ? "Not connected. It needs an API client ID from ShootProof; the steps are on the next page."
-                : sp.source.mode === "mock"
-                  ? "Sample mode (fixtures only)."
-                  : "Set up. Import an event to show it here for a day."}
-            </Text>
-            {can(user.role, "shootproof.manage") ? (
-              <Link href="/studio/shootproof" className="hl-link">
-                Open ShootProof bridge
-              </Link>
-            ) : (
-              <Text size="sm" tone="muted">
-                Only the owner can use the bridge.
-              </Text>
-            )}
-          </div>
-          <div className="studio-card" style={{ marginTop: "1.5rem" }}>
-            <Heading as="h2" size="2xl">
               Still to come
             </Heading>
             <Text tone="muted" size="sm" style={{ margin: "0.5rem 0" }}>
-              The studio above is built; these pieces finish the replacement of ShootProof.
+              The studio above is built; these pieces are on the plan in docs/project/PROGRESS.md.
             </Text>
             <ul className="studio-steps">
               {roadmap.map((r) => (

@@ -491,7 +491,6 @@ export function StudioApp({ section, user, data }: { section: string; user: stri
             {x.label}
           </Link>
         ))}
-        <Link href="/studio">ShootProof</Link>
       </nav>
       <Banner note={note} />
       {body}

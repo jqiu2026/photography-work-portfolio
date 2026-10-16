@@ -1,6 +1,6 @@
 import { createCipheriv, createDecipheriv, hkdfSync, randomBytes } from "node:crypto";
 
-/** AES-256-GCM for secrets stored in the database (ShootProof tokens). Key derived from AUTH_SECRET with HKDF. */
+/** AES-256-GCM for secrets stored in the database (settings secrets). Key derived from AUTH_SECRET with HKDF. */
 const version = "v1";
 
 function key(secret = process.env.AUTH_SECRET): Uint8Array {

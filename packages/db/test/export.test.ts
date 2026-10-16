@@ -22,7 +22,6 @@ beforeAll(async () => {
     .insert(s.posts)
     .values({ slug: "hello/world", title: 'A "quoted" title', body: "# Hi\n\nBody", status: "published" });
   await db.insert(s.inboxMessages).values({ name: "Ada", email: "ada@example.com", message: "hello there" });
-  await db.insert(s.externalConnections).values({ provider: "shootproof", data: "SECRET-CIPHERTEXT" });
 });
 
 describe("export", () => {

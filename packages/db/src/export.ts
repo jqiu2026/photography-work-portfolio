@@ -18,7 +18,7 @@ function markdown(fields: Record<string, unknown>, body: string) {
 /**
  * Everything the owner can edit, as plain files: one JSON file per table, Markdown for posts and pages, and a media
  * manifest (file names, keys, alt text, licences). No lock-in: this is the format-of-last-resort backup.
- * Left out on purpose: OAuth/ShootProof tokens, rate-limit counters and the temporary external cache.
+ * Left out on purpose: tokens and secrets, and rate-limit counters.
  */
 export async function exportAll(db: Database): Promise<Record<string, string>> {
   const [

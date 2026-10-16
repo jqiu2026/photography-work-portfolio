@@ -13,7 +13,6 @@ export default {
     "@jerryqiu/storage",
     "@jerryqiu/inbox",
     "@jerryqiu/media",
-    "@jerryqiu/shootproof",
   ],
   serverExternalPackages: ["sharp", "pg", "@electric-sql/pglite"],
   // photos.jerryqiu.com is an alias: send every path to the canonical photo.jerryqiu.com (Q57).

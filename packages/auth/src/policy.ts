@@ -41,7 +41,6 @@ export const actions = [
   "users.manage",
   "audit.read",
   "studio.access",
-  "shootproof.manage",
 ] as const;
 export type Action = (typeof actions)[number];
 

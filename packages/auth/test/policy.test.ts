@@ -72,14 +72,7 @@ describe("roles", () => {
   it("editor manages content but not users, settings or purging", () => {
     expect(can("editor", "content.write")).toBe(true);
     expect(can("editor", "media.write")).toBe(true);
-    for (const a of [
-      "users.manage",
-      "settings.write",
-      "trash.purge",
-      "shootproof.manage",
-      "studio.access",
-      "inbox.delete",
-    ] as const)
+    for (const a of ["users.manage", "settings.write", "trash.purge", "studio.access", "inbox.delete"] as const)
       expect(can("editor", a)).toBe(false);
   });
   it("client and unknown roles can do nothing in the admin", () => {
