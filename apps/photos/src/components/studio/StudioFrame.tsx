@@ -29,6 +29,46 @@ import "./studio.css";
 import "./studio-chrome.css";
 import "./studio-dashboard.css";
 
+export type Tone = "neutral" | "accent" | "success" | "warning" | "danger" | "muted" | "info";
+const TONES: Record<string, Tone> = {
+  paid: "success",
+  succeeded: "success",
+  signed: "success",
+  accepted: "success",
+  published: "success",
+  delivered: "success",
+  done: "success",
+  confirmed: "success",
+  converted: "success",
+  free: "success",
+  active: "success",
+  new: "accent",
+  booked: "accent",
+  sent: "info",
+  viewed: "info",
+  scheduled: "info",
+  shot: "info",
+  editing: "info",
+  pending: "warning",
+  partial: "warning",
+  expiring: "warning",
+  overdue: "danger",
+  failed: "danger",
+  declined: "danger",
+  cancelled: "danger",
+  bounced: "danger",
+  void: "muted",
+  refunded: "muted",
+  archived: "muted",
+  expired: "muted",
+  stopped: "muted",
+  skipped: "muted",
+  mock: "muted",
+  lost: "muted",
+};
+/** One colour per meaning for every status badge in the studio: done is green, waiting on someone is blue, needs you is amber, went wrong is red, finished with is grey. */
+export const statusTone = (status: string): Tone => TONES[status] ?? "neutral";
+
 export type Result = { ok: boolean; message?: string; error?: string; link?: string };
 
 /** Shared pieces for studio sections: the section nav, a result banner, cards, and an action runner with refresh. */

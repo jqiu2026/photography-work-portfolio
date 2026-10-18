@@ -18,10 +18,12 @@ import {
 } from "@/app/studio/actions";
 import "./studio.css";
 import { FormMessage } from "@/components/ui";
-import { Banner, Card, StudioHead } from "./StudioFrame";
+import { Banner, Card, StudioHead, statusTone } from "./StudioFrame";
 import { studioSections } from "./sections";
 
 const JOB_STEPS = ["inquiry", "booked", "shot", "editing", "delivered", "paid"] as const;
+/** An invoice still waiting for money (not paid, voided or refunded). */
+const open = (status: string) => !["paid", "void", "refunded"].includes(status);
 const usd = (cents: number) =>
   new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(cents / 100);
 const day = (d: Date | string | null) => (d ? new Date(d).toISOString().slice(0, 10) : "");
@@ -180,7 +182,7 @@ export function StudioApp({ section, user, data }: { section: string; user: stri
                     Convert to client
                   </Button>
                 ) : (
-                  <Status tone="muted">{b.status}</Status>
+                  <Status tone={statusTone(b.status)}>{b.status}</Status>
                 )}
               </li>
             ))}
@@ -206,11 +208,8 @@ export function StudioApp({ section, user, data }: { section: string; user: stri
               <li className="hm-data-list-item" key={m.id}>
                 <details>
                   <summary>
-                    <strong>{m.subject}</strong> · {m.to} ·{" "}
-                    <Status tone={m.status === "sent" ? "success" : m.status === "failed" ? "danger" : "muted"}>
-                      {m.status}
-                    </Status>{" "}
-                    · {m.kind}
+                    <strong>{m.subject}</strong> · {m.to} · <Status tone={statusTone(m.status)}>{m.status}</Status> ·{" "}
+                    {m.kind}
                   </summary>
                   <pre className="st-pre">{m.text}</pre>
                   {m.error ? <FormMessage className="st-error">{m.error}</FormMessage> : null}
@@ -283,7 +282,7 @@ export function StudioApp({ section, user, data }: { section: string; user: stri
                       {j.clientName} · {day(j.date)} · {usd(j.feeCents)}
                     </small>
                     <span className="st-steps">
-                      <Status tone={j.status === "paid" ? "success" : "accent"}>{j.status}</Status>
+                      <Status tone={statusTone(j.status)}>{j.status}</Status>
                       <Progress
                         size="sm"
                         aria-label={`Progress: ${j.status}`}
@@ -392,7 +391,7 @@ export function StudioApp({ section, user, data }: { section: string; user: stri
                 <span>
                   <strong>{k.jobTitle}</strong>
                   <small>
-                    {k.title} · <Status tone={k.status === "signed" ? "success" : "neutral"}>{k.status}</Status>
+                    {k.title} · <Status tone={statusTone(k.status)}>{k.status}</Status>
                     {k.signedBy ? ` · signed by ${k.signedBy}` : ""}
                   </small>
                 </span>
@@ -424,17 +423,17 @@ export function StudioApp({ section, user, data }: { section: string; user: stri
             {data.invoices.map((i) => (
               <li className="hm-data-list-item" key={i.id} data-invoice-id={i.id}>
                 <span>
-                  <strong>
-                    {i.number} · {i.jobTitle}
-                  </strong>
+                  <span className="st-title">
+                    <strong>
+                      {i.number} · {i.jobTitle}
+                    </strong>
+                    <Status tone={statusTone(i.status)}>{i.status}</Status>
+                  </span>
                   <small>{i.lines}</small>
-                  <Status tone={i.status === "paid" ? "success" : i.status === "void" ? "muted" : "warning"}>
-                    {i.status}
-                  </Status>
                 </span>
+                <strong className="st-amount">{usd(i.totalCents)}</strong>
                 <span className="hm-data-list-actions st-actions">
-                  <strong>{usd(i.totalCents)}</strong>
-                  {i.status !== "paid" && i.status !== "void" ? (
+                  {open(i.status) ? (
                     <Button
                       variant="secondary"
                       size="sm"
@@ -444,7 +443,7 @@ export function StudioApp({ section, user, data }: { section: string; user: stri
                       {i.status === "draft" ? "Send" : "New payment link"}
                     </Button>
                   ) : null}
-                  {i.status !== "paid" && i.status !== "void" ? (
+                  {open(i.status) ? (
                     <Button
                       variant="secondary"
                       size="sm"

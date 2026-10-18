@@ -42,9 +42,18 @@
   display: grid;
   gap: var(--hm-space-4);
 }
+/* forms: short fields share a row (two or three across when there is room); long fields, checkboxes, notes and the
+   button take the whole row, so a form reads top to bottom without a tall column of single inputs */
 .st-form {
   display: grid;
-  gap: var(--hm-space-4);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 12rem), 1fr));
+  gap: var(--hm-space-4) var(--hm-space-4);
+  align-items: end;
+}
+.st-form > :is(.hm-check, .hm-text, p, fieldset, .hm-alert, .st-wide, .st-actions, .hm-radio-group),
+.st-form > .hm-field:has(textarea, .hm-checkbox, [role="radiogroup"]),
+.st-form > .hm-button {
+  grid-column: 1 / -1;
 }
 .st-form > .hm-button {
   justify-self: start;
@@ -86,8 +95,20 @@
 .st-steps .hm-progress {
   flex: 0 1 8rem;
 }
-.st-list--tall .st-actions {
-  flex-basis: 100%;
+/* a row: the words take the room, then an amount, then the actions; it wraps under the words on narrow screens */
+.st-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--hm-space-1) var(--hm-space-2);
+}
+.st-amount {
+  flex: none;
+  font-weight: var(--hm-weight-medium);
+  font-variant-numeric: tabular-nums;
+}
+.st-list .st-actions {
+  justify-content: flex-end;
 }
 
 /* a row of controls, and an inline form (a field and its button) */

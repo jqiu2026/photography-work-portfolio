@@ -30,7 +30,7 @@ import {
   upgradePlanAction,
 } from "@/app/studio/settings-actions";
 import { FormMessage } from "@/components/ui";
-import { Card, Frame, useAct, useConfirm } from "./StudioFrame";
+import { Card, Frame, statusTone, useAct, useConfirm } from "./StudioFrame";
 import "./galleries.css";
 
 const usd = (c: number) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(c / 100);
@@ -607,9 +607,7 @@ export function PlanView({ data }: { data: PlanData }) {
                   <small>{c.at}</small>
                 </span>
                 <span>{usd(c.amountCents)}</span>
-                <Status tone={c.status === "paid" || c.status === "free" ? "success" : "warning"}>
-                  {c.status === "free" ? "No payment needed" : c.status}
-                </Status>
+                <Status tone={statusTone(c.status)}>{c.status === "free" ? "No payment needed" : c.status}</Status>
               </li>
             ))}
           </ul>

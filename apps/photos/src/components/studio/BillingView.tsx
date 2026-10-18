@@ -11,7 +11,7 @@ import {
   saveBillingSettingsAction,
   stopRecurringAction,
 } from "@/app/studio/billing-actions";
-import { Card, Frame, useAct, useConfirm } from "./StudioFrame";
+import { Card, Frame, statusTone, useAct, useConfirm } from "./StudioFrame";
 
 const usd = (c: number) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(c / 100);
 
@@ -33,13 +33,6 @@ export type BillingData = {
   jobs: { id: string; title: string }[];
   settings: { tips: boolean; percents: string; ach: boolean; surcharge: boolean; surchargePercent: string };
   stripe: boolean;
-};
-
-const PAY_TONE: Record<string, "success" | "warning" | "danger" | "neutral" | "muted"> = {
-  succeeded: "success",
-  pending: "warning",
-  failed: "danger",
-  refunded: "muted",
 };
 
 /** Payments and refunds, instalment plans, recurring invoices, and the tip, bank and surcharge settings. */
@@ -76,7 +69,7 @@ export function BillingView({ user, data }: { user: string; data: BillingData })
                 <li className="hm-data-list-item" key={p.id} data-payment-id={p.id}>
                   <span>
                     <strong>{p.invoice}</strong> · {usd(p.amountCents)} · {p.method ?? p.provider}{" "}
-                    <Status tone={PAY_TONE[p.status] ?? "neutral"}>{p.status}</Status>
+                    <Status tone={statusTone(p.status)}>{p.status}</Status>
                     <small>
                       {p.at}
                       {p.tipCents ? ` · tip ${usd(p.tipCents)}` : ""}
