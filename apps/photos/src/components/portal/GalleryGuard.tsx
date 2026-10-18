@@ -1,7 +1,7 @@
 "use client";
 
 import "./gallery-design.css";
-import { GuardScope } from "@halation/ui/media";
+import { GuardScope } from "@/components/media";
 import { useEffect, useMemo } from "react";
 import { idleLeaveAction } from "@/app/client/actions";
 import type { GallerySecurity } from "@jerryqiu/db/gallery-security";

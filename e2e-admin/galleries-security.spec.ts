@@ -127,7 +127,7 @@ test("screenshot and save keys: a warning first, the second attempt locks the vi
   });
   await key(c, { key: "PrintScreen", code: "PrintScreen" });
   await expect(c.getByRole("alertdialog")).toBeVisible();
-  await expect(c.locator("html")).toHaveClass(/hl-guard-hide/);
+  await expect(c.locator("html")).toHaveClass(/pm-guard-hide/);
   await c.getByRole("button", { name: "OK, I understand" }).click();
   await expect(c).toHaveURL(/\/g\/[a-z0-9-]+$/); // one attempt only warns
 
@@ -185,13 +185,13 @@ test("hold to view conceals photographs until the pointer is held; log-only neve
   await openAsClient(c);
   await expect(c).toHaveURL(/\/g\/[a-z0-9-]+$/, { timeout: 25_000 });
   const html = c.locator("html");
-  await expect(html).toHaveClass(/hl-guard-conceal/);
-  await expect(html).not.toHaveClass(/hl-guard-reveal/);
+  await expect(html).toHaveClass(/pm-guard-conceal/);
+  await expect(html).not.toHaveClass(/pm-guard-reveal/);
   await c.mouse.move(300, 300);
   await c.mouse.down();
-  await expect(html).toHaveClass(/hl-guard-reveal/);
+  await expect(html).toHaveClass(/pm-guard-reveal/);
   await c.mouse.up();
-  await expect(html).not.toHaveClass(/hl-guard-reveal/);
+  await expect(html).not.toHaveClass(/pm-guard-reveal/);
   for (let i = 0; i < 4; i++) await key(c, { key: "PrintScreen", code: "PrintScreen" });
   await c.waitForTimeout(500);
   await expect(c).toHaveURL(/\/g\/[a-z0-9-]+$/); // log-only: never locked

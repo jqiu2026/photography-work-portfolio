@@ -1,5 +1,5 @@
 import { Breadcrumbs, Container, Eyebrow, Heading, Section, Text } from "@/components/ui";
-import { ProtectedGallery, ProtectedImage } from "@halation/ui/media";
+import { ProtectedGallery, ProtectedImage } from "@/components/media";
 import { Blocks, MDX } from "@jerryqiu/render";
 import { getSite } from "@jerryqiu/sites";
 import { person } from "@jerryqiu/sites/profile";

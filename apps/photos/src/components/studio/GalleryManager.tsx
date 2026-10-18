@@ -1,6 +1,6 @@
 "use client";
 
-import { ProtectedImage } from "@halation/ui/media";
+import { ProtectedImage } from "@/components/media";
 import type { GallerySecurity, GalleryStyle } from "@jerryqiu/db/gallery-security";
 import Link from "next/link";
 import { useRouter } from "next/navigation";

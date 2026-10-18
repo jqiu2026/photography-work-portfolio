@@ -38,10 +38,13 @@ function build(categories: Category[], all: Photo[], featured?: Photo[]): Portfo
   };
 }
 
-/** The portfolio from the CMS galleries (one gallery per subject), or the shipped static set without a database. */
+/**
+ * The portfolio from the CMS galleries (one gallery per subject), or the shipped static set without a database or
+ * while the CMS has no photographs yet (so the site never opens empty).
+ */
 export async function getPortfolio(): Promise<Portfolio> {
   const galleries = await getGalleries();
-  if (!galleries) {
+  if (!galleries?.some((g) => g.items.length)) {
     const byId = (slug: string) => repo.photos.find((p) => p.slug === slug) as unknown as Photo;
     return {
       ...build(

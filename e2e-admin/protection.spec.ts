@@ -87,10 +87,10 @@ test.describe("a strict gallery on the photography site", () => {
       const dialog = page.getByRole("alertdialog");
       await expect(dialog, name).toBeVisible();
       await expect(dialog).toContainText("not a lock");
-      await expect(page.locator("html")).toHaveClass(/hl-guard-hide/);
+      await expect(page.locator("html")).toHaveClass(/pm-guard-hide/);
       await dialog.getByRole("button", { name: /understand/ }).click();
       await expect(dialog).toHaveCount(0);
-      await expect(page.locator("html")).not.toHaveClass(/hl-guard-hide/);
+      await expect(page.locator("html")).not.toHaveClass(/pm-guard-hide/);
     }
     // ordinary typing does nothing
     await page.keyboard.press("a");

@@ -2,7 +2,6 @@
 export default {
   distDir: process.env.NEXT_DIST_DIR || ".next",
   transpilePackages: [
-    "@halation/ui",
     "@jerryqiu/sites",
     "@jerryqiu/render",
     "@jerryqiu/mocks",

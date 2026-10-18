@@ -407,9 +407,6 @@ importers:
 
   apps/photos:
     dependencies:
-      '@halation/ui':
-        specifier: workspace:*
-        version: link:../../packages/ui
       '@holominimal/ui':
         specifier: workspace:^
         version: link:../../packages/holominimal

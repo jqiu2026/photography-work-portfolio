@@ -1,4 +1,4 @@
-import { ProtectedImage } from "@halation/ui/media";
+import { ProtectedImage } from "@/components/media";
 import { Button, EmptyState, Reveal, Surface } from "@holominimal/ui";
 import { getSite } from "@jerryqiu/sites";
 import type { Metadata } from "next";

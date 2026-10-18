@@ -3,7 +3,7 @@ import "./holominimal.css";
 import "./protection.css";
 import { ThemeScript } from "@jerryqiu/sites/theme-script";
 import { Theme } from "@holominimal/ui";
-import { ScreenshotGuard } from "@halation/ui/media";
+import { ScreenshotGuard } from "@/components/media";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { getSite } from "@jerryqiu/sites";

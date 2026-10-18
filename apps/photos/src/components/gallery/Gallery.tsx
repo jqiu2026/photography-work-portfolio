@@ -1,6 +1,6 @@
 "use client";
 
-import { ProtectedImage } from "@halation/ui/media";
+import { ProtectedImage } from "@/components/media";
 import {
   Alert,
   ArrowLeftIcon,

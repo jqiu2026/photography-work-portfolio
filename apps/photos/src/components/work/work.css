@@ -19,7 +19,7 @@
   aspect-ratio: 4 / 3;
   background: var(--hm-surface-raised);
 }
-.work-card__media .hl-img {
+.work-card__media .pm-img {
   aspect-ratio: 4 / 3 !important;
   height: 100%;
 }

@@ -1,7 +1,7 @@
 import { PageTab, PageTabs } from "@holominimal/ui";
 import { Container, EmptyState, Section } from "@/components/ui";
 import { PageHeader } from "@/components/PageHeader";
-import { ProtectedGallery } from "@halation/ui/media";
+import { ProtectedGallery } from "@/components/media";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Shell } from "@/components/Shell";

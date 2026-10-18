@@ -1,282 +1,171 @@
 /*
- * Image protection and the protected gallery (`@halation/ui/media`: ProtectedImage, ProtectedGallery, GuardScope,
- * ScreenshotGuard). These components stay, because they are protection, not UI; their rules live here on Holominimal
- * tokens, so the app no longer loads the Halation stylesheet. Class names are the ones the components render (hl-*).
+ * Photograph protection (components/media: ProtectedImage, ProtectedGallery, ProtectedViewer, ScreenshotGuard) on
+ * Holominimal tokens. A deterrent, see docs/project/05-security-and-image-protection.md. The viewer reuses Holominimal's
+ * lightbox frame (hm-lightbox-*) and the guard's reminder is a Holominimal alert dialog, so only the image, the grid
+ * and the guard's page states are styled here.
  */
-.hl-sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
 
-.hl-row {
-  display: flex;
-  gap: var(--hm-space-4);
-}
-
-.hl-row--wrap {
-  flex-wrap: wrap;
-}
-
-/* Media */
-.hl-img {
+/* the photograph: blur-up placeholder, then the picture fades in */
+.pm-img {
   display: block;
   position: relative;
   overflow: hidden;
   background-size: cover;
   background-position: center;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
 }
-
-.hl-img--fill {
+.pm-img--fill {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
 }
-
-.hl-img img {
+.pm-img img {
+  display: block;
   width: 100%;
   height: 100%;
-  display: block;
-  transition: opacity 0.7s var(--hm-ease-glide);
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+  user-select: none;
+  animation: pm-img-in var(--hm-dur-slow) var(--hm-ease-glide);
+}
+@keyframes pm-img-in {
+  from {
+    opacity: 0;
+    filter: blur(12px);
+  }
+}
+.pm-img[data-state="loading"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 30%, rgb(255 255 255 / 0.06) 50%, transparent 70%) 0 0 / 250% 100%;
+  animation: pm-img-shine 1.6s linear infinite;
+}
+@keyframes pm-img-shine {
+  to {
+    background-position: -150% 0;
+  }
 }
 
-.hl-gallery {
+/* a transparent layer over the picture: long-press and drag land here, not on the image */
+.pm-shield {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+/* the gallery grid */
+.pm-pgallery {
   list-style: none;
   margin: 0;
   padding: 0;
 }
-
-.hl-gallery li {
+.pm-pgallery li {
+  position: relative;
   margin: 0;
-}
-
-.hl-gallery button {
-  all: unset;
-  display: block;
-  cursor: zoom-in;
-  width: 100%;
-  height: 100%;
-  position: relative;
-}
-
-.hl-gallery button:focus-visible {
-  outline: var(--hm-focus-width) solid var(--hm-focus-color);
-  outline-offset: 3px;
-}
-
-.hl-gallery--justified {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.hl-gallery--justified li {
-  position: relative;
   overflow: hidden;
   border-radius: var(--hm-radius-sm);
+  background: var(--hm-surface);
 }
-
-.hl-gallery--justified::after {
+.pm-pgallery button {
+  all: unset;
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: zoom-in;
+}
+.pm-pgallery button:focus-visible {
+  outline: var(--hm-focus-width) solid var(--hm-focus-color);
+  outline-offset: calc(var(--hm-focus-width) * -1);
+}
+.pm-pgallery li .pm-img img {
+  transition: transform 1.2s var(--hm-ease-glide);
+}
+.pm-pgallery li:hover .pm-img img {
+  transform: scale(1.03);
+}
+.pm-pgallery--justified {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--hm-space-2);
+}
+.pm-pgallery--justified::after {
   content: "";
   flex-grow: 1e4;
 }
-
-.hl-gallery--masonry {
+.pm-pgallery--justified button {
+  position: absolute;
+  inset: 0;
+}
+.pm-pgallery--masonry {
   columns: 3 18rem;
-  column-gap: 8px;
+  column-gap: var(--hm-space-2);
 }
-
-.hl-gallery--masonry li {
+.pm-pgallery--masonry li {
   break-inside: avoid;
-  margin-bottom: 8px;
-  border-radius: var(--hm-radius-sm);
-  overflow: hidden;
+  margin-bottom: var(--hm-space-2);
+}
+@media (max-width: 640px) {
+  .pm-pgallery--masonry {
+    column-count: 1 !important;
+  }
 }
 
-.hl-gallery li .hl-img img {
-  transition: transform 1.2s var(--hm-ease-glide);
-}
-
-.hl-gallery li:hover .hl-img img {
-  transform: scale(1.03);
-}
-
-.hl-lb__overlay {
-  position: fixed;
-  inset: 0;
-  background: #000;
-  z-index: 140;
-  animation: hl-fade var(--hm-dur-base);
-}
-
-.hl-lb {
-  position: fixed;
-  inset: 0;
-  z-index: 141;
-  display: grid;
-  place-items: center;
-  color: #eee;
-}
-
-.hl-lb__fig {
-  margin: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  padding: 4rem 1rem 1rem;
-}
-
-.hl-lb__img {
-  all: unset;
+/* the viewer: Holominimal's lightbox frame with a protected photograph on the stage */
+.pm-viewer-stage {
   position: relative;
-  flex: 1;
-  min-height: 0;
-  cursor: zoom-in;
-  overflow: hidden;
+}
+.pm-viewer-stage .pm-img {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-color: transparent !important;
 }
 
-.hl-lb__fig[data-zoom] .hl-lb__img {
-  cursor: zoom-out;
-}
-
-.hl-lb__fig[data-zoom] .hl-lb__img img {
-  transform: scale(2);
-  transition: transform var(--hm-dur-slow) var(--hm-ease-glide), opacity 0.7s;
-}
-
-.hl-lb__img:focus-visible {
-  outline: var(--hm-focus-width) solid var(--hm-focus-color);
-}
-
-.hl-lb figcaption {
-  text-align: center;
-  padding-top: 0.8rem;
-  font-size: var(--hm-text-sm);
-  color: #bbb;
-}
-
-.hl-lb figcaption span {
-  opacity: 0.6;
-}
-
-.hl-lb__btn {
-  position: absolute;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  border: 0;
-  background: rgb(255 255 255 / 0.1);
-  color: #fff;
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-  backdrop-filter: blur(8px);
-  transition: background var(--hm-dur-fast);
-}
-
-.hl-lb__btn:hover {
-  background: rgb(255 255 255 / 0.2);
-}
-
-.hl-lb__close {
-  top: 1rem;
-  right: 1rem;
-}
-
-.hl-lb__prev {
-  left: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.hl-lb__next {
-  right: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.hl-lb__hint {
-  position: absolute;
-  top: 1.4rem;
-  left: 1.2rem;
-  font-size: var(--hm-text-xs);
-  color: #888;
-  display: inline-flex;
-  gap: 0.4em;
-  align-items: center;
-}
-
-.hl-gallery--justified button {
-  position: absolute;
-  inset: 0;
-}
-
-/* ---- Image protection (a deterrent, see docs/project/05-security-and-image-protection.md) ---- */
-.hl-visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
-
-.hl-protected {
-  -webkit-user-select: none;
-  user-select: none;
-  -webkit-touch-callout: none;
-}
-
-.hl-protected img,
-html[data-guard] .hl-img img {
+/* the guard's page states (classes on <html>, set by ScreenshotGuard) */
+html[data-guard] .pm-img img {
   -webkit-user-drag: none;
-  -webkit-touch-callout: none;
+  user-select: none;
+}
+html[data-guard-noselect] body {
   -webkit-user-select: none;
   user-select: none;
 }
-
-/* Transparent layer over the picture: long-press and drag land here, not on the image. */
-.hl-protected__shield {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  background: transparent;
+html[data-guard-noselect] :is(input, textarea, [contenteditable]) {
+  -webkit-user-select: text;
+  user-select: text;
 }
-
-html.hl-guard-hide .hl-img,
-html.hl-guard-hide [data-protected] {
+html.pm-guard-hide .pm-img,
+html.pm-guard-hide [data-protected] {
   visibility: hidden;
 }
-
-html.hl-guard-conceal:not(.hl-guard-reveal) .hl-img,
-html.hl-guard-conceal:not(.hl-guard-reveal) [data-protected] {
+html.pm-guard-conceal:not(.pm-guard-reveal) .pm-img,
+html.pm-guard-conceal:not(.pm-guard-reveal) [data-protected] {
   filter: blur(28px) brightness(0.55);
-  transition: filter 0.12s;
+  transition: filter var(--hm-dur-fast);
 }
-
-html.hl-guard-conceal:not(.hl-guard-reveal)::after {
+html.pm-guard-conceal:not(.pm-guard-reveal)::after {
   content: "Press and hold to view";
   position: fixed;
   left: 50%;
-  bottom: 1.2rem;
+  bottom: var(--hm-space-5);
   translate: -50% 0;
-  z-index: 900;
-  padding: 0.5rem 1rem;
-  border-radius: 999px;
-  background: rgb(0 0 0 / 0.8);
-  color: #fff;
-  font-size: 0.85rem;
+  z-index: var(--hm-z-toast, 900);
+  padding: var(--hm-space-2) var(--hm-space-4);
+  border: 1px solid var(--hm-line-overlay);
+  border-radius: var(--hm-radius-pill);
+  background: var(--hm-surface-overlay);
+  color: var(--hm-fg);
+  font-size: var(--hm-text-sm);
+  box-shadow: var(--hm-shadow-md);
   pointer-events: none;
 }
-
 /* touch screens: the lower half of each photograph is blurred until pressed and held */
-html.hl-guard-half:not(.hl-guard-half-off) .hl-img::after,
-html.hl-guard-half:not(.hl-guard-half-off) [data-protected]::after {
+html.pm-guard-half:not(.pm-guard-half-off) .pm-img::after,
+html.pm-guard-half:not(.pm-guard-half-off) [data-protected]::after {
   content: "";
   position: absolute;
   inset: 50% 0 0;
@@ -285,102 +174,16 @@ html.hl-guard-half:not(.hl-guard-half-off) [data-protected]::after {
   -webkit-backdrop-filter: blur(22px);
   pointer-events: none;
 }
-
-.hl-pgallery {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  column-gap: 0.75rem;
-}
-
-.hl-pgallery li {
-  break-inside: avoid;
-  margin-bottom: 0.75rem;
-}
-
-@media (max-width: 640px) {
-  .hl-pgallery {
-    column-count: 1 !important;
-  }
-}
-
 @media print {
-  html[data-guard="strict"] .hl-img,
+  html[data-guard="strict"] .pm-img,
   html[data-guard="strict"] [data-protected] {
     display: none !important;
   }
 }
-
-.hl-guard {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  display: grid;
-  place-items: center;
-  padding: 1.5rem;
-  background: rgb(0 0 0 / 0.7);
-}
-
-.hl-guard__box {
-  max-width: 28rem;
-  padding: 1.75rem;
-  background: var(--hm-surface-overlay);
-  color: var(--hm-fg);
-  border: 1px solid var(--hm-line-overlay);
-  display: grid;
-  gap: 0.9rem;
-}
-
-.hl-guard__box h2 {
-  margin: 0;
-  font-size: var(--hm-text-xl);
-}
-
-.hl-guard__box p {
-  margin: 0;
-}
-
-.hl-guard__note {
-  color: var(--hm-muted);
-  font-size: var(--hm-text-sm);
-}
-
-/* the guard's warning: a Holominimal dialog surface with its one primary button */
-.hl-guard__box {
-  border-radius: var(--hm-radius-xl);
-  box-shadow: var(--hm-shadow-overlay);
-}
-.hl-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: var(--hm-target);
-  padding: 0 1.3rem;
-  border: 1px solid var(--hm-fg);
-  border-radius: var(--hm-radius-md);
-  background: var(--hm-fg);
-  color: var(--hm-on-fg);
-  font: inherit;
-  font-size: var(--hm-text-md);
-  font-weight: var(--hm-weight-medium);
-  cursor: pointer;
-}
-.hl-btn:hover {
-  background: var(--hm-fg-strong);
-}
-.hl-btn:focus-visible {
-  outline: var(--hm-focus-width) solid var(--hm-focus-color);
-  outline-offset: var(--hm-focus-offset);
-}
-@keyframes hl-fade {
-  from {
-    opacity: 0;
-  }
-}
 @media (prefers-reduced-motion: reduce) {
-  .hl-lb__overlay,
-  .hl-img img,
-  .hl-gallery li .hl-img img {
+  .pm-img img,
+  .pm-img[data-state="loading"]::before,
+  .pm-pgallery li .pm-img img {
     animation: none;
     transition: none;
   }
