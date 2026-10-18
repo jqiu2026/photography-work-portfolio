@@ -96,3 +96,16 @@ Never block on these. Each has a default already being used. Append new ones at 
 | Q78 | Notes written as HTML | Converted to plain text with bold, italic, links and lists; nothing else is kept | Rich text | `lib/html-text.ts` |
 | Q79 | Music rights | The studio uploads tracks it may play; no licensed catalogue is connected | A music licensing partner | `/studio/music` |
 
+
+## Holominimal polish (2026-10-18)
+
+| # | Question | Default chosen | Impact if otherwise | Where |
+|---|---|---|---|---|
+| Q80 | Holominimal is dark only, but galleries offer four themes (dark, slate, light, paper) | Kept all four: dark is plain Holominimal; slate, light and paper re-point the `--hm-*` tokens inside the gallery, so every component follows the theme. The lightbox is always dark | Drop the light themes, or add a light scheme to Holominimal upstream | `components/gallery/gallery.css` |
+| Q81 | Feedback in the client gallery: Holominimal Toast or an inline notice | A Holominimal `Alert` pinned to the foot of the window (or inside the open dialog), because toasts carry no status/alert role and are inert behind a modal | Switch to Toast once it can announce roles | `Gallery.tsx` `Notice` |
+| Q82 | Sending a selection is final for the client | Now asks first ("Send your selection?") | One click, as before | `Gallery.tsx` |
+| Q83 | Desktop control height is 36px (Holominimal default), 44px on touch screens | Library default kept; touch targets meet 44px | Force 44px everywhere | `@holominimal/ui` button tokens |
+| Q84 | Rating: Holominimal Rating uses radios, so clicking the same star no longer clears it | A "Clear rating" button appears when a photograph is rated | Toggle-off on the star | `Gallery.tsx` |
+| Q85 | Date fields | Native `<input type=date>` in Holominimal input style (best picker on phones, and specs fill it directly) instead of `DatePicker` | DatePicker everywhere | studio forms, booking |
+| Q86 | Halation runtime pieces still in use | `ProtectedImage`, `ProtectedGallery`, `GuardScope`, `ScreenshotGuard` (protection) and `ThemeScript` (sets the static motion tier before paint, which `e2e/static-tier.spec.ts` checks). Their CSS now lives in `app/protection.css` on `--hm-*` tokens; the Halation stylesheet and ThemeProvider are gone | Port the tier script to Holominimal | `app/layout.tsx`, `app/protection.css` |
+| Q87 | The "Book a shoot" call to action in the public frame | Hidden on client documents (quote, pay, sign, questionnaire, order) and on the booking pages themselves | Show it everywhere | `Shell cta={false}` |

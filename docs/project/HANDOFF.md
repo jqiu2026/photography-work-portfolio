@@ -12,7 +12,15 @@ Done and committed: PHOTO-M1 foundation, M2 ShootProof removed, M3 protection ev
 
 ## UI: Holominimal (2026-10-18)
 
-The photo site UI is on Holominimal (`@holominimal/ui`, vendored build in `packages/holominimal`; rebuild in `~/Documents/holominimal` and re-copy `dist` to update). Pages import `Container/Section/Heading/Field...` from `components/ui.tsx`. Public frame: `PublicChrome` (AppShell, Atmosphere, Dock). Studio frame: `StudioChrome`. `app/holominimal.css` bridges the old `--hl-*` tokens (gallery, studio views) to `--hm-*`. The home intro was retired. Gallery and studio view CSS is still `--hl-*` through the bridge; migrate file by file.
+The whole photo site is on Holominimal (`@holominimal/ui`, vendored build in `packages/holominimal`; rebuild in `~/Documents/holominimal` and re-copy `dist` to update). There is no `--hl-*` bridge and no Halation stylesheet any more.
+
+- **Frames:** public `PublicChrome` (AppShell, Atmosphere, PublicDock; `Shell cta={false}` hides the booking button), studio `StudioChrome` (AppShell, Dock, `CommandPalette` jump-to).
+- **Pages** import from `components/ui.tsx` (Container, Section, Heading, Field with `required`, plus re-exports). Shared pieces there: `FormMessage` (a form's error or confirmation, role alert/status) and `ResultCard` (the end of a client document flow). Inner public pages start with `components/PageHeader.tsx`.
+- **Studio:** `StudioFrame.tsx` holds `StudioHead` (PageHeader and PageTabs), `Banner` (Alert, with `CopyLink`), `Card` (section surface) and `useConfirm()` (Holominimal alert dialog; no `window.confirm` left). Layout CSS: `studio.css`, `studio-dashboard.css`, `gallery-manager.css`, `galleries.css`, all `--hm-*` only.
+- **Client gallery:** `components/gallery/Gallery.tsx` and `gallery.css`. The four gallery themes re-point `--hm-*` tokens on `.gx.hm-theme` (Q80); the lightbox is always dark (`data-hm-scheme="dark"`). Feedback is the `Notice` (Q81).
+- **Protection:** `ProtectedImage`, `ProtectedGallery`, `GuardScope`, `ScreenshotGuard` still come from `@halation/ui/media`; their CSS is `app/protection.css`. `ThemeScript` stays for the static motion tier (Q86).
+- **Tests:** `e2e-admin/ui.ts` has `choose(control, label)`, which picks an option in a native select or a Holominimal Select by its visible label. Holominimal Select options have no value attribute, so specs use labels.
+- Dev check without the e2e setup: `scripts/shot.mjs`; for gated screens a Playwright script can fill the gallery passcode first.
 
 ## How to work here
 
