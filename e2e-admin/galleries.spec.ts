@@ -149,8 +149,9 @@ test("the client sees albums, a welcome and the accent; picks within the limit, 
   await c.getByRole("button", { name: "Open shot-1.jpg" }).click();
   const lb = c.getByRole("dialog", { name: "Photograph" });
   await expect(lb.locator("img[src^='blob:']")).toBeVisible({ timeout: 25_000 });
-  await lb.getByRole("button", { name: "4 stars for shot-1.jpg" }).click();
-  await expect(lb.getByRole("button", { name: "4 stars for shot-1.jpg" })).toHaveAttribute("aria-pressed", "true");
+  const stars = lb.getByRole("radiogroup", { name: "Rate shot-1.jpg" });
+  await stars.getByRole("radio", { name: "4 stars" }).check();
+  await expect(stars.getByRole("radio", { name: "4 stars" })).toBeChecked();
   await lb.getByRole("button", { name: "Approve shot-1.jpg" }).click();
   await expect(lb.getByRole("button", { name: "Approve shot-1.jpg" })).toHaveAttribute("aria-pressed", "true");
   await lb.getByLabel("Your comment").fill("Could this one be a little brighter?");
@@ -167,6 +168,8 @@ test("the client sees albums, a welcome and the accent; picks within the limit, 
   await show.getByRole("button", { name: "Close" }).click();
 
   await c.getByRole("button", { name: "Send my selection" }).click();
+  // sending is final for the client, so it asks first
+  await c.getByRole("dialog", { name: "Send your selection?" }).getByRole("button", { name: "Send selection" }).click();
   await slow(c.getByRole("status").filter({ hasText: "You chose 2 photographs" })).toBeVisible();
   await expect(c.getByRole("button", { name: /from favourites/ }).first()).toBeDisabled();
   await ctx.storageState({ path: `/tmp/gal-${uid}.json` });

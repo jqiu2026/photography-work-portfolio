@@ -107,3 +107,85 @@ body {
   border-color: var(--hm-line-strong);
   border-radius: var(--hm-radius-md);
 }
+
+/* a form's confirmation (FormMessage ok): the hint style, in the success colour */
+.pm-ok {
+  color: var(--hm-success-text);
+}
+
+/* small layout helpers shared by the client document pages (quote, sign, pay, questionnaire) */
+.pm-stack {
+  display: grid;
+  gap: var(--hm-space-4);
+}
+.pm-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--hm-space-3);
+}
+.pm-subhead {
+  margin: 0 0 var(--hm-space-3);
+  font-size: var(--hm-text-xs);
+  font-weight: var(--hm-weight-regular);
+  letter-spacing: var(--hm-tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--hm-muted);
+}
+.pm-quote-actions {
+  display: grid;
+  gap: var(--hm-space-7);
+  margin-top: var(--hm-space-7);
+  max-width: 36rem;
+}
+.pm-doc {
+  display: grid;
+  gap: var(--hm-space-5);
+}
+.pm-num {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.pm-doc-title {
+  margin: 0;
+  font-size: var(--hm-text-2xl);
+  font-weight: var(--hm-weight-medium);
+  letter-spacing: var(--hm-tracking-tight);
+  line-height: var(--hm-leading-tight);
+}
+.pm-result__msg {
+  margin: 0;
+  color: var(--hm-fg-soft);
+  line-height: 1.6;
+}
+.pm-result__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--hm-space-2);
+}
+.pm-row--fields > .hm-field {
+  flex: 1 1 9rem;
+}
+/* contract text: readable, scrolls in place, keyboard-focusable */
+.st-contract {
+  margin: 0;
+  max-height: 22rem;
+  overflow: auto;
+  padding: var(--hm-space-4);
+  border: 1px solid var(--hm-line-strong);
+  border-radius: var(--hm-radius-md);
+  background: var(--hm-control-bg);
+  color: var(--hm-fg-soft);
+  font-family: var(--hm-font-sans);
+  font-size: var(--hm-text-sm);
+  line-height: 1.65;
+  white-space: pre-wrap;
+}
+.st-contract:focus-visible {
+  outline: var(--hm-focus-width) solid var(--hm-focus-color);
+  outline-offset: var(--hm-focus-offset);
+}
+.pm-foot-link {
+  margin: var(--hm-space-5) 0 0;
+}

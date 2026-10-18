@@ -8,6 +8,7 @@ import {
   type FieldProps,
   type ContainerProps,
   Grid as HmGrid,
+  Surface,
   Heading as HmHeading,
   type HeadingProps as HmHeadingProps,
 } from "@holominimal/ui";
@@ -18,7 +19,48 @@ import { type CSSProperties, cloneElement, type HTMLAttributes, type ReactElemen
  * The site's page-building vocabulary (Container, Section, Heading, Eyebrow, Prose...) on Holominimal. Pages import
  * from here, so a page never names the design system and a later re-skin touches this file and the tokens only.
  */
-export { Button, Input, Select, Text, Textarea } from "@holominimal/ui";
+export {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+  Alert,
+  AlertDescription,
+  AlertTitle,
+  Badge,
+  Button,
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  Checkbox,
+  DataList,
+  DataListItem,
+  EmptyState,
+  Input,
+  PageActions,
+  PageDescription,
+  PageEyebrow,
+  PageHeader,
+  PageTitle,
+  Select,
+  Separator,
+  Status,
+  Step,
+  Stepper,
+  Surface,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+  Tag,
+  Text,
+  Textarea,
+} from "@holominimal/ui";
 
 /** Holominimal's Field, plus `required`: the control is marked required and the label gets a quiet asterisk. */
 export function Field({ required, label, children, ...rest }: FieldProps & { required?: boolean }) {
@@ -106,5 +148,49 @@ export function Breadcrumbs({ items }: { items: { label: string; href?: string }
         </BreadcrumbItem>
       ))}
     </Breadcrumb>
+  );
+}
+
+/**
+ * The answer to a form: an error (role alert, Holominimal's field-error style) or a confirmation (role status). A
+ * paragraph, so it sits under the button it answers. `className` lets older screens keep their hook (`st-error`).
+ */
+export function FormMessage({
+  ok,
+  children,
+  className,
+  ...rest
+}: HTMLAttributes<HTMLParagraphElement> & { ok?: boolean }) {
+  if (!children) return null;
+  return (
+    <p
+      {...rest}
+      role={ok ? "status" : "alert"}
+      className={[ok ? "hm-field-hint pm-ok" : "hm-field-error", className].filter(Boolean).join(" ")}
+    >
+      {children}
+    </p>
+  );
+}
+
+/** The end of a client document flow (signed, paid, answers sent): a quiet card with a title and what happened. */
+export function ResultCard({
+  eyebrow,
+  title,
+  message,
+  tone = "success",
+  children,
+}: { eyebrow?: ReactNode; title: ReactNode; message?: ReactNode; tone?: "success" | "neutral"; children?: ReactNode }) {
+  return (
+    <Surface variant="outlined" padding="lg" className="pm-stack pm-result" data-tone={tone}>
+      {eyebrow ? <p className="hm-eyebrow">{eyebrow}</p> : null}
+      <h1 className="pm-doc-title">{title}</h1>
+      {message ? (
+        <p role="status" className="pm-result__msg">
+          {message}
+        </p>
+      ) : null}
+      {children}
+    </Surface>
   );
 }

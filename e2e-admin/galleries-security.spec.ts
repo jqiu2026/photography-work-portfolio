@@ -129,7 +129,9 @@ test("screenshot and save keys: a warning first, the second attempt locks the vi
 
   await key(c, { key: "s", code: "KeyS", ctrlKey: true });
   await expect(c, `events: ${seen.join(" | ")}`).toHaveURL(/\/g\/[a-z0-9-]+\?locked=1$/, { timeout: 25_000 });
-  await expect(c.locator("p[role=alert]")).toContainText("closed because a screenshot or save was attempted");
+  await expect(
+    c.getByRole("alert").filter({ hasText: "closed because a screenshot or save was attempted" }),
+  ).toBeVisible();
 
   // the same viewer cannot simply come back in with the passcode
   await c.goto(`${PHOTOS}/g/${slug}`, { waitUntil: "networkidle" });

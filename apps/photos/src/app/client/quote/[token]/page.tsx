@@ -1,4 +1,23 @@
-import { Container, Section, Text } from "@/components/ui";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+  Alert,
+  Container,
+  PageDescription,
+  PageEyebrow,
+  PageHeader,
+  PageTitle,
+  Prose,
+  Section,
+  Status,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  Text,
+} from "@/components/ui";
 import { getDb } from "@jerryqiu/db";
 import * as com from "@jerryqiu/db/commerce";
 import { formatMoney, approx } from "@jerryqiu/db/pricing";
@@ -7,9 +26,17 @@ import { notFound } from "next/navigation";
 import { QuoteActions } from "@/components/QuoteActions";
 import { Shell } from "@/components/Shell";
 import { resolveRef } from "@/lib/portal-links";
-import "@/components/studio/studio.css";
 
 export const dynamic = "force-dynamic";
+const STATUS: Record<string, string> = {
+  draft: "Draft",
+  sent: "Waiting for your answer",
+  viewed: "Waiting for your answer",
+  accepted: "Accepted",
+  declined: "Declined",
+  expired: "Expired",
+};
+
 export const metadata = { title: "Your quote", robots: { index: false, follow: false } };
 
 export default async function QuotePage({ params }: { params: Promise<{ token: string }> }) {
@@ -24,74 +51,79 @@ export default async function QuotePage({ params }: { params: Promise<{ token: s
   const addOns = (await com.listAddOns(db)).filter((a) => a.upsell && a.visible);
   const chosen = new Map(q.lines.filter((l) => l.refId && l.amountCents > 0).map((l) => [l.refId as string, l.qty]));
   const est = approx(q.totalCents, "eur");
+  const row = (label: React.ReactNode, amount: React.ReactNode, strong?: boolean) => (
+    <TableRow>
+      <TableCell rowHeader={strong}>{label}</TableCell>
+      <TableCell className="pm-num">{strong ? <strong>{amount}</strong> : amount}</TableCell>
+    </TableRow>
+  );
   return (
     <Shell>
       {q.isSample ? <MockBanner what="This quote uses SAMPLE prices from the example catalogue" /> : null}
       <Section>
-        <Container size="md">
-          <section className="st-card" aria-labelledby="q-title">
-            <p className="hl-eyebrow">Quote {q.number}</p>
-            <h1 className="st-title" id="q-title">
-              {q.title}
-            </h1>
-            {q.intro ? <p className="st-note">{q.intro}</p> : null}
-            <table className="st-table" aria-label="Quote lines">
-              <tbody>
+        <Container size="sm">
+          <section className="pm-doc" aria-labelledby="q-title">
+            <PageHeader>
+              <PageEyebrow>Quote {q.number}</PageEyebrow>
+              <PageTitle id="q-title">{q.title}</PageTitle>
+              <PageDescription>
+                <Status tone={q.status === "accepted" ? "success" : open ? "accent" : "muted"}>
+                  {STATUS[q.status] ?? q.status}
+                </Status>
+                {q.validUntil && open ? ` Valid until ${q.validUntil.toISOString().slice(0, 10)}.` : ""}
+              </PageDescription>
+            </PageHeader>
+            {q.intro ? <Prose>{q.intro}</Prose> : null}
+            <Table aria-label="Quote lines">
+              <TableBody>
                 {q.lines.map((l, i) => (
-                  <tr key={`${l.description}-${i}`}>
-                    <td>
+                  <TableRow key={`${l.description}-${i}`}>
+                    <TableCell>
                       {l.description}
                       {l.qty > 1 ? ` × ${l.qty}` : ""}
-                      {l.standaloneCents ? <small> (sells for {money(l.standaloneCents)} on its own)</small> : null}
-                    </td>
-                    <td style={{ textAlign: "right" }}>{l.amountCents === 0 ? "Included" : money(l.amountCents)}</td>
-                  </tr>
+                      {l.standaloneCents ? (
+                        <Text as="span" size="xs" tone="muted">
+                          {" "}
+                          (sells for {money(l.standaloneCents)} on its own)
+                        </Text>
+                      ) : null}
+                    </TableCell>
+                    <TableCell className="pm-num">{l.amountCents === 0 ? "Included" : money(l.amountCents)}</TableCell>
+                  </TableRow>
                 ))}
-                {q.taxCents > 0 ? (
-                  <tr>
-                    <td>
-                      {q.taxLabel ?? "Sales tax"} ({(q.taxRateBp / 100).toFixed(2)}%)
-                    </td>
-                    <td style={{ textAlign: "right" }}>{money(q.taxCents)}</td>
-                  </tr>
-                ) : null}
-                <tr>
-                  <th scope="row">Total</th>
-                  <th style={{ textAlign: "right" }}>{money(q.totalCents)}</th>
-                </tr>
-                {q.giftCents > 0 ? (
-                  <tr>
-                    <td>Gift card</td>
-                    <td style={{ textAlign: "right" }}>−{money(q.giftCents)}</td>
-                  </tr>
-                ) : null}
-                {q.depositCents > 0 ? (
-                  <tr>
-                    <td>Deposit due on acceptance</td>
-                    <td style={{ textAlign: "right" }}>{money(q.depositCents)}</td>
-                  </tr>
-                ) : null}
-              </tbody>
-            </table>
-            {est ? <p className="st-note">{est}. You are charged in US dollars.</p> : null}
-            <p className="st-note">
-              Status: <strong>{q.status}</strong>
-              {q.validUntil && open ? ` · valid until ${q.validUntil.toISOString().slice(0, 10)}` : ""}
-            </p>
+                {q.taxCents > 0
+                  ? row(`${q.taxLabel ?? "Sales tax"} (${(q.taxRateBp / 100).toFixed(2)}%)`, money(q.taxCents))
+                  : null}
+                {row("Total", money(q.totalCents), true)}
+                {q.giftCents > 0 ? row("Gift card", `−${money(q.giftCents)}`) : null}
+                {q.depositCents > 0 ? row("Deposit due on acceptance", money(q.depositCents)) : null}
+              </TableBody>
+            </Table>
+            {est ? (
+              <Text size="sm" tone="muted">
+                {est}. You are charged in US dollars.
+              </Text>
+            ) : null}
             {q.terms ? (
-              <details>
-                <summary>Terms</summary>
-                <p className="st-note" style={{ whiteSpace: "pre-wrap" }}>
-                  {q.terms}
-                </p>
-              </details>
+              <Accordion type="single" collapsible>
+                <AccordionItem value="terms">
+                  <AccordionTrigger>Terms</AccordionTrigger>
+                  <AccordionContent>
+                    <Prose style={{ whiteSpace: "pre-wrap" }}>{q.terms}</Prose>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
             ) : null}
             {q.status === "accepted" ? (
-              <p role="status" className="st-note">
+              <Alert tone="success">
                 Accepted by {q.acceptedBy} on {q.acceptedAt?.toISOString().slice(0, 10)}.
-              </p>
+              </Alert>
             ) : null}
-            {q.status === "expired" ? <p className="st-error">This quote has expired. Ask for a new one.</p> : null}
+            {q.status === "expired" ? (
+              <Alert tone="warning" className="st-error">
+                This quote has expired. Ask for a new one.
+              </Alert>
+            ) : null}
           </section>
           <QuoteActions
             token={token}
@@ -106,7 +138,7 @@ export default async function QuotePage({ params }: { params: Promise<{ token: s
               max: a.maxQty,
             }))}
           />
-          <Text size="sm" tone="muted" style={{ marginTop: "2rem" }}>
+          <Text size="xs" tone="dim" style={{ marginTop: "var(--hm-space-8)" }}>
             Not legal or tax advice. Sales tax shown here is a calculation at quote time.
           </Text>
         </Container>

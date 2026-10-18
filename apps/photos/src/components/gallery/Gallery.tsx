@@ -1,8 +1,59 @@
 "use client";
 
 import { ProtectedImage } from "@halation/ui/media";
+import {
+  Alert,
+  ArrowLeftIcon,
+  Badge,
+  Button,
+  Checkbox,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  CloseIcon,
+  DataList,
+  DataListItem,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogTitle,
+  DownloadIcon,
+  Drawer,
+  DrawerContent,
+  DrawerTitle,
+  EmptyState,
+  Field,
+  GalleryCard,
+  GalleryCover,
+  GalleryGrid,
+  GalleryItem,
+  GalleryMeta,
+  GalleryTitle,
+  IconButton,
+  Input,
+  LikeIcon,
+  LockIcon,
+  NumberInput,
+  PageTab,
+  PageTabs,
+  PlayPauseIcon,
+  Progress,
+  Rating,
+  Segment,
+  SegmentedControl,
+  Select,
+  ShareIcon,
+  ShoppingBagIcon,
+  SkipNextIcon,
+  SlideshowIcon,
+  Tab,
+  TabList,
+  TabPanel,
+  Tabs,
+  Textarea,
+} from "@holominimal/ui";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { type ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { leaveGalleryAction, toggleFavoriteAction } from "@/app/client/actions";
 import {
   commentAction,
@@ -21,6 +72,8 @@ type Data = ClientGalleryData;
 type Item = Data["items"][number];
 type Product = Data["shop"]["products"][number];
 type Line = { productId: string; mediaId: string | null; qty: number };
+type Msg = { ok: boolean; text: string; id: number } | null;
+type Say = (ok: boolean, text: string) => void;
 
 const usd = (cents: number) =>
   new Intl.NumberFormat("en-US", {
@@ -28,6 +81,7 @@ const usd = (cents: number) =>
     currency: "USD",
     maximumFractionDigits: cents % 100 ? 2 : 0,
   }).format(cents / 100);
+const plural = (n: number, one: string, many = `${one}s`) => `${n} ${n === 1 ? one : many}`;
 const DIGITAL = ["digital-web", "digital-full", "digital-all"];
 const PPI_FLOOR = 180; // same floor the print lab check uses on the server
 const fits = (p: Product, it: Item) => {
@@ -45,6 +99,18 @@ const asset = (i: Pick<Item, "width" | "height" | "color" | "blur"> & { mediaId:
   blur: i.blur ?? undefined,
   files: [],
 });
+/** Black or white, whichever reads better on the owner's brand colour (WCAG relative luminance). */
+function onColour(colour: string) {
+  const m = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(colour.trim());
+  if (!m) return "#fff";
+  const hex = m[1].length === 3 ? [...m[1]].map((c) => c + c).join("") : m[1];
+  const n = Number.parseInt(hex, 16);
+  const [r, g, b] = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map((c) => {
+    const v = c / 255;
+    return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+  });
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b > 0.179 ? "#000" : "#fff";
+}
 
 /**
  * The gallery, as the people it is for see it. A cover and title open it; albums (with sub-albums and locked albums) and
@@ -55,15 +121,13 @@ export function Gallery({ data }: { data: Data }) {
   return (
     <>
       <GalleryView data={data} />
-      {data.tracks.length ? (
-        <MusicPlayer tracks={data.tracks} autoplay={data.style.autoplay} theme={data.theme} />
-      ) : null}
+      {data.tracks.length ? <MusicPlayer tracks={data.tracks} autoplay={data.style.autoplay} /> : null}
     </>
   );
 }
 
 /** Gallery music: the studio's tracks in order, with play, pause and next. Autoplay waits for the visitor's first tap (browsers require it). */
-function MusicPlayer({ tracks, autoplay, theme }: { tracks: Data["tracks"]; autoplay: boolean; theme: string }) {
+function MusicPlayer({ tracks, autoplay }: { tracks: Data["tracks"]; autoplay: boolean }) {
   const ref = useRef<HTMLAudioElement>(null);
   const [i, setI] = useState(0);
   const [playing, setPlaying] = useState(false);
@@ -82,26 +146,53 @@ function MusicPlayer({ tracks, autoplay, theme }: { tracks: Data["tracks"]; auto
   }, [autoplay]);
   const t = tracks[i % tracks.length];
   return (
-    <div className="gx gx-music" data-theme={theme} role="group" aria-label="Music">
+    <div className="gx-music" role="group" aria-label="Music">
       <audio ref={ref} src={`/g/audio/${t.id}`} preload="none" onEnded={() => setI((n) => (n + 1) % tracks.length)} />
-      <button
-        type="button"
+      <IconButton
+        size="sm"
+        variant="primary"
+        className="gx-round"
         onClick={() => setPlaying((p) => !p)}
         aria-pressed={playing}
         aria-label={playing ? "Pause music" : "Play music"}
       >
-        {playing ? "❚❚" : "▶"}
-      </button>
+        <PlayPauseIcon playing={playing} />
+      </IconButton>
       <span>
-        ♪ {t.title}
+        {t.title}
         {t.artist ? <small> · {t.artist}</small> : null}
       </span>
       {tracks.length > 1 ? (
-        <button type="button" onClick={() => setI((n) => (n + 1) % tracks.length)} aria-label="Next track">
-          ›|
-        </button>
+        <IconButton
+          size="sm"
+          variant="ghost"
+          onClick={() => setI((n) => (n + 1) % tracks.length)}
+          aria-label="Next track"
+        >
+          <SkipNextIcon />
+        </IconButton>
       ) : null}
     </div>
+  );
+}
+
+/** One message at a time: pinned to the foot of the window, or `inline` inside the dialog that is open. */
+function Notice({ msg, inline, onDone }: { msg: Msg; inline?: boolean; onDone?: () => void }) {
+  useEffect(() => {
+    if (!msg || inline || !onDone) return;
+    const t = setTimeout(onDone, msg.ok ? 4500 : 8000);
+    return () => clearTimeout(t);
+  }, [msg, inline, onDone]);
+  if (!msg) return null;
+  return (
+    <Alert
+      key={msg.id}
+      tone={msg.ok ? "success" : "danger"}
+      className="gx-notice"
+      data-inline={inline ? "" : undefined}
+    >
+      {msg.text}
+    </Alert>
   );
 }
 
@@ -140,8 +231,9 @@ function GalleryView({ data }: { data: Data }) {
   const [open, setOpen] = useState<number | null>(null);
   const [cartOpen, setCartOpen] = useState(false);
   const [dlOpen, setDlOpen] = useState(false);
+  const [confirmSend, setConfirmSend] = useState(false);
   const [lockFor, setLockFor] = useState<string | null>(null);
-  const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
+  const [msg, setMsg] = useState<Msg>(null);
   const [sent, setSent] = useState(data.sent);
   const [cart, setCart] = useState<Line[]>([]);
   const storeKey = `gx-cart-${data.slug ?? data.galleryId ?? data.title}`;
@@ -156,7 +248,8 @@ function GalleryView({ data }: { data: Data }) {
       localStorage.setItem(storeKey, JSON.stringify(cart));
     } catch {}
   }, [cart, storeKey]);
-  const say = (ok: boolean, text: string) => setMsg({ ok, text });
+  const say: Say = useCallback((ok, text) => setMsg({ ok, text, id: Date.now() }), []);
+  const clearMsg = useCallback(() => setMsg(null), []);
   const upd = (id: string, p: Partial<Item>) =>
     setItems((all) => all.map((i) => (i.mediaId === id ? { ...i, ...p } : i)));
 
@@ -193,11 +286,20 @@ function GalleryView({ data }: { data: Data }) {
     say(true, `${p.name} added to your cart.`);
   };
 
+  const brand = data.style.primary || data.accent;
   const style = {
-    ...(data.style.primary || data.accent ? { ["--gx-accent" as string]: data.style.primary || data.accent } : {}),
+    ...(brand ? { ["--gx-brand" as string]: brand, ["--gx-on-brand" as string]: onColour(brand) } : {}),
     ...(data.style.secondary ? { ["--gx-link" as string]: data.style.secondary } : {}),
     ...(data.style.background ? { ["--gx-bg-custom" as string]: data.style.background } : {}),
   } as React.CSSProperties;
+  const frame = {
+    className: "gx hm-theme",
+    style,
+    "data-theme": data.theme,
+    "data-font": data.style.font,
+    "data-brand": brand ? "" : undefined,
+    "data-custom-bg": data.style.background ? "" : undefined,
+  };
 
   /* ---- proofing (the client only) ---- */
   async function fav(i: Item) {
@@ -205,10 +307,9 @@ function GalleryView({ data }: { data: Data }) {
     if (r.ok) upd(i.mediaId, { favourite: !i.favourite });
     else say(false, r.error);
   }
-  async function rate(i: Item, n: number) {
-    const next = i.rating === n ? null : n;
-    const r = await rateAction({ galleryId: gid, mediaId: i.mediaId, rating: next });
-    if (r.ok) upd(i.mediaId, { rating: next });
+  async function rate(i: Item, n: number | null) {
+    const r = await rateAction({ galleryId: gid, mediaId: i.mediaId, rating: n });
+    if (r.ok) upd(i.mediaId, { rating: n });
     else say(false, r.error);
   }
   async function decide(i: Item, d: "approved" | "rejected") {
@@ -219,6 +320,7 @@ function GalleryView({ data }: { data: Data }) {
   }
   async function submitSelection() {
     const r = await sendSelectionAction(gid);
+    setConfirmSend(false);
     if (r.ok) {
       setSent(true);
       say(true, r.message ?? "Sent.");
@@ -235,13 +337,14 @@ function GalleryView({ data }: { data: Data }) {
     if (a?.closed) return setLockFor(id);
     setAlbum(id);
     setView("photos");
-    document.getElementById("gx-main")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    document.getElementById("gx-main")?.scrollIntoView({ block: "start" });
   }
 
   if (data.state === "expired" || data.state === "archived")
     return (
-      <div className="gx" style={style} data-theme={data.theme} data-font={data.style.font}>
+      <div {...frame}>
         <section className="gx-gone" aria-labelledby="gx-exp">
+          <p className="gx-brand">{data.style.brandLine || data.brand.name}</p>
           <h1 id="gx-exp">{data.title}</h1>
           <p role="status">
             This gallery{" "}
@@ -251,17 +354,16 @@ function GalleryView({ data }: { data: Data }) {
             .{client ? " Your photographs are safe: extend access to bring it back." : ""}
           </p>
           {client ? (
-            <button type="button" className="gx-btn" onClick={reactivate}>
+            <Button size="lg" onClick={reactivate}>
               Extend access
-            </button>
+            </Button>
           ) : null}
-          {msg ? <p role={msg.ok ? "status" : "alert"}>{msg.text}</p> : null}
+          <Notice msg={msg} inline />
         </section>
       </div>
     );
 
   const crop = data.layout === "grid" || data.layout === "mosaic";
-  const hasCover = Boolean(heroItem) && data.style.header !== "minimal";
   const sty = data.style;
   const hasAlbums = !sty.hideAlbums && top.length > 0;
   const today = new Date().toISOString().slice(0, 10);
@@ -277,7 +379,8 @@ function GalleryView({ data }: { data: Data }) {
       }
       await navigator.clipboard.writeText(url);
       say(true, "Link copied. Send it to anyone who should see this gallery.");
-    } catch {
+    } catch (e) {
+      if ((e as Error)?.name === "AbortError") return; // the share sheet was dismissed
       say(false, `Copy this link: ${url}`);
     }
   }
@@ -288,14 +391,19 @@ function GalleryView({ data }: { data: Data }) {
     setStage("gallery");
     if (sty.introMessage) setRulesOpen(true);
   }
+  function goPhotos() {
+    setView("photos");
+    setAlbum("");
+  }
   const photosRoot = view === "photos" && !album && hasAlbums && sty.albumView === "cards";
   const showGrid = !photosRoot && view !== "shop" && view !== "about";
+  const dialogOpen = open !== null || cartOpen || dlOpen;
 
-  if (stage === "pending") return <div className="gx" style={style} data-theme={data.theme} data-font={sty.font} />;
+  if (stage === "pending") return <div {...frame} />;
   if (stage === "intro" && heroItem)
     return (
-      <div className="gx gx-intro" style={style} data-theme={data.theme} data-font={sty.font}>
-        <header className="gx-hero" data-header={sty.header} data-cover="">
+      <div {...frame}>
+        <header className="gx-hero" data-header={sty.header}>
           <div className="gx-hero__img">
             <ProtectedImage asset={asset({ ...heroItem })} alt="" fill fit="cover" priority sizes="100vw" />
           </div>
@@ -303,28 +411,27 @@ function GalleryView({ data }: { data: Data }) {
             <p className="gx-brand">{sty.brandLine || data.brand.name}</p>
             <h1>{data.title}</h1>
             {data.welcome ? <p className="gx-welcome">{data.welcome}</p> : null}
-            <div className="gx-hero__actions">
-              <button type="button" className="gx-btn gx-btn--solid" onClick={enter}>
-                View Gallery
-              </button>
-            </div>
+            <Button size="lg" onClick={enter}>
+              View Gallery
+            </Button>
           </div>
         </header>
       </div>
     );
 
+  const heading = view === "favourites" ? "Favorites" : current ? current.name : data.title;
+  const back =
+    view === "photos" && (current || album === "all-photos")
+      ? current?.parentId
+        ? `Back to ${parent?.name}`
+        : hasAlbums && sty.albumView === "cards"
+          ? "All albums"
+          : "All photos"
+      : null;
+  const albumValue = !album || album === "all-photos" ? "all" : (current?.parentId ?? album);
+
   return (
-    <div
-      className="gx"
-      style={style}
-      data-theme={data.theme}
-      data-font={sty.font}
-      data-layout={data.layout}
-      data-density={data.density}
-      data-gap={sty.gap}
-      data-corners={sty.corners}
-      data-custom-bg={sty.background ? "" : undefined}
-    >
+    <div {...frame} data-layout={data.layout} data-density={data.density} data-gap={sty.gap} data-corners={sty.corners}>
       {banner ? (
         <p className="gx-banner">
           {sty.bannerLink ? (
@@ -337,178 +444,151 @@ function GalleryView({ data }: { data: Data }) {
         </p>
       ) : null}
       <header className="gx-top">
-        <a
-          className="gx-top__brand"
-          href={data.slug ? `/g/${data.slug}` : "#"}
-          onClick={() => {
-            setView("photos");
-            setAlbum("");
-          }}
-        >
+        <a className="gx-top__brand" href={data.slug ? `/g/${data.slug}` : "#"} onClick={goPhotos}>
           {sty.brandLine || data.brand.name}
         </a>
-        <nav className="gx-top__tabs" aria-label="Gallery">
-          <button
-            type="button"
-            aria-current={view === "photos" ? "page" : undefined}
-            onClick={() => {
-              setView("photos");
-              setAlbum("");
-            }}
-          >
-            Photos
-          </button>
-          {shopOn ? (
-            <button type="button" aria-current={view === "shop" ? "page" : undefined} onClick={() => setView("shop")}>
-              Store
+        <PageTabs aria-label="Gallery">
+          <PageTab asChild current={view === "photos"}>
+            <button type="button" onClick={goPhotos}>
+              Photos
             </button>
+          </PageTab>
+          {shopOn ? (
+            <PageTab asChild current={view === "shop"}>
+              <button type="button" onClick={() => setView("shop")}>
+                Store
+              </button>
+            </PageTab>
           ) : null}
           {client ? (
-            <button
-              type="button"
-              aria-current={view === "favourites" ? "page" : undefined}
-              onClick={() => setView("favourites")}
-            >
-              Favorites <small>{chosen}</small>
-            </button>
+            <PageTab asChild current={view === "favourites"}>
+              <button type="button" onClick={() => setView("favourites")}>
+                Favorites <span className="gx-count-badge">{chosen}</span>
+              </button>
+            </PageTab>
           ) : null}
-          <button type="button" aria-current={view === "about" ? "page" : undefined} onClick={() => setView("about")}>
-            About
-          </button>
-        </nav>
+          <PageTab asChild current={view === "about"}>
+            <button type="button" onClick={() => setView("about")}>
+              About
+            </button>
+          </PageTab>
+        </PageTabs>
         <div className="gx-top__right">
           {!client && data.slug ? (
-            <button type="button" className="gx-tool" onClick={() => setSignIn(true)}>
+            <Button variant="ghost" size="sm" onClick={() => setSignIn(true)}>
               Client sign-in
-            </button>
+            </Button>
           ) : null}
           {client ? (
             <form action={leaveGalleryAction}>
-              <button type="submit" className="gx-tool">
+              <Button type="submit" variant="ghost" size="sm">
                 Sign out
-              </button>
+              </Button>
             </form>
           ) : null}
           {shopOn ? (
-            <button
-              type="button"
-              className="gx-cart"
+            <IconButton
+              variant="ghost"
+              className="gx-cart-btn"
               onClick={() => setCartOpen(true)}
-              aria-label={`Cart, ${cartCount} item${cartCount === 1 ? "" : "s"}`}
+              aria-label={`Cart, ${plural(cartCount, "item")}`}
             >
-              <svg
-                viewBox="0 0 24 24"
-                width="22"
-                height="22"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.6"
-                aria-hidden="true"
-              >
-                <path d="M3 4h2.2l2 11h10.6l2-8H6.4" />
-                <circle cx="9" cy="19.5" r="1.2" />
-                <circle cx="17" cy="19.5" r="1.2" />
-              </svg>
-              {cartCount ? <b>{cartCount}</b> : null}
-            </button>
+              <ShoppingBagIcon />
+              {cartCount ? <Badge aria-hidden="true">{cartCount}</Badge> : null}
+            </IconButton>
           ) : null}
         </div>
       </header>
-      <div className="gx-subbar" role="toolbar" aria-label="Gallery actions">
-        {sty.allowSharing && data.slug ? (
-          <button type="button" onClick={() => void share()}>
-            Share
-          </button>
-        ) : null}
-        {canDownload && sty.showDownloadAll ? (
-          <button type="button" onClick={() => setDlOpen(true)}>
-            Download all
-          </button>
-        ) : null}
-        <button type="button" disabled={!shown.length} onClick={() => setOpen(0)}>
-          Slideshow
-        </button>
-      </div>
 
       <main id="gx-main" className="gx-main" tabIndex={-1}>
-        {msg ? (
-          <p className="gx-msg" role={msg.ok ? "status" : "alert"} data-ok={msg.ok || undefined}>
-            {msg.text}
-          </p>
-        ) : null}
         {data.state === "expiring" && client ? (
-          <p className="gx-msg" role="status">
+          <Alert tone="warning" style={{ marginBottom: "var(--hm-space-5)" }}>
             This gallery expires on {data.expiresAt}.{" "}
-            <button type="button" className="gx-link" onClick={reactivate}>
+            <Button variant="ghost" size="sm" onClick={reactivate}>
               Extend access
-            </button>
-          </p>
+            </Button>
+          </Alert>
         ) : null}
 
         {view === "shop" && shopOn ? (
-          <ShopView data={data} onAdd={addToCart} onBrowse={() => setView("photos")} />
+          <ShopView data={data} onAdd={addToCart} onBrowse={goPhotos} />
         ) : view === "about" ? (
           <About data={data} />
         ) : (
           <>
-            <div className="gx-title">
-              <h1>{view === "favourites" ? "Favorites" : current ? current.name : data.title}</h1>
-              <p className="gx-count">
-                {photosRoot
-                  ? `${top.length} album${top.length === 1 ? "" : "s"}`
-                  : `${shown.length} photograph${shown.length === 1 ? "" : "s"}`}
-              </p>
-              {current || album === "all-photos" ? (
-                <button type="button" className="gx-link" onClick={() => setAlbum(current?.parentId ?? "")}>
-                  ←{" "}
-                  {current?.parentId
-                    ? `Back to ${parent?.name}`
-                    : hasAlbums && sty.albumView === "cards"
-                      ? "All albums"
-                      : "All photos"}
-                </button>
-              ) : null}
-              {!current && data.welcome && !album ? <p className="gx-welcome">{data.welcome}</p> : null}
+            <div className="gx-head">
+              <div className="gx-head__text">
+                {back ? (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="gx-back"
+                    onClick={() => setAlbum(current?.parentId ?? "")}
+                  >
+                    <ArrowLeftIcon /> {back}
+                  </Button>
+                ) : null}
+                <h1>{heading}</h1>
+                <p className="gx-fine">
+                  {photosRoot ? plural(top.length, "album") : plural(shown.length, "photograph")}
+                </p>
+                {view === "photos" && !current && data.welcome && !album ? (
+                  <p className="gx-welcome">{data.welcome}</p>
+                ) : null}
+              </div>
+              <div className="gx-actions" role="toolbar" aria-label="Gallery actions">
+                {sty.allowSharing && data.slug ? (
+                  <Button variant="secondary" size="sm" onClick={() => void share()}>
+                    <ShareIcon /> Share
+                  </Button>
+                ) : null}
+                {canDownload && sty.showDownloadAll ? (
+                  <Button variant="secondary" size="sm" onClick={() => setDlOpen(true)}>
+                    <DownloadIcon /> Download all
+                  </Button>
+                ) : null}
+                {shown.length > 1 && showGrid ? (
+                  <Button variant="secondary" size="sm" onClick={() => setOpen(0)}>
+                    <SlideshowIcon /> Slideshow
+                  </Button>
+                ) : null}
+              </div>
             </div>
             {hasAlbums && sty.albumView === "tabs" && view === "photos" ? (
-              <div className="gx-subs" role="toolbar" aria-label="Albums">
+              <SegmentedControl
+                className="gx-albums"
+                aria-label="Albums"
+                value={albumValue}
+                onValueChange={(v) => (v === "all" ? setAlbum("") : pickAlbum(v))}
+              >
                 {sty.hideAllPhotos ? null : (
-                  <button type="button" aria-pressed={!album || album === "all-photos"} onClick={() => setAlbum("")}>
-                    All photos {sty.hideAlbumCount ? null : <small>{items.length}</small>}
-                  </button>
+                  <Segment value="all">All photos {sty.hideAlbumCount ? null : <small>{items.length}</small>}</Segment>
                 )}
                 {top.map((a) => (
-                  <button
-                    key={a.id}
-                    type="button"
-                    aria-pressed={album === a.id || current?.parentId === a.id}
-                    onClick={() => pickAlbum(a.id)}
-                  >
-                    {a.locked ? "🔒 " : ""}
-                    {a.name}{" "}
+                  <Segment key={a.id} value={a.id}>
+                    {a.locked ? <LockIcon size={14} /> : null} {a.name}{" "}
                     {sty.hideAlbumCount ? null : (
                       <small>{a.closed ? "locked" : a.count + kids(a.id).reduce((n, k) => n + k.count, 0)}</small>
                     )}
-                  </button>
+                  </Segment>
                 ))}
-              </div>
+              </SegmentedControl>
             ) : null}
             {subs.length && view === "photos" ? (
-              <div className="gx-subs" role="toolbar" aria-label={`In ${parent?.name}`}>
-                <button
-                  type="button"
-                  aria-pressed={album === parent?.id}
-                  onClick={() => parent && pickAlbum(parent.id)}
-                >
-                  All of {parent?.name}
-                </button>
+              <SegmentedControl
+                className="gx-albums"
+                aria-label={`In ${parent?.name}`}
+                value={album}
+                onValueChange={pickAlbum}
+              >
+                <Segment value={parent?.id ?? ""}>All of {parent?.name}</Segment>
                 {subs.map((sb) => (
-                  <button key={sb.id} type="button" aria-pressed={album === sb.id} onClick={() => pickAlbum(sb.id)}>
-                    {sb.locked ? "🔒 " : ""}
-                    {sb.name} {sty.hideAlbumCount ? null : <small>{sb.closed ? "locked" : sb.count}</small>}
-                  </button>
+                  <Segment key={sb.id} value={sb.id}>
+                    {sb.locked ? <LockIcon size={14} /> : null} {sb.name}{" "}
+                    {sty.hideAlbumCount ? null : <small>{sb.closed ? "locked" : sb.count}</small>}
+                  </Segment>
                 ))}
-              </div>
+              </SegmentedControl>
             ) : null}
             {photosRoot ? (
               <AlbumCards data={data} items={items} onPick={pickAlbum} onAll={() => setAlbum("all-photos")} />
@@ -516,83 +596,88 @@ function GalleryView({ data }: { data: Data }) {
             {showGrid ? (
               <>
                 {current?.description ? <p className="gx-album-note">{current.description}</p> : null}
-                <ul className="gx-photos" aria-label="Photographs">
-                  {shown.map((i, n) => (
-                    <li
-                      key={i.mediaId}
-                      data-media-id={i.mediaId}
-                      data-wide={data.layout === "mosaic" && n % 7 === 0 ? "" : undefined}
-                      style={{ "--ar": i.width / Math.max(1, i.height) } as React.CSSProperties}
-                    >
-                      <button
-                        type="button"
-                        className="gx-open"
-                        onClick={() => setOpen(n)}
-                        aria-label={`Open ${i.filename}`}
-                        style={crop ? undefined : { aspectRatio: `${i.width} / ${i.height}` }}
+                {shown.length ? (
+                  <ul className="gx-photos" aria-label="Photographs">
+                    {shown.map((i, n) => (
+                      <li
+                        key={i.mediaId}
+                        data-media-id={i.mediaId}
+                        data-wide={data.layout === "mosaic" && n % 7 === 0 ? "" : undefined}
+                        style={{ "--ar": i.width / Math.max(1, i.height) } as React.CSSProperties}
                       >
-                        {crop ? (
-                          <ProtectedImage
-                            asset={asset(i)}
-                            alt={i.filename}
-                            sizes="(min-width: 900px) 30vw, 50vw"
-                            fill
-                            fit="cover"
-                          />
-                        ) : (
-                          <ProtectedImage asset={asset(i)} alt={i.filename} sizes="(min-width: 900px) 30vw, 50vw" />
-                        )}
-                      </button>
-                      {sty.showFilenames ? <small className="gx-cap">{i.filename}</small> : null}
-                      <div className="gx-tile">
-                        {client ? (
-                          <button
-                            type="button"
-                            className="gx-ico"
-                            aria-pressed={i.favourite}
-                            aria-label={`${i.favourite ? "Remove" : "Add"} ${i.filename} ${i.favourite ? "from" : "to"} favourites`}
-                            disabled={sent}
-                            onClick={() => void fav(i)}
-                          >
-                            {i.favourite ? "♥" : "♡"}
-                          </button>
+                        <button
+                          type="button"
+                          className="gx-open"
+                          onClick={() => setOpen(n)}
+                          aria-label={`Open ${i.filename}`}
+                          style={crop ? undefined : { aspectRatio: `${i.width} / ${i.height}` }}
+                        >
+                          {crop ? (
+                            <ProtectedImage
+                              asset={asset(i)}
+                              alt={i.filename}
+                              sizes="(min-width: 900px) 30vw, 50vw"
+                              fill
+                              fit="cover"
+                            />
+                          ) : (
+                            <ProtectedImage asset={asset(i)} alt={i.filename} sizes="(min-width: 900px) 30vw, 50vw" />
+                          )}
+                        </button>
+                        {sty.showFilenames ? <small className="gx-cap">{i.filename}</small> : null}
+                        {client || shopOn ? (
+                          <div className="gx-tile">
+                            {client ? (
+                              <IconButton
+                                variant="secondary"
+                                className="gx-fav gx-round"
+                                aria-pressed={i.favourite}
+                                aria-label={`${i.favourite ? "Remove" : "Add"} ${i.filename} ${i.favourite ? "from" : "to"} favourites`}
+                                disabled={sent}
+                                onClick={() => void fav(i)}
+                              >
+                                <LikeIcon liked={i.favourite} />
+                              </IconButton>
+                            ) : null}
+                            {shopOn ? (
+                              <Button
+                                variant="secondary"
+                                size="sm"
+                                shape="pill"
+                                aria-label={`Buy ${i.filename}`}
+                                onClick={() => setOpen(n)}
+                              >
+                                Buy
+                              </Button>
+                            ) : null}
+                          </div>
                         ) : null}
-                        {shopOn ? (
-                          <button
-                            type="button"
-                            className="gx-ico gx-ico--buy"
-                            aria-label={`Buy ${i.filename}`}
-                            onClick={() => setOpen(n)}
-                          >
-                            Buy
-                          </button>
-                        ) : null}
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-                {!shown.length ? (
-                  <p className="gx-empty">
-                    {view === "favourites" ? "Tap the heart on a photograph to keep it here." : "Nothing here yet."}
-                  </p>
-                ) : null}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <EmptyState>
+                    {view === "favourites"
+                      ? "No favourites yet. Tap the heart on a photograph to keep it here."
+                      : "No photographs here yet."}
+                  </EmptyState>
+                )}
               </>
             ) : null}
             {client && !photosRoot ? (
               <section className="gx-select" aria-label="Your selection">
                 <p role="status">
-                  {chosen} favourite{chosen === 1 ? "" : "s"} chosen{data.limit ? ` of ${data.limit}` : ""}.
-                  {sent ? " Your selection was sent." : ""}
+                  {sent
+                    ? `Your selection of ${plural(chosen, "photograph")} was sent.`
+                    : `${plural(chosen, "favourite")} chosen${data.limit ? ` of ${data.limit}` : ""}.`}
                 </p>
+                {data.limit && !sent ? (
+                  <Progress value={chosen} max={data.limit} size="sm" aria-label="Favourites chosen" />
+                ) : null}
                 {!sent ? (
-                  <button
-                    type="button"
-                    className="gx-btn gx-btn--solid"
-                    disabled={!chosen}
-                    onClick={() => void submitSelection()}
-                  >
+                  <Button disabled={!chosen} onClick={() => setConfirmSend(true)}>
                     Send my selection
-                  </button>
+                  </Button>
                 ) : null}
               </section>
             ) : null}
@@ -601,20 +686,23 @@ function GalleryView({ data }: { data: Data }) {
       </main>
 
       <footer className="gx-foot">
-        {sty.footer ? <p>{sty.footer}</p> : null}
-        <p>
-          <a href="/terms">Terms of Use</a> · <a href="/privacy">Privacy Policy</a>
+        {sty.footer ? <p>{sty.footer}</p> : <span />}
+        <nav aria-label="Gallery information">
+          <Button asChild variant="ghost" size="sm">
+            <a href="/terms">Terms of Use</a>
+          </Button>
+          <Button asChild variant="ghost" size="sm">
+            <a href="/privacy">Privacy Policy</a>
+          </Button>
           {sty.introMessage ? (
-            <>
-              {" "}
-              ·{" "}
-              <button type="button" className="gx-link" onClick={() => setRulesOpen(true)}>
-                {sty.introHeadline || "Rules"}
-              </button>
-            </>
+            <Button variant="ghost" size="sm" onClick={() => setRulesOpen(true)}>
+              {sty.introHeadline || "Rules"}
+            </Button>
           ) : null}
-        </p>
+        </nav>
       </footer>
+
+      {dialogOpen ? null : <Notice msg={msg} onDone={clearMsg} />}
 
       {open !== null && shown[open] ? (
         <Lightbox
@@ -625,10 +713,15 @@ function GalleryView({ data }: { data: Data }) {
           start={open}
           sent={sent}
           cart={cart}
-          onClose={() => setOpen(null)}
+          msg={msg}
+          onClose={() => {
+            setOpen(null);
+            setMsg(null);
+          }}
           onAdd={addToCart}
           onOpenCart={() => {
             setOpen(null);
+            setMsg(null);
             setCartOpen(true);
           }}
           fav={fav}
@@ -645,6 +738,10 @@ function GalleryView({ data }: { data: Data }) {
           subtotal={subtotal}
           printQty={printQty}
           onClose={() => setCartOpen(false)}
+          onBrowse={() => {
+            setCartOpen(false);
+            goPhotos();
+          }}
           onChange={(productId, mediaId, qty) =>
             setCart((c) =>
               qty <= 0
@@ -657,16 +754,39 @@ function GalleryView({ data }: { data: Data }) {
           onDone={() => setCart([])}
         />
       ) : null}
-      {dlOpen ? <Downloads data={data} client={client} onClose={() => setDlOpen(false)} say={say} /> : null}
+      {dlOpen ? (
+        <Downloads
+          data={data}
+          client={client}
+          msg={msg}
+          onClose={() => {
+            setDlOpen(false);
+            setMsg(null);
+          }}
+          say={say}
+        />
+      ) : null}
       {rulesOpen ? (
-        <Sheet title={sty.introHeadline || "Rules"} onClose={() => setRulesOpen(false)}>
+        <Modal title={sty.introHeadline || "Rules"} onClose={() => setRulesOpen(false)}>
           <RichText text={sty.introMessage} />
-          <p style={{ marginTop: "1.2rem" }}>
-            <button type="button" className="gx-btn gx-btn--solid" onClick={() => setRulesOpen(false)}>
-              Continue
-            </button>
-          </p>
-        </Sheet>
+          <DialogFooter>
+            <Button onClick={() => setRulesOpen(false)}>Continue</Button>
+          </DialogFooter>
+        </Modal>
+      ) : null}
+      {confirmSend ? (
+        <Modal title="Send your selection?" onClose={() => setConfirmSend(false)} size="sm">
+          <DialogDescription>
+            {plural(chosen, "favourite")} will go to {data.brand.name || "your photographer"}. After sending you can't
+            change them unless they reopen your selection.
+          </DialogDescription>
+          <DialogFooter>
+            <Button variant="secondary" onClick={() => setConfirmSend(false)}>
+              Keep choosing
+            </Button>
+            <Button onClick={() => void submitSelection()}>Send selection</Button>
+          </DialogFooter>
+        </Modal>
       ) : null}
       {signIn && data.slug ? (
         <SignIn
@@ -694,32 +814,75 @@ function GalleryView({ data }: { data: Data }) {
   );
 }
 
+/** A Holominimal dialog that is open while it is mounted. */
+function Modal({
+  title,
+  onClose,
+  children,
+  size = "md",
+}: { title: string; onClose: () => void; children: ReactNode; size?: "sm" | "md" | "lg" }) {
+  return (
+    <Dialog open onOpenChange={(o) => !o && onClose()}>
+      <DialogContent size={size}>
+        <div className="gx-dialog-head">
+          <DialogTitle>{title}</DialogTitle>
+          <IconButton variant="ghost" aria-label="Close" onClick={onClose}>
+            <CloseIcon />
+          </IconButton>
+        </div>
+        <div className="gx-dialog-body">{children}</div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 function About({ data }: { data: Data }) {
   const b = data.brand;
+  const ig = b.instagram?.replace(/^@/, "");
+  const rows: [string, ReactNode][] = [];
+  if (b.website)
+    rows.push([
+      "Website",
+      <a key="w" href={`https://${b.website.replace(/^https?:\/\//, "")}`}>
+        {b.website}
+      </a>,
+    ]);
+  if (ig)
+    rows.push([
+      "Instagram",
+      <a key="i" href={`https://www.instagram.com/${ig}`}>
+        @{ig}
+      </a>,
+    ]);
+  if (b.email)
+    rows.push([
+      "Email",
+      <a key="e" href={`mailto:${b.email}`}>
+        {b.email}
+      </a>,
+    ]);
+  if (b.phone)
+    rows.push([
+      "Phone",
+      <a key="p" href={`tel:${b.phone.replace(/[^\d+]/g, "")}`}>
+        {b.phone}
+      </a>,
+    ]);
+  if (b.address) rows.push(["Studio", b.address]);
   return (
-    <section className="gx-about" aria-labelledby="gx-about-h">
+    <section className="gx-page" aria-labelledby="gx-about-h">
       <h1 id="gx-about-h">{b.name}</h1>
       {data.style.aboutText ? <RichText text={data.style.aboutText} /> : null}
-      <ul>
-        {b.website ? (
-          <li>
-            Website: <a href={`https://${b.website.replace(/^https?:\/\//, "")}`}>{b.website}</a>
-          </li>
-        ) : null}
-        {b.instagram ? (
-          <li>
-            Instagram:{" "}
-            <a href={`https://www.instagram.com/${b.instagram.replace(/^@/, "")}`}>@{b.instagram.replace(/^@/, "")}</a>
-          </li>
-        ) : null}
-        {b.email ? (
-          <li>
-            Email: <a href={`mailto:${b.email}`}>{b.email}</a>
-          </li>
-        ) : null}
-        {b.phone ? <li>Phone: {b.phone}</li> : null}
-        {b.address ? <li>{b.address}</li> : null}
-      </ul>
+      {rows.length ? (
+        <dl className="gx-contact">
+          {rows.map(([k, v]) => (
+            <div key={k} style={{ display: "contents" }}>
+              <dt>{k}</dt>
+              <dd>{v}</dd>
+            </div>
+          ))}
+        </dl>
+      ) : null}
     </section>
   );
 }
@@ -727,72 +890,33 @@ function About({ data }: { data: Data }) {
 function SignIn({ slug, onClose, onDone }: { slug: string; onClose: () => void; onDone: () => void }) {
   const [code, setCode] = useState("");
   const [err, setErr] = useState("");
+  const [busy, setBusy] = useState(false);
   return (
-    <Sheet title="Client sign-in" onClose={onClose}>
-      <p className="gx-fine">
+    <Modal title="Client sign-in" onClose={onClose} size="sm">
+      <DialogDescription>
         If this is your gallery, enter the passcode you were given. It lets you pick favorites, rate, comment and
         download what is yours.
-      </p>
+      </DialogDescription>
       <form
-        className="gx-form"
         onSubmit={async (e) => {
           e.preventDefault();
+          setBusy(true);
           const r = await enterGalleryAction({ slug, passcode: code });
+          setBusy(false);
           if (r.ok) onDone();
           else setErr(r.error);
         }}
       >
-        <label>
-          Passcode
-          <input value={code} onChange={(e) => setCode(e.target.value)} autoComplete="off" />
-        </label>
-        {err ? (
-          <p role="alert" className="gx-msg">
-            {err}
-          </p>
-        ) : null}
-        <button type="submit" className="gx-btn gx-btn--solid">
-          Sign in
-        </button>
+        <Field label="Passcode" error={err || undefined}>
+          <Input value={code} onChange={(e) => setCode(e.target.value)} autoComplete="off" required />
+        </Field>
+        <DialogFooter>
+          <Button type="submit" loading={busy}>
+            Sign in
+          </Button>
+        </DialogFooter>
       </form>
-    </Sheet>
-  );
-}
-
-/** A native dialog with a title, a close button and the page behind it inert. */
-function Sheet({
-  title,
-  onClose,
-  children,
-  wide,
-  side,
-}: { title: string; onClose: () => void; children: React.ReactNode; wide?: boolean; side?: boolean }) {
-  const ref = useRef<HTMLDialogElement>(null);
-  useEffect(() => {
-    ref.current?.showModal();
-    return () => ref.current?.close();
-  }, []);
-  return (
-    // biome-ignore lint/a11y/useKeyWithClickEvents: clicking the backdrop is a mouse shortcut; Escape and the Close button close it for the keyboard
-    <dialog
-      ref={ref}
-      className="gx-sheet"
-      data-wide={wide || undefined}
-      data-side={side || undefined}
-      aria-label={title}
-      onClose={onClose}
-      onClick={(e) => {
-        if (e.target === ref.current) onClose();
-      }}
-    >
-      <div className="gx-sheet__bar">
-        <h2>{title}</h2>
-        <button type="button" className="gx-tool" onClick={onClose}>
-          Close
-        </button>
-      </div>
-      <div className="gx-sheet__body">{children}</div>
-    </dialog>
+    </Modal>
   );
 }
 
@@ -808,34 +932,38 @@ function AlbumCards({
       ? null
       : (items.find((i) => i.mediaId === a.coverMediaId) ?? items.find((i) => i.albumId === a.id) ?? null);
   return (
-    <ul className="gx-cards" aria-label="Albums">
-      <li>
-        <button type="button" className="gx-card" onClick={onAll}>
-          <span className="gx-card__img">
-            {items[0] ? <ProtectedImage asset={asset(items[0])} alt="" fill fit="cover" /> : null}
-          </span>
-          <span className="gx-card__label">
-            All photos <small>{items.length}</small>
-          </span>
-        </button>
-      </li>
-      {top.map((a) => {
+    <GalleryGrid aria-label="Albums" className="gx-cards">
+      <GalleryItem index={0}>
+        <GalleryCard asChild>
+          <button type="button" onClick={onAll}>
+            <GalleryCover ratio="4 / 5">
+              {items[0] ? <ProtectedImage asset={asset(items[0])} alt="" fill fit="cover" /> : undefined}
+            </GalleryCover>
+            <GalleryTitle>
+              All photos <GalleryMeta>{items.length}</GalleryMeta>
+            </GalleryTitle>
+          </button>
+        </GalleryCard>
+      </GalleryItem>
+      {top.map((a, n) => {
         const c = cover(a);
         return (
-          <li key={a.id}>
-            <button type="button" className="gx-card" onClick={() => onPick(a.id)} data-locked={a.closed || undefined}>
-              <span className="gx-card__img">
-                {c ? <ProtectedImage asset={asset(c)} alt="" fill fit="cover" /> : <span className="gx-lock">🔒</span>}
-              </span>
-              <span className="gx-card__label">
-                {a.name} <small>{a.closed ? "locked" : a.count}</small>
-              </span>
-              {a.description ? <span className="gx-card__desc">{a.description}</span> : null}
-            </button>
-          </li>
+          <GalleryItem key={a.id} index={n + 1}>
+            <GalleryCard asChild>
+              <button type="button" onClick={() => onPick(a.id)} data-locked={a.closed || undefined}>
+                <GalleryCover ratio="4 / 5" empty={<LockIcon size="lg" title="Locked" />}>
+                  {c ? <ProtectedImage asset={asset(c)} alt="" fill fit="cover" /> : undefined}
+                </GalleryCover>
+                <GalleryTitle>
+                  {a.name} <GalleryMeta>{a.closed ? "locked" : a.count}</GalleryMeta>
+                </GalleryTitle>
+                {a.description ? <GalleryMeta>{a.description}</GalleryMeta> : null}
+              </button>
+            </GalleryCard>
+          </GalleryItem>
         );
       })}
-    </ul>
+    </GalleryGrid>
   );
 }
 
@@ -852,39 +980,48 @@ function ShopView({
     ["Albums", ["album"]],
   ];
   const sell = (k: string) => (DIGITAL.includes(k) ? data.shop.sellDigital : data.shop.sellPrints);
+  const any = data.shop.products.some((p) => sell(p.kind));
   return (
-    <section className="gx-shop" aria-labelledby="gx-shop-h">
-      <h2 id="gx-shop-h">Shop</h2>
-      <p className="gx-shop__lede">Pick a photograph, then choose a size or a download. {data.shop.note}</p>
-      <button type="button" className="gx-btn gx-btn--solid" onClick={onBrowse}>
-        Choose photographs
-      </button>
+    <section className="gx-page" aria-labelledby="gx-shop-h">
+      <div>
+        <h1 id="gx-shop-h">Store</h1>
+        <p className="gx-lede">Open a photograph and choose a print size or a download. {data.shop.note}</p>
+      </div>
+      <div>
+        <Button size="lg" onClick={onBrowse}>
+          Choose photographs
+        </Button>
+      </div>
+      {any ? null : <EmptyState>Nothing is for sale here yet.</EmptyState>}
       {groups.map(([name, kinds]) => {
         const list = data.shop.products.filter((p) => kinds.includes(p.kind) && sell(p.kind));
         if (!list.length) return null;
         return (
-          <div key={name} className="gx-shop__group">
-            <h3>{name}</h3>
-            <ul>
+          <section key={name} aria-label={name}>
+            <h2>{name}</h2>
+            <DataList>
               {list.map((p) => (
-                <li key={p.id}>
-                  <span>
-                    <strong>{p.name}</strong>
-                    {p.description ? <small>{p.description}</small> : null}
-                  </span>
-                  <em>
-                    {usd(p.priceCents)}
-                    {p.sample ? <b className="gx-sample">SAMPLE</b> : null}
-                  </em>
-                  {p.kind === "digital-all" ? (
-                    <button type="button" className="gx-btn" onClick={() => onAdd(p.id, null)}>
-                      Add whole gallery
-                    </button>
-                  ) : null}
-                </li>
+                <DataListItem
+                  key={p.id}
+                  description={p.description || undefined}
+                  meta={
+                    <span className="gx-price">
+                      {usd(p.priceCents)} {p.sample ? <Badge tone="warning">SAMPLE</Badge> : null}
+                    </span>
+                  }
+                  actions={
+                    p.kind === "digital-all" ? (
+                      <Button variant="secondary" size="sm" onClick={() => onAdd(p.id, null)}>
+                        Add whole gallery
+                      </Button>
+                    ) : undefined
+                  }
+                >
+                  {p.name}
+                </DataListItem>
               ))}
-            </ul>
-          </div>
+            </DataList>
+          </section>
         );
       })}
     </section>
@@ -899,6 +1036,7 @@ function Lightbox({
   start,
   sent,
   cart,
+  msg,
   onClose,
   onAdd,
   onOpenCart,
@@ -915,21 +1053,22 @@ function Lightbox({
   start: number;
   sent: boolean;
   cart: Line[];
+  msg: Msg;
   onClose: () => void;
   onAdd: (productId: string, mediaId: string | null) => void;
   onOpenCart: () => void;
   fav: (i: Item) => Promise<void>;
-  rate: (i: Item, n: number) => Promise<void>;
+  rate: (i: Item, n: number | null) => Promise<void>;
   decide: (i: Item, d: "approved" | "rejected") => Promise<void>;
-  say: (ok: boolean, text: string) => void;
+  say: Say;
   setItems: React.Dispatch<React.SetStateAction<Item[]>>;
 }) {
   const ref = useRef<HTMLDialogElement>(null);
   const [i, setI] = useState(start);
   const [play, setPlay] = useState(false);
-  const [panel, setPanel] = useState<"buy" | "proof" | null>(
-    shopOn || (!client && data.rules.length) ? "buy" : client ? "proof" : null,
-  );
+  const buyTab = shopOn || (!client && data.rules.length > 0);
+  const [panel, setPanel] = useState<"buy" | "proof">(buyTab ? "buy" : "proof");
+  const hasPanel = buyTab || client;
   const [draft, setDraft] = useState("");
   useEffect(() => {
     ref.current?.showModal();
@@ -942,7 +1081,8 @@ function Lightbox({
   }, [play, items.length]);
   useEffect(() => {
     const k = (e: KeyboardEvent) => {
-      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+      const t = e.target as HTMLElement | null;
+      if (t?.closest("input, textarea, [role=radiogroup], [role=tablist]")) return;
       if (e.key === "ArrowRight") setI((x) => (x + 1) % items.length);
       if (e.key === "ArrowLeft") setI((x) => (x - 1 + items.length) % items.length);
     };
@@ -956,6 +1096,7 @@ function Lightbox({
     (p) => p.kind !== "digital-all" && (DIGITAL.includes(p.kind) ? data.shop.sellDigital : data.shop.sellPrints),
   );
   const inCart = (productId: string) => cart.some((l) => l.productId === productId && l.mediaId === it.mediaId);
+  const cartCount = cart.reduce((n, l) => n + l.qty, 0);
   async function send() {
     const r = await commentAction({ galleryId: data.galleryId, mediaId: it.mediaId, body: draft });
     if (r.ok) {
@@ -965,198 +1106,225 @@ function Lightbox({
     } else say(false, r.error);
   }
   const web = data.downloads.web && data.downloads.unlocked;
+  const dl = (size: string) =>
+    `/client/download?${data.galleryId ? `g=${data.galleryId}&` : ""}m=${it.mediaId}&size=${size}`;
+  const prev = () => setI((x) => (x - 1 + items.length) % items.length);
+  const next = () => setI((x) => (x + 1) % items.length);
   return (
-    <dialog ref={ref} className="gx-lb" aria-label="Photograph" onClose={onClose}>
+    <dialog ref={ref} className="gx-lb hm-theme" data-hm-scheme="dark" aria-label="Photograph" onClose={onClose}>
       <div className="gx-lb__bar">
-        <span aria-live="polite">
+        <span className="gx-lb__count" aria-live="polite">
           {i + 1} / {items.length}
+          <span className="gx-lb__name">{it.filename}</span>
         </span>
         <div>
-          <button type="button" className="gx-tool" aria-pressed={play} onClick={() => setPlay((p) => !p)}>
-            {play ? "Pause" : "Play"}
-          </button>
-          <button type="button" className="gx-tool" onClick={onClose}>
-            Close
-          </button>
+          {items.length > 1 ? (
+            <Button variant="secondary" size="sm" aria-pressed={play} onClick={() => setPlay((p) => !p)}>
+              <PlayPauseIcon playing={play} /> {play ? "Pause" : "Play"}
+            </Button>
+          ) : null}
+          <Button variant="secondary" size="sm" onClick={onClose}>
+            <CloseIcon /> Close
+          </Button>
         </div>
       </div>
-      <div className="gx-lb__stage" data-panel={panel ? "" : undefined}>
-        <button
-          type="button"
-          className="gx-lb__nav"
-          aria-label="Previous photograph"
-          onClick={() => setI((x) => (x - 1 + items.length) % items.length)}
-        >
-          ←
-        </button>
-        <div className="gx-lb__photo">
-          <ProtectedImage key={it.mediaId} asset={asset(it)} alt={it.filename} fit="contain" priority />
+      <div className="gx-lb__body" data-panel={hasPanel ? "" : undefined}>
+        <div className="gx-lb__stage">
+          {items.length > 1 ? (
+            <IconButton
+              variant="secondary"
+              size="lg"
+              className="gx-round"
+              aria-label="Previous photograph"
+              onClick={prev}
+            >
+              <ChevronLeftIcon />
+            </IconButton>
+          ) : (
+            <span />
+          )}
+          <div className="gx-lb__photo">
+            <ProtectedImage key={it.mediaId} asset={asset(it)} alt={it.filename} fit="contain" priority />
+          </div>
+          {items.length > 1 ? (
+            <IconButton variant="secondary" size="lg" className="gx-round" aria-label="Next photograph" onClick={next}>
+              <ChevronRightIcon />
+            </IconButton>
+          ) : (
+            <span />
+          )}
         </div>
-        <button
-          type="button"
-          className="gx-lb__nav"
-          aria-label="Next photograph"
-          onClick={() => setI((x) => (x + 1) % items.length)}
-        >
-          →
-        </button>
-        {panel ? (
+        {hasPanel ? (
           <aside className="gx-lb__panel" aria-label="Photograph options">
-            <div className="gx-lb__tabs" role="tablist">
-              {shopOn || (!client && data.rules.length) ? (
-                <button type="button" role="tab" aria-selected={panel === "buy"} onClick={() => setPanel("buy")}>
-                  {shopOn ? "Buy" : "Download"}
-                </button>
+            <Notice msg={msg} inline />
+            <Tabs value={panel} onValueChange={(v) => setPanel(v as "buy" | "proof")}>
+              {buyTab && client ? (
+                <TabList aria-label="Options" variant="pill">
+                  <Tab value="buy">{shopOn ? "Buy" : "Download"}</Tab>
+                  <Tab value="proof">Proof</Tab>
+                </TabList>
+              ) : null}
+              {buyTab ? (
+                <TabPanel value="buy">
+                  {shopOn && options.length ? (
+                    <DataList>
+                      {options.map((p) => {
+                        const ok = fits(p, it);
+                        return (
+                          <DataListItem
+                            key={p.id}
+                            description={!ok ? "Too small for this size" : undefined}
+                            meta={
+                              <span className="gx-price">
+                                {usd(p.priceCents)} {p.sample ? <Badge tone="warning">SAMPLE</Badge> : null}
+                              </span>
+                            }
+                            actions={
+                              <Button
+                                variant="secondary"
+                                size="sm"
+                                disabled={!ok || (inCart(p.id) && DIGITAL.includes(p.kind))}
+                                onClick={() => onAdd(p.id, it.mediaId)}
+                              >
+                                {inCart(p.id) ? (DIGITAL.includes(p.kind) ? "In cart" : "Add another") : "Add"}
+                              </Button>
+                            }
+                          >
+                            {p.name}
+                          </DataListItem>
+                        );
+                      })}
+                    </DataList>
+                  ) : shopOn ? (
+                    <EmptyState>Nothing is for sale here yet.</EmptyState>
+                  ) : null}
+                  {shopOn && cart.length ? (
+                    <Button onClick={onOpenCart}>
+                      <ShoppingBagIcon /> Open cart ({cartCount})
+                    </Button>
+                  ) : null}
+                  {!client && freeRules.length ? (
+                    <section aria-label="Free downloads" className="gx-rule">
+                      <h3 className="gx-fine">Free downloads</h3>
+                      {freeRules.map((r) => (
+                        <PhotoRule key={r.id} rule={r} mediaId={it.mediaId} data={data} />
+                      ))}
+                    </section>
+                  ) : web && !client ? (
+                    <Button asChild variant="secondary">
+                      <a href={dl("web")} download>
+                        <DownloadIcon /> Free web-size copy
+                      </a>
+                    </Button>
+                  ) : null}
+                </TabPanel>
               ) : null}
               {client ? (
-                <button type="button" role="tab" aria-selected={panel === "proof"} onClick={() => setPanel("proof")}>
-                  Proof
-                </button>
+                <TabPanel value="proof">
+                  <div className="gx-proof-row">
+                    <Button
+                      variant={it.favourite ? "primary" : "secondary"}
+                      aria-pressed={it.favourite}
+                      disabled={sent}
+                      onClick={() => void fav(it)}
+                      aria-label={`${it.favourite ? "Remove" : "Add"} ${it.filename} ${it.favourite ? "from" : "to"} favourites`}
+                    >
+                      <LikeIcon liked={it.favourite} /> Favourite
+                    </Button>
+                  </div>
+                  {data.allowRatings ? (
+                    <div className="gx-proof-row">
+                      <Rating
+                        aria-label={`Rate ${it.filename}`}
+                        value={it.rating ?? 0}
+                        onValueChange={(n) => void rate(it, n)}
+                      />
+                      {it.rating ? (
+                        <Button variant="ghost" size="sm" onClick={() => void rate(it, null)}>
+                          Clear rating
+                        </Button>
+                      ) : null}
+                    </div>
+                  ) : null}
+                  <div className="gx-proof-row" role="group" aria-label="Approval">
+                    <Button
+                      variant={it.decision === "approved" ? "primary" : "secondary"}
+                      size="sm"
+                      aria-pressed={it.decision === "approved"}
+                      disabled={sent}
+                      onClick={() => void decide(it, "approved")}
+                      aria-label={`Approve ${it.filename}`}
+                    >
+                      Approve
+                    </Button>
+                    <Button
+                      variant={it.decision === "rejected" ? "primary" : "secondary"}
+                      size="sm"
+                      aria-pressed={it.decision === "rejected"}
+                      disabled={sent}
+                      onClick={() => void decide(it, "rejected")}
+                      aria-label={`Not for me: ${it.filename}`}
+                    >
+                      Not this
+                    </Button>
+                  </div>
+                  {data.allowComments ? (
+                    <form
+                      className="gx-form"
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        void send();
+                      }}
+                    >
+                      {it.comments.length ? (
+                        <ul className="gx-comments" aria-label="Comments">
+                          {it.comments.map((c, k) => (
+                            <li key={`${c.at}-${k}`}>
+                              <small>
+                                {c.author === "client" ? "You" : "Photographer"} · {c.at}
+                              </small>
+                              <span>{c.body}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : null}
+                      <Field label="Your comment">
+                        <Textarea
+                          value={draft}
+                          onChange={(e) => setDraft(e.target.value)}
+                          maxLength={1000}
+                          rows={2}
+                          autoGrow
+                        />
+                      </Field>
+                      <div>
+                        <Button type="submit" variant="secondary" size="sm" disabled={!draft.trim()}>
+                          Add comment
+                        </Button>
+                      </div>
+                    </form>
+                  ) : null}
+                  {(data.downloads.full && data.downloads.unlocked) || web ? (
+                    <div className="gx-proof-row">
+                      {data.downloads.full && data.downloads.unlocked ? (
+                        <Button asChild variant="secondary" size="sm">
+                          <a href={dl("full")} download>
+                            <DownloadIcon /> Full size
+                          </a>
+                        </Button>
+                      ) : null}
+                      {web ? (
+                        <Button asChild variant="secondary" size="sm">
+                          <a href={dl("web")} download>
+                            <DownloadIcon /> Web size
+                          </a>
+                        </Button>
+                      ) : null}
+                    </div>
+                  ) : null}
+                </TabPanel>
               ) : null}
-            </div>
-            {panel === "buy" ? (
-              <div className="gx-buy">
-                <p className="gx-buy__file">{it.filename}</p>
-                {shopOn && options.length ? (
-                  <ul>
-                    {options.map((p) => {
-                      const ok = fits(p, it);
-                      return (
-                        <li key={p.id}>
-                          <span>
-                            {p.name}
-                            {p.sample ? <b className="gx-sample">SAMPLE</b> : null}
-                            {!ok ? <small>Too small for this size</small> : null}
-                          </span>
-                          <em>{usd(p.priceCents)}</em>
-                          <button
-                            type="button"
-                            className="gx-btn"
-                            disabled={!ok}
-                            onClick={() => onAdd(p.id, it.mediaId)}
-                          >
-                            {inCart(p.id) ? (DIGITAL.includes(p.kind) ? "In cart" : "Add another") : "Add"}
-                          </button>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                ) : shopOn ? (
-                  <p>Nothing is for sale here yet.</p>
-                ) : null}
-                {shopOn && cart.length ? (
-                  <button type="button" className="gx-btn gx-btn--solid" onClick={onOpenCart}>
-                    Open cart ({cart.reduce((n, l) => n + l.qty, 0)})
-                  </button>
-                ) : null}
-                {!client && freeRules.length ? (
-                  <div className="gx-free">
-                    <h3>Free downloads</h3>
-                    <ul>
-                      {freeRules.map((r) => (
-                        <PhotoRule key={r.id} rule={r} mediaId={it.mediaId} data={data} say={say} />
-                      ))}
-                    </ul>
-                  </div>
-                ) : web ? (
-                  <a
-                    className="gx-btn"
-                    href={`/client/download?${data.galleryId ? `g=${data.galleryId}&` : ""}m=${it.mediaId}&size=web`}
-                    download
-                  >
-                    Free web-size copy
-                  </a>
-                ) : null}
-              </div>
-            ) : null}
-            {panel === "proof" && client ? (
-              <div className="gx-proof">
-                <button
-                  type="button"
-                  className="gx-btn"
-                  aria-pressed={it.favourite}
-                  disabled={sent}
-                  onClick={() => void fav(it)}
-                  aria-label={`${it.favourite ? "Remove" : "Add"} ${it.filename} ${it.favourite ? "from" : "to"} favourites`}
-                >
-                  {it.favourite ? "♥ Favourite" : "♡ Favourite"}
-                </button>
-                {data.allowRatings ? (
-                  <span role="group" aria-label={`Rate ${it.filename}`} className="gx-stars">
-                    {[1, 2, 3, 4, 5].map((s) => (
-                      <button
-                        key={s}
-                        type="button"
-                        aria-pressed={(it.rating ?? 0) >= s}
-                        aria-label={`${s} star${s > 1 ? "s" : ""} for ${it.filename}`}
-                        onClick={() => void rate(it, s)}
-                      >
-                        {(it.rating ?? 0) >= s ? "★" : "☆"}
-                      </button>
-                    ))}
-                  </span>
-                ) : null}
-                <div className="gx-proof__row">
-                  <button
-                    type="button"
-                    className="gx-btn"
-                    aria-pressed={it.decision === "approved"}
-                    disabled={sent}
-                    onClick={() => void decide(it, "approved")}
-                    aria-label={`Approve ${it.filename}`}
-                  >
-                    Approve
-                  </button>
-                  <button
-                    type="button"
-                    className="gx-btn"
-                    aria-pressed={it.decision === "rejected"}
-                    disabled={sent}
-                    onClick={() => void decide(it, "rejected")}
-                    aria-label={`Not for me: ${it.filename}`}
-                  >
-                    Not this
-                  </button>
-                </div>
-                {data.allowComments ? (
-                  <div className="gx-comments">
-                    <ul>
-                      {it.comments.map((c, k) => (
-                        <li key={`${c.at}-${k}`}>
-                          <strong>{c.author === "client" ? "You" : "Photographer"}</strong> <small>{c.at}</small>
-                          <span>{c.body}</span>
-                        </li>
-                      ))}
-                    </ul>
-                    <label>
-                      Your comment
-                      <input value={draft} onChange={(e) => setDraft(e.target.value)} maxLength={1000} />
-                    </label>
-                    <button type="button" className="gx-btn" onClick={() => void send()} disabled={!draft.trim()}>
-                      Add comment
-                    </button>
-                  </div>
-                ) : null}
-                {data.downloads.full && data.downloads.unlocked ? (
-                  <a
-                    className="gx-btn"
-                    href={`/client/download?${data.galleryId ? `g=${data.galleryId}&` : ""}m=${it.mediaId}&size=full`}
-                    download
-                  >
-                    Full size
-                  </a>
-                ) : null}
-                {web ? (
-                  <a
-                    className="gx-btn"
-                    href={`/client/download?${data.galleryId ? `g=${data.galleryId}&` : ""}m=${it.mediaId}&size=web`}
-                    download
-                  >
-                    Web size
-                  </a>
-                ) : null}
-              </div>
-            ) : null}
+            </Tabs>
           </aside>
         ) : null}
       </div>
@@ -1164,12 +1332,15 @@ function Lightbox({
   );
 }
 
+const COUNTRY: Record<string, string> = { US: "United States", CA: "Canada", MX: "Mexico" };
+
 function Cart({
   data,
   lines,
   subtotal,
   printQty,
   onClose,
+  onBrowse,
   onChange,
   onDone,
 }: {
@@ -1178,6 +1349,7 @@ function Cart({
   subtotal: number;
   printQty: number;
   onClose: () => void;
+  onBrowse: () => void;
   onChange: (productId: string, mediaId: string | null, qty: number) => void;
   onDone: () => void;
 }) {
@@ -1195,6 +1367,7 @@ function Cart({
   const [busy, setBusy] = useState(false);
   const set = (k: keyof typeof f) => (e: { target: { value: string } }) => setF((x) => ({ ...x, [k]: e.target.value }));
   const ship = shipping(printQty);
+  const short = data.shop.minOrderCents > 0 && subtotal < data.shop.minOrderCents;
   async function go() {
     setErr("");
     setBusy(true);
@@ -1214,221 +1387,245 @@ function Cart({
           }
         : null,
     });
-    setBusy(false);
     if (r.ok) {
       onDone();
       location.assign(r.url);
-    } else setErr(r.error);
+    } else {
+      setBusy(false);
+      setErr(r.error);
+    }
   }
   return (
-    <Sheet title="Your cart" onClose={onClose} side>
-      {lines.length ? (
-        <>
-          <ul className="gx-cart">
-            {lines.map((l) => (
-              <li key={`${l.productId}-${l.mediaId}`}>
-                <span>
-                  {l.product?.name}
-                  <small>{l.mediaId ? (l.item?.filename ?? "photograph") : "Whole gallery"}</small>
-                </span>
-                <em>{usd((l.product?.priceCents ?? 0) * l.qty)}</em>
-                <span className="gx-qty">
-                  {DIGITAL.includes(l.product?.kind ?? "") ? null : (
-                    <>
-                      <button
-                        type="button"
-                        aria-label="One fewer"
-                        onClick={() => onChange(l.productId, l.mediaId, l.qty - 1)}
-                      >
-                        −
-                      </button>
-                      <b>{l.qty}</b>
-                      <button
-                        type="button"
-                        aria-label="One more"
-                        onClick={() => onChange(l.productId, l.mediaId, l.qty + 1)}
-                      >
-                        +
-                      </button>
-                    </>
-                  )}
-                  <button type="button" className="gx-link" onClick={() => onChange(l.productId, l.mediaId, 0)}>
-                    Remove
-                  </button>
-                </span>
-              </li>
-            ))}
-          </ul>
-          <dl className="gx-sum">
-            <div>
-              <dt>Subtotal</dt>
-              <dd>{usd(subtotal)}</dd>
-            </div>
-            {ship ? (
-              <div>
-                <dt>Shipping (SAMPLE rate)</dt>
-                <dd>{usd(ship)}</dd>
-              </div>
-            ) : null}
-            <div className="gx-sum__total">
-              <dt>Total</dt>
-              <dd>{usd(subtotal + ship)}</dd>
-            </div>
-          </dl>
-          <form
-            className="gx-form"
-            onSubmit={(e) => {
-              e.preventDefault();
-              void go();
-            }}
-          >
-            <label>
-              Your name
-              <input value={f.name} onChange={set("name")} autoComplete="name" required />
-            </label>
-            <label>
-              Email (your receipt and downloads go here)
-              <input type="email" value={f.email} onChange={set("email")} autoComplete="email" required />
-            </label>
-            {printQty ? (
-              <fieldset>
-                <legend>Ship prints to</legend>
-                <label>
-                  Address
-                  <input value={f.line1} onChange={set("line1")} autoComplete="address-line1" required />
-                </label>
-                <label>
-                  Apartment, suite (optional)
-                  <input value={f.line2} onChange={set("line2")} autoComplete="address-line2" />
-                </label>
-                <div className="gx-form__row">
-                  <label>
-                    City
-                    <input value={f.city} onChange={set("city")} autoComplete="address-level2" required />
-                  </label>
-                  <label>
-                    State
-                    <input value={f.region} onChange={set("region")} autoComplete="address-level1" required />
-                  </label>
-                  <label>
-                    ZIP
-                    <input value={f.postalCode} onChange={set("postalCode")} autoComplete="postal-code" required />
-                  </label>
+    <Drawer open onOpenChange={(o) => !o && onClose()}>
+      <DrawerContent side="right">
+        <div className="gx-dialog-head">
+          <DrawerTitle>Your cart</DrawerTitle>
+          <IconButton variant="ghost" aria-label="Close" onClick={onClose}>
+            <CloseIcon />
+          </IconButton>
+        </div>
+        <div className="gx-dialog-body">
+          {lines.length ? (
+            <>
+              <DataList aria-label="In your cart">
+                {lines.map((l) => (
+                  <DataListItem
+                    key={`${l.productId}-${l.mediaId}`}
+                    description={l.mediaId ? (l.item?.filename ?? "photograph") : "Whole gallery"}
+                    meta={<span className="gx-price">{usd((l.product?.priceCents ?? 0) * l.qty)}</span>}
+                    actions={
+                      <>
+                        {DIGITAL.includes(l.product?.kind ?? "") ? null : (
+                          <NumberInput
+                            className="gx-qty"
+                            aria-label={`Quantity of ${l.product?.name}`}
+                            value={l.qty}
+                            min={1}
+                            max={50}
+                            onValueChange={(n) => n && onChange(l.productId, l.mediaId, n)}
+                          />
+                        )}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          aria-label={`Remove ${l.product?.name}`}
+                          onClick={() => onChange(l.productId, l.mediaId, 0)}
+                        >
+                          Remove
+                        </Button>
+                      </>
+                    }
+                  >
+                    {l.product?.name}
+                  </DataListItem>
+                ))}
+              </DataList>
+              <dl className="gx-sum">
+                <div>
+                  <dt>Subtotal</dt>
+                  <dd>{usd(subtotal)}</dd>
                 </div>
-                <label>
-                  Country
-                  <select value={f.country} onChange={set("country")}>
-                    {data.shop.shipCountries.map((c) => (
-                      <option key={c} value={c}>
-                        {c === "US" ? "United States" : c === "CA" ? "Canada" : "Mexico"}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-              </fieldset>
-            ) : null}
-            {err ? (
-              <p role="alert" className="gx-msg">
-                {err}
-              </p>
-            ) : null}
-            {data.shop.minOrderCents && subtotal < data.shop.minOrderCents ? (
-              <p role="status" className="gx-msg">
-                The smallest order here is {usd(data.shop.minOrderCents)}. Add {usd(data.shop.minOrderCents - subtotal)}{" "}
-                more to continue.
-              </p>
-            ) : null}
-            {data.shop.checkoutMessage ? <p className="gx-fine">{data.shop.checkoutMessage}</p> : null}
-            <button
-              type="submit"
-              className="gx-btn gx-btn--solid"
-              disabled={busy || (data.shop.minOrderCents > 0 && subtotal < data.shop.minOrderCents)}
-            >
-              {busy ? "One moment…" : "Continue to payment"}
-            </button>
-            <p className="gx-fine">You pay on the next page. Prints are only ordered once your payment is confirmed.</p>
-          </form>
-        </>
-      ) : (
-        <p>Your cart is empty. Open a photograph and choose a size or a download.</p>
-      )}
-    </Sheet>
+                {ship ? (
+                  <div>
+                    <dt>Shipping (SAMPLE rate)</dt>
+                    <dd>{usd(ship)}</dd>
+                  </div>
+                ) : null}
+                <div className="gx-sum__total">
+                  <dt>Total</dt>
+                  <dd>{usd(subtotal + ship)}</dd>
+                </div>
+              </dl>
+              <form
+                className="gx-form"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  void go();
+                }}
+              >
+                <Field label="Your name">
+                  <Input value={f.name} onChange={set("name")} autoComplete="name" required />
+                </Field>
+                <Field label="Email" hint="Your receipt and downloads go here.">
+                  <Input type="email" value={f.email} onChange={set("email")} autoComplete="email" required />
+                </Field>
+                {printQty ? (
+                  <fieldset>
+                    <legend>Ship prints to</legend>
+                    <Field label="Address">
+                      <Input value={f.line1} onChange={set("line1")} autoComplete="address-line1" required />
+                    </Field>
+                    <Field label="Apartment, suite (optional)">
+                      <Input value={f.line2} onChange={set("line2")} autoComplete="address-line2" />
+                    </Field>
+                    <div className="gx-row3">
+                      <Field label="City">
+                        <Input value={f.city} onChange={set("city")} autoComplete="address-level2" required />
+                      </Field>
+                      <Field label="State">
+                        <Input value={f.region} onChange={set("region")} autoComplete="address-level1" required />
+                      </Field>
+                      <Field label="ZIP">
+                        <Input value={f.postalCode} onChange={set("postalCode")} autoComplete="postal-code" required />
+                      </Field>
+                    </div>
+                    {data.shop.shipCountries.length > 1 ? (
+                      <Field label="Country">
+                        <Select
+                          value={f.country}
+                          onValueChange={(v) => setF((x) => ({ ...x, country: v }))}
+                          options={data.shop.shipCountries.map((c) => ({ value: c, label: COUNTRY[c] ?? c }))}
+                        />
+                      </Field>
+                    ) : null}
+                  </fieldset>
+                ) : null}
+                {err ? (
+                  <Alert tone="danger" role="alert">
+                    {err}
+                  </Alert>
+                ) : null}
+                {short ? (
+                  <Alert tone="warning" role="status">
+                    The smallest order here is {usd(data.shop.minOrderCents)}. Add{" "}
+                    {usd(data.shop.minOrderCents - subtotal)} more to continue.
+                  </Alert>
+                ) : null}
+                {data.shop.checkoutMessage ? <p className="gx-fine">{data.shop.checkoutMessage}</p> : null}
+                <Button type="submit" size="lg" loading={busy} disabled={busy || short}>
+                  Continue to payment
+                </Button>
+                <p className="gx-fine">
+                  You pay on the next page. Prints are only ordered once your payment is confirmed.
+                </p>
+              </form>
+            </>
+          ) : (
+            <>
+              <EmptyState>Your cart is empty. Open a photograph and choose a size or a download.</EmptyState>
+              <Button variant="secondary" onClick={onBrowse}>
+                Browse photographs
+              </Button>
+            </>
+          )}
+        </div>
+      </DrawerContent>
+    </Drawer>
   );
 }
 
 function Downloads({
   data,
   client,
+  msg,
   onClose,
   say,
-}: { data: Data; client: boolean; onClose: () => void; say: (ok: boolean, t: string) => void }) {
+}: { data: Data; client: boolean; msg: Msg; onClose: () => void; say: Say }) {
   const router = useRouter();
   const [pin, setPin] = useState("");
+  const [pinErr, setPinErr] = useState("");
+  const [busy, setBusy] = useState(false);
   const [unlocked, setUnlocked] = useState(data.downloads.unlocked);
   const dl = (q: string) => `/client/download?${data.galleryId ? `g=${data.galleryId}&` : ""}${q}`;
   async function unlock() {
+    setBusy(true);
+    setPinErr("");
     const r = await unlockDownloadsAction({ galleryId: data.galleryId, pin });
+    setBusy(false);
     if (r.ok) {
       setUnlocked(true);
       say(true, r.message ?? "Unlocked.");
-    } else say(false, r.error);
+    } else setPinErr(r.error);
   }
-  if (!client && data.rules.length)
+  if (!client && data.rules.length) {
+    const all = data.rules.filter((r) => r.showAll);
     return (
-      <Sheet title="Download all" onClose={onClose}>
-        <ul className="gx-dl">
-          {data.rules
-            .filter((r) => r.showAll)
-            .map((r) => (
-              <RuleRow key={r.id} rule={r} data={data} dl={dl} onUnlocked={() => router.refresh()} say={say} />
-            ))}
-        </ul>
-        {data.rules.every((r) => !r.showAll) ? <p>Open a photograph to download it.</p> : null}
-      </Sheet>
+      <Modal title="Download all" onClose={onClose}>
+        <Notice msg={msg} inline />
+        {all.map((r) => (
+          <RuleRow key={r.id} rule={r} data={data} dl={dl} onUnlocked={() => router.refresh()} />
+        ))}
+        {all.length ? null : <EmptyState>Open a photograph to download it.</EmptyState>}
+      </Modal>
     );
+  }
+  const zip = (size: "web" | "full", parts: number, label: string) =>
+    Array.from({ length: parts }, (_, k) => (
+      <DataListItem
+        key={`${size}${k}`}
+        actions={
+          <Button asChild variant="secondary" size="sm">
+            <a href={dl(`zip=1&size=${size}&part=${k + 1}`)} download>
+              <DownloadIcon /> Download ZIP
+            </a>
+          </Button>
+        }
+        description={parts > 1 ? `Part ${k + 1} of ${parts}` : undefined}
+      >
+        {label}
+      </DataListItem>
+    ));
   return (
-    <Sheet title="Downloads" onClose={onClose}>
+    <Modal title="Downloads" onClose={onClose}>
+      <Notice msg={msg} inline />
       {data.downloads.pin && !unlocked ? (
-        <div className="gx-form">
-          <label>
-            Download PIN
-            <input inputMode="numeric" value={pin} onChange={(e) => setPin(e.target.value)} autoComplete="off" />
-          </label>
-          <button type="button" className="gx-btn gx-btn--solid" onClick={() => void unlock()}>
-            Unlock downloads
-          </button>
-        </div>
+        <form
+          className="gx-form"
+          onSubmit={(e) => {
+            e.preventDefault();
+            void unlock();
+          }}
+        >
+          <DialogDescription>Enter the download PIN your photographer gave you.</DialogDescription>
+          <Field label="Download PIN" error={pinErr || undefined}>
+            <Input inputMode="numeric" value={pin} onChange={(e) => setPin(e.target.value)} autoComplete="off" />
+          </Field>
+          <DialogFooter>
+            <Button type="submit" loading={busy}>
+              Unlock downloads
+            </Button>
+          </DialogFooter>
+        </form>
       ) : (
-        <ul className="gx-dl">
-          {data.downloads.web
-            ? Array.from({ length: data.downloads.webParts }, (_, k) => (
-                <li key={`w${k}`}>
-                  <span>
-                    All photographs, web size
-                    {data.downloads.webParts > 1 ? ` (part ${k + 1} of ${data.downloads.webParts})` : ""}
-                  </span>
-                  <a className="gx-btn" href={dl(`zip=1&size=web&part=${k + 1}`)} download>
-                    Download ZIP
-                  </a>
-                </li>
-              ))
-            : null}
+        <DataList>
+          {data.downloads.web ? zip("web", data.downloads.webParts, "All photographs, web size") : null}
           {client && data.downloads.full
-            ? Array.from({ length: data.downloads.fullParts }, (_, k) => (
-                <li key={`f${k}`}>
-                  <span>
-                    All photographs, full resolution
-                    {data.downloads.fullParts > 1 ? ` (part ${k + 1} of ${data.downloads.fullParts})` : ""}
-                  </span>
-                  <a className="gx-btn" href={dl(`zip=1&size=full&part=${k + 1}`)} download>
-                    Download ZIP
-                  </a>
-                </li>
-              ))
+            ? zip("full", data.downloads.fullParts, "All photographs, full resolution")
             : null}
-        </ul>
+        </DataList>
       )}
-    </Sheet>
+    </Modal>
+  );
+}
+
+/** A rule's licence, when it has one: read it, then tick to accept. */
+function Licence({ text, ok, onOk }: { text: string; ok: boolean; onOk: (v: boolean) => void }) {
+  return (
+    <details className="gx-fine">
+      <summary>Licence</summary>
+      <RichText text={text} />
+      <Checkbox label="I accept this licence" checked={ok} onChange={(e) => onOk(e.target.checked)} />
+    </details>
   );
 }
 
@@ -1438,15 +1635,14 @@ function RuleRow({
   data,
   dl,
   onUnlocked,
-  say,
 }: {
   rule: Data["rules"][number];
   data: Data;
   dl: (q: string) => string;
   onUnlocked: () => void;
-  say: (ok: boolean, t: string) => void;
 }) {
   const [pin, setPin] = useState("");
+  const [err, setErr] = useState("");
   const [open, setOpen] = useState(rule.unlocked);
   const [ok, setOk] = useState(!rule.printRelease);
   const covered = data.items.filter((i) =>
@@ -1454,129 +1650,126 @@ function RuleRow({
   ).length;
   const parts = Math.max(1, Math.ceil(covered / 150));
   return (
-    <li className="gx-rule">
-      <span>
+    <section className="gx-rule" aria-label={rule.name}>
+      <div>
         <strong>{rule.name}</strong>
-        <small>
+        <p className="gx-fine">
           {rule.maxPx ? `${rule.maxPx} px` : "Original size"}
           {rule.perVisitor ? ` · up to ${rule.perVisitor} per visit` : ""}
           {rule.watermarked ? " · watermarked" : ""}
-        </small>
-      </span>
+        </p>
+      </div>
       {!open ? (
-        <form
-          className="gx-form gx-form--inline"
-          onSubmit={async (e) => {
-            e.preventDefault();
-            const r = await unlockRuleAction({ galleryId: data.galleryId, ruleId: rule.id, pin });
+        <PinForm
+          onSubmit={async (p) => {
+            const r = await unlockRuleAction({ galleryId: data.galleryId, ruleId: rule.id, pin: p });
             if (r.ok) {
               setOpen(true);
               onUnlocked();
-            } else say(false, r.error);
+            } else setErr(r.error);
           }}
-        >
-          <label>
-            PIN
-            <input value={pin} onChange={(e) => setPin(e.target.value)} autoComplete="off" />
-          </label>
-          <button type="submit" className="gx-btn">
-            Unlock
-          </button>
-        </form>
+          pin={pin}
+          setPin={setPin}
+          err={err}
+        />
       ) : (
         <>
-          {rule.printRelease ? (
-            <details className="gx-release">
-              <summary>Licence</summary>
-              <RichText text={rule.printRelease} />
-              <label className="gx-check">
-                <input type="checkbox" checked={ok} onChange={(e) => setOk(e.target.checked)} /> I accept this licence
-              </label>
-            </details>
-          ) : null}
+          {rule.printRelease ? <Licence text={rule.printRelease} ok={ok} onOk={setOk} /> : null}
           <span className="gx-rule__links">
             {Array.from({ length: parts }, (_, k) =>
               ok ? (
-                <a key={`${rule.id}-${k}`} className="gx-btn" href={dl(`zip=1&rule=${rule.id}&part=${k + 1}`)} download>
-                  Download ZIP{parts > 1 ? ` (part ${k + 1} of ${parts})` : ""}
-                </a>
+                <Button asChild key={`${rule.id}-${k}`} variant="secondary" size="sm">
+                  <a href={dl(`zip=1&rule=${rule.id}&part=${k + 1}`)} download>
+                    <DownloadIcon /> Download ZIP{parts > 1 ? ` (part ${k + 1} of ${parts})` : ""}
+                  </a>
+                </Button>
               ) : (
-                <button key={`${rule.id}-${k}`} type="button" className="gx-btn" disabled>
+                <Button key={`${rule.id}-${k}`} variant="secondary" size="sm" disabled>
                   Accept the licence to download
-                </button>
+                </Button>
               ),
             )}
           </span>
         </>
       )}
-    </li>
+    </section>
+  );
+}
+
+function PinForm({
+  pin,
+  setPin,
+  err,
+  onSubmit,
+}: { pin: string; setPin: (v: string) => void; err: string; onSubmit: (pin: string) => Promise<void> }) {
+  const [busy, setBusy] = useState(false);
+  return (
+    <form
+      className="gx-inline"
+      onSubmit={async (e) => {
+        e.preventDefault();
+        setBusy(true);
+        await onSubmit(pin);
+        setBusy(false);
+      }}
+    >
+      <Field label="PIN" error={err || undefined}>
+        <Input value={pin} onChange={(e) => setPin(e.target.value)} autoComplete="off" />
+      </Field>
+      <Button type="submit" variant="secondary" loading={busy}>
+        Unlock
+      </Button>
+    </form>
   );
 }
 
 /** One rule for one photograph: unlock with its PIN, accept its licence, then download the resized copy. */
-function PhotoRule({
-  rule,
-  mediaId,
-  data,
-  say,
-}: { rule: Data["rules"][number]; mediaId: string; data: Data; say: (ok: boolean, t: string) => void }) {
+function PhotoRule({ rule, mediaId, data }: { rule: Data["rules"][number]; mediaId: string; data: Data }) {
   const router = useRouter();
   const [pin, setPin] = useState("");
+  const [err, setErr] = useState("");
   const [open, setOpen] = useState(rule.unlocked);
   const [ok, setOk] = useState(!rule.printRelease);
   const href = `/client/download?${data.galleryId ? `g=${data.galleryId}&` : ""}m=${mediaId}&rule=${rule.id}`;
   return (
-    <li className="gx-rule">
-      <span>
+    <div className="gx-rule">
+      <div>
         {rule.name}
-        <small>
+        <p className="gx-fine">
           {rule.maxPx ? `${rule.maxPx} px` : "original size"}
           {rule.watermarked ? ", watermarked" : ""}
-        </small>
-      </span>
+        </p>
+      </div>
       {!open ? (
-        <form
-          className="gx-form gx-form--inline"
-          onSubmit={async (e) => {
-            e.preventDefault();
-            const r = await unlockRuleAction({ galleryId: data.galleryId, ruleId: rule.id, pin });
+        <PinForm
+          pin={pin}
+          setPin={setPin}
+          err={err}
+          onSubmit={async (p) => {
+            const r = await unlockRuleAction({ galleryId: data.galleryId, ruleId: rule.id, pin: p });
             if (r.ok) {
               setOpen(true);
               router.refresh();
-            } else say(false, r.error);
+            } else setErr(r.error);
           }}
-        >
-          <label>
-            PIN
-            <input value={pin} onChange={(e) => setPin(e.target.value)} autoComplete="off" />
-          </label>
-          <button type="submit" className="gx-btn">
-            Unlock
-          </button>
-        </form>
+        />
       ) : (
         <>
-          {rule.printRelease ? (
-            <details className="gx-release">
-              <summary>Licence</summary>
-              <RichText text={rule.printRelease} />
-              <label className="gx-check">
-                <input type="checkbox" checked={ok} onChange={(e) => setOk(e.target.checked)} /> I accept this licence
-              </label>
-            </details>
-          ) : null}
+          {rule.printRelease ? <Licence text={rule.printRelease} ok={ok} onOk={setOk} /> : null}
           {ok ? (
-            <a className="gx-btn" href={href} download>
-              Download
-            </a>
+            <Button asChild variant="secondary" size="sm">
+              <a href={href} download>
+                <DownloadIcon /> Download
+              </a>
+            </Button>
           ) : (
-            <button type="button" className="gx-btn" disabled>
+            <Button variant="secondary" size="sm" disabled>
               Accept the licence first
-            </button>
+            </Button>
           )}
         </>
       )}
-    </li>
+    </div>
   );
 }
 
@@ -1588,31 +1781,31 @@ function UnlockAlbum({
 }: { galleryId?: string; album?: Data["albums"][number]; onClose: () => void; onOpened: (id: string) => void }) {
   const [code, setCode] = useState("");
   const [err, setErr] = useState("");
+  const [busy, setBusy] = useState(false);
   if (!album) return null;
   return (
-    <Sheet title={`${album.name} is locked`} onClose={onClose}>
+    <Modal title={`${album.name} is locked`} onClose={onClose} size="sm">
+      <DialogDescription>This album has its own passcode. Your photographer can give it to you.</DialogDescription>
       <form
         className="gx-form"
         onSubmit={async (e) => {
           e.preventDefault();
+          setBusy(true);
           const r = await unlockAlbumAction({ galleryId, albumId: album.id, passcode: code });
+          setBusy(false);
           if (r.ok) onOpened(album.id);
           else setErr(r.error);
         }}
       >
-        <label>
-          Album passcode
-          <input value={code} onChange={(e) => setCode(e.target.value)} autoComplete="off" />
-        </label>
-        {err ? (
-          <p role="alert" className="gx-msg">
-            {err}
-          </p>
-        ) : null}
-        <button type="submit" className="gx-btn gx-btn--solid">
-          Open album
-        </button>
+        <Field label="Album passcode" error={err || undefined}>
+          <Input value={code} onChange={(e) => setCode(e.target.value)} autoComplete="off" required />
+        </Field>
+        <DialogFooter>
+          <Button type="submit" loading={busy}>
+            Open album
+          </Button>
+        </DialogFooter>
       </form>
-    </Sheet>
+    </Modal>
   );
 }

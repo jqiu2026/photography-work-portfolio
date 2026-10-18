@@ -1,11 +1,10 @@
-import { Container, Section } from "@/components/ui";
+import { Container, ResultCard, Section } from "@/components/ui";
 import { getDb } from "@jerryqiu/db";
 import * as forms from "@jerryqiu/db/forms";
 import { notFound } from "next/navigation";
 import { QuestionnaireForm } from "@/components/QuestionnaireForm";
 import { Shell } from "@/components/Shell";
 import { resolveRef } from "@/lib/portal-links";
-import "@/components/studio/studio.css";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "A few questions", robots: { index: false, follow: false } };
@@ -20,14 +19,9 @@ export default async function QuestionnairePage({ params }: { params: Promise<{ 
   return (
     <Shell>
       <Section>
-        <Container size="md">
+        <Container size="sm">
           {q.completedAt ? (
-            <section className="st-card">
-              <h1 className="st-title">{q.title}</h1>
-              <p role="status" className="st-note">
-                Your answers were sent. Thank you.
-              </p>
-            </section>
+            <ResultCard eyebrow={q.title} title="Thank you" message="Your answers were sent." />
           ) : (
             <QuestionnaireForm token={token} title={q.title} fields={q.fields} />
           )}

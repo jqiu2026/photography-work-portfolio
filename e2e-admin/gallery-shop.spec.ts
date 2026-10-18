@@ -137,7 +137,7 @@ test("a visitor opens the link with no passcode: albums, a locked album that ope
 
   // a sub-album shows inside its parent
   await v.getByRole("button", { name: /^Ceremony/ }).click();
-  await expect(v.getByRole("toolbar", { name: "In Ceremony" })).toBeVisible();
+  await expect(v.getByRole("group", { name: "In Ceremony" })).toBeVisible();
   await expect(v.locator("li[data-media-id]")).toHaveCount(2); // ceremony + vows
   await v.getByRole("button", { name: /^Vows/ }).click();
   await expect(v.locator("li[data-media-id]")).toHaveCount(1);

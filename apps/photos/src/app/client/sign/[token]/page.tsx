@@ -1,4 +1,4 @@
-import { Container, Section } from "@/components/ui";
+import { Container, ResultCard, Section } from "@/components/ui";
 import { getDb } from "@jerryqiu/db";
 import * as st from "@jerryqiu/db/studio";
 import { notFound } from "next/navigation";
@@ -19,14 +19,9 @@ export default async function SignPage({ params }: { params: Promise<{ token: st
   return (
     <Shell>
       <Section>
-        <Container size="md">
+        <Container size="sm">
           {k.status === "signed" ? (
-            <section className="st-card">
-              <h1 className="st-title">Signed</h1>
-              <p className="st-note" role="status">
-                This contract was signed by {k.signerName}.
-              </p>
-            </section>
+            <ResultCard eyebrow={k.title} title="Signed" message={`This contract was signed by ${k.signerName}.`} />
           ) : (
             <SignForm token={token} body={k.body} title={k.title} minor={k.minor} subject={k.subject} />
           )}

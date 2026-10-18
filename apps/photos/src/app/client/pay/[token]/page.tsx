@@ -1,4 +1,4 @@
-import { Container, Section } from "@/components/ui";
+import { Button, Container, ResultCard, Section } from "@/components/ui";
 import { getDb } from "@jerryqiu/db";
 import * as st from "@jerryqiu/db/studio";
 import { MockBanner } from "@jerryqiu/sites/mock";
@@ -38,39 +38,36 @@ export default async function PayPage({
         <MockBanner what="Payments are a local mock (Stripe test-mode shape, no card is charged)" />
       ) : null}
       <Section>
-        <Container size="md">
-          <p className="st-note">
-            <a href={`/client/pay/${token}/pdf`}>Download the invoice (PDF)</a>
-          </p>
+        <Container size="sm">
           {inv.status === "paid" ? (
-            <section className="st-card">
-              <h1 className="st-title">Paid</h1>
-              <p className="st-note" role="status">
-                Invoice {inv.number} is paid. Thank you.
-              </p>
-              <p className="st-note">
-                <a href={`/client/pay/${token}/receipt`}>Download the receipt (PDF)</a>
-              </p>
-              {shopOrder ? (
-                <p className="st-note">
-                  <a href={`/g/order/${orderLink(shopOrder.id)}`}>Open your order and downloads</a>
-                </p>
-              ) : null}
-            </section>
+            <ResultCard
+              eyebrow={`Invoice ${inv.number}`}
+              title="Paid"
+              message={`Invoice ${inv.number} is paid. Thank you.`}
+            >
+              <div className="pm-result__links">
+                <Button asChild variant="secondary">
+                  <a href={`/client/pay/${token}/receipt`}>Download the receipt (PDF)</a>
+                </Button>
+                {shopOrder ? (
+                  <Button asChild>
+                    <a href={`/g/order/${orderLink(shopOrder.id)}`}>Open your order and downloads</a>
+                  </Button>
+                ) : null}
+              </div>
+            </ResultCard>
           ) : paid ? (
-            <section className="st-card">
-              <h1 className="st-title">Thank you</h1>
-              <p className="st-note" role="status">
-                Your payment is being confirmed. This page will show "Paid" shortly; you can close it.
-              </p>
-            </section>
+            <ResultCard
+              eyebrow={`Invoice ${inv.number}`}
+              title="Thank you"
+              message={'Your payment is being confirmed. This page will show "Paid" shortly; you can close it.'}
+            />
           ) : mode === "none" ? (
-            <section className="st-card">
-              <h1 className="st-title">Invoice {inv.number}</h1>
-              <p className="st-note">
-                {usd(inv.totalCents)}. Online payment is not set up yet. Please contact the photographer to pay.
-              </p>
-            </section>
+            <ResultCard
+              tone="neutral"
+              title={`Invoice ${inv.number}`}
+              message={`${usd(inv.totalCents)}. Online payment is not set up yet. Please contact the photographer to pay.`}
+            />
           ) : (
             <PayForm
               token={token}
@@ -83,6 +80,11 @@ export default async function PayPage({
               }}
             />
           )}
+          <p className="pm-foot-link">
+            <Button asChild variant="ghost" size="sm">
+              <a href={`/client/pay/${token}/pdf`}>Download the invoice (PDF)</a>
+            </Button>
+          </p>
         </Container>
       </Section>
     </Shell>

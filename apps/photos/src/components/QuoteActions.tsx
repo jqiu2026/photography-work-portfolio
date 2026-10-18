@@ -1,14 +1,24 @@
 "use client";
 
-import { Button, Field, Input } from "@/components/ui";
+import {
+  Button,
+  Checkbox,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogTitle,
+  NumberInput,
+} from "@holominimal/ui";
 import { useRouter } from "next/navigation";
 import { type ChangeEvent, useState, useTransition } from "react";
 import { acceptQuoteAction, declineQuoteAction, repriceQuoteAction } from "@/app/client/quote-actions";
+import { DataList, DataListItem, Field, FormMessage, Input } from "@/components/ui";
 
 export type Upsell = { id: string; name: string; price: string; unit: string; qty: number; max: number };
 const usd = (c: number) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(c / 100);
 
-/** Upsells (re-priced on the server), accept with a typed name, or decline. */
+/** Upsells (re-priced on the server), accept with a typed name, or decline (asked twice: it cannot be undone). */
 export function QuoteActions({
   token,
   upsells,
@@ -19,6 +29,7 @@ export function QuoteActions({
   const [pending, start] = useTransition();
   const [name, setName] = useState("");
   const [agree, setAgree] = useState(false);
+  const [declining, setDeclining] = useState(false);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const run = (fn: () => Promise<{ ok: boolean; message?: string; error?: string; payUrl?: string }>) =>
     start(async () => {
@@ -29,41 +40,41 @@ export function QuoteActions({
     });
   if (!open) return null;
   return (
-    <div style={{ display: "grid", gap: "1.5rem", marginTop: "2rem", maxWidth: "36rem" }}>
+    <div className="pm-quote-actions">
       {upsells.length ? (
-        <fieldset
-          style={{
-            border: "1px solid var(--hl-line)",
-            borderRadius: 12,
-            padding: "1rem",
-            display: "grid",
-            gap: "0.5rem",
-          }}
-        >
-          <legend>Add to your quote</legend>
-          {upsells.map((u) => (
-            <label key={u.id} style={{ display: "flex", alignItems: "center", gap: "0.75rem", minHeight: 44 }}>
-              <input
-                type="number"
-                min={0}
-                max={u.max}
-                value={u.qty}
-                aria-label={`${u.name} quantity`}
-                style={{ width: "4.5rem" }}
-                disabled={pending}
-                onChange={(e) => run(() => repriceQuoteAction(token, [{ id: u.id, qty: Number(e.target.value) }]))}
-              />
-              <span>
-                {u.name}{" "}
-                <small style={{ color: "var(--hl-muted)" }}>
-                  {u.price} {u.unit}
-                </small>
-              </span>
-            </label>
-          ))}
-        </fieldset>
+        <section aria-labelledby="q-add">
+          <h2 id="q-add" className="pm-subhead">
+            Add to your quote
+          </h2>
+          <DataList>
+            {upsells.map((u) => (
+              <DataListItem
+                key={u.id}
+                description={`${u.price} ${u.unit}`}
+                actions={
+                  <NumberInput
+                    aria-label={`${u.name} quantity`}
+                    value={u.qty}
+                    min={0}
+                    max={u.max}
+                    disabled={pending}
+                    onValueChange={(n) => run(() => repriceQuoteAction(token, [{ id: u.id, qty: n ?? 0 }]))}
+                  />
+                }
+              >
+                {u.name}
+              </DataListItem>
+            ))}
+          </DataList>
+        </section>
       ) : null}
-      <div style={{ display: "grid", gap: "0.75rem" }}>
+      <form
+        className="pm-stack"
+        onSubmit={(e) => {
+          e.preventDefault();
+          run(() => acceptQuoteAction(token, name, agree));
+        }}
+      >
         <Field label="Type your full name to accept">
           <Input
             value={name}
@@ -71,29 +82,41 @@ export function QuoteActions({
             autoComplete="name"
           />
         </Field>
-        <label style={{ display: "flex", gap: "0.6rem", alignItems: "flex-start" }}>
-          <input
-            type="checkbox"
-            checked={agree}
-            onChange={(e) => setAgree(e.target.checked)}
-            style={{ marginTop: "0.3rem" }}
-          />
-          <span>I have read this quote and its terms, and I accept it.</span>
-        </label>
-        <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
-          <Button type="button" disabled={pending} onClick={() => run(() => acceptQuoteAction(token, name, agree))}>
+        <Checkbox
+          label="I have read this quote and its terms, and I accept it."
+          checked={agree}
+          onChange={(e) => setAgree(e.target.checked)}
+        />
+        <div className="pm-row">
+          <Button type="submit" size="lg" loading={pending}>
             {depositCents > 0 ? `Accept and pay the ${usd(depositCents)} deposit` : "Accept"}
           </Button>
-          <Button type="button" variant="ghost" disabled={pending} onClick={() => run(() => declineQuoteAction(token))}>
+          <Button type="button" variant="ghost" disabled={pending} onClick={() => setDeclining(true)}>
             Decline
           </Button>
         </div>
-      </div>
-      {msg ? (
-        <p role={msg.ok ? "status" : "alert"} style={{ color: msg.ok ? undefined : "var(--hl-danger, #b00020)" }}>
-          {msg.text}
-        </p>
-      ) : null}
+        <FormMessage ok={msg?.ok}>{msg?.text}</FormMessage>
+      </form>
+      <Dialog open={declining} onOpenChange={setDeclining}>
+        <DialogContent size="sm">
+          <DialogTitle>Decline this quote?</DialogTitle>
+          <DialogDescription>The photographer is told, and the quote can no longer be accepted.</DialogDescription>
+          <DialogFooter>
+            <Button variant="secondary" onClick={() => setDeclining(false)}>
+              Keep it
+            </Button>
+            <Button
+              variant="danger"
+              onClick={() => {
+                setDeclining(false);
+                run(() => declineQuoteAction(token));
+              }}
+            >
+              Decline quote
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
