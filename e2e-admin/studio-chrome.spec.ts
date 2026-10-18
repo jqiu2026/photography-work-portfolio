@@ -28,23 +28,23 @@ test("the studio sidebar: selected entry is largest, the pointer magnifies the n
   expect(far).toBeLessThan(1);
 
   // move to an entry far from the selected one: it grows past its resting size, the selected one stays the largest
-  const target = nav.getByRole("link", { name: "Store", exact: true });
+  const target = nav.getByRole("link", { name: "Sales", exact: true });
   const box = (await target.boundingBox())!;
   await page.mouse.move(box.x + 30, box.y + box.height / 2, { steps: 6 });
-  await expect.poll(() => scaleOf(page, "Store")).toBeGreaterThan(1.3);
-  expect(await scaleOf(page, "Dashboard")).toBeGreaterThanOrEqual(await scaleOf(page, "Store"));
+  await expect.poll(() => scaleOf(page, "Sales")).toBeGreaterThan(1.3);
+  expect(await scaleOf(page, "Dashboard")).toBeGreaterThanOrEqual(await scaleOf(page, "Sales"));
 
   // leaving the sidebar area relaxes it again
   await page.mouse.move(900, 450, { steps: 4 });
-  await expect.poll(() => scaleOf(page, "Store")).toBeLessThan(1.1);
+  await expect.poll(() => scaleOf(page, "Sales")).toBeLessThan(1.1);
 
   // entries are real links
   await target.click();
   await expect(page).toHaveURL(/\/studio\/orders$/);
-  await expect(nav.getByRole("link", { name: "Store", exact: true })).toHaveAttribute("aria-current", "page");
+  await expect(nav.getByRole("link", { name: "Sales", exact: true })).toHaveAttribute("aria-current", "page");
   // the group's pages are quiet tabs on the page itself
-  const tabs = page.getByRole("navigation", { name: "Store pages" });
-  for (const t of ["Orders and prices", "Payments"]) await expect(tabs.getByRole("link", { name: t })).toBeVisible();
+  const tabs = page.getByRole("navigation", { name: "Sales pages" });
+  for (const t of ["Store", "Quotes", "Invoices", "Payments"]) await expect(tabs.getByRole("link", { name: t })).toBeVisible();
 });
 
 test("the dashboard shows real totals and every other section keeps its heading and the sidebar", async ({ page }) => {
@@ -53,7 +53,7 @@ test("the dashboard shows real totals and every other section keeps its heading 
     await expect(page.getByRole("heading", { name, exact: true })).toBeVisible();
   await expect(
     page.getByRole("navigation", { name: "Studio sections" }).locator("a[data-hm-dock-item], a.hm-dock-brand-link"),
-  ).toHaveCount(7); // brand + 6 groups (the open group also lists its pages)
+  ).toHaveCount(8); // brand + 7 groups (the open group's pages are tabs in the page header)
   for (const id of [
     "calendar",
     "packages",

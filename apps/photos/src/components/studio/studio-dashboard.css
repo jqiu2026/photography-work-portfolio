@@ -1,34 +1,55 @@
 /* The dashboard: holographic quick-start cards, stats, the revenue chart and two columns of lists. */
 .db-quick {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
   gap: var(--hm-space-3);
   margin-bottom: var(--hm-space-8);
 }
-.db-quick__card {
-  display: grid;
-  gap: var(--hm-space-1);
-  align-content: start;
-  min-height: 7.5rem;
+/* compact: a tinted icon, two lines of words, an arrow that nudges on hover */
+.db-quick .db-quick__card {
+  --db-tint: hsl(var(--db-hue) 85% 68%);
+  display: flex;
+  align-items: center;
+  gap: var(--hm-space-3);
+  min-height: 4.75rem;
+  padding: var(--hm-space-3) var(--hm-space-5) var(--hm-space-3) var(--hm-space-3);
   color: inherit;
   text-decoration: none;
 }
-.db-quick__card strong {
+.db-quick__icon {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--hm-radius-md);
+  background: color-mix(in srgb, var(--db-tint) 16%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--db-tint) 28%, transparent);
+  color: var(--db-tint);
+}
+.db-quick__text {
+  display: grid;
+  gap: 0.1rem;
+  min-width: 0;
+  flex: 1;
+}
+.db-quick__text strong {
+  display: flex;
+  align-items: center;
+  gap: var(--hm-space-2);
   font-weight: var(--hm-weight-medium);
 }
-.db-quick__card span:last-child {
+.db-quick__text > span {
   color: var(--hm-muted);
   font-size: var(--hm-text-sm);
 }
-.db-quick__icon {
-  display: inline-grid;
-  place-items: center;
-  width: 2.25rem;
-  height: 2.25rem;
-  margin-bottom: var(--hm-space-3);
-  border-radius: var(--hm-radius-md);
-  background: var(--hm-accent-soft);
-  color: var(--hm-accent);
+.db-quick__go {
+  flex: none;
+  color: var(--hm-muted);
+  transition: color var(--hm-dur-fast) var(--hm-ease-out);
+}
+.db-quick__card:hover .db-quick__go {
+  color: var(--hm-fg);
 }
 .db-quick__card:focus-visible {
   outline: var(--hm-focus-width) solid var(--hm-focus-color);
@@ -48,6 +69,9 @@
   margin-bottom: var(--hm-space-3);
 }
 .db-head h2 {
+  display: flex;
+  align-items: center;
+  gap: var(--hm-space-2);
   margin: 0;
   font-size: var(--hm-text-base);
   font-weight: var(--hm-weight-medium);
@@ -72,14 +96,19 @@
   min-height: 2.25rem;
 }
 @media (max-width: 520px) {
-  .db-quick__card {
-    min-height: 0;
+  .db-quick {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--hm-space-2);
   }
-  .db-quick__card span:last-child {
+  .db-quick .db-quick__card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--hm-space-2);
+    padding: var(--hm-space-3);
+  }
+  .db-quick__text > span,
+  .db-quick__go {
     display: none;
-  }
-  .db-quick__icon {
-    margin-bottom: var(--hm-space-2);
   }
 }
 .db-caption {
@@ -94,4 +123,74 @@
   overflow: hidden;
   clip-path: inset(50%);
   white-space: nowrap;
+}
+
+/* rows: an icon or a date chip, the words, then a badge on the right */
+.db-row {
+  display: flex;
+  align-items: center;
+  gap: var(--hm-space-3);
+  min-width: 0;
+}
+.db-row--top {
+  align-items: baseline;
+  gap: var(--hm-space-2);
+}
+.db-row > span:last-child {
+  min-width: 0;
+}
+.db-list .hm-data-list-item {
+  align-items: center;
+}
+.db-mark {
+  --db-tint: var(--hm-fg-soft);
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--hm-radius-md);
+  background: color-mix(in srgb, var(--db-tint) 14%, transparent);
+  color: var(--db-tint);
+}
+.db-mark svg {
+  width: 1rem;
+  height: 1rem;
+}
+.db-mark[data-tone="accent"] {
+  --db-tint: var(--hm-accent);
+}
+.db-mark[data-tone="warning"] {
+  --db-tint: var(--hm-warning);
+}
+.db-mark[data-tone="danger"] {
+  --db-tint: var(--hm-danger);
+}
+.db-mark[data-tone="info"] {
+  --db-tint: var(--hm-info, var(--hm-accent));
+}
+.db-date {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  padding: 0.3rem 0;
+  border: 1px solid var(--hm-line-strong);
+  border-radius: var(--hm-radius-md);
+  font-size: var(--hm-text-lg);
+  font-weight: var(--hm-weight-medium);
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+.db-date small {
+  color: var(--hm-accent);
+  font-size: var(--hm-text-2xs);
+  font-weight: var(--hm-weight-medium);
+  letter-spacing: var(--hm-tracking-eyebrow);
+  text-transform: uppercase;
+}
+/* the dates sit beside the title, so the description lines up under the words, not under the chip */
+.db-list .hm-data-list-item:has(.db-date) .hm-data-list-description {
+  padding-left: calc(2.75rem + var(--hm-space-3));
+  margin-top: -1.1rem;
 }

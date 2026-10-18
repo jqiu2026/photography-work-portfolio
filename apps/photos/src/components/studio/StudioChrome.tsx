@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { AppShell, Atmosphere, Dock, DockBrand, DockItem, DockSubItem, DockSubnav, LightField } from "@holominimal/ui";
+import { AppShell, Atmosphere, Dock, DockBrand, DockItem, LightField } from "@holominimal/ui";
 import { type ReactNode, ViewTransition } from "react";
 import { groupOf, studioGroups, studioSections } from "./sections";
 import { StudioPalette } from "./StudioPalette";
@@ -20,8 +20,8 @@ export function activeSection(pathname: string): string {
 }
 
 /**
- * Studio chrome on Holominimal: the atmosphere, the proximity dock (the current group is largest, its pages listed under
- * it), the jump palette top right, and a page column that fades between routes. Entries are real links.
+ * Studio chrome on Holominimal: the atmosphere, the proximity dock (the current group is largest; its pages are tabs
+ * in the page header), the jump palette top right, and a page column that fades between routes. Entries are real links.
  */
 export function StudioChrome({ children }: { children: ReactNode }) {
   const pathname = usePathname();
@@ -42,22 +42,7 @@ export function StudioChrome({ children }: { children: ReactNode }) {
             }
           >
             {studioGroups.map((g) => (
-              <DockItem
-                key={g.id}
-                asChild
-                current={g.id === active}
-                subnav={
-                  g.id === active && g.sections.length > 1 ? (
-                    <DockSubnav aria-label={`${g.label} pages`}>
-                      {g.sections.map((id) => (
-                        <DockSubItem key={id} asChild current={section === id}>
-                          <Link href={`/studio/${id}`}>{studioSections.find((x) => x.id === id)?.label}</Link>
-                        </DockSubItem>
-                      ))}
-                    </DockSubnav>
-                  ) : undefined
-                }
-              >
+              <DockItem key={g.id} asChild current={g.id === active}>
                 <Link href={`/studio/${g.sections[0]}`}>{g.label}</Link>
               </DockItem>
             ))}

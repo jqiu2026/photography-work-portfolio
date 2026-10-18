@@ -5,7 +5,7 @@ export const studioSections = [
   { id: "visitors", label: "Visitors" },
   { id: "music", label: "Music" },
   { id: "watermarks", label: "Watermarks" },
-  { id: "orders", label: "Orders and prices" },
+  { id: "orders", label: "Store" },
   { id: "billing", label: "Payments" },
   { id: "pipeline", label: "Pipeline" },
   { id: "calendar", label: "Calendar" },
@@ -22,36 +22,23 @@ export const studioSections = [
   { id: "reports", label: "Reports" },
   { id: "brand", label: "Brand" },
   { id: "users", label: "Users" },
-  { id: "plan", label: "Plan and billing" },
+  { id: "plan", label: "Plan" },
   { id: "automations", label: "Automations" },
 ] as const;
 
-/** The sidebar shows these few groups (the same shape as the tools photographers already know); each page shows its siblings as tabs. */
+/**
+ * The sidebar shows these groups (the same shape as the tools photographers already know); each page shows its
+ * siblings as tabs, never more than six. Configuration (brand, packages, forms, automations, users, plan) lives in
+ * Settings, look-back views (pipeline, activity) in Reports, and everything that bills in Sales.
+ */
 export const studioGroups = [
-  { id: "overview", label: "Dashboard", sections: ["overview", "activity"], hue: 210 },
-  { id: "galleries", label: "Galleries", sections: ["galleries", "visitors", "music", "watermarks"], hue: 330 },
-  { id: "store", label: "Store", sections: ["orders", "billing"], hue: 150 },
-  {
-    id: "studio",
-    label: "Studio",
-    sections: [
-      "clients",
-      "shoots",
-      "pipeline",
-      "calendar",
-      "bookings",
-      "quotes",
-      "packages",
-      "contracts",
-      "forms",
-      "invoices",
-      "inbox",
-      "tasks",
-    ],
-    hue: 265,
-  },
-  { id: "reports", label: "Reports", sections: ["reports"], hue: 38 },
-  { id: "settings", label: "Settings", sections: ["brand", "users", "plan", "automations"], hue: 190 },
+  { id: "overview", label: "Dashboard", sections: ["overview", "tasks"], hue: 210 },
+  { id: "galleries", label: "Galleries", sections: ["galleries", "visitors", "watermarks", "music"], hue: 330 },
+  { id: "clients", label: "Clients", sections: ["clients", "bookings", "contracts", "inbox"], hue: 265 },
+  { id: "calendar", label: "Calendar", sections: ["calendar", "shoots"], hue: 285 },
+  { id: "store", label: "Sales", sections: ["orders", "quotes", "invoices", "billing"], hue: 150 },
+  { id: "reports", label: "Reports", sections: ["reports", "pipeline", "activity"], hue: 38 },
+  { id: "settings", label: "Settings", sections: ["brand", "packages", "forms", "automations", "users", "plan"], hue: 190 },
 ] as const;
 
 export const sectionInfo: Record<string, string> = {
