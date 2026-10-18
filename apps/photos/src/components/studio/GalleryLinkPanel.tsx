@@ -1,5 +1,7 @@
 "use client";
 
+import { Button, Field, Input, Select, SettingsSection, Text } from "@holominimal/ui";
+
 import { useState } from "react";
 import { saveLinkAction, sendGalleryLinkAction } from "@/app/studio/gallery-actions";
 
@@ -36,59 +38,49 @@ export function GalleryLinkPanel({
   const [vis, setVis] = useState(link.visibility);
   const url = `${origin}/g/${slug}`;
   return (
-    <div className="gm-block">
-      <h2>Gallery link</h2>
-      <p className="st-note">
+    <SettingsSection title="Gallery link" className="gm-block">
+      <Text size="sm" tone="muted">
         This is the link to send. {live ? "The gallery is live." : "Publish the gallery before sending it."} Clients
         open it, and enter the passcode there if the gallery is private. There is no separate client login.
-      </p>
+      </Text>
       <div className="gm-row">
         <code>{url}</code>
-        <button type="button" className="st-btn st-btn--ghost" onClick={() => copy(url, "Link copied")}>
+        <Button variant="secondary" onClick={() => copy(url, "Link copied")}>
           Copy link
-        </button>
-        <a className="st-btn st-btn--ghost" href={url} target="_blank" rel="noreferrer">
-          Open
-        </a>
-        <button
-          type="button"
-          className="st-btn st-btn--ghost"
-          disabled={pending}
-          onClick={() => run(() => sendGalleryLinkAction(galleryId))}
-        >
+        </Button>
+        <Button asChild variant="secondary">
+          <a href={url} target="_blank" rel="noreferrer">
+            Open
+          </a>
+        </Button>
+        <Button variant="secondary" disabled={pending} onClick={() => run(() => sendGalleryLinkAction(galleryId))}>
           Email {clientName || "the client"}
-        </button>
+        </Button>
       </div>
-      {clientEmail ? <p className="st-note">Goes to {clientEmail}. The email has the link, not the passcode.</p> : null}
+      {clientEmail ? (
+        <Text size="sm" tone="muted">
+          Goes to {clientEmail}. The email has the link, not the passcode.
+        </Text>
+      ) : null}
       <div className="gm-fields">
-        <label>
-          Address
-          <span className="gm-colour">
-            <code>/g/</code>
-            <input aria-label="Gallery address" value={slug} onChange={(e) => setSlug(e.target.value)} />
-          </span>
-        </label>
-        <label>
-          Who can open the link
-          <select aria-label="Who can open the link" value={vis} onChange={(e) => setVis(e.target.value)}>
+        <Field label="Gallery address" hint={origin ? `${origin}/g/${slug || "…"}` : undefined}>
+          <Input value={slug} onChange={(e) => setSlug(e.target.value)} spellCheck={false} />
+        </Field>
+        <Field label="Who can open the link">
+          <Select aria-label="Who can open the link" value={vis} onValueChange={(v) => setVis(v)}>
             <option value="passcode">Private: the passcode is asked for</option>
             <option value="link">Anyone with the link (view and shop; the passcode adds proofing)</option>
-          </select>
-        </label>
-        <button
-          type="button"
-          className="st-btn"
-          disabled={pending}
-          onClick={() => run(() => saveLinkAction({ galleryId, slug, visibility: vis }))}
-        >
+          </Select>
+        </Field>
+        <Button disabled={pending} onClick={() => run(() => saveLinkAction({ galleryId, slug, visibility: vis }))}>
           Save link
-        </button>
+        </Button>
       </div>
       {copied ? (
-        <p className="st-note" role="status">
+        <Text size="sm" tone="muted" role="status">
           {copied}
-        </p>
+        </Text>
       ) : null}
-    </div>
+    </SettingsSection>
   );
 }

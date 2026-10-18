@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { choose } from "./ui";
 import sharp from "sharp";
 import { enterGallery, newGallery, publishOpenGallery, uploadPhotos } from "./gallery-helpers";
 
@@ -64,7 +65,7 @@ test("owner sets brand, a watermark, a track, rules and the branding of a galler
   await page.getByRole("button", { name: "Add client" }).click();
   await slow(page.getByRole("status")).toContainText("Client added");
   await page.goto(`${PHOTOS}/studio/shoots`, { waitUntil: "networkidle" });
-  await page.getByLabel("Client").selectOption({ label: `Set Client ${uid}` });
+  await choose(page.getByLabel("Client"), `Set Client ${uid}`);
   await page.getByLabel("Title").fill(`Set job ${uid}`);
   await page.getByRole("button", { name: "Add job" }).click();
   await slow(page.getByRole("listitem").filter({ hasText: `Set job ${uid}` })).toBeVisible();
@@ -80,7 +81,7 @@ test("owner sets brand, a watermark, a track, rules and the branding of a galler
   await page.getByRole("tab", { name: "Downloads" }).click();
   const rule = page.getByRole("form", { name: "Download rule" });
   await rule.getByLabel("Rule name (visitors see it)").fill("Free (720 px)");
-  await rule.getByLabel("Watermark").selectOption({ label: `Mark ${uid}` });
+  await choose(rule.getByLabel("Watermark"), `Mark ${uid}`);
   await rule.getByRole("button", { name: "Add rule" }).click();
   await slow(page.getByRole("status").filter({ hasText: "Download rule saved" })).toBeVisible();
   await rule.getByLabel("Rule name (visitors see it)").fill("High resolution (PIN)");
@@ -113,7 +114,10 @@ test("owner sets brand, a watermark, a track, rules and the branding of a galler
   await page.getByLabel("Ask visitors for their email address before they see the gallery").check();
   await page.getByRole("button", { name: "Save", exact: true }).first().click();
   await slow(page.getByRole("status").filter({ hasText: "Access settings saved" })).toBeVisible();
-  await page.getByLabel("Who can open the link").selectOption("link");
+  await choose(
+    page.getByLabel("Who can open the link"),
+    "Anyone with the link (view and shop; the passcode adds proofing)",
+  );
   await page.getByRole("button", { name: "Save link" }).click();
   await slow(page.getByRole("status").filter({ hasText: "Link saved" })).toBeVisible();
   await publishOpenGallery(page);
@@ -239,7 +243,7 @@ test("price sheets, reports, and the Free plan's limits (then back to Full Frame
   await page.getByRole("form", { name: "New price sheet" }).getByRole("button", { name: "Add sheet" }).click();
   await slow(page.getByRole("status").filter({ hasText: "Price sheet created" })).toBeVisible();
   await page.goto(`${url}#shop`, { waitUntil: "networkidle" });
-  await page.getByLabel("Price sheet").selectOption({ label: `Sheet ${uid}` });
+  await choose(page.getByLabel("Price sheet"), `Sheet ${uid}`);
   await page.getByLabel(/Smallest order/).fill("25");
   await page.getByRole("button", { name: "Save store settings" }).click();
   await slow(page.getByRole("status").filter({ hasText: "Store settings saved" })).toBeVisible();

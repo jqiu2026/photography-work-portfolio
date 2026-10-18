@@ -1,4 +1,5 @@
 import { expect, type Page, test } from "@playwright/test";
+import { choose } from "./ui";
 import sharp from "sharp";
 import { clientOpen, newGallery, publishOpenGallery, uploadPhotos } from "./gallery-helpers";
 
@@ -31,7 +32,7 @@ test("owner makes a gallery and sets its security and look", async ({ page }) =>
   await page.getByRole("button", { name: "Add client" }).click();
   await slow(page.getByRole("status")).toContainText("Client added");
   await page.goto(`${PHOTOS}/studio/shoots`, { waitUntil: "networkidle" });
-  await page.getByLabel("Client").selectOption({ label: `Sec Client ${uid}` });
+  await choose(page.getByLabel("Client"), `Sec Client ${uid}`);
   await page.getByLabel("Title").fill(`Sec job ${uid}`);
   await page.getByRole("button", { name: "Add job" }).click();
   await slow(page.getByRole("listitem").filter({ hasText: `Sec job ${uid}` })).toBeVisible();
@@ -47,9 +48,9 @@ test("owner makes a gallery and sets its security and look", async ({ page }) =>
 
   // look
   await page.getByRole("tab", { name: "Branding" }).click();
-  await page.getByLabel("Typeface").selectOption("serif");
-  await page.getByLabel("Spacing").selectOption("wide");
-  await page.getByLabel("Corners").selectOption("round");
+  await choose(page.getByLabel("Typeface"), "Serif (Georgia)");
+  await choose(page.getByLabel("Spacing"), "Wide");
+  await choose(page.getByLabel("Corners"), "Round");
   await page.getByLabel(/Line above the title/).fill(`Studio ${uid}`);
   await page.getByLabel(/Closing note/).fill(`Thanks, ${uid}`);
   await page.getByLabel("Background colour (hex, optional)").fill("red");
@@ -67,14 +68,17 @@ test("owner makes a gallery and sets its security and look", async ({ page }) =>
 
   // downloads allowed, capped at one a day
   await page.getByRole("tab", { name: "Downloads" }).click();
-  await page.getByLabel("What clients can download").selectOption("web");
+  await choose(page.getByLabel("What clients can download"), "Web size");
   await page.getByRole("button", { name: "Save", exact: true }).click();
   await slow(page.getByRole("status").filter({ hasText: "Download setting saved" })).toBeVisible();
 
   // security: lock after two attempts, overlay on, one download a day
   await page.getByRole("tab", { name: "Security" }).click();
   await expect(page.getByText(/cannot stop everything/)).toBeVisible();
-  await page.getByLabel("When a key or capture attempt is seen").selectOption("lock");
+  await choose(
+    page.getByLabel("When a key or capture attempt is seen"),
+    "Warn, then lock them out after repeated attempts",
+  );
   await page.getByLabel("Attempts before a lock").fill("2");
   await page.getByLabel("Lock for (minutes)").fill("10");
   await page.getByLabel(/Tile a faint viewer code/).check();
@@ -170,7 +174,7 @@ test("the studio sees the attempts and the lock, and can let the viewer back in"
 test("hold to view conceals photographs until the pointer is held; log-only never locks", async ({ page, browser }) => {
   await studioSetting(page, "Security");
   await page.getByLabel(/stay blurred until the viewer presses and holds/).check();
-  await page.getByLabel("When a key or capture attempt is seen").selectOption("log");
+  await choose(page.getByLabel("When a key or capture attempt is seen"), "Log it only (hide photographs briefly)");
   await page.getByRole("button", { name: "Save security" }).click();
   await slow(page.getByRole("status").filter({ hasText: "Security settings saved" })).toBeVisible();
 
@@ -194,7 +198,7 @@ test("hold to view conceals photographs until the pointer is held; log-only neve
 
 test("a gallery with protection off has no guard, no overlay and no events", async ({ page, browser }) => {
   await studioSetting(page, "Security");
-  await page.locator("#gm-security select").first().selectOption("off");
+  await choose(page.getByLabel("Level"), "Off");
   await page.getByLabel(/Tile a faint viewer code/).uncheck();
   await page.getByRole("button", { name: "Save security" }).click();
   await slow(page.getByRole("status").filter({ hasText: "Security settings saved" })).toBeVisible();

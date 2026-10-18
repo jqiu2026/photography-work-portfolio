@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { choose } from "./ui";
 import sharp from "sharp";
 import { enterGallery, newGallery, publishOpenGallery, uploadPhotos } from "./gallery-helpers";
 
@@ -44,7 +45,7 @@ test("owner builds a gallery with nested and locked albums, a public link and an
   await page.getByRole("button", { name: "Add client" }).click();
   await slow(page.getByRole("status")).toContainText("Client added");
   await page.goto(`${PHOTOS}/studio/shoots`, { waitUntil: "networkidle" });
-  await page.getByLabel("Client").selectOption({ label: `Shop Client ${uid}` });
+  await choose(page.getByLabel("Client"), `Shop Client ${uid}`);
   await page.getByLabel("Title").fill(`Shop job ${uid}`);
   await page.getByRole("button", { name: "Add job" }).click();
   await slow(page.getByRole("listitem").filter({ hasText: `Shop job ${uid}` })).toBeVisible();
@@ -59,11 +60,11 @@ test("owner builds a gallery with nested and locked albums, a public link and an
   await add.getByRole("button", { name: "Add album" }).click();
   await slow(page.getByRole("status").filter({ hasText: "Album added" })).toBeVisible();
   await add.getByLabel("Album name").fill("Vows");
-  await add.getByLabel("Inside").selectOption({ label: "Inside Ceremony" });
+  await choose(add.getByLabel("Inside"), "Inside Ceremony");
   await add.getByRole("button", { name: "Add album" }).click();
   await slow(page.getByRole("status").filter({ hasText: "Sub-album added" })).toBeVisible();
   await add.getByLabel("Album name").fill("Formals");
-  await add.getByLabel("Inside").selectOption({ label: "Top level" });
+  await choose(add.getByLabel("Inside"), "Top level");
   await add.getByRole("button", { name: "Add album" }).click();
   await slow(page.getByRole("status").filter({ hasText: "Album added" })).toBeVisible();
   await page.getByLabel("Passcode for Formals").fill("ab");
@@ -76,16 +77,16 @@ test("owner builds a gallery with nested and locked albums, a public link and an
   // the large one (fits a 4 x 6 print, not an 8 x 10), two small ones, and one with no album
   const big = await jpeg("#aa4433", 1403, 907);
   await page.getByRole("tab", { name: "Photos" }).click();
-  await page.getByLabel("Into album").selectOption({ label: "Vows" });
+  await choose(page.getByLabel("Into album"), "Vows");
   await uploadPhotos(page, [file("vows-big.jpg", big)], 1);
   await page.getByRole("button", { name: "Upload photographs" }).click();
-  await page.getByLabel("Into album").selectOption({ label: "Ceremony" });
+  await choose(page.getByLabel("Into album"), "Ceremony");
   await uploadPhotos(page, [file("ceremony-small.jpg", await jpeg("#33aa66", 805, 603))], 2);
   await page.getByRole("button", { name: "Upload photographs" }).click();
-  await page.getByLabel("Into album").selectOption({ label: "Formals" });
+  await choose(page.getByLabel("Into album"), "Formals");
   await uploadPhotos(page, [file("formals-small.jpg", await jpeg("#3344aa", 807, 601))], 3);
   await page.getByRole("button", { name: "Upload photographs" }).click();
-  await page.getByLabel("Into album").selectOption({ label: "No album" });
+  await choose(page.getByLabel("Into album"), "No album");
   await uploadPhotos(page, [file("loose-small.jpg", await jpeg("#aa33aa", 809, 599))], 4);
 
   // the price list: a real price replaces SAMPLE
@@ -102,7 +103,10 @@ test("owner builds a gallery with nested and locked albums, a public link and an
   // link and shop
   await page.goto(`${galleryUrl}#share`, { waitUntil: "networkidle" });
   await page.getByLabel("Gallery address").fill("studio");
-  await page.getByLabel("Who can open the link").selectOption("link");
+  await choose(
+    page.getByLabel("Who can open the link"),
+    "Anyone with the link (view and shop; the passcode adds proofing)",
+  );
   await page.getByRole("button", { name: "Save link" }).click();
   await slow(page.locator("p.st-error")).toContainText("address");
   await page.getByLabel("Gallery address").fill(slug);

@@ -1,5 +1,6 @@
 "use client";
 
+import { Button, FileDropzone, FileItem, Progress, RefreshIcon, Text } from "@holominimal/ui";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 
@@ -50,7 +51,6 @@ async function withRetry<T>(fn: () => Promise<T>, tries = 4): Promise<T> {
  */
 export function GalleryUploader({ galleryId, albumId }: { galleryId: string; albumId?: string }) {
   const router = useRouter();
-  const input = useRef<HTMLInputElement>(null);
   const [items, setItems] = useState<Item[]>([]);
   const [busy, setBusy] = useState(false);
   const seen = useRef(new Set<string>()); // hashes already sent (or being sent) in this page session
@@ -136,48 +136,51 @@ export function GalleryUploader({ galleryId, albumId }: { galleryId: string; alb
   const failed = items.filter((i) => i.state === "failed");
   const done = items.filter((i) => i.state === "done" || i.state === "duplicate").length;
   return (
-    <div
-      onDragOver={(e) => e.preventDefault()}
-      onDrop={(e) => {
-        e.preventDefault();
-        pick(e.dataTransfer.files);
-      }}
-      className="st-drop"
-    >
-      <label>
-        Upload photographs (JPEG, PNG, WebP, AVIF, GIF or TIFF, up to 60 MB each)
-        <input
-          ref={input}
-          type="file"
-          accept="image/*"
-          multiple
-          onChange={(e) => e.target.files && pick(e.target.files)}
-        />
-      </label>
+    <div className="st-drop">
+      <FileDropzone
+        onFiles={pick}
+        accept="image/*"
+        multiple
+        label="Drop photographs here, or choose files"
+        description="JPEG, PNG, WebP, AVIF, GIF or TIFF, up to 60 MB each. Duplicates are recognised and skipped."
+      />
       {items.length ? (
         <>
-          <p className="st-note" role="status">
+          <Progress
+            value={done}
+            max={items.length}
+            tone={failed.length ? "warning" : "accent"}
+            aria-label="Upload progress"
+            size="sm"
+          />
+          <Text size="sm" tone="muted" role="status">
             {done} of {items.length} done{failed.length ? `, ${failed.length} failed` : ""}.
-          </p>
-          <ul className="st-list" aria-label="Uploads">
+          </Text>
+          <ul className="hm-file-list" aria-label="Uploads">
             {items.map((i) => (
-              <li key={i.id} data-upload-state={i.state}>
-                <span>
-                  {i.name}
-                  <small>
-                    {i.state === "failed" ? i.error : i.state === "duplicate" ? "already uploaded, added" : i.state}
-                  </small>
-                </span>
-                {i.state === "uploading" ? (
-                  <progress max={100} value={i.pct} aria-label={`Uploading ${i.name}`} />
-                ) : null}
-              </li>
+              <FileItem
+                key={i.id}
+                data-upload-state={i.state}
+                name={i.state === "duplicate" ? `${i.name} (already uploaded, added)` : i.name}
+                size={i.file?.size}
+                progress={i.state === "uploading" ? i.pct : undefined}
+                status={
+                  i.state === "failed"
+                    ? "error"
+                    : i.state === "uploading"
+                      ? "uploading"
+                      : i.state === "done" || i.state === "duplicate"
+                        ? "done"
+                        : "ready"
+                }
+                error={i.state === "failed" ? i.error : undefined}
+              />
             ))}
           </ul>
           {failed.length ? (
-            <button type="button" className="st-btn" disabled={busy} onClick={() => void run(failed)}>
-              Retry the failed ones
-            </button>
+            <Button variant="secondary" disabled={busy} onClick={() => void run(failed)}>
+              <RefreshIcon /> Retry the failed ones
+            </Button>
           ) : null}
         </>
       ) : null}

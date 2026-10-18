@@ -1,5 +1,7 @@
 "use client";
 
+import { Button, Checkbox, Field, Input, Select, SettingsSection, Text, Textarea } from "@holominimal/ui";
+
 import { useState } from "react";
 import { cancelOrderAction, saveShopAction } from "@/app/studio/gallery-actions";
 
@@ -45,25 +47,21 @@ export function GalleryShopPanel({
 }) {
   const [s, setS] = useState(shop);
   const box = (k: "enabled" | "listed" | "sellDigital" | "sellPrints" | "abandonedCart", label: string) => (
-    <label className="gm-check">
-      <input type="checkbox" checked={s[k]} onChange={(e) => setS({ ...s, [k]: e.target.checked })} /> {label}
-    </label>
+    <Checkbox checked={s[k]} onChange={(e) => setS({ ...s, [k]: e.target.checked })} label={label} />
   );
   return (
     <>
-      <div className="gm-block">
-        <h2>Store</h2>
-        <p className="st-note">
+      <SettingsSection title="Store" className="gm-block">
+        <Text size="sm" tone="muted">
           Let people order prints and downloads from this gallery. Choose the price sheet it sells from.
-        </p>
+        </Text>
         <div className="gm-fields">
           {box("enabled", "Open the store in this gallery")}
           {box("sellDigital", "Sell downloads")}
           {box("sellPrints", "Sell prints and products")}
           {box("listed", 'List this gallery on the site\'s public Shop page (needs "Anyone with the link")')}
-          <label>
-            Price sheet
-            <select value={s.priceSheetId} onChange={(e) => setS({ ...s, priceSheetId: e.target.value })}>
+          <Field label="Price sheet">
+            <Select value={s.priceSheetId} onValueChange={(v) => setS({ ...s, priceSheetId: v })}>
               <option value="">{sheets.find((x) => x.isDefault)?.name ?? "Standard"} (default)</option>
               {sheets
                 .filter((x) => !x.isDefault)
@@ -72,51 +70,41 @@ export function GalleryShopPanel({
                     {x.name}
                   </option>
                 ))}
-            </select>
-          </label>
-          <label>
-            Smallest order, in dollars (blank = none)
-            <input inputMode="decimal" value={s.minOrder} onChange={(e) => setS({ ...s, minOrder: e.target.value })} />
-          </label>
+            </Select>
+          </Field>
+          <Field label="Smallest order, in dollars (blank = none)">
+            <Input inputMode="decimal" value={s.minOrder} onChange={(e) => setS({ ...s, minOrder: e.target.value })} />
+          </Field>
           {box("abandonedCart", "Email a reminder when an order is left unpaid for a day")}
-          <label className="gm-wide">
-            Note at the top of the Store (turnaround, shipping)
-            <input maxLength={240} value={s.note} onChange={(e) => setS({ ...s, note: e.target.value })} />
-          </label>
-          <label className="gm-wide">
-            Message shown at checkout
-            <textarea
+          <Field label="Note at the top of the Store (turnaround, shipping)" className="gm-wide">
+            <Input maxLength={240} value={s.note} onChange={(e) => setS({ ...s, note: e.target.value })} />
+          </Field>
+          <Field label="Message shown at checkout" className="gm-wide">
+            <Textarea
               rows={3}
               maxLength={1000}
               value={s.checkoutMessage}
               onChange={(e) => setS({ ...s, checkoutMessage: e.target.value })}
             />
-          </label>
-          <label className="gm-wide">
-            Print release delivered with every order (shown on the buyer's order page)
-            <textarea
+          </Field>
+          <Field label="Print release delivered with every order (shown on the buyer's order page)" className="gm-wide">
+            <Textarea
               rows={6}
               maxLength={7500}
               value={s.printRelease}
               onChange={(e) => setS({ ...s, printRelease: e.target.value })}
             />
-          </label>
+          </Field>
         </div>
-        <button
-          type="button"
-          className="st-btn"
-          disabled={pending}
-          onClick={() => run(() => saveShopAction({ galleryId, ...s }))}
-        >
+        <Button disabled={pending} onClick={() => run(() => saveShopAction({ galleryId, ...s }))}>
           Save store settings
-        </button>
-      </div>
-      <div className="gm-block">
-        <h2>Orders from this gallery</h2>
+        </Button>
+      </SettingsSection>
+      <SettingsSection title="Orders from this gallery" className="gm-block">
         {orders.length ? (
-          <ul className="st-list">
+          <ul className="hm-data-list st-list">
             {orders.map((o) => (
-              <li key={o.id}>
+              <li className="hm-data-list-item" key={o.id}>
                 <span>
                   {o.number} · {o.buyer}
                   <small>
@@ -125,22 +113,19 @@ export function GalleryShopPanel({
                 </span>
                 <span>{usd(o.totalCents)}</span>
                 {o.status === "pending" ? (
-                  <button
-                    type="button"
-                    className="st-btn st-btn--ghost"
-                    disabled={pending}
-                    onClick={() => run(() => cancelOrderAction(o.id))}
-                  >
+                  <Button variant="secondary" disabled={pending} onClick={() => run(() => cancelOrderAction(o.id))}>
                     Cancel
-                  </button>
+                  </Button>
                 ) : null}
               </li>
             ))}
           </ul>
         ) : (
-          <p className="st-note">No orders yet.</p>
+          <Text size="sm" tone="muted">
+            No orders yet.
+          </Text>
         )}
-      </div>
+      </SettingsSection>
     </>
   );
 }

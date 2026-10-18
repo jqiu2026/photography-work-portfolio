@@ -1,5 +1,7 @@
 "use client";
 
+import { Button, Checkbox, Field, Input, Select, SettingsSection, Text, Textarea } from "@holominimal/ui";
+
 import { useState } from "react";
 import { deleteRuleAction, saveRuleAction } from "@/app/studio/gallery-actions";
 
@@ -63,16 +65,15 @@ export function GalleryDownloads({
     });
   const wm = (id: string | null) => watermarks.find((w) => w.id === id)?.name;
   return (
-    <div className="gm-block">
-      <h2>Free downloads</h2>
-      <p className="st-note">
+    <SettingsSection title="Free downloads" className="gm-block">
+      <Text size="sm" tone="muted">
         Rules decide who may download for free. With no rule, visitors cannot download (they can still buy in the
         Store). The client's own downloads are set below.
-      </p>
+      </Text>
       {rules.length ? (
-        <ul className="st-list" aria-label="Download rules">
+        <ul className="hm-data-list st-list" aria-label="Download rules">
           {rules.map((r) => (
-            <li key={r.id}>
+            <li className="hm-data-list-item" key={r.id}>
               <span>
                 {r.name}
                 <small>
@@ -82,22 +83,23 @@ export function GalleryDownloads({
                   {r.hasPin ? " · PIN" : ""}
                 </small>
               </span>
-              <button type="button" className="st-btn st-btn--ghost" onClick={() => edit(r)}>
+              <Button variant="secondary" onClick={() => edit(r)}>
                 Edit
-              </button>
-              <button
-                type="button"
-                className="st-btn st-btn--ghost"
+              </Button>
+              <Button
+                variant="secondary"
                 disabled={pending}
                 onClick={() => run(() => deleteRuleAction({ galleryId, id: r.id }))}
               >
                 Delete
-              </button>
+              </Button>
             </li>
           ))}
         </ul>
       ) : (
-        <p className="st-note">No rules yet.</p>
+        <Text size="sm" tone="muted">
+          No rules yet.
+        </Text>
       )}
       <h3>{f.id ? "Edit rule" : "New rule"}</h3>
       <form
@@ -124,68 +126,65 @@ export function GalleryDownloads({
           );
         }}
       >
-        <label>
-          Rule name (visitors see it)
-          <input value={f.name} maxLength={80} onChange={(e) => set("name", e.target.value)} />
-        </label>
-        <label>
-          Applies to
-          <select value={f.albumId} onChange={(e) => set("albumId", e.target.value)}>
+        <Field label="Rule name (visitors see it)">
+          <Input value={f.name} maxLength={80} onChange={(e) => set("name", e.target.value)} />
+        </Field>
+        <Field label="Applies to">
+          <Select value={f.albumId} onValueChange={(v) => set("albumId", v)}>
             <option value="">Whole gallery</option>
             {albums.map((a) => (
               <option key={a.id} value={a.id}>
                 Album: {a.name}
               </option>
             ))}
-          </select>
-        </label>
-        <label>
-          Longest side in pixels (blank = the original file)
-          <input inputMode="numeric" value={f.maxPx} onChange={(e) => set("maxPx", e.target.value)} />
-        </label>
-        <label>
-          Downloads per visitor (blank = unlimited)
-          <input inputMode="numeric" value={f.perVisitor} onChange={(e) => set("perVisitor", e.target.value)} />
-        </label>
-        <label>
-          Watermark
-          <select value={f.watermarkId} onChange={(e) => set("watermarkId", e.target.value)}>
+          </Select>
+        </Field>
+        <Field label="Longest side in pixels (blank = the original file)">
+          <Input inputMode="numeric" value={f.maxPx} onChange={(e) => set("maxPx", e.target.value)} />
+        </Field>
+        <Field label="Downloads per visitor (blank = unlimited)">
+          <Input inputMode="numeric" value={f.perVisitor} onChange={(e) => set("perVisitor", e.target.value)} />
+        </Field>
+        <Field label="Watermark">
+          <Select value={f.watermarkId} onValueChange={(v) => set("watermarkId", v)}>
             <option value="">None</option>
             {watermarks.map((w) => (
               <option key={w.id} value={w.id}>
                 {w.name}
               </option>
             ))}
-          </select>
-        </label>
-        <label>
-          PIN (optional, 4 to 12 letters or digits{f.id ? "; blank keeps the current one" : ""})
-          <input autoComplete="off" value={f.pin} onChange={(e) => set("pin", e.target.value)} />
-        </label>
-        <label className="gm-wide">
-          Licence to accept before downloading (optional; **bold**, *italic*, [links](https://…) work)
-          <textarea
+          </Select>
+        </Field>
+        <Field label={<>PIN (optional, 4 to 12 letters or digits{f.id ? "; blank keeps the current one" : ""})</>}>
+          <Input autoComplete="off" value={f.pin} onChange={(e) => set("pin", e.target.value)} />
+        </Field>
+        <Field
+          label="Licence to accept before downloading (optional; **bold**, *italic*, [links](https://…) work)"
+          className="gm-wide"
+        >
+          <Textarea
             rows={5}
             maxLength={7500}
             value={f.printRelease}
             onChange={(e) => set("printRelease", e.target.value)}
           />
-        </label>
-        <label className="gm-check">
-          <input type="checkbox" checked={f.showAll} onChange={(e) => set("showAll", e.target.checked)} /> Offer this
-          rule in "Download all"
-        </label>
+        </Field>
+        <Checkbox
+          checked={f.showAll}
+          onChange={(e) => set("showAll", e.target.checked)}
+          label={'Offer this rule in "Download all"'}
+        />
         <div className="gm-row">
-          <button type="submit" className="st-btn" disabled={pending}>
+          <Button type="submit" disabled={pending}>
             {f.id ? "Save rule" : "Add rule"}
-          </button>
+          </Button>
           {f.id ? (
-            <button type="button" className="st-btn st-btn--ghost" onClick={() => setF(blank)}>
+            <Button variant="secondary" onClick={() => setF(blank)}>
               Cancel
-            </button>
+            </Button>
           ) : null}
         </div>
       </form>
-    </div>
+    </SettingsSection>
   );
 }

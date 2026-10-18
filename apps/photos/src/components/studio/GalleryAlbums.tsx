@@ -1,5 +1,21 @@
 "use client";
 
+import {
+  ArrowDownIcon,
+  ArrowUpIcon,
+  Badge,
+  Button,
+  Checkbox,
+  CornerDownRightIcon,
+  Field,
+  Input,
+  Select,
+  SettingsSection,
+  Text,
+} from "@holominimal/ui";
+
+import { useConfirm } from "./StudioFrame";
+
 import { useState } from "react";
 import {
   createAlbumAction,
@@ -50,12 +66,11 @@ export function GalleryAlbums({
   };
   return (
     <>
-      <div className="gm-block">
-        <h2>Albums</h2>
-        <p className="st-note">
+      <SettingsSection title="Albums" className="gm-block">
+        <Text size="sm" tone="muted">
           Visitors see "All photos" plus these albums. A sub-album sits inside an album. A locked album stays closed
           until its own passcode is entered. Move photographs into an album from the Photos tab.
-        </p>
+        </Text>
         <form
           className="gm-inline"
           aria-label="New album"
@@ -68,25 +83,25 @@ export function GalleryAlbums({
             );
           }}
         >
-          <input
+          <Input
             aria-label="Album name"
             placeholder="Album name (for example Ceremony)"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
-          <select aria-label="Inside" value={parent} onChange={(e) => setParent(e.target.value)}>
+          <Select aria-label="Inside" value={parent} onValueChange={(v) => setParent(v)}>
             <option value="">Top level</option>
             {tops.map((a) => (
               <option key={a.id} value={a.id}>
                 Inside {a.name}
               </option>
             ))}
-          </select>
-          <button type="submit" className="st-btn" disabled={pending}>
+          </Select>
+          <Button type="submit" disabled={pending}>
             Add album
-          </button>
+          </Button>
         </form>
-      </div>
+      </SettingsSection>
       {tops.map((a, n) => (
         <AlbumCard
           key={a.id}
@@ -116,7 +131,11 @@ export function GalleryAlbums({
             ))}
         </AlbumCard>
       ))}
-      {!albums.length ? <p className="st-note">No albums yet. Photographs show under All photos.</p> : null}
+      {!albums.length ? (
+        <Text size="sm" tone="muted">
+          No albums yet. Photographs show under All photos.
+        </Text>
+      ) : null}
     </>
   );
 }
@@ -149,33 +168,36 @@ function AlbumCard({
   const [name, setName] = useState(album.name);
   const [desc, setDesc] = useState(album.description);
   const [code, setCode] = useState("");
+  const [ask, confirmEl] = useConfirm();
   const mine = items.filter((i) => i.albumId === album.id);
   return (
-    <div className="gm-block" data-sub={sub || undefined} style={sub ? { marginLeft: "1.5rem" } : undefined}>
-      <h3>
-        {sub ? "↳ " : ""}
-        {album.name}{" "}
-        <small>
-          {count} photo{count === 1 ? "" : "s"}
-        </small>
-        {album.locked ? <em> · locked</em> : null}
-        {album.hidden ? <em> · hidden</em> : null}
-      </h3>
+    <SettingsSection
+      level={3}
+      className="gm-block gm-album"
+      data-sub={sub || undefined}
+      title={
+        <>
+          {sub ? <CornerDownRightIcon size={14} /> : null} {album.name}{" "}
+          <Badge tone="muted">
+            {count} photo{count === 1 ? "" : "s"}
+          </Badge>
+          {album.locked ? <Badge tone="warning">locked</Badge> : null}
+          {album.hidden ? <Badge tone="muted">hidden</Badge> : null}
+        </>
+      }
+    >
       <div className="gm-fields">
-        <label>
-          Name
-          <input value={name} maxLength={60} onChange={(e) => setName(e.target.value)} />
-        </label>
-        <label className="gm-wide">
-          Short description (shown above its photographs)
-          <input value={desc} maxLength={400} onChange={(e) => setDesc(e.target.value)} />
-        </label>
-        <label>
-          Cover photograph
-          <select
+        <Field label="Name">
+          <Input value={name} maxLength={60} onChange={(e) => setName(e.target.value)} />
+        </Field>
+        <Field label="Short description (shown above its photographs)" className="gm-wide">
+          <Input value={desc} maxLength={400} onChange={(e) => setDesc(e.target.value)} />
+        </Field>
+        <Field label="Cover photograph">
+          <Select
             value={album.coverMediaId ?? ""}
-            onChange={(e) =>
-              run(() => updateAlbumAction({ galleryId, albumId: album.id, coverMediaId: e.target.value || null }))
+            onValueChange={(v) =>
+              run(() => updateAlbumAction({ galleryId, albumId: album.id, coverMediaId: v || null }))
             }
           >
             <option value="">First photograph</option>
@@ -184,59 +206,54 @@ function AlbumCard({
                 {i.filename}
               </option>
             ))}
-          </select>
-        </label>
-        <label className="gm-check">
-          <input
-            type="checkbox"
-            checked={album.hidden}
-            onChange={(e) => run(() => updateAlbumAction({ galleryId, albumId: album.id, hidden: e.target.checked }))}
-          />{" "}
-          Hide this album from the list (its photographs still show under All photos)
-        </label>
+          </Select>
+        </Field>
+        <Checkbox
+          checked={album.hidden}
+          onChange={(e) => run(() => updateAlbumAction({ galleryId, albumId: album.id, hidden: e.target.checked }))}
+          label="Hide this album from the list (its photographs still show under All photos)"
+        />
       </div>
       <div className="gm-row">
-        <button
-          type="button"
-          className="st-btn"
+        <Button
           disabled={pending}
           onClick={() => run(() => updateAlbumAction({ galleryId, albumId: album.id, name, description: desc }))}
         >
           Save album
-        </button>
+        </Button>
         {!sub ? (
           <>
-            <button
-              type="button"
-              className="st-btn st-btn--ghost"
+            <Button
+              variant="secondary"
               disabled={pending || first}
               onClick={() => move?.(album.id, -1)}
               aria-label={`Move ${album.name} earlier`}
             >
-              ↑
-            </button>
-            <button
-              type="button"
-              className="st-btn st-btn--ghost"
+              <ArrowUpIcon />
+            </Button>
+            <Button
+              variant="secondary"
               disabled={pending || last}
               onClick={() => move?.(album.id, 1)}
               aria-label={`Move ${album.name} later`}
             >
-              ↓
-            </button>
+              <ArrowDownIcon />
+            </Button>
           </>
         ) : null}
-        <button
-          type="button"
-          className="st-btn st-btn--ghost"
+        <Button
+          variant="danger"
           disabled={pending}
-          onClick={() =>
-            confirm(`Delete the album "${album.name}"? Its photographs stay in the gallery.`) &&
-            run(() => deleteAlbumAction({ galleryId, albumId: album.id }))
+          onClick={async () =>
+            (await ask({
+              title: `Delete the album "${album.name}"?`,
+              body: "Its photographs stay in the gallery, outside any album.",
+              action: "Delete album",
+            })) && run(() => deleteAlbumAction({ galleryId, albumId: album.id }))
           }
         >
           Delete album
-        </button>
+        </Button>
       </div>
       <form
         className="gm-inline"
@@ -250,7 +267,7 @@ function AlbumCard({
           );
         }}
       >
-        <input
+        <Input
           aria-label={`Passcode for ${album.name}`}
           placeholder={
             album.locked
@@ -261,11 +278,12 @@ function AlbumCard({
           value={code}
           onChange={(e) => setCode(e.target.value)}
         />
-        <button type="submit" className="st-btn st-btn--ghost" disabled={pending}>
+        <Button type="submit" variant="secondary" disabled={pending}>
           {album.locked && !code ? "Remove the lock" : "Lock album"}
-        </button>
+        </Button>
       </form>
       {children}
-    </div>
+      {confirmEl}
+    </SettingsSection>
   );
 }

@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { choose } from "./ui";
 import sharp from "sharp";
 import { clientOpen, enterGallery, newGallery, publishOpenGallery } from "./gallery-helpers";
 import { detectViewerCode } from "../packages/media/src/forensic";
@@ -45,7 +46,7 @@ test("owner creates a client, a job and an empty gallery, then uploads photograp
   await page.getByRole("button", { name: "Add client" }).click();
   await slow(page.getByRole("status")).toContainText("Client added");
   await page.goto(`${PHOTOS}/studio/shoots`, { waitUntil: "networkidle" });
-  await page.getByLabel("Client").selectOption({ label: `Gal Client ${uid}` });
+  await choose(page.getByLabel("Client"), `Gal Client ${uid}`);
   await page.getByLabel("Title").fill(`Gal job ${uid}`);
   await page.getByRole("button", { name: "Add job" }).click();
   await slow(page.getByRole("listitem").filter({ hasText: `Gal job ${uid}` })).toBeVisible();
@@ -85,7 +86,7 @@ test("owner sets up albums, downloads, a PIN, a selection limit, a welcome and a
   await alb.getByRole("button", { name: "Add album" }).click();
   await slow(page.getByRole("status").filter({ hasText: "Album added" })).toBeVisible();
   await page.getByRole("button", { name: "Open shot-1.jpg" }).click();
-  await page.getByLabel("Album for shot-1.jpg").selectOption({ label: "Highlights" });
+  await choose(page.getByLabel("Album for shot-1.jpg"), "Highlights");
   await slow(page.getByRole("status").filter({ hasText: "Moved" })).toBeVisible();
   await page.keyboard.press("Escape");
 
@@ -101,7 +102,7 @@ test("owner sets up albums, downloads, a PIN, a selection limit, a welcome and a
   await page.getByLabel(/Accent colour \(optional/).fill("#cc3322");
 
   await page.getByRole("tab", { name: "Downloads" }).click();
-  await page.getByLabel("What clients can download").selectOption("full");
+  await choose(page.getByLabel("What clients can download"), "Web size and full resolution");
   await page.getByRole("button", { name: "Save", exact: true }).click();
   await slow(page.getByRole("status").filter({ hasText: "Download setting saved" })).toBeVisible();
   const pin = inForm(page, "Download PIN");

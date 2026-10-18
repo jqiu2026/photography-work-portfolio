@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { type FormEvent, type ReactNode, useState, useTransition } from "react";
+import { type FormEvent, type ReactNode, useCallback, useState, useTransition } from "react";
 import {
   Alert,
   Button,
@@ -9,6 +9,11 @@ import {
   CardHeader,
   CardTitle,
   CopyCheckIcon,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogTitle,
   Card as HmCard,
   PageActions,
   PageDescription,
@@ -132,4 +137,36 @@ export function Frame({
       {children}
     </div>
   );
+}
+
+type Ask = { title: string; body?: string; action: string; danger?: boolean };
+
+/**
+ * A Holominimal confirmation dialog for destructive or final actions, used as `if (await ask({...})) doIt()`. Returns
+ * the `ask` function and the dialog element, which the caller renders once.
+ */
+export function useConfirm(): [(a: Ask) => Promise<boolean>, ReactNode] {
+  const [q, setQ] = useState<(Ask & { done: (ok: boolean) => void }) | null>(null);
+  const ask = useCallback((a: Ask) => new Promise<boolean>((done) => setQ({ danger: true, ...a, done })), []);
+  const finish = (ok: boolean) => {
+    q?.done(ok);
+    setQ(null);
+  };
+  const el = (
+    <Dialog open={Boolean(q)} onOpenChange={(o) => !o && finish(false)}>
+      <DialogContent size="sm" role="alertdialog">
+        <DialogTitle>{q?.title}</DialogTitle>
+        {q?.body ? <DialogDescription>{q.body}</DialogDescription> : null}
+        <DialogFooter>
+          <Button variant="secondary" onClick={() => finish(false)}>
+            Cancel
+          </Button>
+          <Button variant={q?.danger ? "danger" : "primary"} onClick={() => finish(true)}>
+            {q?.action}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+  return [ask, el];
 }

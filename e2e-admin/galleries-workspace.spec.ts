@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { choose } from "./ui";
 import sharp from "sharp";
 import { clientOpen, newGallery, publishOpenGallery, uploadPhotos } from "./gallery-helpers";
 
@@ -28,7 +29,7 @@ test("create a gallery from a job, upload inside it, and find it in the list", a
   await page.getByRole("button", { name: "Add client" }).click();
   await slow(page.getByRole("status")).toContainText("Client added");
   await page.goto(`${PHOTOS}/studio/shoots`, { waitUntil: "networkidle" });
-  await page.getByLabel("Client").selectOption({ label: `WS Client ${uid}` });
+  await choose(page.getByLabel("Client"), `WS Client ${uid}`);
   await page.getByLabel("Title").fill(`WS job ${uid}`);
   await page.getByRole("button", { name: "Add job" }).click();
   await slow(page.getByRole("listitem").filter({ hasText: `WS job ${uid}` })).toBeVisible();
@@ -84,11 +85,11 @@ test("select several photographs: hide, show, make the cover; sort; open one and
   await expect(page.locator("li[data-media-id]").filter({ hasText: "c-third.jpg" })).toContainText("Cover");
   await page.getByRole("button", { name: "Done" }).click();
 
-  await page.getByLabel("Sort photographs").selectOption("name");
+  await choose(page.getByLabel("Sort photographs"), "Filename");
   await slow(page.getByRole("status").filter({ hasText: "Sorted 3 photographs" })).toBeVisible();
-  await page.getByLabel("Show", { exact: true }).selectOption("hidden");
+  await choose(page.getByLabel("Show", { exact: true }), "Hidden");
   await expect(page.getByText("No photographs match this filter.")).toBeVisible();
-  await page.getByLabel("Show", { exact: true }).selectOption("all");
+  await choose(page.getByLabel("Show", { exact: true }), "Everything");
 
   await page.getByRole("button", { name: "Open a-first.jpg" }).click();
   const view = page.getByRole("dialog", { name: "Photograph" });
@@ -103,7 +104,7 @@ test("design: rows and light; the client sees them after the gallery is publishe
   await page.goto(url, { waitUntil: "networkidle" });
   await page.getByRole("tab", { name: "Branding" }).click();
   await page.getByRole("radio", { name: "Rows" }).click();
-  await page.getByLabel("Theme").selectOption("light");
+  await choose(page.getByLabel("Theme"), "Light");
   await page.getByLabel(/Shown above the photographs/).fill(`Welcome ${uid}`);
   await page.getByRole("button", { name: "Save design" }).click();
   await slow(page.getByRole("status").filter({ hasText: "Design saved" })).toBeVisible();
@@ -175,8 +176,9 @@ test("duplicate as a draft, schedule it for the past, and the hourly job publish
   await expect(page.locator(".gm-meta")).toContainText("Live");
 
   await page.getByRole("tab", { name: "Settings" }).click();
-  page.once("dialog", (d) => d.accept());
   await page.getByRole("button", { name: "Delete gallery" }).click();
+  // deleting asks first, in the studio's own confirmation dialog
+  await page.getByRole("alertdialog").getByRole("button", { name: "Delete gallery" }).click();
   await expect(page).toHaveURL(/\/studio\/galleries$/, { timeout: 25_000 });
   await expect(page.getByRole("link", { name: /\(copy\)/ })).toHaveCount(0);
   await expect(page.getByRole("link", { name: new RegExp(`Workspace ${uid}`) }).first()).toBeVisible();
