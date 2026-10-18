@@ -127,10 +127,10 @@ function Section({
   return (
     <section className="db-section" aria-labelledby={id}>
       <div className="db-head">
-        <h2 id={id}>
-          {title}
+        <div className="db-title">
+          <h2 id={id}>{title}</h2>
           {count}
-        </h2>
+        </div>
         {more}
       </div>
       {children}

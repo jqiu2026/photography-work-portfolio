@@ -68,10 +68,12 @@
   gap: var(--hm-space-4);
   margin-bottom: var(--hm-space-3);
 }
-.db-head h2 {
+.db-title {
   display: flex;
   align-items: center;
   gap: var(--hm-space-2);
+}
+.db-head h2 {
   margin: 0;
   font-size: var(--hm-text-base);
   font-weight: var(--hm-weight-medium);

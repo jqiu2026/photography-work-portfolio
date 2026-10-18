@@ -141,21 +141,16 @@ function Hero({ photos, subjects }: { photos: HomePhoto[]; subjects: Subject[] }
   );
 }
 
-/** Two rows of photographs drifting in opposite directions, under one line about what I photograph. */
+/** Two rows of photographs drifting in opposite directions (decorative), under one line about what I photograph. */
 function Subjects({ photos }: { photos: HomePhoto[] }) {
   if (photos.length < 6) return null;
   const half = Math.ceil(photos.length / 2);
   const row = (list: HomePhoto[], reverse: boolean) => (
     <Marquee duration={70} reverse={reverse} gap="0.75rem" className="hx-row">
       {list.map((p, i) => (
-        <Link
-          key={`${p.id ?? i}`}
-          href={`/portfolio/${p.category}`}
-          className="hx-tile"
-          aria-label={`${p.alt} (${p.category})`}
-        >
+        <span key={`${p.id ?? i}`} className="hx-tile">
           <ProtectedImage asset={p} alt="" fill sizes="22rem" />
-        </Link>
+        </span>
       ))}
     </Marquee>
   );
@@ -168,7 +163,8 @@ function Subjects({ photos }: { photos: HomePhoto[] }) {
         </h2>
         <p>Theater and dance from the wings, events from the middle of the room, the city in snow, and planes.</p>
       </div>
-      <div className="hx-rows">
+      {/* decorative: the subjects are links in the hero, and every photograph is in the portfolio */}
+      <div className="hx-rows" aria-hidden="true">
         {row(photos.slice(0, half), false)}
         {row(photos.slice(half), true)}
       </div>

@@ -65,7 +65,8 @@ test("keyboard: lightbox opens, navigates and closes", async ({ page }) => {
   const dialog = page.getByRole("dialog");
   await expect(dialog).toBeVisible();
   await page.keyboard.press("ArrowRight");
-  await expect(dialog.locator("figcaption")).toContainText("2 /");
+  // the viewer's counter is a live region in the Holominimal lightbox bar
+  await expect(dialog.locator(".hm-lightbox-count")).toContainText("2 /");
   await page.keyboard.press("Escape");
   await expect(dialog).toBeHidden();
 });

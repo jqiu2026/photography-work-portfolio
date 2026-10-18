@@ -258,10 +258,6 @@
   overflow: hidden;
   background: var(--hm-surface);
 }
-.hx-tile:focus-visible {
-  outline: var(--hm-focus-width) solid var(--hm-focus-color);
-  outline-offset: calc(var(--hm-focus-width) * -1);
-}
 .hx-tile .pm-img img {
   transition: transform 1.2s var(--hm-ease-glide);
 }
@@ -432,7 +428,6 @@
   background: #0b0b0f;
   box-shadow: 0 40px 80px -24px rgb(0 0 0 / 0.85);
   transform: translateY(calc((1 - var(--e)) * 30%)) rotate(calc((1 - var(--e)) * 6deg));
-  opacity: clamp(0, calc(var(--e) * 1.6), 1);
 }
 .hx-notch {
   justify-self: center;
