@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { choose } from "./ui";
 
 /** Contract templates, releases (minor + guardian), e-sign consent, questionnaires and the gallery policy clause. */
 const PHOTOS = "http://localhost:3302";
@@ -6,8 +7,7 @@ const uid = Date.now().toString(36);
 const email = `forms-${uid}@example.test`;
 test.describe.configure({ mode: "serial" });
 const slow = expect.configure({ timeout: 25_000 });
-const select = (form: import("@playwright/test").Locator, label: RegExp) =>
-  form.locator("label", { hasText: label }).locator("select");
+const select = (form: import("@playwright/test").Locator, label: RegExp) => form.getByLabel(label);
 
 test("owner adds a client and a job, saves policies, and creates a contract from the Event template with merged fields", async ({
   page,
@@ -18,7 +18,7 @@ test("owner adds a client and a job, saves policies, and creates a contract from
   await page.getByRole("button", { name: "Add client" }).click();
   await slow(page.getByRole("status")).toContainText("Client added");
   await page.goto(`${PHOTOS}/studio/shoots`, { waitUntil: "networkidle" });
-  await page.getByLabel("Client").selectOption({ label: `Forms Client ${uid}` });
+  await choose(page.getByLabel("Client"), `Forms Client ${uid}`);
   await page.getByLabel("Title").fill(`Forms job ${uid}`);
   await page.getByLabel("Fee (dollars)").fill("500");
   await page.getByRole("button", { name: "Add job" }).click();
@@ -32,8 +32,8 @@ test("owner adds a client and a job, saves policies, and creates a contract from
   await slow(page.getByRole("status")).toContainText("Policies saved");
 
   const make = page.getByRole("form", { name: "Create from template" });
-  await select(make, /^Job/).selectOption({ label: `Forms job ${uid}` });
-  await select(make, /^Template/).selectOption({ label: "Event photography agreement" });
+  await choose(select(make, /^Job/), `Forms job ${uid}`);
+  await choose(select(make, /^Template/), "Event photography agreement");
   await make.getByRole("button", { name: "Create draft" }).click();
   await slow(page.getByRole("status")).toContainText("Created (draft)");
 
@@ -65,8 +65,8 @@ test("owner adds a client and a job, saves policies, and creates a contract from
 test("a release for a minor needs the guardian's name", async ({ page }) => {
   await page.goto(`${PHOTOS}/studio/forms`, { waitUntil: "networkidle" });
   const make = page.getByRole("form", { name: "Create from template" });
-  await select(make, /^Job/).selectOption({ label: `Forms job ${uid}` });
-  await select(make, /^Template/).selectOption({ label: "Model release" });
+  await choose(select(make, /^Job/), `Forms job ${uid}`);
+  await choose(select(make, /^Template/), "Model release");
   await make.getByRole("button", { name: "Create draft" }).click();
   await slow(page.locator("p.st-error")).toContainText("who or what");
   await make.getByLabel("Who or what it covers").fill("Sam Student");
@@ -98,8 +98,8 @@ test("a questionnaire is sent by email, answered once through its link, and the 
 }) => {
   await page.goto(`${PHOTOS}/studio/forms`, { waitUntil: "networkidle" });
   const send = page.getByRole("form", { name: "Send questionnaire" });
-  await select(send, /^Questionnaire/).selectOption({ label: "Event details" });
-  await select(send, /^Client/).selectOption({ label: `Forms Client ${uid}` });
+  await choose(select(send, /^Questionnaire/), "Event details");
+  await choose(select(send, /^Client/), `Forms Client ${uid}`);
   await send.getByRole("button", { name: "Send" }).click();
   await slow(page.locator("code").first()).toContainText("/client/questionnaire/");
   const link = ((await page.locator("code").first().textContent()) as string).replace(/^https?:\/\/[^/]+/, "");
@@ -113,7 +113,10 @@ test("a questionnaire is sent by email, answered once through its link, and the 
   await slow(page.locator("p.st-error")).toContainText("Please answer");
   await page.getByLabel(/What time does the event start/).fill("3pm to 6pm");
   await page.getByLabel(/Moments or people that must/).fill("The cake");
-  await page.getByLabel(/Will children be photographed/).selectOption("Yes");
+  await page
+    .getByRole("group", { name: /Will children be photographed/ })
+    .getByRole("radio", { name: "Yes" })
+    .check();
   await page.getByLabel(/Who is my contact/).fill("Pat 555-0100");
   await page.getByRole("button", { name: "Send my answers" }).click();
   await slow(page.getByRole("status")).toContainText("Your answers are saved");

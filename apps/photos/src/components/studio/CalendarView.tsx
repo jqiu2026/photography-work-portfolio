@@ -1,5 +1,7 @@
 "use client";
 
+import { Button, Field, Input, Select, Text } from "@holominimal/ui";
+
 import {
   addAppointmentAction,
   addBlackoutAction,
@@ -48,38 +50,39 @@ export function CalendarView({ user, data }: { user: string; data: CalendarData 
     <Frame section="calendar" user={user} note={note}>
       <div className="st-grid">
         <Card title="Upcoming" id="cal-up">
-          <p className="st-note">
+          <Text size="sm" tone="muted">
             All times in {data.timezone}. Buffers and travel time keep a slot clear on both sides.
-          </p>
+          </Text>
           {days.length ? (
             days.map((d) => (
               <div key={d}>
                 <h3 className="st-day">{data.appointments.find((a) => a.day === d)?.dayLabel}</h3>
-                <ul className="st-list">
+                <ul className="hm-data-list st-list">
                   {data.appointments
                     .filter((a) => a.day === d)
                     .map((a) => (
-                      <li key={a.id} data-appointment-id={a.id}>
+                      <li className="hm-data-list-item" key={a.id} data-appointment-id={a.id}>
                         <span>
                           <strong>{a.title}</strong>
                           <small>{[a.time, a.kind, a.status, a.client, a.location].filter(Boolean).join(" · ")}</small>
                         </span>
-                        <button
-                          type="button"
-                          className="st-btn st-btn--ghost"
+                        <Button
+                          variant="secondary"
                           disabled={pending}
                           onClick={() => act(() => cancelAppointmentAction(a.id))}
                           aria-label={`Cancel ${a.title}`}
                         >
                           Cancel
-                        </button>
+                        </Button>
                       </li>
                     ))}
                 </ul>
               </div>
             ))
           ) : (
-            <p className="st-note">Nothing scheduled.</p>
+            <Text size="sm" tone="muted">
+              Nothing scheduled.
+            </Text>
           )}
         </Card>
 
@@ -103,80 +106,68 @@ export function CalendarView({ user, data }: { user: string; data: CalendarData 
               () => setF({}),
             )}
           >
-            <label>
-              Title
-              <input value={f.title ?? ""} onChange={set("title")} />
-            </label>
-            <label>
-              Date
-              <input type="date" value={f.date ?? ""} onChange={set("date")} />
-            </label>
-            <label>
-              Start
-              <input type="time" value={f.start ?? ""} onChange={set("start")} />
-            </label>
-            <label>
-              End
-              <input type="time" value={f.end ?? ""} onChange={set("end")} />
-            </label>
-            <label>
-              Kind
-              <select value={f.kind ?? "shoot"} onChange={set("kind")}>
+            <Field label="Title">
+              <Input value={f.title ?? ""} onChange={set("title")} />
+            </Field>
+            <Field label="Date">
+              <Input type="date" value={f.date ?? ""} onChange={set("date")} />
+            </Field>
+            <Field label="Start">
+              <Input type="time" value={f.start ?? ""} onChange={set("start")} />
+            </Field>
+            <Field label="End">
+              <Input type="time" value={f.end ?? ""} onChange={set("end")} />
+            </Field>
+            <Field label="Kind">
+              <Select value={f.kind ?? "shoot"} onValueChange={(v) => set("kind")({ target: { value: v } })}>
                 <option value="shoot">Shoot</option>
                 <option value="consult">Consult</option>
                 <option value="block">Personal block</option>
-              </select>
-            </label>
-            <label>
-              Where
-              <input value={f.location ?? ""} onChange={set("location")} />
-            </label>
-            <label>
-              Buffer each side (minutes)
-              <input
+              </Select>
+            </Field>
+            <Field label="Where">
+              <Input value={f.location ?? ""} onChange={set("location")} />
+            </Field>
+            <Field label="Buffer each side (minutes)">
+              <Input
                 inputMode="numeric"
                 value={f.buffer ?? ""}
                 onChange={set("buffer")}
                 placeholder={String(data.settings.defaultBufferMin)}
               />
-            </label>
-            <label>
-              Travel each way (minutes)
-              <input inputMode="numeric" value={f.travel ?? ""} onChange={set("travel")} placeholder="0" />
-            </label>
-            <label>
-              Job (optional)
-              <select value={f.job ?? ""} onChange={set("job")}>
+            </Field>
+            <Field label="Travel each way (minutes)">
+              <Input inputMode="numeric" value={f.travel ?? ""} onChange={set("travel")} placeholder="0" />
+            </Field>
+            <Field label="Job (optional)">
+              <Select value={f.job ?? ""} onValueChange={(v) => set("job")({ target: { value: v } })}>
                 <option value="">None</option>
                 {data.jobs.map((j) => (
                   <option key={j.id} value={j.id}>
                     {j.title}
                   </option>
                 ))}
-              </select>
-            </label>
-            <button type="submit" className="st-btn" disabled={pending}>
+              </Select>
+            </Field>
+            <Button type="submit" disabled={pending}>
               Add
-            </button>
+            </Button>
           </form>
         </Card>
 
         <Card title="Bookable hours" id="cal-hours">
-          <p className="st-note">When clients can book online. Nothing outside these hours is offered.</p>
-          <ul className="st-list">
+          <Text size="sm" tone="muted">
+            When clients can book online. Nothing outside these hours is offered.
+          </Text>
+          <ul className="hm-data-list st-list">
             {data.rules.map((r) => (
-              <li key={r.id}>
+              <li className="hm-data-list-item" key={r.id}>
                 <span>
                   {WEEKDAYS[r.weekday]} {hhmm(r.startMinute)} to {hhmm(r.endMinute)}
                 </span>
-                <button
-                  type="button"
-                  className="st-btn st-btn--ghost"
-                  disabled={pending}
-                  onClick={() => act(() => removeRuleAction(r.id))}
-                >
+                <Button variant="secondary" disabled={pending} onClick={() => act(() => removeRuleAction(r.id))}>
                   Remove
-                </button>
+                </Button>
               </li>
             ))}
           </ul>
@@ -185,46 +176,38 @@ export function CalendarView({ user, data }: { user: string; data: CalendarData 
             className="st-form"
             onSubmit={submit(() => addRuleAction({ weekday: f.rwd ?? "1", start: f.rs ?? "", end: f.re ?? "" }))}
           >
-            <label>
-              Day
-              <select value={f.rwd ?? "1"} onChange={set("rwd")}>
+            <Field label="Day">
+              <Select value={f.rwd ?? "1"} onValueChange={(v) => set("rwd")({ target: { value: v } })}>
                 {WEEKDAYS.map((d, i) => (
-                  <option key={d} value={i}>
+                  <option key={d} value={String(i)}>
                     {d}
                   </option>
                 ))}
-              </select>
-            </label>
-            <label>
-              From
-              <input type="time" value={f.rs ?? ""} onChange={set("rs")} />
-            </label>
-            <label>
-              To
-              <input type="time" value={f.re ?? ""} onChange={set("re")} />
-            </label>
-            <button type="submit" className="st-btn" disabled={pending}>
+              </Select>
+            </Field>
+            <Field label="From">
+              <Input type="time" value={f.rs ?? ""} onChange={set("rs")} />
+            </Field>
+            <Field label="To">
+              <Input type="time" value={f.re ?? ""} onChange={set("re")} />
+            </Field>
+            <Button type="submit" disabled={pending}>
               Add hours
-            </button>
+            </Button>
           </form>
         </Card>
 
         <Card title="Blocked days" id="cal-black">
-          <ul className="st-list">
+          <ul className="hm-data-list st-list">
             {data.blackouts.map((b) => (
-              <li key={b.id}>
+              <li className="hm-data-list-item" key={b.id}>
                 <span>
                   {b.date}
                   {b.reason ? ` · ${b.reason}` : ""}
                 </span>
-                <button
-                  type="button"
-                  className="st-btn st-btn--ghost"
-                  disabled={pending}
-                  onClick={() => act(() => removeBlackoutAction(b.id))}
-                >
+                <Button variant="secondary" disabled={pending} onClick={() => act(() => removeBlackoutAction(b.id))}>
                   Reopen
-                </button>
+                </Button>
               </li>
             ))}
           </ul>
@@ -236,24 +219,22 @@ export function CalendarView({ user, data }: { user: string; data: CalendarData 
               () => setF({}),
             )}
           >
-            <label>
-              Day
-              <input type="date" value={f.bd ?? ""} onChange={set("bd")} />
-            </label>
-            <label>
-              Reason (private)
-              <input value={f.br ?? ""} onChange={set("br")} />
-            </label>
-            <button type="submit" className="st-btn" disabled={pending}>
+            <Field label="Day">
+              <Input type="date" value={f.bd ?? ""} onChange={set("bd")} />
+            </Field>
+            <Field label="Reason (private)">
+              <Input value={f.br ?? ""} onChange={set("br")} />
+            </Field>
+            <Button type="submit" disabled={pending}>
               Block day
-            </button>
+            </Button>
           </form>
         </Card>
 
         <Card title="Mini-sessions" id="cal-mini">
-          <p className="st-note">
+          <Text size="sm" tone="muted">
             Open a run of short slots on one day. Clients pick a slot on the booking page; one person gets each.
-          </p>
+          </Text>
           <form
             noValidate
             className="st-form"
@@ -271,61 +252,51 @@ export function CalendarView({ user, data }: { user: string; data: CalendarData 
               () => setF({}),
             )}
           >
-            <label>
-              Name
-              <input value={f.ml ?? ""} onChange={set("ml")} placeholder="Fall minis" />
-            </label>
-            <label>
-              Day
-              <input type="date" value={f.md ?? ""} onChange={set("md")} />
-            </label>
-            <label>
-              First slot
-              <input type="time" value={f.ms ?? ""} onChange={set("ms")} />
-            </label>
-            <label>
-              Slots
-              <input inputMode="numeric" value={f.mc ?? "6"} onChange={set("mc")} />
-            </label>
-            <label>
-              Minutes each
-              <input inputMode="numeric" value={f.mlen ?? "20"} onChange={set("mlen")} />
-            </label>
-            <label>
-              Gap between (minutes)
-              <input inputMode="numeric" value={f.mg ?? "10"} onChange={set("mg")} />
-            </label>
-            <label>
-              Where
-              <input value={f.mloc ?? ""} onChange={set("mloc")} />
-            </label>
-            <button type="submit" className="st-btn" disabled={pending}>
+            <Field label="Name">
+              <Input value={f.ml ?? ""} onChange={set("ml")} placeholder="Fall minis" />
+            </Field>
+            <Field label="Day">
+              <Input type="date" value={f.md ?? ""} onChange={set("md")} />
+            </Field>
+            <Field label="First slot">
+              <Input type="time" value={f.ms ?? ""} onChange={set("ms")} />
+            </Field>
+            <Field label="Slots">
+              <Input inputMode="numeric" value={f.mc ?? "6"} onChange={set("mc")} />
+            </Field>
+            <Field label="Minutes each">
+              <Input inputMode="numeric" value={f.mlen ?? "20"} onChange={set("mlen")} />
+            </Field>
+            <Field label="Gap between (minutes)">
+              <Input inputMode="numeric" value={f.mg ?? "10"} onChange={set("mg")} />
+            </Field>
+            <Field label="Where">
+              <Input value={f.mloc ?? ""} onChange={set("mloc")} />
+            </Field>
+            <Button type="submit" disabled={pending}>
               Open slots
-            </button>
+            </Button>
           </form>
         </Card>
 
         <Card title="Waitlist" id="cal-wait">
           {data.waiting.length ? (
-            <ul className="st-list">
+            <ul className="hm-data-list st-list">
               {data.waiting.map((w) => (
-                <li key={w.wanted}>
+                <li className="hm-data-list-item" key={w.wanted}>
                   <span>
                     {w.wanted} <small>{w.count} waiting</small>
                   </span>
-                  <button
-                    type="button"
-                    className="st-btn"
-                    disabled={pending}
-                    onClick={() => act(() => notifyWaitlistAction(w.wanted))}
-                  >
+                  <Button disabled={pending} onClick={() => act(() => notifyWaitlistAction(w.wanted))}>
                     Tell them a spot opened
-                  </button>
+                  </Button>
                 </li>
               ))}
             </ul>
           ) : (
-            <p className="st-note">Nobody is waiting.</p>
+            <Text size="sm" tone="muted">
+              Nobody is waiting.
+            </Text>
           )}
         </Card>
 
@@ -343,34 +314,29 @@ export function CalendarView({ user, data }: { user: string; data: CalendarData 
               }),
             )}
           >
-            <label>
-              Time zone
-              <input value={f.tz ?? data.timezone} onChange={set("tz")} />
-            </label>
-            <label>
-              Default buffer (minutes)
-              <input inputMode="numeric" value={f.sb ?? String(data.settings.defaultBufferMin)} onChange={set("sb")} />
-            </label>
-            <label>
-              Minimum notice (hours)
-              <input inputMode="numeric" value={f.sn ?? String(data.settings.minNoticeHours)} onChange={set("sn")} />
-            </label>
-            <label>
-              Book up to (days ahead)
-              <input inputMode="numeric" value={f.sa ?? String(data.settings.maxAdvanceDays)} onChange={set("sa")} />
-            </label>
-            <label>
-              Booking deposit (dollars, SAMPLE until you set it)
-              <input inputMode="decimal" value={f.sd ?? data.settings.depositDollars} onChange={set("sd")} />
-            </label>
-            <button type="submit" className="st-btn" disabled={pending}>
+            <Field label="Time zone">
+              <Input value={f.tz ?? data.timezone} onChange={set("tz")} />
+            </Field>
+            <Field label="Default buffer (minutes)">
+              <Input inputMode="numeric" value={f.sb ?? String(data.settings.defaultBufferMin)} onChange={set("sb")} />
+            </Field>
+            <Field label="Minimum notice (hours)">
+              <Input inputMode="numeric" value={f.sn ?? String(data.settings.minNoticeHours)} onChange={set("sn")} />
+            </Field>
+            <Field label="Book up to (days ahead)">
+              <Input inputMode="numeric" value={f.sa ?? String(data.settings.maxAdvanceDays)} onChange={set("sa")} />
+            </Field>
+            <Field label="Booking deposit (dollars, SAMPLE until you set it)">
+              <Input inputMode="decimal" value={f.sd ?? data.settings.depositDollars} onChange={set("sd")} />
+            </Field>
+            <Button type="submit" disabled={pending}>
               Save
-            </button>
+            </Button>
           </form>
-          <p className="st-note">
+          <Text size="sm" tone="muted">
             Calendar feed (subscribe in Apple, Google or Outlook calendar; keep the link private):{" "}
             <code>{data.icsUrl}</code>
-          </p>
+          </Text>
         </Card>
       </div>
     </Frame>

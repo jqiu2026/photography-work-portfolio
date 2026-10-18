@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { choose } from "./ui";
 import sharp from "sharp";
 import { enterGallery, newGallery, publishOpenGallery, uploadPhotos } from "./gallery-helpers";
 import { signStripePayload } from "../packages/payments/src/index";
@@ -46,14 +47,14 @@ test("owner creates a client, a job, a gallery with photographs, a contract and 
   ).toBeVisible();
 
   await page.goto(`${PHOTOS}/studio/shoots`, { waitUntil: "networkidle" });
-  await page.getByLabel("Client").selectOption({ label: `E2E Client ${uid}` });
+  await choose(page.getByLabel("Client"), `E2E Client ${uid}`);
   await page.getByLabel("Title").fill(`E2E job ${uid}`);
   await page.getByLabel("Fee (dollars)").fill("350");
   await page.getByRole("button", { name: "Add job" }).click();
   const row = page.getByRole("listitem").filter({ hasText: `E2E job ${uid}` });
   await expectSlow(row).toBeVisible();
   await row.getByRole("button", { name: "Advance" }).click();
-  await expectSlow(row.getByRole("list", { name: "Progress: booked" })).toBeVisible();
+  await expectSlow(row.getByRole("progressbar", { name: "Progress: booked" })).toBeVisible();
   await row.getByRole("button", { name: "New contract" }).click();
   await expectSlow(page.getByRole("status")).toContainText("Contract created");
   await row.getByRole("button", { name: "New invoice" }).click();

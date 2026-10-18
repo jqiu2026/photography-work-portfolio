@@ -27,7 +27,6 @@ import Link from "next/link";
 import { groupOf, sectionInfo, studioSections } from "./sections";
 import "./studio.css";
 import "./studio-chrome.css";
-import "./studio-legacy.css";
 import "./studio-dashboard.css";
 
 export type Result = { ok: boolean; message?: string; error?: string; link?: string };

@@ -1,5 +1,18 @@
 "use client";
 
+import {
+  Badge,
+  Button,
+  DataList,
+  DataListItem,
+  Field,
+  Input,
+  NumberInput,
+  Select,
+  Text,
+  Textarea,
+} from "@holominimal/ui";
+
 import { useState } from "react";
 import { createQuoteAction, sendQuoteAction } from "@/app/studio/commerce-actions";
 import { Card, Frame, useAct } from "./StudioFrame";
@@ -36,31 +49,28 @@ export function QuotesView({ user, data }: { user: string; data: QuotesData }) {
       <div className="st-grid">
         <Card title="Quotes" id="q-list">
           {data.quotes.length ? (
-            <ul className="st-list st-list--tall">
+            <ul className="hm-data-list st-list st-list--tall">
               {data.quotes.map((q) => (
-                <li key={q.id} data-quote-id={q.id}>
+                <li className="hm-data-list-item" key={q.id} data-quote-id={q.id}>
                   <span>
-                    <strong>{q.number}</strong> · {q.title} {q.isSample ? <em>SAMPLE</em> : null}
+                    <strong>{q.number}</strong> · {q.title} {q.isSample ? <Badge tone="warning">SAMPLE</Badge> : null}
                     <small>
                       {q.client} · {q.status} · {usd(q.totalCents)}
                       {q.validUntil ? ` · valid until ${q.validUntil}` : ""}
                     </small>
                   </span>
                   {q.status === "draft" || q.status === "sent" || q.status === "viewed" ? (
-                    <button
-                      type="button"
-                      className="st-btn"
-                      disabled={pending}
-                      onClick={() => act(() => sendQuoteAction(q.id))}
-                    >
+                    <Button disabled={pending} onClick={() => act(() => sendQuoteAction(q.id))}>
                       {q.status === "draft" ? "Send" : "Send a new link"}
-                    </button>
+                    </Button>
                   ) : null}
                 </li>
               ))}
             </ul>
           ) : (
-            <p className="st-note">No quotes yet.</p>
+            <Text size="sm" tone="muted">
+              No quotes yet.
+            </Text>
           )}
         </Card>
         <Card title="New quote" id="q-new">
@@ -90,80 +100,75 @@ export function QuotesView({ user, data }: { user: string; data: QuotesData }) {
               },
             )}
           >
-            <label>
-              Client
-              <select value={f.client ?? ""} onChange={set("client")}>
+            <Field label="Client">
+              <Select value={f.client ?? ""} onValueChange={(v) => set("client")({ target: { value: v } })}>
                 <option value="">Pick a client</option>
                 {data.clients.map((c) => (
                   <option key={c.id} value={c.id}>
                     {c.name}
                   </option>
                 ))}
-              </select>
-            </label>
-            <label>
-              Title
-              <input value={f.title ?? ""} onChange={set("title")} />
-            </label>
-            <label>
-              Package
-              <select value={f.pkg ?? ""} onChange={set("pkg")}>
+              </Select>
+            </Field>
+            <Field label="Title">
+              <Input value={f.title ?? ""} onChange={set("title")} />
+            </Field>
+            <Field label="Package">
+              <Select value={f.pkg ?? ""} onValueChange={(v) => set("pkg")({ target: { value: v } })}>
                 <option value="">No package</option>
                 {data.packages.map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.name} ({usd(p.priceCents)})
                   </option>
                 ))}
-              </select>
-            </label>
-            <fieldset className="st-fieldset">
-              <legend>Add-ons</legend>
-              {data.addOns.map((a) => (
-                <label key={a.id} className="st-check">
-                  <input
-                    type="number"
-                    min={0}
-                    max={50}
-                    aria-label={`${a.name} quantity`}
-                    value={picked[a.id] ?? 0}
-                    onChange={(e) => setPicked((x) => ({ ...x, [a.id]: Number(e.target.value) }))}
-                    style={{ width: "4rem" }}
-                  />{" "}
-                  {a.name} ({usd(a.priceCents)} {a.unit})
-                </label>
-              ))}
+              </Select>
+            </Field>
+            <fieldset className="pm-fieldset">
+              <legend className="hm-field-label">Add-ons</legend>
+              <DataList>
+                {data.addOns.map((a) => (
+                  <DataListItem
+                    key={a.id}
+                    description={`${usd(a.priceCents)} ${a.unit}`}
+                    actions={
+                      <NumberInput
+                        aria-label={`${a.name} quantity`}
+                        min={0}
+                        max={50}
+                        value={picked[a.id] ?? 0}
+                        onValueChange={(n) => setPicked((x) => ({ ...x, [a.id]: n ?? 0 }))}
+                      />
+                    }
+                  >
+                    {a.name}
+                  </DataListItem>
+                ))}
+              </DataList>
             </fieldset>
-            <label>
-              Promo code
-              <input value={f.promo ?? ""} onChange={set("promo")} />
-            </label>
-            <label>
-              Gift card code
-              <input value={f.gift ?? ""} onChange={set("gift")} />
-            </label>
-            <label>
-              Introduction (optional)
-              <textarea rows={2} value={f.intro ?? ""} onChange={set("intro")} />
-            </label>
-            <label>
-              Terms
-              <textarea rows={4} value={f.terms ?? TERMS} onChange={set("terms")} />
-            </label>
-            <label>
-              Tax address for Stripe Tax: country (optional, 2 letters)
-              <input value={f.country ?? ""} onChange={set("country")} maxLength={2} />
-            </label>
-            <label>
-              State
-              <input value={f.state ?? ""} onChange={set("state")} />
-            </label>
-            <label>
-              Postal code
-              <input value={f.zip ?? ""} onChange={set("zip")} />
-            </label>
-            <button type="submit" className="st-btn" disabled={pending}>
+            <Field label="Promo code">
+              <Input value={f.promo ?? ""} onChange={set("promo")} />
+            </Field>
+            <Field label="Gift card code">
+              <Input value={f.gift ?? ""} onChange={set("gift")} />
+            </Field>
+            <Field label="Introduction (optional)">
+              <Textarea rows={2} value={f.intro ?? ""} onChange={set("intro")} />
+            </Field>
+            <Field label="Terms">
+              <Textarea rows={4} value={f.terms ?? TERMS} onChange={set("terms")} />
+            </Field>
+            <Field label="Tax address for Stripe Tax: country (optional, 2 letters)">
+              <Input value={f.country ?? ""} onChange={set("country")} maxLength={2} />
+            </Field>
+            <Field label="State">
+              <Input value={f.state ?? ""} onChange={set("state")} />
+            </Field>
+            <Field label="Postal code">
+              <Input value={f.zip ?? ""} onChange={set("zip")} />
+            </Field>
+            <Button type="submit" disabled={pending}>
               Create quote
-            </button>
+            </Button>
           </form>
         </Card>
       </div>

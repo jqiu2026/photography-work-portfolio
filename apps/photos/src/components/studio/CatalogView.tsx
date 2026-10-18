@@ -1,5 +1,7 @@
 "use client";
 
+import { Badge, Button, Checkbox, Field, Input, Select, Text, Textarea } from "@holominimal/ui";
+
 import { useState } from "react";
 import {
   createGiftCardAction,
@@ -93,31 +95,27 @@ export function CatalogView({ user, data }: { user: string; data: CatalogData })
     <Frame section="packages" user={user} note={note}>
       <div className="st-grid">
         <Card title="Packages" id="cat-pk">
-          <p className="st-note">
+          <Text size="sm" tone="muted">
             Prices marked SAMPLE show as $XX on the public site until you untick "Sample price".
-          </p>
-          <ul className="st-list st-list--tall">
+          </Text>
+          <ul className="hm-data-list st-list st-list--tall">
             {data.packages.map((p) => (
-              <li key={p.id} data-package-id={p.id}>
+              <li className="hm-data-list-item" key={p.id} data-package-id={p.id}>
                 <span>
-                  <strong>{p.name}</strong> · {usd(p.priceCents)} {p.isSample ? <em>SAMPLE</em> : null}
+                  <strong>{p.name}</strong> · {usd(p.priceCents)}{" "}
+                  {p.isSample ? <Badge tone="warning">SAMPLE</Badge> : null}
                   <small>{p.deliverables.map((d) => `${d.label}: ${d.value}`).join(" · ")}</small>
                   {p.mandatoryFees.length ? (
                     <small>Includes {p.mandatoryFees.map((x) => `${x.label} ${usd(x.cents)}`).join(", ")}</small>
                   ) : null}
                 </span>
                 <span className="st-actions">
-                  <button type="button" className="st-btn st-btn--ghost" onClick={() => editPackage(p)}>
+                  <Button variant="secondary" onClick={() => editPackage(p)}>
                     Edit
-                  </button>
-                  <button
-                    type="button"
-                    className="st-btn st-btn--ghost"
-                    disabled={pending}
-                    onClick={() => act(() => deletePackageAction(p.id))}
-                  >
+                  </Button>
+                  <Button variant="secondary" disabled={pending} onClick={() => act(() => deletePackageAction(p.id))}>
                     Remove
-                  </button>
+                  </Button>
                 </span>
               </li>
             ))}
@@ -143,81 +141,63 @@ export function CatalogView({ user, data }: { user: string; data: CatalogData })
               () => setF({}),
             )}
           >
-            <label>
-              Name
-              <input value={f.pname ?? ""} onChange={set("pname")} />
-            </label>
-            <label>
-              Tagline
-              <input value={f.ptag ?? ""} onChange={set("ptag")} />
-            </label>
-            <label>
-              Headline price (dollars, fees included)
-              <input inputMode="decimal" value={f.pprice ?? ""} onChange={set("pprice")} />
-            </label>
-            <label>
-              Tier (order)
-              <input inputMode="numeric" value={f.ptier ?? ""} onChange={set("ptier")} />
-            </label>
-            <label>
-              Deliverables, one per line as "Label: value" (coverage, edited images, gallery time)
-              <textarea rows={4} value={f.pdel ?? ""} onChange={set("pdel")} />
-            </label>
-            <label>
-              Mandatory fees included in the price, one per line as "Label: dollars"
-              <textarea rows={2} value={f.pfees ?? ""} onChange={set("pfees")} />
-            </label>
-            <label>
-              Included add-ons (slugs, comma separated)
-              <input value={f.pinc ?? ""} onChange={set("pinc")} />
-            </label>
-            <label className="st-check">
-              <input
-                type="checkbox"
-                checked={flags.featured}
-                onChange={(e) => setFlags({ ...flags, featured: e.target.checked })}
-              />{" "}
-              Featured
-            </label>
-            <label className="st-check">
-              <input
-                type="checkbox"
-                checked={flags.sample}
-                onChange={(e) => setFlags({ ...flags, sample: e.target.checked })}
-              />{" "}
-              Sample price (shows as $XX)
-            </label>
-            <button type="submit" className="st-btn" disabled={pending}>
+            <Field label="Name">
+              <Input value={f.pname ?? ""} onChange={set("pname")} />
+            </Field>
+            <Field label="Tagline">
+              <Input value={f.ptag ?? ""} onChange={set("ptag")} />
+            </Field>
+            <Field label="Headline price (dollars, fees included)">
+              <Input inputMode="decimal" value={f.pprice ?? ""} onChange={set("pprice")} />
+            </Field>
+            <Field label="Tier (order)">
+              <Input inputMode="numeric" value={f.ptier ?? ""} onChange={set("ptier")} />
+            </Field>
+            <Field label={'Deliverables, one per line as "Label: value" (coverage, edited images, gallery time)'}>
+              <Textarea rows={4} value={f.pdel ?? ""} onChange={set("pdel")} />
+            </Field>
+            <Field label={'Mandatory fees included in the price, one per line as "Label: dollars"'}>
+              <Textarea rows={2} value={f.pfees ?? ""} onChange={set("pfees")} />
+            </Field>
+            <Field label="Included add-ons (slugs, comma separated)">
+              <Input value={f.pinc ?? ""} onChange={set("pinc")} />
+            </Field>
+            <Checkbox
+              checked={flags.featured}
+              onChange={(e) => setFlags({ ...flags, featured: e.target.checked })}
+              label="Featured"
+            />
+            <Checkbox
+              checked={flags.sample}
+              onChange={(e) => setFlags({ ...flags, sample: e.target.checked })}
+              label="Sample price (shows as $XX)"
+            />
+            <Button type="submit" disabled={pending}>
               {f.pid ? "Save package" : "Add package"}
-            </button>
+            </Button>
           </form>
         </Card>
 
         <Card title="Add-ons and fees" id="cat-ao">
-          <p className="st-note">
+          <Text size="sm" tone="muted">
             The standalone price is always shown next to a bundle. Optional fees (travel, rush) stay separate from the
             headline price.
-          </p>
-          <ul className="st-list st-list--tall">
+          </Text>
+          <ul className="hm-data-list st-list st-list--tall">
             {data.addOns.map((a) => (
-              <li key={a.id} data-addon-id={a.id}>
+              <li className="hm-data-list-item" key={a.id} data-addon-id={a.id}>
                 <span>
                   <strong>{a.name}</strong> · {usd(a.priceCents)} {a.unit} {a.isFee ? "(optional fee)" : ""}{" "}
-                  {a.isSample ? <em>SAMPLE</em> : null}
+                  {a.isSample ? <Badge tone="warning">SAMPLE</Badge> : null}
                   <small>{a.slug}</small>
                 </span>
                 <span className="st-actions">
-                  <button type="button" className="st-btn st-btn--ghost" onClick={() => editAddOn(a)}>
+                  <Button variant="secondary" onClick={() => editAddOn(a)}>
                     Edit
-                  </button>
-                  <button
-                    type="button"
-                    className="st-btn st-btn--ghost"
-                    disabled={pending}
-                    onClick={() => act(() => deleteAddOnAction(a.id))}
-                  >
+                  </Button>
+                  <Button variant="secondary" disabled={pending} onClick={() => act(() => deleteAddOnAction(a.id))}>
                     Remove
-                  </button>
+                  </Button>
                 </span>
               </li>
             ))}
@@ -242,74 +222,59 @@ export function CatalogView({ user, data }: { user: string; data: CatalogData })
               () => setF({}),
             )}
           >
-            <label>
-              Name
-              <input value={f.aname ?? ""} onChange={set("aname")} />
-            </label>
-            <label>
-              Description
-              <input value={f.adesc ?? ""} onChange={set("adesc")} />
-            </label>
-            <label>
-              Standalone price (dollars)
-              <input inputMode="decimal" value={f.aprice ?? ""} onChange={set("aprice")} />
-            </label>
-            <label>
-              Unit
-              <input value={f.aunit ?? ""} onChange={set("aunit")} placeholder="each" />
-            </label>
-            <label>
-              Max quantity
-              <input inputMode="numeric" value={f.amax ?? ""} onChange={set("amax")} placeholder="1" />
-            </label>
-            <label className="st-check">
-              <input
-                type="checkbox"
-                checked={flags.fee}
-                onChange={(e) => setFlags({ ...flags, fee: e.target.checked })}
-              />{" "}
-              Optional fee (travel, rush)
-            </label>
-            <label className="st-check">
-              <input
-                type="checkbox"
-                checked={flags.upsell}
-                onChange={(e) => setFlags({ ...flags, upsell: e.target.checked })}
-              />{" "}
-              Offer as an upsell on quotes
-            </label>
-            <label className="st-check">
-              <input
-                type="checkbox"
-                checked={flags.asample}
-                onChange={(e) => setFlags({ ...flags, asample: e.target.checked })}
-              />{" "}
-              Sample price
-            </label>
-            <button type="submit" className="st-btn" disabled={pending}>
+            <Field label="Name">
+              <Input value={f.aname ?? ""} onChange={set("aname")} />
+            </Field>
+            <Field label="Description">
+              <Input value={f.adesc ?? ""} onChange={set("adesc")} />
+            </Field>
+            <Field label="Standalone price (dollars)">
+              <Input inputMode="decimal" value={f.aprice ?? ""} onChange={set("aprice")} />
+            </Field>
+            <Field label="Unit">
+              <Input value={f.aunit ?? ""} onChange={set("aunit")} placeholder="each" />
+            </Field>
+            <Field label="Max quantity">
+              <Input inputMode="numeric" value={f.amax ?? ""} onChange={set("amax")} placeholder="1" />
+            </Field>
+            <Checkbox
+              checked={flags.fee}
+              onChange={(e) => setFlags({ ...flags, fee: e.target.checked })}
+              label="Optional fee (travel, rush)"
+            />
+            <Checkbox
+              checked={flags.upsell}
+              onChange={(e) => setFlags({ ...flags, upsell: e.target.checked })}
+              label="Offer as an upsell on quotes"
+            />
+            <Checkbox
+              checked={flags.asample}
+              onChange={(e) => setFlags({ ...flags, asample: e.target.checked })}
+              label="Sample price"
+            />
+            <Button type="submit" disabled={pending}>
               {f.aid ? "Save add-on" : "Add add-on"}
-            </button>
+            </Button>
           </form>
         </Card>
 
         <Card title="Codes and gift cards" id="cat-codes">
-          <ul className="st-list">
+          <ul className="hm-data-list st-list">
             {data.promos.map((p) => (
-              <li key={p.id}>
+              <li className="hm-data-list-item" key={p.id}>
                 <span>
                   <code>{p.code}</code> · {p.off} · used {p.uses}
                   {p.maxUses ? ` of ${p.maxUses}` : ""} {p.kind === "referral" ? "· referral" : ""}{" "}
                   {p.active ? "" : "· off"}
                   {p.note ? <small>{p.note}</small> : null}
                 </span>
-                <button
-                  type="button"
-                  className="st-btn st-btn--ghost"
+                <Button
+                  variant="secondary"
                   disabled={pending}
                   onClick={() => act(() => togglePromoAction(p.id, !p.active))}
                 >
                   {p.active ? "Switch off" : "Switch on"}
-                </button>
+                </Button>
               </li>
             ))}
           </ul>
@@ -328,28 +293,24 @@ export function CatalogView({ user, data }: { user: string; data: CatalogData })
               () => setF({}),
             )}
           >
-            <label>
-              Code
-              <input value={f.ccode ?? ""} onChange={set("ccode")} />
-            </label>
-            <label>
-              Kind
-              <select value={f.ckind ?? "percent"} onChange={set("ckind")}>
+            <Field label="Code">
+              <Input value={f.ccode ?? ""} onChange={set("ccode")} />
+            </Field>
+            <Field label="Kind">
+              <Select value={f.ckind ?? "percent"} onValueChange={(v) => set("ckind")({ target: { value: v } })}>
                 <option value="percent">Percent off</option>
                 <option value="amount">Dollars off</option>
-              </select>
-            </label>
-            <label>
-              Value
-              <input inputMode="decimal" value={f.cval ?? ""} onChange={set("cval")} />
-            </label>
-            <label>
-              Max uses (blank = unlimited)
-              <input inputMode="numeric" value={f.cmax ?? ""} onChange={set("cmax")} />
-            </label>
-            <button type="submit" className="st-btn" disabled={pending}>
+              </Select>
+            </Field>
+            <Field label="Value">
+              <Input inputMode="decimal" value={f.cval ?? ""} onChange={set("cval")} />
+            </Field>
+            <Field label="Max uses (blank = unlimited)">
+              <Input inputMode="numeric" value={f.cmax ?? ""} onChange={set("cmax")} />
+            </Field>
+            <Button type="submit" disabled={pending}>
               Create code
-            </button>
+            </Button>
           </form>
           <form
             noValidate
@@ -357,20 +318,19 @@ export function CatalogView({ user, data }: { user: string; data: CatalogData })
             aria-label="Referral code"
             onSubmit={submit(() => createReferralAction(f.rclient ?? ""))}
           >
-            <label>
-              Referral code for a client
-              <select value={f.rclient ?? ""} onChange={set("rclient")}>
+            <Field label="Referral code for a client">
+              <Select value={f.rclient ?? ""} onValueChange={(v) => set("rclient")({ target: { value: v } })}>
                 <option value="">Pick a client</option>
                 {data.clients.map((c) => (
                   <option key={c.id} value={c.id}>
                     {c.name}
                   </option>
                 ))}
-              </select>
-            </label>
-            <button type="submit" className="st-btn" disabled={pending}>
+              </Select>
+            </Field>
+            <Button type="submit" disabled={pending}>
               Create referral code
-            </button>
+            </Button>
           </form>
           <form
             noValidate
@@ -381,30 +341,27 @@ export function CatalogView({ user, data }: { user: string; data: CatalogData })
               () => setF({}),
             )}
           >
-            <label>
-              Gift card amount (dollars)
-              <input inputMode="decimal" value={f.gamt ?? ""} onChange={set("gamt")} />
-            </label>
-            <label>
-              Buyer email (optional)
-              <input value={f.gemail ?? ""} onChange={set("gemail")} />
-            </label>
-            <label>
-              For (optional)
-              <input value={f.grec ?? ""} onChange={set("grec")} />
-            </label>
-            <button type="submit" className="st-btn" disabled={pending}>
+            <Field label="Gift card amount (dollars)">
+              <Input inputMode="decimal" value={f.gamt ?? ""} onChange={set("gamt")} />
+            </Field>
+            <Field label="Buyer email (optional)">
+              <Input value={f.gemail ?? ""} onChange={set("gemail")} />
+            </Field>
+            <Field label="For (optional)">
+              <Input value={f.grec ?? ""} onChange={set("grec")} />
+            </Field>
+            <Button type="submit" disabled={pending}>
               Create gift card
-            </button>
+            </Button>
           </form>
         </Card>
 
         <Card title="Deposit, quotes and tax" id="cat-set">
-          <p className="st-note">
+          <Text size="sm" tone="muted">
             Tax is calculated and shown on quotes and checkout only. Registering, collecting, filing and remitting stay
             with you and your accountant.
             {data.settings.taxIsSample ? " The tax rate below is a SAMPLE until you save it." : ""}
-          </p>
+          </Text>
           <form
             noValidate
             className="st-form"
@@ -418,25 +375,21 @@ export function CatalogView({ user, data }: { user: string; data: CatalogData })
               }),
             )}
           >
-            <label>
-              Deposit (percent of what is due)
-              <input inputMode="decimal" value={f.sdp ?? String(data.settings.depositPercent)} onChange={set("sdp")} />
-            </label>
-            <label>
-              Quotes stay valid (days)
-              <input inputMode="numeric" value={f.sqd ?? String(data.settings.quoteValidDays)} onChange={set("sqd")} />
-            </label>
-            <label>
-              Tax rate (percent)
-              <input inputMode="decimal" value={f.str ?? data.settings.taxRate} onChange={set("str")} />
-            </label>
-            <label>
-              Tax label
-              <input value={f.stl ?? data.settings.taxLabel} onChange={set("stl")} />
-            </label>
-            <button type="submit" className="st-btn" disabled={pending}>
+            <Field label="Deposit (percent of what is due)">
+              <Input inputMode="decimal" value={f.sdp ?? String(data.settings.depositPercent)} onChange={set("sdp")} />
+            </Field>
+            <Field label="Quotes stay valid (days)">
+              <Input inputMode="numeric" value={f.sqd ?? String(data.settings.quoteValidDays)} onChange={set("sqd")} />
+            </Field>
+            <Field label="Tax rate (percent)">
+              <Input inputMode="decimal" value={f.str ?? data.settings.taxRate} onChange={set("str")} />
+            </Field>
+            <Field label="Tax label">
+              <Input value={f.stl ?? data.settings.taxLabel} onChange={set("stl")} />
+            </Field>
+            <Button type="submit" disabled={pending}>
               Save
-            </button>
+            </Button>
           </form>
         </Card>
       </div>

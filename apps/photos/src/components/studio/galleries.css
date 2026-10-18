@@ -38,47 +38,27 @@
   gap: var(--hm-space-4);
 }
 
-.pl-meter progress {
-  width: min(28rem, 100%);
-  height: .5rem;
-  accent-color: #f2f2f3;
+.pl-meter {
+  display: grid;
+  gap: var(--hm-space-2);
+  max-width: 28rem;
 }
 .pl-plans {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-  gap: 1rem;
+  margin-top: var(--hm-space-2);
 }
-.pl-plan {
-  padding: 1rem 1.2rem;
-  border: 1px solid var(--st-line, #1c1c1f);
-  border-radius: 10px;
+/* reports: tabs and the period side by side */
+.rp-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--hm-space-3) var(--hm-space-5);
+  margin-bottom: var(--hm-space-6);
 }
-.pl-plan[data-current] {
-  border-color: #5a5a62;
+.rp-period {
+  display: flex;
+  gap: var(--hm-space-1);
 }
-.pl-plan ul {
-  padding-left: 1.1rem;
-  display: grid;
-  gap: .25rem;
-  font-size: .9rem;
-}
-
-.rp-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: .9rem;
-}
-.rp-table th,
-.rp-table td {
-  padding: .55rem .7rem;
-  text-align: left;
-  border-bottom: 1px solid var(--st-line, #1c1c1f);
-  white-space: nowrap;
-}
-.rp-table th {
-  color: var(--st-dim, #8b8b92);
-  font-weight: 400;
-  font-size: .78rem;
-  letter-spacing: .08em;
-  text-transform: uppercase;
+.st-statrow {
+  margin-bottom: var(--hm-space-7);
 }

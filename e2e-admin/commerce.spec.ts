@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { choose } from "./ui";
 
 /** Packages, add-ons, codes, quotes with upsell and accept-and-pay, gift cards. Dev servers and the throwaway database. */
 const PHOTOS = "http://localhost:3302";
@@ -57,15 +58,9 @@ test("owner creates a client, a code, a gift card and a quote; sends it; the ema
   await slow(page.getByRole("status")).toContainText("Saved");
 
   await page.goto(`${PHOTOS}/studio/quotes`, { waitUntil: "networkidle" });
-  await page
-    .locator("label", { hasText: /^Client/ })
-    .locator("select")
-    .selectOption({ label: `Quote Client ${uid}` });
+  await choose(page.getByLabel(/^Client/), `Quote Client ${uid}`);
   await page.getByRole("textbox", { name: "Title" }).fill(`Spring shoot ${uid}`);
-  await page
-    .locator("label", { hasText: /^Package/ })
-    .locator("select")
-    .selectOption({ label: "Standard ($400.00)" });
+  await choose(page.getByLabel(/^Package/), "Standard ($400.00)");
   await page.getByLabel("Promo code").fill(`save10-${uid}`);
   await page.getByRole("button", { name: "Create quote" }).click();
   await slow(page.getByRole("status")).toContainText(/Quote Q\d{4}-\d{4} created/);

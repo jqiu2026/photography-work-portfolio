@@ -63,19 +63,12 @@
 .gm-wide {
   grid-column: 1 / -1;
 }
-.gm-row,
-.gm-inline,
 .gm-bar,
 .gm-view-actions {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--hm-space-2) var(--hm-space-3);
-}
-.gm-inline > .hm-input,
-.gm-inline > .hm-field {
-  flex: 1 1 14rem;
-  max-width: 24rem;
 }
 .gm-bar {
   margin-bottom: var(--hm-space-5);

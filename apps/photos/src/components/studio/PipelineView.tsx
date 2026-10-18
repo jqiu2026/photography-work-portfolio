@@ -1,5 +1,7 @@
 "use client";
 
+import { ArrowRightIcon, Badge, Button, Surface } from "@holominimal/ui";
+
 import { advanceJobAction, convertBookingAction } from "@/app/studio/actions";
 import { Frame, useAct } from "./StudioFrame";
 
@@ -28,23 +30,23 @@ export function PipelineView({ user, data }: { user: string; data: PipelineData 
       <div className="st-board" role="list" aria-label="Pipeline">
         <section className="st-col" role="listitem" aria-labelledby="col-leads">
           <h2 id="col-leads">
-            New leads <small>{data.leads.length}</small>
+            New leads <Badge tone="muted">{data.leads.length}</Badge>
           </h2>
           <ul>
             {data.leads.map((l) => (
-              <li key={l.id} className="st-cardlet" data-lead-id={l.id}>
+              <Surface as="li" key={l.id} variant="outlined" padding="sm" className="st-cardlet" data-lead-id={l.id}>
                 <strong>{l.name}</strong>
                 <small>{[l.shootType, l.eventDate].filter(Boolean).join(" · ") || "No details yet"}</small>
-                <small>lead score {l.score}</small>
-                <button
-                  type="button"
-                  className="st-btn"
+                <Badge tone="accent">score {l.score}</Badge>
+                <Button
+                  variant="secondary"
+                  size="sm"
                   disabled={pending}
                   onClick={() => act(() => convertBookingAction(l.id))}
                 >
                   Convert to client
-                </button>
-              </li>
+                </Button>
+              </Surface>
             ))}
           </ul>
         </section>
@@ -54,29 +56,29 @@ export function PipelineView({ user, data }: { user: string; data: PipelineData 
             <section key={step} className="st-col" role="listitem" aria-labelledby={`col-${step}`}>
               <h2 id={`col-${step}`}>
                 {LABEL[step]}{" "}
-                <small>
+                <Badge tone="muted">
                   {jobs.length}
                   {jobs.length ? ` · ${money(jobs)}` : ""}
-                </small>
+                </Badge>
               </h2>
               <ul>
                 {jobs.map((j) => (
-                  <li key={j.id} className="st-cardlet" data-job-id={j.id}>
+                  <Surface as="li" key={j.id} variant="outlined" padding="sm" className="st-cardlet" data-job-id={j.id}>
                     <strong>{j.title}</strong>
                     <small>{[j.client, j.date].filter(Boolean).join(" · ")}</small>
                     {j.feeCents ? <small>{usd(j.feeCents)}</small> : null}
                     {i < STEPS.length - 1 ? (
-                      <button
-                        type="button"
-                        className="st-btn"
+                      <Button
+                        variant="secondary"
+                        size="sm"
                         disabled={pending}
                         onClick={() => act(() => advanceJobAction(j.id))}
                         aria-label={`Move ${j.title} to ${LABEL[STEPS[i + 1]]}`}
                       >
-                        Move to {LABEL[STEPS[i + 1]]} →
-                      </button>
+                        {LABEL[STEPS[i + 1]]} <ArrowRightIcon />
+                      </Button>
                     ) : null}
-                  </li>
+                  </Surface>
                 ))}
               </ul>
             </section>

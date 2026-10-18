@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { choose } from "./ui";
 
 /** Pipeline, calendar, availability, online booking with a deposit hold, mini-sessions, the .ics feed and the embed. */
 const PHOTOS = "http://localhost:3302";
@@ -17,7 +18,7 @@ const MON = monday(0);
 test("owner sets bookable hours and a blocked day; the calendar refuses a double booking", async ({ page }) => {
   await page.goto(`${PHOTOS}/studio/calendar`, { waitUntil: "networkidle" });
   const hours = page.locator('section[aria-labelledby="cal-hours"]');
-  await hours.getByLabel("Day").selectOption("1");
+  await choose(hours.getByLabel("Day"), "Monday");
   await hours.getByLabel("From").fill("10:00");
   await hours.getByLabel("To").fill("14:00");
   await hours.getByRole("button", { name: "Add hours" }).click();

@@ -1,8 +1,17 @@
 import { getDb } from "@jerryqiu/db";
-import { Container, Heading, Section } from "@/components/ui";
+import {
+  Container,
+  DataList,
+  DataListItem,
+  PageDescription,
+  PageEyebrow,
+  PageHeader,
+  PageTitle,
+  Section,
+  Status,
+} from "@/components/ui";
 import { requirePageUser } from "@/auth";
 import { StudioShell as Shell } from "@/components/studio/StudioShell";
-import "@/components/studio/studio.css";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Health", robots: { index: false, follow: false } };
@@ -79,20 +88,27 @@ export default async function Health() {
     <Shell>
       <Section>
         <Container size="md">
-          <Heading as="h1" size="3xl" display>
-            Health
-          </Heading>
-          <ul className="st-list st-list--tall" style={{ marginTop: "1.5rem" }}>
+          <PageHeader>
+            <PageEyebrow>Studio</PageEyebrow>
+            <PageTitle>Health</PageTitle>
+            <PageDescription>What is configured, by name only. Values are never shown.</PageDescription>
+          </PageHeader>
+          <DataList aria-label="Checks">
             {checks.map((c) => (
-              <li key={c.name} data-check={c.name}>
-                <span>
-                  <strong>{c.name}</strong>
-                  <small>{c.detail}</small>
-                </span>
-                <em>{c.ok === true ? "ok" : c.ok === "warn" ? "check" : "missing"}</em>
-              </li>
+              <DataListItem
+                key={c.name}
+                data-check={c.name}
+                description={c.detail}
+                meta={
+                  <Status tone={c.ok === true ? "success" : c.ok === "warn" ? "warning" : "danger"}>
+                    {c.ok === true ? "ok" : c.ok === "warn" ? "check" : "missing"}
+                  </Status>
+                }
+              >
+                {c.name}
+              </DataListItem>
             ))}
-          </ul>
+          </DataList>
         </Container>
       </Section>
     </Shell>

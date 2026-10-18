@@ -1,18 +1,35 @@
 "use client";
 
+import {
+  Button,
+  DownloadIcon,
+  EmptyState,
+  PageTab,
+  PageTabs,
+  Stat,
+  StatGroup,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+  Text,
+} from "@holominimal/ui";
+
 import Link from "next/link";
-import { Frame, useAct } from "./StudioFrame";
+import { Card, Frame, useAct } from "./StudioFrame";
 import "./galleries.css";
 
 const usd = (c: number) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(c / 100);
 const mb = (b: number) => `${(b / 1_048_576).toFixed(1)} MB`;
-type Table = { head: string[]; rows: string[][] };
+type ReportTable = { head: string[]; rows: string[][] };
 export type ReportData = {
   tab: "sales" | "orders" | "files" | "products" | "invoices";
   days: number;
   allowed: boolean;
   summary: { label: string; value: string }[];
-  table: Table;
+  table: ReportTable;
 };
 const TABS: [ReportData["tab"], string][] = [
   ["sales", "Sales"],
@@ -34,83 +51,87 @@ export function ReportsView({ data }: { data: ReportData }) {
     a.download = `${data.tab}-report-${data.days}d.csv`;
     a.click();
   };
+  // a column is numeric (right-aligned) when every value in it is an amount, a count or a percentage
+  const NUM = /^[-−]?[$€]?[\d,]+(\.\d+)?%?$/;
+  const numericCol = data.table.head.map(
+    (_, j) => data.table.rows.length > 0 && data.table.rows.every((r) => NUM.test((r[j] ?? "").trim())),
+  );
   return (
     <Frame section="reports" note={note}>
       {!data.allowed ? (
-        <section className="st-card">
-          <h2>Reports are part of Full Frame</h2>
-          <p className="st-note">
-            See sales, orders, files delivered, products and invoices for any period.{" "}
-            <Link href="/studio/plan">Plan and billing</Link>
-          </p>
-        </section>
+        <Card title="Reports are part of Full Frame" id="rp-locked">
+          <Text size="sm" tone="muted">
+            See sales, orders, files delivered, products and invoices for any period.
+          </Text>
+          <div>
+            <Button asChild>
+              <Link href="/studio/plan">See plans</Link>
+            </Button>
+          </div>
+        </Card>
       ) : (
         <>
-          <nav className="st-tabs" aria-label="Reports">
-            {TABS.map(([k, label]) => (
-              <Link
-                key={k}
-                href={`/studio/reports?tab=${k}&days=${data.days}`}
-                aria-current={k === data.tab ? "page" : undefined}
-              >
-                {label}
-              </Link>
-            ))}
-          </nav>
-          <div className="gm-row" role="group" aria-label="Period">
-            {[7, 30, 90, 365].map((d) => (
-              <Link
-                key={d}
-                className="st-btn st-btn--ghost"
-                href={`/studio/reports?tab=${data.tab}&days=${d}`}
-                aria-current={d === data.days ? "true" : undefined}
-              >
-                {d === 365 ? "Year" : `${d} days`}
-              </Link>
-            ))}
+          <div className="rp-bar">
+            <PageTabs aria-label="Reports">
+              {TABS.map(([k, label]) => (
+                <PageTab key={k} asChild current={k === data.tab}>
+                  <Link href={`/studio/reports?tab=${k}&days=${data.days}`}>{label}</Link>
+                </PageTab>
+              ))}
+            </PageTabs>
+            <nav className="rp-period" aria-label="Period">
+              {[7, 30, 90, 365].map((d) => (
+                <Button key={d} asChild size="sm" variant={d === data.days ? "primary" : "ghost"}>
+                  <Link
+                    href={`/studio/reports?tab=${data.tab}&days=${d}`}
+                    aria-current={d === data.days ? "true" : undefined}
+                  >
+                    {d === 365 ? "Year" : `${d} days`}
+                  </Link>
+                </Button>
+              ))}
+            </nav>
           </div>
-          <div className="gl-stats" style={{ display: "flex", gap: "2rem", flexWrap: "wrap", margin: "1rem 0" }}>
+          <StatGroup className="st-statrow">
             {data.summary.map((s) => (
-              <p key={s.label}>
-                <strong>{s.value}</strong>
-                <br />
-                <small>{s.label}</small>
-              </p>
+              <Stat key={s.label} label={s.label} value={s.value} />
             ))}
-          </div>
-          <section className="st-card" aria-label="Report table">
-            {data.table.rows.length ? (
-              <div style={{ overflowX: "auto" }}>
-                <table className="rp-table">
-                  <thead>
-                    <tr>
-                      {data.table.head.map((h) => (
-                        <th key={h} scope="col">
-                          {h}
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {data.table.rows.map((r, i) => (
-                      <tr key={i}>
-                        {r.map((c, j) => (
-                          <td key={j}>{c}</td>
-                        ))}
-                      </tr>
+          </StatGroup>
+          {data.table.rows.length ? (
+            <>
+              <Table containerLabel="Report table" stickyHeader>
+                <TableHeader>
+                  <TableRow>
+                    {data.table.head.map((h) => (
+                      <TableHead key={h} align={numericCol[data.table.head.indexOf(h)] ? "end" : "start"}>
+                        {h}
+                      </TableHead>
                     ))}
-                  </tbody>
-                </table>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {data.table.rows.map((r, i) => (
+                    // biome-ignore lint/suspicious/noArrayIndexKey: report rows have no id and never reorder
+                    <TableRow key={i}>
+                      {r.map((c, j) => (
+                        // biome-ignore lint/suspicious/noArrayIndexKey: columns are positional
+                        <TableCell key={j} numeric={numericCol[j]}>
+                          {c}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+              <div>
+                <Button variant="secondary" onClick={csv}>
+                  <DownloadIcon /> Download CSV
+                </Button>
               </div>
-            ) : (
-              <p className="st-note">Nothing in this period.</p>
-            )}
-            {data.table.rows.length ? (
-              <button type="button" className="st-btn st-btn--ghost" onClick={csv}>
-                Download CSV
-              </button>
-            ) : null}
-          </section>
+            </>
+          ) : (
+            <EmptyState>Nothing in this period.</EmptyState>
+          )}
         </>
       )}
     </Frame>

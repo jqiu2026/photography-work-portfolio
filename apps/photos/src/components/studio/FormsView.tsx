@@ -1,5 +1,7 @@
 "use client";
 
+import { Badge, Button, Checkbox, Field, Input, Select, Text, Textarea } from "@holominimal/ui";
+
 import { useState } from "react";
 import {
   createFromTemplateAction,
@@ -70,21 +72,20 @@ export function FormsView({ user, data }: { user: string; data: FormsData }) {
     <Frame section="forms" user={user} note={note}>
       <div className="st-grid">
         <Card title="Templates" id="f-tpl">
-          <p className="st-note">
+          <Text size="sm" tone="muted">
             Merge fields: client_name, client_email, job_title, job_date, location, fee, deposit, business_name,
             gallery_policy, cancellation_days, today, subject, guardian. Shipped templates are SAMPLES: have a lawyer
             review them.
-          </p>
-          <ul className="st-list st-list--tall">
+          </Text>
+          <ul className="hm-data-list st-list st-list--tall">
             {data.templates.map((t) => (
-              <li key={t.id} data-template-id={t.id}>
+              <li className="hm-data-list-item" key={t.id} data-template-id={t.id}>
                 <span>
-                  <strong>{t.name}</strong> · {t.kind} {t.isSample ? <em>SAMPLE</em> : null}
+                  <strong>{t.name}</strong> · {t.kind} {t.isSample ? <Badge tone="warning">SAMPLE</Badge> : null}
                   <small>{t.body.slice(0, 110).replace(/\n+/g, " ")}…</small>
                 </span>
-                <button
-                  type="button"
-                  className="st-btn st-btn--ghost"
+                <Button
+                  variant="secondary"
                   onClick={() => {
                     setF((x) => ({
                       ...x,
@@ -98,7 +99,7 @@ export function FormsView({ user, data }: { user: string; data: FormsData }) {
                   }}
                 >
                   Edit
-                </button>
+                </Button>
               </li>
             ))}
           </ul>
@@ -120,45 +121,35 @@ export function FormsView({ user, data }: { user: string; data: FormsData }) {
               () => setF({}),
             )}
           >
-            <label>
-              Name
-              <input value={f.tname ?? ""} onChange={set("tname")} />
-            </label>
-            <label>
-              Kind
-              <select value={f.tkind ?? "contract"} onChange={set("tkind")}>
+            <Field label="Name">
+              <Input value={f.tname ?? ""} onChange={set("tname")} />
+            </Field>
+            <Field label="Kind">
+              <Select value={f.tkind ?? "contract"} onValueChange={(v) => set("tkind")({ target: { value: v } })}>
                 {KINDS.map((k) => (
                   <option key={k}>{k}</option>
                 ))}
-              </select>
-            </label>
-            <label>
-              Text (use {"{{field}}"} merge fields)
-              <textarea rows={8} value={f.tbody ?? ""} onChange={set("tbody")} />
-            </label>
-            <label className="st-check">
-              <input
-                type="checkbox"
-                checked={flags.personal}
-                onChange={(e) => setFlags({ ...flags, personal: e.target.checked })}
-              />{" "}
-              Licence: personal use
-            </label>
-            <label className="st-check">
-              <input
-                type="checkbox"
-                checked={flags.commercial}
-                onChange={(e) => setFlags({ ...flags, commercial: e.target.checked })}
-              />{" "}
-              Licence: commercial use
-            </label>
-            <label>
-              Licence term (months, blank = no end)
-              <input inputMode="numeric" value={f.tterm ?? ""} onChange={set("tterm")} />
-            </label>
-            <button type="submit" className="st-btn" disabled={pending}>
+              </Select>
+            </Field>
+            <Field label={<>Text (use {"{{field}}"} merge fields)</>}>
+              <Textarea rows={8} value={f.tbody ?? ""} onChange={set("tbody")} />
+            </Field>
+            <Checkbox
+              checked={flags.personal}
+              onChange={(e) => setFlags({ ...flags, personal: e.target.checked })}
+              label="Licence: personal use"
+            />
+            <Checkbox
+              checked={flags.commercial}
+              onChange={(e) => setFlags({ ...flags, commercial: e.target.checked })}
+              label="Licence: commercial use"
+            />
+            <Field label="Licence term (months, blank = no end)">
+              <Input inputMode="numeric" value={f.tterm ?? ""} onChange={set("tterm")} />
+            </Field>
+            <Button type="submit" disabled={pending}>
               {f.tid ? "Save template" : "Add template"}
-            </button>
+            </Button>
           </form>
         </Card>
 
@@ -180,65 +171,57 @@ export function FormsView({ user, data }: { user: string; data: FormsData }) {
               () => setF({}),
             )}
           >
-            <label>
-              Job
-              <select value={f.cfj ?? ""} onChange={set("cfj")}>
+            <Field label="Job">
+              <Select value={f.cfj ?? ""} onValueChange={(v) => set("cfj")({ target: { value: v } })}>
                 <option value="">Pick a job</option>
                 {data.jobs.map((j) => (
                   <option key={j.id} value={j.id}>
                     {j.title}
                   </option>
                 ))}
-              </select>
-            </label>
-            <label>
-              Template
-              <select value={f.cft ?? ""} onChange={set("cft")}>
+              </Select>
+            </Field>
+            <Field label="Template">
+              <Select value={f.cft ?? ""} onValueChange={(v) => set("cft")({ target: { value: v } })}>
                 <option value="">Pick a template</option>
                 {data.templates.map((t) => (
                   <option key={t.id} value={t.id}>
                     {t.name}
                   </option>
                 ))}
-              </select>
-            </label>
+              </Select>
+            </Field>
             {release ? (
               <>
-                <label>
-                  Who or what it covers
-                  <input value={f.cfs ?? ""} onChange={set("cfs")} />
-                </label>
-                <label className="st-check">
-                  <input
-                    type="checkbox"
-                    checked={flags.minor}
-                    onChange={(e) => setFlags({ ...flags, minor: e.target.checked })}
-                  />{" "}
-                  The subject is under 18 (a guardian must sign)
-                </label>
-                <label>
-                  Signer email (if not the client)
-                  <input value={f.cfe ?? ""} onChange={set("cfe")} />
-                </label>
+                <Field label="Who or what it covers">
+                  <Input value={f.cfs ?? ""} onChange={set("cfs")} />
+                </Field>
+                <Checkbox
+                  checked={flags.minor}
+                  onChange={(e) => setFlags({ ...flags, minor: e.target.checked })}
+                  label="The subject is under 18 (a guardian must sign)"
+                />
+                <Field label="Signer email (if not the client)">
+                  <Input value={f.cfe ?? ""} onChange={set("cfe")} />
+                </Field>
               </>
             ) : null}
-            <button type="submit" className="st-btn" disabled={pending}>
+            <Button type="submit" disabled={pending}>
               Create draft
-            </button>
+            </Button>
           </form>
         </Card>
 
         <Card title="Questionnaires" id="f-q">
-          <ul className="st-list st-list--tall">
+          <ul className="hm-data-list st-list st-list--tall">
             {data.questionnaires.map((q) => (
-              <li key={q.id} data-questionnaire-id={q.id}>
+              <li className="hm-data-list-item" key={q.id} data-questionnaire-id={q.id}>
                 <span>
-                  <strong>{q.name}</strong> {q.isSample ? <em>SAMPLE</em> : null}
+                  <strong>{q.name}</strong> {q.isSample ? <Badge tone="warning">SAMPLE</Badge> : null}
                   <small>{q.fields.length} questions</small>
                 </span>
-                <button
-                  type="button"
-                  className="st-btn st-btn--ghost"
+                <Button
+                  variant="secondary"
                   onClick={() =>
                     setF((x) => ({
                       ...x,
@@ -250,7 +233,7 @@ export function FormsView({ user, data }: { user: string; data: FormsData }) {
                   }
                 >
                   Edit
-                </button>
+                </Button>
               </li>
             ))}
           </ul>
@@ -269,22 +252,18 @@ export function FormsView({ user, data }: { user: string; data: FormsData }) {
               () => setF({}),
             )}
           >
-            <label>
-              Name
-              <input value={f.qname ?? ""} onChange={set("qname")} />
-            </label>
-            <label>
-              Description
-              <input value={f.qdesc ?? ""} onChange={set("qdesc")} />
-            </label>
-            <label>
-              Questions, one per line: label | type | options (type is text, longtext, choice, yesno or date; end the
-              label with * if required)
-              <textarea rows={6} value={f.qfields ?? ""} onChange={set("qfields")} />
-            </label>
-            <button type="submit" className="st-btn" disabled={pending}>
+            <Field label="Name">
+              <Input value={f.qname ?? ""} onChange={set("qname")} />
+            </Field>
+            <Field label="Description">
+              <Input value={f.qdesc ?? ""} onChange={set("qdesc")} />
+            </Field>
+            <Field label="Questions, one per line: label | type | options (type is text, longtext, choice, yesno or date; end the label with * if required)">
+              <Textarea rows={6} value={f.qfields ?? ""} onChange={set("qfields")} />
+            </Field>
+            <Button type="submit" disabled={pending}>
               {f.qid ? "Save questionnaire" : "Add questionnaire"}
-            </button>
+            </Button>
           </form>
           <form
             noValidate
@@ -294,50 +273,47 @@ export function FormsView({ user, data }: { user: string; data: FormsData }) {
               sendQuestionnaireAction({ questionnaireId: f.sq ?? "", clientId: f.sc ?? "", jobId: f.sj }),
             )}
           >
-            <label>
-              Questionnaire
-              <select value={f.sq ?? ""} onChange={set("sq")}>
+            <Field label="Questionnaire">
+              <Select value={f.sq ?? ""} onValueChange={(v) => set("sq")({ target: { value: v } })}>
                 <option value="">Pick one</option>
                 {data.questionnaires.map((q) => (
                   <option key={q.id} value={q.id}>
                     {q.name}
                   </option>
                 ))}
-              </select>
-            </label>
-            <label>
-              Client
-              <select value={f.sc ?? ""} onChange={set("sc")}>
+              </Select>
+            </Field>
+            <Field label="Client">
+              <Select value={f.sc ?? ""} onValueChange={(v) => set("sc")({ target: { value: v } })}>
                 <option value="">Pick a client</option>
                 {data.clients.map((c) => (
                   <option key={c.id} value={c.id}>
                     {c.name}
                   </option>
                 ))}
-              </select>
-            </label>
-            <label>
-              Job (optional)
-              <select value={f.sj ?? ""} onChange={set("sj")}>
+              </Select>
+            </Field>
+            <Field label="Job (optional)">
+              <Select value={f.sj ?? ""} onValueChange={(v) => set("sj")({ target: { value: v } })}>
                 <option value="">None</option>
                 {data.jobs.map((j) => (
                   <option key={j.id} value={j.id}>
                     {j.title}
                   </option>
                 ))}
-              </select>
-            </label>
-            <button type="submit" className="st-btn" disabled={pending}>
+              </Select>
+            </Field>
+            <Button type="submit" disabled={pending}>
               Send
-            </button>
+            </Button>
           </form>
         </Card>
 
         <Card title="Answers" id="f-ans">
           {data.sends.length ? (
-            <ul className="st-list st-list--tall">
+            <ul className="hm-data-list st-list st-list--tall">
               {data.sends.map((s) => (
-                <li key={s.id} data-send-id={s.id}>
+                <li className="hm-data-list-item" key={s.id} data-send-id={s.id}>
                   <details>
                     <summary>
                       <strong>{s.title}</strong> · {s.client} · {s.completed ? "answered" : "waiting"}
@@ -352,22 +328,26 @@ export function FormsView({ user, data }: { user: string; data: FormsData }) {
                         ))}
                       </dl>
                     ) : (
-                      <p className="st-note">No answers yet.</p>
+                      <Text size="sm" tone="muted">
+                        No answers yet.
+                      </Text>
                     )}
                   </details>
                 </li>
               ))}
             </ul>
           ) : (
-            <p className="st-note">Nothing sent yet.</p>
+            <Text size="sm" tone="muted">
+              Nothing sent yet.
+            </Text>
           )}
         </Card>
 
         <Card title="Gallery and cancellation policies" id="f-pol">
-          <p className="st-note">
+          <Text size="sm" tone="muted">
             These fill the gallery clause in every contract and the Terms page.
             {data.policies.sample ? " The extension fee is a SAMPLE until you save it." : ""}
-          </p>
+          </Text>
           <form
             noValidate
             className="st-form"
@@ -382,33 +362,28 @@ export function FormsView({ user, data }: { user: string; data: FormsData }) {
               }),
             )}
           >
-            <label>
-              Business name
-              <input value={f.pb ?? data.policies.businessName} onChange={set("pb")} />
-            </label>
-            <label>
-              Gallery access included (months)
-              <input
+            <Field label="Business name">
+              <Input value={f.pb ?? data.policies.businessName} onChange={set("pb")} />
+            </Field>
+            <Field label="Gallery access included (months)">
+              <Input
                 inputMode="numeric"
                 value={f.pg ?? String(data.policies.galleryAccessMonths)}
                 onChange={set("pg")}
               />
-            </label>
-            <label>
-              Extension period (months)
-              <input inputMode="numeric" value={f.pe ?? String(data.policies.extensionMonths)} onChange={set("pe")} />
-            </label>
-            <label>
-              Extension and reactivation fee (dollars)
-              <input inputMode="decimal" value={f.pf ?? data.policies.extensionFee} onChange={set("pf")} />
-            </label>
-            <label>
-              Cancellation window (days)
-              <input inputMode="numeric" value={f.pc ?? String(data.policies.cancellationDays)} onChange={set("pc")} />
-            </label>
-            <button type="submit" className="st-btn" disabled={pending}>
+            </Field>
+            <Field label="Extension period (months)">
+              <Input inputMode="numeric" value={f.pe ?? String(data.policies.extensionMonths)} onChange={set("pe")} />
+            </Field>
+            <Field label="Extension and reactivation fee (dollars)">
+              <Input inputMode="decimal" value={f.pf ?? data.policies.extensionFee} onChange={set("pf")} />
+            </Field>
+            <Field label="Cancellation window (days)">
+              <Input inputMode="numeric" value={f.pc ?? String(data.policies.cancellationDays)} onChange={set("pc")} />
+            </Field>
+            <Button type="submit" disabled={pending}>
               Save
-            </button>
+            </Button>
           </form>
         </Card>
       </div>

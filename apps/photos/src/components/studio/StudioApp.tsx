@@ -1,5 +1,7 @@
 "use client";
 
+import { Button, Field, Input, Progress, Select, Stat, StatGroup, Status, Step, Stepper, Text } from "@holominimal/ui";
+
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useTransition, type ReactNode } from "react";
@@ -15,7 +17,8 @@ import {
   sendInvoiceAction,
 } from "@/app/studio/actions";
 import "./studio.css";
-import { StudioHead } from "./StudioFrame";
+import { FormMessage } from "@/components/ui";
+import { Banner, Card, StudioHead } from "./StudioFrame";
 import { studioSections } from "./sections";
 
 const JOB_STEPS = ["inquiry", "booked", "shot", "editing", "delivered", "paid"] as const;
@@ -71,29 +74,6 @@ export type StudioData = {
 
 type Result = { ok: boolean; message?: string; error?: string; link?: string };
 
-function Banner({ note }: { note: Result | null }) {
-  if (!note) return null;
-  return (
-    <div className="st-card" role={note.ok ? "status" : "alert"} data-ok={note.ok || undefined}>
-      <p className={note.ok ? "st-note" : "st-error"}>{note.ok ? note.message : note.error}</p>
-      {note.link ? (
-        <p className="st-note">
-          Link (copy it to the client; nothing is emailed in this phase): <code>{note.link}</code>
-        </p>
-      ) : null}
-    </div>
-  );
-}
-
-function Card({ title, children, id }: { title: string; children: ReactNode; id: string }) {
-  return (
-    <section className="st-card" aria-labelledby={id}>
-      <h2 id={id}>{title}</h2>
-      {children}
-    </section>
-  );
-}
-
 /** Studio dashboard sections. Every button calls a guarded server action; the page refreshes from the database. */
 export function StudioApp({ section, user, data }: { section: string; user: string; data: StudioData }) {
   const router = useRouter();
@@ -123,30 +103,24 @@ export function StudioApp({ section, user, data }: { section: string; user: stri
     body = (
       <div className="st-grid">
         <Card title="Today" id="st-today">
-          <dl className="st-stats">
-            <div>
-              <dt>New inquiries</dt>
-              <dd>{data.bookings.filter((b) => b.status === "new").length}</dd>
-            </div>
-            <div>
-              <dt>Open jobs</dt>
-              <dd>{data.jobs.filter((j) => j.status !== "paid" && j.status !== "cancelled").length}</dd>
-            </div>
-            <div>
-              <dt>Unpaid invoices</dt>
-              <dd>{unpaid.length}</dd>
-            </div>
-            <div>
-              <dt>Awaiting signature</dt>
-              <dd>{data.contracts.filter((k) => k.status === "sent" || k.status === "viewed").length}</dd>
-            </div>
-          </dl>
+          <StatGroup>
+            <Stat label="New inquiries" value={data.bookings.filter((b) => b.status === "new").length} />
+            <Stat
+              label="Open jobs"
+              value={data.jobs.filter((j) => j.status !== "paid" && j.status !== "cancelled").length}
+            />
+            <Stat label="Unpaid invoices" value={unpaid.length} />
+            <Stat
+              label="Awaiting signature"
+              value={data.contracts.filter((k) => k.status === "sent" || k.status === "viewed").length}
+            />
+          </StatGroup>
         </Card>
         <Card title="Outstanding" id="st-out">
           {unpaid.length ? (
-            <ul className="st-list">
+            <ul className="hm-data-list st-list">
               {unpaid.map((i) => (
-                <li key={i.id}>
+                <li className="hm-data-list-item" key={i.id}>
                   <span>
                     {i.number} · {i.jobTitle}
                   </span>
@@ -155,7 +129,9 @@ export function StudioApp({ section, user, data }: { section: string; user: stri
               ))}
             </ul>
           ) : (
-            <p className="st-note">Nothing outstanding.</p>
+            <Text size="sm" tone="muted">
+              Nothing outstanding.
+            </Text>
           )}
         </Card>
       </div>
@@ -164,13 +140,13 @@ export function StudioApp({ section, user, data }: { section: string; user: stri
     const sorted = [...data.bookings].sort((x, y) => y.score - x.score || y.createdAt.localeCompare(x.createdAt));
     body = (
       <Card title="Inquiries" id="st-b">
-        <p className="st-note">
+        <Text size="sm" tone="muted">
           Highest lead score first. The score is explained in docs/project/01-photo-site-spec.md.
-        </p>
+        </Text>
         {sorted.length ? (
-          <ul className="st-list st-list--tall">
+          <ul className="hm-data-list st-list st-list--tall">
             {sorted.map((b) => (
-              <li key={b.id} data-lead-id={b.id}>
+              <li className="hm-data-list-item" key={b.id} data-lead-id={b.id}>
                 <span>
                   <strong>{b.name}</strong> · {b.shootType ?? b.topic} · <span title="Lead score">score {b.score}</span>
                   <small>
@@ -195,43 +171,49 @@ export function StudioApp({ section, user, data }: { section: string; user: stri
                   ) : null}
                 </span>
                 {b.status === "new" ? (
-                  <button
-                    type="button"
-                    className="st-btn"
+                  <Button
+                    variant="secondary"
+                    size="sm"
                     disabled={pending}
                     onClick={() => run(() => convertBookingAction(b.id))}
                   >
                     Convert to client
-                  </button>
+                  </Button>
                 ) : (
-                  <em>{b.status}</em>
+                  <Status tone="muted">{b.status}</Status>
                 )}
               </li>
             ))}
           </ul>
         ) : (
-          <p className="st-note">No inquiries yet.</p>
+          <Text size="sm" tone="muted">
+            No inquiries yet.
+          </Text>
         )}
       </Card>
     );
   } else if (section === "inbox") {
     body = (
       <Card title="Inbox" id="st-in">
-        <p className="st-note">
+        <Text size="sm" tone="muted">
           Every email the platform sends. <strong>mock</strong> means the labelled development outbox recorded it and
           nothing was sent; <strong>skipped</strong> means no email provider is configured (TODO(owner): needs
           RESEND_API_KEY and EMAIL_FROM).
-        </p>
+        </Text>
         {data.emails.length ? (
-          <ul className="st-list st-list--tall">
+          <ul className="hm-data-list st-list st-list--tall">
             {data.emails.map((m) => (
-              <li key={m.id}>
+              <li className="hm-data-list-item" key={m.id}>
                 <details>
                   <summary>
-                    <strong>{m.subject}</strong> · {m.to} · <em>{m.status}</em> · {m.kind}
+                    <strong>{m.subject}</strong> · {m.to} ·{" "}
+                    <Status tone={m.status === "sent" ? "success" : m.status === "failed" ? "danger" : "muted"}>
+                      {m.status}
+                    </Status>{" "}
+                    · {m.kind}
                   </summary>
                   <pre className="st-pre">{m.text}</pre>
-                  {m.error ? <p className="st-error">{m.error}</p> : null}
+                  {m.error ? <FormMessage className="st-error">{m.error}</FormMessage> : null}
                   <small>
                     {m.provider} · {m.at.slice(0, 16).replace("T", " ")}
                   </small>
@@ -240,7 +222,9 @@ export function StudioApp({ section, user, data }: { section: string; user: stri
             ))}
           </ul>
         ) : (
-          <p className="st-note">No email yet.</p>
+          <Text size="sm" tone="muted">
+            No email yet.
+          </Text>
         )}
       </Card>
     );
@@ -249,38 +233,38 @@ export function StudioApp({ section, user, data }: { section: string; user: stri
       <div className="st-grid">
         <Card title="Clients" id="st-c">
           {data.clients.length ? (
-            <ul className="st-list">
+            <ul className="hm-data-list st-list">
               {data.clients.map((c) => (
-                <li key={c.id}>
+                <li className="hm-data-list-item" key={c.id}>
                   <strong>{c.name}</strong>
                   <span>{c.email}</span>
                 </li>
               ))}
             </ul>
           ) : (
-            <p className="st-note">No clients yet.</p>
+            <Text size="sm" tone="muted">
+              No clients yet.
+            </Text>
           )}
         </Card>
         <Card title="Add a client" id="st-ac">
           <form
             noValidate
-            className="st-form"
+            className="st-form pm-stack"
             onSubmit={submit(
               () => addClientAction({ name: form.cname ?? "", email: form.cemail ?? "" }),
               () => setForm({}),
             )}
           >
-            <label>
-              Name
-              <input value={form.cname ?? ""} onChange={set("cname")} />
-            </label>
-            <label>
-              Email
-              <input type="email" value={form.cemail ?? ""} onChange={set("cemail")} />
-            </label>
-            <button className="st-btn" type="submit" disabled={pending}>
+            <Field label="Name">
+              <Input value={form.cname ?? ""} onChange={set("cname")} />
+            </Field>
+            <Field label="Email">
+              <Input type="email" value={form.cemail ?? ""} onChange={set("cemail")} />
+            </Field>
+            <Button type="submit" disabled={pending}>
               Add client
-            </button>
+            </Button>
           </form>
         </Card>
       </div>
@@ -290,51 +274,49 @@ export function StudioApp({ section, user, data }: { section: string; user: stri
       <div className="st-grid">
         <Card title="Jobs" id="st-s">
           {data.jobs.length ? (
-            <ul className="st-list st-list--tall">
+            <ul className="hm-data-list st-list st-list--tall">
               {data.jobs.map((j) => (
-                <li key={j.id}>
+                <li className="hm-data-list-item" key={j.id}>
                   <span>
                     <strong>{j.title}</strong>
                     <small>
                       {j.clientName} · {day(j.date)} · {usd(j.feeCents)}
                     </small>
-                    <ol className="st-steps" aria-label={`Progress: ${j.status}`}>
-                      {JOB_STEPS.map((st) => (
-                        <li
-                          key={st}
-                          data-done={
-                            JOB_STEPS.indexOf(st) <= JOB_STEPS.indexOf(j.status as (typeof JOB_STEPS)[number]) ||
-                            undefined
-                          }
-                          aria-current={st === j.status ? "step" : undefined}
-                        >
-                          {st}
-                        </li>
-                      ))}
-                    </ol>
+                    <span className="st-steps">
+                      <Status tone={j.status === "paid" ? "success" : "accent"}>{j.status}</Status>
+                      <Progress
+                        size="sm"
+                        aria-label={`Progress: ${j.status}`}
+                        value={JOB_STEPS.indexOf(j.status as (typeof JOB_STEPS)[number]) + 1}
+                        max={JOB_STEPS.length}
+                      />
+                      <small>
+                        step {JOB_STEPS.indexOf(j.status as (typeof JOB_STEPS)[number]) + 1} of {JOB_STEPS.length}
+                      </small>
+                    </span>
                   </span>
-                  <span className="st-actions">
+                  <span className="hm-data-list-actions st-actions">
                     {j.status !== "paid" ? (
-                      <button
-                        type="button"
-                        className="st-btn"
+                      <Button
+                        variant="secondary"
+                        size="sm"
                         disabled={pending}
                         onClick={() => run(() => advanceJobAction(j.id))}
                       >
                         Advance
-                      </button>
+                      </Button>
                     ) : null}
-                    <button
-                      type="button"
-                      className="st-btn st-btn--ghost"
+                    <Button
+                      variant="secondary"
+                      size="sm"
                       disabled={pending}
                       onClick={() => run(() => createContractAction(j.id))}
                     >
                       New contract
-                    </button>
-                    <button
-                      type="button"
-                      className="st-btn st-btn--ghost"
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      size="sm"
                       disabled={pending}
                       onClick={() =>
                         run(() =>
@@ -347,18 +329,20 @@ export function StudioApp({ section, user, data }: { section: string; user: stri
                       }
                     >
                       New invoice
-                    </button>
+                    </Button>
                   </span>
                 </li>
               ))}
             </ul>
           ) : (
-            <p className="st-note">No jobs yet.</p>
+            <Text size="sm" tone="muted">
+              No jobs yet.
+            </Text>
           )}
         </Card>
         <Card title="New job" id="st-ns">
           <form
-            className="st-form"
+            className="st-form pm-stack"
             onSubmit={submit(
               () =>
                 addJobAction({
@@ -370,31 +354,30 @@ export function StudioApp({ section, user, data }: { section: string; user: stri
               () => setForm({}),
             )}
           >
-            <label>
-              Client
-              <select value={form.client ?? data.clients[0]?.id ?? ""} onChange={set("client")}>
+            <Field label="Client">
+              <Select
+                value={form.client ?? data.clients[0]?.id ?? ""}
+                onValueChange={(v) => set("client")({ target: { value: v } })}
+              >
                 {data.clients.map((c) => (
                   <option key={c.id} value={c.id}>
                     {c.name}
                   </option>
                 ))}
-              </select>
-            </label>
-            <label>
-              Title
-              <input value={form.title ?? ""} onChange={set("title")} />
-            </label>
-            <label>
-              Date
-              <input type="date" value={form.date ?? ""} onChange={set("date")} />
-            </label>
-            <label>
-              Fee (dollars)
-              <input inputMode="decimal" value={form.fee ?? ""} onChange={set("fee")} />
-            </label>
-            <button className="st-btn" type="submit" disabled={pending || !data.clients.length}>
+              </Select>
+            </Field>
+            <Field label="Title">
+              <Input value={form.title ?? ""} onChange={set("title")} />
+            </Field>
+            <Field label="Date">
+              <Input type="date" value={form.date ?? ""} onChange={set("date")} />
+            </Field>
+            <Field label="Fee (dollars)">
+              <Input inputMode="decimal" value={form.fee ?? ""} onChange={set("fee")} />
+            </Field>
+            <Button type="submit" disabled={pending || !data.clients.length}>
               Add job
-            </button>
+            </Button>
           </form>
         </Card>
       </div>
@@ -403,31 +386,33 @@ export function StudioApp({ section, user, data }: { section: string; user: stri
     body = (
       <Card title="Contracts" id="st-k">
         {data.contracts.length ? (
-          <ul className="st-list st-list--tall">
+          <ul className="hm-data-list st-list st-list--tall">
             {data.contracts.map((k) => (
-              <li key={k.id}>
+              <li className="hm-data-list-item" key={k.id}>
                 <span>
                   <strong>{k.jobTitle}</strong>
                   <small>
-                    {k.title} · {k.status}
+                    {k.title} · <Status tone={k.status === "signed" ? "success" : "neutral"}>{k.status}</Status>
                     {k.signedBy ? ` · signed by ${k.signedBy}` : ""}
                   </small>
                 </span>
                 {k.status === "draft" || k.status === "sent" || k.status === "viewed" ? (
-                  <button
-                    type="button"
-                    className="st-btn"
+                  <Button
+                    variant="secondary"
+                    size="sm"
                     disabled={pending}
                     onClick={() => run(() => sendContractAction(k.id))}
                   >
                     {k.status === "draft" ? "Send for signature" : "New signing link"}
-                  </button>
+                  </Button>
                 ) : null}
               </li>
             ))}
           </ul>
         ) : (
-          <p className="st-note">No contracts yet. Create one from a job.</p>
+          <Text size="sm" tone="muted">
+            No contracts yet. Create one from a job.
+          </Text>
         )}
       </Card>
     );
@@ -435,44 +420,48 @@ export function StudioApp({ section, user, data }: { section: string; user: stri
     body = (
       <Card title="Invoices" id="st-i">
         {data.invoices.length ? (
-          <ul className="st-list st-list--tall">
+          <ul className="hm-data-list st-list st-list--tall">
             {data.invoices.map((i) => (
-              <li key={i.id} data-invoice-id={i.id}>
+              <li className="hm-data-list-item" key={i.id} data-invoice-id={i.id}>
                 <span>
                   <strong>
                     {i.number} · {i.jobTitle}
                   </strong>
                   <small>{i.lines}</small>
-                  <small>{i.status}</small>
+                  <Status tone={i.status === "paid" ? "success" : i.status === "void" ? "muted" : "warning"}>
+                    {i.status}
+                  </Status>
                 </span>
-                <span className="st-actions">
+                <span className="hm-data-list-actions st-actions">
                   <strong>{usd(i.totalCents)}</strong>
                   {i.status !== "paid" && i.status !== "void" ? (
-                    <button
-                      type="button"
-                      className="st-btn"
+                    <Button
+                      variant="secondary"
+                      size="sm"
                       disabled={pending}
                       onClick={() => run(() => sendInvoiceAction(i.id))}
                     >
                       {i.status === "draft" ? "Send" : "New payment link"}
-                    </button>
+                    </Button>
                   ) : null}
                   {i.status !== "paid" && i.status !== "void" ? (
-                    <button
-                      type="button"
-                      className="st-btn st-btn--ghost"
+                    <Button
+                      variant="secondary"
+                      size="sm"
                       disabled={pending}
                       onClick={() => run(() => markInvoicePaidAction(i.id))}
                     >
                       Mark paid (cash, Zelle)
-                    </button>
+                    </Button>
                   ) : null}
                 </span>
               </li>
             ))}
           </ul>
         ) : (
-          <p className="st-note">No invoices yet. Create one from a job.</p>
+          <Text size="sm" tone="muted">
+            No invoices yet. Create one from a job.
+          </Text>
         )}
       </Card>
     );

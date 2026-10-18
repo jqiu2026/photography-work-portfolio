@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { choose } from "./ui";
 
 /** Payment plans, tips, bank and card options with the surcharge disclosure, PDFs, refunds, recurring billing. */
 const PHOTOS = "http://localhost:3302";
@@ -9,7 +10,7 @@ const slow = expect.configure({ timeout: 25_000 });
 const today = new Date().toISOString().slice(0, 10);
 const inForm = (page: import("@playwright/test").Page, name: string) => page.getByRole("form", { name });
 const pick = (form: import("@playwright/test").Locator, label: RegExp, option: string) =>
-  form.locator("label", { hasText: label }).locator("select").selectOption({ label: option });
+  choose(form.getByLabel(label), option);
 let payLink = "";
 
 test("setup: a client and a job; tips, bank transfer and a card surcharge are switched on", async ({ page }) => {
@@ -19,7 +20,7 @@ test("setup: a client and a job; tips, bank transfer and a card surcharge are sw
   await page.getByRole("button", { name: "Add client" }).click();
   await slow(page.getByRole("status")).toContainText("Client added");
   await page.goto(`${PHOTOS}/studio/shoots`, { waitUntil: "networkidle" });
-  await page.getByLabel("Client").selectOption({ label: `Billing Client ${uid}` });
+  await choose(page.getByLabel("Client"), `Billing Client ${uid}`);
   await page.getByLabel("Title").fill(`Billing job ${uid}`);
   await page.getByLabel("Fee (dollars)").fill("900");
   await page.getByRole("button", { name: "Add job" }).click();

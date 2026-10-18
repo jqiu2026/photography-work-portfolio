@@ -1,5 +1,7 @@
 "use client";
 
+import { Button, Checkbox, Input, Segment, SegmentedControl, Stat, StatGroup, Status, Text } from "@holominimal/ui";
+
 import Link from "next/link";
 import { useState } from "react";
 import {
@@ -10,7 +12,7 @@ import {
   renameSheetAction,
   saveProductAction,
 } from "@/app/studio/gallery-actions";
-import { Frame, useAct } from "./StudioFrame";
+import { Card, Frame, useAct, useConfirm } from "./StudioFrame";
 import "./galleries.css";
 
 type Product = {
@@ -50,6 +52,7 @@ const KIND: Record<string, string> = {
 /** The shop: one price list for every gallery, and the orders that came in. Prices marked SAMPLE are placeholders until you set them. */
 export function OrdersView({ data }: { data: { products: Product[]; sheets: Sheet[]; orders: Order[] } }) {
   const { pending, note, act } = useAct();
+  const [ask, confirmEl] = useConfirm();
   const [edit, setEdit] = useState<Record<string, Partial<Product>>>({});
   const [sheetId, setSheetId] = useState(data.sheets[0]?.id ?? "");
   const [newName, setNewName] = useState("");
@@ -61,53 +64,42 @@ export function OrdersView({ data }: { data: { products: Product[]; sheets: Shee
   const revenue = paid.reduce((n, o) => n + o.totalCents, 0);
   return (
     <Frame section="orders" note={note}>
-      <div className="gl-stats" style={{ display: "flex", gap: "2rem", flexWrap: "wrap", margin: "0 0 1.6rem" }}>
-        <p>
-          <strong>{usd(revenue)}</strong>
-          <br />
-          <small>
-            from {paid.length} paid order{paid.length === 1 ? "" : "s"}
-          </small>
-        </p>
-        <p>
-          <strong>{data.orders.filter((o) => o.status === "pending").length}</strong>
-          <br />
-          <small>waiting for payment</small>
-        </p>
-      </div>
+      <StatGroup className="st-statrow">
+        <Stat
+          label="Revenue"
+          value={usd(revenue)}
+          detail={`from ${paid.length} paid order${paid.length === 1 ? "" : "s"}`}
+        />
+        <Stat
+          label="Waiting"
+          value={data.orders.filter((o) => o.status === "pending").length}
+          detail="orders waiting for payment"
+        />
+      </StatGroup>
 
-      <section className="st-card" aria-labelledby="ord-prices">
-        <h2 id="ord-prices">Price sheets</h2>
-        <p className="st-note">
+      <Card title="Price sheets" id="ord-prices">
+        <Text size="sm" tone="muted">
           A price sheet is a list of what you sell and for how much. Each gallery picks one (its Store tab); the default
           is used when it does not. Print costs come from your lab; check each price covers the lab's cost, shipping and
           the card fee. A price marked SAMPLE is a placeholder: set yours and it disappears.
-        </p>
-        <div className="gm-row" role="tablist" aria-label="Price sheets">
+        </Text>
+        <SegmentedControl aria-label="Price sheets" value={sheet?.id ?? ""} onValueChange={setSheetId}>
           {data.sheets.map((x) => (
-            <button
-              key={x.id}
-              type="button"
-              role="tab"
-              aria-selected={x.id === sheet?.id}
-              className="st-btn st-btn--ghost"
-              onClick={() => setSheetId(x.id)}
-            >
+            <Segment key={x.id} value={x.id}>
               {x.name}
               {x.isDefault ? " (default)" : ""}
-            </button>
+            </Segment>
           ))}
-        </div>
+        </SegmentedControl>
         <div className="gm-row">
-          <input
+          <Input
             aria-label="Rename this sheet"
             placeholder={sheet?.name}
             value={rename}
             onChange={(e) => setRename(e.target.value)}
           />
-          <button
-            type="button"
-            className="st-btn st-btn--ghost"
+          <Button
+            variant="secondary"
             disabled={pending || !rename.trim() || !sheet}
             onClick={() =>
               sheet &&
@@ -118,23 +110,25 @@ export function OrdersView({ data }: { data: { products: Product[]; sheets: Shee
             }
           >
             Rename
-          </button>
+          </Button>
           {sheet && !sheet.isDefault ? (
             <>
-              <button
-                type="button"
-                className="st-btn st-btn--ghost"
+              <Button
+                variant="secondary"
                 disabled={pending}
                 onClick={() => act(() => makeDefaultSheetAction(sheet.id))}
               >
                 Make default
-              </button>
-              <button
-                type="button"
-                className="st-btn st-btn--ghost"
+              </Button>
+              <Button
+                variant="danger"
                 disabled={pending}
-                onClick={() =>
-                  confirm(`Delete the price sheet "${sheet.name}"?`) &&
+                onClick={async () =>
+                  (await ask({
+                    title: `Delete the price sheet "${sheet.name}"?`,
+                    body: "Its products and prices are removed with it.",
+                    action: "Delete sheet",
+                  })) &&
                   act(
                     () => deleteSheetAction(sheet.id),
                     () => setSheetId(data.sheets[0]?.id ?? ""),
@@ -142,7 +136,7 @@ export function OrdersView({ data }: { data: { products: Product[]; sheets: Shee
                 }
               >
                 Delete sheet
-              </button>
+              </Button>
             </>
           ) : null}
         </div>
@@ -158,31 +152,31 @@ export function OrdersView({ data }: { data: { products: Product[]; sheets: Shee
             );
           }}
         >
-          <input
+          <Input
             aria-label="New sheet name"
             placeholder="New sheet (copies this one)"
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
           />
-          <button type="submit" className="st-btn" disabled={pending}>
+          <Button type="submit" disabled={pending}>
             Add sheet
-          </button>
+          </Button>
         </form>
-        <ul className="st-list">
+        <ul className="hm-data-list st-list">
           {data.products
             .filter((p) => p.sheetId === sheet?.id)
             .map((p) => (
-              <li key={p.id}>
+              <li className="hm-data-list-item" key={p.id}>
                 <span style={{ display: "grid", gap: ".3rem", flex: 1 }}>
                   <small>{KIND[p.kind] ?? p.kind}</small>
-                  <input
+                  <Input
                     aria-label={`Name of ${p.name}`}
                     value={val(p, "name")}
                     onChange={(e) => set(p.id, "name", e.target.value)}
                   />
                 </span>
                 <span>
-                  <input
+                  <Input
                     aria-label={`Price of ${p.name}`}
                     inputMode="decimal"
                     style={{ width: "6rem" }}
@@ -191,17 +185,12 @@ export function OrdersView({ data }: { data: { products: Product[]; sheets: Shee
                   />{" "}
                   {p.sample && !edit[p.id]?.price ? <small>SAMPLE</small> : null}
                 </span>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={edit[p.id]?.active === undefined ? p.active : Boolean(edit[p.id]?.active)}
-                    onChange={(e) => setEdit((x) => ({ ...x, [p.id]: { ...x[p.id], active: e.target.checked } }))}
-                  />{" "}
-                  For sale
-                </label>
-                <button
-                  type="button"
-                  className="st-btn"
+                <Checkbox
+                  checked={edit[p.id]?.active === undefined ? p.active : Boolean(edit[p.id]?.active)}
+                  onChange={(e) => setEdit((x) => ({ ...x, [p.id]: { ...x[p.id], active: e.target.checked } }))}
+                  label="For sale"
+                />
+                <Button
                   disabled={pending || !edit[p.id]}
                   onClick={() =>
                     act(
@@ -217,18 +206,17 @@ export function OrdersView({ data }: { data: { products: Product[]; sheets: Shee
                   }
                 >
                   Save
-                </button>
+                </Button>
               </li>
             ))}
         </ul>
-      </section>
+      </Card>
 
-      <section className="st-card" aria-labelledby="ord-list">
-        <h2 id="ord-list">Orders</h2>
+      <Card title="Orders" id="ord-list">
         {data.orders.length ? (
-          <ul className="st-list">
+          <ul className="hm-data-list st-list">
             {data.orders.map((o) => (
-              <li key={o.id}>
+              <li className="hm-data-list-item" key={o.id}>
                 <span>
                   {o.number} · <Link href={`/studio/gallery/${o.galleryId}#shop`}>{o.gallery}</Link>
                   <small>
@@ -238,24 +226,32 @@ export function OrdersView({ data }: { data: { products: Product[]; sheets: Shee
                   {o.lab ? <small>Print lab order {o.lab}</small> : null}
                 </span>
                 <span>{usd(o.totalCents)}</span>
-                <em>{o.status}</em>
+                <Status
+                  tone={
+                    o.status === "paid" || o.status === "fulfilled"
+                      ? "success"
+                      : o.status === "pending"
+                        ? "warning"
+                        : "muted"
+                  }
+                >
+                  {o.status}
+                </Status>
                 {o.status === "pending" ? (
-                  <button
-                    type="button"
-                    className="st-btn st-btn--ghost"
-                    disabled={pending}
-                    onClick={() => act(() => cancelOrderAction(o.id))}
-                  >
+                  <Button variant="secondary" disabled={pending} onClick={() => act(() => cancelOrderAction(o.id))}>
                     Cancel
-                  </button>
+                  </Button>
                 ) : null}
               </li>
             ))}
           </ul>
         ) : (
-          <p className="st-note">No orders yet. Open a gallery's Shop tab, turn the shop on, and share its link.</p>
+          <Text size="sm" tone="muted">
+            No orders yet. Open a gallery's Shop tab, turn the shop on, and share its link.
+          </Text>
         )}
-      </section>
+      </Card>
+      {confirmEl}
     </Frame>
   );
 }

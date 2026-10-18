@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { choose } from "./ui";
 
 /** Cron, automations (dedupe, switch-off), reminders honouring preferences, tasks, activity. */
 const PHOTOS = "http://localhost:3302";
@@ -29,7 +30,7 @@ test("setup: a client with a job and an invoice due in two days (sent)", async (
   await page.getByRole("button", { name: "Add client" }).click();
   await slow(page.getByRole("status")).toContainText("Client added");
   await page.goto(`${PHOTOS}/studio/shoots`, { waitUntil: "networkidle" });
-  await page.getByLabel("Client").selectOption({ label: `Ops Client ${uid}` });
+  await choose(page.getByLabel("Client"), `Ops Client ${uid}`);
   await page.getByLabel("Title").fill(`Ops job ${uid}`);
   await page.getByLabel("Fee (dollars)").fill("200");
   await page.getByRole("button", { name: "Add job" }).click();
@@ -37,10 +38,7 @@ test("setup: a client with a job and an invoice due in two days (sent)", async (
   // one-line payment plan whose only due date is two days away gives an invoice with a due date
   await page.goto(`${PHOTOS}/studio/billing`, { waitUntil: "networkidle" });
   const plan = inForm(page, "New payment plan");
-  await plan
-    .locator("label", { hasText: /^Job/ })
-    .locator("select")
-    .selectOption({ label: `Ops job ${uid}` });
+  await choose(plan.getByLabel(/^Job/), `Ops job ${uid}`);
   await plan.getByLabel("Total (dollars)").fill("200");
   await plan.getByLabel("Instalments").fill("2");
   await plan.getByLabel("First due").fill(inDays(2));

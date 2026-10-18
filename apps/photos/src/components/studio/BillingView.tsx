@@ -1,5 +1,7 @@
 "use client";
 
+import { Button, Checkbox, Field, Input, Select, Text } from "@holominimal/ui";
+
 import { useState } from "react";
 import {
   createPlanAction,
@@ -44,26 +46,25 @@ export function BillingView({ user, data }: { user: string; data: BillingData })
   });
   const set = (k: string) => (e: { target: { value: string } }) => setF((x) => ({ ...x, [k]: e.target.value }));
   const jobField = (key: string) => (
-    <label>
-      Job
-      <select value={f[key] ?? ""} onChange={set(key)}>
+    <Field label="Job">
+      <Select value={f[key] ?? ""} onValueChange={(v) => set(key)({ target: { value: v } })}>
         <option value="">Pick a job</option>
         {data.jobs.map((j) => (
           <option key={j.id} value={j.id}>
             {j.title}
           </option>
         ))}
-      </select>
-    </label>
+      </Select>
+    </Field>
   );
   return (
     <Frame section="billing" user={user} note={note}>
       <div className="st-grid">
         <Card title="Payments and refunds" id="b-pay">
           {data.payments.length ? (
-            <ul className="st-list st-list--tall">
+            <ul className="hm-data-list st-list st-list--tall">
               {data.payments.map((p) => (
-                <li key={p.id} data-payment-id={p.id}>
+                <li className="hm-data-list-item" key={p.id} data-payment-id={p.id}>
                   <span>
                     <strong>{p.invoice}</strong> · {usd(p.amountCents)} · {p.method ?? p.provider} · {p.status}
                     <small>
@@ -83,7 +84,7 @@ export function BillingView({ user, data }: { user: string; data: BillingData })
                         () => setF({}),
                       )}
                     >
-                      <input
+                      <Input
                         inputMode="decimal"
                         aria-label={`Refund amount for ${p.invoice} in dollars`}
                         placeholder={((p.amountCents - p.refundedCents) / 100).toFixed(2)}
@@ -91,28 +92,30 @@ export function BillingView({ user, data }: { user: string; data: BillingData })
                         onChange={set(`r-${p.id}`)}
                         style={{ width: "6.5rem" }}
                       />
-                      <button type="submit" className="st-btn st-btn--ghost" disabled={pending}>
+                      <Button type="submit" variant="secondary" disabled={pending}>
                         Refund
-                      </button>
+                      </Button>
                     </form>
                   ) : null}
                 </li>
               ))}
             </ul>
           ) : (
-            <p className="st-note">No payments yet.</p>
+            <Text size="sm" tone="muted">
+              No payments yet.
+            </Text>
           )}
-          <p className="st-note">
+          <Text size="sm" tone="muted">
             {data.stripe
               ? "Refunds on Stripe payments are sent to Stripe, then recorded here."
               : "Stripe is not configured (TODO(owner): needs STRIPE_SECRET_KEY): refunds here are recorded only; send the money back yourself."}
-          </p>
+          </Text>
         </Card>
 
         <Card title="Payment plan" id="b-plan">
-          <ul className="st-list">
+          <ul className="hm-data-list st-list">
             {data.plans.map((p) => (
-              <li key={p.id}>
+              <li className="hm-data-list-item" key={p.id}>
                 <span>
                   {p.name} · {usd(p.totalCents)} in {p.count}
                   <small>{p.paid} paid</small>
@@ -137,49 +140,40 @@ export function BillingView({ user, data }: { user: string; data: BillingData })
             )}
           >
             {jobField("pj")}
-            <label>
-              Total (dollars)
-              <input inputMode="decimal" value={f.pt ?? ""} onChange={set("pt")} />
-            </label>
-            <label>
-              Instalments
-              <input inputMode="numeric" value={f.pc ?? "3"} onChange={set("pc")} />
-            </label>
-            <label>
-              First due
-              <input type="date" value={f.pd ?? ""} onChange={set("pd")} />
-            </label>
-            <label>
-              Every
-              <select value={f.pe ?? "month"} onChange={set("pe")}>
+            <Field label="Total (dollars)">
+              <Input inputMode="decimal" value={f.pt ?? ""} onChange={set("pt")} />
+            </Field>
+            <Field label="Instalments">
+              <Input inputMode="numeric" value={f.pc ?? "3"} onChange={set("pc")} />
+            </Field>
+            <Field label="First due">
+              <Input type="date" value={f.pd ?? ""} onChange={set("pd")} />
+            </Field>
+            <Field label="Every">
+              <Select value={f.pe ?? "month"} onValueChange={(v) => set("pe")({ target: { value: v } })}>
                 <option value="month">Month</option>
                 <option value="2weeks">Two weeks</option>
                 <option value="week">Week</option>
-              </select>
-            </label>
-            <button type="submit" className="st-btn" disabled={pending}>
+              </Select>
+            </Field>
+            <Button type="submit" disabled={pending}>
               Create plan
-            </button>
+            </Button>
           </form>
         </Card>
 
         <Card title="Recurring billing" id="b-rec">
-          <ul className="st-list">
+          <ul className="hm-data-list st-list">
             {data.recurring.map((r) => (
-              <li key={r.id}>
+              <li className="hm-data-list-item" key={r.id}>
                 <span>
                   {r.description} · {usd(r.amountCents)} every {r.months} month{r.months > 1 ? "s" : ""}
                   <small>{r.active ? `next ${r.next}` : "stopped"}</small>
                 </span>
                 {r.active ? (
-                  <button
-                    type="button"
-                    className="st-btn st-btn--ghost"
-                    disabled={pending}
-                    onClick={() => act(() => stopRecurringAction(r.id))}
-                  >
+                  <Button variant="secondary" disabled={pending} onClick={() => act(() => stopRecurringAction(r.id))}>
                     Stop
-                  </button>
+                  </Button>
                 ) : null}
               </li>
             ))}
@@ -202,42 +196,32 @@ export function BillingView({ user, data }: { user: string; data: BillingData })
             )}
           >
             {jobField("rj")}
-            <label>
-              What is billed
-              <input value={f.rd ?? ""} onChange={set("rd")} />
-            </label>
-            <label>
-              Amount (dollars)
-              <input inputMode="decimal" value={f.ra ?? ""} onChange={set("ra")} />
-            </label>
-            <label>
-              Every (months)
-              <input inputMode="numeric" value={f.rm ?? "1"} onChange={set("rm")} />
-            </label>
-            <label>
-              First invoice
-              <input type="date" value={f.rs ?? ""} onChange={set("rs")} />
-            </label>
-            <label>
-              Last invoice (optional)
-              <input type="date" value={f.re ?? ""} onChange={set("re")} />
-            </label>
-            <button type="submit" className="st-btn" disabled={pending}>
+            <Field label="What is billed">
+              <Input value={f.rd ?? ""} onChange={set("rd")} />
+            </Field>
+            <Field label="Amount (dollars)">
+              <Input inputMode="decimal" value={f.ra ?? ""} onChange={set("ra")} />
+            </Field>
+            <Field label="Every (months)">
+              <Input inputMode="numeric" value={f.rm ?? "1"} onChange={set("rm")} />
+            </Field>
+            <Field label="First invoice">
+              <Input type="date" value={f.rs ?? ""} onChange={set("rs")} />
+            </Field>
+            <Field label="Last invoice (optional)">
+              <Input type="date" value={f.re ?? ""} onChange={set("re")} />
+            </Field>
+            <Button type="submit" disabled={pending}>
               Start
-            </button>
+            </Button>
           </form>
-          <p className="st-note">
+          <Text size="sm" tone="muted">
             Recurring invoices and due instalments are sent automatically each day (a Vercel Cron job); this button runs
             them now.
-          </p>
-          <button
-            type="button"
-            className="st-btn st-btn--ghost"
-            disabled={pending}
-            onClick={() => act(() => runBillingNowAction())}
-          >
+          </Text>
+          <Button variant="secondary" disabled={pending} onClick={() => act(() => runBillingNowAction())}>
             Run billing now
-          </button>
+          </Button>
         </Card>
 
         <Card title="Tips, bank payment and surcharge" id="b-set">
@@ -255,46 +239,35 @@ export function BillingView({ user, data }: { user: string; data: BillingData })
               }),
             )}
           >
-            <label className="st-check">
-              <input
-                type="checkbox"
-                checked={flags.tips}
-                onChange={(e) => setFlags({ ...flags, tips: e.target.checked })}
-              />{" "}
-              Offer a tip at payment
-            </label>
-            <label>
-              Tip choices (percent, comma separated)
-              <input value={f.sp ?? data.settings.percents} onChange={set("sp")} />
-            </label>
-            <label className="st-check">
-              <input
-                type="checkbox"
-                checked={flags.ach}
-                onChange={(e) => setFlags({ ...flags, ach: e.target.checked })}
-              />{" "}
-              Offer bank transfer (ACH, needs it enabled in Stripe)
-            </label>
-            <label className="st-check">
-              <input
-                type="checkbox"
-                checked={flags.surcharge}
-                onChange={(e) => setFlags({ ...flags, surcharge: e.target.checked })}
-              />{" "}
-              Add a credit card surcharge (default off)
-            </label>
-            <label>
-              Surcharge percent (at most 3)
-              <input inputMode="decimal" value={f.ss ?? data.settings.surchargePercent} onChange={set("ss")} />
-            </label>
-            <p className="st-note">
+            <Checkbox
+              checked={flags.tips}
+              onChange={(e) => setFlags({ ...flags, tips: e.target.checked })}
+              label="Offer a tip at payment"
+            />
+            <Field label="Tip choices (percent, comma separated)">
+              <Input value={f.sp ?? data.settings.percents} onChange={set("sp")} />
+            </Field>
+            <Checkbox
+              checked={flags.ach}
+              onChange={(e) => setFlags({ ...flags, ach: e.target.checked })}
+              label="Offer bank transfer (ACH, needs it enabled in Stripe)"
+            />
+            <Checkbox
+              checked={flags.surcharge}
+              onChange={(e) => setFlags({ ...flags, surcharge: e.target.checked })}
+              label="Add a credit card surcharge (default off)"
+            />
+            <Field label="Surcharge percent (at most 3)">
+              <Input inputMode="decimal" value={f.ss ?? data.settings.surchargePercent} onChange={set("ss")} />
+            </Field>
+            <Text size="sm" tone="muted">
               A surcharge is allowed on credit cards only (never debit), must be disclosed before the sale, is capped at
               the lower of 3% or your actual cost, needs advance notice to the card networks, and is banned in some
               states. Check the rules where you work before turning it on. Not legal advice.
-            </p>
-            <button type="submit" className="st-btn" disabled={pending}>
+            </Text>
+            <Button type="submit" disabled={pending}>
               Save
-            </button>
+            </Button>
           </form>
         </Card>
       </div>

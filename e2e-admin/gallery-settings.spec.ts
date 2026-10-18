@@ -259,12 +259,8 @@ test("price sheets, reports, and the Free plan's limits (then back to Full Frame
   await page.goto(`${PHOTOS}/studio/plan`, { waitUntil: "networkidle" });
   await expect(page.getByText("100% discount, billed monthly at $0.00")).toBeVisible();
   await expect(page.getByText("No payment needed").first()).toBeVisible();
-  await page
-    .getByRole("button", { name: "Switch to Free" })
-    .click()
-    .catch(() => {});
-  page.once("dialog", (d) => d.accept());
   await page.getByRole("button", { name: "Switch to Free" }).click();
+  await page.getByRole("alertdialog").getByRole("button", { name: "Switch to Free" }).click();
   await slow(page.getByRole("status").filter({ hasText: "Switched to Free" })).toBeVisible();
   await page.goto(`${url}#shop`, { waitUntil: "networkidle" });
   await page.getByLabel("Open the store in this gallery").check();

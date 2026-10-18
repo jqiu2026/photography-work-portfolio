@@ -189,3 +189,38 @@ body {
 .pm-foot-link {
   margin: var(--hm-space-5) 0 0;
 }
+/* a native file input, in the control style (kept native where a test or a ref reads it directly) */
+.pm-file {
+  font: inherit;
+  font-size: var(--hm-text-sm);
+  color: var(--hm-muted);
+}
+.pm-file::file-selector-button {
+  margin-right: var(--hm-space-3);
+  min-height: var(--hm-control-h);
+  padding: 0 0.9rem;
+  border: 1px solid var(--hm-line-strong);
+  border-radius: var(--hm-radius-md);
+  background: var(--hm-chrome-bg);
+  color: var(--hm-fg-soft);
+  font: inherit;
+  cursor: pointer;
+}
+.pm-file:hover::file-selector-button {
+  border-color: var(--hm-line-hover);
+  color: var(--hm-fg-strong);
+}
+.pm-file:focus-visible {
+  outline: var(--hm-focus-width) solid var(--hm-focus-color);
+  outline-offset: var(--hm-focus-offset);
+}
+.pm-fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+.pm-fieldset > legend {
+  margin-bottom: var(--hm-space-2);
+  padding: 0;
+}
