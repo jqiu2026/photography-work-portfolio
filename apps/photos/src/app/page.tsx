@@ -3,6 +3,7 @@ import { Button, EmptyState, Reveal, Surface } from "@holominimal/ui";
 import { getSite } from "@jerryqiu/sites";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { HomeStory } from "@/components/home/HomeStory";
 import { Shell } from "@/components/Shell";
 import { getPortfolio } from "@/lib/portfolio";
 import { getWork } from "@/lib/work";
@@ -13,30 +14,13 @@ export const metadata: Metadata = {
   description: "Photography by Jerry Qiu: theater, events, street and aviation, shot mostly around New York.",
 };
 
-// Draft captions, one per kind of photograph (the first photograph of that gallery). TODO(owner): rewrite every line
-// in your voice and check it against the photograph.
-const captions: { category: string; text: string }[] = [
-  { category: "theater", text: "Stage light is generous, and brief." },
-  { category: "event", text: "Most of this job is waiting for the half second where someone forgets I'm there." },
-  { category: "street", text: "Snow edits the city for free." },
-  { category: "macro", text: "Close enough that the world becomes a texture." },
-  { category: "aviation", text: "Planes are patient. I'm not, but I try." },
-];
-
 const fmt = (d: string) => new Date(d).toLocaleDateString("en-US", { month: "long", year: "numeric" });
 
 export default async function Home() {
-  const { categories, photosIn, hero, photos } = await getPortfolio();
-  const work = await getWork();
-  const selected = captions
-    .map((c) => ({ ...c, p: photosIn(c.category)[0] }))
-    .filter((c): c is { category: string; text: string; p: NonNullable<(typeof c)["p"]> } => !!c.p);
-  const lead = hero ?? photos[0];
-  // the lead photograph first, then the rest of the selection without repeating it
-  const mosaic = [
-    ...(lead ? [{ category: "", text: "", p: lead }] : []),
-    ...selected.filter((s) => s.p.id !== lead?.id),
-  ].slice(0, 6);
+  const { categories, photosIn, featured, photos } = await getPortfolio();
+  const projects = (await getWork()).filter((w) => w.cover).slice(0, 4);
+  // the story opens on the featured set (one subject after another, so it shows range), then the rest
+  const story = [...featured, ...photos.filter((p) => !featured.some((f) => f.id === p.id))].slice(0, 18);
   const cats = categories
     .map((c) => ({ ...c, count: photosIn(c.slug).length, cover: photosIn(c.slug)[0] }))
     .filter((c) => c.count);
@@ -51,53 +35,10 @@ export default async function Home() {
   return (
     <Shell>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
-      <div className="pub-wrap">
-        <header className="pub-hero">
-          <p className="hm-eyebrow hm-enter" style={{ "--hm-i": 0 } as React.CSSProperties}>
-            Photography · New York
-          </p>
-          <h1 className="hm-enter" style={{ "--hm-i": 1 } as React.CSSProperties}>
-            Pictures of people at work.
-          </h1>
-          {/* TODO(owner): rewrite in your voice. Existing owner text from the original site. */}
-          <p className="pub-lede hm-enter" style={{ "--hm-i": 2 } as React.CSSProperties}>
-            Photography is how I started, and it is still how I pay attention. I make pictures of people at work, then
-            spend a long time trying to make them honest.
-          </p>
-          <p className="pub-places hm-enter" style={{ "--hm-i": 3 } as React.CSSProperties}>
-            Theater · Events · Street · Aviation
-          </p>
-          <div className="pub-actions hm-enter" style={{ "--hm-i": 4 } as React.CSSProperties}>
-            <Button asChild size="lg">
-              <Link href="/portfolio">See the portfolio</Link>
-            </Button>
-            <Button asChild size="lg" variant="secondary">
-              <Link href="/book">Book a shoot</Link>
-            </Button>
-          </div>
-        </header>
-
-        {mosaic.length ? (
-          <ul className="pub-mosaic" aria-label="Selected photographs">
-            {mosaic.map((m, i) => (
-              <li key={m.p.id ?? i} data-lead={i === 0 ? "" : undefined}>
-                <Link href={m.category ? `/portfolio/${m.category}` : "/portfolio"}>
-                  <figure>
-                    <ProtectedImage
-                      asset={m.p}
-                      alt={m.p.alt ?? ""}
-                      sizes={i === 0 ? "(min-width: 900px) 62vw, 92vw" : "(min-width: 900px) 30vw, 92vw"}
-                      priority={i < 2}
-                      fill
-                    />
-                    {m.text ? <figcaption>{m.text}</figcaption> : null}
-                  </figure>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        ) : null}
-      </div>
+      <HomeStory
+        photos={story}
+        subjects={categories.filter((c) => photosIn(c.slug).length).map((c) => ({ slug: c.slug, name: c.name }))}
+      />
 
       <section className="pub-section" aria-labelledby="by-kind">
         <div className="pub-wrap">
@@ -126,7 +67,7 @@ export default async function Home() {
         </div>
       </section>
 
-      {work.length ? (
+      {projects.length ? (
         <section className="pub-section" aria-labelledby="projects">
           <div className="pub-wrap">
             <div className="pub-head-row">
@@ -136,18 +77,15 @@ export default async function Home() {
               </Link>
             </div>
             <ul className="pub-projects">
-              {work
-                .filter((w) => w.cover)
-                .slice(0, 4)
-                .map((w) => (
-                  <li key={w.slug}>
-                    <Link href={`/work/${w.slug}`}>
-                      {w.cover ? <ProtectedImage asset={w.cover} alt="" sizes="(min-width: 900px) 46vw, 92vw" /> : null}
-                      <strong>{w.title}</strong>
-                      <small>{[fmt(w.date), w.summary].filter(Boolean).join(" · ")}</small>
-                    </Link>
-                  </li>
-                ))}
+              {projects.map((w) => (
+                <li key={w.slug}>
+                  <Link href={`/work/${w.slug}`}>
+                    {w.cover ? <ProtectedImage asset={w.cover} alt="" sizes="(min-width: 900px) 46vw, 92vw" /> : null}
+                    <strong>{w.title}</strong>
+                    <small>{[fmt(w.date), w.summary].filter(Boolean).join(" · ")}</small>
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
         </section>

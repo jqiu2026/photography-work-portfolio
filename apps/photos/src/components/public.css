@@ -236,13 +236,18 @@
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(9rem, 44%), 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.7rem;
+}
+@media (max-width: 640px) {
+  .pub-cats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 .pub-cat {
   position: relative;
   display: block;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 3 / 2;
   overflow: hidden;
   border-radius: var(--hm-radius-md);
   background: var(--hm-surface);
@@ -253,11 +258,14 @@
   content: "";
   position: absolute;
   inset: 0;
+  z-index: 3;
   background: linear-gradient(to top, rgb(0 0 0 / 0.75), transparent 55%);
+  pointer-events: none;
 }
 .pub-cat span {
   position: absolute;
-  z-index: 2;
+  z-index: 4;
+  text-shadow: 0 1px 8px rgb(0 0 0 / 0.6);
   left: 0.8rem;
   bottom: 0.7rem;
   right: 0.8rem;
