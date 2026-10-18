@@ -60,11 +60,9 @@
   gap: 0.7rem;
   margin-top: 1.6rem;
 }
-/* buttons: the white primary and the hairline pill, matching Holominimal's Button */
 
 /* ---- type on older inner pages ---- */
-.pub h1,
-.pub h1.hl-heading {
+.pub h1 {
   font-size: var(--hm-text-3xl);
   font-weight: var(--hm-weight-medium);
   line-height: var(--hm-leading-tight);
