@@ -44,7 +44,8 @@ test("the studio sidebar: selected entry is largest, the pointer magnifies the n
   await expect(nav.getByRole("link", { name: "Sales", exact: true })).toHaveAttribute("aria-current", "page");
   // the group's pages are quiet tabs on the page itself
   const tabs = page.getByRole("navigation", { name: "Sales pages" });
-  for (const t of ["Store", "Quotes", "Invoices", "Payments"]) await expect(tabs.getByRole("link", { name: t })).toBeVisible();
+  for (const t of ["Store", "Quotes", "Invoices", "Payments"])
+    await expect(tabs.getByRole("link", { name: t })).toBeVisible();
 });
 
 test("the dashboard shows real totals and every other section keeps its heading and the sidebar", async ({ page }) => {

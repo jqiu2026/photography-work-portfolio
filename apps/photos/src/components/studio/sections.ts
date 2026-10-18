@@ -38,7 +38,12 @@ export const studioGroups = [
   { id: "calendar", label: "Calendar", sections: ["calendar", "shoots"], hue: 285 },
   { id: "store", label: "Sales", sections: ["orders", "quotes", "invoices", "billing"], hue: 150 },
   { id: "reports", label: "Reports", sections: ["reports", "pipeline", "activity"], hue: 38 },
-  { id: "settings", label: "Settings", sections: ["brand", "packages", "forms", "automations", "users", "plan"], hue: 190 },
+  {
+    id: "settings",
+    label: "Settings",
+    sections: ["brand", "packages", "forms", "automations", "users", "plan"],
+    hue: 190,
+  },
 ] as const;
 
 export const sectionInfo: Record<string, string> = {
