@@ -39,10 +39,10 @@ const FOOTER = [
 
 /**
  * The photography site's frame, built on Holominimal: a night-sky atmosphere, the proximity dock for navigation, one
- * call to action pinned top right, and a hairline footer. The only link that leaves this site is the one jerryqiu.com
+ * call to action pinned top right (left out where it would be noise: client documents, the booking pages), and a hairline footer. The only link that leaves this site is the one jerryqiu.com
  * button (cross-site rule).
  */
-export function PublicChrome({ children }: { children: ReactNode }) {
+export function PublicChrome({ children, cta = true }: { children: ReactNode; cta?: boolean }) {
   const hub = getSite("hub");
   const year = new Date().getFullYear();
   return (
@@ -52,9 +52,11 @@ export function PublicChrome({ children }: { children: ReactNode }) {
         sidebar={<PublicDock />}
         toolbarLabel="Booking"
         toolbar={
-          <Button asChild size="sm">
-            <Link href="/book">Book a shoot</Link>
-          </Button>
+          cta ? (
+            <Button asChild size="sm">
+              <Link href="/book">Book a shoot</Link>
+            </Button>
+          ) : undefined
         }
       >
         {children}

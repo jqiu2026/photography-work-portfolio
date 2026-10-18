@@ -1,4 +1,5 @@
 import { Button, Container, Grid, Section, Text } from "@/components/ui";
+import { PageHeader } from "@/components/PageHeader";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Shell } from "@/components/Shell";
@@ -9,9 +10,7 @@ export const metadata: Metadata = { title: "About", description: "About the phot
 export default function About() {
   return (
     <Shell>
-      <Container className="page-head">
-        <h1 className="hl-heading hl-heading--display">About the photographer</h1>
-      </Container>
+      <PageHeader eyebrow="About" title="About the photographer" />
       <Section style={{ paddingTop: 0 }}>
         <Container size="md">
           <Grid cols={2} gap={12}>

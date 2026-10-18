@@ -1,6 +1,7 @@
 "use client";
 
-import { Button, Field, Input } from "@/components/ui";
+import { ToggleGroup, ToggleGroupItem } from "@holominimal/ui";
+import { Alert, Button, Checkbox, Field, FormMessage, Heading, Input, ResultCard, Text } from "@/components/ui";
 import { useState } from "react";
 import { bookMinislotAction, joinWaitlistAction } from "@/app/book/schedule/actions";
 
@@ -36,67 +37,71 @@ export function MiniPicker({ groups }: { groups: MiniGroup[] }) {
     });
     setMsg(r.ok ? r.message : r.error);
   }
-  if (done)
-    return (
-      <p role="status" style={{ fontSize: "var(--hl-text-lg)" }}>
-        {msg}
-      </p>
-    );
+  if (done) return <ResultCard level={2} title="You're booked" message={msg} />;
   return (
-    <div style={{ display: "grid", gap: "1.5rem", maxWidth: "36rem" }}>
+    <div className="pm-form">
       {groups.length ? (
         groups.map((g) => (
-          <section key={g.label} aria-label={g.label}>
-            <h2 className="hl-heading" style={{ fontSize: "var(--hl-text-xl)" }}>
+          <section key={g.label} aria-label={g.label} className="pm-stack">
+            <Heading level={2} size="xl">
               {g.label}
-            </h2>
-            {g.location ? <p style={{ color: "var(--hl-muted)" }}>{g.location}</p> : null}
-            <ul style={{ listStyle: "none", padding: 0, display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+            </Heading>
+            {g.location ? (
+              <Text size="sm" tone="muted">
+                {g.location}
+              </Text>
+            ) : null}
+            <ToggleGroup
+              aria-label={`Times on ${g.label}`}
+              className="pm-slots"
+              value={g.slots.some((x) => x.id === slot) ? (slot ?? "") : ""}
+              onValueChange={(v) => setSlot(v || null)}
+            >
               {g.slots.map((s) => (
-                <li key={s.id}>
-                  <button type="button" className="slot" aria-pressed={slot === s.id} onClick={() => setSlot(s.id)}>
-                    {s.time}
-                  </button>
-                </li>
+                <ToggleGroupItem key={s.id} value={s.id}>
+                  {s.time}
+                </ToggleGroupItem>
               ))}
-            </ul>
+            </ToggleGroup>
           </section>
         ))
       ) : (
-        <form onSubmit={wait} style={{ display: "grid", gap: "0.75rem" }}>
-          <p role="status">
+        <form onSubmit={wait} className="pm-stack" aria-label="Waitlist">
+          <Alert tone="neutral">
             No mini-session slots are open right now. Join the waitlist and I'll email you when the next ones open.
-          </p>
-          <Field label="Your name">
-            <Input name="wname" autoComplete="name" />
-          </Field>
-          <Field label="Email">
-            <Input name="wemail" type="email" autoComplete="email" />
-          </Field>
+          </Alert>
+          <div className="pm-pair">
+            <Field label="Your name">
+              <Input name="wname" autoComplete="name" />
+            </Field>
+            <Field label="Email">
+              <Input name="wemail" type="email" autoComplete="email" />
+            </Field>
+          </div>
           <div>
-            <Button type="submit">Join the waitlist</Button>
+            <Button type="submit" variant="secondary">
+              Join the waitlist
+            </Button>
           </div>
           {msg ? <p role="status">{msg}</p> : null}
         </form>
       )}
       {slot ? (
-        <form onSubmit={submit} noValidate style={{ display: "grid", gap: "1rem" }} aria-label="Your details">
-          <Field label="Your name" required>
-            <Input name="name" autoComplete="name" />
-          </Field>
-          <Field label="Email" required>
-            <Input name="email" type="email" autoComplete="email" />
-          </Field>
-          <label style={{ display: "flex", gap: "0.6rem", fontSize: "var(--hl-text-sm)" }}>
-            <input type="checkbox" name="consent" /> I agree that my details are stored so you can confirm.
-          </label>
-          {err ? (
-            <p role="alert" style={{ color: "var(--hl-danger, #b00020)" }}>
-              {err}
-            </p>
-          ) : null}
+        <form onSubmit={submit} noValidate className="pm-stack" aria-label="Your details">
+          <div className="pm-pair">
+            <Field label="Your name" required>
+              <Input name="name" autoComplete="name" />
+            </Field>
+            <Field label="Email" required>
+              <Input name="email" type="email" autoComplete="email" />
+            </Field>
+          </div>
+          <Checkbox name="consent" label="I agree that my details are stored so you can confirm." />
+          <FormMessage>{err}</FormMessage>
           <div>
-            <Button type="submit">Book this slot</Button>
+            <Button type="submit" size="lg">
+              Book this slot
+            </Button>
           </div>
         </form>
       ) : null}

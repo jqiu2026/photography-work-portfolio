@@ -1,4 +1,5 @@
 import { Container, Section, Text } from "@/components/ui";
+import { PageHeader } from "@/components/PageHeader";
 import type { Metadata } from "next";
 import { SchedulePicker } from "@/components/SchedulePicker";
 import { Shell } from "@/components/Shell";
@@ -10,13 +11,11 @@ export const dynamic = "force-dynamic";
 export default function Schedule() {
   const minDate = new Date().toISOString().slice(0, 10);
   return (
-    <Shell>
-      <Container className="page-head">
-        <h1 className="hl-heading hl-heading--display">Pick a time</h1>
-        <Text size="xl" tone="muted" style={{ marginTop: "1.5rem", maxWidth: "36ch" }}>
-          Choose a day, then a free time. Sessions are held while you pay the deposit.
-        </Text>
-      </Container>
+    <Shell cta={false}>
+      <PageHeader
+        title={"Pick a time"}
+        intro={"Choose a day, then a free time. Sessions are held while you pay the deposit."}
+      />
       <Section style={{ paddingTop: 0 }}>
         <Container>
           <SchedulePicker minDate={minDate} />

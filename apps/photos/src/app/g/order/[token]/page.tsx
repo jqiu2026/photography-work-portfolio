@@ -58,7 +58,7 @@ export default async function OrderPage({ params }: { params: Promise<{ token: s
   const dl = (q: string) => `/g/order/${token}/download?${q}`;
   const tone = paid ? "success" : order.status === "pending" ? "warning" : "muted";
   return (
-    <Shell>
+    <Shell cta={false}>
       <Container size="sm">
         <Section>
           <PageHeader>

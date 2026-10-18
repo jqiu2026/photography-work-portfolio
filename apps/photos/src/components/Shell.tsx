@@ -6,7 +6,11 @@ import { PublicChrome } from "./PublicChrome";
  * has the whole window and its own navigation (the gallery page links back where it needs to).
  */
 /** (`cinema` is kept so older call sites compile; it changes nothing.) */
-export function Shell({ children, bare }: { children: ReactNode; bare?: boolean; cinema?: boolean }) {
+export function Shell({
+  children,
+  bare,
+  cta = true,
+}: { children: ReactNode; bare?: boolean; cinema?: boolean; cta?: boolean }) {
   if (bare) return <>{children}</>;
-  return <PublicChrome>{children}</PublicChrome>;
+  return <PublicChrome cta={cta}>{children}</PublicChrome>;
 }

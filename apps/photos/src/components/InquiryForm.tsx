@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Field, Input, Select, Textarea } from "@/components/ui";
+import { Alert, Button, Checkbox, Field, FormMessage, Input, ResultCard, Select, Textarea } from "@/components/ui";
 import NextLink from "next/link";
 import { type FormEvent, useEffect, useRef, useState } from "react";
 import { budgetOptions, type ShootType } from "@/content/shoot-types";
@@ -90,88 +90,90 @@ export function InquiryForm({
 
   if (state === "sent")
     return (
-      <div role="status" style={{ maxWidth: "36rem" }}>
-        <p style={{ fontSize: "var(--hl-text-lg)" }}>Thanks, I got your message.</p>
-        <p style={{ color: "var(--hl-muted)" }}>
-          A confirmation is on its way to your inbox. I reply myself, usually within two days.
-        </p>
-      </div>
+      <ResultCard
+        level={2}
+        title="Thanks, I got your message."
+        message="A confirmation is on its way to your inbox. I reply myself, usually within two days."
+      />
     );
   return (
-    <form
-      onSubmit={submit}
-      noValidate
-      aria-label={`${type.label} inquiry`}
-      style={{ display: "grid", gap: "1.25rem", maxWidth: "36rem" }}
-    >
-      <Field label="Your name" error={errors.name} required>
-        <Input name="name" autoComplete="name" />
-      </Field>
-      <Field label="Email" error={errors.email} required>
-        <Input name="email" type="email" autoComplete="email" />
-      </Field>
-      <Field label="Phone (optional)">
-        <Input name="phone" type="tel" autoComplete="tel" />
-      </Field>
-      <Field label="Date (if you have one)">
-        <Input name="eventDate" type="date" />
-      </Field>
+    <form onSubmit={submit} noValidate aria-label={`${type.label} inquiry`} className="pm-form">
+      <div className="pm-pair">
+        <Field label="Your name" error={errors.name} required>
+          <Input name="name" autoComplete="name" />
+        </Field>
+        <Field label="Email" error={errors.email} required>
+          <Input name="email" type="email" autoComplete="email" />
+        </Field>
+      </div>
+      <div className="pm-pair">
+        <Field label="Phone (optional)">
+          <Input name="phone" type="tel" autoComplete="tel" />
+        </Field>
+        <Field label="Date (if you have one)">
+          <Input name="eventDate" type="date" />
+        </Field>
+      </div>
       <Field label="Where">
         <Input name="location" autoComplete="off" />
       </Field>
-      {type.extra.map((x) => (
-        <Field key={x.name} label={x.label}>
-          <Input
-            name={`x:${x.name}`}
-            type={x.kind === "number" ? "number" : "text"}
-            min={x.kind === "number" ? 0 : undefined}
-          />
-        </Field>
-      ))}
+      {type.extra.length ? (
+        <div className="pm-pair">
+          {type.extra.map((x) => (
+            <Field key={x.name} label={x.label}>
+              <Input
+                name={`x:${x.name}`}
+                type={x.kind === "number" ? "number" : "text"}
+                inputMode={x.kind === "number" ? "numeric" : undefined}
+                min={x.kind === "number" ? 0 : undefined}
+              />
+            </Field>
+          ))}
+        </div>
+      ) : null}
       <Field label="Budget">
-        <Select name="budget">
+        <Select name="budget" defaultValue={budgetOptions[0]}>
           {budgetOptions.map((b) => (
             <option key={b}>{b}</option>
           ))}
         </Select>
       </Field>
       <Field label="Tell me about it" hint={type.messageHint} error={errors.message} required>
-        <Textarea name="message" />
+        <Textarea name="message" rows={5} autoGrow />
       </Field>
-      <div aria-hidden style={{ position: "absolute", left: "-9999px" }}>
+      <div aria-hidden className="pm-honeypot">
         <label>
           Website
           <input name="website" tabIndex={-1} autoComplete="off" />
         </label>
       </div>
-      <div>
-        <label style={{ display: "flex", gap: "0.6rem", alignItems: "flex-start", fontSize: "var(--hl-text-sm)" }}>
-          <input type="checkbox" name="consent" style={{ marginTop: "0.25rem" }} />
-          <span>
-            I agree that my message is stored so you can reply, and that you may email me about it. See the{" "}
-            <NextLink href="/privacy" target={embed ? "_blank" : undefined} style={{ textDecoration: "underline" }}>
-              privacy page
-            </NextLink>
-            .
-          </span>
-        </label>
-        {errors.consent ? (
-          <p role="alert" style={{ color: "var(--hl-danger, #b00020)", fontSize: "var(--hl-text-sm)" }}>
-            {errors.consent}
-          </p>
-        ) : null}
+      <div className="pm-stack">
+        <Checkbox
+          name="consent"
+          aria-invalid={errors.consent ? true : undefined}
+          label={
+            <>
+              I agree that my message is stored so you can reply, and that you may email me about it. See the{" "}
+              <NextLink href="/privacy" target={embed ? "_blank" : undefined} className="pm-link">
+                privacy page
+              </NextLink>
+              .
+            </>
+          }
+        />
+        <FormMessage>{errors.consent}</FormMessage>
       </div>
       {state === "error" ? (
-        <p role="alert" style={{ color: "var(--hl-danger, #b00020)" }}>
+        <Alert tone="danger">
           {problem}{" "}
-          <a href={`mailto:${fallbackEmail}`} style={{ textDecoration: "underline" }}>
+          <a href={`mailto:${fallbackEmail}`} className="pm-link">
             Email {fallbackEmail}
           </a>
-        </p>
+        </Alert>
       ) : null}
       <div>
-        <Button type="submit" disabled={state === "sending"}>
-          {state === "sending" ? "Sending…" : "Send inquiry"}
+        <Button type="submit" size="lg" loading={state === "sending"}>
+          Send inquiry
         </Button>
       </div>
     </form>

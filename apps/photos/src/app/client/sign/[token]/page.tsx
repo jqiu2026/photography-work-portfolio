@@ -17,7 +17,7 @@ export default async function SignPage({ params }: { params: Promise<{ token: st
   const k = await st.contractByToken(db, ref);
   if (!k) notFound();
   return (
-    <Shell>
+    <Shell cta={false}>
       <Section>
         <Container size="sm">
           {k.status === "signed" ? (

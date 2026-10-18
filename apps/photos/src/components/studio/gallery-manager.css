@@ -17,7 +17,8 @@
 .gm-stats {
   margin-bottom: var(--hm-space-7);
 }
-.gm-tabs {
+.gm-tabs.hm-tab-list {
+  flex-wrap: nowrap;
   margin-bottom: var(--hm-space-6);
   max-width: 100%;
   overflow-x: auto;

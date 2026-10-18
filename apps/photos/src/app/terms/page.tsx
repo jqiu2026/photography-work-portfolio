@@ -1,3 +1,4 @@
+import { DataList, DataListItem } from "@/components/ui";
 import { getDb } from "@jerryqiu/db";
 import * as com from "@jerryqiu/db/commerce";
 import * as forms from "@jerryqiu/db/forms";
@@ -42,16 +43,13 @@ export default async function Terms() {
         fee. Download what you want to keep before it expires.
       </p>
       <h2>Extras and their prices</h2>
-      <ul className="mk-list">
+      <DataList className="mk-list">
         {addOns.map((a) => (
-          <li key={a.name}>
-            <span>
-              {a.name} <small>{a.unit}</small>
-            </span>
-            <span>{a.price}</span>
-          </li>
+          <DataListItem key={a.name} description={a.unit} meta={a.price}>
+            {a.name}
+          </DataListItem>
         ))}
-      </ul>
+      </DataList>
       <h2>Your photographs and licence</h2>
       <p>
         I keep the copyright. You receive the licence in your contract (usually personal, non-commercial use).

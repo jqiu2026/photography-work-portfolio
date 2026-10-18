@@ -67,7 +67,7 @@ test("the slots API offers free times only, and not on a blocked day or outside 
 test("a visitor books a free consultation; it is confirmed, emailed, and that time disappears", async ({ page }) => {
   await page.goto(`${PHOTOS}/book/schedule`, { waitUntil: "networkidle" });
   await page.getByLabel("Pick a day").fill(MON);
-  const first = page.getByRole("list", { name: "Free times" }).getByRole("button").first();
+  const first = page.getByRole("group", { name: "Free times" }).getByRole("button").first();
   await expect(first).toBeVisible({ timeout: 15_000 });
   const label = (await first.textContent()) as string;
   await first.click();
@@ -78,7 +78,7 @@ test("a visitor books a free consultation; it is confirmed, emailed, and that ti
   await slow(page.getByRole("status")).toContainText("You're booked");
   await page.goto(`${PHOTOS}/book/schedule`, { waitUntil: "networkidle" });
   await page.getByLabel("Pick a day").fill(MON);
-  await expect(page.getByRole("list", { name: "Free times" }).getByRole("button").first()).not.toHaveText(label, {
+  await expect(page.getByRole("group", { name: "Free times" }).getByRole("button").first()).not.toHaveText(label, {
     timeout: 15_000,
   });
   await page.goto(`${PHOTOS}/studio/inbox`, { waitUntil: "networkidle" });
@@ -96,7 +96,7 @@ test("a paid session is held until the deposit is paid (mock card), then confirm
   await page.goto(`${PHOTOS}/book/schedule`, { waitUntil: "networkidle" });
   await page.getByLabel(/Portrait session/).check();
   await page.getByLabel("Pick a day").fill(monday(1));
-  const slot = page.getByRole("list", { name: "Free times" }).getByRole("button").first();
+  const slot = page.getByRole("group", { name: "Free times" }).getByRole("button").first();
   await expect(slot).toBeVisible({ timeout: 15_000 });
   await slot.click();
   await expect(page.getByText(/SAMPLE amount/)).toBeVisible();

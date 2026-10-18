@@ -1,5 +1,5 @@
 import { ProtectedImage } from "@halation/ui/media";
-import { Reveal, Surface } from "@holominimal/ui";
+import { Button, EmptyState, Reveal, Surface } from "@holominimal/ui";
 import { getSite } from "@jerryqiu/sites";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -68,33 +68,35 @@ export default async function Home() {
             Theater · Events · Street · Aviation
           </p>
           <div className="pub-actions hm-enter" style={{ "--hm-i": 4 } as React.CSSProperties}>
-            <Link href="/portfolio" className="pub-btn">
-              See the portfolio
-            </Link>
-            <Link href="/book" className="pub-btn pub-btn--ghost">
-              Book a shoot
-            </Link>
+            <Button asChild size="lg">
+              <Link href="/portfolio">See the portfolio</Link>
+            </Button>
+            <Button asChild size="lg" variant="secondary">
+              <Link href="/book">Book a shoot</Link>
+            </Button>
           </div>
         </header>
 
-        <ul className="pub-mosaic" aria-label="Selected photographs">
-          {mosaic.map((m, i) => (
-            <li key={m.p.id ?? i} data-lead={i === 0 ? "" : undefined}>
-              <Link href={m.category ? `/portfolio/${m.category}` : "/portfolio"}>
-                <figure>
-                  <ProtectedImage
-                    asset={m.p}
-                    alt={m.p.alt ?? ""}
-                    sizes={i === 0 ? "(min-width: 900px) 62vw, 92vw" : "(min-width: 900px) 30vw, 92vw"}
-                    priority={i < 2}
-                    fill
-                  />
-                  {m.text ? <figcaption>{m.text}</figcaption> : null}
-                </figure>
-              </Link>
-            </li>
-          ))}
-        </ul>
+        {mosaic.length ? (
+          <ul className="pub-mosaic" aria-label="Selected photographs">
+            {mosaic.map((m, i) => (
+              <li key={m.p.id ?? i} data-lead={i === 0 ? "" : undefined}>
+                <Link href={m.category ? `/portfolio/${m.category}` : "/portfolio"}>
+                  <figure>
+                    <ProtectedImage
+                      asset={m.p}
+                      alt={m.p.alt ?? ""}
+                      sizes={i === 0 ? "(min-width: 900px) 62vw, 92vw" : "(min-width: 900px) 30vw, 92vw"}
+                      priority={i < 2}
+                      fill
+                    />
+                    {m.text ? <figcaption>{m.text}</figcaption> : null}
+                  </figure>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        ) : null}
       </div>
 
       <section className="pub-section" aria-labelledby="by-kind">
@@ -105,6 +107,7 @@ export default async function Home() {
               All photographs →
             </Link>
           </div>
+          {cats.length ? null : <EmptyState>New photographs are on the way.</EmptyState>}
           <ul className="pub-cats">
             {cats.map((c) => (
               <li key={c.slug}>
@@ -219,9 +222,9 @@ export default async function Home() {
             <p>Tell me about the event or the idea. I'll reply by email.</p>
           </div>
           <div className="pub-actions" style={{ margin: 0 }}>
-            <Link href="/book" className="pub-btn">
-              Start a booking
-            </Link>
+            <Button asChild size="lg">
+              <Link href="/book">Start a booking</Link>
+            </Button>
           </div>
         </div>
       </div>

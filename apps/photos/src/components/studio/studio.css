@@ -195,3 +195,10 @@
 .st-card__body > div > .hm-button:only-child {
   justify-self: start;
 }
+
+/* phones and small tablets: the dock is a top strip, so the tools sit in the flow under it and pages keep a 16px gutter */
+@media (max-width: 860px) {
+  .st-wrap {
+    padding-inline: var(--hm-space-4);
+  }
+}

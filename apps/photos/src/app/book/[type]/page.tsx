@@ -1,4 +1,5 @@
 import { Container, Section, Text } from "@/components/ui";
+import { PageHeader } from "@/components/PageHeader";
 import { person } from "@jerryqiu/sites/profile";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -20,13 +21,8 @@ export default async function BookType({ params }: { params: Promise<{ type: str
   const t = shootType((await params).type);
   if (!t) notFound();
   return (
-    <Shell>
-      <Container className="page-head">
-        <h1 className="hl-heading hl-heading--display">{t.headline}</h1>
-        <Text size="xl" tone="muted" style={{ marginTop: "1.5rem", maxWidth: "40ch" }}>
-          {t.blurb}
-        </Text>
-      </Container>
+    <Shell cta={false}>
+      <PageHeader eyebrow="Book" title={t.headline} intro={t.blurb} />
       <Section style={{ paddingTop: 0 }}>
         <Container>
           <InquiryForm type={t} fallbackEmail={person.bookingEmail} />

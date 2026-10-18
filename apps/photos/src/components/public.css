@@ -1,8 +1,7 @@
 /*
  * Photography site, public pages, on Holominimal: a black page under a quiet night sky, the proximity dock for
  * navigation, hairlines instead of boxes, white type, light only where it points. Tokens are `--hm-*`.
- * The studio and gallery screens have their own stylesheets; the older `--hl-*` names they read are bridged in
- * app/holominimal.css.
+ * The studio and gallery screens have their own stylesheets, also on `--hm-*`.
  */
 .pub {
   min-height: 100dvh;
@@ -62,32 +61,6 @@
   margin-top: 1.6rem;
 }
 /* buttons: the white primary and the hairline pill, matching Holominimal's Button */
-.pub-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: var(--hm-target);
-  padding: 0 1.25rem;
-  border-radius: var(--hm-radius-md);
-  background: var(--hm-fg);
-  color: var(--hm-on-fg);
-  text-decoration: none;
-  font-weight: var(--hm-weight-medium);
-  font-size: var(--hm-text-md);
-  transition: background var(--hm-dur-fast) var(--hm-ease-out), box-shadow var(--hm-dur-fast) var(--hm-ease-out);
-}
-.pub-btn:hover {
-  background: var(--hm-fg-strong);
-}
-.pub-btn--ghost {
-  background: none;
-  color: var(--hm-fg);
-  box-shadow: inset 0 0 0 1px var(--hm-line-strong);
-}
-.pub-btn--ghost:hover {
-  background: var(--hm-surface);
-  box-shadow: inset 0 0 0 1px var(--hm-line-hover);
-}
 
 /* ---- type on older inner pages ---- */
 .pub h1,

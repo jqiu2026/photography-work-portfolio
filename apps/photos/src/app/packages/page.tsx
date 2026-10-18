@@ -1,4 +1,17 @@
-import { Container, Section, Text } from "@/components/ui";
+import {
+  Badge,
+  Button,
+  PricingCard,
+  PricingFeature,
+  PricingFeatures,
+  PricingFooter,
+  PricingGrid,
+  PricingName,
+  PricingPrice,
+  PricingTagline,
+} from "@holominimal/ui";
+import { PageHeader } from "@/components/PageHeader";
+import { Alert, Container, DataList, DataListItem, Heading, Section, Text } from "@/components/ui";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Shell } from "@/components/Shell";
@@ -15,77 +28,82 @@ export default async function Packages() {
   const { packages, addOns, anySample } = await getPublicCatalog();
   return (
     <Shell>
-      <Container className="page-head">
-        <h1 className="hl-heading hl-heading--display">Packages</h1>
-        <Text size="xl" tone="muted" style={{ marginTop: "1.5rem", maxWidth: "40ch" }}>
-          Packages list what you receive: coverage time, edited images and how long your gallery stays online. Mandatory
-          fees are inside the price. Optional extras are listed separately, with their own prices, so you can compare a
-          bundle with buying it alone.
-        </Text>
+      <PageHeader
+        eyebrow="Pricing"
+        title="Packages"
+        intro="Packages list what you receive: coverage time, edited images and how long your gallery stays online. Mandatory fees are inside the price. Optional extras are listed separately, with their own prices, so you can compare a bundle with buying it alone."
+      >
         {anySample ? (
-          <p className="pk-note" role="note">
+          <Alert tone="info" role="note" className="pk-note">
             SAMPLE: the contents below are an example and every price shows as $XX until the real prices are set.
-          </p>
+          </Alert>
         ) : null}
-      </Container>
+      </PageHeader>
       <Section style={{ paddingTop: 0 }}>
         <Container>
-          <ul className="pk-grid" aria-label="Packages">
+          <PricingGrid aria-label="Packages">
             {packages.map((p) => (
-              <li key={p.id} className="pk-card" data-featured={p.featured || undefined}>
-                <h2>{p.name}</h2>
-                {p.tagline ? <p className="pk-tag">{p.tagline}</p> : null}
-                <p className="pk-price">
-                  {p.price} {p.isSample ? <small>SAMPLE</small> : null}
-                </p>
-                <ul className="pk-list">
+              <PricingCard key={p.id} as="li" featured={p.featured} featuredLabel="Most booked">
+                <PricingName as="h2">{p.name}</PricingName>
+                {p.tagline ? <PricingTagline>{p.tagline}</PricingTagline> : null}
+                <PricingPrice>
+                  {p.price} {p.isSample ? <Badge tone="warning">SAMPLE</Badge> : null}
+                </PricingPrice>
+                <PricingFeatures>
                   {p.deliverables.map((d) => (
-                    <li key={d.label}>
-                      <span>{d.label}</span>
-                      <strong>{d.value}</strong>
-                    </li>
+                    <PricingFeature key={d.label} value={d.value}>
+                      {d.label}
+                    </PricingFeature>
                   ))}
                   {p.included.map((i) => (
-                    <li key={i.name}>
-                      <span>Includes {i.name}</span>
-                      <strong>worth {i.standalone}</strong>
-                    </li>
+                    <PricingFeature key={i.name} value={`worth ${i.standalone}`}>
+                      Includes {i.name}
+                    </PricingFeature>
                   ))}
-                </ul>
-                {p.fees.length ? <p className="pk-fee">{p.fees.join(", ")}</p> : null}
-              </li>
+                </PricingFeatures>
+                <PricingFooter>
+                  {p.fees.length ? (
+                    <Text size="xs" tone="muted">
+                      {p.fees.join(", ")}
+                    </Text>
+                  ) : null}
+                  <Button asChild variant={p.featured ? "primary" : "secondary"}>
+                    <Link href="/book">Ask about {p.name}</Link>
+                  </Button>
+                </PricingFooter>
+              </PricingCard>
             ))}
-          </ul>
-          <h2 className="hl-heading" style={{ marginTop: "3rem", fontSize: "var(--hl-text-2xl)" }}>
-            Extras, on their own
-          </h2>
-          <ul className="pk-extras" aria-label="Add-ons and fees">
-            {addOns.map((a) => (
-              <li key={a.name}>
-                <span>
-                  <strong>{a.name}</strong>
-                  {a.description ? <small>{a.description}</small> : null}
-                </span>
-                <span>
-                  {a.price}{" "}
-                  <small>
-                    {a.unit}
-                    {a.isFee ? " · optional fee" : ""}
-                  </small>
-                </span>
-              </li>
-            ))}
-          </ul>
-          <p style={{ marginTop: "2rem" }}>
-            <Link href="/book" className="hl-link">
-              Ask about a shoot
-            </Link>
-            {" · "}
-            <Link href="/book/schedule" className="hl-link">
-              Pick a time
-            </Link>
-          </p>
-          <Text size="sm" tone="muted" style={{ marginTop: "1rem" }}>
+          </PricingGrid>
+          <section aria-labelledby="pk-extras" className="pk-extras">
+            <Heading level={2} size="xl" id="pk-extras">
+              Extras, on their own
+            </Heading>
+            <DataList aria-label="Add-ons and fees">
+              {addOns.map((a) => (
+                <DataListItem
+                  key={a.name}
+                  description={a.description || undefined}
+                  meta={
+                    <>
+                      <strong className="pk-amount">{a.price}</strong> {a.unit}
+                      {a.isFee ? " · optional fee" : ""}
+                    </>
+                  }
+                >
+                  {a.name}
+                </DataListItem>
+              ))}
+            </DataList>
+          </section>
+          <div className="pk-actions">
+            <Button asChild size="lg">
+              <Link href="/book">Ask about a shoot</Link>
+            </Button>
+            <Button asChild size="lg" variant="secondary">
+              <Link href="/book/schedule">Pick a time</Link>
+            </Button>
+          </div>
+          <Text size="sm" tone="muted" style={{ marginTop: "var(--hm-space-4)" }}>
             Sales tax, where it applies, is shown as its own line on your quote.
           </Text>
         </Container>

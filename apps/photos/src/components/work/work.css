@@ -14,37 +14,37 @@
   color: inherit;
 }
 .work-card__media {
-  border-radius: var(--hl-radius-lg);
+  border-radius: var(--hm-radius-lg);
   overflow: hidden;
   aspect-ratio: 4 / 3;
-  background: var(--hl-surface-2);
+  background: var(--hm-surface-raised);
 }
 .work-card__media .hl-img {
   aspect-ratio: 4 / 3 !important;
   height: 100%;
 }
 .work-card__media img {
-  transition: transform 1.4s var(--hl-ease);
+  transition: transform 1.4s var(--hm-ease-glide);
 }
 .work-card:hover img {
   transform: scale(1.035);
 }
 .work-card h2 {
-  font-family: var(--hl-font-display);
-  font-weight: var(--hl-display-weight);
-  font-size: var(--hl-text-2xl);
-  letter-spacing: var(--hl-display-tracking);
+  font-family: var(--font-sans), var(--hm-font-sans);
+  font-weight: 500;
+  font-size: var(--hm-text-2xl);
+  letter-spacing: -0.015em;
   margin-top: 1.1rem;
   line-height: 1.1;
 }
 .work-card p {
-  color: var(--hl-muted);
-  font-size: var(--hl-text-sm);
+  color: var(--hm-muted);
+  font-size: var(--hm-text-sm);
   margin-top: .4rem;
 }
 .work-detail__hero {
-  margin: 0 var(--hl-gutter);
-  border-radius: var(--hl-radius-lg);
+  margin: 0 var(--hm-gutter);
+  border-radius: var(--hm-radius-lg);
   overflow: hidden;
 }
 .work-detail__meta {
@@ -53,11 +53,11 @@
   gap: 2rem 4rem;
   margin-top: 2rem;
   padding-top: 1.5rem;
-  border-top: 1px solid var(--hl-line);
-  font-size: var(--hl-text-sm);
+  border-top: 1px solid var(--hm-line-overlay);
+  font-size: var(--hm-text-sm);
 }
 .work-detail__meta dt {
-  color: var(--hl-muted);
+  color: var(--hm-muted);
 }
 .work-detail__meta dd {
   margin: .2rem 0 0;
@@ -66,7 +66,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
-  border-top: 1px solid var(--hl-line);
+  border-top: 1px solid var(--hm-line-overlay);
   padding-block: 3rem;
 }
 .next-prev a {
@@ -79,14 +79,14 @@
   text-align: right;
 }
 .next-prev span {
-  color: var(--hl-muted);
-  font-size: var(--hl-text-sm);
+  color: var(--hm-muted);
+  font-size: var(--hm-text-sm);
 }
 .next-prev strong {
-  font-family: var(--hl-font-display);
-  font-weight: var(--hl-display-weight);
-  font-size: var(--hl-text-2xl);
-  letter-spacing: var(--hl-display-tracking);
+  font-family: var(--font-sans), var(--hm-font-sans);
+  font-weight: 500;
+  font-size: var(--hm-text-2xl);
+  letter-spacing: -0.015em;
 }
 .work-card__empty {
   height: 100%;
@@ -94,8 +94,8 @@
   place-items: center;
   padding: 2rem;
   text-align: center;
-  font-family: var(--hl-font-display);
-  font-size: var(--hl-text-2xl);
-  letter-spacing: var(--hl-display-tracking);
-  color: var(--hl-muted);
+  font-family: var(--font-sans), var(--hm-font-sans);
+  font-size: var(--hm-text-2xl);
+  letter-spacing: -0.015em;
+  color: var(--hm-muted);
 }

@@ -40,3 +40,10 @@
 .st-util .hm-kbd {
   margin-left: 0.15rem;
 }
+@media (max-width: 860px) {
+  .st-util {
+    position: static;
+    justify-content: flex-end;
+    padding: var(--hm-space-3) var(--hm-space-4) 0;
+  }
+}

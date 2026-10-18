@@ -17,7 +17,7 @@ export default async function QuestionnairePage({ params }: { params: Promise<{ 
   const q = await forms.questionnaireByToken(db, ref);
   if (!q) notFound();
   return (
-    <Shell>
+    <Shell cta={false}>
       <Section>
         <Container size="sm">
           {q.completedAt ? (

@@ -1,4 +1,5 @@
 import { Container, Section, Text } from "@/components/ui";
+import { PageHeader } from "@/components/PageHeader";
 import { getDb } from "@jerryqiu/db";
 import * as cal from "@jerryqiu/db/calendar";
 import type { Metadata } from "next";
@@ -33,13 +34,8 @@ export default async function Minis() {
     }
   }
   return (
-    <Shell>
-      <Container className="page-head">
-        <h1 className="hl-heading hl-heading--display">Mini-sessions</h1>
-        <Text size="xl" tone="muted" style={{ marginTop: "1.5rem", maxWidth: "36ch" }}>
-          Short, fixed-length sessions on set days. Pick a slot.
-        </Text>
-      </Container>
+    <Shell cta={false}>
+      <PageHeader title={"Mini-sessions"} intro={"Short, fixed-length sessions on set days. Pick a slot."} />
       <Section style={{ paddingTop: 0 }}>
         <Container>
           <MiniPicker groups={groups} />

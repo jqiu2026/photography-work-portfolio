@@ -1,8 +1,7 @@
-import "@halation/ui/styles.css";
 import "@holominimal/ui/styles.css";
 import "./holominimal.css";
+import "./protection.css";
 import { ThemeScript } from "@jerryqiu/sites/theme-script";
-import { ThemeProvider } from "@halation/ui";
 import { Theme } from "@holominimal/ui";
 import { ScreenshotGuard } from "@halation/ui/media";
 import { Analytics } from "@vercel/analytics/next";
@@ -35,14 +34,12 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <ThemeScript preset="photos" defaultTheme="dark" />
         <meta name="robots" content="noai, noimageai" />
       </head>
-      <body className="hl-root">
-        <ThemeProvider preset="photos" defaultTheme="dark">
-          <Theme theme={{ accent: "blue" }}>
-            <ScreenshotGuard level="off">
-              {general.maintenance ? <Maintenance message={general.maintenanceMessage} /> : children}
-            </ScreenshotGuard>
-          </Theme>
-        </ThemeProvider>
+      <body>
+        <Theme theme={{ accent: "blue" }}>
+          <ScreenshotGuard level="off">
+            {general.maintenance ? <Maintenance message={general.maintenanceMessage} /> : children}
+          </ScreenshotGuard>
+        </Theme>
         <Analytics />
         <SpeedInsights />
       </body>

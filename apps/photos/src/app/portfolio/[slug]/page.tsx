@@ -1,4 +1,6 @@
-import { Container, Eyebrow, Heading, Section } from "@/components/ui";
+import { PageTab, PageTabs } from "@holominimal/ui";
+import { Container, Section, Text } from "@/components/ui";
+import { PageHeader } from "@/components/PageHeader";
 import { ProtectedGallery } from "@halation/ui/media";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -23,26 +25,23 @@ export default async function Category({ params }: { params: Promise<{ slug: str
   const tabs = categories.filter((c) => photosIn(c.slug).length);
   return (
     <Shell cinema>
-      <Container className="page-head">
-        <Eyebrow style={{ marginBottom: "1rem" }}>Portfolio</Eyebrow>
-        <Heading as="h1" size="display" display>
-          {cat.name}
-        </Heading>
-      </Container>
+      <PageHeader eyebrow={"Portfolio"} title={cat.name} />
       <Section style={{ paddingTop: 0 }}>
         <Container>
-          <nav className="cat-tabs" aria-label="Subjects">
-            <Link href="/portfolio">All</Link>
+          <PageTabs className="cat-tabs" aria-label="Subjects">
+            <PageTab asChild>
+              <Link href="/portfolio">All</Link>
+            </PageTab>
             {tabs.map((c) => (
-              <Link key={c.slug} href={`/portfolio/${c.slug}`} aria-current={c.slug === slug ? "page" : undefined}>
-                {c.name}
-              </Link>
+              <PageTab key={c.slug} asChild current={c.slug === slug}>
+                <Link href={`/portfolio/${c.slug}`}>{c.name}</Link>
+              </PageTab>
             ))}
-          </nav>
-          <p className="cat-note">
+          </PageTabs>
+          <Text size="sm" tone="muted" className="cat-note">
             These photographs are protected. Screenshots and saving are discouraged; to use an image, get in touch for a
             licence.
-          </p>
+          </Text>
           <ProtectedGallery
             items={items.map((p) => ({ asset: p, alt: p.alt }))}
             layout={items.length > 3 ? "masonry" : "justified"}

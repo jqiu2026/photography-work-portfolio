@@ -179,17 +179,22 @@ export function ResultCard({
   title,
   message,
   tone = "success",
+  level = 1,
   children,
-}: { eyebrow?: ReactNode; title: ReactNode; message?: ReactNode; tone?: "success" | "neutral"; children?: ReactNode }) {
+}: {
+  eyebrow?: ReactNode;
+  title: ReactNode;
+  message?: ReactNode;
+  tone?: "success" | "neutral";
+  level?: 1 | 2;
+  children?: ReactNode;
+}) {
+  const H = level === 1 ? "h1" : "h2";
   return (
-    <Surface variant="outlined" padding="lg" className="pm-stack pm-result" data-tone={tone}>
+    <Surface variant="outlined" padding="lg" className="pm-stack pm-result" data-tone={tone} role="status">
       {eyebrow ? <p className="hm-eyebrow">{eyebrow}</p> : null}
-      <h1 className="pm-doc-title">{title}</h1>
-      {message ? (
-        <p role="status" className="pm-result__msg">
-          {message}
-        </p>
-      ) : null}
+      <H className="pm-doc-title">{title}</H>
+      {message ? <p className="pm-result__msg">{message}</p> : null}
       {children}
     </Surface>
   );

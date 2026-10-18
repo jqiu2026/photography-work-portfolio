@@ -33,7 +33,7 @@ export default async function PayPage({
   const net = await st.invoiceNetCents(db, inv.id);
   const dueCents = Math.max(0, inv.totalCents - net);
   return (
-    <Shell>
+    <Shell cta={false}>
       {mode === "mock" ? (
         <MockBanner what="Payments are a local mock (Stripe test-mode shape, no card is charged)" />
       ) : null}

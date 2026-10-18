@@ -1,6 +1,7 @@
 "use client";
 
-import { Button, Field, Input, Textarea } from "@/components/ui";
+import { Radio, RadioGroup, Step, Stepper, ToggleGroup, ToggleGroupItem } from "@holominimal/ui";
+import { Alert, Button, Checkbox, Field, FormMessage, Input, ResultCard, Text, Textarea } from "@/components/ui";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
 import { type ChangeEvent, useState } from "react";
@@ -75,36 +76,28 @@ export function SchedulePicker({ minDate, initialKind = "consult" }: { minDate: 
     setMsg(r.ok ? r.message : r.error);
   }
 
-  if (state === "done")
-    return (
-      <div role="status" style={{ maxWidth: "36rem" }}>
-        <p style={{ fontSize: "var(--hl-text-lg)" }}>{msg}</p>
-      </div>
-    );
+  if (state === "done") return <ResultCard level={2} title="You're booked" message={msg} />;
+  const step = pick ? 2 : date ? 1 : 0;
   return (
-    <div style={{ display: "grid", gap: "1.5rem", maxWidth: "36rem" }}>
-      <fieldset style={{ border: 0, padding: 0, margin: 0, display: "grid", gap: "0.5rem" }}>
-        <legend style={{ marginBottom: "0.5rem" }}>What would you like to book?</legend>
+    <div className="pm-form">
+      <Stepper current={step} aria-label="Booking steps" className="pm-steps">
+        <Step title="What" />
+        <Step title="When" />
+        <Step title="Your details" />
+      </Stepper>
+      <RadioGroup
+        legend="What would you like to book?"
+        name="kind"
+        value={kind}
+        onValueChange={(v) => {
+          setKind(v);
+          void load(v, date);
+        }}
+      >
         {scheduleKinds.map((k) => (
-          <label key={k.slug} style={{ display: "flex", gap: "0.6rem", alignItems: "flex-start", minHeight: 44 }}>
-            <input
-              type="radio"
-              name="kind"
-              value={k.slug}
-              checked={kind === k.slug}
-              onChange={() => {
-                setKind(k.slug);
-                void load(k.slug, date);
-              }}
-            />
-            <span>
-              <strong>{k.label}</strong>
-              <br />
-              <small style={{ color: "var(--hl-muted)" }}>{k.blurb}</small>
-            </span>
-          </label>
+          <Radio key={k.slug} value={k.slug} label={k.label} description={k.blurb} />
         ))}
-      </fieldset>
+      </RadioGroup>
       <Field label="Pick a day">
         <Input
           type="date"
@@ -116,87 +109,88 @@ export function SchedulePicker({ minDate, initialKind = "consult" }: { minDate: 
           }}
         />
       </Field>
-      {err ? (
-        <p role="alert" style={{ color: "var(--hl-danger, #b00020)" }}>
-          {err}
-        </p>
-      ) : null}
+      <FormMessage>{err}</FormMessage>
       {slots && !slots.length ? (
-        <div>
-          <p role="status">No times are free that day.</p>
-          <form onSubmit={wait} style={{ display: "grid", gap: "0.75rem" }}>
-            <p style={{ color: "var(--hl-muted)" }}>Join the waitlist and I'll email you if a spot opens.</p>
-            <Field label="Your name">
-              <Input name="wname" autoComplete="name" />
-            </Field>
-            <Field label="Email">
-              <Input name="wemail" type="email" autoComplete="email" />
-            </Field>
+        <div className="pm-stack">
+          <Alert tone="neutral">No times are free that day.</Alert>
+          <form onSubmit={wait} className="pm-stack" aria-label="Waitlist">
+            <Text size="sm" tone="muted">
+              Join the waitlist and I'll email you if a spot opens.
+            </Text>
+            <div className="pm-pair">
+              <Field label="Your name">
+                <Input name="wname" autoComplete="name" />
+              </Field>
+              <Field label="Email">
+                <Input name="wemail" type="email" autoComplete="email" />
+              </Field>
+            </div>
             <div>
-              <Button type="submit">Join the waitlist</Button>
+              <Button type="submit" variant="secondary">
+                Join the waitlist
+              </Button>
             </div>
             {msg ? <p role="status">{msg}</p> : null}
           </form>
         </div>
       ) : null}
       {slots?.length ? (
-        <div>
-          <p style={{ color: "var(--hl-muted)", fontSize: "var(--hl-text-sm)" }}>
+        <div className="pm-stack">
+          <Text size="sm" tone="muted">
             Times in {info?.timezone}. {info?.minutes} minutes.
-          </p>
-          <ul
-            style={{ listStyle: "none", padding: 0, display: "flex", flexWrap: "wrap", gap: "0.5rem" }}
+          </Text>
+          <ToggleGroup
             aria-label="Free times"
+            className="pm-slots"
+            value={pick?.start ?? ""}
+            onValueChange={(v) => setPick(slots.find((s) => s.start === v) ?? null)}
           >
             {slots.map((s) => (
-              <li key={s.start}>
-                <button
-                  type="button"
-                  className="slot"
-                  aria-pressed={pick?.start === s.start}
-                  onClick={() => setPick(s)}
-                >
-                  {s.label}
-                </button>
-              </li>
+              <ToggleGroupItem key={s.start} value={s.start}>
+                {s.label}
+              </ToggleGroupItem>
             ))}
-          </ul>
+          </ToggleGroup>
         </div>
       ) : null}
       {pick ? (
-        <form onSubmit={book} noValidate style={{ display: "grid", gap: "1rem" }} aria-label="Your details">
-          <p>
+        <form onSubmit={book} noValidate className="pm-stack" aria-label="Your details">
+          <Alert tone="info" role="status">
             <strong>{pick.label}</strong> on {date}
             {info?.deposit ? ` · deposit ${usd(info.deposit)} (SAMPLE amount until the owner sets it)` : ""}
-          </p>
-          <Field label="Your name" required>
-            <Input name="name" autoComplete="name" />
-          </Field>
-          <Field label="Email" required>
-            <Input name="email" type="email" autoComplete="email" />
-          </Field>
+          </Alert>
+          <div className="pm-pair">
+            <Field label="Your name" required>
+              <Input name="name" autoComplete="name" />
+            </Field>
+            <Field label="Email" required>
+              <Input name="email" type="email" autoComplete="email" />
+            </Field>
+          </div>
           <Field label="Anything I should know?">
-            <Textarea name="notes" />
+            <Textarea name="notes" rows={3} autoGrow />
           </Field>
-          <div aria-hidden style={{ position: "absolute", left: "-9999px" }}>
+          <div aria-hidden className="pm-honeypot">
             <label>
               Website
               <input name="website" tabIndex={-1} autoComplete="off" />
             </label>
           </div>
-          <label style={{ display: "flex", gap: "0.6rem", alignItems: "flex-start", fontSize: "var(--hl-text-sm)" }}>
-            <input type="checkbox" name="consent" style={{ marginTop: "0.25rem" }} />
-            <span>
-              I agree that my details are stored so you can reply and confirm. See the{" "}
-              <NextLink href="/privacy" style={{ textDecoration: "underline" }}>
-                privacy page
-              </NextLink>
-              .
-            </span>
-          </label>
+          <Checkbox
+            name="consent"
+            label={
+              <>
+                I agree that my details are stored so you can reply and confirm. See the{" "}
+                <NextLink href="/privacy" className="pm-link">
+                  privacy page
+                </NextLink>
+                .
+              </>
+            }
+          />
           <div>
-            <Button type="submit" disabled={state === "busy"}>
-              {state === "busy" ? "Booking…" : info?.deposit ? "Hold this time" : "Book this time"}
+            <Button type="submit" size="lg" loading={state === "busy"}>
+              {info?.deposit ? "Hold this time" : "Book this time"}
             </Button>
           </div>
         </form>

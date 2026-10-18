@@ -58,7 +58,7 @@ export default async function QuotePage({ params }: { params: Promise<{ token: s
     </TableRow>
   );
   return (
-    <Shell>
+    <Shell cta={false}>
       {q.isSample ? <MockBanner what="This quote uses SAMPLE prices from the example catalogue" /> : null}
       <Section>
         <Container size="sm">
