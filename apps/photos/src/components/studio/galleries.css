@@ -1,167 +1,41 @@
-.st-root .gl-bar {
+/* All galleries: one toolbar, then the gallery cards. */
+.gl-bar {
   display: flex;
   flex-wrap: wrap;
-  gap: .8rem 1rem;
+  gap: var(--hm-space-3);
   align-items: center;
-  margin-bottom: 1.6rem;
+  margin-bottom: var(--hm-space-6);
 }
-.st-root .gl-bar input[type="search"] {
+.gl-search {
   flex: 1 1 14rem;
-  max-width: 22rem;
+  max-width: 20rem;
 }
-.st-root .gl-filters {
-  display: flex;
-  gap: .2rem;
-  flex-wrap: wrap;
+.gl-sort {
+  min-width: 10rem;
 }
-.st-root .gl-filters button {
-  background: none;
-  border: 0;
-  padding: .4rem .7rem;
-  border-radius: 999px;
-  color: var(--hl-muted);
-  font: inherit;
-  font-size: .85rem;
-  cursor: pointer;
-}
-.st-root .gl-filters button span {
-  opacity: 0.6;
-  margin-left: .15rem;
+.gl-count {
+  margin-left: 0.3rem;
+  color: var(--hm-muted);
   font-variant-numeric: tabular-nums;
 }
-.st-root .gl-filters button:hover {
-  color: var(--st-fg);
+.gl-made {
+  margin-bottom: var(--hm-space-6);
 }
-.st-root .gl-filters button[aria-pressed="true"] {
-  color: var(--st-fg);
-  background: #17171a;
+.gl-made code {
+  font-family: var(--hm-font-mono);
+  font-size: var(--hm-text-base);
+  letter-spacing: 0.08em;
+  color: var(--hm-fg-strong);
 }
-.st-root .gl-new {
+.gl-made__actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
-  align-items: end;
-  padding: 1.2rem 0 1.6rem;
-  border-top: 1px solid var(--st-line);
-  margin-bottom: 1.2rem;
+  gap: var(--hm-space-2);
+  margin-top: var(--hm-space-3);
 }
-.st-root .gl-new label {
+.st-stack {
   display: grid;
-  gap: .3rem;
-  font-size: .8rem;
-  color: var(--hl-muted);
-  flex: 1 1 14rem;
-}
-.st-root .gl-new .st-note {
-  flex-basis: 100%;
-  margin: 0;
-}
-.st-root .gl-made {
-  padding: 1rem 0 1.4rem;
-  border-top: 1px solid hsl(150 60% 45%);
-  margin-bottom: 1.4rem;
-}
-.st-root .gl-made p {
-  margin: 0 0 .4rem;
-}
-.st-root .gl-made code {
-  font-size: 1.1rem;
-  letter-spacing: .08em;
-  color: var(--st-fg);
-}
-.st-root .gl-grid {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
-  gap: 2rem 1.4rem;
-}
-.st-root .gl-grid li {
-  animation: gl-in .5s calc(var(--i) * 40ms) ease-out both;
-}
-@keyframes gl-in {
-  from {
-    opacity: 0;
-    transform: translateY(.6rem);
-  }
-}
-.st-root .gl-card {
-  display: grid;
-  gap: .2rem;
-  color: inherit;
-  text-decoration: none;
-}
-.st-root .gl-cover {
-  position: relative;
-  display: block;
-  aspect-ratio: 3 / 2;
-  overflow: hidden;
-  border-radius: 6px;
-  background: #0e0e10;
-  margin-bottom: .55rem;
-}
-.st-root .gl-cover img,
-.st-root .gl-cover canvas {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform .6s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-.st-root .gl-card:hover .gl-cover img,
-.st-root .gl-card:hover .gl-cover canvas {
-  transform: scale(1.04);
-}
-.st-root .gl-empty {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  font-size: .8rem;
-  color: var(--hl-muted);
-}
-.st-root .gl-chip {
-  position: absolute;
-  top: .55rem;
-  left: .55rem;
-  padding: .15rem .55rem;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(6px);
-  font-style: normal;
-  font-size: .7rem;
-  letter-spacing: .04em;
-}
-.st-root .gl-chip[data-state="live"] {
-  color: hsl(150 60% 65%);
-}
-.st-root .gl-chip[data-state="expiring"] {
-  color: hsl(38 90% 65%);
-}
-.st-root .gl-chip[data-state="expired"],
-.st-root .gl-chip[data-state="archived"] {
-  color: var(--hl-muted);
-}
-.st-root .gl-card strong {
-  font-weight: 500;
-}
-.st-root .gl-card small {
-  color: var(--hl-muted);
-  font-size: .8rem;
-}
-.st-root .gl-card:hover strong {
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-.st-root .gl-none {
-  padding: 4rem 0;
-  text-align: center;
-  color: var(--hl-muted);
-}
-@media (prefers-reduced-motion: reduce) {
-  .st-root .gl-grid li {
-    animation: none;
-  }
+  gap: var(--hm-space-4);
 }
 
 .pl-meter progress {

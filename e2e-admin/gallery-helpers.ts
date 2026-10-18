@@ -1,19 +1,17 @@
 import { expect, type Page } from "@playwright/test";
+import { choose } from "./ui";
 
 type File = { name: string; mimeType: string; buffer: Buffer };
 
 /** Creates an empty draft gallery for a job through the studio and opens it. Returns the client passcode (shown once) and the page URL. */
 export async function newGallery(page: Page, photos: string, jobTitle: string, title?: string) {
   await page.goto(`${photos}/studio/galleries`, { waitUntil: "networkidle" });
-  await page.getByRole("button", { name: "New gallery" }).click();
+  await page.getByRole("link", { name: "New gallery" }).click();
   const form = page.getByRole("form", { name: "New gallery" });
-  const select = form.locator("select");
-  const value = await select.evaluate(
-    (el, t) => [...(el as HTMLSelectElement).options].find((o) => o.text.includes(t))?.value ?? "",
-    jobTitle,
+  await choose(
+    form.getByRole("combobox", { name: "Job" }),
+    new RegExp(jobTitle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")),
   );
-  expect(value).not.toBe("");
-  await select.selectOption(value);
   if (title) await form.getByLabel(/^Title/).fill(title);
   await form.getByRole("button", { name: "Create" }).click();
   const made = page.getByRole("status", { name: "Gallery created" });

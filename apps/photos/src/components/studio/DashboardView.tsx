@@ -1,8 +1,25 @@
 "use client";
 
+import {
+  ArrowRightIcon,
+  BarChart,
+  Button,
+  DataList,
+  DataListItem,
+  EmptyState,
+  ImagePlusIcon,
+  InboxIcon,
+  ShoppingBagIcon,
+  Stat,
+  StatGroup,
+  Status,
+  Surface,
+  UserPlusIcon,
+} from "@holominimal/ui";
 import Link from "next/link";
-import { useState } from "react";
+import type { ReactNode } from "react";
 import type { DashboardData } from "@/lib/studio-dashboard";
+import { StudioHead } from "./StudioFrame";
 import "./studio-dashboard.css";
 
 const usd = (cents: number) =>
@@ -24,203 +41,186 @@ const when = (iso: string) =>
 const ago = (iso: string) => {
   const m = Math.max(0, Math.round((Date.now() - new Date(iso).getTime()) / 60_000));
   if (m < 1) return "now";
-  if (m < 60) return `${m}m`;
-  if (m < 1440) return `${Math.round(m / 60)}h`;
-  return `${Math.round(m / 1440)}d`;
+  if (m < 60) return `${m}m ago`;
+  if (m < 1440) return `${Math.round(m / 60)}h ago`;
+  return `${Math.round(m / 1440)}d ago`;
 };
+const GALLERY_TONE: Record<string, "success" | "warning" | "muted" | "neutral"> = {
+  published: "success",
+  draft: "neutral",
+  expired: "warning",
+  archived: "muted",
+};
+
+/** One of the "start something" cards: a whole-card link on the holographic surface. */
+function Quick({ href, icon, title, detail }: { href: string; icon: ReactNode; title: string; detail: string }) {
+  return (
+    <Surface asChild variant="holo" interactive lit padding="md" className="db-quick__card">
+      <Link href={href}>
+        <span className="db-quick__icon" aria-hidden="true">
+          {icon}
+        </span>
+        <strong>{title}</strong>
+        <span>{detail}</span>
+      </Link>
+    </Surface>
+  );
+}
+
+function Section({ id, title, more, children }: { id: string; title: string; more?: ReactNode; children: ReactNode }) {
+  return (
+    <section className="db-section" aria-labelledby={id}>
+      <div className="db-head">
+        <h2 id={id}>{title}</h2>
+        {more}
+      </div>
+      {children}
+    </section>
+  );
+}
+
+const More = ({ href, children }: { href: string; children: ReactNode }) => (
+  <Button asChild variant="ghost" size="sm">
+    <Link href={href}>
+      {children} <ArrowRightIcon />
+    </Link>
+  </Button>
+);
 
 export function DashboardView({ greeting, data }: { greeting: string; data: DashboardData }) {
   const { revenue, stats } = data;
-  const max = Math.max(1, ...revenue.days.map((d) => d.cents));
-  const [hover, setHover] = useState<number | null>(null);
   const delta = revenue.previousCents
     ? Math.round(((revenue.totalCents - revenue.previousCents) / revenue.previousCents) * 100)
     : null;
-  const shown = hover === null ? null : revenue.days[hover];
 
   return (
-    <div className="st-wrap db" style={{ "--hue": 210 } as React.CSSProperties}>
-      <header className="st-head">
-        <p className="st-crumb">Overview</p>
-        <h1 className="st-title">{greeting}</h1>
-        <nav className="st-tabs" aria-label="Overview pages">
-          <Link href="/studio/overview" aria-current="page">
-            Overview
-          </Link>
-          <Link href="/studio/activity">Activity</Link>
-        </nav>
-      </header>
+    <div className="st-wrap db">
+      <StudioHead section="overview" title={greeting} />
 
       <nav className="db-quick" aria-label="Start something">
-        <Link href="/studio/galleries?new=1">
-          <strong>New gallery</strong>
-          <span>Upload photos and share a link</span>
-        </Link>
-        <Link href="/studio/clients">
-          <strong>Add a client</strong>
-          <span>Then a shoot, quote or invoice</span>
-        </Link>
-        <Link href="/studio/orders">
-          <strong>Shop and orders</strong>
-          <span>Prints and downloads sold</span>
-        </Link>
-        <Link href="/studio/bookings">
-          <strong>Inquiries</strong>
-          <span>{stats.newInquiries ? `${stats.newInquiries} waiting for you` : "Nothing waiting"}</span>
-        </Link>
+        <Quick
+          href="/studio/galleries?new=1"
+          icon={<ImagePlusIcon />}
+          title="New gallery"
+          detail="Upload photos and share a link"
+        />
+        <Quick
+          href="/studio/clients"
+          icon={<UserPlusIcon />}
+          title="Add a client"
+          detail="Then a shoot, quote or invoice"
+        />
+        <Quick
+          href="/studio/orders"
+          icon={<ShoppingBagIcon />}
+          title="Shop and orders"
+          detail="Prints and downloads sold"
+        />
+        <Quick
+          href="/studio/bookings"
+          icon={<InboxIcon />}
+          title="Inquiries"
+          detail={stats.newInquiries ? `${stats.newInquiries} waiting for you` : "Nothing waiting"}
+        />
       </nav>
 
-      <div className="db-stats">
-        <div className="db-stat">
-          <p className="db-label">Revenue, 30 days</p>
-          <p className="db-value">{usd(revenue.totalCents)}</p>
-          <p className="db-delta" data-up={delta !== null && delta >= 0 ? "" : undefined}>
-            {delta === null
+      <StatGroup className="db-stats">
+        <Stat
+          label="Revenue, 30 days"
+          value={usd(revenue.totalCents)}
+          detail={
+            delta === null
               ? "No earlier period yet"
-              : `${delta >= 0 ? "Up" : "Down"} ${Math.abs(delta)}% on the 30 days before`}
-          </p>
-        </div>
-        <div className="db-stat">
-          <p className="db-label">Upcoming</p>
-          <p className="db-value">{stats.upcoming}</p>
-          <p className="db-delta">appointments, next 3 weeks</p>
-        </div>
-        <div className="db-stat">
-          <p className="db-label">Active clients</p>
-          <p className="db-value">{stats.activeClients}</p>
-          <p className="db-delta">with an open job</p>
-        </div>
-        <div className="db-stat">
-          <p className="db-label">To deliver</p>
-          <p className="db-value">{stats.deliveries}</p>
-          <p className="db-delta">published galleries</p>
-        </div>
-      </div>
+              : `${delta >= 0 ? "Up" : "Down"} ${Math.abs(delta)}% on the 30 days before`
+          }
+          trend={delta === null ? undefined : delta >= 0 ? "up" : "down"}
+        />
+        <Stat label="Upcoming" value={stats.upcoming} detail="appointments, next 3 weeks" />
+        <Stat label="Active clients" value={stats.activeClients} detail="with an open job" />
+        <Stat label="To deliver" value={stats.deliveries} detail="published galleries" />
+      </StatGroup>
 
-      <section className="db-section" aria-labelledby="db-rev">
-        <div className="db-head">
-          <h2 id="db-rev">Revenue</h2>
-          <p aria-live="polite">{shown ? `${shown.label} · ${usd(shown.cents)}` : "Last 30 days"}</p>
-        </div>
-        {revenue.totalCents ? (
-          <>
-            <div className="db-bars" onPointerLeave={() => setHover(null)}>
-              {revenue.days.map((d, i) => (
-                <button
-                  key={d.label}
-                  type="button"
-                  className="db-bar"
-                  data-on={hover === i ? "" : undefined}
-                  style={{ "--h": `${Math.max(2, (d.cents / max) * 100)}%`, "--i": i } as React.CSSProperties}
-                  onPointerEnter={() => setHover(i)}
-                  onFocus={() => setHover(i)}
-                  onBlur={() => setHover(null)}
-                  aria-label={`${d.label}: ${usd(d.cents)}`}
-                />
-              ))}
-            </div>
-            <div className="db-axis" aria-hidden="true">
-              <span>{revenue.days[0]?.label}</span>
-              <span>{revenue.days[29]?.label}</span>
-            </div>
-          </>
-        ) : (
-          <p className="db-empty">No payments in the last 30 days.</p>
-        )}
-      </section>
+      <BarChart
+        className="db-section"
+        title="Revenue"
+        caption="Last 30 days"
+        data={revenue.days.map((d) => ({ label: d.label, value: d.cents / 100 }))}
+        format={{ style: "currency", currency: "USD", maximumFractionDigits: 0 }}
+        empty="No payments in the last 30 days."
+      />
 
       <div className="db-two">
-        <section className="db-section" aria-labelledby="db-up">
-          <div className="db-head">
-            <h2 id="db-up">Upcoming</h2>
-            <Link href="/studio/calendar">Calendar</Link>
-          </div>
+        <Section id="db-up" title="Upcoming" more={<More href="/studio/calendar">Calendar</More>}>
           {data.upcoming.length ? (
-            <ul className="db-rows">
+            <DataList>
               {data.upcoming.map((a) => (
-                <li key={a.id}>
-                  <span>
-                    {a.title}
-                    <small>{[when(a.when), a.location].filter(Boolean).join(" · ")}</small>
-                  </span>
-                </li>
+                <DataListItem key={a.id} description={[when(a.when), a.location].filter(Boolean).join(" · ")}>
+                  {a.title}
+                </DataListItem>
               ))}
-            </ul>
+            </DataList>
           ) : (
-            <p className="db-empty">Nothing in the next three weeks.</p>
+            <EmptyState>Nothing in the next three weeks.</EmptyState>
           )}
-        </section>
+        </Section>
 
-        <section className="db-section" aria-labelledby="db-need">
-          <div className="db-head">
-            <h2 id="db-need">Needs attention</h2>
-          </div>
-          <ul className="db-rows">
-            <li>
+        <Section id="db-need" title="Needs attention">
+          <DataList>
+            <DataListItem meta={stats.newInquiries ? <Status tone="accent">new</Status> : undefined}>
               <Link href="/studio/bookings">
                 {stats.newInquiries} new {stats.newInquiries === 1 ? "inquiry" : "inquiries"}
               </Link>
-            </li>
-            <li>
+            </DataListItem>
+            <DataListItem meta={<span className="db-num">{usd(stats.unpaidCents)}</span>}>
               <Link href="/studio/invoices">
                 {stats.unpaidCount} unpaid {stats.unpaidCount === 1 ? "invoice" : "invoices"}
               </Link>
-              <em>{usd(stats.unpaidCents)}</em>
-            </li>
+            </DataListItem>
             {data.tasks.map((t) => (
-              <li key={t.id}>
+              <DataListItem key={t.id} meta={t.dueOn ? <span className="db-num">{t.dueOn}</span> : undefined}>
                 <Link href="/studio/tasks">{t.title}</Link>
-                {t.dueOn ? <em>{t.dueOn}</em> : null}
-              </li>
+              </DataListItem>
             ))}
-          </ul>
-        </section>
+          </DataList>
+        </Section>
       </div>
 
       <div className="db-two">
-        <section className="db-section" aria-labelledby="db-act">
-          <div className="db-head">
-            <h2 id="db-act">Recent activity</h2>
-            <Link href="/studio/activity">All</Link>
-          </div>
+        <Section id="db-act" title="Recent activity" more={<More href="/studio/activity">All activity</More>}>
           {data.activity.length ? (
-            <ul className="db-rows">
+            <DataList>
               {data.activity.slice(0, 6).map((n) => (
-                <li key={n.id}>
-                  <span>
-                    {n.title}
-                    {n.body ? <small>{n.body}</small> : null}
-                  </span>
-                  <time>{ago(n.at)}</time>
-                </li>
+                <DataListItem
+                  key={n.id}
+                  description={n.body || undefined}
+                  meta={<time dateTime={n.at}>{ago(n.at)}</time>}
+                >
+                  {n.title}
+                </DataListItem>
               ))}
-            </ul>
+            </DataList>
           ) : (
-            <p className="db-empty">Bookings, payments and galleries show up here.</p>
+            <EmptyState>Bookings, payments and galleries show up here.</EmptyState>
           )}
-        </section>
+        </Section>
 
-        <section className="db-section" aria-labelledby="db-gal">
-          <div className="db-head">
-            <h2 id="db-gal">Galleries</h2>
-            <Link href="/studio/galleries">All</Link>
-          </div>
+        <Section id="db-gal" title="Galleries" more={<More href="/studio/galleries">All galleries</More>}>
           {data.galleries.length ? (
-            <ul className="db-rows">
+            <DataList>
               {data.galleries.map((g) => (
-                <li key={g.id}>
-                  <Link href={`/studio/gallery/${g.id}`}>
-                    {g.title}
-                    <small>{g.jobTitle}</small>
-                  </Link>
-                  <em>{g.status}</em>
-                </li>
+                <DataListItem
+                  key={g.id}
+                  description={g.jobTitle}
+                  meta={<Status tone={GALLERY_TONE[g.status] ?? "neutral"}>{g.status}</Status>}
+                >
+                  <Link href={`/studio/gallery/${g.id}`}>{g.title}</Link>
+                </DataListItem>
               ))}
-            </ul>
+            </DataList>
           ) : (
-            <p className="db-empty">No client galleries yet.</p>
+            <EmptyState>No client galleries yet.</EmptyState>
           )}
-        </section>
+        </Section>
       </div>
     </div>
   );

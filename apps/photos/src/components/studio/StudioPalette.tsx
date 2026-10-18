@@ -1,7 +1,9 @@
 "use client";
 
+import { Button, type CommandItem, CommandPalette, Kbd, PlusIcon, SearchIcon } from "@holominimal/ui";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useState } from "react";
 import { groupOf, sectionInfo, studioSections } from "./sections";
 
 type Entry = { label: string; hint: string; href: string; keys: string };
@@ -37,103 +39,47 @@ const PAGES: Entry[] = studioSections.map((s) => ({
   keys: `${groupOf(s.id).label} ${s.id}`,
 }));
 
+const ALL = [...ACTIONS.map((e) => ({ ...e, group: "Start" })), ...PAGES.map((e) => ({ ...e, group: "Go to" }))];
+const ITEMS: CommandItem[] = ALL.map((e) => ({
+  id: e.href + e.label,
+  label: e.label,
+  group: e.group,
+  keywords: `${e.hint} ${e.keys}`,
+}));
+
 /**
- * "Jump to": one box that finds any studio page or common action by name (Ctrl or Command K, or the button). The sidebar
- * stays quiet; this is the fast way across the studio.
+ * "Jump to": one box that finds any studio page or common action by name (Ctrl or Command K, or the button), on the
+ * Holominimal command palette. The sidebar stays quiet; this is the fast way across the studio.
  */
 export function StudioPalette() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const [q, setQ] = useState("");
-  const [at, setAt] = useState(0);
-  const input = useRef<HTMLInputElement>(null);
-  const list = useMemo(() => {
-    const all = [...ACTIONS, ...PAGES];
-    const t = q.trim().toLowerCase();
-    return t ? all.filter((e) => `${e.label} ${e.hint} ${e.keys}`.toLowerCase().includes(t)) : all;
-  }, [q]);
-
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
-        e.preventDefault();
-        setOpen((o) => !o);
-      } else if (e.key === "Escape") setOpen(false);
-    };
-    addEventListener("keydown", onKey);
-    return () => removeEventListener("keydown", onKey);
-  }, []);
-  useEffect(() => {
-    if (open) {
-      setQ("");
-      setAt(0);
-      requestAnimationFrame(() => input.current?.focus());
-    }
-  }, [open]);
-
-  const go = (e?: Entry) => {
-    if (!e) return;
-    setOpen(false);
-    router.push(e.href);
-  };
   return (
     <>
       <div className="st-util">
-        <button type="button" className="st-jump" onClick={() => setOpen(true)} aria-haspopup="dialog">
-          Jump to <kbd>⌘K</kbd>
-        </button>
-        <a href="/studio/galleries?new=1" className="st-new">
-          + New gallery
-        </a>
+        <Button variant="secondary" size="sm" shape="pill" onClick={() => setOpen(true)} aria-haspopup="dialog">
+          <SearchIcon /> Jump to <Kbd>⌘K</Kbd>
+        </Button>
+        <Button asChild size="sm" shape="pill">
+          <Link href="/studio/galleries?new=1">
+            <PlusIcon /> New gallery
+          </Link>
+        </Button>
       </div>
-      {open ? (
-        <div className="st-pal" role="dialog" aria-modal="true" aria-label="Jump to">
-          <button
-            type="button"
-            className="st-pal__scrim"
-            tabIndex={-1}
-            aria-label="Close"
-            onClick={() => setOpen(false)}
-          />
-          <div className="st-pal__box">
-            <input
-              ref={input}
-              value={q}
-              onChange={(e) => {
-                setQ(e.target.value);
-                setAt(0);
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "ArrowDown") {
-                  e.preventDefault();
-                  setAt((a) => Math.min(list.length - 1, a + 1));
-                } else if (e.key === "ArrowUp") {
-                  e.preventDefault();
-                  setAt((a) => Math.max(0, a - 1));
-                } else if (e.key === "Enter") go(list[at]);
-              }}
-              placeholder="Go to a page or start something…"
-              aria-label="Search the studio"
-            />
-            <ul id="st-pal-list">
-              {list.slice(0, 12).map((e, i) => (
-                <li key={e.href + e.label}>
-                  <button
-                    type="button"
-                    data-on={i === at || undefined}
-                    onMouseEnter={() => setAt(i)}
-                    onClick={() => go(e)}
-                  >
-                    <span>{e.label}</span>
-                    <small>{e.hint}</small>
-                  </button>
-                </li>
-              ))}
-              {list.length ? null : <li className="st-pal__none">Nothing matches “{q}”.</li>}
-            </ul>
-          </div>
-        </div>
-      ) : null}
+      <CommandPalette
+        open={open}
+        onOpenChange={setOpen}
+        items={ITEMS}
+        shortcut
+        label="Jump to"
+        placeholder="Go to a page or start something…"
+        emptyMessage="Nothing matches."
+        onSelect={(item) => {
+          const e = ALL.find((x) => x.href + x.label === item.id);
+          setOpen(false);
+          if (e) router.push(e.href);
+        }}
+      />
     </>
   );
 }

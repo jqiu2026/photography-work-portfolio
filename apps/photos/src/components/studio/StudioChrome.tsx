@@ -8,6 +8,7 @@ import { groupOf, studioGroups, studioSections } from "./sections";
 import { StudioPalette } from "./StudioPalette";
 import "./studio.css";
 import "./studio-chrome.css";
+import "./studio-legacy.css";
 import "./studio-dashboard.css";
 
 /** Which sidebar entry a path belongs to (a single gallery page counts as Galleries). */

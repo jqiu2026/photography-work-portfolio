@@ -2,10 +2,27 @@
 
 import { useRouter } from "next/navigation";
 import { type FormEvent, type ReactNode, useState, useTransition } from "react";
+import {
+  Alert,
+  Button,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CopyCheckIcon,
+  Card as HmCard,
+  PageActions,
+  PageDescription,
+  PageEyebrow,
+  PageHeader,
+  PageTab,
+  PageTabs,
+  PageTitle,
+} from "@holominimal/ui";
 import Link from "next/link";
 import { groupOf, sectionInfo, studioSections } from "./sections";
 import "./studio.css";
 import "./studio-chrome.css";
+import "./studio-legacy.css";
 import "./studio-dashboard.css";
 
 export type Result = { ok: boolean; message?: string; error?: string; link?: string };
@@ -31,48 +48,74 @@ export function useAct() {
   return { pending, note, act, submit };
 }
 
+/** The answer to the last action: a Holominimal alert (status or alert role), and the client link when one was made. */
 export function Banner({ note }: { note: Result | null }) {
   if (!note) return null;
   return (
-    <div className="st-card" role={note.ok ? "status" : "alert"} data-ok={note.ok || undefined}>
-      <p className={note.ok ? "st-note" : "st-error"}>{note.ok ? note.message : note.error}</p>
-      {note.link ? (
-        <p className="st-note">
-          Link (copy it to the client): <code>{note.link}</code>
-        </p>
-      ) : null}
-    </div>
+    <Alert tone={note.ok ? "success" : "danger"} className="st-banner">
+      <p className={note.ok ? "hm-alert-description" : "hm-alert-description st-error"}>
+        {note.ok ? note.message : note.error}
+      </p>
+      {note.link ? <CopyLink link={note.link} /> : null}
+    </Alert>
+  );
+}
+
+/** A link for the client, with a copy button (the owner pastes it into a message). */
+export function CopyLink({ link }: { link: string }) {
+  const [copied, setCopied] = useState(false);
+  return (
+    <p className="st-copy">
+      <span>Link for the client:</span> <code>{link}</code>
+      <Button
+        variant="secondary"
+        size="sm"
+        onClick={() =>
+          navigator.clipboard?.writeText(link).then(
+            () => setCopied(true),
+            () => setCopied(false),
+          )
+        }
+      >
+        <CopyCheckIcon copied={copied} /> {copied ? "Copied" : "Copy"}
+      </Button>
+    </p>
   );
 }
 
 export function Card({ title, children, id }: { title: string; children: ReactNode; id: string }) {
   return (
-    <section className="st-card" aria-labelledby={id}>
-      <h2 id={id}>{title}</h2>
-      {children}
-    </section>
+    <HmCard as="section" variant="section" padding="none" className="st-card" aria-labelledby={id}>
+      <CardHeader>
+        <CardTitle as="h2" id={id}>
+          {title}
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="st-card__body">{children}</CardContent>
+    </HmCard>
   );
 }
 
-/** Page header: where you are, what this page is for, and its siblings as quiet tabs. */
-export function StudioHead({ section }: { section: string }) {
+/** Page header: where you are, what this page is for, and its siblings as tabs. */
+export function StudioHead({ section, title, actions }: { section: string; title?: ReactNode; actions?: ReactNode }) {
   const group = groupOf(section);
   const label = studioSections.find((x) => x.id === section)?.label ?? "Studio";
   return (
-    <header className="st-head" style={{ "--hue": group.hue } as React.CSSProperties}>
-      <p className="st-crumb">{group.label}</p>
-      <h1 className="st-title">{label}</h1>
-      <p className="st-sub">{sectionInfo[section]}</p>
+    <PageHeader className="st-head" style={{ "--hue": group.hue } as React.CSSProperties}>
+      <PageEyebrow>{group.label}</PageEyebrow>
+      <PageTitle>{title ?? label}</PageTitle>
+      {sectionInfo[section] && !title ? <PageDescription>{sectionInfo[section]}</PageDescription> : null}
+      {actions ? <PageActions>{actions}</PageActions> : null}
       {group.sections.length > 1 ? (
-        <nav className="st-tabs" aria-label={`${group.label} pages`}>
+        <PageTabs aria-label={`${group.label} pages`}>
           {group.sections.map((id) => (
-            <Link key={id} href={`/studio/${id}`} aria-current={id === section ? "page" : undefined}>
-              {studioSections.find((x) => x.id === id)?.label}
-            </Link>
+            <PageTab key={id} asChild current={id === section}>
+              <Link href={`/studio/${id}`}>{studioSections.find((x) => x.id === id)?.label}</Link>
+            </PageTab>
           ))}
-        </nav>
+        </PageTabs>
       ) : null}
-    </header>
+    </PageHeader>
   );
 }
 
