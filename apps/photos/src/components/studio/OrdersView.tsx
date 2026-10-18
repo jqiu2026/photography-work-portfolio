@@ -238,7 +238,17 @@ export function OrdersView({ data }: { data: { products: Product[]; sheets: Shee
                   {o.status}
                 </Status>
                 {o.status === "pending" ? (
-                  <Button variant="secondary" disabled={pending} onClick={() => act(() => cancelOrderAction(o.id))}>
+                  <Button
+                    variant="secondary"
+                    disabled={pending}
+                    onClick={async () =>
+                      (await ask({
+                        title: `Cancel order ${o.number}?`,
+                        body: "The buyer can no longer pay for it and its invoice is voided. This cannot be undone.",
+                        action: "Cancel order",
+                      })) && act(() => cancelOrderAction(o.id))
+                    }
+                  >
                     Cancel
                   </Button>
                 ) : null}

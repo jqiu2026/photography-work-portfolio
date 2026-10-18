@@ -3,6 +3,7 @@
 import { Button, Checkbox, Field, Input, Select, SettingsSection, Text, Textarea } from "@holominimal/ui";
 
 import { useState } from "react";
+import { useConfirm } from "./StudioFrame";
 import { cancelOrderAction, saveShopAction } from "@/app/studio/gallery-actions";
 
 type Run = (fn: () => Promise<{ ok: boolean; [k: string]: unknown }>, after?: () => void) => void;
@@ -46,11 +47,13 @@ export function GalleryShopPanel({
   pending: boolean;
 }) {
   const [s, setS] = useState(shop);
+  const [ask, confirmEl] = useConfirm();
   const box = (k: "enabled" | "listed" | "sellDigital" | "sellPrints" | "abandonedCart", label: string) => (
     <Checkbox checked={s[k]} onChange={(e) => setS({ ...s, [k]: e.target.checked })} label={label} />
   );
   return (
     <>
+      {confirmEl}
       <SettingsSection title="Store" className="gm-block">
         <Text size="sm" tone="muted">
           Let people order prints and downloads from this gallery. Choose the price sheet it sells from.
@@ -113,7 +116,17 @@ export function GalleryShopPanel({
                 </span>
                 <span>{usd(o.totalCents)}</span>
                 {o.status === "pending" ? (
-                  <Button variant="secondary" disabled={pending} onClick={() => run(() => cancelOrderAction(o.id))}>
+                  <Button
+                    variant="secondary"
+                    disabled={pending}
+                    onClick={async () =>
+                      (await ask({
+                        title: `Cancel order ${o.number}?`,
+                        body: "The buyer can no longer pay for it and its invoice is voided. This cannot be undone.",
+                        action: "Cancel order",
+                      })) && run(() => cancelOrderAction(o.id))
+                    }
+                  >
                     Cancel
                   </Button>
                 ) : null}

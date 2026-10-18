@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Checkbox, Field, Input, Select, Text } from "@holominimal/ui";
+import { Button, Checkbox, Field, Input, Select, Status, Text } from "@holominimal/ui";
 
 import { useState } from "react";
 import {
@@ -11,7 +11,7 @@ import {
   saveBillingSettingsAction,
   stopRecurringAction,
 } from "@/app/studio/billing-actions";
-import { Card, Frame, useAct } from "./StudioFrame";
+import { Card, Frame, useAct, useConfirm } from "./StudioFrame";
 
 const usd = (c: number) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(c / 100);
 
@@ -35,9 +35,17 @@ export type BillingData = {
   stripe: boolean;
 };
 
+const PAY_TONE: Record<string, "success" | "warning" | "danger" | "neutral" | "muted"> = {
+  succeeded: "success",
+  pending: "warning",
+  failed: "danger",
+  refunded: "muted",
+};
+
 /** Payments and refunds, instalment plans, recurring invoices, and the tip, bank and surcharge settings. */
 export function BillingView({ user, data }: { user: string; data: BillingData }) {
   const { pending, note, act, submit } = useAct();
+  const [ask, confirmEl] = useConfirm();
   const [f, setF] = useState<Record<string, string>>({});
   const [flags, setFlags] = useState({
     tips: data.settings.tips,
@@ -59,6 +67,7 @@ export function BillingView({ user, data }: { user: string; data: BillingData })
   );
   return (
     <Frame section="billing" user={user} note={note}>
+      {confirmEl}
       <div className="st-grid">
         <Card title="Payments and refunds" id="b-pay">
           {data.payments.length ? (
@@ -66,7 +75,8 @@ export function BillingView({ user, data }: { user: string; data: BillingData })
               {data.payments.map((p) => (
                 <li className="hm-data-list-item" key={p.id} data-payment-id={p.id}>
                   <span>
-                    <strong>{p.invoice}</strong> · {usd(p.amountCents)} · {p.method ?? p.provider} · {p.status}
+                    <strong>{p.invoice}</strong> · {usd(p.amountCents)} · {p.method ?? p.provider}{" "}
+                    <Status tone={PAY_TONE[p.status] ?? "neutral"}>{p.status}</Status>
                     <small>
                       {p.at}
                       {p.tipCents ? ` · tip ${usd(p.tipCents)}` : ""}
@@ -79,10 +89,24 @@ export function BillingView({ user, data }: { user: string; data: BillingData })
                       noValidate
                       className="st-actions"
                       aria-label={`Refund ${p.invoice}`}
-                      onSubmit={submit(
-                        () => refundAction({ paymentId: p.id, amount: f[`r-${p.id}`] ?? "", reason: "Refund" }),
-                        () => setF({}),
-                      )}
+                      onSubmit={async (e) => {
+                        e.preventDefault();
+                        const typed = (f[`r-${p.id}`] ?? "").trim();
+                        const amount = typed ? `$${typed.replace(/^\$/, "")}` : usd(p.amountCents - p.refundedCents);
+                        if (
+                          await ask({
+                            title: `Refund ${amount} on ${p.invoice}?`,
+                            body: data.stripe
+                              ? "The money goes back to the client's card through Stripe. A refund cannot be undone."
+                              : "This records the refund. Stripe is not set up, so send the money back yourself. A refund cannot be undone.",
+                            action: `Refund ${amount}`,
+                          })
+                        )
+                          act(
+                            () => refundAction({ paymentId: p.id, amount: typed, reason: "Refund" }),
+                            () => setF({}),
+                          );
+                      }}
                     >
                       <Input
                         inputMode="decimal"
@@ -171,7 +195,17 @@ export function BillingView({ user, data }: { user: string; data: BillingData })
                   <small>{r.active ? `next ${r.next}` : "stopped"}</small>
                 </span>
                 {r.active ? (
-                  <Button variant="secondary" disabled={pending} onClick={() => act(() => stopRecurringAction(r.id))}>
+                  <Button
+                    variant="secondary"
+                    disabled={pending}
+                    onClick={async () =>
+                      (await ask({
+                        title: `Stop billing ${r.description}?`,
+                        body: `No more invoices for ${usd(r.amountCents)} every ${r.months} month${r.months > 1 ? "s" : ""} will be sent. Invoices already sent stay as they are. To start again, set up a new recurring invoice.`,
+                        action: "Stop recurring billing",
+                      })) && act(() => stopRecurringAction(r.id))
+                    }
+                  >
                     Stop
                   </Button>
                 ) : null}

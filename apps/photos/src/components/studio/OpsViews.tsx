@@ -12,7 +12,7 @@ import {
   saveRuleAction,
   toggleTaskAction,
 } from "@/app/studio/ops-actions";
-import { Card, Frame, useAct } from "./StudioFrame";
+import { Card, Frame, useAct, useConfirm } from "./StudioFrame";
 
 export type TasksData = {
   tasks: { id: string; title: string; dueOn: string | null; notes: string | null; done: boolean; overdue: boolean }[];
@@ -20,10 +20,12 @@ export type TasksData = {
 
 export function TasksView({ user, data }: { user: string; data: TasksData }) {
   const { pending, note, act, submit } = useAct();
+  const [ask, confirmEl] = useConfirm();
   const [f, setF] = useState<Record<string, string>>({});
   const set = (k: string) => (e: { target: { value: string } }) => setF((x) => ({ ...x, [k]: e.target.value }));
   return (
     <Frame section="tasks" user={user} note={note}>
+      {confirmEl}
       <div className="st-grid">
         <Card title="Tasks" id="t-list">
           {data.tasks.length ? (
@@ -49,7 +51,13 @@ export function TasksView({ user, data }: { user: string; data: TasksData }) {
                     variant="ghost"
                     size="sm"
                     disabled={pending}
-                    onClick={() => act(() => deleteTaskAction(t.id))}
+                    onClick={async () =>
+                      (await ask({
+                        title: `Delete "${t.title}"?`,
+                        body: "To keep a record of it, mark it done instead.",
+                        action: "Delete task",
+                      })) && act(() => deleteTaskAction(t.id))
+                    }
                     aria-label={`Delete "${t.title}"`}
                   >
                     Delete

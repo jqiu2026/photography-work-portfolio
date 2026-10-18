@@ -95,6 +95,7 @@ test("billing shows the tip and surcharge; a partial refund then a full refund u
   const form = pay.getByRole("form", { name: /^Refund / });
   await form.getByRole("textbox").fill("100");
   await form.getByRole("button", { name: "Refund" }).click();
+  await page.getByRole("alertdialog").getByRole("button", { name: "Refund $100" }).click();
   await slow(page.getByRole("status")).toContainText("Invoice is now partial");
   await page.goto(`${PHOTOS}/studio/billing`, { waitUntil: "networkidle" });
   const again = page
@@ -103,9 +104,15 @@ test("billing shows the tip and surcharge; a partial refund then a full refund u
     .getByRole("form", { name: /^Refund / });
   await again.getByRole("textbox").fill("999");
   await again.getByRole("button", { name: "Refund" }).click();
+  await page.getByRole("alertdialog").getByRole("button", { name: "Refund $999" }).click();
   await slow(page.locator("p.st-error")).toContainText("At most");
   await again.getByRole("textbox").fill("");
   await again.getByRole("button", { name: "Refund" }).click();
+  // an empty amount refunds what is left, and the dialog says how much
+  await page
+    .getByRole("alertdialog")
+    .getByRole("button", { name: /^Refund \$/ })
+    .click();
   await slow(page.getByRole("status")).toContainText("Invoice is now refunded");
 });
 

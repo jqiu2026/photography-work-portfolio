@@ -14,7 +14,7 @@ import {
   saveCalendarSettingsAction,
 } from "@/app/studio/calendar-actions";
 import { useState } from "react";
-import { Card, Frame, useAct } from "./StudioFrame";
+import { Card, Frame, useAct, useConfirm } from "./StudioFrame";
 
 const WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const hhmm = (m: number) => `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`;
@@ -43,11 +43,13 @@ export type CalendarData = {
 /** Calendar: upcoming appointments, bookable hours, blocked days, mini-session slots, the .ics feed, and the waitlist. */
 export function CalendarView({ user, data }: { user: string; data: CalendarData }) {
   const { pending, note, act, submit } = useAct();
+  const [ask, confirmEl] = useConfirm();
   const [f, setF] = useState<Record<string, string>>({});
   const set = (k: string) => (e: { target: { value: string } }) => setF((x) => ({ ...x, [k]: e.target.value }));
   const days = [...new Set(data.appointments.map((a) => a.day))];
   return (
     <Frame section="calendar" user={user} note={note}>
+      {confirmEl}
       <div className="st-grid">
         <Card title="Upcoming" id="cal-up">
           <Text size="sm" tone="muted">
@@ -69,7 +71,13 @@ export function CalendarView({ user, data }: { user: string; data: CalendarData 
                         <Button
                           variant="secondary"
                           disabled={pending}
-                          onClick={() => act(() => cancelAppointmentAction(a.id))}
+                          onClick={async () =>
+                            (await ask({
+                              title: `Cancel ${a.title}?`,
+                              body: "The client is not emailed, so let them know yourself. Anyone on the waitlist can be told from this page.",
+                              action: "Cancel appointment",
+                            })) && act(() => cancelAppointmentAction(a.id))
+                          }
                           aria-label={`Cancel ${a.title}`}
                         >
                           Cancel

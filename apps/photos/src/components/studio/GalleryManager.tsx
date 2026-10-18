@@ -419,7 +419,17 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
               <MailIcon /> Email the client
             </Button>
             {live ? (
-              <Button variant="secondary" disabled={pending} onClick={() => run(() => unpublishAction(gid))}>
+              <Button
+                variant="secondary"
+                disabled={pending}
+                onClick={async () =>
+                  (await ask({
+                    title: "Unpublish this gallery?",
+                    body: "The client's link stops working until you publish again. Nothing is deleted.",
+                    action: "Unpublish",
+                  })) && run(() => unpublishAction(gid))
+                }
+              >
                 Unpublish
               </Button>
             ) : (
@@ -786,7 +796,16 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
                 client.
               </Text>
               <div className="gm-row">
-                <Button disabled={pending} onClick={() => run(() => regeneratePasscodeAction(gid))}>
+                <Button
+                  disabled={pending}
+                  onClick={async () =>
+                    (await ask({
+                      title: "Make a new passcode?",
+                      body: "The old passcode stops working at once. Give the new one to the client.",
+                      action: "Make a new passcode",
+                    })) && run(() => regeneratePasscodeAction(gid))
+                  }
+                >
                   Generate a new passcode
                 </Button>
                 {secret ? (
@@ -1405,7 +1424,16 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
                 paid extension.
               </Text>
               <div className="gm-row">
-                <Button disabled={pending} onClick={() => run(() => sendExtensionInvoiceAction(gid))}>
+                <Button
+                  disabled={pending}
+                  onClick={async () =>
+                    (await ask({
+                      title: "Email the client an extension invoice?",
+                      body: "They get an invoice by email. When it is paid, the gallery stays open for longer.",
+                      action: "Send invoice",
+                    })) && run(() => sendExtensionInvoiceAction(gid))
+                  }
+                >
                   Send an extension invoice
                 </Button>
                 <Button

@@ -97,6 +97,7 @@ export function MusicView({
   allowed,
 }: { tracks: { id: string; title: string; artist: string; mb: string }[]; allowed: boolean }) {
   const { pending, note, act } = useAct();
+  const [ask, confirmEl] = useConfirm();
   const file = useRef<HTMLInputElement>(null);
   const [title, setTitle] = useState("");
   const [artist, setArtist] = useState("");
@@ -122,6 +123,7 @@ export function MusicView({
   }
   return (
     <Frame section="music" note={note}>
+      {confirmEl}
       <Card title="Gallery music" id="mu-h">
         <Text size="sm" tone="muted">
           Upload tracks you have the right to play (your own, or licensed for this use). Choose a playlist for each
@@ -166,7 +168,17 @@ export function MusicView({
                     {t.mb} MB
                   </small>
                 </span>
-                <Button variant="secondary" disabled={pending} onClick={() => act(() => deleteTrackAction(t.id))}>
+                <Button
+                  variant="secondary"
+                  disabled={pending}
+                  onClick={async () =>
+                    (await ask({
+                      title: `Remove ${t.title}?`,
+                      body: "It is taken out of the music library, so galleries can no longer play it.",
+                      action: "Remove track",
+                    })) && act(() => deleteTrackAction(t.id))
+                  }
+                >
                   Remove
                 </Button>
               </li>
@@ -196,6 +208,7 @@ type Mark = {
 const POS = ["bottom-right", "bottom-left", "top-right", "top-left", "center", "tile"];
 export function WatermarksView({ marks }: { marks: Mark[] }) {
   const { pending, note, act } = useAct();
+  const [ask, confirmEl] = useConfirm();
   const blank = { id: "", name: "", kind: "text", text: "", position: "bottom-right", opacity: 45, sizePct: 22 };
   const [f, setF] = useState(blank);
   const png = useRef<HTMLInputElement>(null);
@@ -216,6 +229,7 @@ export function WatermarksView({ marks }: { marks: Mark[] }) {
   }
   return (
     <Frame section="watermarks" note={note}>
+      {confirmEl}
       <Card title="Watermarks" id="wm-h">
         <Text size="sm" tone="muted">
           A watermark is a visible mark put on the copies a rule delivers (Gallery, Downloads). Every delivered
@@ -256,7 +270,17 @@ export function WatermarksView({ marks }: { marks: Mark[] }) {
                     Set as default
                   </Button>
                 ) : null}
-                <Button variant="secondary" disabled={pending} onClick={() => act(() => deleteWatermarkAction(m.id))}>
+                <Button
+                  variant="secondary"
+                  disabled={pending}
+                  onClick={async () =>
+                    (await ask({
+                      title: `Delete the watermark ${m.name}?`,
+                      body: "Download rules that use it stop marking copies. Copies already downloaded keep their mark.",
+                      action: "Delete watermark",
+                    })) && act(() => deleteWatermarkAction(m.id))
+                  }
+                >
                   Delete
                 </Button>
               </li>

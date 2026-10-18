@@ -14,7 +14,7 @@ import {
   saveCommerceSettingsAction,
   togglePromoAction,
 } from "@/app/studio/commerce-actions";
-import { Card, Frame, useAct } from "./StudioFrame";
+import { Card, Frame, useAct, useConfirm } from "./StudioFrame";
 
 const usd = (c: number) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(c / 100);
 const dollars = (c: number) => (c / 100).toFixed(2);
@@ -62,6 +62,7 @@ export type CatalogData = {
 /** Packages, add-ons, codes, gift cards and the deposit and tax settings. Every price flagged SAMPLE shows as $XX publicly. */
 export function CatalogView({ user, data }: { user: string; data: CatalogData }) {
   const { pending, note, act, submit } = useAct();
+  const [ask, confirmEl] = useConfirm();
   const [f, setF] = useState<Record<string, string>>({});
   const set = (k: string) => (e: { target: { value: string } }) => setF((x) => ({ ...x, [k]: e.target.value }));
   const [flags, setFlags] = useState({ featured: false, sample: true, fee: false, upsell: true, asample: true });
@@ -93,6 +94,7 @@ export function CatalogView({ user, data }: { user: string; data: CatalogData })
   };
   return (
     <Frame section="packages" user={user} note={note}>
+      {confirmEl}
       <div className="st-grid">
         <Card title="Packages" id="cat-pk">
           <Text size="sm" tone="muted">
@@ -113,7 +115,17 @@ export function CatalogView({ user, data }: { user: string; data: CatalogData })
                   <Button variant="secondary" onClick={() => editPackage(p)}>
                     Edit
                   </Button>
-                  <Button variant="secondary" disabled={pending} onClick={() => act(() => deletePackageAction(p.id))}>
+                  <Button
+                    variant="secondary"
+                    disabled={pending}
+                    onClick={async () =>
+                      (await ask({
+                        title: `Remove the package ${p.name}?`,
+                        body: "It is no longer offered to clients.",
+                        action: "Remove package",
+                      })) && act(() => deletePackageAction(p.id))
+                    }
+                  >
                     Remove
                   </Button>
                 </span>
@@ -195,7 +207,17 @@ export function CatalogView({ user, data }: { user: string; data: CatalogData })
                   <Button variant="secondary" onClick={() => editAddOn(a)}>
                     Edit
                   </Button>
-                  <Button variant="secondary" disabled={pending} onClick={() => act(() => deleteAddOnAction(a.id))}>
+                  <Button
+                    variant="secondary"
+                    disabled={pending}
+                    onClick={async () =>
+                      (await ask({
+                        title: `Remove the add-on ${a.name}?`,
+                        body: "It is no longer offered to clients.",
+                        action: "Remove add-on",
+                      })) && act(() => deleteAddOnAction(a.id))
+                    }
+                  >
                     Remove
                   </Button>
                 </span>

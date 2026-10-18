@@ -123,6 +123,7 @@ test("a new passcode locks out the old one; the email goes to the client's addre
   await page.goto(url, { waitUntil: "networkidle" });
   await page.getByRole("tab", { name: "Share" }).click();
   await page.getByRole("button", { name: "Generate a new passcode" }).click();
+  await page.getByRole("alertdialog").getByRole("button", { name: "Make a new passcode" }).click();
   const fresh = page.getByLabel("New passcode", { exact: true });
   await expect(fresh).toBeVisible({ timeout: 25_000 });
   const next = ((await fresh.textContent()) ?? "").trim();

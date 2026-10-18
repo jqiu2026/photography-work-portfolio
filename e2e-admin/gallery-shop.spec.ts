@@ -294,6 +294,7 @@ test("an unpaid order can be cancelled by the owner, and its invoice is voided",
   const pending = page.getByRole("listitem").filter({ hasText: "Bo Browser" });
   await expect(pending).toContainText("pending");
   await pending.getByRole("button", { name: "Cancel" }).click();
+  await page.getByRole("alertdialog").getByRole("button", { name: "Cancel order" }).click();
   await slow(page.getByRole("status").filter({ hasText: "Order cancelled" })).toBeVisible();
   await expect(pending).toContainText("cancelled");
 });

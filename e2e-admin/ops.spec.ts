@@ -89,6 +89,7 @@ test("tasks: add, complete, delete", async ({ page }) => {
   await slow(page.getByRole("status")).toContainText("Done");
   await expect(row).not.toContainText("overdue");
   await row.getByRole("button", { name: /Delete/ }).click();
+  await page.getByRole("alertdialog").getByRole("button", { name: "Delete task" }).click();
   await slow(page.getByRole("status")).toContainText("Task removed");
   await expect(row).toHaveCount(0);
 });

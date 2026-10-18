@@ -3,6 +3,7 @@
 import { Button, Checkbox, Field, Input, Select, SettingsSection, Text, Textarea } from "@holominimal/ui";
 
 import { useState } from "react";
+import { useConfirm } from "./StudioFrame";
 import { deleteRuleAction, saveRuleAction } from "@/app/studio/gallery-actions";
 
 type Run = (fn: () => Promise<{ ok: boolean; [k: string]: unknown }>, after?: () => void) => void;
@@ -50,6 +51,7 @@ export function GalleryDownloads({
   pending: boolean;
 }) {
   const [f, setF] = useState(blank);
+  const [ask, confirmEl] = useConfirm();
   const set = <K extends keyof typeof blank>(k: K, v: (typeof blank)[K]) => setF((x) => ({ ...x, [k]: v }));
   const edit = (r: DownloadRuleRow) =>
     setF({
@@ -66,6 +68,7 @@ export function GalleryDownloads({
   const wm = (id: string | null) => watermarks.find((w) => w.id === id)?.name;
   return (
     <SettingsSection title="Free downloads" className="gm-block">
+      {confirmEl}
       <Text size="sm" tone="muted">
         Rules decide who may download for free. With no rule, visitors cannot download (they can still buy in the
         Store). The client's own downloads are set below.
@@ -89,7 +92,13 @@ export function GalleryDownloads({
               <Button
                 variant="secondary"
                 disabled={pending}
-                onClick={() => run(() => deleteRuleAction({ galleryId, id: r.id }))}
+                onClick={async () =>
+                  (await ask({
+                    title: `Delete the rule ${r.name}?`,
+                    body: "Visitors it let download can no longer download for free.",
+                    action: "Delete rule",
+                  })) && run(() => deleteRuleAction({ galleryId, id: r.id }))
+                }
               >
                 Delete
               </Button>
