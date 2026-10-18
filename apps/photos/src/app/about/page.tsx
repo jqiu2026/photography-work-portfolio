@@ -1,4 +1,4 @@
-import { Button, Container, Grid, Section, Text } from "@halation/ui";
+import { Button, Container, Grid, Section, Text } from "@/components/ui";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Shell } from "@/components/Shell";
@@ -24,8 +24,8 @@ export default function About() {
             <div>
               <Text tone="muted">I photograph theater, school and community events, street scenes and aircraft.</Text>
               <div style={{ marginTop: "2rem", display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
-                <Button as={Link} href="/book">
-                  Book a shoot
+                <Button asChild>
+                  <Link href="/book">Book a shoot</Link>
                 </Button>
               </div>
             </div>

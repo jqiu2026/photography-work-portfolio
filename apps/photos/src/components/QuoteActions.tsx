@@ -1,8 +1,8 @@
 "use client";
 
-import { Button, Field, Input } from "@halation/ui";
+import { Button, Field, Input } from "@/components/ui";
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { type ChangeEvent, useState, useTransition } from "react";
 import { acceptQuoteAction, declineQuoteAction, repriceQuoteAction } from "@/app/client/quote-actions";
 
 export type Upsell = { id: string; name: string; price: string; unit: string; qty: number; max: number };
@@ -65,7 +65,11 @@ export function QuoteActions({
       ) : null}
       <div style={{ display: "grid", gap: "0.75rem" }}>
         <Field label="Type your full name to accept">
-          <Input value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" />
+          <Input
+            value={name}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
+            autoComplete="name"
+          />
         </Field>
         <label style={{ display: "flex", gap: "0.6rem", alignItems: "flex-start" }}>
           <input

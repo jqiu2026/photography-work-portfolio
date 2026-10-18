@@ -1,4 +1,4 @@
-import { Container, Heading, Section, Text } from "@halation/ui";
+import { Container, Heading, Section, Text } from "@/components/ui";
 import { getDb, schema } from "@jerryqiu/db";
 import * as st from "@jerryqiu/db/studio";
 import { desc, eq, inArray, isNull } from "drizzle-orm";

@@ -1,0 +1,109 @@
+/*
+ * Holominimal bridge. The photo site is built on Holominimal (`@holominimal/ui`): black page, hairlines, white type,
+ * restrained light. Older screens (studio, galleries, forms) still read Halation `--hl-*` variables, so those are
+ * pointed at the Holominimal `--hm-*` tokens here. Loaded after both stylesheets. Retire a `--hl-*` line when the last
+ * screen that reads it moves over.
+ */
+:root,
+[data-theme],
+[data-preset],
+[data-cinema] {
+  --hl-field: var(--hm-bg);
+  --hl-surface: var(--hm-surface);
+  --hl-surface-2: var(--hm-surface-raised);
+  --hl-ink: var(--hm-fg);
+  --hl-dim: var(--hm-muted);
+  --hl-edge: var(--hm-line-overlay);
+  --hl-bg: var(--hm-bg);
+  --hl-text: var(--hm-fg);
+  --hl-muted: var(--hm-muted);
+  --hl-line: var(--hm-line-overlay);
+  --hl-border: var(--hm-line-strong);
+
+  --hl-accent: var(--hm-accent);
+  --hl-accent-text: var(--hm-accent);
+  --hl-accent-contrast: #000;
+  --hl-red: var(--hm-danger);
+  --hl-red-text: var(--hm-danger);
+  --hl-danger: var(--hm-danger);
+  --hl-success: var(--hm-success-text);
+  --hl-green: var(--hm-success);
+  --hl-green-text: var(--hm-success-text);
+  --hl-warn: var(--hm-warning);
+  --hl-warning: var(--hm-warning);
+  --hl-amber: var(--hm-warning);
+  --hl-amber-text: var(--hm-warning);
+  --hl-blue: var(--hm-accent);
+  --hl-blue-text: var(--hm-accent);
+
+  --hl-font-sans: var(--font-sans), var(--hm-font-sans);
+  --hl-font-display: var(--font-sans), var(--hm-font-sans);
+  --hl-font-mono: var(--font-mono), var(--hm-font-mono);
+  --hl-display-weight: 500;
+  --hl-display-tracking: -0.015em;
+  --hl-wdth: 100;
+
+  --hl-radius-sm: var(--hm-radius-sm);
+  --hl-radius-md: var(--hm-radius-md);
+  --hl-radius-lg: var(--hm-radius-lg);
+  --hl-radius-control: var(--hm-radius-md);
+
+  --hl-text-display: clamp(2.2rem, 1rem + 4vw, 3.6rem);
+  --hl-text-4xl: clamp(2.1rem, 1.2rem + 2.6vw, 3.2rem);
+
+  --hl-ease: var(--hm-ease-glide);
+  --hl-ease-glide: var(--hm-ease-glide);
+  --hl-ease-pour: var(--hm-ease-pour);
+  color-scheme: dark;
+}
+
+/* Hanken Grotesk and Martian Mono come from next/font; hand them to Holominimal so both systems share one face. */
+:root {
+  --hm-font-sans: var(--font-sans), "Hanken Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --hm-font-mono: var(--font-mono), "Martian Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+html,
+body {
+  background: var(--hm-bg);
+  color: var(--hm-fg);
+}
+body {
+  margin: 0;
+}
+
+/* long-form text (legal pages, about) */
+.hm-prose {
+  max-width: 44rem;
+  color: var(--hm-fg-soft);
+  line-height: 1.7;
+}
+.hm-prose :where(h2, h3) {
+  color: var(--hm-fg);
+  margin: 2rem 0 0.6rem;
+}
+.hm-prose :where(p, ul, ol) {
+  margin: 0 0 1rem;
+}
+.hm-prose :where(a) {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Holominimal's base resets (`.hm-root :where(button)`) tie with Halation's component rules and load later; re-assert
+   the colors of Halation components that still render (the shared contact form, gallery pieces). */
+.hl-btn.hl-btn--solid {
+  background: var(--hm-fg);
+  color: var(--hm-on-fg);
+  border-radius: var(--hm-radius-md);
+}
+.hl-btn.hl-btn--accent {
+  background: var(--hm-accent);
+  color: #000;
+  border-radius: var(--hm-radius-md);
+}
+.hl-btn.hl-btn--ghost {
+  color: var(--hm-fg);
+  border-color: var(--hm-line-strong);
+  border-radius: var(--hm-radius-md);
+}

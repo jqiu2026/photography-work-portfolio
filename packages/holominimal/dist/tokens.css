@@ -1,0 +1,350 @@
+/* @holominimal/ui 0.1.0 */
+/*
+ * Holominimal tokens. Every value the components use is a custom property here; themes override them on any element
+ * (`.hm-theme` or the `Theme` component). Values are taken from the reference studio: a black page, near-black
+ * surfaces separated by hairlines rather than boxes, white text, gray secondary text, and color only as signal.
+ */
+:root {
+  /* ---- neutrals ---- */
+  --hm-bg: #000;
+  --hm-surface: #131316; /* inputs, quiet fills */
+  --hm-control-bg: rgb(255 255 255 / 0.05); /* inputs: a translucent lift that reads on black, glass and holo alike */
+  --hm-surface-raised: #17171a; /* hover fill of an interactive surface */
+  --hm-surface-overlay: #101013; /* dialogs, palettes, menus */
+  --hm-fg: #f2f2f3;
+  --hm-fg-strong: #fff;
+  --hm-fg-soft: #b9b9c0; /* tool labels on translucent controls */
+  --hm-muted: #8b8b92; /* secondary text */
+  --hm-dim: #85858d; /* resting sidebar entries, hints */
+  --hm-faint: #55555c; /* placeholders */
+  --hm-line: #1c1c1f; /* hairlines between sections */
+  --hm-line-strong: #34343a; /* control borders */
+  --hm-line-hover: #50505a; /* a border under the pointer */
+  --hm-line-focus: #8b8b92; /* a focused control border */
+  --hm-line-current: #5a5a62; /* the viewer's current plan */
+  --hm-line-overlay: #2a2a2f;
+  --hm-scrim: rgb(0 0 0 / 0.6);
+  --hm-on-fg: #000; /* text on the white primary button */
+
+  /* ---- holographic accents (HSL triplets so alpha can vary) ---- */
+  --hm-cyan: 188 100% 68%;
+  --hm-blue: 210 90% 68%;
+  --hm-violet: 268 95% 72%;
+  --hm-magenta: 322 95% 72%;
+  /* the one accent a theme points with: focus rings, selected tabs, active rails. Override with a hue. */
+  --hm-accent-h: 210;
+
+  /* ---- chart series: six distinct hues for categorical data (donut slices, legends) ---- */
+  --hm-series-1: hsl(210 80% 66%);
+  --hm-series-2: hsl(268 80% 72%);
+  --hm-series-3: hsl(188 80% 62%);
+  --hm-series-4: hsl(322 80% 70%);
+  --hm-series-5: hsl(38 90% 65%);
+  --hm-series-6: hsl(150 55% 55%);
+
+  /* ---- semantic status ---- */
+  --hm-success: hsl(150 55% 55%);
+  --hm-success-text: hsl(150 60% 65%);
+  --hm-warning: hsl(38 90% 65%);
+  --hm-danger: hsl(355 80% 66%);
+
+  /* ---- holographic material ---- */
+  --hm-light: 1; /* lighting intensity, 0 (off) .. 1.5 */
+  --hm-glass-bg: rgb(255 255 255 / 0.05); /* a faint white lift, so the atmosphere shows through instead of a gray fill */
+  --hm-glass-edge: inset 0 1px 0 rgb(255 255 255 / 0.1); /* the lit top edge that reads as glass */
+  --hm-glass-blur: 16px;
+  --hm-chrome-bg: rgb(0 0 0 / 0.7); /* secondary buttons and tools: translucent over imagery */
+  --hm-on-photo: #f2f2f3; /* text over photographs and the lightbox, in every scheme */
+  --hm-nebula: 1; /* strength of the atmosphere color; a light scheme raises it */
+  --hm-star: 255 255 255; /* star color (rgb triplet) */
+  --hm-control-edge: inset 0 1px 0 rgb(255 255 255 / 0.03);
+  --hm-glass-saturate: 1.6;
+
+  /* ---- type ---- */
+  --hm-font-sans: "Hanken Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --hm-font-mono: "Martian Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --hm-text-2xs: 0.7rem;
+  --hm-text-xs: 0.75rem;
+  --hm-text-sm: 0.85rem;
+  --hm-text-md: 0.92rem;
+  --hm-text-base: 1rem;
+  --hm-text-lg: 1.15rem;
+  --hm-text-xl: 1.4rem;
+  --hm-text-2xl: clamp(1.7rem, 3vw, 2.3rem);
+  --hm-text-3xl: clamp(2.2rem, 4.5vw, 3.4rem);
+  --hm-text-stat: clamp(1.7rem, 2.6vw, 2.2rem);
+  --hm-weight-regular: 400;
+  --hm-weight-medium: 500; /* headings are medium, never bold */
+  --hm-weight-semibold: 600; /* emphasis in running text, for Text weight="semibold" */
+  --hm-tracking-tight: -0.01em;
+  --hm-tracking-num: -0.02em;
+  --hm-tracking-eyebrow: 0.14em;
+  --hm-tracking-brand: 0.22em;
+  --hm-leading-tight: 1.1;
+  --hm-leading: 1.5;
+
+  /* ---- space and layout ---- */
+  --hm-space-1: 0.25rem;
+  --hm-space-2: 0.5rem;
+  --hm-space-3: 0.75rem;
+  --hm-space-4: 1rem;
+  --hm-space-5: 1.4rem;
+  --hm-space-6: 2rem;
+  --hm-space-7: 2.4rem;
+  --hm-space-8: 3rem;
+  --hm-space-9: 4rem;
+  --hm-gutter: clamp(1.25rem, 0.5rem + 3vw, 3rem);
+  --hm-content: 62rem;
+  --hm-sidebar: clamp(11rem, 16vw, 14rem);
+  --hm-sidebar-pad: clamp(1.4rem, 2.6vw, 2.4rem);
+  --hm-target: 44px; /* minimum touch target */
+  --hm-control-h: 36px;
+
+  /* ---- radii ---- */
+  --hm-radius-xs: 2px;
+  --hm-radius-sm: 6px;
+  --hm-radius-md: 8px;
+  --hm-radius-lg: 10px;
+  --hm-radius-xl: 12px;
+  --hm-radius-pill: 999px;
+
+  /* ---- elevation (shadows are rare; depth comes from fills and hairlines) ---- */
+  --hm-shadow-xs: 0 1px 2px rgb(0 0 0 / 0.55);
+  --hm-shadow-sm: 0 2px 5px -1px rgb(0 0 0 / 0.6), 0 1px 2px rgb(0 0 0 / 0.45);
+  --hm-shadow-md: 0 8px 18px -4px rgb(0 0 0 / 0.65), 0 2px 5px rgb(0 0 0 / 0.5);
+  --hm-shadow-lg: 0 18px 38px -8px rgb(0 0 0 / 0.72), 0 6px 12px -2px rgb(0 0 0 / 0.55);
+  --hm-shadow-xl: 0 34px 70px -12px rgb(0 0 0 / 0.82), 0 12px 24px -4px rgb(0 0 0 / 0.6);
+  --hm-shadow-overlay: 0 30px 80px rgb(0 0 0 / 0.6);
+
+  /* ---- motion ---- */
+  --hm-ease-glide: cubic-bezier(0.22, 1, 0.36, 1); /* arrivals: fast out, long settle */
+  --hm-ease-pour: cubic-bezier(0.65, 0, 0.35, 1); /* symmetric moves */
+  --hm-ease-curtain: cubic-bezier(0.7, 0, 0.2, 1); /* page-sized wipes */
+  /* springs: CSS linear() easings that overshoot a little and settle. soft for panels, lively for small controls */
+  --hm-ease-spring-soft: linear(0, 0.18 5%, 0.58 12%, 0.88 20%, 1.025 30%, 1.04 36%, 1.02 46%, 0.996 60%, 1);
+  --hm-ease-spring: linear(0, 0.009, 0.035 2.1%, 0.141, 0.281 6.7%, 0.723 12.9%, 0.938 16.7%, 1.017, 1.077, 1.121, 1.149 24.3%, 1.159, 1.163, 1.161, 1.154 29.9%, 1.129 32.8%, 1.051 39.6%, 1.017 43.1%, 0.991, 0.977 51%, 0.974 53.8%, 0.975 57.1%, 0.997 69.8%, 1.003 76.9%, 1);
+  --hm-ease-out: ease;
+  --hm-dur-instant: 0.15s;
+  --hm-dur-fast: 0.2s;
+  --hm-dur-base: 0.34s;
+  --hm-dur-slow: 0.6s;
+  --hm-dur-scene: 0.9s;
+  --hm-stagger: 40ms;
+  --hm-rise: 0.4rem; /* how far content travels when it fades in */
+  --hm-rise-lg: 1rem;
+
+  /* ---- focus ---- */
+  --hm-focus-width: 1px;
+  --hm-focus-offset: 3px;
+
+  /* ---- layers ---- */
+  --hm-z-base: 0;
+  --hm-z-raised: 1;
+  --hm-z-sidebar: 5;
+  --hm-z-toolbar: 6;
+  --hm-z-sticky: 10;
+  --hm-z-dropdown: 30;
+  --hm-z-overlay: 50;
+  --hm-z-toast: 60;
+  --hm-z-tooltip: 70;
+
+  color-scheme: dark;
+}
+
+/* Derived tokens: custom properties resolve where they are declared, so anything built from another token is
+   re-declared on every theme scope. Overriding --hm-accent-h on a subtree then recolours its accent. */
+:root,
+.hm-theme {
+  --hm-accent: hsl(var(--hm-accent-h) 70% 68%);
+  --hm-accent-soft: hsl(var(--hm-accent-h) 70% 68% / 0.14);
+  --hm-accent-line: hsl(var(--hm-accent-h) 70% 68% / 0.5);
+  /* selected and highlighted fills: a translucent wash with a lit top edge, so it reads as glass and not a flat bar */
+  --hm-surface-selected: rgb(255 255 255 / 0.085);
+  --hm-selected-edge: inset 0 1px 0 rgb(255 255 255 / 0.16), inset 0 0 0 1px rgb(255 255 255 / 0.05);
+  --hm-info: hsl(var(--hm-cyan));
+  --hm-iridescence: linear-gradient(
+    100deg,
+    hsl(var(--hm-cyan) / 0.55),
+    hsl(var(--hm-violet) / 0.35) 40%,
+    hsl(var(--hm-magenta) / 0.5) 70%,
+    hsl(var(--hm-cyan) / 0.4)
+  );
+  --hm-shadow-glow: 0 18px 50px -28px hsl(var(--hm-violet) / 0.55);
+  --hm-font-display: var(--hm-font-sans);
+  --hm-focus-color: var(--hm-fg);
+}
+
+/* Reduced motion: from the OS, or forced by a theme (`data-hm-motion="reduce"`). Durations collapse; transforms that
+   only decorate are switched off in the component styles. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --hm-dur-instant: 1ms;
+    --hm-dur-fast: 1ms;
+    --hm-dur-base: 1ms;
+    --hm-dur-slow: 1ms;
+    --hm-dur-scene: 1ms;
+    --hm-stagger: 0ms;
+    --hm-rise: 0;
+    --hm-rise-lg: 0;
+  }
+  /* a theme can insist on motion (a showcase toggle, a kiosk); restore the defaults below it */
+  [data-hm-motion="full"] {
+    --hm-dur-instant: 0.15s;
+    --hm-dur-fast: 0.2s;
+    --hm-dur-base: 0.34s;
+    --hm-dur-slow: 0.6s;
+    --hm-dur-scene: 0.9s;
+    --hm-stagger: 40ms;
+    --hm-rise: 0.4rem;
+    --hm-rise-lg: 1rem;
+  }
+}
+[data-hm-motion="reduce"] {
+  --hm-dur-instant: 1ms;
+  --hm-dur-fast: 1ms;
+  --hm-dur-base: 1ms;
+  --hm-dur-slow: 1ms;
+  --hm-dur-scene: 1ms;
+  --hm-stagger: 0ms;
+  --hm-rise: 0;
+  --hm-rise-lg: 0;
+}
+
+/*
+ * Dark, set explicitly (`scheme: "dark"` writes data-hm-scheme="dark"). The default needs no attribute, but a dark
+ * subtree inside a dusk or dawn page needs these values to put the dark scheme back. Schemes nest: an element's own
+ * scheme always wins over an ancestor's, and a nested theme without one follows its ancestor.
+ */
+[data-hm-scheme="dark"],
+[data-hm-scheme="dark"] .hm-theme:not([data-hm-scheme]) {
+  --hm-bg: #000;
+  --hm-surface: #131316;
+  --hm-surface-raised: #17171a;
+  --hm-surface-overlay: #101013;
+  --hm-surface-selected: rgb(255 255 255 / 0.085);
+  --hm-selected-edge: inset 0 1px 0 rgb(255 255 255 / 0.16), inset 0 0 0 1px rgb(255 255 255 / 0.05);
+  --hm-fg: #f2f2f3;
+  --hm-fg-strong: #fff;
+  --hm-fg-soft: #b9b9c0;
+  --hm-muted: #8b8b92;
+  --hm-dim: #85858d;
+  --hm-faint: #55555c;
+  --hm-on-fg: #000;
+  --hm-accent: hsl(var(--hm-accent-h) 70% 68%);
+  --hm-accent-soft: hsl(var(--hm-accent-h) 70% 68% / 0.14);
+  --hm-accent-line: hsl(var(--hm-accent-h) 70% 68% / 0.5);
+}
+[data-hm-scheme="dark"] {
+  --hm-cyan: 188 100% 68%;
+  --hm-blue: 210 90% 68%;
+  --hm-violet: 268 95% 72%;
+  --hm-magenta: 322 95% 72%;
+  --hm-control-bg: rgb(255 255 255 / 0.05);
+  --hm-control-edge: inset 0 1px 0 rgb(255 255 255 / 0.03);
+  --hm-chrome-bg: rgb(0 0 0 / 0.7);
+  --hm-line: #1c1c1f;
+  --hm-line-strong: #34343a;
+  --hm-line-hover: #50505a;
+  --hm-line-focus: #8b8b92;
+  --hm-line-current: #5a5a62;
+  --hm-line-overlay: #2a2a2f;
+  --hm-scrim: rgb(0 0 0 / 0.6);
+  --hm-glass-bg: rgb(255 255 255 / 0.05);
+  --hm-glass-edge: inset 0 1px 0 rgb(255 255 255 / 0.1);
+  --hm-shadow-overlay: 0 30px 80px rgb(0 0 0 / 0.6);
+  --hm-nebula: 1;
+  color-scheme: dark;
+}
+
+/*
+ * Dusk: the dark theme, brighter and carrying about 30% of the accent color. It is still a dark theme (light text on a
+ * deep tinted page), only lifted: the page, fills and glass take the accent hue, so changing `accent` recolours the whole
+ * scheme. Select it with `<Theme theme={{ scheme: "dusk" }}>` (data-hm-scheme="dusk"); it nests like any theme.
+ */
+[data-hm-scheme="dusk"],
+[data-hm-scheme="dusk"] .hm-theme:not([data-hm-scheme]) {
+  --hm-bg: hsl(var(--hm-accent-h) 42% 15%);
+  --hm-surface: hsl(var(--hm-accent-h) 38% 19%);
+  --hm-surface-raised: hsl(var(--hm-accent-h) 38% 22%);
+  --hm-surface-overlay: hsl(var(--hm-accent-h) 40% 17%);
+  --hm-surface-selected: hsl(var(--hm-accent-h) 90% 88% / 0.15);
+  --hm-selected-edge: inset 0 1px 0 rgb(255 255 255 / 0.2), inset 0 0 0 1px hsl(var(--hm-accent-h) 90% 88% / 0.1);
+  --hm-fg: hsl(var(--hm-accent-h) 40% 95%);
+  --hm-fg-strong: #fff;
+  --hm-fg-soft: hsl(var(--hm-accent-h) 32% 84%);
+  --hm-muted: hsl(var(--hm-accent-h) 22% 74%);
+  --hm-dim: hsl(var(--hm-accent-h) 18% 66%);
+  --hm-faint: hsl(var(--hm-accent-h) 14% 54%);
+  --hm-on-fg: hsl(var(--hm-accent-h) 45% 12%);
+  --hm-accent: hsl(var(--hm-accent-h) 85% 74%);
+  --hm-accent-soft: hsl(var(--hm-accent-h) 85% 74% / 0.18);
+  --hm-accent-line: hsl(var(--hm-accent-h) 85% 74% / 0.55);
+}
+[data-hm-scheme="dusk"] {
+  --hm-cyan: 188 100% 68%;
+  --hm-blue: 210 90% 68%;
+  --hm-violet: 268 95% 72%;
+  --hm-magenta: 322 95% 72%;
+  --hm-control-bg: rgb(255 255 255 / 0.07);
+  --hm-control-edge: inset 0 1px 0 rgb(255 255 255 / 0.08);
+  --hm-chrome-bg: rgb(10 14 40 / 0.55);
+  --hm-line: rgb(255 255 255 / 0.1);
+  --hm-line-strong: rgb(255 255 255 / 0.19);
+  --hm-line-hover: rgb(255 255 255 / 0.34);
+  --hm-line-focus: rgb(255 255 255 / 0.6);
+  --hm-line-current: rgb(255 255 255 / 0.45);
+  --hm-line-overlay: rgb(255 255 255 / 0.16);
+  --hm-scrim: rgb(6 8 28 / 0.62);
+  --hm-glass-bg: rgb(255 255 255 / 0.08);
+  --hm-glass-edge: inset 0 1px 0 rgb(255 255 255 / 0.16);
+  --hm-shadow-overlay: 0 30px 80px rgb(4 6 24 / 0.55);
+  --hm-nebula: 1.9;
+  color-scheme: dark;
+}
+
+/*
+ * Dawn: the dark theme in warm colors. Deep aubergine and umber surfaces with an amber and rose light, and the
+ * atmosphere turns from violet and cyan to rose and amber. Like the other schemes it is dark (light text on a deep page);
+ * it sets its own warm accent. Select it with `<Theme theme={{ scheme: "dawn" }}>` (data-hm-scheme="dawn").
+ */
+[data-hm-scheme="dawn"],
+[data-hm-scheme="dawn"] .hm-theme:not([data-hm-scheme]) {
+  --hm-dawn-h: 18;
+  --hm-bg: hsl(var(--hm-dawn-h) 34% 9%);
+  --hm-surface: hsl(var(--hm-dawn-h) 28% 13%);
+  --hm-surface-raised: hsl(var(--hm-dawn-h) 28% 16%);
+  --hm-surface-overlay: hsl(var(--hm-dawn-h) 30% 11%);
+  --hm-surface-selected: rgb(255 226 200 / 0.13);
+  --hm-selected-edge: inset 0 1px 0 rgb(255 236 220 / 0.2), inset 0 0 0 1px rgb(255 226 200 / 0.08);
+  --hm-fg: hsl(30 45% 95%);
+  --hm-fg-strong: #fff;
+  --hm-fg-soft: hsl(28 32% 83%);
+  --hm-muted: hsl(26 20% 72%);
+  --hm-dim: hsl(24 16% 64%);
+  --hm-faint: hsl(22 12% 52%);
+  --hm-on-fg: hsl(var(--hm-dawn-h) 40% 10%);
+  --hm-accent: hsl(28 92% 70%);
+  --hm-accent-soft: hsl(28 92% 70% / 0.17);
+  --hm-accent-line: hsl(28 92% 70% / 0.55);
+  --hm-cyan: 38 96% 66%;
+  --hm-blue: 22 92% 64%;
+  --hm-violet: 345 82% 66%;
+  --hm-magenta: 12 88% 64%;
+}
+[data-hm-scheme="dawn"] {
+  --hm-control-bg: rgb(255 236 220 / 0.07);
+  --hm-control-edge: inset 0 1px 0 rgb(255 236 220 / 0.09);
+  --hm-chrome-bg: rgb(26 12 8 / 0.58);
+  --hm-line: rgb(255 236 220 / 0.1);
+  --hm-line-strong: rgb(255 236 220 / 0.18);
+  --hm-line-hover: rgb(255 236 220 / 0.33);
+  --hm-line-focus: rgb(255 236 220 / 0.6);
+  --hm-line-current: rgb(255 236 220 / 0.45);
+  --hm-line-overlay: rgb(255 236 220 / 0.15);
+  --hm-scrim: rgb(14 6 4 / 0.64);
+  --hm-glass-bg: rgb(255 236 220 / 0.07);
+  --hm-glass-edge: inset 0 1px 0 rgb(255 236 220 / 0.15);
+  --hm-shadow-overlay: 0 30px 80px rgb(10 3 2 / 0.6);
+  --hm-nebula: 1.7;
+  color-scheme: dark;
+}

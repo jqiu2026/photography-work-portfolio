@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@halation/ui": "workspace:*",
+    "@holominimal/ui": "workspace:^",
     "@jerryqiu/auth": "workspace:*",
     "@jerryqiu/db": "workspace:*",
     "@jerryqiu/email": "workspace:*",

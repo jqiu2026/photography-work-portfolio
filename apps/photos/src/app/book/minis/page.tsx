@@ -1,4 +1,4 @@
-import { Container, Section, Text } from "@halation/ui";
+import { Container, Section, Text } from "@/components/ui";
 import { getDb } from "@jerryqiu/db";
 import * as cal from "@jerryqiu/db/calendar";
 import type { Metadata } from "next";

@@ -1,4 +1,4 @@
-import { Container, Section, Text } from "@halation/ui";
+import { Container, Section, Text } from "@/components/ui";
 import type { ReactNode } from "react";
 import { Shell } from "@/components/Shell";
 import { type FeatureStatus, statusLabel } from "@/content/features";

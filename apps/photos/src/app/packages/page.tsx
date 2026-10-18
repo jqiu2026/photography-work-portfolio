@@ -1,4 +1,4 @@
-import { Container, Section, Text } from "@halation/ui";
+import { Container, Section, Text } from "@/components/ui";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Shell } from "@/components/Shell";

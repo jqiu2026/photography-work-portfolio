@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { type ReactNode, useEffect, useRef, ViewTransition } from "react";
+import { AppShell, Atmosphere, Dock, DockBrand, DockItem, DockSubItem, DockSubnav, LightField } from "@holominimal/ui";
+import { type ReactNode, ViewTransition } from "react";
 import { groupOf, studioGroups, studioSections } from "./sections";
 import { StudioPalette } from "./StudioPalette";
 import "./studio.css";
@@ -18,129 +19,56 @@ export function activeSection(pathname: string): string {
   return rest !== undefined || studioSections.some((s) => s.id === seg) ? seg : "overview";
 }
 
-const REACH = 96; // px of vertical distance over which the pointer magnifies an entry
-const RANGE = 300; // px from the left edge within which the pointer counts as "near the dock"
-
 /**
- * Studio chrome: a see-through sidebar whose entries are tiny until the pointer comes close. The entry under the pointer
- * grows, the selected one is always the largest, and the rest shrink and fade with distance. A holographic backdrop follows
- * the pointer. Entries are real links (focus magnifies too); with reduced motion everything is static.
+ * Studio chrome on Holominimal: the atmosphere, the proximity dock (the current group is largest, its pages listed under
+ * it), the jump palette top right, and a page column that fades between routes. Entries are real links.
  */
 export function StudioChrome({ children }: { children: ReactNode }) {
   const pathname = usePathname();
-  const active = groupOf(activeSection(pathname)).id;
-  const dock = useRef<HTMLElement>(null);
-  const root = useRef<HTMLDivElement>(null);
-  const activeIndex = Math.max(
-    0,
-    studioGroups.findIndex((g) => g.id === active),
-  );
-
-  useEffect(() => {
-    const el = dock.current;
-    if (!el) return;
-    const items = Array.from(el.querySelectorAll<HTMLElement>("[data-dock-item]"));
-    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const fine = matchMedia("(hover: hover) and (pointer: fine)").matches;
-    const cur = items.map(() => 0);
-    let pointer: { x: number; y: number } | null = null;
-    let focused = -1;
-    let raf = 0;
-
-    const target = (i: number) => {
-      if (i === activeIndex) return 1;
-      const rest = 0.1 + 0.3 * Math.exp(-Math.abs(i - activeIndex) / 3);
-      let k = rest;
-      if (fine && pointer) {
-        const r = (items[i].parentElement ?? items[i]).getBoundingClientRect(); // the <li> never moves; the link scales
-        const dy = pointer.y - (r.top + r.height / 2);
-        const near = Math.max(0, Math.min(1, 1 - (pointer.x - 24) / RANGE));
-        k = Math.max(k, 0.92 * Math.exp(-((dy / REACH) ** 2)) * near);
-      }
-      if (focused === i) k = Math.max(k, 0.92);
-      return Math.min(k, i === activeIndex ? 1 : 0.92);
-    };
-    const paint = () => {
-      let moving = false;
-      items.forEach((it, i) => {
-        const t = target(i);
-        cur[i] = reduce ? t : cur[i] + (t - cur[i]) * 0.18;
-        if (Math.abs(t - cur[i]) > 0.002) moving = true;
-        it.style.setProperty("--k", cur[i].toFixed(3));
-      });
-      raf = moving ? requestAnimationFrame(paint) : 0;
-    };
-    const kick = () => {
-      if (!raf) raf = requestAnimationFrame(paint);
-    };
-    const move = (e: PointerEvent) => {
-      pointer = { x: e.clientX, y: e.clientY };
-      kick();
-    };
-    const leave = () => {
-      pointer = null;
-      kick();
-    };
-    const onFocus = (e: FocusEvent) => {
-      focused = items.indexOf(e.target as HTMLElement);
-      kick();
-    };
-    const onBlur = () => {
-      focused = -1;
-      kick();
-    };
-    addEventListener("pointermove", move, { passive: true });
-    document.addEventListener("pointerleave", leave);
-    el.addEventListener("focusin", onFocus);
-    el.addEventListener("focusout", onBlur);
-    paint();
-    return () => {
-      removeEventListener("pointermove", move);
-      document.removeEventListener("pointerleave", leave);
-      el.removeEventListener("focusin", onFocus);
-      el.removeEventListener("focusout", onBlur);
-      cancelAnimationFrame(raf);
-    };
-  }, [activeIndex]);
-
+  const section = activeSection(pathname);
+  const active = groupOf(section).id;
   return (
-    <div className="st-root" ref={root}>
-      <nav className="st-dock" aria-label="Studio sections" ref={dock}>
-        <Link href="/" className="st-dock-brand">
-          Studio
-        </Link>
-        <ul>
-          {studioGroups.map((g, i) => (
-            <li key={g.id} style={{ "--i": i } as React.CSSProperties}>
-              <Link
-                href={`/studio/${g.sections[0]}`}
-                data-dock-item
-                aria-current={g.id === active ? "page" : undefined}
-                style={{ "--k": g.id === active ? 1 : 0.2 } as React.CSSProperties}
+    <LightField className="st-root">
+      <AppShell
+        entrance="curtain"
+        backdrop={<Atmosphere />}
+        sidebar={
+          <Dock
+            aria-label="Studio sections"
+            brand={
+              <DockBrand asChild>
+                <Link href="/">Studio</Link>
+              </DockBrand>
+            }
+          >
+            {studioGroups.map((g) => (
+              <DockItem
+                key={g.id}
+                asChild
+                current={g.id === active}
+                subnav={
+                  g.id === active && g.sections.length > 1 ? (
+                    <DockSubnav aria-label={`${g.label} pages`}>
+                      {g.sections.map((id) => (
+                        <DockSubItem key={id} asChild current={section === id}>
+                          <Link href={`/studio/${id}`}>{studioSections.find((x) => x.id === id)?.label}</Link>
+                        </DockSubItem>
+                      ))}
+                    </DockSubnav>
+                  ) : undefined
+                }
               >
-                {g.label}
-              </Link>
-              {g.id === active && g.sections.length > 1 ? (
-                <ul className="st-sub-list" aria-label={`${g.label} pages`}>
-                  {g.sections.map((id) => (
-                    <li key={id}>
-                      <Link href={`/studio/${id}`} aria-current={activeSection(pathname) === id ? "page" : undefined}>
-                        {studioSections.find((x) => x.id === id)?.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              ) : null}
-            </li>
-          ))}
-        </ul>
-      </nav>
-      <StudioPalette />
-      <div className="st-stage">
+                <Link href={`/studio/${g.sections[0]}`}>{g.label}</Link>
+              </DockItem>
+            ))}
+          </Dock>
+        }
+      >
+        <StudioPalette />
         <ViewTransition key={pathname} name="st-page" enter="st-in" exit="st-out" default="none">
           <div className="st-page">{children}</div>
         </ViewTransition>
-      </div>
-    </div>
+      </AppShell>
+    </LightField>
   );
 }

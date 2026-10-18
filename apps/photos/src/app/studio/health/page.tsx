@@ -1,5 +1,5 @@
 import { getDb } from "@jerryqiu/db";
-import { Container, Heading, Section } from "@halation/ui";
+import { Container, Heading, Section } from "@/components/ui";
 import { requirePageUser } from "@/auth";
 import { StudioShell as Shell } from "@/components/studio/StudioShell";
 import "@/components/studio/studio.css";

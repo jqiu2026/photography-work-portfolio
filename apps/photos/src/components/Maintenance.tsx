@@ -1,4 +1,4 @@
-import { Container, Heading, Text } from "@halation/ui";
+import { Container, Heading, Text } from "@/components/ui";
 
 /** Shown instead of the site while maintenance mode is on. */
 export function Maintenance({ message }: { message?: string }) {

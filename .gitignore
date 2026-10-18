@@ -56,3 +56,6 @@ test-results/
 
 # dev log
 docs/project/.docs-dev.log
+
+# vendored build of the Holominimal UI library (see packages/holominimal/package.json)
+!packages/holominimal/dist/

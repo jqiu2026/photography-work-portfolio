@@ -1,0 +1,7374 @@
+/* @holominimal/ui 0.1.0 */
+/* @holominimal/ui: everything. Import once at the app root: `import "@holominimal/ui/styles.css"`. */
+/*
+ * Holominimal tokens. Every value the components use is a custom property here; themes override them on any element
+ * (`.hm-theme` or the `Theme` component). Values are taken from the reference studio: a black page, near-black
+ * surfaces separated by hairlines rather than boxes, white text, gray secondary text, and color only as signal.
+ */
+:root {
+  /* ---- neutrals ---- */
+  --hm-bg: #000;
+  --hm-surface: #131316; /* inputs, quiet fills */
+  --hm-control-bg: rgb(255 255 255 / 0.05); /* inputs: a translucent lift that reads on black, glass and holo alike */
+  --hm-surface-raised: #17171a; /* hover fill of an interactive surface */
+  --hm-surface-overlay: #101013; /* dialogs, palettes, menus */
+  --hm-fg: #f2f2f3;
+  --hm-fg-strong: #fff;
+  --hm-fg-soft: #b9b9c0; /* tool labels on translucent controls */
+  --hm-muted: #8b8b92; /* secondary text */
+  --hm-dim: #85858d; /* resting sidebar entries, hints */
+  --hm-faint: #55555c; /* placeholders */
+  --hm-line: #1c1c1f; /* hairlines between sections */
+  --hm-line-strong: #34343a; /* control borders */
+  --hm-line-hover: #50505a; /* a border under the pointer */
+  --hm-line-focus: #8b8b92; /* a focused control border */
+  --hm-line-current: #5a5a62; /* the viewer's current plan */
+  --hm-line-overlay: #2a2a2f;
+  --hm-scrim: rgb(0 0 0 / 0.6);
+  --hm-on-fg: #000; /* text on the white primary button */
+
+  /* ---- holographic accents (HSL triplets so alpha can vary) ---- */
+  --hm-cyan: 188 100% 68%;
+  --hm-blue: 210 90% 68%;
+  --hm-violet: 268 95% 72%;
+  --hm-magenta: 322 95% 72%;
+  /* the one accent a theme points with: focus rings, selected tabs, active rails. Override with a hue. */
+  --hm-accent-h: 210;
+
+  /* ---- chart series: six distinct hues for categorical data (donut slices, legends) ---- */
+  --hm-series-1: hsl(210 80% 66%);
+  --hm-series-2: hsl(268 80% 72%);
+  --hm-series-3: hsl(188 80% 62%);
+  --hm-series-4: hsl(322 80% 70%);
+  --hm-series-5: hsl(38 90% 65%);
+  --hm-series-6: hsl(150 55% 55%);
+
+  /* ---- semantic status ---- */
+  --hm-success: hsl(150 55% 55%);
+  --hm-success-text: hsl(150 60% 65%);
+  --hm-warning: hsl(38 90% 65%);
+  --hm-danger: hsl(355 80% 66%);
+
+  /* ---- holographic material ---- */
+  --hm-light: 1; /* lighting intensity, 0 (off) .. 1.5 */
+  --hm-glass-bg: rgb(255 255 255 / 0.05); /* a faint white lift, so the atmosphere shows through instead of a gray fill */
+  --hm-glass-edge: inset 0 1px 0 rgb(255 255 255 / 0.1); /* the lit top edge that reads as glass */
+  --hm-glass-blur: 16px;
+  --hm-chrome-bg: rgb(0 0 0 / 0.7); /* secondary buttons and tools: translucent over imagery */
+  --hm-on-photo: #f2f2f3; /* text over photographs and the lightbox, in every scheme */
+  --hm-nebula: 1; /* strength of the atmosphere color; a light scheme raises it */
+  --hm-star: 255 255 255; /* star color (rgb triplet) */
+  --hm-control-edge: inset 0 1px 0 rgb(255 255 255 / 0.03);
+  --hm-glass-saturate: 1.6;
+
+  /* ---- type ---- */
+  --hm-font-sans: "Hanken Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --hm-font-mono: "Martian Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --hm-text-2xs: 0.7rem;
+  --hm-text-xs: 0.75rem;
+  --hm-text-sm: 0.85rem;
+  --hm-text-md: 0.92rem;
+  --hm-text-base: 1rem;
+  --hm-text-lg: 1.15rem;
+  --hm-text-xl: 1.4rem;
+  --hm-text-2xl: clamp(1.7rem, 3vw, 2.3rem);
+  --hm-text-3xl: clamp(2.2rem, 4.5vw, 3.4rem);
+  --hm-text-stat: clamp(1.7rem, 2.6vw, 2.2rem);
+  --hm-weight-regular: 400;
+  --hm-weight-medium: 500; /* headings are medium, never bold */
+  --hm-weight-semibold: 600; /* emphasis in running text, for Text weight="semibold" */
+  --hm-tracking-tight: -0.01em;
+  --hm-tracking-num: -0.02em;
+  --hm-tracking-eyebrow: 0.14em;
+  --hm-tracking-brand: 0.22em;
+  --hm-leading-tight: 1.1;
+  --hm-leading: 1.5;
+
+  /* ---- space and layout ---- */
+  --hm-space-1: 0.25rem;
+  --hm-space-2: 0.5rem;
+  --hm-space-3: 0.75rem;
+  --hm-space-4: 1rem;
+  --hm-space-5: 1.4rem;
+  --hm-space-6: 2rem;
+  --hm-space-7: 2.4rem;
+  --hm-space-8: 3rem;
+  --hm-space-9: 4rem;
+  --hm-gutter: clamp(1.25rem, 0.5rem + 3vw, 3rem);
+  --hm-content: 62rem;
+  --hm-sidebar: clamp(11rem, 16vw, 14rem);
+  --hm-sidebar-pad: clamp(1.4rem, 2.6vw, 2.4rem);
+  --hm-target: 44px; /* minimum touch target */
+  --hm-control-h: 36px;
+
+  /* ---- radii ---- */
+  --hm-radius-xs: 2px;
+  --hm-radius-sm: 6px;
+  --hm-radius-md: 8px;
+  --hm-radius-lg: 10px;
+  --hm-radius-xl: 12px;
+  --hm-radius-pill: 999px;
+
+  /* ---- elevation (shadows are rare; depth comes from fills and hairlines) ---- */
+  --hm-shadow-xs: 0 1px 2px rgb(0 0 0 / 0.55);
+  --hm-shadow-sm: 0 2px 5px -1px rgb(0 0 0 / 0.6), 0 1px 2px rgb(0 0 0 / 0.45);
+  --hm-shadow-md: 0 8px 18px -4px rgb(0 0 0 / 0.65), 0 2px 5px rgb(0 0 0 / 0.5);
+  --hm-shadow-lg: 0 18px 38px -8px rgb(0 0 0 / 0.72), 0 6px 12px -2px rgb(0 0 0 / 0.55);
+  --hm-shadow-xl: 0 34px 70px -12px rgb(0 0 0 / 0.82), 0 12px 24px -4px rgb(0 0 0 / 0.6);
+  --hm-shadow-overlay: 0 30px 80px rgb(0 0 0 / 0.6);
+
+  /* ---- motion ---- */
+  --hm-ease-glide: cubic-bezier(0.22, 1, 0.36, 1); /* arrivals: fast out, long settle */
+  --hm-ease-pour: cubic-bezier(0.65, 0, 0.35, 1); /* symmetric moves */
+  --hm-ease-curtain: cubic-bezier(0.7, 0, 0.2, 1); /* page-sized wipes */
+  /* springs: CSS linear() easings that overshoot a little and settle. soft for panels, lively for small controls */
+  --hm-ease-spring-soft: linear(0, 0.18 5%, 0.58 12%, 0.88 20%, 1.025 30%, 1.04 36%, 1.02 46%, 0.996 60%, 1);
+  --hm-ease-spring: linear(0, 0.009, 0.035 2.1%, 0.141, 0.281 6.7%, 0.723 12.9%, 0.938 16.7%, 1.017, 1.077, 1.121, 1.149 24.3%, 1.159, 1.163, 1.161, 1.154 29.9%, 1.129 32.8%, 1.051 39.6%, 1.017 43.1%, 0.991, 0.977 51%, 0.974 53.8%, 0.975 57.1%, 0.997 69.8%, 1.003 76.9%, 1);
+  --hm-ease-out: ease;
+  --hm-dur-instant: 0.15s;
+  --hm-dur-fast: 0.2s;
+  --hm-dur-base: 0.34s;
+  --hm-dur-slow: 0.6s;
+  --hm-dur-scene: 0.9s;
+  --hm-stagger: 40ms;
+  --hm-rise: 0.4rem; /* how far content travels when it fades in */
+  --hm-rise-lg: 1rem;
+
+  /* ---- focus ---- */
+  --hm-focus-width: 1px;
+  --hm-focus-offset: 3px;
+
+  /* ---- layers ---- */
+  --hm-z-base: 0;
+  --hm-z-raised: 1;
+  --hm-z-sidebar: 5;
+  --hm-z-toolbar: 6;
+  --hm-z-sticky: 10;
+  --hm-z-dropdown: 30;
+  --hm-z-overlay: 50;
+  --hm-z-toast: 60;
+  --hm-z-tooltip: 70;
+
+  color-scheme: dark;
+}
+
+/* Derived tokens: custom properties resolve where they are declared, so anything built from another token is
+   re-declared on every theme scope. Overriding --hm-accent-h on a subtree then recolours its accent. */
+:root,
+.hm-theme {
+  --hm-accent: hsl(var(--hm-accent-h) 70% 68%);
+  --hm-accent-soft: hsl(var(--hm-accent-h) 70% 68% / 0.14);
+  --hm-accent-line: hsl(var(--hm-accent-h) 70% 68% / 0.5);
+  /* selected and highlighted fills: a translucent wash with a lit top edge, so it reads as glass and not a flat bar */
+  --hm-surface-selected: rgb(255 255 255 / 0.085);
+  --hm-selected-edge: inset 0 1px 0 rgb(255 255 255 / 0.16), inset 0 0 0 1px rgb(255 255 255 / 0.05);
+  --hm-info: hsl(var(--hm-cyan));
+  --hm-iridescence: linear-gradient(
+    100deg,
+    hsl(var(--hm-cyan) / 0.55),
+    hsl(var(--hm-violet) / 0.35) 40%,
+    hsl(var(--hm-magenta) / 0.5) 70%,
+    hsl(var(--hm-cyan) / 0.4)
+  );
+  --hm-shadow-glow: 0 18px 50px -28px hsl(var(--hm-violet) / 0.55);
+  --hm-font-display: var(--hm-font-sans);
+  --hm-focus-color: var(--hm-fg);
+}
+
+/* Reduced motion: from the OS, or forced by a theme (`data-hm-motion="reduce"`). Durations collapse; transforms that
+   only decorate are switched off in the component styles. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --hm-dur-instant: 1ms;
+    --hm-dur-fast: 1ms;
+    --hm-dur-base: 1ms;
+    --hm-dur-slow: 1ms;
+    --hm-dur-scene: 1ms;
+    --hm-stagger: 0ms;
+    --hm-rise: 0;
+    --hm-rise-lg: 0;
+  }
+  /* a theme can insist on motion (a showcase toggle, a kiosk); restore the defaults below it */
+  [data-hm-motion="full"] {
+    --hm-dur-instant: 0.15s;
+    --hm-dur-fast: 0.2s;
+    --hm-dur-base: 0.34s;
+    --hm-dur-slow: 0.6s;
+    --hm-dur-scene: 0.9s;
+    --hm-stagger: 40ms;
+    --hm-rise: 0.4rem;
+    --hm-rise-lg: 1rem;
+  }
+}
+[data-hm-motion="reduce"] {
+  --hm-dur-instant: 1ms;
+  --hm-dur-fast: 1ms;
+  --hm-dur-base: 1ms;
+  --hm-dur-slow: 1ms;
+  --hm-dur-scene: 1ms;
+  --hm-stagger: 0ms;
+  --hm-rise: 0;
+  --hm-rise-lg: 0;
+}
+
+/*
+ * Dark, set explicitly (`scheme: "dark"` writes data-hm-scheme="dark"). The default needs no attribute, but a dark
+ * subtree inside a dusk or dawn page needs these values to put the dark scheme back. Schemes nest: an element's own
+ * scheme always wins over an ancestor's, and a nested theme without one follows its ancestor.
+ */
+[data-hm-scheme="dark"],
+[data-hm-scheme="dark"] .hm-theme:not([data-hm-scheme]) {
+  --hm-bg: #000;
+  --hm-surface: #131316;
+  --hm-surface-raised: #17171a;
+  --hm-surface-overlay: #101013;
+  --hm-surface-selected: rgb(255 255 255 / 0.085);
+  --hm-selected-edge: inset 0 1px 0 rgb(255 255 255 / 0.16), inset 0 0 0 1px rgb(255 255 255 / 0.05);
+  --hm-fg: #f2f2f3;
+  --hm-fg-strong: #fff;
+  --hm-fg-soft: #b9b9c0;
+  --hm-muted: #8b8b92;
+  --hm-dim: #85858d;
+  --hm-faint: #55555c;
+  --hm-on-fg: #000;
+  --hm-accent: hsl(var(--hm-accent-h) 70% 68%);
+  --hm-accent-soft: hsl(var(--hm-accent-h) 70% 68% / 0.14);
+  --hm-accent-line: hsl(var(--hm-accent-h) 70% 68% / 0.5);
+}
+[data-hm-scheme="dark"] {
+  --hm-cyan: 188 100% 68%;
+  --hm-blue: 210 90% 68%;
+  --hm-violet: 268 95% 72%;
+  --hm-magenta: 322 95% 72%;
+  --hm-control-bg: rgb(255 255 255 / 0.05);
+  --hm-control-edge: inset 0 1px 0 rgb(255 255 255 / 0.03);
+  --hm-chrome-bg: rgb(0 0 0 / 0.7);
+  --hm-line: #1c1c1f;
+  --hm-line-strong: #34343a;
+  --hm-line-hover: #50505a;
+  --hm-line-focus: #8b8b92;
+  --hm-line-current: #5a5a62;
+  --hm-line-overlay: #2a2a2f;
+  --hm-scrim: rgb(0 0 0 / 0.6);
+  --hm-glass-bg: rgb(255 255 255 / 0.05);
+  --hm-glass-edge: inset 0 1px 0 rgb(255 255 255 / 0.1);
+  --hm-shadow-overlay: 0 30px 80px rgb(0 0 0 / 0.6);
+  --hm-nebula: 1;
+  color-scheme: dark;
+}
+
+/*
+ * Dusk: the dark theme, brighter and carrying about 30% of the accent color. It is still a dark theme (light text on a
+ * deep tinted page), only lifted: the page, fills and glass take the accent hue, so changing `accent` recolours the whole
+ * scheme. Select it with `<Theme theme={{ scheme: "dusk" }}>` (data-hm-scheme="dusk"); it nests like any theme.
+ */
+[data-hm-scheme="dusk"],
+[data-hm-scheme="dusk"] .hm-theme:not([data-hm-scheme]) {
+  --hm-bg: hsl(var(--hm-accent-h) 42% 15%);
+  --hm-surface: hsl(var(--hm-accent-h) 38% 19%);
+  --hm-surface-raised: hsl(var(--hm-accent-h) 38% 22%);
+  --hm-surface-overlay: hsl(var(--hm-accent-h) 40% 17%);
+  --hm-surface-selected: hsl(var(--hm-accent-h) 90% 88% / 0.15);
+  --hm-selected-edge: inset 0 1px 0 rgb(255 255 255 / 0.2), inset 0 0 0 1px hsl(var(--hm-accent-h) 90% 88% / 0.1);
+  --hm-fg: hsl(var(--hm-accent-h) 40% 95%);
+  --hm-fg-strong: #fff;
+  --hm-fg-soft: hsl(var(--hm-accent-h) 32% 84%);
+  --hm-muted: hsl(var(--hm-accent-h) 22% 74%);
+  --hm-dim: hsl(var(--hm-accent-h) 18% 66%);
+  --hm-faint: hsl(var(--hm-accent-h) 14% 54%);
+  --hm-on-fg: hsl(var(--hm-accent-h) 45% 12%);
+  --hm-accent: hsl(var(--hm-accent-h) 85% 74%);
+  --hm-accent-soft: hsl(var(--hm-accent-h) 85% 74% / 0.18);
+  --hm-accent-line: hsl(var(--hm-accent-h) 85% 74% / 0.55);
+}
+[data-hm-scheme="dusk"] {
+  --hm-cyan: 188 100% 68%;
+  --hm-blue: 210 90% 68%;
+  --hm-violet: 268 95% 72%;
+  --hm-magenta: 322 95% 72%;
+  --hm-control-bg: rgb(255 255 255 / 0.07);
+  --hm-control-edge: inset 0 1px 0 rgb(255 255 255 / 0.08);
+  --hm-chrome-bg: rgb(10 14 40 / 0.55);
+  --hm-line: rgb(255 255 255 / 0.1);
+  --hm-line-strong: rgb(255 255 255 / 0.19);
+  --hm-line-hover: rgb(255 255 255 / 0.34);
+  --hm-line-focus: rgb(255 255 255 / 0.6);
+  --hm-line-current: rgb(255 255 255 / 0.45);
+  --hm-line-overlay: rgb(255 255 255 / 0.16);
+  --hm-scrim: rgb(6 8 28 / 0.62);
+  --hm-glass-bg: rgb(255 255 255 / 0.08);
+  --hm-glass-edge: inset 0 1px 0 rgb(255 255 255 / 0.16);
+  --hm-shadow-overlay: 0 30px 80px rgb(4 6 24 / 0.55);
+  --hm-nebula: 1.9;
+  color-scheme: dark;
+}
+
+/*
+ * Dawn: the dark theme in warm colors. Deep aubergine and umber surfaces with an amber and rose light, and the
+ * atmosphere turns from violet and cyan to rose and amber. Like the other schemes it is dark (light text on a deep page);
+ * it sets its own warm accent. Select it with `<Theme theme={{ scheme: "dawn" }}>` (data-hm-scheme="dawn").
+ */
+[data-hm-scheme="dawn"],
+[data-hm-scheme="dawn"] .hm-theme:not([data-hm-scheme]) {
+  --hm-dawn-h: 18;
+  --hm-bg: hsl(var(--hm-dawn-h) 34% 9%);
+  --hm-surface: hsl(var(--hm-dawn-h) 28% 13%);
+  --hm-surface-raised: hsl(var(--hm-dawn-h) 28% 16%);
+  --hm-surface-overlay: hsl(var(--hm-dawn-h) 30% 11%);
+  --hm-surface-selected: rgb(255 226 200 / 0.13);
+  --hm-selected-edge: inset 0 1px 0 rgb(255 236 220 / 0.2), inset 0 0 0 1px rgb(255 226 200 / 0.08);
+  --hm-fg: hsl(30 45% 95%);
+  --hm-fg-strong: #fff;
+  --hm-fg-soft: hsl(28 32% 83%);
+  --hm-muted: hsl(26 20% 72%);
+  --hm-dim: hsl(24 16% 64%);
+  --hm-faint: hsl(22 12% 52%);
+  --hm-on-fg: hsl(var(--hm-dawn-h) 40% 10%);
+  --hm-accent: hsl(28 92% 70%);
+  --hm-accent-soft: hsl(28 92% 70% / 0.17);
+  --hm-accent-line: hsl(28 92% 70% / 0.55);
+  --hm-cyan: 38 96% 66%;
+  --hm-blue: 22 92% 64%;
+  --hm-violet: 345 82% 66%;
+  --hm-magenta: 12 88% 64%;
+}
+[data-hm-scheme="dawn"] {
+  --hm-control-bg: rgb(255 236 220 / 0.07);
+  --hm-control-edge: inset 0 1px 0 rgb(255 236 220 / 0.09);
+  --hm-chrome-bg: rgb(26 12 8 / 0.58);
+  --hm-line: rgb(255 236 220 / 0.1);
+  --hm-line-strong: rgb(255 236 220 / 0.18);
+  --hm-line-hover: rgb(255 236 220 / 0.33);
+  --hm-line-focus: rgb(255 236 220 / 0.6);
+  --hm-line-current: rgb(255 236 220 / 0.45);
+  --hm-line-overlay: rgb(255 236 220 / 0.15);
+  --hm-scrim: rgb(14 6 4 / 0.64);
+  --hm-glass-bg: rgb(255 236 220 / 0.07);
+  --hm-glass-edge: inset 0 1px 0 rgb(255 236 220 / 0.15);
+  --hm-shadow-overlay: 0 30px 80px rgb(10 3 2 / 0.6);
+  --hm-nebula: 1.7;
+  color-scheme: dark;
+}
+
+/* Base: applied only inside `.hm-root` (the Theme component adds it), so the library never restyles a host page. */
+.hm-root {
+  background: var(--hm-bg);
+  color: var(--hm-fg);
+  font-family: var(--hm-font-sans);
+  font-size: var(--hm-text-base);
+  line-height: var(--hm-leading);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+.hm-root *,
+.hm-root *::before,
+.hm-root *::after {
+  box-sizing: border-box;
+}
+.hm-root :where(h1, h2, h3, h4, p, ul, ol, dl, dd, figure) {
+  margin: 0;
+}
+.hm-root :where(h1, h2, h3, h4) {
+  font-weight: var(--hm-weight-medium);
+  line-height: var(--hm-leading-tight);
+}
+.hm-root :where(a) {
+  color: inherit;
+}
+.hm-root :where(img, svg, video, canvas) {
+  display: block;
+  max-width: 100%;
+}
+.hm-root :where(button, input, select, textarea) {
+  font: inherit;
+  color: inherit;
+}
+.hm-root :where(:focus-visible) {
+  outline: var(--hm-focus-width) solid var(--hm-focus-color);
+  outline-offset: var(--hm-focus-offset);
+}
+.hm-root ::selection {
+  background: hsl(var(--hm-accent-h) 70% 68% / 0.35);
+}
+
+/* visually hidden, still announced */
+.hm-sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* skip link: invisible until focused */
+.hm-skip {
+  position: fixed;
+  z-index: calc(var(--hm-z-overlay) + 1);
+  top: var(--hm-space-3);
+  left: var(--hm-space-3);
+  padding: var(--hm-space-2) var(--hm-space-4);
+  border-radius: var(--hm-radius-md);
+  background: var(--hm-fg);
+  color: var(--hm-on-fg);
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+.hm-skip:focus-visible {
+  transform: none;
+}
+
+/*
+ * Motion. One language, from the reference studio: things arrive by fading in and rising a few pixels on a long glide;
+ * they leave faster than they arrive and without travel. Nothing loops. Every effect collapses under reduced motion
+ * (the duration tokens become 1ms and the travel tokens 0).
+ */
+@keyframes hm-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes hm-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes hm-rise {
+  from {
+    opacity: 0;
+    transform: translateY(var(--hm-rise));
+  }
+}
+@keyframes hm-rise-lg {
+  from {
+    opacity: 0;
+    transform: translateY(var(--hm-rise-lg));
+  }
+}
+@keyframes hm-slide-in-start {
+  from {
+    opacity: 0;
+    transform: translateX(calc(var(--hm-rise-lg) * -1.5));
+  }
+}
+@keyframes hm-pop {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--hm-rise) * -0.5)) scale(0.98);
+  }
+}
+@keyframes hm-grow-y {
+  from {
+    transform: scaleY(0);
+  }
+}
+@keyframes hm-shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+@keyframes hm-spin {
+  to {
+    rotate: 360deg;
+  }
+}
+
+/* Enter: content that appears on mount. Stagger with `--hm-i` (0, 1, 2...) on each item. */
+.hm-enter {
+  animation: hm-rise var(--hm-dur-slow) var(--hm-ease-glide) both;
+  animation-delay: calc(var(--hm-i, 0) * var(--hm-stagger));
+}
+.hm-enter[data-motion="fade"] {
+  animation-name: hm-fade-in;
+}
+.hm-enter[data-motion="rise-lg"] {
+  animation-name: hm-rise-lg;
+  animation-duration: var(--hm-dur-scene);
+}
+.hm-enter[data-motion="slide"] {
+  animation-name: hm-slide-in-start;
+  animation-duration: var(--hm-dur-scene);
+}
+
+/* Reveal on scroll: hidden only after JS marks it pending, so content is always visible without JS */
+[data-hm-reveal="pending"] {
+  opacity: 0;
+  transform: translateY(var(--hm-rise-lg));
+}
+[data-hm-reveal="shown"] {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity var(--hm-dur-slow) var(--hm-ease-glide),
+    transform var(--hm-dur-scene) var(--hm-ease-glide);
+  transition-delay: calc(var(--hm-i, 0) * var(--hm-stagger));
+}
+
+/* View transitions (React <ViewTransition enter="hm-in" exit="hm-out"> or document.startViewTransition) */
+::view-transition-old(.hm-out) {
+  animation: hm-fade-out 0.16s var(--hm-ease-out) both;
+}
+::view-transition-new(.hm-in) {
+  animation: hm-rise var(--hm-dur-base) var(--hm-ease-out) 0.08s both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hm-enter,
+  ::view-transition-old(.hm-out),
+  ::view-transition-new(.hm-in) {
+    animation: none;
+  }
+  [data-hm-reveal="pending"] {
+    opacity: 1;
+    transform: none;
+  }
+}
+[data-hm-motion="reduce"] .hm-enter {
+  animation: none;
+}
+[data-hm-motion="reduce"] [data-hm-reveal="pending"] {
+  opacity: 1;
+  transform: none;
+}
+
+/*
+ * Animation presets. One attribute plays one named motion, so any element can animate without writing keyframes:
+ *
+ *   <div data-hm-anim="fade-up">                     plays once on mount
+ *   <div data-hm-anim="pulse" data-hm-trigger="hover">   plays while hovered (focus, view, click and manual triggers too)
+ *   <li data-hm-anim="fade-up" style="--hm-i: 2">    --hm-i staggers by --hm-stagger
+ *
+ * Tune with custom properties: --hm-anim-duration, --hm-anim-delay, --hm-anim-easing, --hm-anim-count (a number or
+ * `infinite`), --hm-anim-direction, --hm-anim-distance and --hm-anim-step. The <Animate>, <Stagger> and <TextReveal>
+ * components and the animate() function set these for you. Presets are grouped as enter, attention, loop and exit.
+ * Reduced motion switches every preset off, which leaves the element in its resting state.
+ */
+[data-hm-anim] {
+  animation-name: var(--_hm-anim, hm-a-fade-in);
+  animation-duration: var(--hm-anim-duration, var(--hm-dur-slow));
+  animation-timing-function: var(--hm-anim-easing, var(--hm-ease-glide));
+  animation-delay: calc(var(--hm-anim-delay, 0ms) + var(--hm-i, 0) * var(--hm-anim-step, var(--hm-stagger)));
+  animation-iteration-count: var(--hm-anim-count, 1);
+  animation-direction: var(--hm-anim-direction, normal);
+  animation-fill-mode: both;
+  backface-visibility: hidden;
+}
+/* attention and loop presets keep their own feel: no fill so the element rests normally between plays */
+
+[data-hm-anim="pulse"],
+[data-hm-anim="heartbeat"],
+[data-hm-anim="shake"],
+[data-hm-anim="wiggle"],
+[data-hm-anim="bounce"],
+[data-hm-anim="jello"],
+[data-hm-anim="rubber"],
+[data-hm-anim="tada"],
+[data-hm-anim="flash"],
+[data-hm-anim="swing"],
+[data-hm-anim="ping"],
+[data-hm-anim="blink"],
+[data-hm-anim="flip-once"],
+[data-hm-anim="hop"],
+[data-hm-anim="float"],
+[data-hm-anim="breathe"],
+[data-hm-anim="glow-pulse"],
+[data-hm-anim="spin"],
+[data-hm-anim="orbit"],
+[data-hm-anim="sway"],
+[data-hm-anim="shimmer-slide"],
+[data-hm-anim="wave-y"],
+[data-hm-anim="rise-fall"] {
+  animation-fill-mode: none;
+  animation-timing-function: var(--hm-anim-easing, ease-in-out);
+}
+
+[data-hm-anim="float"],
+[data-hm-anim="breathe"],
+[data-hm-anim="glow-pulse"],
+[data-hm-anim="spin"],
+[data-hm-anim="orbit"],
+[data-hm-anim="sway"],
+[data-hm-anim="shimmer-slide"],
+[data-hm-anim="wave-y"],
+[data-hm-anim="rise-fall"] {
+  animation-iteration-count: var(--hm-anim-count, infinite);
+  animation-duration: var(--hm-anim-duration, 3s);
+}
+
+[data-hm-anim="spin"] {
+  animation-timing-function: var(--hm-anim-easing, linear);
+  animation-duration: var(--hm-anim-duration, 1s);
+}
+
+[data-hm-anim="shimmer-slide"] {
+  background-image: linear-gradient(100deg, var(--hm-dim) 30%, var(--hm-fg-strong) 50%, var(--hm-dim) 70%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation-timing-function: var(--hm-anim-easing, linear);
+}
+
+[data-hm-anim="ping"] {
+  animation-duration: var(--hm-anim-duration, 1.4s);
+  animation-timing-function: var(--hm-anim-easing, cubic-bezier(0, 0, 0.2, 1));
+}
+
+[data-hm-anim="spring-up"],
+[data-hm-anim="pop"],
+[data-hm-anim="drop"] {
+  animation-timing-function: var(--hm-anim-easing, var(--hm-ease-spring-soft));
+}
+
+[data-hm-anim="spring-up"] {
+  animation-duration: var(--hm-anim-duration, var(--hm-dur-scene));
+}
+
+[data-hm-anim="fade-in"] {
+  --_hm-anim: hm-a-fade-in;
+}
+
+[data-hm-anim="fade-up"] {
+  --_hm-anim: hm-a-fade-up;
+}
+
+[data-hm-anim="fade-down"] {
+  --_hm-anim: hm-a-fade-down;
+}
+
+[data-hm-anim="fade-left"] {
+  --_hm-anim: hm-a-fade-left;
+}
+
+[data-hm-anim="fade-right"] {
+  --_hm-anim: hm-a-fade-right;
+}
+
+[data-hm-anim="slide-up"] {
+  --_hm-anim: hm-a-slide-up;
+}
+
+[data-hm-anim="slide-down"] {
+  --_hm-anim: hm-a-slide-down;
+}
+
+[data-hm-anim="slide-left"] {
+  --_hm-anim: hm-a-slide-left;
+}
+
+[data-hm-anim="slide-right"] {
+  --_hm-anim: hm-a-slide-right;
+}
+
+[data-hm-anim="zoom-in"] {
+  --_hm-anim: hm-a-zoom-in;
+}
+
+[data-hm-anim="zoom-out"] {
+  --_hm-anim: hm-a-zoom-out;
+}
+
+[data-hm-anim="pop"] {
+  --_hm-anim: hm-a-pop;
+}
+
+[data-hm-anim="blur-in"] {
+  --_hm-anim: hm-a-blur-in;
+}
+
+[data-hm-anim="flip-x"] {
+  --_hm-anim: hm-a-flip-x;
+}
+
+[data-hm-anim="flip-y"] {
+  --_hm-anim: hm-a-flip-y;
+}
+
+[data-hm-anim="rotate-in"] {
+  --_hm-anim: hm-a-rotate-in;
+}
+
+[data-hm-anim="swing-in"] {
+  --_hm-anim: hm-a-swing-in;
+}
+
+[data-hm-anim="drop"] {
+  --_hm-anim: hm-a-drop;
+}
+
+[data-hm-anim="unfold"] {
+  --_hm-anim: hm-a-unfold;
+}
+
+[data-hm-anim="expand"] {
+  --_hm-anim: hm-a-expand;
+}
+
+[data-hm-anim="wipe-up"] {
+  --_hm-anim: hm-a-wipe-up;
+}
+
+[data-hm-anim="wipe-down"] {
+  --_hm-anim: hm-a-wipe-down;
+}
+
+[data-hm-anim="curtain"] {
+  --_hm-anim: hm-a-curtain;
+}
+
+[data-hm-anim="spring-up"] {
+  --_hm-anim: hm-a-spring-up;
+}
+
+[data-hm-anim="tilt-in"] {
+  --_hm-anim: hm-a-tilt-in;
+}
+
+[data-hm-anim="skew-in"] {
+  --_hm-anim: hm-a-skew-in;
+}
+
+[data-hm-anim="letter-in"] {
+  --_hm-anim: hm-a-letter-in;
+}
+
+[data-hm-anim="pulse"] {
+  --_hm-anim: hm-a-pulse;
+}
+
+[data-hm-anim="heartbeat"] {
+  --_hm-anim: hm-a-heartbeat;
+}
+
+[data-hm-anim="shake"] {
+  --_hm-anim: hm-a-shake;
+}
+
+[data-hm-anim="wiggle"] {
+  --_hm-anim: hm-a-wiggle;
+}
+
+[data-hm-anim="bounce"] {
+  --_hm-anim: hm-a-bounce;
+}
+
+[data-hm-anim="jello"] {
+  --_hm-anim: hm-a-jello;
+}
+
+[data-hm-anim="rubber"] {
+  --_hm-anim: hm-a-rubber;
+}
+
+[data-hm-anim="tada"] {
+  --_hm-anim: hm-a-tada;
+}
+
+[data-hm-anim="flash"] {
+  --_hm-anim: hm-a-flash;
+}
+
+[data-hm-anim="swing"] {
+  --_hm-anim: hm-a-swing;
+}
+
+[data-hm-anim="ping"] {
+  --_hm-anim: hm-a-ping;
+}
+
+[data-hm-anim="blink"] {
+  --_hm-anim: hm-a-blink;
+}
+
+[data-hm-anim="flip-once"] {
+  --_hm-anim: hm-a-flip-once;
+}
+
+[data-hm-anim="hop"] {
+  --_hm-anim: hm-a-hop;
+}
+[data-hm-anim="nudge-right"] {
+  --_hm-anim: hm-a-nudge-right;
+}
+[data-hm-anim="nudge-left"] {
+  --_hm-anim: hm-a-nudge-left;
+}
+[data-hm-anim="nudge-up"] {
+  --_hm-anim: hm-a-nudge-up;
+}
+[data-hm-anim="nudge-down"] {
+  --_hm-anim: hm-a-nudge-down;
+}
+[data-hm-anim="spin-once"] {
+  --_hm-anim: hm-a-spin-once;
+}
+[data-hm-anim="nudge-right"],
+[data-hm-anim="nudge-left"],
+[data-hm-anim="nudge-up"],
+[data-hm-anim="nudge-down"],
+[data-hm-anim="spin-once"] {
+  animation-fill-mode: none;
+  animation-duration: var(--hm-anim-duration, 0.55s);
+  animation-timing-function: var(--hm-anim-easing, ease-in-out);
+}
+[data-hm-anim="spin-once"] {
+  animation-duration: var(--hm-anim-duration, 0.9s);
+}
+
+[data-hm-anim="float"] {
+  --_hm-anim: hm-a-float;
+}
+
+[data-hm-anim="breathe"] {
+  --_hm-anim: hm-a-breathe;
+}
+
+[data-hm-anim="glow-pulse"] {
+  --_hm-anim: hm-a-glow-pulse;
+}
+
+[data-hm-anim="spin"] {
+  --_hm-anim: hm-a-spin;
+}
+
+[data-hm-anim="orbit"] {
+  --_hm-anim: hm-a-orbit;
+}
+
+[data-hm-anim="sway"] {
+  --_hm-anim: hm-a-sway;
+}
+
+[data-hm-anim="shimmer-slide"] {
+  --_hm-anim: hm-a-shimmer-slide;
+}
+
+[data-hm-anim="wave-y"] {
+  --_hm-anim: hm-a-wave-y;
+}
+
+[data-hm-anim="rise-fall"] {
+  --_hm-anim: hm-a-rise-fall;
+}
+
+[data-hm-anim="fade-out"] {
+  --_hm-anim: hm-a-fade-out;
+}
+
+[data-hm-anim="fade-out-up"] {
+  --_hm-anim: hm-a-fade-out-up;
+}
+
+[data-hm-anim="fade-out-down"] {
+  --_hm-anim: hm-a-fade-out-down;
+}
+
+[data-hm-anim="zoom-exit"] {
+  --_hm-anim: hm-a-zoom-exit;
+}
+
+[data-hm-anim="shrink"] {
+  --_hm-anim: hm-a-shrink;
+}
+
+[data-hm-anim="blur-out"] {
+  --_hm-anim: hm-a-blur-out;
+}
+
+[data-hm-anim="fall"] {
+  --_hm-anim: hm-a-fall;
+}
+
+[data-hm-anim="slide-out-left"] {
+  --_hm-anim: hm-a-slide-out-left;
+}
+
+[data-hm-anim="slide-out-right"] {
+  --_hm-anim: hm-a-slide-out-right;
+}
+
+/* triggers: without one the preset plays on mount. hover and focus play while active; view, click and manual play
+   while [data-hm-play] is set (the components do that). [data-hm-pending] hides an entrance until it is time. */
+[data-hm-anim][data-hm-trigger="hover"]:not(:hover),
+[data-hm-anim][data-hm-trigger="focus"]:not(:focus-within),
+[data-hm-anim][data-hm-trigger="view"]:not([data-hm-play]),
+[data-hm-anim][data-hm-trigger="click"]:not([data-hm-play]),
+[data-hm-anim][data-hm-trigger="manual"]:not([data-hm-play]) {
+  animation: none;
+}
+/* group: plays while the nearest button, link or [data-hm-group] is hovered or focused (icons inside buttons) */
+[data-hm-anim][data-hm-trigger="group"] {
+  animation-name: none;
+}
+:where(a, button, [role="button"], [data-hm-group]):is(:hover, :focus-visible) [data-hm-anim][data-hm-trigger="group"] {
+  animation-name: var(--_hm-anim, hm-a-fade-in);
+}
+[data-hm-anim][data-hm-pending] {
+  opacity: 0;
+}
+
+/* an exit leaves the element in its final state (hidden): fill forwards */
+
+[data-hm-anim="fade-out"],
+[data-hm-anim="fade-out-up"],
+[data-hm-anim="fade-out-down"],
+[data-hm-anim="zoom-exit"],
+[data-hm-anim="shrink"],
+[data-hm-anim="blur-out"],
+[data-hm-anim="fall"],
+[data-hm-anim="slide-out-left"],
+[data-hm-anim="slide-out-right"] {
+  animation-fill-mode: forwards;
+  animation-timing-function: var(--hm-anim-easing, var(--hm-ease-out));
+  animation-duration: var(--hm-anim-duration, var(--hm-dur-base));
+}
+
+
+/* keyframes */
+@keyframes hm-a-nudge-right {
+  50% {
+    transform: translateX(0.28em);
+  }
+}
+@keyframes hm-a-nudge-left {
+  50% {
+    transform: translateX(-0.28em);
+  }
+}
+@keyframes hm-a-nudge-up {
+  50% {
+    transform: translateY(-0.28em);
+  }
+}
+@keyframes hm-a-nudge-down {
+  50% {
+    transform: translateY(0.28em);
+  }
+}
+@keyframes hm-a-spin-once {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes hm-a-fade-in {
+  from{opacity:0}
+}
+
+@keyframes hm-a-fade-up {
+  from{opacity:0;transform:translateY(var(--hm-anim-distance, 1.4rem))}
+}
+
+@keyframes hm-a-fade-down {
+  from{opacity:0;transform:translateY(calc(var(--hm-anim-distance, 1.4rem) * -1))}
+}
+
+@keyframes hm-a-fade-left {
+  from{opacity:0;transform:translateX(var(--hm-anim-distance, 1.4rem))}
+}
+
+@keyframes hm-a-fade-right {
+  from{opacity:0;transform:translateX(calc(var(--hm-anim-distance, 1.4rem) * -1))}
+}
+
+@keyframes hm-a-slide-up {
+  from{transform:translateY(100%)}
+}
+
+@keyframes hm-a-slide-down {
+  from{transform:translateY(-100%)}
+}
+
+@keyframes hm-a-slide-left {
+  from{transform:translateX(100%)}
+}
+
+@keyframes hm-a-slide-right {
+  from{transform:translateX(-100%)}
+}
+
+@keyframes hm-a-zoom-in {
+  from{opacity:0;transform:scale(0.6)}
+}
+
+@keyframes hm-a-zoom-out {
+  from{opacity:0;transform:scale(1.4)}
+}
+
+@keyframes hm-a-pop {
+  0%{opacity:0;transform:scale(0.7)}60%{opacity:1;transform:scale(1.06)}100%{transform:scale(1)}
+}
+
+@keyframes hm-a-blur-in {
+  from{opacity:0;filter:blur(14px);transform:scale(1.04)}
+}
+
+@keyframes hm-a-flip-x {
+  from{opacity:0;transform:perspective(600px) rotateX(-80deg)}
+}
+
+@keyframes hm-a-flip-y {
+  from{opacity:0;transform:perspective(600px) rotateY(-80deg)}
+}
+
+@keyframes hm-a-rotate-in {
+  from{opacity:0;transform:rotate(-14deg) scale(0.88)}
+}
+
+@keyframes hm-a-swing-in {
+  from{opacity:0;transform:perspective(600px) rotateX(-70deg) translateY(-0.6rem);transform-origin:top center}
+}
+
+@keyframes hm-a-drop {
+  0%{opacity:0;transform:translateY(-3rem)}55%{opacity:1;transform:translateY(0.4rem)}75%{transform:translateY(-0.5rem)}90%{transform:translateY(0.15rem)}100%{transform:translateY(0)}
+}
+
+@keyframes hm-a-unfold {
+  from{opacity:0;transform:scaleY(0.2);transform-origin:top}
+}
+
+@keyframes hm-a-expand {
+  from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}
+}
+
+@keyframes hm-a-wipe-up {
+  from{clip-path:inset(100% 0 0 0)}to{clip-path:inset(0 0 0 0)}
+}
+
+@keyframes hm-a-wipe-down {
+  from{clip-path:inset(0 0 100% 0)}to{clip-path:inset(0 0 0 0)}
+}
+
+@keyframes hm-a-curtain {
+  from{clip-path:inset(0 50% 0 50%)}to{clip-path:inset(0 0 0 0)}
+}
+
+@keyframes hm-a-spring-up {
+  from{opacity:0;transform:translateY(2.2rem) scale(0.96)}
+}
+
+@keyframes hm-a-tilt-in {
+  from{opacity:0;transform:perspective(700px) rotateX(18deg) rotateY(-14deg) translateY(1rem)}
+}
+
+@keyframes hm-a-skew-in {
+  from{opacity:0;transform:translateX(-2rem) skewX(14deg)}
+}
+
+@keyframes hm-a-letter-in {
+  from{opacity:0;transform:translateY(0.6em);filter:blur(4px)}
+}
+
+@keyframes hm-a-pulse {
+  0%,100%{transform:scale(1)}50%{transform:scale(1.07)}
+}
+
+@keyframes hm-a-heartbeat {
+  0%,100%{transform:scale(1)}14%{transform:scale(1.18)}28%{transform:scale(1)}42%{transform:scale(1.12)}70%{transform:scale(1)}
+}
+
+@keyframes hm-a-shake {
+  0%,100%{transform:translateX(0)}15%{transform:translateX(-7px)}30%{transform:translateX(6px)}45%{transform:translateX(-5px)}60%{transform:translateX(4px)}75%{transform:translateX(-2px)}
+}
+
+@keyframes hm-a-wiggle {
+  0%,100%{transform:rotate(0)}20%{transform:rotate(-8deg)}40%{transform:rotate(7deg)}60%{transform:rotate(-5deg)}80%{transform:rotate(3deg)}
+}
+
+@keyframes hm-a-bounce {
+  0%,100%{transform:translateY(0);animation-timing-function:cubic-bezier(0.3,0,0.8,0.15)}40%{transform:translateY(-28%);animation-timing-function:cubic-bezier(0.2,0.6,0.4,1)}70%{transform:translateY(0)}85%{transform:translateY(-8%)}
+}
+
+@keyframes hm-a-jello {
+  0%,100%{transform:none}30%{transform:scale(1.2,0.8)}40%{transform:scale(0.85,1.15)}50%{transform:scale(1.1,0.92)}65%{transform:scale(0.96,1.04)}75%{transform:scale(1.02,0.99)}
+}
+
+@keyframes hm-a-rubber {
+  0%,100%{transform:scale(1)}30%{transform:scale(1.25,0.75)}40%{transform:scale(0.75,1.25)}50%{transform:scale(1.15,0.85)}65%{transform:scale(0.95,1.05)}75%{transform:scale(1.05,0.95)}
+}
+
+@keyframes hm-a-tada {
+  0%,100%{transform:scale(1) rotate(0)}10%,20%{transform:scale(0.9) rotate(-4deg)}30%,50%,70%,90%{transform:scale(1.12) rotate(4deg)}40%,60%,80%{transform:scale(1.12) rotate(-4deg)}
+}
+
+@keyframes hm-a-flash {
+  0%,50%,100%{opacity:1}25%,75%{opacity:0.15}
+}
+
+@keyframes hm-a-swing {
+  20%{transform:rotate(14deg)}40%{transform:rotate(-10deg)}60%{transform:rotate(6deg)}80%{transform:rotate(-3deg)}100%{transform:rotate(0)}
+}
+
+@keyframes hm-a-ping {
+  0%{transform:scale(1);opacity:0.9}80%,100%{transform:scale(2.2);opacity:0}
+}
+
+@keyframes hm-a-blink {
+  0%,49%{opacity:1}50%,100%{opacity:0}
+}
+
+@keyframes hm-a-flip-once {
+  from{transform:perspective(500px) rotateY(0)}to{transform:perspective(500px) rotateY(360deg)}
+}
+
+@keyframes hm-a-hop {
+  0%,100%{transform:translateY(0) scale(1,1)}20%{transform:translateY(0) scale(1.1,0.9)}50%{transform:translateY(-0.7rem) scale(0.95,1.08)}80%{transform:translateY(0) scale(1.06,0.94)}
+}
+
+@keyframes hm-a-float {
+  0%,100%{transform:translateY(0)}50%{transform:translateY(-0.5rem)}
+}
+
+@keyframes hm-a-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.14);
+    opacity: 0.5;
+  }
+}
+
+@keyframes hm-a-glow-pulse {
+  0%,100%{filter:drop-shadow(0 0 0 hsl(var(--hm-violet)/0))}50%{filter:drop-shadow(0 0 0.7rem hsl(var(--hm-violet)/0.8))}
+}
+
+@keyframes hm-a-spin {
+  to{transform:rotate(360deg)}
+}
+
+@keyframes hm-a-orbit {
+  from{transform:rotate(0) translateX(0.6rem) rotate(0)}to{transform:rotate(360deg) translateX(0.6rem) rotate(-360deg)}
+}
+
+@keyframes hm-a-sway {
+  0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}
+}
+
+@keyframes hm-a-shimmer-slide {
+  to{background-position:-200% 0}
+}
+
+@keyframes hm-a-wave-y {
+  0%,100%{transform:translateY(0)}50%{transform:translateY(-35%)}
+}
+
+@keyframes hm-a-rise-fall {
+  0%{transform:translateY(0);opacity:0}15%{opacity:1}100%{transform:translateY(-1.6rem);opacity:0}
+}
+
+@keyframes hm-a-fade-out {
+  to{opacity:0}
+}
+
+@keyframes hm-a-fade-out-up {
+  to{opacity:0;transform:translateY(calc(var(--hm-anim-distance, 1.4rem) * -1))}
+}
+
+@keyframes hm-a-fade-out-down {
+  to{opacity:0;transform:translateY(var(--hm-anim-distance, 1.4rem))}
+}
+
+@keyframes hm-a-zoom-exit {
+  to{opacity:0;transform:scale(0.6)}
+}
+
+@keyframes hm-a-shrink {
+  to{opacity:0;transform:scale(0.2)}
+}
+
+@keyframes hm-a-blur-out {
+  to{opacity:0;filter:blur(14px);transform:scale(0.96)}
+}
+
+@keyframes hm-a-fall {
+  to{opacity:0;transform:translateY(3rem) rotate(6deg)}
+}
+
+@keyframes hm-a-slide-out-left {
+  to{transform:translateX(-100%)}
+}
+
+@keyframes hm-a-slide-out-right {
+  to{transform:translateX(100%)}
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  [data-hm-anim]:where(:not([data-hm-motion="full"] *, [data-hm-motion="full"])) {
+    animation: none;
+  }
+  [data-hm-anim][data-hm-pending]:where(:not([data-hm-motion="full"] *, [data-hm-motion="full"])) {
+    opacity: 1;
+  }
+}
+[data-hm-motion="reduce"] [data-hm-anim],
+[data-hm-anim][data-hm-motion="reduce"] {
+  animation: none;
+}
+[data-hm-motion="reduce"] [data-hm-anim][data-hm-pending] {
+  opacity: 1;
+}
+
+/* TextReveal: words and letters are inline blocks so transforms apply; spaces stay as text */
+.hm-text-reveal-piece {
+  display: inline-block;
+  white-space: pre;
+}
+
+/* Marquee: two copies of the content slide left by exactly one copy, then loop */
+.hm-marquee {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+.hm-marquee-track {
+  display: flex;
+  inline-size: max-content;
+  animation: hm-marquee var(--hm-marquee-duration, 30s) linear infinite;
+}
+.hm-marquee[data-reverse] .hm-marquee-track {
+  animation-direction: reverse;
+}
+.hm-marquee-group {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--hm-marquee-gap, var(--hm-space-6));
+  padding-inline-end: var(--hm-marquee-gap, var(--hm-space-6));
+}
+.hm-marquee[data-pause]:hover .hm-marquee-track,
+.hm-marquee[data-pause]:focus-within .hm-marquee-track {
+  animation-play-state: paused;
+}
+@keyframes hm-marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hm-marquee-track {
+    animation: none;
+  }
+}
+[data-hm-motion="reduce"] .hm-marquee-track {
+  animation: none;
+}
+
+.hm-countup {
+  font-variant-numeric: tabular-nums;
+}
+.hm-typewriter-caret {
+  display: inline-block;
+  inline-size: 0.09em;
+  block-size: 1.05em;
+  margin-inline-start: 0.12em;
+  vertical-align: text-bottom;
+  background: currentColor;
+  animation: hm-a-blink 1s steps(1) infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hm-typewriter-caret {
+    animation: none;
+  }
+}
+
+/*
+ * Effects: composable utilities for the holographic look. Each class is one effect on its own element, so they stack:
+ * `<div class="hm-glass hm-holo-border hm-glow">`. Everything reads the lighting tokens (`--hm-light`, `--hm-iridescence`,
+ * the glass tokens), so a theme changes them all at once. Strength is tuned with `data-*` attributes, not new CSS.
+ */
+
+/* glass: a translucent fill that blurs what is behind it; a solid fallback without backdrop-filter */
+.hm-glass {
+  background: var(--hm-surface-overlay);
+  border: 1px solid var(--hm-line);
+}
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .hm-glass {
+    background: var(--hm-glass-bg);
+    box-shadow: var(--hm-glass-edge);
+    -webkit-backdrop-filter: blur(var(--hm-glass-blur)) saturate(var(--hm-glass-saturate));
+    backdrop-filter: blur(var(--hm-glass-blur)) saturate(var(--hm-glass-saturate));
+  }
+  .hm-glass[data-glass="thin"] {
+    --hm-glass-blur: 6px;
+  }
+  .hm-glass[data-glass="thick"] {
+    --hm-glass-blur: 36px;
+    --hm-glass-saturate: 1.6;
+  }
+}
+
+/* backdrop blur on its own */
+.hm-blur-sm {
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+.hm-blur-md {
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+}
+.hm-blur-lg {
+  -webkit-backdrop-filter: blur(32px);
+  backdrop-filter: blur(32px);
+}
+
+/* iridescent edge: a 1px gradient ring; the element needs `position: relative` (added here) and a radius */
+.hm-holo-border {
+  position: relative;
+  isolation: isolate;
+}
+.hm-holo-border::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--hm-iridescence);
+  background-size: 200% 100%;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: calc(0.7 * var(--hm-light));
+  pointer-events: none;
+}
+.hm-holo-border[data-animated]::before {
+  animation: hm-holo-pan 8s linear infinite;
+}
+@keyframes hm-holo-pan {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* glow: a soft colored shadow around the element. `data-glow` picks the color */
+.hm-glow {
+  box-shadow: 0 0 calc(2.4rem * var(--hm-light)) -0.6rem hsl(var(--hm-violet) / 0.55);
+}
+.hm-glow[data-glow="accent"] {
+  box-shadow: 0 0 calc(2.4rem * var(--hm-light)) -0.6rem var(--hm-accent);
+}
+.hm-glow[data-glow="cyan"] {
+  box-shadow: 0 0 calc(2.4rem * var(--hm-light)) -0.6rem hsl(var(--hm-cyan) / 0.6);
+}
+.hm-glow[data-glow="magenta"] {
+  box-shadow: 0 0 calc(2.4rem * var(--hm-light)) -0.6rem hsl(var(--hm-magenta) / 0.6);
+}
+.hm-glow[data-glow="strong"] {
+  box-shadow: 0 0 calc(3.6rem * var(--hm-light)) -0.2rem hsl(var(--hm-violet) / 0.7);
+}
+.hm-glow-text {
+  text-shadow: 0 0 calc(1.2rem * var(--hm-light)) hsl(var(--hm-cyan) / 0.5);
+}
+
+/* iridescent text: the gradient is the glyph fill; `data-animated` slides it slowly */
+.hm-iridescent-text {
+  background: linear-gradient(
+    100deg,
+    hsl(var(--hm-cyan)),
+    hsl(var(--hm-violet)) 35%,
+    hsl(var(--hm-magenta)) 65%,
+    hsl(var(--hm-cyan))
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+.hm-iridescent-text[data-animated] {
+  animation: hm-holo-pan 6s linear infinite;
+}
+
+/* grain: a faint film texture over the element (an inline SVG noise; no image request) */
+.hm-grain {
+  position: relative;
+  isolation: isolate;
+}
+.hm-grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.07;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+.hm-grain[data-grain="strong"]::after {
+  opacity: 0.14;
+}
+
+/* shine: a bright band sweeps across on hover */
+.hm-shine {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.hm-shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(105deg, transparent 35%, rgb(255 255 255 / calc(0.14 * var(--hm-light))) 50%, transparent 65%);
+  translate: -120% 0;
+  transition: translate var(--hm-dur-scene) var(--hm-ease-glide);
+  pointer-events: none;
+}
+.hm-shine:hover::after,
+.hm-shine:focus-visible::after {
+  translate: 120% 0;
+}
+
+/* edge fades: mask the ends of a scrolling or overflowing box */
+.hm-fade-y {
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 1.5rem, #000 calc(100% - 1.5rem), transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 1.5rem, #000 calc(100% - 1.5rem), transparent);
+}
+.hm-fade-x {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 1.5rem, #000 calc(100% - 1.5rem), transparent);
+  mask-image: linear-gradient(to right, transparent, #000 1.5rem, #000 calc(100% - 1.5rem), transparent);
+}
+
+/* decorative backgrounds and dividers */
+.hm-dot-grid {
+  background-image: radial-gradient(rgb(var(--hm-star) / 0.22) 1px, transparent 1px);
+  background-size: 1.4rem 1.4rem;
+}
+.hm-line-grid {
+  background-image:
+    linear-gradient(var(--hm-line) 1px, transparent 1px), linear-gradient(90deg, var(--hm-line) 1px, transparent 1px);
+  background-size: 2.4rem 2.4rem;
+}
+.hm-vignette {
+  background: radial-gradient(ellipse at center, transparent 55%, rgb(0 0 0 / 0.45));
+}
+.hm-divider-glow {
+  block-size: 1px;
+  border: 0;
+  background: linear-gradient(90deg, transparent, hsl(var(--hm-cyan) / 0.5), hsl(var(--hm-violet) / 0.5), transparent);
+  opacity: var(--hm-light);
+}
+.hm-gradient-wash {
+  background:
+    radial-gradient(60% 80% at 15% 0%, hsl(var(--hm-violet) / calc(0.18 * var(--hm-light))), transparent 70%),
+    radial-gradient(50% 70% at 90% 100%, hsl(var(--hm-cyan) / calc(0.14 * var(--hm-light))), transparent 70%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hm-holo-border[data-animated]::before,
+  .hm-iridescent-text[data-animated] {
+    animation: none;
+  }
+  .hm-shine::after {
+    transition: none;
+  }
+}
+[data-hm-motion="reduce"] .hm-holo-border[data-animated]::before,
+[data-hm-motion="reduce"] .hm-iridescent-text[data-animated] {
+  animation: none;
+}
+
+/*
+ * Surfaces. One element, one implementation; `data-variant` picks the material:
+ *   section   flat: no fill, a hairline on top and room (the default studio section)
+ *   outlined  a hairline box (pricing, quick actions)
+ *   elevated  a near-black fill and hairline (menus, popovers, dialogs)
+ *   glass     translucent with backdrop blur; solid fallback without backdrop-filter
+ *   holo      glass plus a thin iridescent edge and pointer light; reserve for one or two focal elements per view
+ * Orthogonal attributes: `data-interactive` (hover lift), `data-lit` (pointer light on any variant), `data-selected`.
+ */
+.hm-surface {
+  position: relative;
+  display: block;
+  border-radius: var(--hm-radius-lg);
+  color: inherit;
+  text-decoration: none;
+  isolation: isolate;
+}
+.hm-surface[data-padding="none"] {
+  padding: 0;
+}
+.hm-surface[data-padding="sm"] {
+  padding: var(--hm-space-3) var(--hm-space-4);
+}
+.hm-surface[data-padding="md"] {
+  padding: var(--hm-space-4) var(--hm-space-5);
+}
+.hm-surface[data-padding="lg"] {
+  padding: var(--hm-space-6);
+}
+
+.hm-surface[data-variant="section"] {
+  border-radius: 0;
+  border-top: 1px solid var(--hm-line);
+  padding-inline: 0;
+  padding-bottom: 0;
+}
+.hm-surface[data-variant="section"][data-padding] {
+  padding-top: var(--hm-space-5);
+}
+
+.hm-surface[data-variant="outlined"] {
+  border: 1px solid var(--hm-line);
+}
+
+.hm-surface[data-variant="elevated"] {
+  background: var(--hm-surface-overlay);
+  border: 1px solid var(--hm-line-overlay);
+  box-shadow: var(--hm-glass-edge), var(--hm-shadow-md);
+}
+
+.hm-surface[data-variant="glass"],
+.hm-surface[data-variant="holo"] {
+  background: var(--hm-surface-overlay);
+  border: 1px solid var(--hm-line);
+}
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .hm-surface[data-variant="glass"],
+  .hm-surface[data-variant="holo"] {
+    background: var(--hm-glass-bg);
+    box-shadow: var(--hm-glass-edge);
+    -webkit-backdrop-filter: blur(var(--hm-glass-blur)) saturate(var(--hm-glass-saturate));
+    backdrop-filter: blur(var(--hm-glass-blur)) saturate(var(--hm-glass-saturate));
+  }
+}
+
+/* the iridescent edge: a 1px gradient ring cut out with a mask; static, low opacity, brighter under the pointer */
+.hm-surface[data-variant="holo"] {
+  border-color: transparent;
+}
+.hm-surface[data-variant="holo"]::before,
+.hm-surface[data-selected]::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--hm-iridescence);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: calc(0.6 * var(--hm-light));
+  transition: opacity var(--hm-dur-slow) var(--hm-ease-glide);
+  pointer-events: none;
+}
+.hm-surface[data-variant="holo"]:hover::before,
+.hm-surface[data-variant="holo"]:focus-within::before,
+.hm-surface[data-selected]::before {
+  opacity: calc(0.95 * var(--hm-light));
+}
+
+/* pointer light: a soft radial wash at --hm-px/--hm-py, written by LightField (no JS: centered top, still subtle).
+   The light's variables do not inherit, so a pointer frame restyles the lit surface and its glow, never the content
+   inside it; the glow takes them from its surface explicitly. */
+@property --hm-px {
+  syntax: "*";
+  inherits: false;
+}
+@property --hm-py {
+  syntax: "*";
+  inherits: false;
+}
+@property --hm-rx {
+  syntax: "*";
+  inherits: false;
+}
+@property --hm-ry {
+  syntax: "*";
+  inherits: false;
+}
+.hm-surface[data-variant="holo"]::after,
+.hm-surface[data-lit]::after {
+  --hm-px: inherit;
+  --hm-py: inherit;
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(
+    18rem circle at var(--hm-px, 50%) var(--hm-py, 0%),
+    hsl(var(--hm-cyan) / calc(0.1 * var(--hm-light))),
+    hsl(var(--hm-violet) / calc(0.06 * var(--hm-light))) 40%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity var(--hm-dur-base) var(--hm-ease-out);
+  pointer-events: none;
+}
+.hm-surface[data-variant="holo"]:hover::after,
+.hm-surface[data-lit]:hover::after,
+.hm-surface[data-lit]:focus-within::after {
+  opacity: 1;
+}
+
+/* interactive: a quiet lift (border brightens, fill appears, 2px rise) */
+.hm-surface[data-interactive] {
+  cursor: pointer;
+  transition:
+    border-color var(--hm-dur-base) var(--hm-ease-out),
+    background-color var(--hm-dur-base) var(--hm-ease-out),
+    transform var(--hm-dur-base) var(--hm-ease-glide);
+}
+.hm-surface[data-interactive]:hover,
+.hm-surface[data-interactive]:focus-visible {
+  border-color: var(--hm-line-hover);
+  transform: translateY(-2px);
+}
+.hm-surface[data-interactive]:not([data-variant="glass"], [data-variant="holo"]):hover,
+.hm-surface[data-interactive]:not([data-variant="glass"], [data-variant="holo"]):focus-visible {
+  background-color: var(--hm-surface-raised);
+}
+.hm-surface[data-interactive]:active {
+  transform: translateY(0);
+}
+.hm-surface[data-selected]:not([data-variant="holo"]) {
+  border-color: transparent;
+}
+
+/* optional perspective: LightField writes --hm-rx/--hm-ry when tilt is on */
+.hm-surface[data-tilt] {
+  transform: perspective(900px) rotateX(var(--hm-rx, 0deg)) rotateY(var(--hm-ry, 0deg));
+  transition: transform var(--hm-dur-slow) var(--hm-ease-glide);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hm-surface[data-interactive]:hover,
+  .hm-surface[data-interactive]:focus-visible,
+  .hm-surface[data-tilt] {
+    transform: none;
+  }
+}
+[data-hm-motion="reduce"] .hm-surface[data-interactive]:hover,
+[data-hm-motion="reduce"] .hm-surface[data-interactive]:focus-visible,
+[data-hm-motion="reduce"] .hm-surface[data-tilt] {
+  transform: none;
+}
+
+/*
+ * Atmosphere: an optional page backdrop, built like a night sky rather than a scatter of blobs.
+ *   composition  a nebula on the top-left to bottom-right diagonal (violet, then cyan), a faint horizon glow, and a
+ *                calm center: the stars fade out behind the content column.
+ *   motion       the nebula drifts over two minutes, the stars twinkle over half a minute, and each layer shifts a few
+ *                pixels against the pointer by its depth (--hm-mx/--hm-my come from LightField). Transforms only.
+ *   restraint    color sits at a few percent so glass has something to refract; --hm-light scales all of it.
+ */
+.hm-atmosphere {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background: radial-gradient(90% 55% at 50% 118%, hsl(var(--hm-blue) / calc(0.07 * var(--hm-light) * var(--hm-nebula))), transparent 70%);
+  --_px: calc(var(--hm-mx, 50vw) - 50vw);
+  --_py: calc(var(--hm-my, 50vh) - 50vh);
+}
+.hm-sky-nebula,
+.hm-sky-stars {
+  position: absolute;
+  inset: -12%;
+  will-change: transform, translate;
+  transition: translate 1.8s var(--hm-ease-out);
+}
+.hm-sky-nebula {
+  background:
+    radial-gradient(42% 38% at 20% 22%, hsl(var(--hm-violet) / calc(0.15 * var(--hm-light) * var(--hm-nebula))), transparent 72%),
+    radial-gradient(38% 34% at 80% 76%, hsl(var(--hm-cyan) / calc(0.1 * var(--hm-light) * var(--hm-nebula))), transparent 72%),
+    radial-gradient(26% 24% at 74% 18%, hsl(var(--hm-magenta) / calc(0.05 * var(--hm-light) * var(--hm-nebula))), transparent 72%),
+    radial-gradient(30% 26% at 28% 84%, hsl(var(--hm-blue) / calc(0.06 * var(--hm-light) * var(--hm-nebula))), transparent 72%);
+  translate: calc(var(--_px) * -0.012) calc(var(--_py) * -0.012);
+  animation: hm-sky-drift 120s ease-in-out infinite alternate;
+}
+.hm-sky-stars {
+  --_star: rgb(var(--hm-star) / calc(0.55 * var(--hm-light)));
+  --_dim: rgb(var(--hm-star) / calc(0.28 * var(--hm-light)));
+  /* quiet behind the content column, fuller toward the edges */
+  -webkit-mask-image: radial-gradient(ellipse 70% 65% at 55% 48%, transparent 0 18%, #000 88%);
+  mask-image: radial-gradient(ellipse 70% 65% at 55% 48%, transparent 0 18%, #000 88%);
+}
+.hm-sky-stars[data-depth="far"] {
+  background-image:
+    radial-gradient(1px 1px at 23px 41px, var(--_dim), transparent),
+    radial-gradient(1px 1px at 97px 163px, var(--_dim), transparent),
+    radial-gradient(1px 1px at 171px 22px, var(--_dim), transparent),
+    radial-gradient(1px 1px at 59px 117px, var(--_dim), transparent),
+    radial-gradient(1px 1px at 131px 89px, var(--_dim), transparent),
+    radial-gradient(1px 1px at 19px 183px, var(--_dim), transparent);
+  background-size: 211px 197px, 263px 241px, 317px 283px, 197px 229px, 349px 307px, 281px 263px;
+  translate: calc(var(--_px) * -0.006) calc(var(--_py) * -0.006);
+  animation: hm-sky-float 180s ease-in-out infinite alternate;
+}
+.hm-sky-stars[data-depth="near"] {
+  background-image:
+    radial-gradient(1.5px 1.5px at 61px 77px, var(--_star), transparent),
+    radial-gradient(1.5px 1.5px at 233px 151px, var(--_star), transparent),
+    radial-gradient(2px 2px at 137px 301px, var(--_star), transparent),
+    radial-gradient(1.5px 1.5px at 349px 47px, var(--_star), transparent);
+  background-size: 419px 389px, 487px 443px, 541px 503px, 607px 571px;
+  translate: calc(var(--_px) * -0.02) calc(var(--_py) * -0.02);
+  animation: hm-sky-twinkle 32s ease-in-out infinite alternate;
+}
+.hm-atmosphere::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    24rem circle at var(--hm-mx, 30vw) var(--hm-my, 30vh),
+    hsl(var(--hm-violet) / calc(0.07 * var(--hm-light))),
+    hsl(var(--hm-cyan) / calc(0.03 * var(--hm-light))) 45%,
+    transparent 70%
+  );
+}
+/* the theme can quiet the backdrop (data-hm-atmosphere): calm keeps a third of the color and holds still; off removes it */
+[data-hm-atmosphere="calm"] .hm-atmosphere {
+  --hm-nebula: 0.4;
+}
+[data-hm-atmosphere="calm"] .hm-sky-nebula,
+[data-hm-atmosphere="calm"] .hm-sky-stars {
+  animation: none;
+}
+[data-hm-atmosphere="calm"] .hm-sky-stars {
+  opacity: 0.55;
+}
+[data-hm-atmosphere="off"] .hm-atmosphere {
+  display: none;
+}
+@keyframes hm-sky-drift {
+  from {
+    transform: translate3d(-2%, -1.5%, 0) rotate(-2deg) scale(1);
+  }
+  to {
+    transform: translate3d(2%, 2%, 0) rotate(2deg) scale(1.08);
+  }
+}
+@keyframes hm-sky-float {
+  from {
+    transform: translate3d(-12px, -8px, 0);
+  }
+  to {
+    transform: translate3d(12px, 8px, 0);
+  }
+}
+@keyframes hm-sky-twinkle {
+  from {
+    opacity: 0.45;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hm-sky-nebula,
+  .hm-sky-stars,
+  .hm-sky-stars[data-depth] {
+    animation: none;
+    translate: none;
+    transition: none;
+  }
+}
+[data-hm-motion="reduce"] .hm-sky-nebula,
+[data-hm-motion="reduce"] .hm-sky-stars,
+[data-hm-motion="reduce"] .hm-sky-stars[data-depth] {
+  animation: none;
+  translate: none;
+  transition: none;
+}
+
+/* Surface treatment set by a theme (`data-hm-surface`): matte drops translucency and iridescence, glass drops iridescence */
+[data-hm-surface="matte"] .hm-surface:is([data-variant="glass"], [data-variant="holo"]) {
+  background: var(--hm-surface-overlay);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow: none;
+  border-color: var(--hm-line-overlay);
+}
+[data-hm-surface="matte"] .hm-surface::before,
+[data-hm-surface="glass"] .hm-surface::before {
+  display: none;
+}
+[data-hm-surface="matte"] .hm-surface[data-selected],
+[data-hm-surface="glass"] .hm-surface[data-selected] {
+  border-color: var(--hm-line-focus);
+}
+[data-hm-surface="matte"] .hm-atmosphere {
+  display: none;
+}
+
+/* App shell: the stage clears the sidebar; the toolbar floats top-right. */
+.hm-shell {
+  position: relative;
+  min-height: 100dvh;
+  isolation: isolate;
+}
+.hm-shell-stage {
+  position: relative;
+  padding-left: var(--hm-sidebar);
+}
+.hm-shell[data-sidebar="right"] > .hm-shell-stage {
+  padding-left: 0;
+  padding-right: var(--hm-sidebar);
+}
+.hm-shell[data-sidebar="right"] > .hm-shell-toolbar {
+  right: auto;
+  left: clamp(1rem, 2.6vw, 2.4rem);
+}
+.hm-shell-stage:focus {
+  outline: none;
+}
+.hm-shell-toolbar {
+  position: fixed;
+  z-index: var(--hm-z-toolbar);
+  top: var(--hm-space-4);
+  right: clamp(1rem, 2.6vw, 2.4rem);
+  display: flex;
+  gap: var(--hm-space-2);
+  align-items: center;
+}
+.hm-page {
+  width: min(100% - 2 * var(--hm-gutter), var(--hm-content));
+  margin-inline: auto;
+  padding-block: 2.6rem 6rem;
+}
+.hm-page[data-width="wide"] {
+  --hm-content: 80rem;
+}
+
+@media (max-width: 860px) {
+  .hm-shell-stage,
+  .hm-shell[data-sidebar="right"] > .hm-shell-stage {
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 3.2rem;
+  }
+  .hm-shell[data-sidebar="right"] > .hm-shell-toolbar {
+    left: auto;
+    right: clamp(1rem, 2.6vw, 2.4rem);
+  }
+  .hm-shell-toolbar {
+    top: auto;
+    bottom: var(--hm-space-4);
+  }
+}
+
+/* arrival: a black curtain lifts, the dock slides in, the page rises (once, on mount) */
+@media (prefers-reduced-motion: no-preference) {
+  .hm-shell[data-entrance="curtain"]::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: var(--hm-bg);
+    pointer-events: none;
+    animation: hm-curtain 1s var(--hm-ease-curtain) 0.1s forwards;
+  }
+  .hm-shell[data-entrance] > .hm-dock {
+    animation: hm-slide-in-start var(--hm-dur-scene) var(--hm-ease-glide) 0.35s both;
+  }
+  .hm-shell[data-entrance] > .hm-shell-toolbar {
+    animation: hm-fade-in var(--hm-dur-slow) var(--hm-ease-out) 0.7s both;
+  }
+  .hm-shell[data-entrance] > .hm-shell-stage {
+    animation: hm-rise-lg var(--hm-dur-scene) var(--hm-ease-glide) 0.3s both;
+  }
+}
+[data-hm-motion="reduce"] .hm-shell[data-entrance]::after {
+  display: none;
+}
+[data-hm-motion="reduce"] .hm-shell[data-entrance] > * {
+  animation: none;
+}
+@keyframes hm-curtain {
+  to {
+    transform: translateY(-101%);
+    visibility: hidden;
+  }
+}
+
+/*
+ * Dock. Each entry reads --hm-k (0..1, written by the proximity engine; before hydration the CSS resting value applies):
+ * scale 0.8 -> 1.5, a 10px nudge right, and gray -> white. Font weight never changes (a weight change re-flows the
+ * glyphs and makes the hit area jitter). The <li> keeps a fixed height so the scaled link never shifts its neighbors.
+ */
+.hm-dock {
+  --hm-dock-indicator: var(--hm-fg);
+  pointer-events: none; /* the empty dock area lets clicks through; entries opt back in */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: var(--hm-sidebar-pad);
+  width: var(--hm-sidebar);
+  font-family: var(--hm-font-sans);
+}
+.hm-dock[data-placement="fixed"] {
+  position: fixed;
+  z-index: var(--hm-z-sidebar);
+  inset: 0 auto 0 0;
+}
+.hm-dock[data-placement="inline"] {
+  position: relative;
+  min-height: 100%;
+}
+/* a dock on the right edge: the same design mirrored */
+.hm-dock[data-side="right"] {
+  padding-left: 0;
+  padding-right: var(--hm-sidebar-pad);
+  align-items: flex-end;
+}
+.hm-dock[data-side="right"][data-placement="fixed"] {
+  inset: 0 0 0 auto;
+}
+.hm-dock[data-side="right"] .hm-dock-brand {
+  left: auto;
+  right: var(--hm-sidebar-pad);
+}
+.hm-dock[data-side="right"] .hm-dock-list {
+  justify-items: end;
+}
+.hm-dock[data-side="right"] .hm-dock-entry {
+  align-items: flex-end;
+}
+.hm-dock[data-side="right"] .hm-dock-item {
+  transform-origin: right center;
+  transform: translateX(calc(var(--_k) * -10px)) scale(calc(0.8 + var(--_k) * 0.7));
+  text-align: right;
+}
+.hm-dock[data-side="right"] .hm-dock-item[aria-current="page"]::before {
+  left: auto;
+  right: -0.9rem;
+}
+.hm-dock[data-side="right"] .hm-dock-sub {
+  margin: 0.25rem 0.1rem 0.6rem 0;
+  padding: 0 0.85rem 0 0;
+  border-left: 0;
+  border-right: 1px solid var(--hm-line);
+  text-align: right;
+}
+.hm-dock[data-side="right"] .hm-dock-sub-item:hover,
+.hm-dock[data-side="right"] .hm-dock-sub-item:focus-visible {
+  transform: translateX(-3px);
+}
+.hm-dock-brand {
+  pointer-events: auto;
+  position: absolute;
+  top: 1.5rem;
+  left: var(--hm-sidebar-pad);
+}
+.hm-dock-brand-link {
+  font-size: var(--hm-text-2xs);
+  letter-spacing: var(--hm-tracking-brand);
+  text-transform: uppercase;
+  color: var(--hm-dim);
+  text-decoration: none;
+  transition: color var(--hm-dur-fast) var(--hm-ease-out);
+}
+.hm-dock-brand-link:hover {
+  color: var(--hm-fg);
+}
+.hm-dock-list,
+.hm-dock-sub {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.hm-dock-list {
+  display: grid;
+}
+.hm-dock-entry {
+  min-height: clamp(2.6rem, 6.4vh, 3.4rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.hm-dock-item {
+  --hm-k-rest: 0.2;
+  --_k: var(--hm-k, var(--hm-k-rest));
+  pointer-events: auto;
+  position: relative;
+  display: block;
+  width: max-content;
+  font-size: var(--hm-text-base);
+  font-weight: var(--hm-weight-medium);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  text-decoration: none;
+  transform-origin: left center;
+  transform: translateX(calc(var(--_k) * 10px)) scale(calc(0.8 + var(--_k) * 0.7));
+  color: var(--hm-dim);
+  color: color-mix(in oklab, var(--hm-fg) calc(var(--_k) * 100%), var(--hm-dim));
+  will-change: transform;
+  backface-visibility: hidden;
+  outline-offset: 6px;
+}
+.hm-dock-item[aria-current="page"] {
+  --hm-k-rest: 1;
+}
+/* the active page: a small dot in the margin, so "current" never depends on size or color alone */
+.hm-dock-item[aria-current="page"]::before {
+  animation: hm-dock-dot var(--hm-dur-slow) var(--hm-ease-spring) both;
+  content: "";
+  position: absolute;
+  left: -0.9rem;
+  top: 50%;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--hm-dock-indicator);
+  translate: 0 -50%;
+}
+.hm-dock-item:focus-visible,
+.hm-dock-sub-item:focus-visible {
+  outline: var(--hm-focus-width) solid var(--hm-focus-color);
+  border-radius: 4px;
+}
+
+.hm-dock-sub {
+  animation: hm-rise var(--hm-dur-slow) var(--hm-ease-glide) both;
+  display: grid;
+  gap: 0.15rem;
+  margin: 0.25rem 0 0.6rem 0.1rem;
+  padding-left: 0.85rem;
+  border-left: 1px solid var(--hm-line);
+}
+.hm-dock-sub-item:nth-child(2) {
+  animation-delay: calc(var(--hm-stagger) * 1);
+}
+.hm-dock-sub-item:nth-child(3) {
+  animation-delay: calc(var(--hm-stagger) * 2);
+}
+.hm-dock-sub-item:nth-child(n + 4) {
+  animation-delay: calc(var(--hm-stagger) * 3);
+}
+.hm-dock-sub-item {
+  animation: hm-slide-in-start var(--hm-dur-slow) var(--hm-ease-glide) both;
+  pointer-events: auto;
+  display: block;
+  padding: 0.12rem 0;
+  font-size: 0.8rem;
+  color: var(--hm-dim);
+  text-decoration: none;
+  transition:
+    color var(--hm-dur-fast) var(--hm-ease-out),
+    transform var(--hm-dur-base) var(--hm-ease-glide);
+}
+.hm-dock-sub-item:hover,
+.hm-dock-sub-item:focus-visible {
+  color: var(--hm-fg);
+  transform: translateX(3px);
+}
+.hm-dock-sub-item[aria-current="page"] {
+  color: var(--hm-fg);
+}
+
+/* touch-only devices: no magnification, a readable resting size */
+@media (hover: none) {
+  .hm-dock-item {
+    --hm-k-rest: 0.45;
+  }
+  .hm-dock-item[aria-current="page"] {
+    --hm-k-rest: 1;
+  }
+}
+
+/* small screens: a conventional top strip */
+@media (max-width: 860px) {
+  .hm-dock[data-placement="fixed"] {
+    inset: 0 0 auto 0;
+    width: auto;
+    height: 3.2rem;
+  }
+  .hm-dock {
+    width: auto;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start; /* centered overflow would push the first entries out of reach */
+    padding: 0 var(--hm-space-4);
+    overflow-x: auto;
+    scrollbar-width: none;
+    background: var(--hm-bg);
+    border-bottom: 1px solid var(--hm-line);
+    pointer-events: auto;
+  }
+  .hm-dock-brand,
+  .hm-dock-sub {
+    display: none;
+  }
+  .hm-dock-list {
+    display: flex;
+    gap: 1.4rem;
+  }
+  .hm-dock-entry {
+    min-height: 0;
+  }
+  .hm-dock-item {
+    transform: none;
+    font-size: 0.9rem;
+    min-height: var(--hm-target);
+    display: inline-flex;
+    align-items: center;
+    color: var(--hm-muted);
+  }
+  .hm-dock-item[aria-current="page"] {
+    color: var(--hm-fg);
+  }
+  .hm-dock-item[aria-current="page"]::before {
+    left: 50%;
+    top: auto;
+    bottom: 0.35rem;
+    translate: -50% 0;
+  }
+}
+
+@media (forced-colors: active) {
+  .hm-dock-item {
+    transform: none;
+    color: LinkText;
+  }
+  .hm-dock-item[aria-current="page"]::before {
+    background: CanvasText;
+  }
+}
+
+@keyframes hm-dock-dot {
+  from {
+    scale: 0;
+    opacity: 0;
+  }
+}
+
+.hm-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--hm-space-4);
+  margin-bottom: var(--hm-space-4);
+}
+.hm-card-header :where(a, p) {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--hm-muted);
+  text-decoration: none;
+  font-variant-numeric: tabular-nums;
+}
+.hm-card-header a:hover {
+  color: var(--hm-fg);
+}
+.hm-card-title {
+  margin: 0;
+  font-size: var(--hm-text-base);
+  font-weight: var(--hm-weight-medium);
+  letter-spacing: 0;
+  color: var(--hm-fg);
+}
+.hm-card > .hm-card-title:first-child {
+  margin-bottom: var(--hm-space-4);
+}
+.hm-card-description {
+  margin-top: 0.3rem;
+  font-size: var(--hm-text-sm);
+  color: var(--hm-muted);
+  max-width: 52ch;
+}
+.hm-card-header .hm-card-description {
+  margin-top: 0.2rem;
+}
+.hm-card-content {
+  display: grid;
+  gap: var(--hm-space-3);
+}
+.hm-card-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--hm-space-2);
+  align-items: center;
+  margin-top: var(--hm-space-5);
+}
+
+/* grid of cards/sections: wide gutters, sections stack with room */
+.hm-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--hm-grid-min, 24rem)), 1fr));
+  gap: var(--hm-grid-gap, 2.4rem 3rem);
+  align-items: start;
+}
+.hm-stack {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr); /* wide children (code, tables) scroll instead of widening the stack */
+  gap: var(--hm-stack-gap, var(--hm-space-7));
+  align-content: start;
+}
+.hm-cluster {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--hm-cluster-gap, var(--hm-space-2));
+  align-items: center;
+}
+
+.hm-icon {
+  flex: none;
+  vertical-align: -0.125em;
+}
+.hm-icon-spin {
+  animation: hm-spin 1s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hm-icon-spin {
+    animation-duration: 3s;
+  }
+}
+
+/* sun to moon: the rays fold away while a second disc slides over the sun and carves a crescent */
+.hm-sunmoon-disc {
+  transition:
+    transform var(--hm-dur-slow) var(--hm-ease-spring-soft),
+    r var(--hm-dur-slow) var(--hm-ease-spring-soft);
+  transform-origin: 12px 12px;
+}
+.hm-sunmoon-bite {
+  transform: translate(7px, -6px);
+  transition: transform var(--hm-dur-slow) var(--hm-ease-spring-soft);
+}
+.hm-sunmoon-rays {
+  transform-origin: 12px 12px;
+  transition: transform var(--hm-dur-slow) var(--hm-ease-spring-soft);
+}
+.hm-sunmoon[data-moon] .hm-sunmoon-bite {
+  transform: translate(0, 0);
+}
+.hm-sunmoon[data-moon] .hm-sunmoon-rays {
+  transform: rotate(60deg) scale(0);
+}
+
+/* dawn: the sun sinks behind a rising horizon, so only its upper half and the upper rays show. Every change is a
+   change of shape or position (no fades): rays retract into the sun, the horizon grows out of a point. */
+.hm-sunmoon-body {
+  transition: transform var(--hm-dur-slow) var(--hm-ease-spring-soft);
+}
+.hm-sunmoon-sea {
+  transform: translateY(10px);
+  transition: transform var(--hm-dur-slow) var(--hm-ease-spring-soft);
+}
+.hm-sunmoon-horizon {
+  transform-origin: 12px 18.5px;
+  transform: scale(0);
+  transition: transform var(--hm-dur-slow) var(--hm-ease-spring-soft);
+}
+.hm-sunmoon-rays path {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform var(--hm-dur-slow) var(--hm-ease-spring-soft);
+}
+.hm-sunmoon[data-mode="dawn"] .hm-sunmoon-body {
+  transform: translateY(2.5px);
+}
+.hm-sunmoon[data-mode="dawn"] .hm-sunmoon-sea {
+  transform: translateY(0);
+}
+.hm-sunmoon[data-mode="dawn"] .hm-sunmoon-horizon {
+  transform: scale(1);
+}
+.hm-sunmoon[data-mode="dawn"] .hm-sunmoon-rays path:nth-child(2),
+.hm-sunmoon[data-mode="dawn"] .hm-sunmoon-rays path:nth-child(6),
+.hm-sunmoon[data-mode="dawn"] .hm-sunmoon-rays path:nth-child(8) {
+  transform: scale(0);
+}
+
+/*
+ * Animated state icons (icons/animated-states.tsx). State lives in data attributes; every move is a transform or a
+ * stroke draw. They share the spring easing, and rest at their end state under reduced motion.
+ */
+.hm-ai * {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.hm-ai [class^="hm-ai-"],
+.hm-ai [class*=" hm-ai-"] {
+  transition:
+    transform var(--hm-dur-slow) var(--hm-ease-spring-soft),
+    stroke-dashoffset var(--hm-dur-slow) var(--hm-ease-glide),
+    opacity var(--hm-dur-base) var(--hm-ease-out),
+    d var(--hm-dur-slow) var(--hm-ease-spring-soft);
+}
+
+/* menu to cross */
+.hm-ai-menu[data-open] .hm-ai-top {
+  transform: translateY(5px) rotate(45deg);
+}
+.hm-ai-menu[data-open] .hm-ai-bot {
+  transform: translateY(-5px) rotate(-45deg);
+}
+.hm-ai-menu[data-open] .hm-ai-mid {
+  transform: scaleX(0);
+}
+/* plus to cross */
+.hm-ai-plus .hm-ai-turn {
+  transform-origin: 12px 12px;
+  transform-box: view-box;
+}
+.hm-ai-plus[data-open] .hm-ai-turn {
+  transform: rotate(135deg);
+}
+/* chevron */
+.hm-ai-chevron .hm-ai-turn {
+  transform-origin: 12px 12px;
+  transform-box: view-box;
+}
+.hm-ai-chevron[data-direction="right"] .hm-ai-turn {
+  transform: rotate(-90deg);
+}
+.hm-ai-chevron[data-open] .hm-ai-turn {
+  transform: rotate(180deg);
+}
+.hm-ai-chevron[data-direction="right"][data-open] .hm-ai-turn {
+  transform: rotate(0);
+}
+/* play to pause: the two shapes morph (path data transitions; browsers without it switch at once) */
+.hm-ai-playpause .hm-ai-l,
+.hm-ai-playpause .hm-ai-r {
+  stroke-width: 1.4;
+}
+.hm-ai-playpause[data-playing] .hm-ai-l {
+  d: path("M7.500 5.500L10.500 5.500L10.500 18.500L7.500 18.500Z");
+}
+.hm-ai-playpause[data-playing] .hm-ai-r {
+  d: path("M13.500 5.500L16.500 5.500L16.500 18.500L13.500 18.500Z");
+}
+/* drawn marks: success and error */
+.hm-ai-draw .hm-ai-ring,
+.hm-ai-draw .hm-ai-mark,
+.hm-ai-copy .hm-ai-mark,
+.hm-ai-volume .hm-ai-cross,
+.hm-ai-eye .hm-ai-slash {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+.hm-ai-draw[data-active] .hm-ai-ring {
+  animation: hm-ai-draw 0.55s var(--hm-ease-glide) both;
+}
+.hm-ai-draw[data-active] .hm-ai-mark {
+  animation: hm-ai-draw 0.4s var(--hm-ease-glide) 0.4s both;
+}
+.hm-ai-draw[data-active] .hm-ai-mark-2 {
+  animation-delay: 0.52s;
+}
+.hm-ai-draw[data-shake][data-active] {
+  animation: hm-a-shake 0.45s ease-in-out 0.9s both;
+}
+@keyframes hm-ai-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+/* like and star: the fill grows from the center with a spring, and the whole icon pops */
+.hm-ai-like .hm-ai-fill {
+  transform: scale(0);
+  opacity: 0;
+}
+.hm-ai-like[data-active] .hm-ai-fill {
+  transform: scale(1);
+  opacity: 1;
+}
+.hm-ai-like[data-active] {
+  animation: hm-a-pop 0.5s var(--hm-ease-spring-soft) both;
+}
+/* bell */
+.hm-ai-bell .hm-ai-swing {
+  transform-origin: 12px 4px;
+  transform-box: view-box;
+}
+.hm-ai-bell[data-ringing] .hm-ai-swing {
+  animation: hm-a-swing 0.9s ease-in-out infinite;
+}
+/* copy to check */
+.hm-ai-copy[data-active] .hm-ai-sheets {
+  transform: scale(0.4);
+  opacity: 0;
+}
+.hm-ai-copy[data-active] .hm-ai-mark {
+  stroke-dashoffset: 0;
+  transition-delay: 0.12s;
+}
+/* volume */
+.hm-ai-volume[data-level="0"] .hm-ai-wave-1,
+.hm-ai-volume[data-level="0"] .hm-ai-wave-2,
+.hm-ai-volume[data-level="1"] .hm-ai-wave-2,
+.hm-ai-volume[data-muted] .hm-ai-wave {
+  opacity: 0;
+  transform: scale(0.6);
+}
+.hm-ai-volume[data-muted] .hm-ai-cross {
+  stroke-dashoffset: 0;
+}
+.hm-ai-volume[data-muted] .hm-ai-cross-2 {
+  transition-delay: 0.08s;
+}
+/* eye */
+.hm-ai-eye[data-hidden] .hm-ai-slash {
+  stroke-dashoffset: 0;
+}
+.hm-ai-eye[data-hidden] .hm-ai-pupil {
+  transform: scale(0.45);
+}
+/* lock: the shackle rises and swings off its left leg */
+.hm-ai-lock .hm-ai-shackle {
+  transform-origin: 8px 11px;
+  transform-box: view-box;
+}
+.hm-ai-lock:not([data-locked]) .hm-ai-shackle {
+  transform: translateY(-2.500px) rotate(-22deg);
+}
+
+/* loaders: loops */
+.hm-ai-dots circle {
+  animation: hm-a-wave-y 1s ease-in-out infinite;
+}
+.hm-ai-dots circle:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.hm-ai-dots circle:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.hm-ai-bars path {
+  transform-origin: center;
+  animation: hm-ai-eq 0.9s ease-in-out infinite;
+}
+.hm-ai-bars path:nth-child(2) {
+  animation-delay: 0.18s;
+}
+.hm-ai-bars path:nth-child(3) {
+  animation-delay: 0.36s;
+}
+.hm-ai-bars path:nth-child(4) {
+  animation-delay: 0.54s;
+}
+@keyframes hm-ai-eq {
+  0%,
+  100% {
+    transform: scaleY(0.35);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+.hm-ai-ring .hm-ai-arc {
+  transform-origin: 12px 12px;
+  transform-box: view-box;
+  animation: hm-spin 0.9s linear infinite;
+}
+.hm-ai-pulse .hm-ai-ripple {
+  transform-origin: 12px 12px;
+  transform-box: view-box;
+  animation: hm-a-ping 1.6s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+.hm-ai-pulse .hm-ai-ripple-2 {
+  animation-delay: 0.8s;
+}
+.hm-ai-orbit .hm-ai-orbit {
+  transform-origin: 12px 12px;
+  transform-box: view-box;
+  animation: hm-spin 1.3s linear infinite;
+}
+.hm-ai-signal path {
+  animation: hm-ai-climb 1.2s ease-in-out infinite;
+}
+.hm-ai-signal path:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.hm-ai-signal path:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.hm-ai-signal path:nth-child(4) {
+  animation-delay: 0.45s;
+}
+@keyframes hm-ai-climb {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  40% {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hm-ai,
+  .hm-ai * {
+    transition-duration: 1ms !important;
+  }
+  .hm-ai-draw[data-active] .hm-ai-ring,
+  .hm-ai-draw[data-active] .hm-ai-mark {
+    animation-duration: 1ms;
+    animation-delay: 0s;
+  }
+  .hm-ai-draw[data-shake][data-active],
+  .hm-ai-like[data-active],
+  .hm-ai-bell[data-ringing] .hm-ai-swing {
+    animation: none;
+  }
+  /* loaders carry meaning, so they slow rather than stop */
+  .hm-ai-dots circle,
+  .hm-ai-bars path,
+  .hm-ai-ring .hm-ai-arc,
+  .hm-ai-pulse .hm-ai-ripple,
+  .hm-ai-orbit .hm-ai-orbit,
+  .hm-ai-signal path {
+    animation-duration: 3s;
+  }
+}
+
+/* Layout and type primitives: Box, Stack, Inline, Grid, Container, Spacer, Center, AspectRatio, Text, Heading */
+.hm-box[data-radius="sm"] {
+  border-radius: var(--hm-radius-sm);
+}
+.hm-box[data-radius="md"] {
+  border-radius: var(--hm-radius-md);
+}
+.hm-box[data-radius="lg"] {
+  border-radius: var(--hm-radius-lg);
+}
+.hm-box[data-radius="xl"] {
+  border-radius: var(--hm-radius-xl);
+}
+.hm-box[data-radius="full"] {
+  border-radius: 999px;
+}
+
+.hm-stack[data-align],
+.hm-cluster[data-align] {
+  /* a stack is a grid, a cluster a flex row: both take align-items */
+}
+.hm-stack[data-align="start"],
+.hm-cluster[data-align="start"] {
+  align-items: start;
+  justify-items: start;
+}
+.hm-stack[data-align="center"],
+.hm-cluster[data-align="center"] {
+  align-items: center;
+  justify-items: center;
+}
+.hm-stack[data-align="end"],
+.hm-cluster[data-align="end"] {
+  align-items: end;
+  justify-items: end;
+}
+.hm-stack[data-align="stretch"],
+.hm-cluster[data-align="stretch"] {
+  align-items: stretch;
+  justify-items: stretch;
+}
+.hm-cluster[data-align="baseline"] {
+  align-items: baseline;
+}
+.hm-stack[data-justify="center"] {
+  align-content: center;
+}
+.hm-stack[data-justify="end"] {
+  align-content: end;
+}
+.hm-stack[data-justify="between"] {
+  align-content: space-between;
+}
+.hm-cluster[data-justify="start"] {
+  justify-content: flex-start;
+}
+.hm-cluster[data-justify="center"] {
+  justify-content: center;
+}
+.hm-cluster[data-justify="end"] {
+  justify-content: flex-end;
+}
+.hm-cluster[data-justify="between"] {
+  justify-content: space-between;
+}
+.hm-cluster[data-justify="around"] {
+  justify-content: space-around;
+}
+.hm-cluster[data-nowrap] {
+  flex-wrap: nowrap;
+}
+.hm-grid[data-columns] {
+  grid-template-columns: repeat(var(--hm-grid-cols), minmax(0, 1fr));
+}
+
+.hm-container {
+  inline-size: 100%;
+  margin-inline: auto;
+  padding-inline: var(--hm-space-5);
+  max-inline-size: 72rem;
+}
+.hm-container[data-size="sm"] {
+  max-inline-size: 40rem;
+}
+.hm-container[data-size="md"] {
+  max-inline-size: 56rem;
+}
+.hm-container[data-size="xl"] {
+  max-inline-size: 90rem;
+}
+.hm-container[data-size="full"] {
+  max-inline-size: none;
+}
+.hm-spacer {
+  flex: 1 1 0;
+  min-inline-size: 0;
+  min-block-size: 0;
+}
+.hm-center {
+  display: grid;
+  place-items: center;
+}
+.hm-aspect {
+  position: relative;
+  overflow: hidden;
+}
+.hm-aspect > * {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.hm-text {
+  margin: 0;
+  color: var(--hm-fg);
+  font-size: var(--hm-text-md);
+  line-height: 1.55;
+}
+.hm-text[data-size="2xs"] {
+  font-size: var(--hm-text-2xs);
+}
+.hm-text[data-size="xs"] {
+  font-size: var(--hm-text-xs);
+}
+.hm-text[data-size="sm"] {
+  font-size: var(--hm-text-sm);
+}
+.hm-text[data-size="md"] {
+  font-size: var(--hm-text-md);
+}
+.hm-text[data-size="base"] {
+  font-size: var(--hm-text-base);
+}
+.hm-text[data-size="lg"] {
+  font-size: var(--hm-text-lg);
+}
+.hm-text[data-size="xl"] {
+  font-size: var(--hm-text-xl);
+  line-height: 1.3;
+}
+.hm-text[data-size="2xl"] {
+  font-size: var(--hm-text-2xl);
+  line-height: 1.15;
+  letter-spacing: var(--hm-tracking-tight);
+}
+.hm-text[data-size="3xl"] {
+  font-size: var(--hm-text-3xl);
+  line-height: 1.08;
+  letter-spacing: var(--hm-tracking-tight);
+}
+.hm-text[data-tone="soft"] {
+  color: var(--hm-fg-soft);
+}
+.hm-text[data-tone="muted"] {
+  color: var(--hm-muted);
+}
+.hm-text[data-tone="dim"] {
+  color: var(--hm-dim);
+}
+.hm-text[data-tone="accent"] {
+  color: var(--hm-accent);
+}
+.hm-text[data-tone="success"] {
+  color: var(--hm-success);
+}
+.hm-text[data-tone="warning"] {
+  color: var(--hm-warning);
+}
+.hm-text[data-tone="danger"] {
+  color: var(--hm-danger);
+}
+.hm-text[data-weight="regular"] {
+  font-weight: var(--hm-weight-regular, 400);
+}
+.hm-text[data-weight="medium"] {
+  font-weight: var(--hm-weight-medium);
+}
+.hm-text[data-weight="semibold"] {
+  font-weight: var(--hm-weight-semibold);
+}
+.hm-text[data-align="center"] {
+  text-align: center;
+}
+.hm-text[data-align="end"] {
+  text-align: end;
+}
+.hm-text[data-truncate] {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.hm-text[data-mono] {
+  font-family: var(--hm-font-mono);
+}
+.hm-text[data-eyebrow] {
+  color: var(--hm-dim);
+  font-size: var(--hm-text-xs);
+  letter-spacing: var(--hm-tracking-eyebrow);
+  text-transform: uppercase;
+}
+.hm-heading {
+  text-wrap: balance;
+}
+
+/* Application patterns: DataTable, Toolbar, Settings */
+.hm-datatable {
+  display: grid;
+  gap: var(--hm-space-4);
+}
+.hm-datatable-check {
+  inline-size: 2.6rem;
+}
+.hm-datatable-empty {
+  padding-block: var(--hm-space-7);
+  color: var(--hm-dim);
+  text-align: center;
+}
+.hm-datatable-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--hm-space-3) var(--hm-space-5);
+}
+.hm-datatable-count {
+  margin: 0;
+  color: var(--hm-dim);
+  font-size: var(--hm-text-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.hm-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--hm-space-3) var(--hm-space-5);
+}
+.hm-toolbar-main,
+.hm-toolbar-end {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--hm-space-3);
+  min-width: 0;
+}
+.hm-toolbar-main {
+  flex: 1 1 18rem;
+}
+.hm-toolbar-end {
+  color: var(--hm-dim);
+  font-size: var(--hm-text-sm);
+}
+
+.hm-settings {
+  display: grid;
+  gap: var(--hm-space-4);
+}
+.hm-settings-title {
+  margin: 0;
+  font-size: var(--hm-text-lg);
+  font-weight: var(--hm-weight-medium);
+}
+.hm-settings-description {
+  margin: 0.25rem 0 0;
+  color: var(--hm-muted);
+  font-size: var(--hm-text-md);
+}
+.hm-settings-rows {
+  display: grid;
+  border-top: 1px solid var(--hm-line);
+}
+.hm-settings-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--hm-space-3) var(--hm-space-6);
+  padding-block: var(--hm-space-4);
+  border-bottom: 1px solid var(--hm-line);
+}
+.hm-settings-text {
+  flex: 1 1 16rem;
+  min-width: 0;
+}
+.hm-settings-name {
+  margin: 0;
+  color: var(--hm-fg);
+}
+.hm-settings-hint {
+  margin: 0.2rem 0 0;
+  color: var(--hm-dim);
+  font-size: var(--hm-text-sm);
+}
+.hm-settings-control {
+  flex: none;
+  max-inline-size: 100%;
+}
+
+/* DataTable: rows arrive in turn (and again on a new page or sort), and the hover highlight falls off with distance */
+.hm-datatable tbody > tr {
+  animation: hm-rise var(--hm-dur-slow) var(--hm-ease-glide) both;
+  animation-delay: calc(min(var(--hm-i, 0), 12) * 32ms);
+}
+/* the hovered row is plainly marked (13%); its neighbors share the glow but never exceed half of it */
+.hm-table[data-proximity] .hm-table-row > .hm-table-cell {
+  background: color-mix(in srgb, var(--hm-fg) calc(min(var(--hm-k, 0), 0.5) * 13%), transparent);
+}
+.hm-table[data-proximity] .hm-table-row:hover > .hm-table-cell {
+  background: color-mix(in srgb, var(--hm-fg) 13%, transparent);
+}
+.hm-table[data-proximity] .hm-table-row[data-selected] > .hm-table-cell {
+  background: var(--hm-surface-selected);
+  box-shadow: inset 0 1px 0 var(--hm-line-strong);
+}
+.hm-datatable-count {
+  animation: hm-fade-in var(--hm-dur-base) var(--hm-ease-out) both;
+}
+
+/* Toolbar: the controls arrive left to right, the trailing slot last */
+.hm-toolbar-main > * {
+  animation: hm-rise var(--hm-dur-slow) var(--hm-ease-glide) both;
+  animation-delay: calc(var(--_i, 0) * var(--hm-stagger));
+}
+.hm-toolbar-main > :nth-child(1) {
+  --_i: 0;
+}
+.hm-toolbar-main > :nth-child(2) {
+  --_i: 1;
+}
+.hm-toolbar-main > :nth-child(3) {
+  --_i: 2;
+}
+.hm-toolbar-main > :nth-child(4) {
+  --_i: 3;
+}
+.hm-toolbar-main > :nth-child(5) {
+  --_i: 4;
+}
+.hm-toolbar-main > :nth-child(6) {
+  --_i: 5;
+}
+.hm-toolbar-main > :nth-child(n + 7) {
+  --_i: 6;
+}
+.hm-toolbar-end {
+  animation: hm-fade-in var(--hm-dur-slow) var(--hm-ease-out) 0.25s both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hm-datatable tbody > tr,
+  .hm-datatable-count,
+  .hm-toolbar-main > *,
+  .hm-toolbar-end {
+    animation: none;
+  }
+}
+[data-hm-motion="reduce"] .hm-datatable tbody > tr,
+[data-hm-motion="reduce"] .hm-datatable-count,
+[data-hm-motion="reduce"] .hm-toolbar-main > *,
+[data-hm-motion="reduce"] .hm-toolbar-end {
+  animation: none;
+}
+
+/*
+ * Cursor. A fixed layer in the top layer (a manual popover), so it sits above dialogs. Parts are positioned by the
+ * engine through `translate`, `rotate` and `scale`, and centered on their point with negative margins; size and shape
+ * live in CSS and change with `data-state` on the root. The system cursor is hidden where the engine is active.
+ */
+[data-hm-cursor-active],
+[data-hm-cursor-active] * {
+  cursor: none !important;
+}
+.hm-cursor-area {
+  position: relative;
+}
+.hm-cursor {
+  position: fixed;
+  inset: 0 auto auto 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  overflow: visible;
+  pointer-events: none;
+  color: var(--hm-cursor-color, var(--hm-fg-strong));
+}
+.hm-cursor[data-blend="difference"] {
+  mix-blend-mode: difference;
+  color: #fff;
+}
+.hm-cursor [data-part] {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: block;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--hm-dur-base) var(--hm-ease-out);
+}
+.hm-cursor[data-visible] [data-part]:not([data-part="label"], [data-part="trail"]) {
+  opacity: 1;
+}
+.hm-cursor[data-state="hidden"] [data-part] {
+  opacity: 0;
+}
+
+[data-part="dot"] {
+  --d: var(--hm-cursor-dot, 8px);
+  /* --w, --h and --r are set by the engine when the dot (with no ring) morphs onto an element */
+  width: var(--w, var(--d));
+  height: var(--h, var(--d));
+  margin: calc(var(--h, var(--d)) / -2) 0 0 calc(var(--w, var(--d)) / -2);
+  border-radius: var(--r, 50%);
+  background: currentColor;
+  transition:
+    width var(--hm-dur-base) var(--hm-ease-spring),
+    height var(--hm-dur-base) var(--hm-ease-spring),
+    margin var(--hm-dur-base) var(--hm-ease-spring),
+    border-radius var(--hm-dur-base) var(--hm-ease-spring),
+    background-color var(--hm-dur-base) var(--hm-ease-out),
+    opacity var(--hm-dur-base) var(--hm-ease-out);
+}
+/* the dot takes the highlighted look as --m (set by the engine) goes from 0 to 1, so it fades in and out with no pop */
+.hm-cursor[data-shape="dot"][data-morph] [data-part="dot"] {
+  background: color-mix(in srgb, currentColor calc(100% - var(--m, 0) * 84%), transparent);
+  box-shadow: inset 0 0 0 1.5px color-mix(in srgb, currentColor calc(var(--m, 0) * 100%), transparent);
+  transition: opacity var(--hm-dur-base) var(--hm-ease-out);
+}
+.hm-cursor[data-shape="crosshair"] [data-part="dot"] {
+  background:
+    linear-gradient(currentColor, currentColor) center / 100% 1.5px no-repeat,
+    linear-gradient(currentColor, currentColor) center / 1.5px 100% no-repeat;
+  --d: calc(var(--hm-cursor-dot, 8px) * 2.4);
+  width: var(--d);
+  height: var(--d);
+  margin: calc(var(--d) / -2) 0 0 calc(var(--d) / -2);
+  border-radius: 0;
+}
+.hm-cursor[data-state="text"] [data-part="dot"] {
+  width: 2px;
+  height: 1.6rem;
+  margin: -0.8rem 0 0 -1px;
+  border-radius: 1px;
+}
+.hm-cursor[data-state="link"] [data-part="dot"] {
+  --d: calc(var(--hm-cursor-dot, 8px) * 0.6);
+}
+
+[data-part="ring"] {
+  --w: var(--hm-cursor-ring, 38px);
+  --h: var(--w);
+  --r: 50%;
+  width: var(--w);
+  height: var(--h);
+  margin: calc(var(--h) / -2) 0 0 calc(var(--w) / -2);
+  border: 1.5px solid currentColor;
+  border-radius: var(--r);
+  box-sizing: border-box;
+  transition:
+    width var(--hm-dur-slow) var(--hm-ease-spring-soft),
+    height var(--hm-dur-slow) var(--hm-ease-spring-soft),
+    margin var(--hm-dur-slow) var(--hm-ease-spring-soft),
+    border-radius var(--hm-dur-slow) var(--hm-ease-spring-soft),
+    background-color var(--hm-dur-base) var(--hm-ease-out),
+    opacity var(--hm-dur-base) var(--hm-ease-out);
+}
+.hm-cursor[data-state="link"] [data-part="ring"] {
+  --w: calc(var(--hm-cursor-ring, 38px) * 1.35);
+  background: color-mix(in srgb, currentColor 12%, transparent);
+}
+.hm-cursor[data-state="text"] [data-part="ring"] {
+  opacity: 0;
+}
+.hm-cursor[data-pressed] [data-part="ring"] {
+  background: color-mix(in srgb, currentColor 22%, transparent);
+}
+
+[data-part="spot"] {
+  --s: var(--hm-cursor-spot, 26rem);
+  width: var(--s);
+  height: var(--s);
+  margin: calc(var(--s) / -2) 0 0 calc(var(--s) / -2);
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--hm-accent) calc(28% * var(--hm-light)), transparent),
+    transparent 70%
+  );
+  mix-blend-mode: screen;
+}
+/* a solid tail along the path the cursor took: one SVG path, redrawn by the engine */
+svg[data-part="trail"] {
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: visible;
+}
+svg[data-part="trail"] path {
+  fill: currentColor;
+}
+.hm-cursor[data-visible] svg[data-part="trail"] {
+  opacity: 1;
+}
+/* a custom icon: centered on the pointer, one icon per state */
+[data-part="icon"] {
+  /* a halo in the page color, so a light icon still reads over a light button */
+  filter: drop-shadow(0 0 1px var(--hm-bg)) drop-shadow(0 0 2px var(--hm-bg));
+  width: 0;
+  height: 0;
+  display: grid;
+  place-items: center;
+  font-size: 1.4rem;
+  line-height: 1;
+}
+[data-part="icon"] > [data-for] {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: max-content; /* the icon part is 0 wide, so without this the icon would shrink to nothing */
+  height: max-content;
+  /* the icon's hotspot (--ax, --ay from -1 to 1) sits on the pointer; the 0-size icon part turns about it */
+  translate: calc(-50% - var(--ax, 0) * 50%) calc(-50% - var(--ay, 0) * 50%);
+  transition:
+    opacity var(--hm-dur-fast) var(--hm-ease-out),
+    scale var(--hm-dur-base) var(--hm-ease-spring);
+}
+[data-part="icon"] > [data-for="link"],
+[data-part="icon"] > [data-for="text"] {
+  opacity: 0;
+  scale: 0.6;
+}
+.hm-cursor[data-state="link"] [data-part="icon"] > [data-for="link"],
+.hm-cursor[data-state="text"] [data-part="icon"] > [data-for="text"] {
+  opacity: 1;
+  scale: 1;
+}
+.hm-cursor[data-state="link"] [data-part="icon"]:has(> [data-for="link"]) > [data-for="default"],
+.hm-cursor[data-state="text"] [data-part="icon"]:has(> [data-for="text"]) > [data-for="default"] {
+  opacity: 0;
+  scale: 0.6;
+}
+
+/* a label next to the cursor: data-hm-cursor-label="View" on any element */
+[data-part="label"] {
+  position: absolute;
+  left: calc(100% + 0.5rem);
+  top: 100%;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: var(--hm-fg-strong);
+  color: var(--hm-on-fg);
+  font-size: var(--hm-text-xs);
+  white-space: nowrap;
+  opacity: 0;
+  scale: 0.7;
+  transform-origin: left top;
+  transition:
+    opacity var(--hm-dur-fast) var(--hm-ease-out),
+    scale var(--hm-dur-base) var(--hm-ease-spring);
+}
+.hm-cursor[data-label][data-visible] [data-part="label"] {
+  opacity: 1;
+  scale: 1;
+}
+
+/* a pulse from the point of a press */
+.hm-cursor-ripple {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+.hm-cursor-ripple::after {
+  content: "";
+  position: absolute;
+  width: var(--rs, 2.4rem);
+  height: var(--rs, 2.4rem);
+  margin: calc(var(--rs, 2.4rem) / -2) 0 0 calc(var(--rs, 2.4rem) / -2);
+  border: 1.5px solid currentColor;
+  border-radius: 50%;
+  animation: hm-cursor-ripple 0.7s var(--hm-ease-glide) both;
+}
+@keyframes hm-cursor-ripple {
+  from {
+    opacity: 0.8;
+    scale: 0.2;
+  }
+  to {
+    opacity: 0;
+    scale: 2.2;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hm-cursor-ripple::after {
+    animation: none;
+    opacity: 0;
+  }
+}
+[data-hm-motion="reduce"] .hm-cursor-ripple::after {
+  animation: none;
+  opacity: 0;
+}
+
+/* locking onto an element: a short, direct ease with no spring, so the highlight arrives with the pointer */
+.hm-cursor[data-morph] [data-part="ring"],
+.hm-cursor[data-morph] [data-part="dot"] {
+  transition:
+    width var(--hm-dur-fast) var(--hm-ease-out),
+    height var(--hm-dur-fast) var(--hm-ease-out),
+    margin var(--hm-dur-fast) var(--hm-ease-out),
+    border-radius var(--hm-dur-fast) var(--hm-ease-out),
+    background-color var(--hm-dur-fast) var(--hm-ease-out),
+    opacity var(--hm-dur-base) var(--hm-ease-out);
+}
+
+.hm-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: var(--hm-control-h);
+  padding: 0 1rem;
+  border: 1px solid transparent;
+  border-radius: var(--hm-radius-md);
+  font: inherit;
+  font-size: var(--hm-text-sm);
+  font-weight: var(--hm-weight-medium);
+  line-height: 1;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background-color var(--hm-dur-fast) var(--hm-ease-out),
+    border-color var(--hm-dur-fast) var(--hm-ease-out),
+    color var(--hm-dur-fast) var(--hm-ease-out),
+    opacity var(--hm-dur-fast) var(--hm-ease-out),
+    transform var(--hm-dur-base) var(--hm-ease-spring);
+}
+.hm-button:active:not(:disabled, [aria-disabled="true"]) {
+  transform: translateY(1px) scale(0.97);
+}
+.hm-button:focus-visible {
+  outline: var(--hm-focus-width) solid var(--hm-focus-color);
+  outline-offset: var(--hm-focus-offset);
+}
+.hm-button[data-shape="pill"] {
+  border-radius: var(--hm-radius-pill);
+}
+.hm-button[data-size="sm"] {
+  min-height: 32px;
+  padding: 0 0.75rem;
+  font-size: 0.8rem;
+}
+.hm-button[data-size="lg"] {
+  min-height: var(--hm-target);
+  padding: 0 1.3rem;
+  font-size: var(--hm-text-md);
+}
+
+/* primary: the one white action */
+.hm-button[data-variant="primary"] {
+  background: var(--hm-fg);
+  color: var(--hm-on-fg);
+  border-color: var(--hm-fg);
+}
+.hm-button[data-variant="primary"]:hover {
+  background: var(--hm-fg-strong);
+}
+/* secondary: a hairline, translucent over imagery */
+.hm-button[data-variant="secondary"] {
+  background: var(--hm-chrome-bg);
+  border-color: var(--hm-line);
+  color: var(--hm-fg-soft);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  font-weight: var(--hm-weight-regular);
+}
+.hm-button[data-variant="secondary"]:hover {
+  color: var(--hm-fg-strong);
+  border-color: var(--hm-line-hover);
+}
+/* ghost: just text */
+.hm-button[data-variant="ghost"] {
+  background: none;
+  color: var(--hm-muted);
+  padding: 0 0.4rem;
+  font-weight: var(--hm-weight-regular);
+}
+.hm-button[data-variant="ghost"]:hover {
+  color: var(--hm-fg);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+/* danger: quiet until it matters */
+.hm-button[data-variant="danger"] {
+  background: none;
+  border-color: var(--hm-line-strong);
+  color: var(--hm-danger);
+}
+.hm-button[data-variant="danger"]:hover {
+  border-color: var(--hm-danger);
+  background: color-mix(in srgb, var(--hm-danger) 9%, transparent);
+}
+
+.hm-button:disabled,
+.hm-button[aria-disabled="true"] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.hm-button[data-loading] {
+  cursor: progress;
+  opacity: 0.8;
+}
+
+.hm-icon-button {
+  padding: 0;
+  width: var(--hm-control-h);
+}
+.hm-icon-button[data-size="sm"] {
+  width: 32px;
+  padding: 0;
+}
+.hm-icon-button[data-size="lg"] {
+  width: var(--hm-target);
+  padding: 0;
+}
+.hm-icon-button svg {
+  width: 1.05em;
+  height: 1.05em;
+}
+
+/* touch: never smaller than a finger */
+@media (pointer: coarse) {
+  .hm-button {
+    min-height: var(--hm-target);
+  }
+  .hm-icon-button {
+    width: var(--hm-target);
+  }
+}
+
+.hm-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.12rem 0.55rem;
+  border-radius: var(--hm-radius-pill);
+  font-size: var(--hm-text-2xs);
+  font-style: normal;
+  font-weight: var(--hm-weight-regular);
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  color: var(--_tone, var(--hm-fg));
+}
+.hm-badge[data-appearance="soft"] {
+  background: var(--hm-surface-selected);
+  box-shadow: var(--hm-selected-edge);
+}
+.hm-badge[data-appearance="overlay"] {
+  background: rgb(0 0 0 / 0.7);
+  color: var(--hm-on-photo);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+.hm-badge[data-appearance="outline"] {
+  border: 1px solid var(--hm-line-strong);
+}
+:is(.hm-badge, .hm-status)[data-tone="accent"] {
+  --_tone: var(--hm-accent);
+}
+:is(.hm-badge, .hm-status)[data-tone="success"] {
+  --_tone: var(--hm-success-text);
+}
+:is(.hm-badge, .hm-status)[data-tone="warning"] {
+  --_tone: var(--hm-warning);
+}
+:is(.hm-badge, .hm-status)[data-tone="danger"] {
+  --_tone: var(--hm-danger);
+}
+:is(.hm-badge, .hm-status)[data-tone="info"] {
+  --_tone: var(--hm-info);
+}
+:is(.hm-badge, .hm-status)[data-tone="muted"] {
+  --_tone: var(--hm-muted);
+}
+.hm-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: var(--hm-text-sm);
+  color: var(--hm-fg);
+}
+.hm-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--_tone, var(--hm-muted));
+}
+
+/* Alert (inline) and Toast (transient) share the toned-edge language. */
+.hm-alert,
+.hm-toast {
+  --_tone: var(--hm-line-current);
+  position: relative;
+  padding: var(--hm-space-3) var(--hm-space-4);
+  border: 1px solid var(--hm-line-strong);
+  border-left: 2px solid var(--_tone);
+  border-radius: var(--hm-radius-md);
+  background: var(--hm-surface);
+  color: var(--hm-fg);
+  font-size: var(--hm-text-md);
+}
+:is(.hm-alert, .hm-toast)[data-tone="info"] {
+  --_tone: var(--hm-info);
+}
+:is(.hm-alert, .hm-toast)[data-tone="success"] {
+  --_tone: var(--hm-success);
+}
+:is(.hm-alert, .hm-toast)[data-tone="warning"] {
+  --_tone: var(--hm-warning);
+}
+:is(.hm-alert, .hm-toast)[data-tone="danger"] {
+  --_tone: var(--hm-danger);
+}
+.hm-alert-title,
+.hm-toast-title {
+  margin: 0;
+  font-weight: var(--hm-weight-medium);
+}
+.hm-alert-description,
+.hm-toast-description {
+  margin: 0.2rem 0 0;
+  color: var(--hm-muted);
+  font-size: var(--hm-text-sm);
+}
+
+/* Toast stack: a popover region in the top layer, pinned to a corner */
+.hm-toast-region {
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  overflow: visible;
+  width: min(24rem, 100vw - 2rem);
+  pointer-events: none;
+  bottom: max(1rem, env(safe-area-inset-bottom));
+  right: 1rem;
+}
+.hm-toast-region[data-position="bottom-center"] {
+  right: auto;
+  left: 50%;
+  translate: -50% 0;
+}
+.hm-toast-region[data-position="top-right"] {
+  bottom: auto;
+  top: 1rem;
+}
+.hm-toast-list {
+  display: grid;
+  gap: var(--hm-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.hm-toast {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--hm-space-3);
+  background: var(--hm-surface-overlay);
+  border-color: var(--hm-line-overlay);
+  box-shadow: var(--hm-shadow-overlay);
+  pointer-events: auto;
+  animation: hm-toast-in var(--hm-dur-slow) var(--hm-ease-spring-soft) both;
+}
+/* the slot collapses (grid rows 1fr to 0fr) while the toast slides away, so the stack closes up smoothly */
+.hm-toast-slot {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition:
+    grid-template-rows var(--hm-dur-base) var(--hm-ease-pour) 60ms,
+    margin var(--hm-dur-base) var(--hm-ease-pour) 60ms;
+}
+.hm-toast-slot > .hm-toast {
+  min-height: 0;
+}
+.hm-toast-slot[data-leaving] {
+  grid-template-rows: 0fr;
+  margin-bottom: calc(var(--hm-space-2) * -1);
+}
+.hm-toast-slot[data-leaving] > .hm-toast {
+  overflow: hidden;
+  padding-block: 0;
+  border-width: 0;
+  pointer-events: none;
+  animation: hm-toast-out var(--hm-dur-base) var(--hm-ease-pour) both;
+}
+@keyframes hm-toast-in {
+  from {
+    opacity: 0;
+    transform: translate(1.4rem, 0.4rem) scale(0.94);
+    filter: blur(3px);
+  }
+}
+@keyframes hm-toast-out {
+  to {
+    opacity: 0;
+    transform: translateX(1.6rem) scale(0.96);
+    filter: blur(2px);
+  }
+}
+.hm-toast-body {
+  flex: 1;
+  min-width: 0;
+}
+.hm-toast-action,
+.hm-toast-close {
+  flex: none;
+  border: 0;
+  background: none;
+  color: var(--hm-fg);
+  font: inherit;
+  cursor: pointer;
+}
+.hm-toast-action {
+  padding: 0.1rem 0.3rem;
+  font-size: var(--hm-text-sm);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.hm-toast-close {
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin: -0.2rem -0.4rem 0 0;
+  border-radius: var(--hm-radius-sm);
+  color: var(--hm-muted);
+}
+.hm-toast-close:hover {
+  color: var(--hm-fg);
+}
+.hm-toast-action:focus-visible,
+.hm-toast-close:focus-visible {
+  outline: var(--hm-focus-width) solid var(--hm-focus-color);
+  outline-offset: var(--hm-focus-offset);
+}
+
+.hm-spinner {
+  --_s: 1.1rem;
+  display: inline-block;
+  flex: none;
+  width: var(--_s);
+  height: var(--_s);
+  border: 1.5px solid var(--hm-line-hover);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: hm-spin 0.8s linear infinite;
+}
+.hm-spinner[data-size="sm"] {
+  --_s: 0.85rem;
+}
+.hm-spinner[data-size="lg"] {
+  --_s: 1.6rem;
+}
+/* a spinner is information, not decoration: under reduced motion it slows rather than stops */
+@media (prefers-reduced-motion: reduce) {
+  .hm-spinner {
+    animation-duration: 2.4s;
+  }
+}
+.hm-skeleton {
+  display: block;
+  border-radius: var(--hm-radius-sm);
+  background: linear-gradient(90deg, var(--hm-surface) 30%, var(--hm-line-strong) 50%, var(--hm-surface) 70%);
+  background-size: 200% 100%;
+  animation: hm-shimmer 1.6s linear infinite;
+}
+.hm-skeleton[data-shape="text"] {
+  height: 0.9em;
+  width: 100%;
+}
+.hm-skeleton[data-shape="block"] {
+  height: 6rem;
+}
+.hm-skeleton[data-shape="circle"] {
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 50%;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hm-skeleton {
+    animation: none;
+  }
+}
+[data-hm-motion="reduce"] .hm-skeleton {
+  animation: none;
+}
+
+.hm-field {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
+}
+.hm-field-label {
+  font-size: 0.8rem;
+  color: var(--hm-muted);
+}
+.hm-field-hint {
+  font-size: var(--hm-text-xs);
+  color: var(--hm-dim);
+}
+.hm-field-error {
+  font-size: var(--hm-text-xs);
+  color: var(--hm-danger);
+}
+
+.hm-control {
+  width: 100%;
+  min-height: var(--hm-control-h);
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--hm-line-strong);
+  border-radius: var(--hm-radius-md);
+  background: var(--hm-control-bg);
+  box-shadow: var(--hm-control-edge);
+  color: var(--hm-fg);
+  font: inherit;
+  font-size: 0.9rem;
+  line-height: 1.3;
+  transition: border-color var(--hm-dur-instant) var(--hm-ease-out);
+}
+.hm-control::placeholder {
+  color: var(--hm-faint);
+}
+.hm-control:hover {
+  border-color: var(--hm-line-hover);
+}
+.hm-control:focus-visible {
+  outline: none;
+  border-color: var(--hm-line-focus);
+  box-shadow: 0 0 0 3px var(--hm-accent-soft);
+}
+.hm-control[aria-invalid="true"] {
+  border-color: color-mix(in srgb, var(--hm-danger) 65%, transparent);
+}
+.hm-control:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.hm-textarea {
+  min-height: 6rem;
+  resize: vertical;
+}
+.hm-textarea[data-autogrow] {
+  field-sizing: content;
+  max-height: 20rem;
+  resize: none;
+}
+/* Select: a custom dropdown (the list is the shared floating menu) */
+.hm-select-root {
+  position: relative;
+  min-width: 0;
+}
+.hm-select.hm-control {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  text-align: left;
+  cursor: pointer;
+}
+.hm-select[data-placeholder] .hm-select-value {
+  color: var(--hm-faint);
+}
+.hm-select-value {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.hm-select-chevron {
+  flex: none;
+  color: var(--hm-muted);
+  transition: rotate var(--hm-dur-base) var(--hm-ease-spring);
+}
+.hm-select[aria-expanded="true"] .hm-select-chevron {
+  rotate: 180deg;
+}
+.hm-select-list {
+  width: var(--hm-anchor-width);
+  max-height: 16rem;
+  overflow: auto;
+}
+.hm-input[type="search"]::-webkit-search-cancel-button {
+  filter: invert(0.6);
+}
+@media (pointer: coarse) {
+  .hm-control {
+    min-height: var(--hm-target);
+    font-size: 1rem; /* no zoom-on-focus on iOS */
+  }
+}
+
+/* checkbox and switch */
+.hm-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: var(--hm-control-h);
+  font-size: var(--hm-text-md);
+  cursor: pointer;
+}
+.hm-check-input {
+  appearance: none;
+  flex: none;
+  display: inline-grid;
+  place-content: center;
+  width: 1.05rem;
+  height: 1.05rem;
+  margin: 0;
+  border: 1px solid var(--hm-line-hover);
+  border-radius: 4px;
+  background: var(--hm-control-bg);
+  cursor: inherit;
+  transition:
+    background-color var(--hm-dur-fast) var(--hm-ease-out),
+    border-color var(--hm-dur-fast) var(--hm-ease-out);
+}
+.hm-check-input::after {
+  content: "";
+  width: 0.55rem;
+  height: 0.3rem;
+  border: 1.5px solid var(--hm-on-fg);
+  border-top: 0;
+  border-right: 0;
+  rotate: -45deg;
+  translate: 0 -0.05rem;
+  scale: 0;
+  transition: scale var(--hm-dur-base) var(--hm-ease-spring);
+}
+.hm-check-input:checked {
+  background: var(--hm-fg);
+  border-color: var(--hm-fg);
+}
+.hm-check-input:checked::after {
+  scale: 1;
+}
+.hm-check-input:focus-visible {
+  outline: var(--hm-focus-width) solid var(--hm-focus-color);
+  outline-offset: var(--hm-focus-offset);
+}
+.hm-check-input:disabled,
+.hm-check-input:disabled + .hm-check-label {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.hm-check[data-appearance="switch"] .hm-check-input {
+  width: 2rem;
+  height: 1.15rem;
+  border-radius: var(--hm-radius-pill);
+  place-content: center start;
+  padding: 0 2px;
+}
+.hm-check[data-appearance="switch"] .hm-check-input::after {
+  width: 0.8rem;
+  height: 0.8rem;
+  border: 0;
+  border-radius: 50%;
+  background: var(--hm-muted);
+  rotate: 0deg;
+  translate: 0 0;
+  scale: 1;
+  transition:
+    translate var(--hm-dur-slow) var(--hm-ease-spring),
+    width var(--hm-dur-fast) var(--hm-ease-glide),
+    background-color var(--hm-dur-fast) var(--hm-ease-out);
+}
+.hm-check[data-appearance="switch"] .hm-check-input:checked {
+  background: var(--hm-fg);
+}
+.hm-check[data-appearance="switch"] .hm-check-input:active::after {
+  width: 1rem; /* the thumb stretches under the finger */
+}
+.hm-check[data-appearance="switch"] .hm-check-input:checked:active::after {
+  translate: 0.62rem 0;
+}
+.hm-check[data-appearance="switch"] .hm-check-input:checked::after {
+  background: var(--hm-on-fg);
+  translate: 0.82rem 0;
+}
+
+/* range: a hairline track, a white thumb */
+.hm-control[type="range"] {
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+  min-height: 1.5rem;
+  accent-color: var(--hm-fg);
+  cursor: pointer;
+}
+.hm-control[type="range"]:focus-visible {
+  outline: var(--hm-focus-width) solid var(--hm-focus-color);
+  outline-offset: 4px;
+}
+
+/* radio group */
+.hm-radio-group {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.hm-radio-legend {
+  padding: 0;
+  margin-bottom: 0.35rem;
+  font-size: 0.8rem;
+  color: var(--hm-muted);
+}
+.hm-radio-options {
+  display: grid;
+  gap: 0.2rem;
+}
+.hm-radio-group[data-orientation="horizontal"] .hm-radio-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 1.4rem;
+}
+.hm-radio {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  min-height: var(--hm-control-h);
+  padding-block: 0.4rem;
+  font-size: var(--hm-text-md);
+  cursor: pointer;
+}
+.hm-radio-input {
+  appearance: none;
+  flex: none;
+  display: inline-grid;
+  place-content: center;
+  width: 1.05rem;
+  height: 1.05rem;
+  margin: 0.1rem 0 0;
+  border: 1px solid var(--hm-line-hover);
+  border-radius: 50%;
+  background: var(--hm-control-bg);
+  cursor: inherit;
+  transition: border-color var(--hm-dur-fast) var(--hm-ease-out);
+}
+.hm-radio-input::after {
+  content: "";
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--hm-fg);
+  scale: 0;
+  transition: scale var(--hm-dur-fast) var(--hm-ease-glide);
+}
+.hm-radio-input:checked {
+  border-color: var(--hm-fg);
+}
+.hm-radio-input:checked::after {
+  scale: 1;
+}
+.hm-radio-input:focus-visible {
+  outline: var(--hm-focus-width) solid var(--hm-focus-color);
+  outline-offset: var(--hm-focus-offset);
+}
+.hm-radio-input:disabled,
+.hm-radio-input:disabled + .hm-radio-text {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.hm-radio-text {
+  display: grid;
+  gap: 0.1rem;
+}
+.hm-radio-description {
+  color: var(--hm-dim);
+  font-size: var(--hm-text-xs);
+}
+
+.hm-page-header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  column-gap: var(--hm-space-6);
+  margin-bottom: 2.2rem;
+}
+.hm-page-header > :not(.hm-page-actions) {
+  grid-column: 1;
+}
+.hm-page-actions {
+  grid-column: 2;
+  grid-row: 1 / span 3;
+  align-self: end;
+  display: flex;
+  gap: var(--hm-space-2);
+}
+.hm-page-header > .hm-page-tabs {
+  grid-column: 1 / -1;
+}
+.hm-eyebrow {
+  margin: 0;
+  font-size: var(--hm-text-xs);
+  letter-spacing: var(--hm-tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--hm-accent);
+}
+.hm-page-title {
+  margin: 0.35rem 0 0;
+  font-family: var(--hm-font-display);
+  font-size: var(--hm-text-2xl);
+  font-weight: var(--hm-weight-medium);
+  line-height: var(--hm-leading-tight);
+  letter-spacing: var(--hm-tracking-tight);
+  text-wrap: balance;
+}
+.hm-page-description {
+  margin: 0.45rem 0 0;
+  color: var(--hm-muted);
+  font-size: var(--hm-text-md);
+  max-width: 46ch;
+}
+.hm-page-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.4rem;
+  margin-top: var(--hm-space-5);
+  border-bottom: 1px solid var(--hm-line);
+}
+.hm-page-tab {
+  padding: 0.55rem 0;
+  margin-bottom: -1px;
+  font-size: 0.88rem;
+  color: var(--hm-muted);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition:
+    color var(--hm-dur-fast) var(--hm-ease-out),
+    border-color var(--hm-dur-fast) var(--hm-ease-out);
+}
+.hm-page-tab:hover {
+  color: var(--hm-fg);
+}
+.hm-page-tab[aria-current="page"] {
+  color: var(--hm-fg);
+  border-bottom-color: var(--hm-accent);
+}
+@media (max-width: 640px) {
+  .hm-page-header {
+    grid-template-columns: 1fr;
+  }
+  .hm-page-actions {
+    grid-column: 1;
+    grid-row: auto;
+    margin-top: var(--hm-space-4);
+  }
+}
+
+/* the underline slides to the current page (PageTabs measures it); without JS the current tab keeps its own border */
+.hm-page-tabs {
+  position: relative;
+}
+.hm-page-tabs[data-indicator]::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--_iw);
+  height: 1px;
+  background: var(--hm-accent);
+  pointer-events: none;
+  /* on the current tab's own bottom edge, so it stays under the right tab when a narrow row wraps */
+  transform: translate(var(--_ix), calc(var(--_iy) + var(--_ih) - 1px));
+  transition:
+    transform var(--hm-dur-slow) var(--hm-ease-spring-soft),
+    width var(--hm-dur-slow) var(--hm-ease-spring-soft);
+}
+.hm-page-tabs[data-indicator] > .hm-page-tab[aria-current="page"] {
+  border-bottom-color: transparent;
+}
+
+.hm-stat-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  margin: 0 0 var(--hm-space-8);
+  border-block: 1px solid var(--hm-line);
+}
+/* the space below only separates it from what follows */
+.hm-stat-group:last-child {
+  margin-bottom: 0;
+}
+.hm-stat {
+  padding: 1.3rem 1.4rem 1.3rem 0;
+  min-width: 0;
+}
+.hm-stat + .hm-stat {
+  padding-left: 1.4rem;
+  border-left: 1px solid var(--hm-line);
+}
+.hm-stat dd {
+  margin: 0;
+}
+.hm-stat-label {
+  font-size: 0.78rem;
+  color: var(--hm-muted);
+}
+.hm-stat .hm-stat-value {
+  margin: 0.4rem 0 0.2rem;
+  font-size: var(--hm-text-stat);
+  font-weight: var(--hm-weight-medium);
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--hm-tracking-num);
+}
+.hm-stat-detail {
+  font-size: var(--hm-text-xs);
+  color: var(--hm-muted);
+}
+.hm-stat-detail[data-trend="up"] {
+  color: var(--hm-success);
+}
+.hm-stat-detail[data-trend="down"] {
+  color: var(--hm-danger);
+}
+/* phones: two columns, hairlines between cells rather than around them */
+@media (max-width: 640px) {
+  .hm-stat-group {
+    grid-template-columns: 1fr 1fr;
+  }
+  .hm-stat,
+  .hm-stat + .hm-stat {
+    padding: 1.1rem 1rem 1.1rem 0;
+    border-left: 0;
+  }
+  .hm-stat:nth-child(even) {
+    padding-left: 1rem;
+    border-left: 1px solid var(--hm-line);
+  }
+  .hm-stat:nth-child(n + 3) {
+    border-top: 1px solid var(--hm-line);
+  }
+}
+
+.hm-data-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.hm-data-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--hm-space-4);
+  padding: 0.75rem 0;
+  border-top: 1px solid var(--hm-line);
+  font-size: var(--hm-text-md);
+}
+.hm-data-list-item:last-child {
+  border-bottom: 1px solid var(--hm-line);
+}
+.hm-data-list-main {
+  min-width: 0;
+}
+.hm-data-list-main a {
+  color: inherit;
+  text-decoration: none;
+}
+.hm-data-list-main a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.hm-data-list-description {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 0.78rem;
+  color: var(--hm-muted);
+}
+.hm-data-list-meta {
+  flex: none;
+  font-size: 0.78rem;
+  color: var(--hm-muted);
+  font-variant-numeric: tabular-nums;
+}
+.hm-data-list-actions {
+  flex: none;
+  display: flex;
+  gap: var(--hm-space-1);
+  opacity: 0.6;
+  transition: opacity var(--hm-dur-fast) var(--hm-ease-out);
+}
+.hm-data-list-item:hover .hm-data-list-actions,
+.hm-data-list-item:focus-within .hm-data-list-actions {
+  opacity: 1;
+}
+@media (hover: none) {
+  .hm-data-list-actions {
+    opacity: 1;
+  }
+}
+.hm-empty {
+  min-height: 6rem;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  color: var(--hm-muted);
+  font-size: 0.9rem;
+}
+
+.hm-table-wrap {
+  /* room inside the scroll box for focus rings and control halos, taken back with a negative margin so columns still
+     line up with the content around the table */
+  max-width: calc(100% + 1.3rem);
+  padding: 0.5rem 0.65rem;
+  margin: -0.5rem -0.65rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.hm-table-wrap[data-sticky] {
+  max-height: min(70dvh, 40rem);
+  overflow-y: auto;
+}
+.hm-table-wrap:focus-visible {
+  outline: var(--hm-focus-width) solid var(--hm-focus-color);
+  outline-offset: var(--hm-focus-offset);
+}
+.hm-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--hm-text-md);
+}
+.hm-table-caption {
+  padding-bottom: var(--hm-space-3);
+  color: var(--hm-muted);
+  font-size: var(--hm-text-sm);
+  text-align: left;
+}
+.hm-table-head,
+.hm-table-cell {
+  padding: 0.75rem var(--hm-space-4) 0.75rem 0;
+  text-align: left;
+  vertical-align: baseline;
+  font-weight: var(--hm-weight-regular);
+}
+.hm-table-head:last-child,
+.hm-table-cell:last-child {
+  padding-right: 0;
+}
+:is(.hm-table-head, .hm-table-cell)[data-align="end"] {
+  text-align: right;
+}
+.hm-table-cell[data-numeric] {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--hm-tracking-num);
+}
+th.hm-table-cell {
+  color: var(--hm-fg-strong);
+}
+.hm-table-head {
+  border-bottom: 1px solid var(--hm-line-strong);
+  color: var(--hm-dim);
+  font-size: var(--hm-text-xs);
+  letter-spacing: var(--hm-tracking-eyebrow);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.hm-table-wrap[data-sticky] .hm-table-head {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--hm-bg);
+}
+.hm-table-row > .hm-table-cell {
+  border-bottom: 1px solid var(--hm-line);
+}
+.hm-table-row:hover > .hm-table-cell {
+  background: var(--hm-control-bg);
+}
+.hm-table-row[data-selected] > .hm-table-cell {
+  background: var(--hm-surface-selected);
+  box-shadow: inset 0 1px 0 var(--hm-line-strong); /* the lit top edge only: cells must not outline themselves */
+}
+.hm-table-cell a {
+  color: inherit;
+  text-underline-offset: 3px;
+}
+
+.hm-table-sort {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0 0.15rem 0 0; /* room for the rotated chevron, so a right-aligned last column never scrolls */
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+}
+.hm-table-sort:hover,
+.hm-table-sort:not([data-sort="none"]) {
+  color: var(--hm-fg);
+}
+.hm-table-sort:focus-visible {
+  outline: var(--hm-focus-width) solid var(--hm-focus-color);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+.hm-table-sort-icon {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  rotate: 45deg;
+  translate: 0 -0.1rem;
+  opacity: 0.35;
+  transition: rotate var(--hm-dur-fast) var(--hm-ease-out), opacity var(--hm-dur-fast) var(--hm-ease-out);
+}
+.hm-table-sort[data-sort="ascending"] .hm-table-sort-icon {
+  rotate: -135deg;
+  translate: 0 0.1rem;
+  opacity: 1;
+}
+.hm-table-sort[data-sort="descending"] .hm-table-sort-icon {
+  opacity: 1;
+}
+
+.hm-tab-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+.hm-tab-list[data-variant="underline"] {
+  gap: 1.6rem;
+  margin-bottom: var(--hm-space-5);
+  border-bottom: 1px solid var(--hm-line);
+}
+.hm-tab-list[data-variant="pill"] {
+  gap: 0.2rem;
+  margin-bottom: var(--hm-space-4);
+}
+.hm-tabs[data-orientation="vertical"] {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--hm-space-6);
+}
+.hm-tabs[data-orientation="vertical"] .hm-tab-list {
+  flex-direction: column;
+  border-bottom: 0;
+  border-right: 1px solid var(--hm-line);
+  gap: 0.2rem;
+}
+.hm-tab {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: var(--hm-muted);
+  cursor: pointer;
+  transition:
+    color var(--hm-dur-fast) var(--hm-ease-out),
+    border-color var(--hm-dur-fast) var(--hm-ease-out),
+    background-color var(--hm-dur-fast) var(--hm-ease-out);
+}
+.hm-tab:hover {
+  color: var(--hm-fg);
+}
+.hm-tab:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.hm-tab[aria-selected="true"] {
+  color: var(--hm-fg);
+}
+[data-variant="underline"] > .hm-tab {
+  padding: 0.6rem 0;
+  margin-bottom: -1px;
+  font-size: var(--hm-text-md);
+  border-bottom: 1px solid transparent;
+}
+[data-variant="underline"] > .hm-tab[aria-selected="true"] {
+  border-bottom-color: var(--hm-fg);
+}
+.hm-tabs[data-orientation="vertical"] [data-variant="underline"] > .hm-tab {
+  margin: 0 -1px 0 0;
+  padding: 0.45rem 1.2rem 0.45rem 0;
+  text-align: left;
+  border-bottom: 0;
+  border-right: 1px solid transparent;
+}
+.hm-tabs[data-orientation="vertical"] [data-variant="underline"] > .hm-tab[aria-selected="true"] {
+  border-right-color: var(--hm-fg);
+}
+[data-variant="pill"] > .hm-tab {
+  padding: 0.4rem 0.7rem;
+  border-radius: var(--hm-radius-pill);
+  font-size: var(--hm-text-sm);
+}
+[data-variant="pill"] > .hm-tab[aria-selected="true"] {
+  background: var(--hm-surface-selected);
+  box-shadow: var(--hm-selected-edge);
+}
+.hm-tab:focus-visible {
+  outline: var(--hm-focus-width) solid var(--hm-focus-color);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+.hm-tab-panel:focus-visible {
+  outline: var(--hm-focus-width) solid var(--hm-focus-color);
+  outline-offset: 4px;
+  border-radius: var(--hm-radius-md);
+}
+.hm-tab-panel:not([hidden]) {
+  animation: hm-rise var(--hm-dur-slow) var(--hm-ease-glide) both;
+}
+
+/*
+ * Sliding indicator. TabList measures the active tab (--_ix/--_iy/--_iw/--_ih) and sets data-indicator once it has
+ * laid out; the underline or the pill then glides to the new tab on a soft spring instead of swapping. Without JS the
+ * selected tab keeps its own border or fill.
+ */
+.hm-tab-list {
+  position: relative;
+}
+.hm-tab {
+  position: relative;
+  z-index: 1;
+}
+.hm-tab-list[data-indicator]::after,
+.hm-tab-list[data-indicator]::before {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  transition:
+    transform var(--hm-dur-slow) var(--hm-ease-spring-soft),
+    width var(--hm-dur-slow) var(--hm-ease-spring-soft),
+    height var(--hm-dur-slow) var(--hm-ease-spring-soft);
+}
+.hm-tab-list[data-variant="underline"][data-indicator]::after {
+  left: 0;
+  top: 0;
+  height: 1px;
+  width: var(--_iw);
+  background: var(--hm-fg);
+  /* on the selected tab's own bottom edge, so it stays under the right tab when a narrow row wraps */
+  transform: translate(var(--_ix), calc(var(--_iy) + var(--_ih) - 1px));
+}
+.hm-tab-list[data-variant="underline"][data-indicator] > .hm-tab[aria-selected="true"] {
+  border-bottom-color: transparent;
+}
+.hm-tab-list[data-variant="pill"][data-indicator]::before {
+  left: 0;
+  top: 0;
+  z-index: 0;
+  width: var(--_iw);
+  height: var(--_ih);
+  border-radius: var(--hm-radius-pill);
+  background: var(--hm-surface-selected);
+  box-shadow: var(--hm-selected-edge);
+  transform: translate(var(--_ix), var(--_iy));
+}
+.hm-tab-list[data-variant="pill"][data-indicator] > .hm-tab[aria-selected="true"] {
+  background: none;
+}
+.hm-tabs[data-orientation="vertical"] .hm-tab-list[data-variant="underline"][data-indicator]::after {
+  left: auto;
+  right: -1px;
+  bottom: auto;
+  top: 0;
+  width: 1px;
+  height: var(--_ih);
+  transform: translateY(var(--_iy));
+}
+.hm-tabs[data-orientation="vertical"] .hm-tab-list[data-variant="underline"][data-indicator] > .hm-tab[aria-selected="true"] {
+  border-right-color: transparent;
+}
+
+/* Collapsible and Accordion: the height animates by transitioning a grid row from 0fr to 1fr, so no measuring */
+.hm-collapsible-content {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows var(--hm-dur-slow) var(--hm-ease-pour),
+    opacity var(--hm-dur-base) var(--hm-ease-out);
+}
+.hm-collapsible-content[data-state="open"] {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+.hm-collapsible-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+.hm-collapsible-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+.hm-collapsible-trigger:focus-visible {
+  outline: var(--hm-focus-width) solid var(--hm-focus-color);
+  outline-offset: 4px;
+}
+
+.hm-accordion {
+  border-top: 1px solid var(--hm-line);
+}
+.hm-accordion-item {
+  border-bottom: 1px solid var(--hm-line);
+}
+.hm-accordion-heading {
+  margin: 0;
+  font-size: inherit;
+}
+.hm-accordion-trigger {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--hm-space-4);
+  padding: 1rem 0;
+  border: 0;
+  background: none;
+  color: var(--hm-fg);
+  font: inherit;
+  font-size: var(--hm-text-base);
+  text-align: left;
+  cursor: pointer;
+  transition: color var(--hm-dur-fast) var(--hm-ease-out);
+}
+.hm-accordion-trigger:hover {
+  color: var(--hm-fg-strong);
+}
+.hm-accordion-trigger:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.hm-accordion-trigger:focus-visible {
+  outline: var(--hm-focus-width) solid var(--hm-focus-color);
+  outline-offset: -2px;
+  border-radius: var(--hm-radius-sm);
+}
+.hm-accordion-chevron {
+  flex: none;
+  color: var(--hm-muted);
+  transition: rotate var(--hm-dur-slow) var(--hm-ease-spring);
+}
+.hm-accordion-trigger[data-state="open"] .hm-accordion-chevron {
+  rotate: 180deg;
+}
+.hm-accordion-content .hm-collapsible-inner > * {
+  color: var(--hm-muted);
+  font-size: var(--hm-text-md);
+}
+.hm-accordion-content .hm-collapsible-inner {
+  padding-right: var(--hm-space-6);
+}
+.hm-accordion-content .hm-collapsible-inner > :last-child {
+  padding-bottom: 1.2rem;
+}
+
+.hm-segmented {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.2rem;
+}
+.hm-segment {
+  min-height: var(--hm-control-h);
+  padding: 0.4rem 1.15rem; /* the hover and pressed pill extends well past the text */
+  border: 1px solid transparent;
+  border-radius: var(--hm-radius-pill);
+  background: none;
+  color: var(--hm-muted);
+  font: inherit;
+  font-size: var(--hm-text-sm);
+  cursor: pointer;
+  transition:
+    color var(--hm-dur-fast) var(--hm-ease-out),
+    border-color var(--hm-dur-fast) var(--hm-ease-out),
+    background-color var(--hm-dur-fast) var(--hm-ease-out);
+}
+.hm-segment:hover {
+  color: var(--hm-fg);
+}
+.hm-segment:hover:not([aria-pressed="true"], :disabled) {
+  background: var(--hm-control-bg);
+}
+.hm-segment[aria-pressed="true"] {
+  color: var(--hm-fg);
+  background: var(--hm-surface-selected);
+  box-shadow: var(--hm-selected-edge);
+  border-color: var(--hm-line-strong);
+}
+.hm-segment:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.hm-segment:focus-visible {
+  outline: var(--hm-focus-width) solid var(--hm-focus-color);
+  outline-offset: var(--hm-focus-offset);
+}
+@media (pointer: coarse) {
+  .hm-segment {
+    min-height: var(--hm-target);
+  }
+}
+
+/* sliding highlight: SegmentedControl measures the pressed segment (see createIndicator) */
+.hm-segmented {
+  position: relative;
+}
+.hm-segment {
+  position: relative;
+  z-index: 1;
+}
+.hm-segmented[data-indicator]::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 0;
+  width: var(--_iw);
+  height: var(--_ih);
+  border: 1px solid var(--hm-line-strong);
+  border-radius: var(--hm-radius-pill);
+  background: var(--hm-surface-selected);
+  box-shadow: var(--hm-selected-edge);
+  pointer-events: none;
+  transform: translate(var(--_ix), var(--_iy));
+  transition:
+    transform var(--hm-dur-slow) var(--hm-ease-spring-soft),
+    width var(--hm-dur-slow) var(--hm-ease-spring-soft),
+    height var(--hm-dur-slow) var(--hm-ease-spring-soft);
+}
+.hm-segmented[data-indicator] > .hm-segment[aria-pressed="true"] {
+  background: none;
+  border-color: transparent;
+}
+
+/*
+ * Slider: a hairline rail, a fill and a round thumb. Everything that moves is eased with a short transition on
+ * position, so a drag glides between steps and a key press slides rather than jumps. While the pointer is down the
+ * easing is quick so the thumb still tracks the hand.
+ */
+.hm-slider {
+  --_ease: var(--hm-dur-base) var(--hm-ease-glide);
+  display: flex;
+  align-items: center;
+  gap: var(--hm-space-3);
+  min-height: var(--hm-control-h);
+  touch-action: none;
+}
+.hm-slider-track {
+  position: relative;
+  flex: 1;
+  height: 1.5rem;
+  margin-inline: 0.55rem; /* half a thumb, so a thumb at either end stays inside the control's box */
+  cursor: pointer;
+}
+/* the thumb overhangs each end by half its width: keep that overhang pressable */
+.hm-slider-track::before {
+  content: "";
+  position: absolute;
+  inset: 0 -0.55rem;
+}
+.hm-slider-rail,
+.hm-slider-fill {
+  position: absolute;
+  top: 50%;
+  height: 3px;
+  margin-top: -1.5px;
+  border-radius: var(--hm-radius-pill);
+}
+/* the rail runs from the minimum to the maximum: a thumb centered on an end sits exactly on that end of the line */
+.hm-slider-rail {
+  inset-inline: 0;
+  background: var(--hm-line-strong);
+}
+.hm-slider-fill {
+  left: var(--_lo);
+  width: calc(var(--_hi) - var(--_lo));
+  background: var(--hm-accent);
+  transition:
+    left var(--_ease),
+    width var(--_ease);
+}
+.hm-slider-thumb {
+  position: absolute;
+  top: 50%;
+  left: var(--_at);
+  width: 1.1rem;
+  height: 1.1rem;
+  margin: -0.55rem 0 0 -0.55rem;
+  border-radius: 50%;
+  background: var(--hm-fg);
+  box-shadow: 0 0 0 1px var(--hm-line-strong), var(--hm-shadow-sm);
+  transition:
+    left var(--_ease),
+    scale var(--hm-dur-fast) var(--hm-ease-glide),
+    box-shadow var(--hm-dur-fast) var(--hm-ease-out);
+  outline: none;
+}
+.hm-slider[data-dragging] {
+  --_ease: 90ms var(--hm-ease-out);
+}
+.hm-slider-thumb:hover,
+.hm-slider[data-dragging] .hm-slider-thumb {
+  scale: 1.12;
+}
+.hm-slider-thumb:focus-visible {
+  box-shadow: 0 0 0 1px var(--hm-line-strong), 0 0 0 4px var(--hm-accent-soft), var(--hm-shadow-sm);
+}
+.hm-slider[data-disabled] {
+  opacity: 0.45;
+}
+.hm-slider[data-disabled] .hm-slider-track {
+  cursor: not-allowed;
+}
+.hm-slider-value {
+  min-width: 3ch;
+  color: var(--hm-muted);
+  font-size: var(--hm-text-sm);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+@media (pointer: coarse) {
+  .hm-slider-track {
+    height: var(--hm-target);
+  }
+}
+
+/* Separator, Kbd, Tag */
+.hm-separator {
+  flex: none;
+  background: var(--hm-line);
+}
+.hm-separator[data-orientation="horizontal"] {
+  width: 100%;
+  height: 1px;
+  margin-block: var(--hm-space-4);
+}
+.hm-separator[data-orientation="vertical"] {
+  align-self: stretch;
+  width: 1px;
+  min-height: 1em;
+  margin-inline: var(--hm-space-3);
+}
+
+.hm-kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.5em;
+  padding: 0.1em 0.45em;
+  border: 1px solid var(--hm-line-strong);
+  border-bottom-width: 2px;
+  border-radius: var(--hm-radius-sm);
+  background: var(--hm-control-bg);
+  color: var(--hm-fg-soft);
+  font-family: var(--hm-font-mono);
+  font-size: 0.78em;
+  line-height: 1.4;
+}
+.hm-kbd-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.hm-kbd-group > .hm-kbd + .hm-kbd::before {
+  content: none;
+}
+
+.hm-tag {
+  --_tone: var(--hm-fg-soft);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.18rem 0.6rem;
+  border: 1px solid var(--hm-line-strong);
+  border-radius: var(--hm-radius-pill);
+  background: var(--hm-control-bg);
+  color: var(--_tone);
+  font-size: var(--hm-text-sm);
+  line-height: 1.4;
+  animation: hm-pop var(--hm-dur-base) var(--hm-ease-spring-soft) both;
+}
+.hm-tag[data-tone="accent"] {
+  --_tone: var(--hm-accent);
+  border-color: var(--hm-accent-line);
+}
+.hm-tag[data-tone="success"] {
+  --_tone: var(--hm-success-text);
+}
+.hm-tag[data-tone="warning"] {
+  --_tone: var(--hm-warning);
+}
+.hm-tag[data-tone="danger"] {
+  --_tone: var(--hm-danger);
+}
+.hm-tag-remove {
+  display: grid;
+  place-items: center;
+  width: 1.1rem;
+  height: 1.1rem;
+  margin-right: -0.3rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: inherit;
+  opacity: 0.65;
+  cursor: pointer;
+  transition:
+    opacity var(--hm-dur-fast) var(--hm-ease-out),
+    background-color var(--hm-dur-fast) var(--hm-ease-out);
+}
+.hm-tag-remove:hover {
+  opacity: 1;
+  background: var(--hm-surface-selected);
+  box-shadow: var(--hm-selected-edge);
+}
+.hm-tag-remove:focus-visible {
+  outline: var(--hm-focus-width) solid var(--hm-focus-color);
+  outline-offset: 1px;
+}
+
+.hm-avatar {
+  --_s: 2.4rem;
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: var(--_s);
+  height: var(--_s);
+  border-radius: 50%;
+  background: hsl(var(--_h, 220) 38% 30% / 0.55);
+  box-shadow: inset 0 0 0 1px var(--hm-line-strong);
+  color: var(--hm-fg);
+  font-size: calc(var(--_s) * 0.38);
+  font-weight: var(--hm-weight-medium);
+  letter-spacing: 0.02em;
+  user-select: none;
+}
+.hm-avatar[data-shape="square"] {
+  border-radius: var(--hm-radius-md);
+}
+.hm-avatar[data-size="xs"] {
+  --_s: 1.5rem;
+}
+.hm-avatar[data-size="sm"] {
+  --_s: 2rem;
+}
+.hm-avatar[data-size="lg"] {
+  --_s: 3.2rem;
+}
+.hm-avatar[data-size="xl"] {
+  --_s: 4.5rem;
+}
+.hm-avatar-fallback {
+  grid-area: 1 / 1;
+}
+.hm-avatar-img {
+  grid-area: 1 / 1;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity var(--hm-dur-slow) var(--hm-ease-out);
+}
+.hm-avatar-img[data-loaded] {
+  opacity: 1;
+}
+.hm-avatar-status {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 28%;
+  height: 28%;
+  min-width: 6px;
+  min-height: 6px;
+  border-radius: 50%;
+  background: var(--hm-faint);
+  box-shadow: 0 0 0 2px var(--hm-bg);
+}
+.hm-avatar-status[data-status="online"] {
+  background: var(--hm-success);
+}
+.hm-avatar-status[data-status="away"] {
+  background: var(--hm-warning);
+}
+.hm-avatar-status[data-status="busy"] {
+  background: var(--hm-danger);
+}
+.hm-avatar-group {
+  display: inline-flex;
+  align-items: center;
+}
+.hm-avatar-group > .hm-avatar {
+  box-shadow:
+    inset 0 0 0 1px var(--hm-line-strong),
+    0 0 0 2px var(--hm-bg);
+  transition: transform var(--hm-dur-base) var(--hm-ease-spring);
+}
+.hm-avatar-group > .hm-avatar + .hm-avatar {
+  margin-left: -0.6rem;
+}
+.hm-avatar-group > .hm-avatar:hover {
+  transform: translateY(-3px);
+  z-index: 1;
+}
+.hm-avatar-more {
+  background: var(--hm-surface-selected);
+  box-shadow: var(--hm-selected-edge);
+  color: var(--hm-muted);
+}
+
+/* Progress: the fill is a transform, so it eases to each value without layout work */
+.hm-progress {
+  --_tone: var(--hm-accent);
+  display: flex;
+  align-items: center;
+  gap: var(--hm-space-3);
+}
+.hm-progress[data-tone="success"],
+.hm-ring[data-tone="success"] {
+  --_tone: var(--hm-success);
+}
+.hm-progress[data-tone="warning"],
+.hm-ring[data-tone="warning"] {
+  --_tone: var(--hm-warning);
+}
+.hm-progress[data-tone="danger"],
+.hm-ring[data-tone="danger"] {
+  --_tone: var(--hm-danger);
+}
+.hm-progress-track {
+  position: relative;
+  flex: 1;
+  height: 6px;
+  overflow: hidden;
+  border-radius: var(--hm-radius-pill);
+  background: var(--hm-line-strong);
+}
+.hm-progress[data-size="sm"] .hm-progress-track {
+  height: 3px;
+}
+.hm-progress-fill {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--_tone);
+  transform-origin: left center;
+  transform: scaleX(var(--_p, 0));
+  transition: transform var(--hm-dur-scene) var(--hm-ease-glide);
+}
+.hm-progress[data-indeterminate] .hm-progress-fill {
+  width: 40%;
+  transform: none;
+  transition: none;
+  animation: hm-progress-sweep 2.4s var(--hm-ease-pour) infinite;
+}
+@keyframes hm-progress-sweep {
+  from {
+    translate: -100% 0;
+  }
+  to {
+    translate: 250% 0;
+  }
+}
+.hm-progress-value {
+  min-width: 3.2ch;
+  color: var(--hm-muted);
+  font-size: var(--hm-text-sm);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.hm-ring {
+  --_tone: var(--hm-accent);
+  --_d: 3rem;
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: var(--_d);
+  height: var(--_d);
+}
+.hm-ring[data-size="sm"] {
+  --_d: 1.6rem;
+}
+.hm-ring[data-size="lg"] {
+  --_d: 5rem;
+}
+.hm-ring svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  rotate: -90deg;
+}
+.hm-ring-track,
+.hm-ring-arc {
+  fill: none;
+  stroke-width: 3;
+}
+.hm-ring-track {
+  stroke: var(--hm-line-strong);
+}
+.hm-ring-arc {
+  stroke: var(--_tone);
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: calc(1 - var(--_p, 0));
+  transition: stroke-dashoffset var(--hm-dur-scene) var(--hm-ease-glide);
+}
+.hm-ring[data-indeterminate] svg {
+  animation: hm-spin 1.6s linear infinite;
+}
+.hm-ring[data-indeterminate] .hm-ring-arc {
+  transition: none;
+}
+.hm-ring-label {
+  font-size: calc(var(--_d) * 0.26);
+  font-variant-numeric: tabular-nums;
+  color: var(--hm-fg-soft);
+}
+@media (prefers-reduced-motion: reduce) {
+  .hm-progress[data-indeterminate] .hm-progress-fill {
+    animation-duration: 6s;
+  }
+  .hm-ring[data-indeterminate] svg {
+    animation-duration: 4s;
+  }
+}
+
+/* Breadcrumb, Pagination, Stepper */
+.hm-breadcrumb-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--hm-text-sm);
+  color: var(--hm-muted);
+}
+.hm-breadcrumb-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.hm-breadcrumb-item + .hm-breadcrumb-item::before {
+  content: "";
+  width: 0.4rem;
+  height: 0.4rem;
+  border-top: 1px solid var(--hm-faint);
+  border-right: 1px solid var(--hm-faint);
+  rotate: 45deg;
+  margin-right: 0.2rem;
+}
+.hm-breadcrumb-link {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--hm-dur-fast) var(--hm-ease-out);
+}
+.hm-breadcrumb-link:hover {
+  color: var(--hm-fg);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.hm-breadcrumb-page {
+  color: var(--hm-fg);
+}
+
+.hm-pagination-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.2rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.hm-page-link {
+  display: inline-grid;
+  place-items: center;
+  min-width: var(--hm-control-h);
+  height: var(--hm-control-h);
+  padding: 0 0.7rem;
+  border: 1px solid transparent;
+  border-radius: var(--hm-radius-md);
+  background: none;
+  color: var(--hm-muted);
+  font: inherit;
+  font-size: var(--hm-text-sm);
+  font-variant-numeric: tabular-nums;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    color var(--hm-dur-fast) var(--hm-ease-out),
+    background-color var(--hm-dur-fast) var(--hm-ease-out),
+    border-color var(--hm-dur-fast) var(--hm-ease-out),
+    transform var(--hm-dur-base) var(--hm-ease-spring);
+}
+.hm-page-link:hover:not([aria-disabled="true"], [data-current]) {
+  color: var(--hm-fg);
+  background: var(--hm-control-bg);
+}
+.hm-page-link:active:not([aria-disabled="true"]) {
+  transform: scale(0.94);
+}
+.hm-page-link[data-current] {
+  color: var(--hm-fg);
+  background: var(--hm-surface-selected);
+  box-shadow: var(--hm-selected-edge);
+  border-color: var(--hm-line-strong);
+  cursor: default;
+}
+.hm-page-link[aria-disabled="true"] {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.hm-page-link:focus-visible {
+  outline: var(--hm-focus-width) solid var(--hm-focus-color);
+  outline-offset: var(--hm-focus-offset);
+}
+.hm-pagination-gap {
+  display: grid;
+  place-items: center;
+  min-width: var(--hm-control-h);
+  height: var(--hm-control-h);
+}
+.hm-page-gap-button {
+  min-width: var(--hm-control-h);
+  height: var(--hm-control-h);
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--hm-radius-md);
+  background: none;
+  color: var(--hm-dim);
+  font: inherit;
+  cursor: pointer;
+  transition:
+    color var(--hm-dur-fast) var(--hm-ease-out),
+    background-color var(--hm-dur-fast) var(--hm-ease-out);
+}
+.hm-page-gap-button:hover {
+  color: var(--hm-fg);
+  background: var(--hm-control-bg);
+}
+.hm-page-gap-button:focus-visible,
+.hm-page-jump:focus-visible {
+  outline: var(--hm-focus-width) solid var(--hm-focus-color);
+  outline-offset: var(--hm-focus-offset);
+}
+.hm-page-jump {
+  width: 4.6rem;
+  height: var(--hm-control-h);
+  padding: 0 0.6rem;
+  border: 1px solid var(--hm-line-focus);
+  border-radius: var(--hm-radius-md);
+  background: var(--hm-control-bg);
+  box-shadow: 0 0 0 3px var(--hm-accent-soft);
+  color: var(--hm-fg);
+  font: inherit;
+  font-size: var(--hm-text-sm);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  animation: hm-pop var(--hm-dur-base) var(--hm-ease-spring-soft) both;
+}
+.hm-page-jump::placeholder {
+  color: var(--hm-faint);
+}
+@media (pointer: coarse) {
+  .hm-page-link {
+    min-width: var(--hm-target);
+    height: var(--hm-target);
+  }
+}
+
+.hm-stepper {
+  display: flex;
+  gap: var(--hm-space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.hm-stepper[data-orientation="vertical"] {
+  flex-direction: column;
+  gap: 0;
+}
+.hm-step {
+  position: relative;
+  display: flex;
+  flex: 1;
+  align-items: flex-start;
+  gap: 0.7rem;
+  min-width: 0;
+  color: var(--hm-dim);
+}
+.hm-step-marker {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 1.7rem;
+  height: 1.7rem;
+  border: 1px solid var(--hm-line-strong);
+  border-radius: 50%;
+  background: var(--hm-control-bg);
+  font-size: var(--hm-text-xs);
+  font-variant-numeric: tabular-nums;
+  transition:
+    background-color var(--hm-dur-base) var(--hm-ease-out),
+    border-color var(--hm-dur-base) var(--hm-ease-out),
+    color var(--hm-dur-base) var(--hm-ease-out),
+    scale var(--hm-dur-slow) var(--hm-ease-spring);
+}
+.hm-step[data-status="current"] {
+  color: var(--hm-fg);
+}
+.hm-step[data-status="current"] .hm-step-marker {
+  border-color: var(--hm-accent);
+  color: var(--hm-accent);
+  background: var(--hm-accent-soft);
+  scale: 1.08;
+}
+.hm-step[data-status="complete"] {
+  color: var(--hm-fg-soft);
+}
+.hm-step[data-status="complete"] .hm-step-marker {
+  border-color: var(--hm-accent);
+  background: var(--hm-accent);
+  color: var(--hm-on-fg);
+}
+.hm-step-text {
+  display: grid;
+  gap: 0.1rem;
+  padding-top: 0.2rem;
+}
+.hm-step-title {
+  font-size: var(--hm-text-md);
+}
+.hm-step-description {
+  color: var(--hm-dim);
+  font-size: var(--hm-text-xs);
+}
+/* the connector between steps */
+.hm-stepper[data-orientation="horizontal"] .hm-step:not(:last-child)::after {
+  content: "";
+  flex: 1;
+  min-width: 1.5rem;
+  height: 1px;
+  margin: 0.85rem 0.2rem 0 0.3rem;
+  background: var(--hm-line-strong);
+  transition: background-color var(--hm-dur-slow) var(--hm-ease-out);
+}
+.hm-stepper[data-orientation="vertical"] .hm-step {
+  padding-bottom: var(--hm-space-5);
+}
+.hm-stepper[data-orientation="vertical"] .hm-step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 1.9rem;
+  bottom: 0.2rem;
+  left: 0.85rem;
+  width: 1px;
+  background: var(--hm-line-strong);
+}
+.hm-step[data-status="complete"]::after {
+  background: var(--hm-accent) !important;
+}
+/* on a phone a row of steps keeps every marker but only the current step's words; the others stay readable to
+   assistive tech, so the steps never run into their connectors */
+@media (max-width: 640px) {
+  .hm-stepper[data-orientation="horizontal"] .hm-step[data-status="current"] {
+    flex: 1 0 auto;
+  }
+  .hm-stepper[data-orientation="horizontal"] .hm-step:not([data-status="current"]) .hm-step-text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+/* Pagination: the current page's highlight slides between pages (Pagination measures it) */
+.hm-pagination-list {
+  position: relative;
+}
+.hm-pagination-list[data-indicator]::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--_iw);
+  height: var(--_ih);
+  border: 1px solid var(--hm-line-strong);
+  border-radius: var(--hm-radius-md);
+  background: var(--hm-surface-selected);
+  box-shadow: var(--hm-selected-edge);
+  pointer-events: none;
+  transform: translate(var(--_ix), var(--_iy));
+  transition:
+    transform var(--hm-dur-slow) var(--hm-ease-spring-soft),
+    width var(--hm-dur-slow) var(--hm-ease-spring-soft);
+}
+.hm-pagination-list[data-indicator] .hm-page-link {
+  position: relative;
+}
+.hm-pagination-list[data-indicator] .hm-page-link[data-current] {
+  background: none;
+  border-color: transparent;
+}
+
+/* Breadcrumb: the trail draws itself in from the left */
+.hm-breadcrumb-item {
+  animation: hm-slide-in-start var(--hm-dur-slow) var(--hm-ease-glide) both;
+}
+.hm-breadcrumb-item:nth-child(2) {
+  animation-delay: calc(var(--hm-stagger) * 1);
+}
+.hm-breadcrumb-item:nth-child(3) {
+  animation-delay: calc(var(--hm-stagger) * 2);
+}
+.hm-breadcrumb-item:nth-child(4) {
+  animation-delay: calc(var(--hm-stagger) * 3);
+}
+.hm-breadcrumb-item:nth-child(n + 5) {
+  animation-delay: calc(var(--hm-stagger) * 4);
+}
+
+/* Stepper: the current step's ring breathes once it arrives; completed connectors fill with the accent */
+.hm-step[data-status="current"] .hm-step-marker {
+  animation: hm-step-arrive var(--hm-dur-scene) var(--hm-ease-spring-soft) both;
+}
+@keyframes hm-step-arrive {
+  from {
+    box-shadow: 0 0 0 0 var(--hm-accent-soft);
+  }
+  60% {
+    box-shadow: 0 0 0 7px var(--hm-accent-soft);
+  }
+  to {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+/*
+ * Dialog: native <dialog> in the top layer. Enters with a short pop, exits with a fade (allow-discrete keeps it
+ * rendered while it fades). Browsers without @starting-style simply show and hide it.
+ */
+.hm-dialog {
+  --_w: 34rem;
+  width: min(var(--_w), 100vw - 2rem);
+  max-height: min(85dvh, 48rem);
+  margin: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--hm-fg);
+  overflow: visible;
+  opacity: 1;
+  transform: none;
+  filter: none;
+  transition:
+    opacity var(--hm-dur-fast) var(--hm-ease-out),
+    transform var(--hm-dur-slow) var(--hm-ease-spring-soft),
+    filter var(--hm-dur-base) var(--hm-ease-out),
+    overlay var(--hm-dur-base) allow-discrete,
+    display var(--hm-dur-base) allow-discrete;
+}
+.hm-dialog[data-size="sm"] {
+  --_w: 26rem;
+}
+.hm-dialog[data-size="lg"] {
+  --_w: 48rem;
+}
+.hm-dialog[data-position="top"] {
+  margin-top: 14vh;
+}
+.hm-dialog:not([open]) {
+  opacity: 0;
+  transform: translateY(0.5rem) scale(0.97);
+  filter: blur(4px);
+}
+@starting-style {
+  .hm-dialog[open] {
+    opacity: 0;
+    transform: translateY(1rem) scale(0.94);
+    filter: blur(6px);
+  }
+}
+.hm-dialog::backdrop {
+  background: var(--hm-scrim);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  opacity: 1;
+  transition:
+    opacity var(--hm-dur-base) var(--hm-ease-out),
+    backdrop-filter var(--hm-dur-slow) var(--hm-ease-out),
+    overlay var(--hm-dur-base) allow-discrete,
+    display var(--hm-dur-base) allow-discrete;
+}
+.hm-dialog:not([open])::backdrop {
+  opacity: 0;
+  backdrop-filter: blur(0);
+}
+@starting-style {
+  .hm-dialog[open]::backdrop {
+    opacity: 0;
+    backdrop-filter: blur(0);
+  }
+}
+.hm-dialog-box {
+  max-height: inherit;
+  overflow: auto;
+  padding: var(--hm-space-5) var(--hm-space-5) var(--hm-space-4);
+  border: 1px solid var(--hm-line-overlay);
+  border-radius: var(--hm-radius-xl);
+  background: var(--hm-surface-overlay);
+  box-shadow: var(--hm-shadow-overlay);
+}
+.hm-dialog-title {
+  font-size: var(--hm-text-lg);
+  font-weight: var(--hm-weight-medium);
+  letter-spacing: var(--hm-tracking-tight);
+}
+.hm-dialog-description {
+  margin-top: 0.4rem;
+  color: var(--hm-muted);
+  font-size: var(--hm-text-md);
+}
+.hm-dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: var(--hm-space-2);
+  margin-top: var(--hm-space-5);
+}
+html:has(.hm-dialog[open]) {
+  overflow: hidden;
+}
+
+/* side sheets: Drawer. They slide from their edge on a soft spring and leave quickly. */
+.hm-dialog:is([data-position="left"], [data-position="right"], [data-position="bottom"]) {
+  max-height: none;
+  filter: none;
+}
+.hm-dialog:is([data-position="left"], [data-position="right"]) {
+  --_w: 26rem;
+  width: min(var(--_w), 100vw);
+  height: 100dvh;
+}
+.hm-dialog[data-position="right"] {
+  margin: 0 0 0 auto;
+}
+.hm-dialog[data-position="left"] {
+  margin: 0 auto 0 0;
+}
+.hm-dialog[data-position="bottom"] {
+  width: min(var(--_w), 100vw);
+  max-height: 85dvh;
+  margin: auto auto 0;
+}
+.hm-dialog[data-position="right"]:not([open]) {
+  transform: translateX(100%);
+  opacity: 1;
+  filter: none;
+}
+.hm-dialog[data-position="left"]:not([open]) {
+  transform: translateX(-100%);
+  opacity: 1;
+  filter: none;
+}
+.hm-dialog[data-position="bottom"]:not([open]) {
+  transform: translateY(100%);
+  opacity: 1;
+  filter: none;
+}
+@starting-style {
+  .hm-dialog[data-position="right"][open] {
+    transform: translateX(100%);
+    opacity: 1;
+    filter: none;
+  }
+  .hm-dialog[data-position="left"][open] {
+    transform: translateX(-100%);
+    opacity: 1;
+    filter: none;
+  }
+  .hm-dialog[data-position="bottom"][open] {
+    transform: translateY(100%);
+    opacity: 1;
+    filter: none;
+  }
+}
+.hm-dialog:is([data-position="left"], [data-position="right"]) .hm-dialog-box {
+  height: 100%;
+  max-height: none;
+  border-radius: 0;
+  border-block-width: 0;
+}
+.hm-dialog[data-position="right"] .hm-dialog-box {
+  border-right-width: 0;
+}
+.hm-dialog[data-position="left"] .hm-dialog-box {
+  border-left-width: 0;
+}
+.hm-dialog[data-position="bottom"] .hm-dialog-box {
+  border-radius: var(--hm-radius-xl) var(--hm-radius-xl) 0 0;
+  border-bottom-width: 0;
+}
+
+/* Shared by Popover, Tooltip and DropdownMenu: a native popover in the top layer, placed by the floating engine. */
+.hm-floating {
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--hm-line-overlay);
+  background: var(--hm-surface-overlay);
+  color: var(--hm-fg);
+  overflow: visible;
+}
+/* enter: grows out of the anchor with a soft spring; exit: a quick shrink back. Direction follows data-side. */
+.hm-floating {
+  --_dx: 0px;
+  --_dy: 0.4rem;
+  transform-origin: var(--_ox, 50%) var(--_oy, 0%);
+}
+.hm-floating[data-side="top"] {
+  --_dy: -0.4rem;
+  --_oy: 100%;
+}
+.hm-floating[data-side="left"] {
+  --_dx: -0.4rem;
+  --_dy: 0px;
+  --_ox: 100%;
+  --_oy: 50%;
+}
+.hm-floating[data-side="right"] {
+  --_dx: 0.4rem;
+  --_dy: 0px;
+  --_ox: 0%;
+  --_oy: 50%;
+}
+.hm-floating[data-state="open"] {
+  animation: hm-float-in var(--hm-dur-base) var(--hm-ease-spring-soft) both;
+}
+.hm-floating[data-state="closed"] {
+  pointer-events: none;
+  animation: hm-float-out var(--hm-dur-fast) var(--hm-ease-pour) both;
+}
+@keyframes hm-float-in {
+  from {
+    opacity: 0;
+    transform: translate(calc(var(--_dx) * -1), calc(var(--_dy) * -1)) scale(0.94);
+    filter: blur(4px);
+  }
+}
+@keyframes hm-float-out {
+  to {
+    opacity: 0;
+    transform: translate(calc(var(--_dx) * -0.5), calc(var(--_dy) * -0.5)) scale(0.97);
+    filter: blur(2px);
+  }
+}
+.hm-floating:focus-visible {
+  outline: none;
+}
+
+.hm-popover {
+  min-width: 12rem;
+  max-width: min(24rem, 100vw - 1rem);
+  padding: var(--hm-space-4);
+  border-radius: var(--hm-radius-lg);
+  box-shadow: var(--hm-shadow-overlay);
+  font-size: var(--hm-text-md);
+}
+
+.hm-tooltip {
+  max-width: 18rem;
+  padding: 0.35rem 0.6rem;
+  border-radius: var(--hm-radius-sm);
+  font-size: var(--hm-text-xs);
+  line-height: 1.35;
+  pointer-events: none;
+}
+
+/* DropdownMenu */
+.hm-menu {
+  min-width: max(11rem, var(--hm-anchor-width, 0px));
+  max-width: min(20rem, 100vw - 1rem);
+  padding: 0.3rem;
+  border-radius: var(--hm-radius-lg);
+  box-shadow: var(--hm-shadow-overlay);
+}
+.hm-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  min-height: var(--hm-control-h);
+  padding: 0.4rem 0.6rem;
+  border: 0;
+  border-radius: var(--hm-radius-sm);
+  background: none;
+  color: var(--hm-fg);
+  font: inherit;
+  font-size: var(--hm-text-md);
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+.hm-menu-item:hover,
+.hm-menu-item:focus-visible {
+  outline: none;
+  background: var(--hm-surface-selected);
+  box-shadow: var(--hm-selected-edge);
+}
+.hm-menu-item[data-tone="danger"] {
+  color: var(--hm-danger);
+}
+.hm-menu-item[data-disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.hm-menu-label {
+  padding: 0.4rem 0.6rem 0.2rem;
+  color: var(--hm-dim);
+  font-size: var(--hm-text-2xs);
+  letter-spacing: var(--hm-tracking-eyebrow);
+  text-transform: uppercase;
+}
+.hm-menu-separator {
+  height: 1px;
+  margin: 0.3rem -0.3rem;
+  background: var(--hm-line);
+}
+@media (pointer: coarse) {
+  .hm-menu-item {
+    min-height: var(--hm-target);
+  }
+}
+
+/* menu items arrive one after another */
+.hm-menu[data-state="open"] .hm-menu-item {
+  animation: hm-menu-item-in var(--hm-dur-base) var(--hm-ease-glide) both;
+}
+@keyframes hm-menu-item-in {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--_dy, 0.4rem) * -0.6));
+  }
+}
+.hm-menu[data-state="open"] .hm-menu-item:nth-child(1) {
+  animation-delay: calc(0 * var(--hm-stagger) * 0.5);
+}
+.hm-menu[data-state="open"] .hm-menu-item:nth-child(2) {
+  animation-delay: calc(1 * var(--hm-stagger) * 0.5);
+}
+.hm-menu[data-state="open"] .hm-menu-item:nth-child(3) {
+  animation-delay: calc(2 * var(--hm-stagger) * 0.5);
+}
+.hm-menu[data-state="open"] .hm-menu-item:nth-child(4) {
+  animation-delay: calc(3 * var(--hm-stagger) * 0.5);
+}
+.hm-menu[data-state="open"] .hm-menu-item:nth-child(5) {
+  animation-delay: calc(4 * var(--hm-stagger) * 0.5);
+}
+.hm-menu[data-state="open"] .hm-menu-item:nth-child(6) {
+  animation-delay: calc(5 * var(--hm-stagger) * 0.5);
+}
+.hm-menu[data-state="open"] .hm-menu-item:nth-child(7) {
+  animation-delay: calc(6 * var(--hm-stagger) * 0.5);
+}
+.hm-menu[data-state="open"] .hm-menu-item:nth-child(8) {
+  animation-delay: calc(7 * var(--hm-stagger) * 0.5);
+}
+.hm-menu[data-state="open"] .hm-menu-item:nth-child(9) {
+  animation-delay: calc(8 * var(--hm-stagger) * 0.5);
+}
+.hm-menu[data-state="open"] .hm-menu-item:nth-child(10) {
+  animation-delay: calc(9 * var(--hm-stagger) * 0.5);
+}
+.hm-menu[data-state="open"] .hm-menu-item:nth-child(11) {
+  animation-delay: calc(10 * var(--hm-stagger) * 0.5);
+}
+.hm-menu[data-state="open"] .hm-menu-item:nth-child(12) {
+  animation-delay: calc(11 * var(--hm-stagger) * 0.5);
+}
+
+.hm-context-area {
+  border-radius: var(--hm-radius-lg);
+}
+.hm-context-area:focus-visible {
+  outline: var(--hm-focus-width) solid var(--hm-focus-color);
+  outline-offset: var(--hm-focus-offset);
+}
+
+.hm-combobox {
+  position: relative;
+  min-width: 0;
+}
+.hm-combobox-field.hm-control {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 2rem 0.3rem 0.55rem;
+  cursor: text;
+}
+.hm-combobox-field.hm-control:focus-within {
+  border-color: var(--hm-line-focus);
+  box-shadow: 0 0 0 3px var(--hm-accent-soft);
+}
+.hm-combobox[data-disabled] .hm-combobox-field {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.hm-combobox-input {
+  flex: 1 1 6rem;
+  min-width: 4rem;
+  min-height: 1.6rem;
+  padding: 0 0.2rem;
+  border: 0;
+  background: none;
+  color: var(--hm-fg);
+  font: inherit;
+  font-size: 0.9rem;
+  outline: none;
+}
+.hm-combobox-input::placeholder {
+  color: var(--hm-faint);
+}
+.hm-combobox-chevron {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  translate: 0 -50%;
+  color: var(--hm-muted);
+  pointer-events: none;
+  transition: rotate var(--hm-dur-base) var(--hm-ease-spring);
+}
+.hm-combobox:has(.hm-combobox-input[aria-expanded="true"]) .hm-combobox-chevron {
+  rotate: 180deg;
+}
+.hm-combobox-list {
+  width: var(--hm-anchor-width);
+  max-height: 16rem;
+  overflow: auto;
+}
+.hm-combobox-option {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: 0 0.6rem;
+  padding: 0.5rem 0.6rem;
+  border-radius: var(--hm-radius-sm);
+  font-size: var(--hm-text-md);
+  cursor: pointer;
+}
+.hm-combobox-option[data-active] {
+  background: var(--hm-surface-selected);
+  box-shadow: var(--hm-selected-edge);
+}
+.hm-combobox-option[aria-disabled="true"] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.hm-combobox-description {
+  grid-column: 1;
+  color: var(--hm-dim);
+  font-size: var(--hm-text-xs);
+}
+.hm-combobox-check {
+  grid-row: 1;
+  grid-column: 2;
+  color: var(--hm-accent);
+  opacity: 0;
+  scale: 0.6;
+  transition:
+    opacity var(--hm-dur-fast) var(--hm-ease-out),
+    scale var(--hm-dur-base) var(--hm-ease-spring);
+}
+.hm-combobox-option[aria-selected="true"] .hm-combobox-check {
+  opacity: 1;
+  scale: 1;
+}
+.hm-combobox-empty {
+  margin: 0;
+  padding: 0.7rem 0.6rem;
+  color: var(--hm-dim);
+  font-size: var(--hm-text-md);
+}
+
+/* NumberInput, Rating, PinInput, Toggle, TagInput, FileDropzone */
+.hm-number.hm-control {
+  display: inline-flex;
+  align-items: stretch;
+  width: auto;
+  padding: 0;
+  overflow: hidden;
+}
+.hm-number:focus-within {
+  border-color: var(--hm-line-focus);
+  box-shadow: 0 0 0 3px var(--hm-accent-soft);
+}
+.hm-number[data-disabled] {
+  opacity: 0.5;
+}
+.hm-number-input {
+  width: 5.5ch;
+  min-width: 4rem;
+  padding: 0 0.3rem;
+  border: 0;
+  background: none;
+  color: var(--hm-fg);
+  font: inherit;
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  outline: none;
+}
+.hm-number-button {
+  display: grid;
+  place-items: center;
+  width: calc(var(--hm-control-h) - 2px);
+  border: 0;
+  background: none;
+  color: var(--hm-muted);
+  cursor: pointer;
+  transition:
+    background-color var(--hm-dur-fast) var(--hm-ease-out),
+    color var(--hm-dur-fast) var(--hm-ease-out),
+    scale var(--hm-dur-base) var(--hm-ease-spring);
+}
+.hm-number-button:hover:not(:disabled) {
+  background: var(--hm-surface-selected);
+  box-shadow: var(--hm-selected-edge);
+  color: var(--hm-fg);
+}
+.hm-number-button:active:not(:disabled) {
+  scale: 0.9;
+}
+.hm-number-button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.hm-rating {
+  --_star: 1.5rem;
+  display: inline-flex;
+  gap: 0.15rem;
+}
+.hm-rating[data-size="sm"] {
+  --_star: 1.1rem;
+}
+.hm-rating[data-size="lg"] {
+  --_star: 2rem;
+}
+.hm-star {
+  position: relative;
+  display: inline-grid;
+  width: var(--_star);
+  height: var(--_star);
+  cursor: pointer;
+}
+.hm-rating[data-readonly] .hm-star {
+  cursor: default;
+}
+.hm-star svg {
+  grid-area: 1 / 1;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.hm-star-back,
+.hm-star-front {
+  stroke-linejoin: round;
+  stroke-width: 1;
+}
+.hm-star-back {
+  fill: none;
+  stroke: var(--hm-line-hover);
+}
+.hm-star-front {
+  fill: var(--hm-accent);
+  stroke: var(--hm-accent);
+  clip-path: inset(0 calc(100% - var(--_fill, 0%)) 0 0);
+  transition: clip-path var(--hm-dur-base) var(--hm-ease-glide);
+}
+.hm-star[data-on] svg {
+  animation: hm-star-pop var(--hm-dur-slow) var(--hm-ease-spring);
+}
+@keyframes hm-star-pop {
+  40% {
+    scale: 1.22;
+  }
+}
+.hm-rating-input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+.hm-star:has(.hm-rating-input:focus-visible) {
+  outline: var(--hm-focus-width) solid var(--hm-focus-color);
+  outline-offset: 2px;
+  border-radius: var(--hm-radius-sm);
+}
+
+.hm-pin {
+  display: flex;
+  max-width: 100%;
+  gap: 0.45rem;
+}
+.hm-pin-box.hm-control {
+  flex: 0 1 2.6rem;
+  min-width: 0;
+  width: 2.6rem;
+  height: 3rem;
+  padding: 0;
+  font-size: var(--hm-text-xl);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  caret-color: var(--hm-accent);
+}
+.hm-pin-box.hm-control:focus {
+  scale: 1.04;
+  transition:
+    scale var(--hm-dur-base) var(--hm-ease-spring),
+    border-color var(--hm-dur-instant) var(--hm-ease-out);
+}
+.hm-pin[data-invalid] .hm-pin-box {
+  border-color: color-mix(in srgb, var(--hm-danger) 65%, transparent);
+}
+
+.hm-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-width: var(--hm-control-h);
+  min-height: var(--hm-control-h);
+  padding: 0 0.7rem;
+  border: 1px solid transparent;
+  border-radius: var(--hm-radius-md);
+  background: none;
+  color: var(--hm-muted);
+  font: inherit;
+  font-size: var(--hm-text-sm);
+  cursor: pointer;
+  transition:
+    color var(--hm-dur-fast) var(--hm-ease-out),
+    background-color var(--hm-dur-fast) var(--hm-ease-out),
+    border-color var(--hm-dur-fast) var(--hm-ease-out),
+    scale var(--hm-dur-base) var(--hm-ease-spring);
+}
+.hm-toggle[data-size="sm"] {
+  min-width: 32px;
+  min-height: 32px;
+  padding: 0 0.55rem;
+}
+.hm-toggle:hover {
+  color: var(--hm-fg);
+  background: var(--hm-control-bg);
+}
+.hm-toggle:active {
+  scale: 0.95;
+}
+.hm-toggle[aria-pressed="true"] {
+  color: var(--hm-fg);
+  background: var(--hm-surface-selected);
+  box-shadow: var(--hm-selected-edge);
+  border-color: var(--hm-line-strong);
+}
+.hm-toggle:focus-visible {
+  outline: var(--hm-focus-width) solid var(--hm-focus-color);
+  outline-offset: var(--hm-focus-offset);
+}
+.hm-toggle:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.hm-toggle-group {
+  display: inline-flex;
+  gap: 0.15rem;
+  padding: 0.15rem;
+  border: 1px solid var(--hm-line-strong);
+  border-radius: calc(var(--hm-radius-md) + 3px);
+  background: var(--hm-control-bg);
+}
+
+.hm-tag-input.hm-control {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.55rem;
+  cursor: text;
+}
+.hm-tag-input.hm-control:focus-within {
+  border-color: var(--hm-line-focus);
+  box-shadow: 0 0 0 3px var(--hm-accent-soft);
+}
+.hm-tag-input[data-disabled] {
+  opacity: 0.5;
+}
+.hm-tag-input-field {
+  flex: 1 1 7rem;
+  min-width: 5rem;
+  min-height: 1.6rem;
+  padding: 0 0.2rem;
+  border: 0;
+  background: none;
+  color: var(--hm-fg);
+  font: inherit;
+  font-size: 0.9rem;
+  outline: none;
+}
+.hm-tag-input-field::placeholder {
+  color: var(--hm-faint);
+}
+
+.hm-dropzone {
+  position: relative;
+  border: 1px dashed var(--hm-line-hover);
+  border-radius: var(--hm-radius-lg);
+  background: var(--hm-control-bg);
+  transition:
+    border-color var(--hm-dur-base) var(--hm-ease-out),
+    background-color var(--hm-dur-base) var(--hm-ease-out),
+    scale var(--hm-dur-slow) var(--hm-ease-spring-soft);
+}
+.hm-dropzone-button {
+  display: grid;
+  justify-items: center;
+  gap: 0.35rem;
+  width: 100%;
+  padding: var(--hm-space-7) var(--hm-space-5);
+  border: 0;
+  border-radius: inherit;
+  background: none;
+  color: var(--hm-muted);
+  font: inherit;
+  text-align: center;
+  cursor: pointer;
+}
+.hm-dropzone-button:focus-visible {
+  outline: var(--hm-focus-width) solid var(--hm-focus-color);
+  outline-offset: 3px;
+}
+.hm-dropzone-icon {
+  color: var(--hm-dim);
+  transition:
+    translate var(--hm-dur-slow) var(--hm-ease-spring),
+    color var(--hm-dur-base) var(--hm-ease-out);
+}
+.hm-dropzone:hover .hm-dropzone-icon {
+  translate: 0 -2px;
+}
+.hm-dropzone-label {
+  color: var(--hm-fg);
+  font-size: var(--hm-text-md);
+}
+.hm-dropzone-description {
+  color: var(--hm-dim);
+  font-size: var(--hm-text-xs);
+}
+.hm-dropzone[data-dragging] {
+  border-color: var(--hm-accent);
+  background: var(--hm-accent-soft);
+  scale: 1.01;
+}
+.hm-dropzone[data-dragging] .hm-dropzone-icon {
+  color: var(--hm-accent);
+  translate: 0 -6px;
+}
+.hm-dropzone[data-disabled] {
+  opacity: 0.5;
+}
+.hm-dropzone[data-disabled] .hm-dropzone-button {
+  cursor: not-allowed;
+}
+
+.hm-file-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 0.35rem 0.8rem;
+  padding: 0.65rem 0;
+  border-top: 1px solid var(--hm-line);
+  list-style: none;
+  animation: hm-rise var(--hm-dur-base) var(--hm-ease-glide) both;
+}
+.hm-file-item > .hm-progress {
+  grid-column: 1 / -1;
+  grid-row: 2;
+}
+.hm-file-meta {
+  display: grid;
+  min-width: 0;
+}
+.hm-file-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--hm-text-md);
+}
+.hm-file-size {
+  color: var(--hm-dim);
+  font-size: var(--hm-text-xs);
+}
+.hm-file-item[data-status="error"] .hm-file-size {
+  color: var(--hm-danger);
+}
+.hm-file-remove {
+  display: grid;
+  place-items: center;
+  width: 1.7rem;
+  height: 1.7rem;
+  border: 0;
+  border-radius: var(--hm-radius-sm);
+  background: none;
+  color: var(--hm-muted);
+  cursor: pointer;
+}
+.hm-file-remove:hover {
+  color: var(--hm-fg);
+  background: var(--hm-surface-selected);
+  box-shadow: var(--hm-selected-edge);
+}
+.hm-file-remove:focus-visible {
+  outline: var(--hm-focus-width) solid var(--hm-focus-color);
+  outline-offset: 2px;
+}
+
+.hm-calendar {
+  --_cell: 2.4rem;
+  display: inline-grid;
+  gap: 0.6rem;
+  width: calc(var(--_cell) * 7);
+  max-width: 100%;
+  font-size: var(--hm-text-md);
+}
+.hm-calendar-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.hm-calendar-title {
+  margin: 0;
+  font-weight: var(--hm-weight-medium);
+}
+.hm-calendar-nav {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border: 0;
+  border-radius: var(--hm-radius-md);
+  background: none;
+  color: var(--hm-muted);
+  cursor: pointer;
+  transition:
+    background-color var(--hm-dur-fast) var(--hm-ease-out),
+    color var(--hm-dur-fast) var(--hm-ease-out),
+    scale var(--hm-dur-base) var(--hm-ease-spring);
+}
+.hm-calendar-nav:hover:not(:disabled) {
+  color: var(--hm-fg);
+  background: var(--hm-surface-selected);
+  box-shadow: var(--hm-selected-edge);
+}
+.hm-calendar-nav:active:not(:disabled) {
+  scale: 0.9;
+}
+.hm-calendar-nav:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+.hm-calendar-nav:focus-visible,
+.hm-calendar-day:focus-visible {
+  outline: var(--hm-focus-width) solid var(--hm-focus-color);
+  outline-offset: 1px;
+}
+.hm-calendar-viewport {
+  overflow: hidden;
+}
+.hm-calendar-grid[data-direction="next"] {
+  animation: hm-cal-from-end var(--hm-dur-slow) var(--hm-ease-spring-soft) both;
+}
+.hm-calendar-grid[data-direction="prev"] {
+  animation: hm-cal-from-start var(--hm-dur-slow) var(--hm-ease-spring-soft) both;
+}
+@keyframes hm-cal-from-end {
+  from {
+    opacity: 0;
+    transform: translateX(1.6rem);
+  }
+}
+@keyframes hm-cal-from-start {
+  from {
+    opacity: 0;
+    transform: translateX(-1.6rem);
+  }
+}
+.hm-calendar-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+.hm-calendar-weekday {
+  display: grid;
+  place-items: center;
+  height: 1.8rem;
+  color: var(--hm-dim);
+  font-size: var(--hm-text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.hm-calendar-cell {
+  display: grid;
+  place-items: center;
+}
+.hm-calendar-day {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: var(--_cell);
+  border: 0;
+  border-radius: var(--hm-radius-md);
+  background: none;
+  color: var(--hm-fg);
+  font: inherit;
+  font-size: var(--hm-text-sm);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition:
+    background-color var(--hm-dur-fast) var(--hm-ease-out),
+    color var(--hm-dur-fast) var(--hm-ease-out),
+    scale var(--hm-dur-base) var(--hm-ease-spring);
+}
+.hm-calendar-day:hover:not(:disabled, [data-selected]) {
+  background: var(--hm-surface-selected);
+  box-shadow: var(--hm-selected-edge);
+}
+.hm-calendar-day:active:not(:disabled) {
+  scale: 0.92;
+}
+.hm-calendar-day[data-outside] {
+  color: var(--hm-dim); /* quieter than the month's days, still above the contrast minimum */
+}
+.hm-calendar-day[data-today]::after {
+  content: "";
+  position: absolute;
+  bottom: 0.3rem;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--hm-accent);
+}
+.hm-calendar-day[data-selected] {
+  background: var(--hm-fg);
+  color: var(--hm-on-fg);
+}
+.hm-calendar-day[data-selected][data-today]::after {
+  background: var(--hm-on-fg);
+}
+.hm-calendar-day[data-in-range]:not([data-selected]) {
+  background: var(--hm-accent-soft);
+  border-radius: 0;
+}
+.hm-calendar-day[data-range-start]:not([data-range-end]) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.hm-calendar-day[data-range-end]:not([data-range-start]) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.hm-calendar-day:disabled {
+  color: var(--hm-faint);
+  text-decoration: line-through;
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.hm-datepicker.hm-control {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.7rem;
+  width: auto;
+  min-width: 13rem;
+  text-align: left;
+  cursor: pointer;
+}
+.hm-datepicker[data-empty] .hm-datepicker-label {
+  color: var(--hm-faint);
+}
+.hm-datepicker svg {
+  flex: none;
+  color: var(--hm-muted);
+}
+.hm-datepicker-pop.hm-popover {
+  min-width: 0;
+  padding: var(--hm-space-3);
+}
+
+.hm-carousel {
+  position: relative;
+  display: grid;
+  gap: var(--hm-space-3);
+}
+.hm-carousel-track {
+  display: flex;
+  gap: var(--_gap);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+  border-radius: var(--hm-radius-lg);
+}
+.hm-carousel-track::-webkit-scrollbar {
+  display: none;
+}
+.hm-carousel-track:focus-visible {
+  outline: var(--hm-focus-width) solid var(--hm-focus-color);
+  outline-offset: 4px;
+}
+.hm-carousel-slide {
+  flex: 0 0 calc((100% - var(--_gap) * (var(--_per) - 1)) / var(--_per));
+  min-width: 0;
+  scroll-snap-align: start;
+}
+.hm-carousel-nav {
+  position: absolute;
+  top: calc(50% - 1.5rem);
+  display: grid;
+  place-items: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border: 1px solid var(--hm-line-strong);
+  border-radius: 50%;
+  background: var(--hm-chrome-bg);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: var(--hm-fg);
+  cursor: pointer;
+  opacity: 0;
+  transition:
+    opacity var(--hm-dur-base) var(--hm-ease-out),
+    translate var(--hm-dur-slow) var(--hm-ease-spring),
+    scale var(--hm-dur-base) var(--hm-ease-spring);
+}
+.hm-carousel-nav[data-side="prev"] {
+  left: 0.7rem;
+  translate: -0.5rem 0;
+}
+.hm-carousel-nav[data-side="next"] {
+  right: 0.7rem;
+  translate: 0.5rem 0;
+}
+.hm-carousel:hover .hm-carousel-nav:not(:disabled),
+.hm-carousel:focus-within .hm-carousel-nav:not(:disabled) {
+  opacity: 1;
+  translate: 0 0;
+}
+.hm-carousel-nav:active:not(:disabled) {
+  scale: 0.92;
+}
+.hm-carousel-nav:disabled {
+  opacity: 0;
+  pointer-events: none;
+}
+.hm-carousel-nav:focus-visible {
+  outline: var(--hm-focus-width) solid var(--hm-focus-color);
+  outline-offset: 2px;
+}
+@media (hover: none) {
+  .hm-carousel-nav:not(:disabled) {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+.hm-carousel-dots {
+  display: flex;
+  justify-content: center;
+}
+/* each dot is a 24px target (WCAG 2.5.8) with the small dot drawn inside it */
+.hm-carousel-dot {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.hm-carousel-dot::before {
+  content: "";
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--hm-radius-pill);
+  background: var(--hm-line-hover);
+  transition:
+    width var(--hm-dur-slow) var(--hm-ease-spring),
+    background-color var(--hm-dur-base) var(--hm-ease-out);
+}
+.hm-carousel-dot:hover::before {
+  background: var(--hm-dim);
+}
+.hm-carousel-dot[aria-current="true"]::before {
+  width: 1.4rem;
+  background: var(--hm-fg);
+}
+.hm-carousel-dot:focus-visible {
+  outline: none;
+}
+.hm-carousel-dot:focus-visible::before {
+  outline: var(--hm-focus-width) solid var(--hm-focus-color);
+  outline-offset: 3px;
+}
+
+.hm-timeline {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.hm-timeline-item {
+  --_line: var(--hm-line-strong);
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.4rem 1fr;
+  gap: 0 0.9rem;
+  padding-bottom: var(--hm-space-5);
+}
+.hm-timeline-item:last-child {
+  padding-bottom: 0;
+}
+.hm-timeline-item:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  top: 1.4rem;
+  bottom: 0;
+  left: calc(0.7rem - 0.5px);
+  width: 1px;
+  background: var(--_line);
+}
+.hm-timeline-item[data-status="done"]::before {
+  background: var(--hm-accent-line);
+}
+.hm-timeline-marker {
+  display: grid;
+  place-items: center;
+  width: 1.4rem;
+  height: 1.4rem;
+  margin-top: 0.1rem;
+  border: 1px solid var(--hm-line-hover);
+  border-radius: 50%;
+  background: var(--hm-bg);
+  color: var(--hm-fg);
+  font-size: 0.7rem;
+}
+.hm-timeline-marker:empty::after {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--hm-line-hover);
+  transition: background-color var(--hm-dur-base) var(--hm-ease-out);
+}
+.hm-timeline-item[data-status="done"] .hm-timeline-marker {
+  border-color: var(--hm-accent);
+}
+.hm-timeline-item[data-status="done"] .hm-timeline-marker:empty::after {
+  background: var(--hm-accent);
+}
+.hm-timeline-item[data-status="current"] .hm-timeline-marker {
+  border-color: var(--hm-accent);
+  box-shadow: 0 0 0 4px var(--hm-accent-soft);
+}
+.hm-timeline-item[data-status="current"] .hm-timeline-marker:empty::after {
+  background: var(--hm-accent);
+  animation: hm-timeline-breathe 3.2s var(--hm-ease-pour) infinite alternate;
+}
+@keyframes hm-timeline-breathe {
+  to {
+    scale: 1.6;
+  }
+}
+.hm-timeline-item[data-status="upcoming"] {
+  color: var(--hm-dim);
+}
+.hm-timeline-body {
+  display: grid;
+  gap: 0.15rem;
+  min-width: 0;
+}
+.hm-timeline-title {
+  margin: 0;
+  font-size: var(--hm-text-md);
+}
+.hm-timeline-time {
+  color: var(--hm-dim);
+  font-size: var(--hm-text-xs);
+  font-variant-numeric: tabular-nums;
+}
+.hm-timeline-description {
+  margin: 0.2rem 0 0;
+  color: var(--hm-muted);
+  font-size: var(--hm-text-sm);
+}
+@media (prefers-reduced-motion: reduce) {
+  .hm-timeline-item[data-status="current"] .hm-timeline-marker:empty::after {
+    animation: none;
+  }
+}
+
+/* Tree, ScrollArea, Splitter */
+.hm-tree,
+.hm-tree-group {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.hm-tree-item {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 2rem;
+  padding: 0.25rem 0.5rem 0.25rem calc(0.5rem + var(--_level) * 1.1rem);
+  border-radius: var(--hm-radius-sm);
+  color: var(--hm-muted);
+  font-size: var(--hm-text-md);
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background-color var(--hm-dur-fast) var(--hm-ease-out),
+    color var(--hm-dur-fast) var(--hm-ease-out);
+}
+.hm-tree-item:hover {
+  color: var(--hm-fg);
+  background: var(--hm-control-bg);
+}
+.hm-tree-item[aria-selected="true"] {
+  color: var(--hm-fg);
+  background: var(--hm-surface-selected);
+  box-shadow: var(--hm-selected-edge);
+}
+.hm-tree-item[aria-disabled="true"] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.hm-tree-item:focus-visible {
+  outline: var(--hm-focus-width) solid var(--hm-focus-color);
+  outline-offset: -1px;
+}
+.hm-tree-chevron {
+  flex: none;
+  color: var(--hm-dim);
+  transition: rotate var(--hm-dur-base) var(--hm-ease-spring);
+}
+.hm-tree-chevron[data-leaf] {
+  visibility: hidden;
+}
+.hm-tree-item[aria-expanded="true"] > .hm-tree-chevron {
+  rotate: 90deg;
+}
+.hm-tree-icon {
+  display: inline-grid;
+  place-items: center;
+  color: var(--hm-dim);
+}
+.hm-tree-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@property --_ft {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+@property --_fb {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+@property --_fl {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+@property --_fr {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+.hm-scrollarea {
+  position: relative;
+  min-height: 0;
+  max-height: inherit;
+  overflow: hidden;
+}
+.hm-scroll-viewport {
+  height: 100%;
+  max-height: inherit;
+  overflow: auto;
+  scrollbar-width: none;
+  overscroll-behavior: contain;
+  border-radius: inherit;
+}
+.hm-scroll-viewport::-webkit-scrollbar {
+  display: none;
+}
+.hm-scroll-viewport:focus-visible {
+  outline: var(--hm-focus-width) solid var(--hm-focus-color);
+  outline-offset: -2px;
+}
+.hm-scrollarea[data-orientation="vertical"] .hm-scroll-viewport {
+  overflow-x: hidden;
+}
+.hm-scrollarea[data-orientation="horizontal"] .hm-scroll-viewport {
+  overflow-y: hidden;
+}
+/* edge fades: they grow in while there is more to scroll in that direction */
+.hm-scrollarea[data-fade] .hm-scroll-viewport {
+  --_ft: 1.6rem;
+  --_fb: 1.6rem;
+  --_fl: 1.6rem;
+  --_fr: 1.6rem;
+  transition:
+    --_ft var(--hm-dur-base) var(--hm-ease-out),
+    --_fb var(--hm-dur-base) var(--hm-ease-out),
+    --_fl var(--hm-dur-base) var(--hm-ease-out),
+    --_fr var(--hm-dur-base) var(--hm-ease-out);
+  -webkit-mask-image:
+    linear-gradient(to bottom, transparent, #000 var(--_ft), #000 calc(100% - var(--_fb)), transparent),
+    linear-gradient(to right, transparent, #000 var(--_fl), #000 calc(100% - var(--_fr)), transparent);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to bottom, transparent, #000 var(--_ft), #000 calc(100% - var(--_fb)), transparent),
+    linear-gradient(to right, transparent, #000 var(--_fl), #000 calc(100% - var(--_fr)), transparent);
+  mask-composite: intersect;
+}
+.hm-scrollarea[data-fade][data-at-start-y] .hm-scroll-viewport,
+.hm-scrollarea[data-fade]:not([data-scrollable-y]) .hm-scroll-viewport {
+  --_ft: 0px;
+}
+.hm-scrollarea[data-fade][data-at-end-y] .hm-scroll-viewport,
+.hm-scrollarea[data-fade]:not([data-scrollable-y]) .hm-scroll-viewport {
+  --_fb: 0px;
+}
+.hm-scrollarea[data-fade][data-at-start-x] .hm-scroll-viewport,
+.hm-scrollarea[data-fade]:not([data-scrollable-x]) .hm-scroll-viewport {
+  --_fl: 0px;
+}
+.hm-scrollarea[data-fade][data-at-end-x] .hm-scroll-viewport,
+.hm-scrollarea[data-fade]:not([data-scrollable-x]) .hm-scroll-viewport {
+  --_fr: 0px;
+}
+.hm-scrollbar {
+  position: absolute;
+  display: none;
+  padding: 2px;
+  opacity: 0;
+  transition: opacity var(--hm-dur-slow) var(--hm-ease-out);
+}
+.hm-scrollbar[data-scroll-bar="y"] {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 10px;
+}
+.hm-scrollbar[data-scroll-bar="x"] {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 10px;
+}
+.hm-scrollarea[data-scrollable-y] .hm-scrollbar[data-scroll-bar="y"],
+.hm-scrollarea[data-scrollable-x] .hm-scrollbar[data-scroll-bar="x"] {
+  display: block;
+}
+.hm-scrollarea:hover .hm-scrollbar,
+.hm-scrollarea[data-scrolling] .hm-scrollbar,
+.hm-scrollarea[data-dragging] .hm-scrollbar {
+  opacity: 1;
+}
+.hm-scroll-thumb {
+  position: relative;
+  border-radius: var(--hm-radius-pill);
+  background: var(--hm-line-hover);
+  transition: background-color var(--hm-dur-fast) var(--hm-ease-out);
+}
+.hm-scrollbar[data-scroll-bar="y"] .hm-scroll-thumb {
+  width: 100%;
+  height: var(--_vh, 0px);
+  translate: 0 var(--_vy, 0px);
+}
+.hm-scrollbar[data-scroll-bar="x"] .hm-scroll-thumb {
+  height: 100%;
+  width: var(--_hw, 0px);
+  translate: var(--_hx, 0px) 0;
+}
+.hm-scroll-thumb:hover,
+.hm-scrollarea[data-dragging] .hm-scroll-thumb {
+  background: var(--hm-fg-soft);
+}
+
+.hm-splitter {
+  display: flex;
+  width: 100%;
+  min-height: 0;
+}
+.hm-splitter[data-direction="vertical"] {
+  flex-direction: column;
+}
+.hm-splitter-cell {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+}
+.hm-splitter-panel {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+}
+.hm-splitter-handle {
+  position: absolute;
+  z-index: 2;
+  background: var(--hm-line-strong);
+  transition:
+    background-color var(--hm-dur-fast) var(--hm-ease-out),
+    scale var(--hm-dur-base) var(--hm-ease-spring);
+  touch-action: none;
+}
+.hm-splitter[data-direction="horizontal"] > .hm-splitter-cell > .hm-splitter-handle {
+  top: 0;
+  right: -1px;
+  bottom: 0;
+  width: 2px;
+  cursor: col-resize;
+}
+.hm-splitter[data-direction="vertical"] > .hm-splitter-cell > .hm-splitter-handle {
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  cursor: row-resize;
+}
+/* a wider, invisible grab area */
+.hm-splitter-handle::before {
+  content: "";
+  position: absolute;
+  inset: 0 -6px;
+}
+.hm-splitter[data-direction="vertical"] > .hm-splitter-cell > .hm-splitter-handle::before {
+  inset: -6px 0;
+}
+.hm-splitter-handle:hover,
+.hm-splitter-handle[data-dragging],
+.hm-splitter-handle:focus-visible {
+  background: var(--hm-accent);
+  outline: none;
+}
+.hm-splitter-handle:focus-visible {
+  box-shadow: 0 0 0 3px var(--hm-accent-soft);
+}
+
+.hm-palette {
+  --_w: 36rem;
+}
+.hm-palette .hm-dialog-box {
+  padding: 0;
+  overflow: hidden;
+}
+.hm-palette-input {
+  width: 100%;
+  padding: 1rem 1.1rem;
+  border: 0;
+  border-bottom: 1px solid var(--hm-line);
+  background: transparent;
+  color: var(--hm-fg-strong);
+  font: inherit;
+  font-size: var(--hm-text-base);
+  outline: none;
+}
+.hm-palette-input::placeholder {
+  color: var(--hm-faint);
+}
+.hm-palette-list {
+  list-style: none;
+  margin: 0;
+  padding: 0.35rem;
+  max-height: 50vh;
+  overflow: auto;
+}
+.hm-palette-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--hm-radius-md);
+  color: var(--hm-fg);
+  cursor: pointer;
+}
+.hm-palette-option[aria-selected="true"] {
+  background: var(--hm-surface-selected);
+  box-shadow: var(--hm-selected-edge);
+}
+.hm-palette-option[aria-disabled="true"] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.hm-palette-option small {
+  color: var(--hm-dim);
+  font-size: var(--hm-text-xs);
+}
+.hm-palette-empty {
+  margin: 0;
+  padding: 1rem 1.1rem;
+  color: var(--hm-dim);
+  font-size: var(--hm-text-md);
+}
+
+.hm-gallery-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--hm-gallery-min, 15rem), 1fr));
+  gap: 2rem 1.4rem;
+}
+.hm-gallery-card {
+  display: grid;
+  gap: 0.2rem;
+  color: inherit;
+  text-decoration: none;
+  border-radius: var(--hm-radius-sm);
+}
+.hm-gallery-card:focus-visible {
+  outline: var(--hm-focus-width) solid var(--hm-focus-color);
+  outline-offset: 4px;
+}
+.hm-gallery-cover {
+  position: relative;
+  display: block;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  border-radius: var(--hm-radius-sm);
+  background: var(--hm-surface);
+  margin-bottom: 0.55rem;
+}
+.hm-gallery-cover > :where(img, canvas, video, picture) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--hm-dur-slow) cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.hm-gallery-card:hover .hm-gallery-cover > :where(img, canvas, video, picture),
+.hm-gallery-card:focus-visible .hm-gallery-cover > :where(img, canvas, video, picture) {
+  transform: scale(1.04);
+}
+.hm-gallery-empty {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 0.8rem;
+  color: var(--hm-muted);
+}
+.hm-gallery-badge {
+  position: absolute;
+  top: 0.55rem;
+  left: 0.55rem;
+}
+.hm-gallery-title {
+  font-weight: var(--hm-weight-medium);
+}
+.hm-gallery-card:hover .hm-gallery-title {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.hm-gallery-meta {
+  color: var(--hm-muted);
+  font-size: 0.8rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hm-gallery-card:hover .hm-gallery-cover > *,
+  .hm-gallery-card:focus-visible .hm-gallery-cover > * {
+    transform: none;
+  }
+}
+
+/* Image: a framed, lazy image with a blur-up placeholder */
+.hm-image {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  background-color: var(--hm-surface);
+  background-size: cover;
+  background-position: center;
+}
+.hm-image-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transition:
+    opacity var(--hm-dur-slow) var(--hm-ease-out),
+    transform var(--hm-dur-slow) cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.hm-image[data-fit="cover"] .hm-image-img {
+  object-fit: cover;
+}
+.hm-image[data-fit="contain"] .hm-image-img {
+  object-fit: contain;
+}
+/* only hidden once hydrated and still loading, so server HTML and no-JS pages show the image */
+.hm-image[data-state="loading"] .hm-image-img {
+  opacity: 0;
+}
+.hm-image[data-state="error"] {
+  background-image: none;
+}
+.hm-image[data-zoom]:hover .hm-image-img,
+.hm-image[data-zoom]:focus-within .hm-image-img {
+  transform: scale(1.04);
+}
+@media (prefers-reduced-motion: reduce) {
+  .hm-image[data-zoom]:hover .hm-image-img,
+  .hm-image[data-zoom]:focus-within .hm-image-img {
+    transform: none;
+  }
+}
+[data-hm-motion="reduce"] .hm-image[data-zoom] .hm-image-img {
+  transform: none;
+}
+
+/* Lightbox */
+.hm-lightbox {
+  width: 100vw;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: rgb(0 0 0 / 0.94);
+  color: var(--hm-on-photo);
+  overflow: hidden;
+  opacity: 1;
+  transition:
+    opacity var(--hm-dur-base) var(--hm-ease-out),
+    overlay var(--hm-dur-base) allow-discrete,
+    display var(--hm-dur-base) allow-discrete;
+}
+.hm-lightbox:not([open]) {
+  opacity: 0;
+}
+@starting-style {
+  .hm-lightbox[open] {
+    opacity: 0;
+  }
+}
+.hm-lightbox[open] {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+.hm-lightbox::backdrop {
+  background: transparent;
+}
+.hm-lightbox-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--hm-space-3) var(--hm-space-4);
+}
+.hm-lightbox-count {
+  margin: 0;
+  color: color-mix(in srgb, var(--hm-on-photo) 62%, transparent);
+  font-size: var(--hm-text-sm);
+  font-variant-numeric: tabular-nums;
+}
+.hm-lightbox-stage {
+  display: grid;
+  place-items: center;
+  min-height: 0;
+  padding: 0 var(--hm-space-9);
+}
+.hm-lightbox-img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  user-select: none;
+  animation: hm-fade-in var(--hm-dur-base) var(--hm-ease-out);
+}
+/* photographs slide in from the side you are heading toward, with a soft settle */
+.hm-lightbox-img[data-direction="next"] {
+  animation: hm-photo-from-end var(--hm-dur-slow) var(--hm-ease-spring-soft) both;
+}
+.hm-lightbox-img[data-direction="prev"] {
+  animation: hm-photo-from-start var(--hm-dur-slow) var(--hm-ease-spring-soft) both;
+}
+@keyframes hm-photo-from-end {
+  from {
+    opacity: 0;
+    transform: translateX(3rem) scale(0.97);
+    filter: blur(6px);
+  }
+}
+@keyframes hm-photo-from-start {
+  from {
+    opacity: 0;
+    transform: translateX(-3rem) scale(0.97);
+    filter: blur(6px);
+  }
+}
+.hm-lightbox-caption {
+  margin: 0;
+  padding: var(--hm-space-3) var(--hm-space-4) var(--hm-space-5);
+  text-align: center;
+  color: color-mix(in srgb, var(--hm-on-photo) 62%, transparent);
+  font-size: var(--hm-text-md);
+}
+.hm-lightbox-button {
+  display: grid;
+  place-items: center;
+  width: var(--hm-target);
+  height: var(--hm-target);
+  border: 1px solid var(--hm-line-strong);
+  border-radius: 50%;
+  background: rgb(0 0 0 / 0.5);
+  color: var(--hm-on-photo);
+  cursor: pointer;
+  transition:
+    border-color var(--hm-dur-fast) var(--hm-ease-out),
+    opacity var(--hm-dur-fast) var(--hm-ease-out);
+}
+.hm-lightbox-button:hover:not([aria-disabled="true"]) {
+  border-color: var(--hm-line-hover);
+}
+.hm-lightbox-button[aria-disabled="true"] {
+  opacity: 0.3;
+  cursor: default;
+}
+.hm-lightbox-button:focus-visible {
+  outline: var(--hm-focus-width) solid var(--hm-focus-color);
+  outline-offset: var(--hm-focus-offset);
+}
+.hm-lightbox-prev,
+.hm-lightbox-next {
+  position: absolute;
+  top: 50%;
+  translate: 0 -50%;
+}
+.hm-lightbox-prev {
+  left: var(--hm-space-3);
+}
+.hm-lightbox-next {
+  right: var(--hm-space-3);
+}
+@media (max-width: 640px) {
+  .hm-lightbox-stage {
+    padding: 0;
+  }
+  .hm-lightbox-prev,
+  .hm-lightbox-next {
+    top: auto;
+    bottom: var(--hm-space-4);
+    translate: none;
+  }
+}
+
+.hm-pricing-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--hm-space-4);
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  align-items: stretch;
+}
+.hm-pricing-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hm-space-3);
+}
+.hm-pricing-card[data-current] {
+  border-color: var(--hm-line-current);
+}
+.hm-pricing-flag {
+  align-self: flex-start;
+  font-size: var(--hm-text-2xs);
+  letter-spacing: var(--hm-tracking-eyebrow);
+  text-transform: uppercase;
+  background: var(--hm-iridescence);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: brightness(1.4);
+}
+.hm-pricing-name {
+  font-size: var(--hm-text-xl);
+  font-weight: var(--hm-weight-medium);
+  letter-spacing: var(--hm-tracking-tight);
+}
+.hm-pricing-tagline {
+  color: var(--hm-muted);
+  font-size: var(--hm-text-md);
+}
+.hm-pricing-price {
+  margin-top: var(--hm-space-2);
+  font-size: var(--hm-text-3xl);
+  font-weight: var(--hm-weight-medium);
+  letter-spacing: var(--hm-tracking-num);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.hm-pricing-price small {
+  /* the period moves to the next line whole ("annual agreement") instead of breaking in the middle */
+  display: inline-block;
+  white-space: nowrap;
+  margin-left: 0.4rem;
+  font-size: var(--hm-text-sm);
+  font-weight: var(--hm-weight-regular);
+  letter-spacing: 0;
+  color: var(--hm-muted);
+}
+.hm-pricing-features {
+  list-style: none;
+  margin: var(--hm-space-2) 0 0;
+  padding: 0;
+  display: grid;
+}
+.hm-pricing-feature {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--hm-space-4);
+  padding: 0.55rem 0;
+  border-top: 1px solid var(--hm-line);
+  font-size: var(--hm-text-md);
+  color: var(--hm-muted);
+}
+.hm-pricing-feature strong {
+  font-weight: var(--hm-weight-regular);
+  color: var(--hm-fg);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.hm-pricing-footer {
+  margin-top: auto;
+  padding-top: var(--hm-space-4);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--hm-space-2);
+}
+.hm-pricing-footer > .hm-button {
+  flex: 1;
+}
+
+.hm-bar-chart {
+  margin: 0;
+}
+.hm-bar-chart-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--hm-space-4);
+  margin-bottom: var(--hm-space-4);
+}
+.hm-bar-chart-title {
+  font-size: var(--hm-text-base);
+  font-weight: var(--hm-weight-medium);
+}
+.hm-bar-chart-caption {
+  font-size: 0.8rem;
+  color: var(--hm-muted);
+  font-variant-numeric: tabular-nums;
+}
+.hm-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: var(--_h, 9rem);
+}
+.hm-bar {
+  flex: 1;
+  min-width: 0;
+  height: var(--h);
+  padding: 0;
+  border: 0;
+  border-radius: var(--hm-radius-xs) var(--hm-radius-xs) 0 0;
+  background: var(--hm-line-hover);
+  cursor: pointer;
+  transform-origin: bottom;
+  animation: hm-grow-y var(--hm-dur-slow) ease-out both;
+  animation-delay: calc(var(--hm-i, 0) * 12ms);
+  transition: background-color var(--hm-dur-instant) var(--hm-ease-out);
+}
+.hm-bar:hover,
+.hm-bar[data-on] {
+  background: var(--hm-fg);
+}
+.hm-bar:focus-visible {
+  outline: var(--hm-focus-width) solid var(--hm-focus-color);
+  outline-offset: 2px;
+}
+.hm-bar-axis {
+  display: flex;
+  justify-content: space-between;
+  margin-top: var(--hm-space-2);
+  font-size: 0.72rem;
+  color: var(--hm-muted);
+}
+@media (prefers-reduced-motion: reduce) {
+  .hm-bar {
+    animation: none;
+  }
+}
+[data-hm-motion="reduce"] .hm-bar {
+  animation: none;
+}
+
+/* LineChart */
+.hm-line-chart {
+  margin: 0;
+}
+.hm-line-plot {
+  position: relative;
+  height: var(--_h, 9rem);
+}
+.hm-line-plot svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.hm-line-grid {
+  fill: none;
+  stroke: var(--hm-line);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+.hm-line-stroke {
+  fill: none;
+  stroke: var(--hm-accent);
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+/* the line is revealed left to right, once */
+.hm-line-reveal {
+  animation: hm-line-reveal var(--hm-dur-scene) var(--hm-ease-glide) both;
+}
+@keyframes hm-line-reveal {
+  from {
+    clip-path: inset(-10% 100% -10% 0);
+  }
+  to {
+    clip-path: inset(-10% 0 -10% 0);
+  }
+}
+.hm-line-rule,
+.hm-line-dot {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+  transition:
+    left var(--hm-dur-base) var(--hm-ease-glide),
+    top var(--hm-dur-base) var(--hm-ease-glide),
+    opacity var(--hm-dur-fast) var(--hm-ease-out);
+}
+.hm-line-rule {
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--hm-line-hover);
+}
+.hm-line-dot {
+  width: 9px;
+  height: 9px;
+  margin: -4.5px 0 0 -4.5px;
+  border-radius: 50%;
+  background: var(--hm-bg);
+  box-shadow: 0 0 0 2px var(--hm-accent), 0 0 12px 1px var(--hm-accent-soft);
+}
+.hm-line-rule[data-on],
+.hm-line-dot[data-on] {
+  opacity: 1;
+}
+.hm-line-hits {
+  position: absolute;
+  inset: 0;
+  display: flex;
+}
+.hm-line-hit {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: crosshair;
+}
+.hm-line-hit:focus-visible {
+  outline: var(--hm-focus-width) solid var(--hm-focus-color);
+  outline-offset: -2px;
+}
+
+/* DonutChart */
+.hm-donut {
+  margin: 0;
+}
+.hm-donut-body {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--hm-space-6);
+  margin-top: var(--hm-space-4);
+}
+.hm-donut-ring {
+  position: relative;
+  flex: none;
+  width: 11rem;
+  height: 11rem;
+}
+.hm-donut-ring svg {
+  width: 100%;
+  height: 100%;
+  rotate: -90deg;
+}
+.hm-donut-track,
+.hm-donut-seg {
+  fill: none;
+  stroke-width: 3.4;
+}
+.hm-donut-track {
+  stroke: var(--hm-line);
+}
+.hm-donut-seg {
+  stroke: var(--_c);
+  transition:
+    opacity var(--hm-dur-base) var(--hm-ease-out),
+    stroke-width var(--hm-dur-base) var(--hm-ease-spring);
+  animation: hm-donut-in var(--hm-dur-scene) var(--hm-ease-glide) both;
+  animation-delay: calc(var(--hm-i, 0) * 60ms);
+}
+.hm-donut-seg[data-on] {
+  stroke-width: 4.4;
+}
+.hm-donut-seg[data-dim] {
+  opacity: 0.35;
+}
+@keyframes hm-donut-in {
+  from {
+    opacity: 0;
+    stroke-width: 0;
+  }
+}
+.hm-donut-center {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  pointer-events: none;
+}
+.hm-donut-value {
+  font-size: var(--hm-text-xl);
+  letter-spacing: var(--hm-tracking-num);
+  font-variant-numeric: tabular-nums;
+}
+.hm-donut-label {
+  color: var(--hm-muted);
+  font-size: var(--hm-text-xs);
+}
+.hm-donut-legend {
+  flex: 1;
+  display: grid;
+  gap: 0.1rem;
+  min-width: 11rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.hm-donut-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto 3.2ch;
+  align-items: center;
+  gap: 0.7rem;
+  width: 100%;
+  padding: 0.45rem 0.5rem;
+  border: 0;
+  border-radius: var(--hm-radius-sm);
+  background: none;
+  color: var(--hm-muted);
+  font: inherit;
+  font-size: var(--hm-text-md);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color var(--hm-dur-fast) var(--hm-ease-out),
+    color var(--hm-dur-fast) var(--hm-ease-out);
+}
+.hm-donut-item:hover,
+.hm-donut-item[data-on] {
+  background: var(--hm-control-bg);
+  color: var(--hm-fg);
+}
+.hm-donut-item:focus-visible {
+  outline: var(--hm-focus-width) solid var(--hm-focus-color);
+  outline-offset: -1px;
+}
+.hm-donut-swatch {
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 50%;
+  background: var(--_c);
+}
+.hm-donut-amount {
+  font-variant-numeric: tabular-nums;
+  color: var(--hm-fg-soft);
+}
+.hm-donut-pct {
+  color: var(--hm-dim);
+  font-size: var(--hm-text-xs);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+/* Sparkline */
+.hm-sparkline {
+  --_c: var(--hm-accent);
+  display: inline-block;
+  overflow: visible;
+  vertical-align: middle;
+}
+.hm-sparkline[data-tone="success"] {
+  --_c: var(--hm-success);
+}
+.hm-sparkline[data-tone="danger"] {
+  --_c: var(--hm-danger);
+}
+.hm-sparkline[data-tone="muted"] {
+  --_c: var(--hm-muted);
+}
+.hm-sparkline-line {
+  fill: none;
+  stroke: var(--_c);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.hm-sparkline-dot {
+  fill: var(--_c);
+}
+@media (prefers-reduced-motion: reduce) {
+  .hm-line-reveal,
+  .hm-donut-seg {
+    animation: none;
+  }
+}
+[data-hm-motion="reduce"] .hm-line-reveal,
+[data-hm-motion="reduce"] .hm-donut-seg {
+  animation: none;
+}
+
+/*
+ * Reduced motion, forced by the theme (`<Theme theme={{ motion: "reduce" }}>` sets data-hm-motion="reduce").
+ * The OS preference is handled next to each component; this file gives the forced setting the same behavior for the
+ * pieces that need it: state-bearing loops (spinners, loaders, indeterminate progress) slow down instead of stopping,
+ * and decorative loops and one-shot flourishes stop. Transitions already collapse through the duration tokens.
+ */
+[data-hm-motion="reduce"] .hm-spinner {
+  animation-duration: 2.4s;
+}
+[data-hm-motion="reduce"] .hm-icon-spin {
+  animation-duration: 3s;
+}
+[data-hm-motion="reduce"] .hm-progress[data-indeterminate] .hm-progress-fill {
+  animation-duration: 6s;
+}
+[data-hm-motion="reduce"] .hm-ring[data-indeterminate] svg {
+  animation-duration: 4s;
+}
+[data-hm-motion="reduce"] .hm-ai-dots circle,
+[data-hm-motion="reduce"] .hm-ai-bars path,
+[data-hm-motion="reduce"] .hm-ai-ring .hm-ai-arc,
+[data-hm-motion="reduce"] .hm-ai-pulse .hm-ai-ripple,
+[data-hm-motion="reduce"] .hm-ai-orbit .hm-ai-orbit,
+[data-hm-motion="reduce"] .hm-ai-signal path {
+  animation-duration: 3s;
+}
+[data-hm-motion="reduce"] .hm-ai-draw[data-shake][data-active],
+[data-hm-motion="reduce"] .hm-ai-like[data-active],
+[data-hm-motion="reduce"] .hm-ai-bell[data-ringing] .hm-ai-swing,
+[data-hm-motion="reduce"] .hm-timeline-item[data-status="current"] .hm-timeline-marker:empty::after {
+  animation: none;
+}
+[data-hm-motion="reduce"] .hm-ai-draw[data-active] .hm-ai-ring,
+[data-hm-motion="reduce"] .hm-ai-draw[data-active] .hm-ai-mark {
+  animation-duration: 1ms;
+  animation-delay: 0s;
+}
+[data-hm-motion="reduce"] .hm-ai,
+[data-hm-motion="reduce"] .hm-ai * {
+  transition-duration: 1ms !important;
+}
+[data-hm-motion="reduce"] .hm-shine::after {
+  transition: none;
+}

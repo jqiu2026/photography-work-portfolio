@@ -1,5 +1,5 @@
 .st-wrap {
-  width: min(100% - 2 * var(--hl-gutter), var(--hl-container-lg));
+  width: min(100% - 2 * var(--hm-gutter), 72rem);
   margin-inline: auto;
   padding-block: 2rem 6rem;
 }
@@ -14,15 +14,15 @@
   align-items: center;
   min-height: 44px;
   padding: 0 1.1rem;
-  border-radius: var(--hl-radius-pill);
-  box-shadow: inset 0 0 0 1px var(--hl-line);
+  border-radius: var(--hm-radius-pill);
+  box-shadow: inset 0 0 0 1px var(--hm-line-strong);
   text-decoration: none;
   font-size: var(--hl-text-sm);
 }
 .st-nav a[aria-current="page"] {
-  background: var(--hl-accent);
-  color: var(--hl-accent-contrast);
-  box-shadow: none;
+  background: var(--hm-surface-selected);
+  color: var(--hm-fg-strong);
+  box-shadow: var(--hm-selected-edge);
 }
 .st-grid {
   display: grid;
@@ -32,9 +32,9 @@
 }
 .st-card {
   padding: 1.5rem;
-  border-radius: var(--hl-radius-lg);
-  background: color-mix(in oklab, var(--hl-surface) 85%, transparent);
-  box-shadow: 0 0 0 1px var(--hl-line);
+  border-radius: var(--hm-radius-lg);
+  background: var(--hm-glass-bg);
+  box-shadow: var(--hm-glass-edge), 0 0 0 1px var(--hm-line-overlay);
 }
 .st-card h2 {
   font-family: var(--hl-font-display);
@@ -132,32 +132,57 @@
 .st-form input,
 .st-form select,
 .st-form textarea {
-  min-height: 44px;
+  min-height: var(--hm-target);
   padding: 0 .9rem;
-  border-radius: var(--hl-radius-md);
-  border: 1px solid var(--hl-line);
-  background: var(--hl-bg);
-  color: var(--hl-text);
+  border-radius: var(--hm-radius-md);
+  border: 1px solid var(--hm-line-strong);
+  background: var(--hm-control-bg);
+  box-shadow: var(--hm-control-edge);
+  color: var(--hm-fg);
   font: inherit;
+  transition: border-color var(--hm-dur-fast) var(--hm-ease-out);
+}
+.st-form input:hover,
+.st-form select:hover,
+.st-form textarea:hover {
+  border-color: var(--hm-line-hover);
+}
+.st-form input:focus-visible,
+.st-form select:focus-visible,
+.st-form textarea:focus-visible {
+  border-color: var(--hm-line-focus);
+  outline: none;
+}
+.st-form textarea {
+  padding-block: .6rem;
 }
 .st-btn {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
   padding: 0 1.2rem;
-  border-radius: var(--hl-radius-pill);
+  border-radius: var(--hm-radius-md);
   border: 0;
-  background: var(--hl-accent);
-  color: var(--hl-accent-contrast);
+  background: var(--hm-fg);
+  color: var(--hm-on-fg);
   font: inherit;
-  font-weight: 600;
+  font-size: var(--hm-text-md);
+  font-weight: var(--hm-weight-medium);
   cursor: pointer;
   text-decoration: none;
+  transition: background var(--hm-dur-fast) var(--hm-ease-out), box-shadow var(--hm-dur-fast) var(--hm-ease-out);
+}
+.st-btn:hover {
+  background: var(--hm-fg-strong);
 }
 .st-btn--ghost {
   background: transparent;
-  color: var(--hl-text);
-  box-shadow: inset 0 0 0 1px var(--hl-line);
+  color: var(--hm-fg);
+  box-shadow: inset 0 0 0 1px var(--hm-line-strong);
+}
+.st-btn--ghost:hover {
+  background: var(--hm-surface);
+  box-shadow: inset 0 0 0 1px var(--hm-line-hover);
 }
 .st-note {
   color: var(--hl-muted);
@@ -167,12 +192,11 @@
   margin: 0;
 }
 .st-title {
-  font-family: var(--hl-font-display);
-  font-variation-settings: "wdth" var(--hl-wdth);
-  font-size: var(--hl-text-4xl);
-  font-weight: var(--hl-display-weight);
+  font-size: var(--hm-text-3xl);
+  font-weight: var(--hm-weight-medium);
+  letter-spacing: var(--hm-tracking-tight);
   margin: .25rem 0 1.5rem;
-  line-height: 1;
+  line-height: var(--hm-leading-tight);
 }
 .st-photos {
   list-style: none;

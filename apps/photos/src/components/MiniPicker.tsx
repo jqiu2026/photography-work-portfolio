@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Field, Input } from "@halation/ui";
+import { Button, Field, Input } from "@/components/ui";
 import { useState } from "react";
 import { bookMinislotAction, joinWaitlistAction } from "@/app/book/schedule/actions";
 

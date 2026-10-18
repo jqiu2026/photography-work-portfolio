@@ -1,4 +1,4 @@
-import { Breadcrumbs, Container, Eyebrow, Heading, Section, Text } from "@halation/ui";
+import { Breadcrumbs, Container, Eyebrow, Heading, Section, Text } from "@/components/ui";
 import { ProtectedGallery, ProtectedImage } from "@halation/ui/media";
 import { Blocks, MDX } from "@jerryqiu/render";
 import { getSite } from "@jerryqiu/sites";

@@ -1,4 +1,4 @@
-import { Container, Section, Text } from "@halation/ui";
+import { Container, Section, Text } from "@/components/ui";
 import { person } from "@jerryqiu/sites/profile";
 import type { Metadata } from "next";
 import Link from "next/link";

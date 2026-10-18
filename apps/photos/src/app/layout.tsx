@@ -1,7 +1,9 @@
 import "@halation/ui/styles.css";
+import "@holominimal/ui/styles.css";
+import "./holominimal.css";
 import { ThemeScript } from "@jerryqiu/sites/theme-script";
-import Script from "next/script";
 import { ThemeProvider } from "@halation/ui";
+import { Theme } from "@holominimal/ui";
 import { ScreenshotGuard } from "@halation/ui/media";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -35,9 +37,11 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       </head>
       <body className="hl-root">
         <ThemeProvider preset="photos" defaultTheme="dark">
-          <ScreenshotGuard level="off">
-            {general.maintenance ? <Maintenance message={general.maintenanceMessage} /> : children}
-          </ScreenshotGuard>
+          <Theme theme={{ accent: "blue" }}>
+            <ScreenshotGuard level="off">
+              {general.maintenance ? <Maintenance message={general.maintenanceMessage} /> : children}
+            </ScreenshotGuard>
+          </Theme>
         </ThemeProvider>
         <Analytics />
         <SpeedInsights />

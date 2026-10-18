@@ -410,6 +410,9 @@ importers:
       '@halation/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      '@holominimal/ui':
+        specifier: workspace:^
+        version: link:../../packages/holominimal
       '@jerryqiu/auth':
         specifier: workspace:*
         version: link:../../packages/auth
@@ -717,6 +720,22 @@ importers:
       vitest:
         specifier: 5.0.3
         version: 5.0.3(@opentelemetry/api@1.9.1)(@types/node@24.19.2)(jsdom@30.1.2)(vite@8.3.4(@types/node@24.19.2)(esbuild@0.27.7)(sass@1.105.1)(tsx@4.23.15)(yaml@2.9.1))
+
+  packages/holominimal:
+    dependencies:
+      react:
+        specifier: '>=19.0.0'
+        version: 19.2.8
+      react-dom:
+        specifier: '>=19.0.0'
+        version: 19.2.8(react@19.2.8)
+    devDependencies:
+      '@types/react':
+        specifier: ^19.3.0
+        version: 19.3.0
+      '@types/react-dom':
+        specifier: ^19.3.0
+        version: 19.3.0(@types/react@19.3.0)
 
   packages/inbox:
     dependencies:

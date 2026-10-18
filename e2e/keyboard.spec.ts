@@ -37,9 +37,6 @@ test("keyboard: photos has a skip link first, a visible focus ring on every nav 
   page,
 }) => {
   await page.goto(`${photos}/`, { waitUntil: "networkidle" });
-  await page.waitForFunction(() => "__skipIntro" in window);
-  await page.keyboard.press("Escape"); // the home intro has its own spec
-  await expect(page.locator(".pub-intro:not([hidden])")).toHaveCount(0);
   await page.keyboard.press("Tab");
   await expect(page.locator(":focus")).toHaveText(/Skip to content/);
   const main = page.getByRole("navigation", { name: "Main" });

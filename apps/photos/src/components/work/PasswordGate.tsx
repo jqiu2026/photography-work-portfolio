@@ -1,8 +1,8 @@
 "use client";
 
-import { Button, Field, Input } from "@halation/ui";
+import { Button, Field, Input } from "@/components/ui";
 import { useRouter } from "next/navigation";
-import { useState, type FormEvent } from "react";
+import { type ChangeEvent, type FormEvent, useState } from "react";
 
 /** Simple shared-password gate for pages marked `protected: true`. Replaced by real accounts in Phase 2. */
 export function PasswordGate() {
@@ -29,7 +29,7 @@ export function PasswordGate() {
         <Input
           type="password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
           autoComplete="current-password"
           required
         />

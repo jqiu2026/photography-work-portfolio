@@ -1,8 +1,8 @@
 import { ProtectedImage } from "@halation/ui/media";
+import { Reveal, Surface } from "@holominimal/ui";
 import { getSite } from "@jerryqiu/sites";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { HomeIntro } from "@/components/HomeIntro";
 import { Shell } from "@/components/Shell";
 import { getPortfolio } from "@/lib/portfolio";
 import { getWork } from "@/lib/work";
@@ -51,39 +51,23 @@ export default async function Home() {
   return (
     <Shell>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
-      <noscript>
-        <style>
-          {
-            ".pub-intro{display:none!important}.pub .pub-bar,.pub .pub-rise{transform:none!important;opacity:1!important;animation:none!important}"
-          }
-        </style>
-      </noscript>
-      <HomeIntro
-        shots={[
-          ...selected
-            .map((x) => x.p)
-            .filter((x) => x.id !== lead?.id)
-            .slice(0, 2),
-          ...(lead ? [lead] : []),
-        ]}
-      />
       <div className="pub-wrap">
         <header className="pub-hero">
-          <p className="hl-eyebrow pub-rise" style={{ "--i": 0 } as React.CSSProperties}>
+          <p className="hm-eyebrow hm-enter" style={{ "--hm-i": 0 } as React.CSSProperties}>
             Photography · New York
           </p>
-          <h1 className="pub-rise" style={{ "--i": 1 } as React.CSSProperties}>
+          <h1 className="hm-enter" style={{ "--hm-i": 1 } as React.CSSProperties}>
             Pictures of people at work.
           </h1>
           {/* TODO(owner): rewrite in your voice. Existing owner text from the original site. */}
-          <p className="pub-lede pub-rise" style={{ "--i": 2 } as React.CSSProperties}>
+          <p className="pub-lede hm-enter" style={{ "--hm-i": 2 } as React.CSSProperties}>
             Photography is how I started, and it is still how I pay attention. I make pictures of people at work, then
             spend a long time trying to make them honest.
           </p>
-          <p className="pub-places pub-rise" style={{ "--i": 3 } as React.CSSProperties}>
+          <p className="pub-places hm-enter" style={{ "--hm-i": 3 } as React.CSSProperties}>
             Theater · Events · Street · Aviation
           </p>
-          <div className="pub-actions pub-rise" style={{ "--i": 4 } as React.CSSProperties}>
+          <div className="pub-actions hm-enter" style={{ "--hm-i": 4 } as React.CSSProperties}>
             <Link href="/portfolio" className="pub-btn">
               See the portfolio
             </Link>
@@ -174,28 +158,56 @@ export default async function Home() {
               Everything the studio does →
             </Link>
           </div>
-          <div className="pub-studio">
-            <div>
+          <Reveal className="pub-studio">
+            <Surface
+              variant="outlined"
+              padding="lg"
+              interactive
+              lit
+              data-hm-reveal=""
+              style={{ "--hm-i": 0 } as React.CSSProperties}
+            >
               <h3>Book</h3>
               <p>Pick a free time or send an inquiry. A deposit holds your date.</p>
               <Link href="/how-it-works">How it works →</Link>
-            </div>
-            <div>
+            </Surface>
+            <Surface
+              variant="outlined"
+              padding="lg"
+              interactive
+              lit
+              data-hm-reveal=""
+              style={{ "--hm-i": 1 } as React.CSSProperties}
+            >
               <h3>Deliver</h3>
               <p>Private, protected galleries with proofing, selections and downloads.</p>
               <Link href="/galleries">About galleries →</Link>
-            </div>
-            <div>
+            </Surface>
+            <Surface
+              variant="outlined"
+              padding="lg"
+              interactive
+              lit
+              data-hm-reveal=""
+              style={{ "--hm-i": 2 } as React.CSSProperties}
+            >
               <h3>Stay in one place</h3>
               <p>Paperwork, payments, messages and progress in a client portal.</p>
               <Link href="/client-portal">Portal tour →</Link>
-            </div>
-            <div>
+            </Surface>
+            <Surface
+              variant="outlined"
+              padding="lg"
+              interactive
+              lit
+              data-hm-reveal=""
+              style={{ "--hm-i": 3 } as React.CSSProperties}
+            >
               <h3>Know the cost</h3>
               <p>Packages list what you receive. Prices are set per shoot.</p>
               <Link href="/packages">Packages →</Link>
-            </div>
-          </div>
+            </Surface>
+          </Reveal>
         </div>
       </section>
 

@@ -1,9 +1,9 @@
 "use client";
 
-import { Button, Field, Input, Textarea } from "@halation/ui";
+import { Button, Field, Input, Textarea } from "@/components/ui";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { type ChangeEvent, useState } from "react";
 import { bookSlotAction, joinWaitlistAction } from "@/app/book/schedule/actions";
 import { scheduleKinds } from "@/lib/scheduling";
 
@@ -110,7 +110,7 @@ export function SchedulePicker({ minDate, initialKind = "consult" }: { minDate: 
           type="date"
           min={minDate}
           value={date}
-          onChange={(e) => {
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
             setDate(e.target.value);
             void load(kind, e.target.value);
           }}

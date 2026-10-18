@@ -1,4 +1,4 @@
-import { Container, Section } from "@halation/ui";
+import { Container, Section } from "@/components/ui";
 import { getDb } from "@jerryqiu/db";
 import * as st from "@jerryqiu/db/studio";
 import { notFound } from "next/navigation";

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Field, Input, Select, Textarea } from "@halation/ui";
+import { Button, Field, Input, Select, Textarea } from "@/components/ui";
 import { useState, useTransition } from "react";
 import { submitQuestionnaireAction } from "@/app/client/questionnaire-actions";
 

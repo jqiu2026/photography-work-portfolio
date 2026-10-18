@@ -1,4 +1,4 @@
-import { Container, Prose, Section } from "@halation/ui";
+import { Container, Prose, Section } from "@/components/ui";
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/PageHeader";
 import { Shell } from "@/components/Shell";

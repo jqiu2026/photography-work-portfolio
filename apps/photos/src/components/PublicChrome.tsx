@@ -1,7 +1,8 @@
 import { getSite } from "@jerryqiu/sites";
+import { AppShell, Atmosphere, Button, LightField } from "@holominimal/ui";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { PublicNav } from "./PublicNav";
+import { PublicDock } from "./PublicDock";
 import "./public.css";
 
 const FOOTER = [
@@ -37,48 +38,49 @@ const FOOTER = [
 ] as const;
 
 /**
- * The photography site's frame: a quiet top bar with the wordmark, a few links and one call to action; a plain footer.
- * No stage, no scroll effects. The only link that leaves this site is the one jerryqiu.com button (cross-site rule).
+ * The photography site's frame, built on Holominimal: a night-sky atmosphere, the proximity dock for navigation, one
+ * call to action pinned top right, and a hairline footer. The only link that leaves this site is the one jerryqiu.com
+ * button (cross-site rule).
  */
 export function PublicChrome({ children }: { children: ReactNode }) {
   const hub = getSite("hub");
   const year = new Date().getFullYear();
   return (
-    <div className="pub">
-      <a className="hl-skip" href="#main">
-        Skip to content
-      </a>
-      <header className="pub-bar">
-        <Link href="/" className="pub-mark">
-          Jerry Qiu <span>Photography</span>
-        </Link>
-        <PublicNav />
-      </header>
-      <main id="main" className="pub-main">
+    <LightField className="pub">
+      <AppShell
+        backdrop={<Atmosphere />}
+        sidebar={<PublicDock />}
+        toolbarLabel="Booking"
+        toolbar={
+          <Button asChild size="sm">
+            <Link href="/book">Book a shoot</Link>
+          </Button>
+        }
+      >
         {children}
-      </main>
-      <footer className="pub-foot">
-        <div className="pub-foot__grid">
-          {FOOTER.map((col) => (
-            <nav key={col.title} aria-label={col.title}>
-              <h2>{col.title}</h2>
-              <ul>
-                {col.links.map(([label, href]) => (
-                  <li key={href}>
-                    <Link href={href}>{label}</Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          ))}
-        </div>
-        <div className="pub-foot__base">
-          <p>© {year} Jerry Qiu. All photographs and writing are © Jerry Qiu unless stated.</p>
-          <a className="pub-return" href={hub.url} data-return-to-hub>
-            jerryqiu.com
-          </a>
-        </div>
-      </footer>
-    </div>
+        <footer className="pub-foot">
+          <div className="pub-foot__grid">
+            {FOOTER.map((col) => (
+              <nav key={col.title} aria-label={col.title}>
+                <h2>{col.title}</h2>
+                <ul>
+                  {col.links.map(([label, href]) => (
+                    <li key={href}>
+                      <Link href={href}>{label}</Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            ))}
+          </div>
+          <div className="pub-foot__base">
+            <p>© {year} Jerry Qiu. All photographs and writing are © Jerry Qiu unless stated.</p>
+            <a className="pub-return" href={hub.url} data-return-to-hub>
+              jerryqiu.com
+            </a>
+          </div>
+        </footer>
+      </AppShell>
+    </LightField>
   );
 }

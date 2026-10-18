@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Field, Input, Select, Textarea } from "@halation/ui";
+import { Button, Field, Input, Select, Textarea } from "@/components/ui";
 import NextLink from "next/link";
 import { type FormEvent, useEffect, useRef, useState } from "react";
 import { budgetOptions, type ShootType } from "@/content/shoot-types";

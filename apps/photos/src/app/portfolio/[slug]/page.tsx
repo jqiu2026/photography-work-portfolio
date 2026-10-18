@@ -1,4 +1,4 @@
-import { Container, Eyebrow, Heading, Section } from "@halation/ui";
+import { Container, Eyebrow, Heading, Section } from "@/components/ui";
 import { ProtectedGallery } from "@halation/ui/media";
 import type { Metadata } from "next";
 import Link from "next/link";

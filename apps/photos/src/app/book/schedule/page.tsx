@@ -1,4 +1,4 @@
-import { Container, Section, Text } from "@halation/ui";
+import { Container, Section, Text } from "@/components/ui";
 import type { Metadata } from "next";
 import { SchedulePicker } from "@/components/SchedulePicker";
 import { Shell } from "@/components/Shell";

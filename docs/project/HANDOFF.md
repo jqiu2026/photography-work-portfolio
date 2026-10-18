@@ -10,6 +10,10 @@ Done and committed: PHOTO-M1 foundation, M2 ShootProof removed, M3 protection ev
 
 **Next (see PROGRESS.md table):** M13 leftovers (tracking emails from the lab webhook, cancel a submitted print after a refund, QR code for the link), M14 reports/expenses/usage-rights/privacy/export, M15 ops, M16 face search and culling mocks, M17 deployment prep, M18 polish and accessibility.
 
+## UI: Holominimal (2026-10-18)
+
+The photo site UI is on Holominimal (`@holominimal/ui`, vendored build in `packages/holominimal`; rebuild in `~/Documents/holominimal` and re-copy `dist` to update). Pages import `Container/Section/Heading/Field...` from `components/ui.tsx`. Public frame: `PublicChrome` (AppShell, Atmosphere, Dock). Studio frame: `StudioChrome`. `app/holominimal.css` bridges the old `--hl-*` tokens (gallery, studio views) to `--hm-*`. The home intro was retired. Gallery and studio view CSS is still `--hl-*` through the bridge; migrate file by file.
+
 ## How to work here
 
 - Gates: `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:e2e` (prod builds, 4000 to 4004), `env -u NEXT_PUBLIC_HUB_URL pnpm test:admin` (dev servers 3300+, throwaway DB; keep NEXT_PUBLIC_*_URL unset). Run a single admin spec with `pnpm exec playwright test -c playwright.admin.config.ts e2e-admin/<file>`.

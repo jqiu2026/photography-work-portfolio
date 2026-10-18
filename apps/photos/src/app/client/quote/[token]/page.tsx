@@ -1,4 +1,4 @@
-import { Container, Section, Text } from "@halation/ui";
+import { Container, Section, Text } from "@/components/ui";
 import { getDb } from "@jerryqiu/db";
 import * as com from "@jerryqiu/db/commerce";
 import { formatMoney, approx } from "@jerryqiu/db/pricing";
