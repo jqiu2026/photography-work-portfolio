@@ -82,3 +82,16 @@
     margin-bottom: var(--hm-space-2);
   }
 }
+.db-caption {
+  font-size: var(--hm-text-sm);
+  color: var(--hm-muted);
+}
+/* the section heading names the chart on screen; its own caption stays for screen readers */
+.db-chart figcaption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

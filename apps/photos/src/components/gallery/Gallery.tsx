@@ -687,7 +687,7 @@ function GalleryView({ data }: { data: Data }) {
 
       <footer className="gx-foot">
         {sty.footer ? <p>{sty.footer}</p> : <span />}
-        <nav aria-label="Gallery information">
+        <nav aria-label="Terms and rules">
           <Button asChild variant="ghost" size="sm">
             <a href="/terms">Terms of Use</a>
           </Button>
@@ -1204,11 +1204,15 @@ function Lightbox({
                     </Button>
                   ) : null}
                   {!client && freeRules.length ? (
-                    <section aria-label="Free downloads" className="gx-rule">
-                      <h3 className="gx-fine">Free downloads</h3>
-                      {freeRules.map((r) => (
-                        <PhotoRule key={r.id} rule={r} mediaId={it.mediaId} data={data} />
-                      ))}
+                    <section aria-labelledby="gx-free-h" className="gx-rule">
+                      <h3 id="gx-free-h" className="gx-fine">
+                        Free downloads
+                      </h3>
+                      <ul className="gx-rules">
+                        {freeRules.map((r) => (
+                          <PhotoRule key={r.id} rule={r} mediaId={it.mediaId} data={data} />
+                        ))}
+                      </ul>
                     </section>
                   ) : web && !client ? (
                     <Button asChild variant="secondary">
@@ -1562,9 +1566,11 @@ function Downloads({
     return (
       <Modal title="Download all" onClose={onClose}>
         <Notice msg={msg} inline />
-        {all.map((r) => (
-          <RuleRow key={r.id} rule={r} data={data} dl={dl} onUnlocked={() => router.refresh()} />
-        ))}
+        <ul className="gx-rules">
+          {all.map((r) => (
+            <RuleRow key={r.id} rule={r} data={data} dl={dl} onUnlocked={() => router.refresh()} />
+          ))}
+        </ul>
         {all.length ? null : <EmptyState>Open a photograph to download it.</EmptyState>}
       </Modal>
     );
@@ -1650,7 +1656,7 @@ function RuleRow({
   ).length;
   const parts = Math.max(1, Math.ceil(covered / 150));
   return (
-    <section className="gx-rule" aria-label={rule.name}>
+    <li className="gx-rule">
       <div>
         <strong>{rule.name}</strong>
         <p className="gx-fine">
@@ -1692,7 +1698,7 @@ function RuleRow({
           </span>
         </>
       )}
-    </section>
+    </li>
   );
 }
 
@@ -1732,7 +1738,7 @@ function PhotoRule({ rule, mediaId, data }: { rule: Data["rules"][number]; media
   const [ok, setOk] = useState(!rule.printRelease);
   const href = `/client/download?${data.galleryId ? `g=${data.galleryId}&` : ""}m=${mediaId}&rule=${rule.id}`;
   return (
-    <div className="gx-rule">
+    <li className="gx-rule">
       <div>
         {rule.name}
         <p className="gx-fine">
@@ -1769,7 +1775,7 @@ function PhotoRule({ rule, mediaId, data }: { rule: Data["rules"][number]; media
           )}
         </>
       )}
-    </div>
+    </li>
   );
 }
 

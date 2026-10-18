@@ -140,14 +140,16 @@ export function DashboardView({ greeting, data }: { greeting: string; data: Dash
         <Stat label="To deliver" value={stats.deliveries} detail="published galleries" />
       </StatGroup>
 
-      <BarChart
-        className="db-section"
-        title="Revenue"
-        caption="Last 30 days"
-        data={revenue.days.map((d) => ({ label: d.label, value: d.cents / 100 }))}
-        format={{ style: "currency", currency: "USD", maximumFractionDigits: 0 }}
-        empty="No payments in the last 30 days."
-      />
+      <Section id="db-rev" title="Revenue" more={<span className="db-caption">Last 30 days</span>}>
+        <BarChart
+          className="db-chart"
+          title="Revenue"
+          caption="Last 30 days"
+          data={revenue.days.map((d) => ({ label: d.label, value: d.cents / 100 }))}
+          format={{ style: "currency", currency: "USD", maximumFractionDigits: 0 }}
+          empty="No payments in the last 30 days."
+        />
+      </Section>
 
       <div className="db-two">
         <Section id="db-up" title="Upcoming" more={<More href="/studio/calendar">Calendar</More>}>

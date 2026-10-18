@@ -151,7 +151,7 @@ test("the client sees albums, a welcome and the accent; picks within the limit, 
   const lb = c.getByRole("dialog", { name: "Photograph" });
   await expect(lb.locator("img[src^='blob:']")).toBeVisible({ timeout: 25_000 });
   const stars = lb.getByRole("radiogroup", { name: "Rate shot-1.jpg" });
-  await stars.getByRole("radio", { name: "4 stars" }).check();
+  await stars.getByRole("radio", { name: "4 stars" }).click(); // saved on the server, then shown as checked
   await expect(stars.getByRole("radio", { name: "4 stars" })).toBeChecked();
   await lb.getByRole("button", { name: "Approve shot-1.jpg" }).click();
   await expect(lb.getByRole("button", { name: "Approve shot-1.jpg" })).toHaveAttribute("aria-pressed", "true");

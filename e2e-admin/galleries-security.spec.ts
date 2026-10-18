@@ -141,7 +141,9 @@ test("screenshot and save keys: a warning first, the second attempt locks the vi
   await c.goto(`${PHOTOS}/g/${slug}`, { waitUntil: "networkidle" });
   await c.getByLabel("Passcode").fill(pass);
   await c.getByRole("button", { name: "Open my gallery" }).click();
-  await expect(c.locator("p[role=alert]")).toContainText("closed because a screenshot or save was attempted", {
+  await expect(
+    c.getByRole("alert").filter({ hasText: "closed because a screenshot or save was attempted" }),
+  ).toBeVisible({
     timeout: 25_000,
   });
   await expect(c.locator("li[data-media-id]")).toHaveCount(0);

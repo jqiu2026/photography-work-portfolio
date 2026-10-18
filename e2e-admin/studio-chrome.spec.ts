@@ -6,7 +6,7 @@ const PHOTOS = "http://localhost:3302";
 const scaleOf = (page: import("@playwright/test").Page, label: string) =>
   page
     .getByRole("navigation", { name: "Studio sections" })
-    .locator("a[data-dock-item]")
+    .locator("a[data-hm-dock-item]")
     .filter({ hasText: new RegExp(`^${label}$`) })
     .evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).a);
 
@@ -52,7 +52,7 @@ test("the dashboard shows real totals and every other section keeps its heading 
   for (const name of ["Revenue", "Upcoming", "Recent activity", "Needs attention", "Galleries"])
     await expect(page.getByRole("heading", { name, exact: true })).toBeVisible();
   await expect(
-    page.getByRole("navigation", { name: "Studio sections" }).locator("a[data-dock-item], a.st-dock-brand"),
+    page.getByRole("navigation", { name: "Studio sections" }).locator("a[data-hm-dock-item], a.hm-dock-brand-link"),
   ).toHaveCount(7); // brand + 6 groups (the open group also lists its pages)
   for (const id of [
     "calendar",

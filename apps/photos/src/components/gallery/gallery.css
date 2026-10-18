@@ -887,6 +887,13 @@
 .gx-qty {
   width: 7.5rem;
 }
+.gx-rules {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--hm-space-5);
+}
 .gx-rule {
   display: grid;
   gap: var(--hm-space-3);

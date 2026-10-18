@@ -93,6 +93,7 @@ test("the client sees tax as its own line and the bundle price, adds an extra (r
     ((await table.locator("tr", { hasText: "Total" }).last().textContent()) as string).replace(/[^0-9.]/g, "");
   const before = await total();
   await page.getByLabel("Extra edited images quantity").fill("3");
+  await page.getByLabel("Extra edited images quantity").press("Tab"); // a typed number counts once you leave the field
   await slow(page.getByRole("status")).toContainText("Updated");
   await expect.poll(total, { timeout: 15_000 }).not.toBe(before);
   // accept needs consent and a name

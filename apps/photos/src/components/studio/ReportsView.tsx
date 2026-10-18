@@ -111,10 +111,8 @@ export function ReportsView({ data }: { data: ReportData }) {
                 </TableHeader>
                 <TableBody>
                   {data.table.rows.map((r, i) => (
-                    // biome-ignore lint/suspicious/noArrayIndexKey: report rows have no id and never reorder
                     <TableRow key={i}>
                       {r.map((c, j) => (
-                        // biome-ignore lint/suspicious/noArrayIndexKey: columns are positional
                         <TableCell key={j} numeric={numericCol[j]}>
                           {c}
                         </TableCell>
