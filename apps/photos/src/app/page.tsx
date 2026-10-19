@@ -3,8 +3,9 @@ import { Button, EmptyState } from "@holominimal/ui";
 import { getSite } from "@jerryqiu/sites";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { HomeJourney } from "@/components/home/HomeJourney";
+import { HomeStory } from "@/components/home/HomeStory";
 import { Shell } from "@/components/Shell";
+import { pickSlots } from "@/content/home-story";
 import { getPublicCatalog } from "@/lib/catalog";
 import { getPortfolio } from "@/lib/portfolio";
 import { getWork } from "@/lib/work";
@@ -21,8 +22,7 @@ export default async function Home() {
   const { categories, photosIn, featured, photos } = await getPortfolio();
   const projects = (await getWork()).filter((w) => w.cover).slice(0, 4);
   const { packages } = await getPublicCatalog();
-  // the story opens on the featured set (one subject after another, so it shows range), then the rest
-  const story = [...featured, ...photos.filter((p) => !featured.some((f) => f.id === p.id))].slice(0, 18);
+  const slots = pickSlots(photos);
   const cats = categories
     .map((c) => ({ ...c, count: photosIn(c.slug).length, cover: photosIn(c.slug)[0] }))
     .filter((c) => c.count);
@@ -37,20 +37,30 @@ export default async function Home() {
   return (
     <Shell intro>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
-      <HomeJourney
-        photos={story}
-        subjects={categories.filter((c) => photosIn(c.slug).length).map((c) => ({ slug: c.slug, name: c.name }))}
+      {/* the cinematic layer is on from the first paint unless reduced motion or Calm is chosen (see HomeStory) */}
+      <script
+        dangerouslySetInnerHTML={{
+          __html:
+            'try{var c=0;try{c=localStorage.getItem("hj-calm")==="1"}catch(e){}if(!c&&!matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.setAttribute("data-hj-motion","")}catch(e){}',
+        }}
+      />
+      <HomeStory
+        slots={slots}
+        subjects={cats.map((c) => ({ slug: c.slug, name: c.name, count: c.count }))}
         packages={packages.map((p) => ({
           id: p.id,
           name: p.name,
           tagline: p.tagline,
           price: p.price,
           featured: p.featured,
+          isSample: p.isSample,
+          deliverables: p.deliverables,
+          fees: p.fees,
         }))}
       />
 
-      {/* the end of the story: the dock and the top bar arrive here (ChromeReveal) */}
-      <div className="pub-end" data-bar-end="">
+      {/* the coda: the plain site, for skimming and direct navigation */}
+      <div className="pub-end">
         <section className="pub-section" aria-labelledby="by-kind">
           <div className="pub-wrap">
             <div className="pub-head-row">

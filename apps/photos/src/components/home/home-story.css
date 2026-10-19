@@ -1,0 +1,1649 @@
+/*
+ * The home story (HomeStory.tsx, docs/project/HOME-VISION.md).
+ *
+ * Two layers. The BASE rules are the finished, still version of every chapter in ordinary page flow: what you get with no
+ * script, with reduced motion and with the Calm button. The cinematic rules are all under `:root[data-hj-motion]` (set by an
+ * inline script in page.tsx and removed by Calm), where each chapter is a tall section with a sticky stage and the scroll
+ * engine writes `--p` (0 to 1) on the section; CSS turns that number into motion. Text never fades by opacity (it slides
+ * out of a mask instead), so contrast checks always see the real colours.
+ */
+.hj {
+  --ink: #f4f1ea;
+  --ink-2: #d4d0c6;
+  --void: #050505;
+  --paper: #efeae0;
+  --paper-ink: #1b1a17;
+  --pencil: #ffd166;
+  --pad: max(1.25rem, 5vw);
+  --spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+  --glide: cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  isolation: isolate;
+  overflow-x: clip;
+  background: var(--void);
+  color: var(--ink);
+}
+
+/* ---- shared pieces ---- */
+.hj-ch {
+  position: relative;
+}
+.hj-stick {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--void);
+  color: var(--ink);
+  min-height: 70svh;
+}
+.hj-ph {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #111;
+}
+.hj-ph .pm-img img {
+  object-position: var(--pos, 50% 50%);
+}
+.hj-scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(to top, rgb(0 0 0 / 0.78), rgb(0 0 0 / 0.15) 55%, rgb(0 0 0 / 0.38));
+}
+.hj-mask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.12em;
+}
+.hj-h2 {
+  margin: 0;
+  font-size: clamp(1.9rem, 4vw, 3.4rem);
+  font-weight: 400;
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+.hj-eyebrow {
+  margin: 0 0 0.8rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+.hj-note {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  opacity: 1;
+  color: inherit;
+}
+.hj-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2.75rem;
+  color: var(--ink);
+  text-underline-offset: 0.3em;
+}
+.hj :is(a, button, input):focus-visible {
+  outline: 2px solid var(--hm-focus-color, #fff);
+  outline-offset: 3px;
+}
+.hj-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+/* ---- the heads-up display ---- */
+.hj-top {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem var(--pad);
+  pointer-events: none;
+  transition: translate 0.5s var(--glide), visibility 0.5s;
+}
+.hj-top > * {
+  pointer-events: auto;
+}
+.hj-skip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  border: 1px solid rgb(255 255 255 / 0.28);
+  border-radius: 999px;
+  background: rgb(10 10 10 / 0.7);
+  backdrop-filter: blur(10px);
+  color: #fff;
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+.hj-skip:hover {
+  background: #fff;
+  color: #000;
+}
+.hj-id,
+.hj-chapter {
+  margin: 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0 1px 8px rgb(0 0 0 / 0.7);
+}
+.hj-chapter b {
+  font-weight: 600;
+}
+.hj-hud {
+  position: fixed;
+  left: 50%;
+  bottom: 1rem;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: min(48rem, calc(100% - 1.5rem));
+  padding: 0.25rem 0.5rem 0.25rem 0.35rem;
+  border: 1px solid rgb(255 255 255 / 0.16);
+  border-radius: 999px;
+  background: rgb(12 12 12 / 0.78);
+  backdrop-filter: blur(14px);
+  color: #fff;
+  translate: -50% 0;
+  transition: translate 0.5s var(--glide), visibility 0.5s;
+}
+.hj-hud > button,
+.hj-hud .hj-segs button {
+  font: inherit;
+  color: inherit;
+}
+.hj-play {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  color: #000 !important;
+  cursor: pointer;
+}
+.hj-segs {
+  flex: 1;
+  display: flex;
+  gap: 3px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.hj-segs li {
+  flex-basis: 0;
+  min-width: 0;
+}
+.hj-segs button {
+  display: grid;
+  align-items: center;
+  width: 100%;
+  height: 2.75rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.hj-segs i {
+  position: relative;
+  display: block;
+  height: 4px;
+  border-radius: 2px;
+  background: rgb(255 255 255 / 0.24);
+  overflow: hidden;
+  transition: height 0.3s var(--glide);
+}
+.hj-segs i::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  transform-origin: left;
+  scale: var(--f, 0) 1;
+}
+.hj-segs button[aria-current="step"] i {
+  height: 7px;
+}
+.hj-status {
+  flex: none;
+  margin: 0;
+  min-width: 7.5rem;
+  font-size: 0.78rem;
+  color: #e8e4da;
+}
+.hj-resume,
+.hj-calm {
+  flex: none;
+  min-height: 2.25rem;
+  padding: 0 0.9rem;
+  border: 1px solid rgb(255 255 255 / 0.3);
+  border-radius: 999px;
+  background: none;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+.hj-resume {
+  background: #fff;
+  color: #000 !important;
+  border-color: #fff;
+}
+.hj-calm[aria-pressed="true"] {
+  border-color: #fff;
+}
+.hj-hud:not(:has(.hj-segs)) {
+  left: auto;
+  right: 1rem;
+  translate: 0 0;
+  width: auto;
+}
+.pub[data-bar="shown"] .hj-hud {
+  translate: -50% 160%;
+  visibility: hidden;
+}
+.pub[data-bar="shown"] .hj-hud:not(:has(.hj-segs)) {
+  translate: 0 160%;
+}
+.pub[data-bar="shown"] .hj-top {
+  translate: 0 -160%;
+  visibility: hidden;
+}
+@media (max-width: 760px) {
+  .hj-id,
+  .hj-status {
+    display: none;
+  }
+  .hj-chapter {
+    font-size: 0.66rem;
+  }
+  .hj-hud {
+    gap: 0.5rem;
+  }
+  .hj-resume,
+  .hj-calm {
+    padding: 0 0.6rem;
+    font-size: 0.72rem;
+  }
+  .hj-segs {
+    min-width: 4rem;
+  }
+}
+
+/* ---- 0 threshold ---- */
+.hj-threshold .hj-stick {
+  display: grid;
+  align-items: end;
+  min-height: min(86svh, 54rem);
+}
+.hj-aperture {
+  position: absolute;
+  inset: 0;
+}
+.hj-seam,
+.hj-cue {
+  display: none;
+}
+.hj-title-mask {
+  position: absolute;
+  left: var(--pad);
+  right: var(--pad);
+  bottom: clamp(5.5rem, 14vh, 8rem);
+}
+.hj-title {
+  margin: 0;
+  max-width: 13ch;
+  font-size: clamp(2.7rem, 7.4vw, 6.8rem);
+  font-weight: 400;
+  line-height: 0.98;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+  color: #fff;
+}
+.hj-corners {
+  position: absolute;
+  inset: 1.5rem;
+  pointer-events: none;
+  --b: 1.75rem;
+  --w: 2px;
+  background:
+    linear-gradient(#fff, #fff) left top / var(--b) var(--w) no-repeat,
+    linear-gradient(#fff, #fff) left top / var(--w) var(--b) no-repeat,
+    linear-gradient(#fff, #fff) right top / var(--b) var(--w) no-repeat,
+    linear-gradient(#fff, #fff) right top / var(--w) var(--b) no-repeat,
+    linear-gradient(#fff, #fff) left bottom / var(--b) var(--w) no-repeat,
+    linear-gradient(#fff, #fff) left bottom / var(--w) var(--b) no-repeat,
+    linear-gradient(#fff, #fff) right bottom / var(--b) var(--w) no-repeat,
+    linear-gradient(#fff, #fff) right bottom / var(--w) var(--b) no-repeat;
+}
+
+/* ---- 1 seeing ---- */
+.hj-seeing .hj-stick {
+  min-height: min(76svh, 48rem);
+}
+.hj-seeing-photo {
+  position: absolute;
+  inset: 0;
+}
+.hj-reticle,
+.hj-closing {
+  display: none;
+}
+.hj-lines {
+  position: absolute;
+  left: var(--pad);
+  bottom: clamp(2.5rem, 9vh, 5rem);
+  display: grid;
+  gap: 0.2rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.hj-line {
+  display: block;
+  font-size: clamp(1.7rem, 4.6vw, 4rem);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  color: #fff;
+}
+
+/* ---- 2 a world of photographs ---- */
+.hj-range .hj-stick {
+  display: grid;
+  gap: 1.5rem;
+  padding: clamp(2.5rem, 7vh, 4rem) var(--pad);
+  min-height: 0;
+}
+.hj-sheet {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  gap: 0.5rem;
+}
+.hj-frame-cell {
+  position: relative;
+  display: block;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  background: #0d0d0d;
+  border: 5px solid #0d0d0d;
+  outline: 1px solid #2c2c2c;
+  transition: filter 0.5s var(--glide), scale 0.5s var(--spring), outline-color 0.3s;
+}
+.hj-frame-cell:nth-child(n + 9) {
+  display: none;
+}
+.hj-frame-cell small {
+  position: absolute;
+  left: 0.4rem;
+  bottom: 0.25rem;
+  font: 0.65rem / 1 ui-monospace, monospace;
+  color: #fff;
+  text-shadow: 0 1px 4px #000;
+}
+.hj-frame-cell[data-on] {
+  outline: 2px solid var(--pencil);
+  border-radius: 3% 5% 4% 6% / 6% 3% 5% 4%;
+}
+.hj-viewing {
+  display: none;
+}
+.hj-range-copy {
+  display: grid;
+  gap: 1rem;
+  justify-items: start;
+}
+.hj-cats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.hj-cats a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  border: 1px solid rgb(255 255 255 / 0.35);
+  border-radius: 999px;
+  color: #fff;
+  text-decoration: none;
+  transition: background 0.3s, color 0.3s, border-color 0.3s;
+}
+.hj-cats a small {
+  font-size: 0.72rem;
+  color: inherit;
+}
+.hj-cats a:hover,
+.hj-cats a[data-on] {
+  background: #fff;
+  color: #000;
+  border-color: #fff;
+}
+
+/* ---- 3 the worlds I enter ---- */
+.hj-worlds .hj-stick {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 0;
+}
+.hj-world {
+  position: relative;
+  margin: 0;
+  min-height: 38svh;
+  overflow: hidden;
+}
+.hj-world figcaption {
+  position: absolute;
+  left: 1.25rem;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 2;
+}
+.hj-world-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 2.75rem;
+  color: #fff;
+  font-size: clamp(2.2rem, 6vw, 5.6rem);
+  line-height: 1;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.hj-world-name svg {
+  width: 0.5em;
+  height: 0.5em;
+}
+
+/* ---- 4 from idea to booking ---- */
+.hj-booking .hj-stick {
+  padding: clamp(2.5rem, 7vh, 4rem) var(--pad);
+  min-height: 0;
+}
+.hj-booking-grid {
+  display: grid;
+  gap: 2rem;
+}
+.hj-stages {
+  display: grid;
+  gap: 0.15rem;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.hj-stages button {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink-2);
+  font: inherit;
+  font-size: 1.05rem;
+  text-align: left;
+  cursor: pointer;
+  transition: color 0.3s, translate 0.4s var(--glide);
+}
+.hj-stages b {
+  font: 0.72rem ui-monospace, monospace;
+  letter-spacing: 0.1em;
+}
+.hj-stages button[aria-current="step"] {
+  color: #fff;
+  translate: 0.6rem 0;
+}
+.hj-stages button[aria-current="step"] b {
+  color: var(--pencil);
+}
+.hj-desk {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+  gap: 1rem;
+}
+.hj-paper {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 0.9rem;
+  padding: 1.5rem;
+  border-radius: 4px;
+  background: var(--paper);
+  color: var(--paper-ink);
+  box-shadow: 0 24px 60px -24px rgb(0 0 0 / 0.7);
+}
+.hj-paper h3 {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+.hj-paper p {
+  margin: 0;
+  line-height: 1.5;
+}
+.hj-paper-n {
+  font: 0.7rem ui-monospace, monospace;
+  letter-spacing: 0.14em;
+  color: #5b574d;
+}
+.hj-paper :is(a, button):focus-visible {
+  outline-color: #111;
+}
+.hj-prompts {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.hj-prompts li {
+  padding: 0.55rem 0 0.35rem;
+  border-bottom: 1.5px dashed #8b8578;
+  font-size: 1.02rem;
+}
+.hj-pick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.hj-pick button {
+  min-height: 2.75rem;
+  padding: 0 0.9rem;
+  border: 1.5px solid #1b1a17;
+  border-radius: 999px;
+  background: none;
+  color: #1b1a17;
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.hj-pick button[aria-pressed="true"] {
+  background: #1b1a17;
+  color: #efeae0;
+}
+.hj-quote {
+  display: grid;
+  gap: 0.5rem;
+}
+.hj-price {
+  font-size: 2.2rem;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+.hj-quote dl {
+  display: grid;
+  gap: 0.25rem;
+  margin: 0;
+}
+.hj-quote dl div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid #c9c3b4;
+  font-size: 0.92rem;
+}
+.hj-quote dt {
+  color: #4a463d;
+}
+.hj-quote dd {
+  margin: 0;
+  font-weight: 500;
+  text-align: right;
+}
+.hj-quote small {
+  color: #4a463d;
+}
+.hj-cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3px;
+  text-align: center;
+  font-size: 0.82rem;
+}
+.hj-cal-grid b {
+  font-weight: 500;
+  color: #4a463d;
+}
+.hj-cal-grid span,
+.hj-cal-grid button {
+  display: grid;
+  place-items: center;
+  min-height: 1.9rem;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  color: #1b1a17;
+  font: inherit;
+}
+.hj-cal-grid span[data-out] {
+  color: #6e695d;
+}
+.hj-cal-grid button[data-open] {
+  background: #e0d9c8;
+  cursor: pointer;
+}
+.hj-cal-grid button[data-picked] {
+  background: #1b1a17;
+  color: #efeae0;
+}
+.hj-refs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.4rem;
+}
+.hj-refs .hj-ph {
+  position: relative;
+  aspect-ratio: 4 / 5;
+}
+.hj-checks {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0;
+  padding-left: 1.1rem;
+  line-height: 1.45;
+}
+
+.hj-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  justify-self: start;
+  min-height: 2.75rem;
+  padding: 0 1.2rem;
+  border: 1.5px solid #1b1a17;
+  border-radius: 999px;
+  background: #1b1a17;
+  color: #efeae0;
+  font-size: 0.95rem;
+  text-decoration: none;
+}
+.hj-btn[data-kind="secondary"] {
+  background: none;
+  color: #1b1a17;
+}
+.hj-btn:hover {
+  background: #000;
+  color: #fff;
+}
+.hj-btn svg {
+  width: 1em;
+  height: 1em;
+}
+
+/* ---- 5 the moment ---- */
+.hj-moment .hj-stick {
+  min-height: min(70svh, 46rem);
+}
+.hj-shot {
+  position: absolute;
+  inset: 0;
+}
+.hj-thirds,
+.hj-af,
+.hj-dim {
+  display: none;
+}
+.hj-phases {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: clamp(5rem, 12vh, 7rem);
+  display: flex;
+  justify-content: center;
+  gap: clamp(1rem, 4vw, 3rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font: 0.78rem ui-monospace, monospace;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0 1px 8px #000;
+}
+
+/* ---- 6 the darkroom ---- */
+.hj-darkroom .hj-stick {
+  display: grid;
+  gap: 1.5rem;
+  padding: clamp(2.5rem, 7vh, 4rem) var(--pad);
+  min-height: 0;
+  background: radial-gradient(ellipse at 50% 35%, #2b0909, #090202 72%);
+}
+.hj-edits {
+  display: grid;
+  gap: 0.8rem;
+  margin: 1.2rem 0 0;
+  padding: 0;
+  list-style: none;
+  max-width: 20rem;
+}
+.hj-edits li {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.95rem;
+  color: var(--ink);
+}
+.hj-edits i {
+  display: block;
+  height: 3px;
+  background: rgb(255 255 255 / 0.2);
+}
+.hj-edits b {
+  display: block;
+  height: 100%;
+  background: #ff6a5c;
+}
+.hj-dark-stage {
+  --split: 50%;
+  display: grid;
+  gap: 0.8rem;
+  justify-items: center;
+  width: min(100%, 52rem);
+}
+.hj-print {
+  width: 100%;
+  padding: clamp(0.5rem, 1.3vw, 1.1rem);
+  background: var(--paper);
+  box-shadow: 0 30px 80px -20px rgb(0 0 0 / 0.85), 0 0 90px -10px rgb(200 37 31 / 0.4);
+}
+.hj-dark-img {
+  position: relative;
+  aspect-ratio: var(--ratio, 1.5);
+  overflow: hidden;
+  background: #111;
+}
+.hj-raw {
+  position: absolute;
+  inset: 0;
+  clip-path: inset(0 calc(100% - var(--split)) 0 0);
+}
+.hj-raw .hj-ph {
+  filter: grayscale(0.75) brightness(0.5) contrast(0.62) sepia(0.25);
+}
+.hj-split {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--split);
+  width: 2px;
+  background: #fff;
+  box-shadow: 0 0 14px rgb(255 255 255 / 0.7);
+}
+.hj-tag {
+  position: absolute;
+  top: 0.6rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: rgb(0 0 0 / 0.72);
+  color: #fff;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.hj-tag--l {
+  left: 0.6rem;
+}
+.hj-tag--r {
+  right: 0.6rem;
+}
+.hj-compare {
+  display: block;
+  width: 100%;
+}
+.hj-compare input {
+  width: 100%;
+  height: 2.75rem;
+  margin: 0;
+  accent-color: #fff;
+  cursor: ew-resize;
+}
+.hj-dark-stage .hj-note {
+  color: var(--ink-2);
+  text-align: center;
+}
+
+/* ---- 7 delivered ---- */
+.hj-delivered .hj-stick {
+  display: grid;
+  align-items: center;
+  gap: 2rem;
+  padding: clamp(2.5rem, 7vh, 4rem) var(--pad);
+  min-height: 0;
+  background: radial-gradient(ellipse at 70% 40%, #17171c, #050505 70%);
+}
+.hj-del-copy {
+  display: grid;
+  gap: 1.2rem;
+  justify-items: start;
+}
+.hj-points {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--ink-2);
+  line-height: 1.45;
+}
+.hj-points li::before {
+  content: "—";
+  margin-right: 0.6rem;
+  color: var(--pencil);
+}
+.hj-devices {
+  position: relative;
+  display: grid;
+  gap: 1rem;
+  justify-items: center;
+}
+.hj-laptop {
+  width: min(100%, 40rem);
+  padding: 0.85rem;
+  border-radius: 14px 14px 6px 6px;
+  background: #14141a;
+  box-shadow: 0 40px 80px -30px #000;
+}
+.hj-screen {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 4px;
+  background: #0b0b0e;
+}
+.hj-bar {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  height: 1.6rem;
+  padding: 0 0.6rem;
+  background: rgb(10 10 14 / 0.88);
+}
+.hj-bar i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #4a4a54;
+}
+.hj-bar span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-left: 0.6rem;
+  font-size: 0.68rem;
+  color: #d4d0c6;
+}
+.hj-bar svg {
+  width: 0.8em;
+  height: 0.8em;
+}
+.hj-cover {
+  position: absolute;
+  inset: 0 0 52% 0;
+}
+.hj-cover .hj-ph {
+  inset: 0;
+}
+.hj-grid {
+  position: absolute;
+  inset: 48% 0 0 0;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 3px;
+  padding: 3px;
+  background: #0b0b0e;
+}
+.hj-cell {
+  position: relative;
+  overflow: hidden;
+}
+.hj-cell button {
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  display: grid;
+  place-items: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgb(0 0 0 / 0.7);
+  color: #fff;
+  cursor: pointer;
+}
+.hj-cell button svg {
+  width: 0.85rem;
+  height: 0.85rem;
+}
+.hj-cell button[aria-pressed="true"] {
+  background: #fff;
+  color: #d3243b;
+}
+.hj-phone {
+  display: none;
+}
+
+/* ---- 8 the photograph stays ---- */
+.hj-finale .hj-stick {
+  display: grid;
+  align-content: center;
+  gap: 2rem;
+  padding: clamp(2.5rem, 7vh, 4rem) var(--pad);
+  min-height: min(90svh, 56rem);
+  background: radial-gradient(ellipse at 50% 20%, #3a2a1c 0%, #15100c 55%, #070605);
+}
+.hj-wall {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+.hj-lamp {
+  display: none;
+}
+.hj-framed {
+  width: min(70vw, 30rem);
+  border: clamp(6px, 1vw, 12px) solid #1a1612;
+  background: #1a1612;
+  box-shadow: 0 30px 70px -25px #000;
+}
+.hj-mat {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  padding: 8%;
+  background: var(--paper);
+}
+.hj-mat .hj-ph {
+  inset: 8%;
+}
+.hj-finale-copy {
+  display: grid;
+  gap: 1.5rem;
+  justify-items: center;
+  text-align: center;
+}
+.hj-final-line {
+  display: block;
+  font-size: clamp(2.1rem, 5.2vw, 4.6rem);
+  font-weight: 400;
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+.hj-bar-end {
+  position: absolute;
+  left: 0;
+  top: 55%;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+.hj-finale-copy h2 {
+  margin: 0;
+}
+
+/* ================= desktop wide static layouts ================= */
+@media (min-width: 900px) {
+  .hj-range .hj-sheet {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .hj-booking-grid {
+    grid-template-columns: minmax(16rem, 0.8fr) 1.4fr;
+    align-items: start;
+  }
+  .hj-darkroom .hj-stick {
+    grid-template-columns: minmax(14rem, 0.5fr) 1.5fr;
+    align-items: center;
+  }
+  .hj-delivered .hj-stick {
+    grid-template-columns: 0.8fr 1.2fr;
+  }
+}
+@media (max-width: 760px) {
+  .hj-worlds .hj-stick {
+    grid-template-columns: 1fr;
+  }
+  .hj-sheet {
+    grid-template-columns: 1fr 1fr;
+  }
+  .hj-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .hj-grid .hj-cell:nth-child(n + 4) {
+    display: none;
+  }
+}
+
+/* ======================================================================== */
+/* ====================== the cinematic layer ============================= */
+/* ======================================================================== */
+
+:root[data-hj-motion] .hj-ch {
+  --p: 0;
+  height: var(--h);
+}
+:root[data-hj-motion] .hj-threshold {
+  --h: 200svh;
+}
+:root[data-hj-motion] .hj-seeing {
+  --h: 260svh;
+}
+:root[data-hj-motion] .hj-range {
+  --h: 280svh;
+}
+:root[data-hj-motion] .hj-worlds {
+  --h: 420svh;
+}
+:root[data-hj-motion] .hj-booking {
+  --h: 420svh;
+}
+:root[data-hj-motion] .hj-moment {
+  --h: 300svh;
+}
+:root[data-hj-motion] .hj-darkroom {
+  --h: 300svh;
+}
+:root[data-hj-motion] .hj-delivered {
+  --h: 280svh;
+}
+:root[data-hj-motion] .hj-finale {
+  --h: 220svh;
+}
+:root[data-hj-motion] .hj-stick {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+}
+
+/* -- threshold: a seam of light opens into the photograph -- */
+:root[data-hj-motion] .hj-threshold .hj-stick {
+  --o: clamp(0, calc(var(--p) * 2.4), 1);
+  --e: calc(var(--o) * var(--o) * (3 - 2 * var(--o)));
+  --t: clamp(0, calc((var(--p) - 0.5) * 4), 1);
+  --c: clamp(0, calc((var(--p) - 0.66) * 4), 1);
+  display: block;
+}
+:root[data-hj-motion] .hj-aperture {
+  clip-path: inset(calc((1 - var(--e)) * (50% - 1px)) calc((1 - var(--e)) * 38%));
+}
+:root[data-hj-motion] .hj-aperture .hj-ph {
+  scale: calc(1.14 - var(--e) * 0.1);
+  translate: calc(var(--mx, 0) * -14px) calc(var(--my, 0) * -9px);
+  filter: brightness(calc(0.5 + var(--e) * 0.5));
+}
+:root[data-hj-motion] .hj-seam {
+  display: block;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(24% + var(--e) * 76%);
+  height: 2px;
+  translate: -50% -50%;
+  background: linear-gradient(90deg, transparent, #fff 20%, #fff 80%, transparent);
+  box-shadow: 0 0 26px 3px rgb(255 232 190 / 0.75);
+  opacity: calc(1 - var(--e));
+  pointer-events: none;
+}
+:root[data-hj-motion] .hj-scrim {
+  opacity: var(--e, 1);
+}
+:root[data-hj-motion] .hj-title {
+  translate: 0 calc((1 - var(--t)) * 115%);
+}
+:root[data-hj-motion] .hj-corners {
+  inset: calc(1.5rem + (1 - var(--c)) * 3rem);
+  opacity: var(--c);
+}
+:root[data-hj-motion] .hj-cue {
+  display: block;
+  position: absolute;
+  left: 50%;
+  bottom: 1.2rem;
+  margin: 0;
+  translate: -50% 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #fff;
+  animation: hj-bob 2.4s ease-in-out infinite;
+}
+@keyframes hj-bob {
+  50% {
+    translate: -50% -6px;
+  }
+}
+
+/* -- seeing: the viewpoint moves into the room, a frame closes on a detail -- */
+:root[data-hj-motion] .hj-seeing .hj-stick {
+  --c: clamp(0, calc((var(--p) - 0.78) * 4.5), 1);
+}
+:root[data-hj-motion] .hj-seeing-photo {
+  transform-origin: calc(var(--fx) * 1%) calc(var(--fy) * 1%);
+  scale: calc(1 + var(--p) * 0.55);
+  translate: calc((50 - var(--fx)) * var(--panx) * var(--p) * 1%) calc((50 - var(--fy)) * var(--pany) * var(--p) * 1%);
+  will-change: scale, translate;
+}
+:root[data-hj-motion] .hj-reticle {
+  display: block;
+  position: absolute;
+  left: calc((var(--fx) + (var(--rx) - var(--fx)) * var(--p)) * 1%);
+  top: calc((var(--fy) + (var(--ry) - var(--fy)) * var(--p)) * 1%);
+  width: calc(7rem - var(--p) * 2.5rem);
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  scale: clamp(0, calc((var(--p) - 0.05) * 8), 1);
+  border: 2px solid #fff;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.35);
+}
+:root[data-hj-motion] .hj-closing {
+  display: block;
+  position: absolute;
+  inset: calc(var(--c) * 33%) calc(var(--c) * 36%);
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 100vmax rgb(0 0 0 / 0.74);
+  opacity: clamp(0, calc((var(--p) - 0.76) * 40), 1);
+  pointer-events: none;
+}
+:root[data-hj-motion] .hj-lines li {
+  grid-area: 1 / 1;
+  --a: calc(0.1 + var(--k) * 0.27);
+  --in: clamp(0, calc((var(--p) - var(--a)) * 10), 1);
+  --out: clamp(0, calc((var(--p) - var(--a) - 0.25) * 10), 1);
+}
+:root[data-hj-motion] .hj-lines li:last-child {
+  --out: 0;
+}
+:root[data-hj-motion] .hj-line {
+  translate: 0 calc((1 - var(--in)) * 115% - var(--out) * 115%);
+}
+
+/* -- range: a contact sheet slides under a fixed viewing aperture -- */
+:root[data-hj-motion] .hj-range .hj-stick {
+  display: block;
+  padding: 0;
+}
+:root[data-hj-motion] .hj-range .hj-stick::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgb(0 0 0 / 0.85), rgb(0 0 0 / 0.1) 62%),
+    linear-gradient(0deg, rgb(0 0 0 / 0.6), transparent 40%);
+}
+:root[data-hj-motion] .hj-sheet {
+  position: absolute;
+  left: 66%;
+  top: 50%;
+  width: 150vw;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1.1vw;
+  translate: calc(-50% + (0.5 - var(--p)) * 22vw) calc(-50% + (0.5 - var(--p)) * 12svh);
+  rotate: -3deg;
+  scale: calc(1.12 - var(--p) * 0.08);
+}
+:root[data-hj-motion] .hj-frame-cell {
+  filter: brightness(0.46) saturate(0.7);
+}
+:root[data-hj-motion] .hj-frame-cell:nth-child(n + 9) {
+  display: block;
+}
+:root[data-hj-motion] .hj-frame-cell[data-on] {
+  filter: none;
+  scale: 1.07;
+  z-index: 2;
+}
+:root[data-hj-motion] .hj-viewing {
+  display: block;
+  position: absolute;
+  left: 66%;
+  top: 50%;
+  z-index: 1;
+  width: 30vw;
+  aspect-ratio: 3 / 2;
+  translate: -50% -50%;
+  --b: 1.6rem;
+  --w: 2px;
+  pointer-events: none;
+  background:
+    linear-gradient(#fff, #fff) left top / var(--b) var(--w) no-repeat,
+    linear-gradient(#fff, #fff) left top / var(--w) var(--b) no-repeat,
+    linear-gradient(#fff, #fff) right top / var(--b) var(--w) no-repeat,
+    linear-gradient(#fff, #fff) right top / var(--w) var(--b) no-repeat,
+    linear-gradient(#fff, #fff) left bottom / var(--b) var(--w) no-repeat,
+    linear-gradient(#fff, #fff) left bottom / var(--w) var(--b) no-repeat,
+    linear-gradient(#fff, #fff) right bottom / var(--b) var(--w) no-repeat,
+    linear-gradient(#fff, #fff) right bottom / var(--w) var(--b) no-repeat;
+}
+:root[data-hj-motion] .hj-range-copy {
+  position: absolute;
+  left: var(--pad);
+  bottom: clamp(5rem, 13vh, 7.5rem);
+  z-index: 3;
+  max-width: min(32rem, 44vw);
+}
+
+/* -- worlds: four full-screen photographs, each opened onto the last -- */
+:root[data-hj-motion] .hj-worlds .hj-stick {
+  display: block;
+}
+:root[data-hj-motion] .hj-world {
+  position: absolute;
+  inset: 0;
+  min-height: 0;
+  z-index: var(--i);
+  --t: clamp(0, calc((var(--p) * 3.4 - var(--i) + 0.4) * 2.5), 1);
+  --t2: clamp(0, calc((var(--p) * 3.4 - var(--i) - 0.6) * 2.5), 1);
+  --v: clamp(0, calc(var(--t) - var(--t2)), 1);
+}
+:root[data-hj-motion] .hj-world:last-child {
+  --t2: 0;
+}
+:root[data-hj-motion] .hj-world[data-open="iris"] {
+  clip-path: circle(calc(var(--t) * 142%) at var(--fx) var(--fy));
+}
+:root[data-hj-motion] .hj-world[data-open="rise"] {
+  clip-path: inset(calc((1 - var(--t)) * 100%) 0 0 0);
+}
+:root[data-hj-motion] .hj-world[data-open="rise"] .hj-ph {
+  translate: 0 calc((1 - var(--t)) * -14%);
+}
+:root[data-hj-motion] .hj-world[data-open="slant"] {
+  clip-path: polygon(0 0, calc(var(--t) * 150%) 0, calc(var(--t) * 150% - 50%) 100%, 0 100%);
+}
+:root[data-hj-motion] .hj-world:first-child {
+  clip-path: none;
+}
+:root[data-hj-motion] .hj-world .hj-ph {
+  scale: calc(1.12 - var(--t) * 0.08 + var(--t2) * 0.06);
+}
+:root[data-hj-motion] .hj-world figcaption {
+  left: var(--pad);
+  bottom: clamp(4.5rem, 12vh, 7rem);
+}
+:root[data-hj-motion] .hj-world-name {
+  translate: 0 calc((1 - var(--v)) * 115%);
+}
+:root[data-hj-motion] .hj-world-name:focus-visible {
+  translate: 0 0;
+}
+
+/* -- booking: four sheets of paper on a desk -- */
+:root[data-hj-motion] .hj-booking .hj-stick {
+  display: grid;
+  align-items: center;
+}
+:root[data-hj-motion] .hj-booking-grid {
+  width: 100%;
+  max-width: 78rem;
+  margin: 0 auto;
+  align-items: center;
+}
+:root[data-hj-motion] .hj-desk {
+  position: relative;
+  display: block;
+  height: min(35rem, 72svh);
+}
+:root[data-hj-motion] .hj-paper {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: min(30rem, 100%);
+  height: fit-content;
+  max-height: 100%;
+  transition: translate 0.9s var(--spring), rotate 0.9s var(--spring), scale 0.9s var(--spring), filter 0.6s;
+  z-index: 1;
+}
+:root[data-hj-motion] .hj-paper[data-state="now"] {
+  z-index: 5;
+}
+:root[data-hj-motion] .hj-paper[data-state="past"] {
+  translate: -46% -7%;
+  rotate: -9deg;
+  scale: 0.78;
+  filter: brightness(0.55);
+  z-index: 2;
+}
+:root[data-hj-motion] .hj-paper[data-state="next"] {
+  translate: 24% 15%;
+  rotate: 5deg;
+  scale: 0.88;
+  filter: brightness(0.8);
+  z-index: 1;
+}
+
+/* -- moment: focus, compose, wait, press -- */
+:root[data-hj-motion] .hj-moment .hj-stick {
+  --lock: clamp(0, calc((var(--p) - 0.36) * 5), 1);
+  --c: clamp(0, calc((var(--p) - 0.86) * 7), 1);
+  background: color-mix(in srgb, #0b0202 calc(var(--c) * 100%), #000);
+}
+:root[data-hj-motion] .hj-shot {
+  scale: calc(1 - var(--c) * 0.12);
+  outline: calc(var(--c) * 14px) solid #efeae0;
+  transform-origin: 50% 50%;
+}
+:root[data-hj-motion] .hj-shot .hj-ph {
+  scale: calc(1.08 - var(--p) * 0.06);
+  filter: blur(calc((1 - clamp(0, calc(var(--p) * 2.4), 1)) * 10px));
+}
+:root[data-hj-motion] .hj-thirds {
+  display: block;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: calc(clamp(0, calc((var(--p) - 0.5) * 4), 1) * 0.5);
+  background: linear-gradient(
+      90deg,
+      transparent calc(33.3% - 0.5px),
+      #fff calc(33.3% - 0.5px),
+      #fff calc(33.3% + 0.5px),
+      transparent calc(33.3% + 0.5px)
+    ),
+    linear-gradient(
+      90deg,
+      transparent calc(66.6% - 0.5px),
+      #fff calc(66.6% - 0.5px),
+      #fff calc(66.6% + 0.5px),
+      transparent calc(66.6% + 0.5px)
+    ),
+    linear-gradient(
+      0deg,
+      transparent calc(33.3% - 0.5px),
+      #fff calc(33.3% - 0.5px),
+      #fff calc(33.3% + 0.5px),
+      transparent calc(33.3% + 0.5px)
+    ),
+    linear-gradient(
+      0deg,
+      transparent calc(66.6% - 0.5px),
+      #fff calc(66.6% - 0.5px),
+      #fff calc(66.6% + 0.5px),
+      transparent calc(66.6% + 0.5px)
+    );
+}
+:root[data-hj-motion] .hj-af {
+  display: block;
+  position: absolute;
+  left: calc(var(--fx) * 1%);
+  top: calc(var(--fy) * 1%);
+  width: calc(6rem - var(--lock) * 1.5rem);
+  aspect-ratio: 1.3;
+  translate: calc(-50% + (1 - var(--lock)) * sin(calc(var(--p) * 2200deg)) * 7vw)
+    calc(-50% + (1 - var(--lock)) * sin(calc(var(--p) * 1700deg)) * 5svh);
+  border: calc(2px + var(--lock) * 2px) solid #fff;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.4);
+  scale: calc(1 - var(--c));
+}
+:root[data-hj-motion] .hj-phases li {
+  --center: calc((var(--k) + 0.5) * 0.21);
+  --on: clamp(0, calc(1 - (var(--p) - var(--center)) * (var(--p) - var(--center)) * 38), 1);
+  position: relative;
+  padding-bottom: 0.4rem;
+}
+:root[data-hj-motion] .hj-phases li::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: #fff;
+  scale: var(--on) 1;
+}
+:root[data-hj-motion] .hj-dim {
+  display: block;
+  position: absolute;
+  inset: 0;
+  background: #000;
+  pointer-events: none;
+  opacity: calc(clamp(0, calc(1 - (var(--p) - 0.83) * (var(--p) - 0.83) * 4000), 1) * 0.88);
+}
+
+/* -- darkroom: the picture develops under the safelight -- */
+:root[data-hj-motion] .hj-darkroom .hj-stick {
+  align-content: center;
+}
+:root[data-hj-motion] .hj-print {
+  scale: calc(0.92 + clamp(0, calc(var(--p) * 5), 1) * 0.08);
+}
+:root[data-hj-motion] .hj-dark-stage {
+  width: min(100%, calc(66svh * var(--ratio, 1.5)), 52rem);
+}
+:root[data-hj-motion] .hj-edits li b {
+  width: calc(clamp(0, calc((var(--p) - 0.14 - var(--k) * 0.13) * 4), 1) * 100%);
+}
+
+/* -- delivered: the print becomes a screen -- */
+:root[data-hj-motion] .hj-delivered .hj-stick {
+  --s: clamp(0, calc(var(--p) * 4), 1);
+  --s2: clamp(0, calc((var(--p) - 0.26) * 4), 1);
+  --s3: clamp(0, calc((var(--p) - 0.5) * 4), 1);
+}
+:root[data-hj-motion] .hj-laptop {
+  padding: calc(0.45rem + var(--s) * 0.45rem);
+  background: color-mix(in srgb, #14141a calc(var(--s) * 100%), #efeae0);
+  rotate: calc((1 - var(--s)) * 3deg);
+  scale: calc(0.82 + var(--s) * 0.18);
+}
+:root[data-hj-motion] .hj-bar {
+  translate: 0 calc((1 - var(--s2)) * -100%);
+}
+:root[data-hj-motion] .hj-cover {
+  bottom: calc(var(--s2) * 52%);
+}
+:root[data-hj-motion] .hj-grid {
+  top: calc(100% - var(--s2) * 52%);
+}
+:root[data-hj-motion] .hj-phone {
+  display: block;
+  position: absolute;
+  right: -2%;
+  bottom: -8%;
+  width: min(34%, 10.5rem);
+  padding: 0.4rem;
+  border-radius: 1.4rem;
+  background: #14141a;
+  box-shadow: 0 30px 60px -20px #000;
+  translate: calc((1 - var(--s3)) * 60%) calc((1 - var(--s3)) * 40%);
+  rotate: calc((1 - var(--s3)) * 8deg);
+}
+.hj-phone-photo {
+  position: relative;
+  aspect-ratio: 9 / 14;
+  overflow: hidden;
+  border-radius: 1rem;
+}
+.hj-phone-actions {
+  display: flex;
+  justify-content: space-around;
+  padding: 0.5rem 0 0.2rem;
+  font-size: 0.7rem;
+  color: #d4d0c6;
+}
+.hj-phone-actions > * {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+}
+.hj-phone-actions svg {
+  width: 0.85em;
+  height: 0.85em;
+}
+.hj-phone-actions [data-on] {
+  color: #ff6b81;
+}
+
+/* -- finale: the camera pulls back from a framed print -- */
+:root[data-hj-motion] .hj-finale .hj-stick {
+  --z: clamp(0, calc(var(--p) * 2.2), 1);
+  --t: clamp(0, calc((var(--p) - 0.55) * 4), 1);
+  display: block;
+  padding: 0;
+}
+:root[data-hj-motion] .hj-wall {
+  position: absolute;
+  inset: 0;
+}
+:root[data-hj-motion] .hj-lamp {
+  display: block;
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 55% 60% at 50% 0%, rgb(255 190 120 / 0.34), transparent 70%);
+  scale: calc(1.4 - var(--z) * 0.4);
+}
+:root[data-hj-motion] .hj-framed {
+  position: absolute;
+  left: 50%;
+  top: 42%;
+  width: min(46vw, 34rem);
+  translate: -50% -50%;
+  scale: calc(2.3 - var(--z) * 1.3);
+  box-shadow: 0 calc(var(--z) * 36px) calc(var(--z) * 90px) -22px rgb(0 0 0 / 0.85);
+}
+:root[data-hj-motion] .hj-finale-copy {
+  position: absolute;
+  left: var(--pad);
+  right: var(--pad);
+  bottom: clamp(2.5rem, 8vh, 5rem);
+}
+:root[data-hj-motion] .hj-final-line {
+  translate: 0 calc((1 - var(--t)) * 120%);
+}
+:root[data-hj-motion] .hj-finale-copy .hj-actions {
+  translate: 0 calc((1 - var(--t)) * 400%);
+}
+:root[data-hj-motion] .hj-finale-copy:focus-within :is(.hj-final-line, .hj-actions) {
+  translate: 0 0;
+}
+
+/* ---- phones ---- */
+@media (max-width: 760px) {
+  :root[data-hj-motion] .hj-range {
+    --h: auto;
+  }
+  :root[data-hj-motion] .hj-range .hj-stick {
+    position: relative;
+    height: auto;
+    display: grid;
+    padding: 4.5rem var(--pad) 5rem;
+  }
+  :root[data-hj-motion] .hj-range .hj-stick::after,
+  :root[data-hj-motion] .hj-viewing {
+    display: none;
+  }
+  :root[data-hj-motion] .hj-sheet {
+    position: static;
+    width: auto;
+    translate: none;
+    rotate: none;
+    scale: none;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+  :root[data-hj-motion] .hj-frame-cell {
+    filter: none;
+  }
+  :root[data-hj-motion] .hj-frame-cell:nth-child(n + 9) {
+    display: none;
+  }
+  :root[data-hj-motion] .hj-range-copy {
+    position: static;
+    max-width: none;
+  }
+  :root[data-hj-motion] .hj-booking .hj-stick,
+  :root[data-hj-motion] .hj-delivered .hj-stick {
+    align-content: center;
+    gap: 1.2rem;
+    padding: 4.5rem var(--pad) 5rem;
+  }
+  :root[data-hj-motion] .hj-booking-grid {
+    gap: 1rem;
+  }
+  :root[data-hj-motion] .hj-stages {
+    grid-template-columns: repeat(4, auto);
+    justify-content: start;
+    margin-top: 0.6rem;
+    gap: 0.9rem;
+  }
+  :root[data-hj-motion] .hj-stages button {
+    font-size: 0.82rem;
+    gap: 0.35rem;
+  }
+  :root[data-hj-motion] .hj-stages button[aria-current="step"] {
+    translate: 0 0;
+  }
+  :root[data-hj-motion] .hj-desk {
+    height: min(31rem, 62svh);
+  }
+  :root[data-hj-motion] .hj-paper {
+    padding: 1.1rem;
+    gap: 0.6rem;
+  }
+  :root[data-hj-motion] .hj-paper[data-state="past"] {
+    translate: -40% -10%;
+  }
+  :root[data-hj-motion] .hj-paper[data-state="next"] {
+    translate: 14% 14%;
+  }
+  :root[data-hj-motion] .hj-darkroom .hj-stick {
+    align-content: center;
+    padding: 4.5rem var(--pad) 5rem;
+    gap: 1rem;
+  }
+  :root[data-hj-motion] .hj-edits {
+    display: none;
+  }
+  :root[data-hj-motion] .hj-del-copy {
+    order: 2;
+  }
+  :root[data-hj-motion] .hj-phone {
+    width: 32%;
+    bottom: -14%;
+  }
+  :root[data-hj-motion] .hj-framed {
+    width: min(72vw, 28rem);
+    top: 38%;
+  }
+  :root[data-hj-motion] .hj-seeing-photo {
+    translate: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hj-cue,
+  .hj-segs i {
+    animation: none;
+    transition: none;
+  }
+}

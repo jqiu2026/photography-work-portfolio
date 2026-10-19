@@ -1,157 +1,740 @@
-# Home page: the immersive vision
+# Jerry Qiu Photography — The Immersive Homepage
 
-Status: vision and build instructions, 2026-10-18. Replaces the current `HomeJourney` once built. Owner decisions are marked **Decide** and have a default; copy marked TODO(owner) is a draft.
+**Status:** Creative direction and implementation brief  
+**Date:** October 18, 2026  
+**Project:** Replace `HomeJourney` on `jerryqiu.com`  
+**Core objective:** Create an immersive, cinematic experience that introduces Jerry's photography, demonstrates his craft, and guides prospective clients through the complete process of working with him.
 
-## Why the current page is not immersive
+Owner decisions are identified as **DECIDE**, with recommended defaults. Unfinished owner-supplied copy is marked `TODO(owner)`.
 
-It is a good web page, not an experience. Everything sits in a column on a dark background: small cards, small photographs, headings and paragraphs, mockups in boxes. The photographs are thumbnails inside UI. Motion decorates the layout instead of carrying the visitor anywhere. Nothing fills the screen, nothing has weight, there is no sense of place or time, and the visitor is always reading rather than *being somewhere*.
+---
 
-## The idea in one line
+## 1. The vision: Enter the world behind the photograph
 
-**You spend one night on a shoot with Jerry, from the moment the house lights go down to the print on your wall, and you see it through his camera.**
+The photography homepage should not feel like a conventional website with a dark theme, large images, and sophisticated animations.
 
-The site does not describe the process; it *is* the process. The screen is the viewfinder. Scrolling is time passing. Every chapter is one of Jerry's own photographs at full bleed, and the interface is the camera, the darkroom and the gallery around it.
+**It should feel like stepping through a portal into another dimension.**
 
-## Principles
+The broader `jerryqiu.com` domain is a multidimensional personal world, with photography representing one distinct dimension. The visitor should feel that they have crossed into a space with its own atmosphere, visual language, physics, and rhythm. It must feel unmistakably different from an ordinary portfolio, while remaining unmistakably Jerry's work.
 
-1. **The photograph is the room.** In every chapter one photograph fills the whole viewport (edge to edge, behind everything). UI floats over it, never beside it. No photograph is ever smaller than half the screen until the closing grid.
-2. **One thing at a time.** Each chapter has one image, one sentence, one gesture. If a screen needs two paragraphs, it is two screens.
-3. **The camera is the interface.** Viewfinder marks, the focus point, the exposure meter, the frame counter and the shutter are the site's chrome during the story. They are functional: the frame counter is the chapter number, the meter is scroll progress, the shutter is the transition.
-4. **Time moves when you scroll.** Scroll never just "moves the page"; it advances light, focus, the shutter, the developer bath. Stopping scrolling freezes the moment. Nothing important happens on a timer that the visitor cannot control.
-5. **Weight and physics.** Prints have paper thickness and shadow, they bend slightly when lifted, they settle with a small overshoot. Light has falloff. Nothing slides linearly.
-6. **Silence is the default; sound is a gift.** A shutter click and room tone exist, off until the visitor turns them on.
-7. **Real, never invented.** Only Jerry's photographs and real platform features. Illustrative numbers are labelled as examples. No fake EXIF.
+The experience begins in darkness. A thin seam of light appears. The visitor crosses a threshold, and the world opens into a photograph that occupies the entire screen. The interface gradually reveals itself as part of this environment, rather than a website placed on top of it.
 
-## The arc (seven chapters and a coda)
+From there, the visitor follows a continuous journey:
 
-Total scroll length on desktop: about 14 to 16 viewport heights. Each chapter is a pinned stage (`position: sticky`, 100dvh) inside a tall runway; the runway length is given per chapter. `p` is the chapter's scroll progress from 0 to 1.
+- **Discover:** Enter Jerry's visual world and experience the way he sees.
+- **Explore:** Encounter the range of subjects, environments, and moments he photographs.
+- **Commission:** See how an inquiry becomes a quote and a confirmed booking.
+- **Capture:** Experience the anticipation, timing, and awareness involved in making a photograph.
+- **Create:** Enter the editing process and witness an image develop into its final form.
+- **Receive:** Step inside the delivered gallery and experience the work as a client would.
+- **Keep:** See the photograph become something tangible, shareable, and lasting.
+- **Return:** Reach a natural exit into the wider portfolio, booking experience, and the rest of Jerry's digital world.
 
-### 0. Cold open: house lights down (runway 150vh)
+The homepage should communicate these ideas primarily through images, spatial transitions, interactions, and real examples. Explanatory text is secondary.
 
-- **Arrive:** a black screen. A single line of text fades up in the middle, small, tracked out: `JERRY QIU · NEW YORK`. One second later the darkness lifts from the bottom like a house curtain rising (the Holominimal curtain), revealing a theater photograph (the trombone frame, `theater` subject) at full bleed, very dark, as if the lights are still down.
-- **Scroll p 0 to 0.6:** the stage lights come up: the photograph's exposure rises from 15% to 100% (CSS `filter: brightness()`) while a warm spotlight radial gradient sweeps across it, following the pointer slightly. The headline builds word by word over the image, huge, bottom left: **Pictures of people at work.** (the owner's existing line, must stay the page's h1).
-- **p 0.6 to 1:** the viewfinder appears: thin corner marks slide in from the four corners, a centre focus box drops in and snaps green, and the frame counter in the top right reads `01`. The headline shrinks into the bottom-left caption position it keeps for the rest of the story.
-- **Interaction:** the photograph tilts a few degrees with the pointer (parallax depth on two layers: the photo and a blurred copy behind it). A small "Scroll" cue breathes at the bottom.
-- **Accessibility:** the h1 is real text from the first paint. Without JavaScript the photograph is fully exposed and the text is visible.
+### The central creative principle
 
-### 1. The room (runway 200vh): "I'm not the one you're looking at"
+**Don't tell visitors what Jerry can do. Let them experience the evidence.**
 
-Purpose: who Jerry is and how he works, felt rather than told.
+If the photography is compelling enough, the interface should get out of its way. If an interaction can communicate an idea more convincingly than a paragraph, use the interaction. If an effect adds spectacle without revealing anything about the work, remove it.
 
-- **Stage:** an event photograph (Maker Faire or the open house) full bleed.
-- **Scroll:** the camera "walks" through the room: the image scales from 1.25 to 1.0 and pans (Ken Burns driven by scroll, not time). The focus box hunts: it jumps between three faces in the frame (positions set per photograph in data) and each time it lands, the rest of the frame gets a subtle depth-of-field blur (a second blurred copy masked by a radial gradient around the focus point).
-- **Copy, one line per focus landing (TODO(owner)):** "I stay out of the way." / "I wait for the half second someone forgets I'm there." / "Then I press the shutter."
-- **Shutter:** on the third line the shutter fires: the screen goes black for 80ms from the top and bottom (two black bars meeting in the middle like a focal-plane shutter), a soft white flash, and the frame counter ticks `02`.
+This is not a game, a cinematic trailer, or a camera-themed marketing template. It is an interactive photographic experience that happens to be a website.
 
-### 2. The contact sheet (runway 220vh): "What I photograph"
+---
 
-Purpose: range. This replaces "My work".
+## 2. The experience architecture
 
-- **Transition:** after the shutter, the full-bleed photo shrinks into one frame of a **contact sheet** that zooms out to fill the screen: rows of Jerry's photographs (24 to 36 frames) on black film rebate, with frame numbers and sprocket marks in the margins (pure CSS).
-- **Scroll:** the sheet slides diagonally under a **loupe** (a circular magnifier that follows the pointer, or the centre of the screen on touch). Under the loupe the frame is sharp and full colour; outside it the sheet is slightly dimmed.
-- **Grease pencil:** as the visitor scrolls, a red grease-pencil stroke draws itself (SVG `stroke-dashoffset` driven by `p`) around one frame per subject: Theater, Event, Dance, Street, Portrait, Aviation, Low light, Macro, Composite. Each circled frame gets its subject name handwritten beside it (a handwriting font, or SVG paths). Each circled frame is a link to that portfolio subject.
-- **Exit:** the circled frames lift off the sheet (with shadow) and fly into a row, which becomes the closing subject grid later.
-- **Requirements:** this chapter keeps an h2 with the text "By kind" (the static-tier test looks for it) inside the visually hidden heading of the sheet, or as the sheet's printed label `BY KIND · SHEET 2`.
+The experience is one continuous journey, not a collection of independent animated sections.
 
-### 3. The night (runway 250vh): "Stage, street, sky"
+There are three layers:
 
-Purpose: the emotional peak. Pure photographs, almost no words.
+1. **The world:** Full-screen photographs, environmental light, depth, spatial transitions, and a consistent sense of place.
+2. **The instrument:** A restrained interface that makes the visitor feel like they are looking, focusing, selecting, and moving through images.
+3. **The information:** The actual services, booking steps, pricing, deliverables, portfolio links, and calls to action.
 
-- **Sequence:** four full-bleed photographs in a row, one per world: stage (theater), street (snow), sky (aviation), people (portrait). Each is shown for about 60vh of scroll.
-- **Transitions between them, all scroll-driven, each different:**
-  - stage to street: the stage spotlight narrows to a circle (`clip-path: circle()`) and opens again on the snowy street; snow particles drift across the transition (a light canvas or CSS layer, 60 to 120 flakes, only during this chapter).
-  - street to sky: the street photo slides down and the aviation photo rises from below with motion blur (stacked translated copies at low opacity) and a slight camera shake that settles.
-  - sky to people: a horizontal wipe like a camera panning to follow the plane, landing on the portrait.
-- **Overlay:** only the viewfinder and one word per photo, very large, over the bottom third of the photo with `mix-blend-mode: difference` so it reads on light and dark. Words: `STAGE`, `STREET`, `SKY`, `PEOPLE`. TODO(owner): choose the four photographs and words.
-- **Meter:** the exposure meter on the right edge (a vertical scale of ticks, -3 to +3) slides as the visitor scrolls; it is the progress bar for the whole story.
+The world provides the emotional experience. The instrument makes it interactive. The information makes it useful.
 
-### 4. Working with me (runway 300vh): the six steps, lived
+None of these layers should overwhelm the others.
 
-Purpose: how it works, step by step, as a physical sequence rather than a list. Keeps the eyebrow text "Working with me".
+### A continuous visual language
 
-Each step is a full-screen moment with one gesture, and a step counter `STEP 1 / 6` in the viewfinder corner.
+The world should use a consistent set of visual motifs:
 
-1. **Pick a package.** The packages arrive as three printed price cards (real `getPublicCatalog` data, $XX while SAMPLE) falling onto a dark table in perspective, fanned, with real paper shadows. Scrolling slides one forward and it flips over (3D `rotateY`) to show what is included. The pointer can lift any card (it tilts toward the pointer). Link: "See the packages".
-2. **Book your date.** The table becomes a calendar page; a day is circled in grease pencil as you scroll, then a time is written in. A paper receipt prints out of the bottom of the screen (clip reveal) reading "Deposit · date held". Link: "Book a shoot".
-3. **The shoot.** Back to full bleed: a photograph from the actual kind of shoot, with the camera overlay active: focus hunting, the shutter firing three times in rhythm with the scroll (frame counter ticks), the burst leaving three ghosted frames sliding to the left.
-4. **The edit.** The screen turns **darkroom red** (a red safelight gradient). The photograph is shown as a dull, flat raw file. Scrolling runs the edit: three slider rails (Light, Colour, Contrast) move on their own, and the image visibly develops (CSS filters interpolated by `p` from flat to final), then a split line reveals before and after. Optional: the developer-tray version, where the print emerges in a liquid tray with a ripple (an SVG turbulence filter).
-5. **Your private gallery.** A laptop rises from below the fold in perspective and its screen *becomes the page*: the camera flies into the laptop screen until the gallery fills the viewport, a real-looking client gallery with Jerry's photographs, hearts popping, "Your selection · 12" counting. A phone slides in on the right showing the same photo with Favourite and Download. Copy: a link and a passcode, favourites, your selection.
-6. **Download or print.** Out of the gallery, one photograph lifts off the screen, gets a white border and a frame, and the camera pulls back to show it hanging on a wall in a warm room (a lamp light cone, a shadow behind the frame). A download progress bar completes and a "Print ordered" tick pops.
+- **Thresholds:** Fine seams of light, apertures, and dimensional openings that transition between spaces.
+- **Depth:** Photographic layers, atmospheric falloff, restrained parallax, and deliberate foreground/background separation.
+- **Light:** Projected light, localized illumination, darkroom reds, and warm light surrounding finished prints.
+- **Frames:** Image boundaries that expand, collapse, rotate, and transform into other objects.
+- **Physicality:** Paper, glass, film, screens, and framed photographs with believable weight and perspective.
+- **Spatial continuity:** Objects should become other objects rather than simply disappear while an unrelated section appears.
 
-### 5. The finale (runway 120vh): the wall
+The camera and darkroom concepts remain available as visual vocabulary, but they are not mandatory in every chapter. The experience must not look like a camera interface stretched across an entire website.
 
-- All the photographs used in the story assemble into a salon-style wall (mixed sizes, frames, gaps), seen at an angle, and the camera slowly pulls back as the visitor scrolls.
-- One line, large and centred: **Book a shoot.** with two buttons: "Start a booking" and "See the portfolio".
-- The site dock and top bar arrive here (ChromeReveal, already built) and the viewfinder chrome leaves.
+### The transition rule
 
-### Coda: everything else (normal page)
+Whenever one environment gives way to another, preserve at least one visual element across the transition.
 
-After the finale the page becomes an ordinary page in the normal frame: the subject grid ("By kind", from the contact sheet's circled frames), projects, the footer. This is where people who want to browse or skim land.
+A photograph might become a film frame. The film frame might become a print. The print might become an image in a client gallery. That gallery image might eventually become a framed photograph on a wall.
 
-## The viewfinder layer (the site's chrome during the story)
+This continuity is the key to making the site feel like one world.
 
-Fixed, `pointer-events: none` except for its controls, `aria-hidden` for the decorative parts.
+---
 
-- **Corner marks** (four L shapes, 1.5px white at 80%).
-- **Focus point** (the green box) driven per chapter.
-- **Frame counter** top right: `01` to `07`, the chapter number, monospace, with a red blinking dot while "recording".
-- **Exposure meter** right edge: progress through the whole story.
-- **Controls** (real buttons, keyboard reachable, visible on focus): "Skip the story" (jumps to the finale), "Sound on/off", "Pause motion" (sets the static composition, stored for the visit).
-- **Caption** bottom left: the current chapter title in small caps, plus the h1 once it has shrunk.
+## 3. The journey
 
-## Sound (optional, off by default) **Decide** (default: include, off)
+Target a cinematic desktop experience of approximately 14–18 viewport heights, with the length determined by the content rather than an arbitrary animation quota.
 
-- A sound toggle in the viewfinder. When on: low room tone per chapter (theater hush, street traffic in snow, jet engine far away), a shutter click on each shutter event, paper sounds when prints are handled. Under 300KB total, loaded only after the toggle is turned on. Never autoplay.
+Use pinned scenes selectively, not everywhere. Each scene should earn its duration by revealing something new. The visitor must always be able to move forward, skip the experience, and reach useful information.
 
-## Motion system (how to build it)
+### Chapter 0 — The threshold
 
-- **One scroll engine** (the existing `useScrollStory` in `HomeJourney.tsx` is the base): every chapter is `data-scroll="pin"` and gets `--p`; sub-phases are computed in CSS with `clamp()` (as the current hero does with `--a`/`--b`). Easing: the engine lerps (0.14 per frame); CSS adds springy curves (`--hm-ease-glide`) to discrete events.
-- **Discrete events** (shutter, grease pencil complete, card flip) fire when `--p` crosses a threshold: the engine dispatches a `story:event` once per crossing (in both directions), which plays a short keyframe animation and the optional sound.
-- **Layers per chapter:** background photograph (ProtectedImage, `fill`), a blurred copy for depth of field, light layers (spotlight, safelight, lamp) as gradients with `mix-blend-mode`, UI layer, viewfinder layer.
-- **Pointer:** a shared `--mx`/`--my` (-1 to 1), already built for the hero. Each layer moves by its depth. Holominimal `Cursor` stays (dot-ring, magnetic) but becomes a **focus reticle** shape over photographs (custom `icon` shape: a small square bracket).
-- **Particles** (snow, dust in the projector light): one small canvas, created only in chapter 3 and destroyed after, never under reduced motion. It must not draw photographs (image protection).
-- **Performance budget:** 60fps on a 2020 MacBook Air; only `transform`, `opacity`, `filter` and `clip-path` animated; at most two full-bleed photographs decoded at once; each chapter preloads the next chapter's photograph when its `p` passes 0.5; `content-visibility: auto` on chapters far away; no layout-triggering properties in scroll handlers.
+**Purpose:** Make the visitor feel that they have entered somewhere new.
 
-## Small screens
+**Visual direction**
 
-- Same chapters, shorter runways (60% length), portrait crops of each photograph (`object-position` per photograph in data).
-- Pointer effects become device tilt only if the visitor allows motion sensors **Decide** (default: no tilt; use gentle auto drift).
-- The loupe on the contact sheet sits in the middle of the screen and the sheet slides under it.
-- The dock stays hidden until the finale, as on desktop.
+Begin with a nearly black screen, with a small, restrained identity mark:
 
-## Accessibility and the rules this must keep
+`JERRY QIU / PHOTOGRAPHY`
 
-- **Reduced motion:** no pinning, no runways, no particles, no cursor, no shutter flash. Each chapter renders as a full-width section with its photograph and its text in their final state (the page must stay under 9000px tall: `e2e/reduced-motion.spec.ts`). Nothing below 0.5 opacity.
-- **No JavaScript:** every chapter shows its final composition; the h1 is "Pictures of people at work."; the texts "By kind" and "Working with me" are present and visible (`e2e/static-tier.spec.ts`).
-- **Flashing:** the shutter flash stays under 3 flashes per second and below 25% of the screen at full white (WCAG 2.3.1); default to a dim flash (white at 40%).
-- **Contrast:** text over photographs sits on a gradient scrim or in a frosted chip; never animate text opacity (axe measures contrast through it): reveal text with clip, blur and movement instead.
-- **Keyboard:** "Skip the story" is the first focusable element. Tab shows the dock (already built). Every chapter link is reachable in reading order.
-- **Image protection:** photographs only through `ProtectedImage` (no file URLs, no photographs drawn to canvas, the screenshot guard stays on). `e2e/photo-protection.spec.ts` must keep passing.
-- **Gates:** `pnpm lint && pnpm typecheck && pnpm test`, `pnpm test:e2e` (axe on `/` at 1440 and 390), `env -u NEXT_PUBLIC_HUB_URL pnpm test:admin`.
+A fine line of light emerges at the center. As the visitor begins to scroll, the line widens into an aperture, revealing a real photograph behind it.
 
-## Assets and data the build needs
+The photograph should not simply fade in. It should feel as though the visitor is seeing a world that already existed on the other side.
 
-| What | Where it comes from | Owner |
-|---|---|---|
-| One photograph per chapter: cold open (theater, dark), the room (event, with three faces and their positions), four "night" photographs, one per step 3 and step 4, one for the wall | The portfolio (static set or CMS); a small data file `content/home-story.ts` maps chapter to photograph slug plus focus points and crops | **Decide** which photographs (default: the current featured set) |
-| Lines of copy per chapter | `content/home-story.ts` | TODO(owner): rewrite in your voice |
-| Handwriting style for the grease pencil | A free handwriting font (OFL) or SVG paths | default: Caveat (OFL) |
-| Sounds (optional) | Recorded by the owner or CC0 sources, under 300KB | **Decide** |
-| Packages | `getPublicCatalog()` (real, SAMPLE shows $XX) | done |
+The aperture opens until the photograph fills the viewport. Light falls across the image, revealing detail gradually. The page's existing Holominimal visual language may inform the opening transition, but the photography world must establish its own identity.
 
-## Build order (each a commit, each shippable)
+The title appears as a single, deliberate statement:
 
-1. Viewfinder layer and the chapter runway framework (pinned stages, `--p`, story events, skip and pause controls), with chapter 0.
-2. Chapter 4 (the six steps) moved into the new framework, since it carries the most information.
-3. Chapter 2 (contact sheet, loupe, grease pencil) and the coda grid it feeds.
-4. Chapter 1 (the room, focus hunting, shutter) and chapter 3 (the night, transitions, snow).
-5. Finale wall and ChromeReveal hand-off.
-6. Sound (if chosen), reduced-motion and phone passes, performance pass, tests.
+**Pictures of people at work.**
 
-## Acceptance (how to know it is immersive)
+This remains the page's actual H1 and must exist in the initial HTML.
 
-- Within one second of arriving, the visitor is looking at one of Jerry's photographs filling the screen, not at a layout.
-- At no point before the finale does the visitor see a column of text, a card grid or a form.
-- Every chapter has at least one moment that responds directly to the visitor's scroll or pointer (light, focus, shutter, loupe, card, wipe).
-- A first-time visitor can say afterwards what Jerry photographs and the six steps of working with him, without having read a paragraph.
-- The page passes every gate listed above, and reduced motion gives a calm, complete page.
+The interface arrives afterward: subtle frame corners, a focus indicator, and a small chapter marker. They should feel discovered rather than switched on all at once.
+
+**Interaction**
+
+- Scrolling opens the aperture and reveals the photograph.
+- Pointer movement creates subtle spatial depth on desktop.
+- A quiet directional cue invites the visitor to continue.
+- The opening image and title remain meaningful without JavaScript.
+
+**Avoid:** A long logo animation, a mandatory loading screen, an elaborate intro that delays access to the photography, or a dramatic effect that obscures the first photograph.
+
+### Chapter 1 — Seeing
+
+**Purpose:** Establish Jerry's eye and personality without turning the homepage into an autobiography.
+
+The opening environment expands into a real event photograph. The visitor feels present in the room rather than looking at a small photograph surrounded by UI.
+
+As they scroll, the camera's virtual viewpoint moves through the image. The composition changes subtly through scale, pan, and depth. A focus indicator draws attention to a meaningful detail.
+
+The interaction should help the visitor notice something they might otherwise overlook: a person's expression, a fleeting gesture, the relationship between the subject and their environment.
+
+Three short lines may appear at distinct moments:
+
+- "I stay out of the way."
+- "I watch for the moment."
+- "Then I press the shutter."
+
+These are provisional copy suggestions, not mandatory narration. Keep only lines that accurately reflect Jerry's approach.
+
+At the end of the sequence, a photographic frame closes around a detail of the image. That frame becomes the first frame of the next environment.
+
+**Important:** Use actual subjects and known focal points from the selected photograph. Do not invent facial tracking, pretend to recognize people, or apply aggressive blur that damages the original composition. If the chosen image does not support this interaction, choose another image or use a different visual gesture.
+
+### Chapter 2 — A world of photographs
+
+**Purpose:** Demonstrate range and make the portfolio discoverable.
+
+The selected frame pulls back into a large photographic contact sheet. This is not a grid of ordinary website cards. It is a spatial field of real photographs, with film-like borders, frame numbers, and restrained annotations.
+
+The visitor sees a world of images extending beyond the viewport.
+
+As they scroll, the contact sheet moves beneath a fixed viewing aperture. Selected images become prominent while the surrounding frames recede. A grease-pencil line traces around several images, revealing subject categories:
+
+- Theater
+- Events
+- Dance
+- Street
+- Portraits
+- Aviation
+- Low light
+- Macro
+- Composites
+
+Use only categories that have enough strong work to justify their presence.
+
+Each highlighted image is a real link to the corresponding portfolio category. Clicking or tapping it opens that destination normally; the immersive effect must never make navigation ambiguous.
+
+The highlighted frames eventually separate from the contact sheet and form a small collection of floating photographs. These images will reappear later in the experience.
+
+Retain the visible or visually hidden H2 **"By kind"** as required by the existing static-tier tests.
+
+**Mobile:** Replace the desktop contact sheet with a smaller, horizontally navigable sequence or a central viewing aperture. Do not shrink a dense desktop layout until it becomes unusable.
+
+**Avoid:** Showing 36 tiny images that are technically present but visually meaningless. Fewer, stronger images are preferable to a large volume of weak thumbnails.
+
+### Chapter 3 — The worlds I enter
+
+**Purpose:** Deliver the emotional peak and demonstrate photographic range through the work itself.
+
+Move through four photographic environments:
+
+1. **STAGE** — The intensity of performance and controlled light.
+2. **STREET** — The unpredictability of a real environment.
+3. **SKY** — The geometry, scale, and movement of aviation.
+4. **PEOPLE** — The expressions and relationships that make photographs meaningful.
+
+The photographs occupy the full viewport. There are no descriptions, lists, or explanatory paragraphs. The environment, composition, and transition carry the meaning.
+
+Transitions are designed around the actual photographs rather than assigned mechanically:
+
+- Stage to street: a focused pool of light contracts and opens onto the next scene.
+- Street to sky: a vertical movement reveals the aircraft and its environment.
+- Sky to people: the camera's viewpoint follows a compositional line into the next photograph.
+
+Snow, atmospheric dust, motion blur, or camera movement may be used when they reinforce the image. They are not requirements.
+
+The visitor should feel as though they are moving through distinct worlds, connected by a single visual language.
+
+A restrained chapter indicator tracks progress. Remove the earlier idea of a literal exposure meter with arbitrary EV values unless those values are grounded in actual photographic data. Progress is progress, not exposure.
+
+**Asset selection is critical.** The four images must be among the strongest available photographs. Each should remain compelling when cropped to the intended viewport.
+
+### Chapter 4 — From idea to booking
+
+**Purpose:** Demonstrate the practical process of hiring Jerry, without interrupting the atmosphere with a conventional services section.
+
+The visitor arrives at a dark, physical-feeling workspace. A floating photograph becomes a printed proof, and several pieces of paper emerge around it.
+
+The sequence transforms through four real stages: inquiry, quote, booking, and preparation.
+
+#### 4A. Inquiry
+
+A blank sheet appears, with a few short prompts:
+
+- What are you planning?
+- When and where?
+- What do you need photographed?
+
+The interface suggests the beginning of an inquiry, but it is not a fake form. The actual inquiry or booking form is a real destination linked from this scene.
+
+CTA: **Tell me about your shoot**
+
+#### 4B. Quote
+
+The inquiry transforms into a quotation. Real packages, services, prices, and deliverables appear from the existing `getPublicCatalog()` data.
+
+The visitor can move between the actual available packages. Each selection changes the information displayed on the paper, rather than merely animating an ornamental card.
+
+Pricing must never be fabricated. If catalog data is unavailable, show a clear unavailability state or direct the visitor to request a quote.
+
+CTA: **Explore packages**
+
+#### 4C. Booking
+
+The quote becomes a calendar or booking document. A date is highlighted, and the relevant booking terms emerge in a small, legible layout.
+
+The sequence should communicate that a shoot is confirmed through the real booking process, not simply because the visitor scrolled past a calendar animation.
+
+Any deposit, payment, cancellation, or date-hold language must match the actual policy.
+
+CTA: **Start a booking**
+
+#### 4D. Preparation
+
+The selected photograph becomes a small collection of reference images, a shot list, or a preparation sheet. These materials suggest the coordination that happens before a shoot.
+
+The visitor then moves through the aperture into the actual shoot environment.
+
+The existing eyebrow **"Working with me"** remains present for compatibility with current tests.
+
+**Design rule:** This is where clarity matters most. Use the physical metaphor to introduce the information, but never sacrifice readable pricing, actual terms, or understandable navigation for a clever animation.
+
+### Chapter 5 — The moment
+
+**Purpose:** Demonstrate craft without claiming that every shoot follows a staged sequence.
+
+Return to full-bleed photography.
+
+The visitor experiences a real photographic moment through a restrained sequence of focus, composition, anticipation, and capture. The scene should be specific to the image selected: a performance gesture, a fleeting expression, a moving aircraft, or a moment in an event.
+
+The shutter effect marks the decisive moment. A brief, dimmed transition connects the photograph to the editing environment.
+
+If multiple images from the same real sequence are available, use them to demonstrate a genuine progression. Do not fabricate a burst, pretend a series of photographs belongs to one shoot, or imply that a staged effect is actual camera telemetry.
+
+The result is a selected photograph that carries into the next chapter.
+
+### Chapter 6 — The darkroom
+
+**Purpose:** Show the editing process as an act of transformation.
+
+The environment shifts into a darkroom-inspired space. A photograph appears with a subdued, unprocessed presentation, and the visitor can see it develop into the finished image.
+
+The effect is not a generic before-and-after slider floating inside a card. The image itself is the environment.
+
+As the visitor scrolls:
+
+- Light and tonal contrast develop.
+- Color balance and saturation settle into place.
+- Local emphasis and the final crop become apparent.
+- The final photograph emerges, filling the screen.
+
+A thin comparison boundary may allow the visitor to inspect before and after. The visitor should be able to move the boundary directly, with keyboard-accessible controls.
+
+Only use authentic before-and-after material from Jerry's workflow. If a raw file cannot be published, use a genuine exported intermediate or an intentionally prepared comparison that is clearly identified. Do not imply that a rendered preview is the actual camera RAW file.
+
+The final image becomes a physical print, carrying its own frame into the next environment.
+
+**Visual direction:** Darkroom red is an accent, not a full-screen filter that makes it impossible to appreciate the photograph. The final color should remain faithful to the delivered work.
+
+### Chapter 7 — Delivered
+
+**Purpose:** Make the client experience tangible and build confidence in the service.
+
+The print transitions into a screen. The visitor moves through the screen into a realistic representation of a delivered client gallery.
+
+This is a demonstration of the actual delivery experience, not a fabricated product interface.
+
+Show the features the real gallery platform supports, such as:
+
+- A private gallery link and access controls, where available.
+- Browsing and viewing photographs.
+- Favoriting or selecting images, where supported.
+- Downloading delivered files.
+- Sharing or ordering prints, if genuinely available.
+
+Use actual gallery software and genuine platform features. Clearly distinguish any demo gallery from a live client gallery. Never expose private client images, gallery URLs, access codes, or personal information.
+
+A laptop and phone may appear together to demonstrate responsive delivery, but they should not compete with the photograph itself. The phone is an optional supporting element, not another elaborate animation sequence.
+
+A single concise line communicates the outcome:
+
+**Your photographs, ready to revisit.**
+
+CTA: **See how galleries work**
+
+The gallery interaction should let the visitor do something real: open a public demonstration gallery, explore a safe sample set, or visit the actual gallery platform.
+
+**Do not simulate likes, downloads, or selections with fake counters presented as real activity.**
+
+### Chapter 8 — The photograph stays
+
+**Purpose:** Give the journey an emotional resolution.
+
+The selected photograph leaves the gallery and becomes a physical print. It gains a paper border, thickness, and a believable shadow as it settles into a frame.
+
+The camera pulls back. The image hangs in a quiet room, illuminated by warm ambient light.
+
+The scene recalls the opening: the visitor is no longer looking into a world but looking at something that has emerged from it.
+
+The journey has come full circle: an idea became a booking, a moment became a photograph, the photograph became a finished image, and the finished image became something the client can keep.
+
+A simple final statement appears:
+
+**Let's make something worth keeping.**
+
+The primary CTA is **Book a shoot**.
+
+Secondary CTA: **Explore the portfolio**.
+
+This is the natural handoff point for the site's existing `ChromeReveal` component. The normal site navigation and dock become available, and the viewfinder interface recedes.
+
+The transition should feel like leaving the photography dimension, not like an animated footer suddenly appearing.
+
+### Coda — The rest of the world
+
+After the finale, the page returns to a normal, accessible website layout.
+
+Include:
+
+- The subject grid, retaining the heading **"By kind"**.
+- Featured projects.
+- A concise introduction and services summary.
+- Clear links to pricing, portfolio categories, galleries, and booking.
+- The site's established footer and navigation.
+
+This section exists for visitors who prefer to skim, search, navigate directly, or return to a specific destination.
+
+The immersive journey should enhance the site, never hold it hostage.
+
+---
+
+## 4. The interface: a window into the world
+
+The interface must remain consistent throughout the experience.
+
+### Persistent elements
+
+- **Identity:** A small Jerry Qiu / Photography mark.
+- **Chapter indicator:** A restrained number or marker indicating the current stage.
+- **Directional cue:** A subtle indication that the experience continues.
+- **Skip control:** A real, keyboard-accessible button that jumps to the finale or conventional content.
+- **Motion control:** A visible way to pause the immersive effects.
+- **Sound control:** Optional, off by default.
+- **Navigation:** The full site navigation becomes prominent at the finale and remains accessible throughout.
+
+A camera-inspired viewfinder may be used selectively, but the entire page should not be trapped inside a literal camera HUD. Avoid decorative frame counters, arbitrary exposure values, fake recording indicators, and simulated camera readouts that do not serve the visitor.
+
+Every visible interface element must have a clear role.
+
+### The cursor
+
+On desktop, the existing Holominimal cursor may transform into a restrained focus reticle over photographs. It can communicate hover, focus, and image selection.
+
+It must never replace the native cursor's essential functionality, obscure clickable controls, or become the only way to understand an interaction.
+
+On touch devices, use ordinary touch interactions rather than attempting to reproduce a desktop pointer.
+
+---
+
+## 5. Motion, interaction, and physicality
+
+Motion is the connective tissue of the experience, not its primary attraction.
+
+### Scroll
+
+Scrolling advances the journey. It should feel like moving through space, revealing detail, or developing an image rather than simply moving between panels.
+
+Use pinned scenes where a meaningful transformation takes place. Return to ordinary scrolling whenever the visitor is reading, browsing, or making a decision.
+
+### Pointer and touch
+
+Pointer movement can influence the viewpoint, focus, or light direction. These effects must remain subtle and must not interfere with clicks.
+
+Touch devices should have deliberate tap and swipe interactions where appropriate. No interaction may depend exclusively on hover.
+
+### Physics
+
+Use physical behavior sparingly but convincingly:
+
+- Prints settle with slight overshoot.
+- Paper objects rotate with believable perspective.
+- Light fades with spatial falloff.
+- Frames retain visual continuity through transitions.
+- Movements ease naturally rather than following a uniform linear trajectory.
+
+Do not animate every element independently. The overall scene should feel coherent.
+
+### Discrete events
+
+Shutter events, print reveals, image selections, and major transitions should occur at intentional points in the story.
+
+They must be reversible or recoverable when the visitor scrolls backward. Re-entering a chapter must not leave stale states, broken animations, or duplicated sound events.
+
+### Sound
+
+**DECIDE — Recommended default: optional sound, off by default.**
+
+If implemented, use a small collection of original or appropriately licensed ambient recordings and restrained sound effects. Load them only after the visitor enables sound.
+
+Never autoplay audio, play overlapping effects on rapid scrolling, or make sound necessary to understand the experience.
+
+---
+
+## 6. Performance and implementation architecture
+
+The experience must be built on the existing application rather than as a disconnected visual prototype.
+
+### Existing foundations
+
+Inspect and reuse the actual implementations of:
+
+- `HomeJourney.tsx`
+- `useScrollStory`
+- `ProtectedImage`
+- Holominimal motion and cursor components
+- `ChromeReveal`
+- `getPublicCatalog()`
+- Portfolio and gallery routing
+- Existing static-tier, reduced-motion, accessibility, and image-protection tests
+
+Preserve working functionality and established conventions unless there is a demonstrable reason to change them.
+
+### Scene architecture
+
+Create a data-driven story model, for example `content/home-story.ts`, to map scenes to:
+
+- Scene identifiers and semantic headings.
+- Image slugs and protected image sources.
+- Focal points and crop positions.
+- Transition types and timing thresholds.
+- Caption text and navigation destinations.
+- Optional scene-specific interactive content.
+
+Keep content separate from rendering logic. Build reusable scene primitives rather than a single enormous component with hard-coded animation conditions.
+
+A scene should own its presentation and local interactions while sharing one story-progress model with the rest of the page.
+
+### Scroll engine
+
+Use the existing `useScrollStory` implementation as the starting point. Inspect its actual behavior before extending it.
+
+Provide normalized progress for each pinned scene and derive animation state from that progress. Avoid adding a second competing scroll engine.
+
+Discrete events should be idempotent, reversible, and safe under rapid scrolling, resizing, navigation, and React lifecycle changes.
+
+Prefer compositor-friendly transforms and opacity. Use filters, masks, and clipping only when their visual benefit justifies their cost.
+
+### Image loading
+
+All photographs must be rendered through `ProtectedImage` in accordance with the existing image-protection architecture.
+
+Never bypass image protection, expose original file URLs, or draw protected photographs to canvas.
+
+Preload only the assets needed for the immediate next scene. Release references to distant scene assets when appropriate, and avoid decoding multiple large full-screen images unnecessarily.
+
+If a transition requires two photographs at once, make that overlap brief and intentional.
+
+### Performance budget
+
+Target a stable 60 FPS on a representative 2020 MacBook Air under ordinary conditions, while gracefully degrading on slower hardware.
+
+- No expensive synchronous work in scroll handlers.
+- No layout-triggering animation loops.
+- No continuous background effects when a scene is inactive.
+- No large particle systems merely for decoration.
+- No unnecessary animation libraries or duplicate dependencies.
+- No network requests or audio downloads for features the visitor has not activated.
+
+Use real-device and browser profiling to identify bottlenecks. Do not claim a frame-rate target has been met without testing.
+
+---
+
+## 7. Mobile and responsive design
+
+Mobile is a first-class version of the experience, not a scaled-down desktop.
+
+Retain the same narrative and emotional progression, but redesign interactions for a portrait viewport.
+
+- Use portrait-friendly image crops, defined per image.
+- Reduce parallax and eliminate hover-dependent behaviors.
+- Replace dense contact sheets with a focused, navigable image sequence.
+- Simplify layered paper and device scenes when their depth would become cramped.
+- Keep captions short and readable.
+- Ensure pricing and booking information can be read without zooming.
+- Preserve normal scrolling as the fallback for complex pinned sequences.
+
+Shorten scenes only where appropriate. Do not arbitrarily compress the entire story to 60% of its desktop length if that makes the experience rushed.
+
+**DECIDE — Motion sensors:** Default to no device tilt. If ever introduced, require an explicit opt-in.
+
+The story must remain complete and navigable at 390px wide and on common tablet sizes.
+
+---
+
+## 8. Accessibility and graceful degradation
+
+The site must remain a usable photography website even when the immersive effects are unavailable.
+
+### Reduced motion
+
+Respect `prefers-reduced-motion` throughout the experience.
+
+- Disable pinning, parallax, particles, shutter flashes, and elaborate transitions.
+- Present each scene in its final, understandable state.
+- Use ordinary document flow.
+- Keep images and text visible.
+- Preserve every important link, pricing detail, and booking path.
+- Ensure the resulting page remains under the existing 9,000px reduced-motion test limit.
+
+Provide a manual pause control independently of the operating-system preference.
+
+### No JavaScript
+
+The initial HTML must contain the actual H1, essential content, scene images where appropriate, and working navigation links.
+
+Without JavaScript, the visitor must see a complete, ordinary version of the page. Do not depend on a script to reveal the only copy or remove an opaque overlay.
+
+The required headings **"By kind"** and **"Working with me"** must remain present and visible under the existing static-tier requirements.
+
+### Keyboard access
+
+- Place "Skip the story" first in the interactive page's focus order.
+- Ensure every destination is reachable using the keyboard.
+- Use real buttons and links.
+- Provide visible focus indicators.
+- Do not trap keyboard focus inside pinned scenes.
+- Do not use scroll position alone to change focus unexpectedly.
+
+### Contrast and readability
+
+Text over photographs must remain readable across different image crops and viewport sizes.
+
+Use scrims, localized gradients, or opaque surfaces when necessary. Never assume a white title will remain legible over every photograph.
+
+Avoid text that is only partially transparent or revealed in a way that causes accessibility tools to report inaccessible contrast.
+
+### Flashing
+
+Avoid full-screen white flashes. A dim, brief shutter transition is preferable.
+
+Respect applicable flashing and animation accessibility requirements; never use a repeated strobe effect.
+
+### Image protection
+
+Preserve the existing image-protection architecture and `e2e/photo-protection.spec.ts` coverage.
+
+No photograph may be exposed through a new unprotected rendering path, canvas extraction, or accidental asset URL leakage.
+
+---
+
+## 9. Authenticity and content requirements
+
+The experience must demonstrate Jerry's real abilities, not invent a story about them.
+
+- Use actual portfolio photographs.
+- Use real service offerings and catalog data.
+- Link to real portfolio categories and booking destinations.
+- Show authentic editing comparisons only where suitable source material exists.
+- Demonstrate only gallery features supported by the real platform.
+- Never fabricate camera metadata, client activity, testimonials, or deliverables.
+- Do not imply that every shoot includes prints, a particular turnaround, or a particular selection process unless that is actually offered.
+
+The visitor should be able to distinguish between a visual metaphor and a real service feature.
+
+### Content file
+
+The story data should support an owner-editable content model containing:
+
+- Selected photograph slug.
+- Scene and subject category.
+- Focal point and responsive crop.
+- Short caption or line of copy.
+- Transition style.
+- Optional comparison-image references.
+- Portfolio and booking destinations.
+- Accessibility text.
+
+Do not hard-code specific faces, image positions, prices, or gallery counts into the animation implementation.
+
+---
+
+## 10. Build sequence
+
+Build the experience in complete, testable increments. Do not attempt to implement every cinematic effect before establishing a functioning narrative.
+
+### Phase 1 — Foundation and threshold
+
+- Inspect the existing homepage, story engine, image protection, routing, and tests.
+- Establish the story data model and scene framework.
+- Implement the threshold and first full-bleed photograph.
+- Add shared scene progress, keyboard navigation, skip, and pause controls.
+- Verify the no-JavaScript and reduced-motion experiences.
+
+**Deliverable:** A working opening that establishes the visual identity and proves the architecture.
+
+### Phase 2 — Portfolio and visual range
+
+- Build the contact-sheet environment.
+- Integrate actual portfolio categories.
+- Implement the four-scene photographic sequence.
+- Establish the transition language and image-selection rules.
+
+**Deliverable:** A compelling, navigable demonstration of the photography itself.
+
+### Phase 3 — Booking and preparation
+
+- Integrate the real public catalog.
+- Connect package selection to actual package information.
+- Explain inquiry, quoting, booking, and preparation through the physical-paper sequence.
+- Add direct links to real forms and destinations.
+
+**Deliverable:** A visually integrated but genuinely useful path to commissioning a shoot.
+
+### Phase 4 — Editing and delivery
+
+- Implement the darkroom transformation.
+- Integrate authentic comparison assets.
+- Build the gallery demonstration using actual supported features.
+- Connect the final print to the closing environment.
+
+**Deliverable:** A complete, truthful representation of the journey from capture to delivery.
+
+### Phase 5 — Finale and wider site
+
+- Assemble the photographic wall.
+- Implement the primary and secondary calls to action.
+- Integrate `ChromeReveal`.
+- Restore normal site navigation and the coda content.
+
+**Deliverable:** A complete experience with a clear path to booking, browsing, and the rest of the domain.
+
+### Phase 6 — Refinement and verification
+
+- Add optional sound if selected.
+- Tune transitions and physical behavior.
+- Test desktop, mobile, keyboard, touch, and reduced motion.
+- Profile image loading and animation performance.
+- Run every existing quality gate.
+
+Required commands:
+
+`pnpm lint && pnpm typecheck && pnpm test`
+
+`pnpm test:e2e`
+
+`env -u NEXT_PUBLIC_HUB_URL pnpm test:admin`
+
+Retain the existing accessibility checks at 1440px and 390px, and ensure photo protection continues to pass.
+
+Each phase should end in a working, reviewable commit. Do not leave the main branch with an incomplete replacement for the existing homepage.
+
+---
+
+## 11. Acceptance criteria
+
+The experience is successful when all of the following are true.
+
+### Creative quality
+
+- The opening feels like crossing into a distinct photographic world.
+- The experience has a recognizable visual identity independent of generic dark-mode portfolio conventions.
+- Transitions preserve spatial or visual continuity between scenes.
+- The photography remains the dominant attraction.
+- Motion reveals something meaningful about the photograph, the process, or the space.
+- The sequence feels intentional rather than like a collection of animation demos.
+
+### Demonstration
+
+- Visitors encounter strong examples of Jerry's work before they encounter long descriptions.
+- The range of photographic subjects is immediately apparent.
+- The booking and preparation process is understandable.
+- Visitors see how editing transforms an image.
+- The delivery chapter demonstrates a real or accurately represented gallery experience.
+- The conclusion communicates the value of the finished photographs.
+
+### Usability
+
+- Visitors can skip the experience at any point.
+- Pricing and booking destinations are easy to reach.
+- Portfolio categories are genuine, working links.
+- The page remains useful on mobile and with reduced motion.
+- The conventional site remains available to visitors who want direct navigation.
+
+### Technical quality
+
+- Existing tests continue to pass.
+- No image-protection regressions are introduced.
+- No-JavaScript rendering remains complete.
+- Reduced motion removes the immersive motion without removing content.
+- Scroll behavior is stable under fast scrolling and viewport resizing.
+- Performance is verified rather than assumed.
+
+---
+
+## 12. Final creative direction
+
+Do not treat this document as a checklist of effects to implement literally.
+
+The aperture, viewfinder, contact sheet, darkroom, floating prints, and gallery are creative ingredients. The goal is not to include every ingredient. The goal is to make them work together as one experience.
+
+If an elaborate animation competes with a photograph, simplify it.
+
+If a transition feels disconnected, redesign the transition rather than adding more effects.
+
+If a visitor needs to read a paragraph to understand something that could be shown, show it.
+
+If an interaction makes the real booking process harder to understand, remove the interaction.
+
+If the site looks impressive but does not make someone want to see more of Jerry's work or book him, it has failed.
+
+**The visitor should leave feeling that they have experienced a photographer's world, witnessed how a moment becomes an image, and discovered how to make that process their own.**
