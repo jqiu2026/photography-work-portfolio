@@ -61,7 +61,7 @@ export default async function Home() {
       />
 
       {/* the coda: the plain site, for skimming and direct navigation. The dock and the top bar arrive here (ChromeReveal). */}
-      <div className="pub-end" data-bar-end="">
+      <div className="pub-end hj-coda" data-bar-end="">
         {projects.length ? (
           <section className="pub-section" aria-labelledby="projects">
             <div className="pub-wrap">
@@ -101,7 +101,7 @@ export default async function Home() {
             </div>
             <div className="hj-faq">
               <h3>{END.faq}</h3>
-              {faq.slice(0, 6).map((f) => (
+              {faq.slice(0, 5).map((f) => (
                 <details key={f.q}>
                   <summary>{f.q}</summary>
                   <p>{f.a}</p>

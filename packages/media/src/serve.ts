@@ -220,7 +220,7 @@ async function watermarkFor(deps: ServeDeps & { db: Database }) {
  * `POST /api/img/token` with `{ ids: [uuid, ...] }` (up to 40) or `{ id }`: signed tokens, one per allowed width, for
  * pages that render photographs without tokens in their HTML (the page stays cacheable) or that have been open longer
  * than a token lives. Same-origin browser requests only, never known scrapers, rate limited. Photographs in client
- * galleries only get tokens when `studioViewer` recognises a client session for them, and those tokens are viewer-bound.
+ * galleries only get tokens when `studioViewer` recognizes a client session for them, and those tokens are viewer-bound.
  * Response: `{ tokensById: { [id]: { [width]: token } } }`, plus `{ tokens }` for a single `id`.
  */
 export async function handleTokenRequest(request: Request, deps: ServeDeps): Promise<Response> {

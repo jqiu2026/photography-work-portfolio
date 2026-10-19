@@ -119,7 +119,7 @@ export default async function StudioSection({
               publishAt: g.publishAt?.toISOString() ?? null,
               createdAt: g.createdAt.toISOString(),
               photos: sx?.photos ?? 0,
-              favourites: sx?.favourites ?? 0,
+              favorites: sx?.favorites ?? 0,
               downloads: sx?.downloads ?? 0,
               views: sx?.views ?? 0,
               cover: m

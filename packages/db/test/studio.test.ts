@@ -82,7 +82,7 @@ describe("clients, jobs, bookings", () => {
   });
 });
 
-describe("galleries and favourites", () => {
+describe("galleries and favorites", () => {
   it("passcodes are hashed, unique, length-checked, and open only published unexpired galleries", async () => {
     const { j } = await seedJob("gal");
     await expect(st.createGallery(db, { jobId: j.id, passcode: "short" })).rejects.toThrow(/6 characters/);
@@ -99,7 +99,7 @@ describe("galleries and favourites", () => {
       .where(eq(s.studioGalleries.id, g.id));
     expect(await st.openGalleryWithPasscode(db, "gallery-pass-1", now)).toBeNull(); // expired
   });
-  it("favourites toggle and only work for photographs in the gallery", async () => {
+  it("favorites toggle and only work for photographs in the gallery", async () => {
     const { j } = await seedJob("fav");
     const [m1] = await db
       .insert(s.media)

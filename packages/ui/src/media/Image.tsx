@@ -7,7 +7,7 @@ import { cx } from "../components/cx";
 export type ImageAsset = {
   width: number;
   height: number;
-  /** Dominant colour, shown until the image is ready. */
+  /** Dominant color, shown until the image is ready. */
   color?: string;
   /** Tiny WebP data URL for blur-up. */
   blur?: string;
@@ -28,7 +28,7 @@ export type ImageProps = {
   fill?: boolean;
 };
 
-/** Framework-agnostic responsive image: srcset, dominant-colour placeholder, blur-up, no layout shift. */
+/** Framework-agnostic responsive image: srcset, dominant-color placeholder, blur-up, no layout shift. */
 export function Image({ asset, alt, sizes = "100vw", priority, fit = "cover", fill, className, style }: ImageProps) {
   const sorted = [...asset.files].sort((a, b) => a.width - b.width);
   const largest = sorted[sorted.length - 1];

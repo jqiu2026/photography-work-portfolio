@@ -53,10 +53,10 @@ test("owner makes a gallery and sets its security and look", async ({ page }) =>
   await choose(page.getByLabel("Corners"), "Round");
   await page.getByLabel(/Line above the title/).fill(`Studio ${uid}`);
   await page.getByLabel(/Closing note/).fill(`Thanks, ${uid}`);
-  await page.getByLabel("Background colour (hex, optional)").fill("red");
+  await page.getByLabel("Background color (hex, optional)").fill("red");
   await page.getByRole("button", { name: "Save look" }).click();
   await slow(page.locator("p.st-error")).toContainText("hex");
-  await page.getByLabel("Background colour (hex, optional)").fill("#101820");
+  await page.getByLabel("Background color (hex, optional)").fill("#101820");
   await page.getByRole("button", { name: "Save look" }).click();
   await slow(page.getByRole("status").filter({ hasText: "Look saved" })).toBeVisible();
 

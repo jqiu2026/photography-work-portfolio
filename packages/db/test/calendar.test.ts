@@ -216,7 +216,7 @@ describe(".ics feed", () => {
         },
         {
           id: "gone",
-          title: "Cancelled",
+          title: "Canceled",
           startsAt: new Date(),
           endsAt: new Date(),
           status: "cancelled",
@@ -229,7 +229,7 @@ describe(".ics feed", () => {
     expect(text.endsWith("END:VCALENDAR\r\n")).toBe(true);
     expect(text).toContain("SUMMARY:Wedding\\, Smith; Jones");
     expect(text).toContain("DTSTART:20270501T140000Z");
-    expect(text).not.toContain("Cancelled");
+    expect(text).not.toContain("Canceled");
     for (const l of text.split("\r\n")) expect(Buffer.byteLength(l)).toBeLessThanOrEqual(75);
     expect(text).toContain("\r\n "); // folded
     expect(text).toContain("\\n"); // newline escaped

@@ -33,7 +33,7 @@ const blank = {
 
 /**
  * Free downloads: rules say who may download what without paying. A rule has a name visitors see, a size (or the original), a
- * limit per visitor, an optional watermark and PIN, a licence to accept, and covers the whole gallery or one album.
+ * limit per visitor, an optional watermark and PIN, a license to accept, and covers the whole gallery or one album.
  */
 export function GalleryDownloads({
   galleryId,

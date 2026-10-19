@@ -39,7 +39,7 @@ export default async function EditTimeline({ params }: { params: Promise<{ id: s
         {row ? <F name="id" label="id" type="hidden" defaultValue={row.id} /> : null}
         <div className="adm-grid2">
           <F name="title" label="Title" defaultValue={row?.title} required />
-          <F name="org" label="Organisation" defaultValue={row?.org} />
+          <F name="org" label="Organization" defaultValue={row?.org} />
         </div>
         <div className="adm-grid2">
           <F

@@ -11,7 +11,7 @@ const WIDTHS = [480, 960, 1600, 2400] as const;
 export type ImageAsset = {
   width: number;
   height: number;
-  /** Dominant colour, shown until the image is ready. */
+  /** Dominant color, shown until the image is ready. */
   color?: string;
   /** Tiny WebP data URL for blur-up. */
   blur?: string;

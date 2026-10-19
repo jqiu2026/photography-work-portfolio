@@ -55,7 +55,7 @@ export default async function MusicHome() {
             <figure className="mu-photo">
               <Image
                 asset={img}
-                alt="A trombonist performing in a haze of coloured stage light."
+                alt="A trombonist performing in a haze of colored stage light."
                 sizes="(min-width: 860px) 40vw, 100vw"
               />
             </figure>

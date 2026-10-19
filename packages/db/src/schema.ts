@@ -460,7 +460,7 @@ export const studioGalleries = pgTable(
     watermark: boolean("watermark").notNull().default(true),
     coverMediaId: uuid("cover_media_id").references(() => media.id),
     expiresAt: timestamp("expires_at", { withTimezone: true }),
-    /** Shown above the photographs (a thank-you, instructions). Per-gallery branding: accent colour too. */
+    /** Shown above the photographs (a thank-you, instructions). Per-gallery branding: accent color too. */
     welcome: text("welcome"),
     accent: text("accent"),
     /** scrypt hash of a PIN that must be entered before any download (optional). */
@@ -555,7 +555,7 @@ export const studioContracts = pgTable(
     signerUserAgent: text("signer_user_agent"),
     /** sha256 of the exact text that was signed */
     documentSha256: text("document_sha256"),
-    /** contract | model-release | property-release | parental-consent | licence */
+    /** contract | model-release | property-release | parental-consent | license */
     kind: text("kind").notNull().default("contract"),
     templateId: uuid("template_id"),
     /** Who or what a release covers (a person, a property). */
@@ -565,7 +565,7 @@ export const studioContracts = pgTable(
     signerEmail: text("signer_email"),
     /** ESIGN/UETA: the signer agreed to sign and keep records electronically (captured with the signature). */
     consentElectronic: boolean("consent_electronic").notNull().default(false),
-    /** Licence terms granted (personal, commercial, term in months; null = no end). Feeds the usage-rights tracker. */
+    /** License terms granted (personal, commercial, term in months; null = no end). Feeds the usage-rights tracker. */
     usageRights: jsonb("usage_rights").$type<{
       personal: boolean;
       commercial: boolean;
@@ -972,7 +972,7 @@ export const studioContractTemplates = pgTable(
     id: uuid("id").primaryKey().defaultRandom(),
     slug: text("slug").notNull(),
     name: text("name").notNull(),
-    /** contract | model-release | property-release | parental-consent | licence */
+    /** contract | model-release | property-release | parental-consent | license */
     kind: text("kind").notNull().default("contract"),
     body: text("body").notNull(),
     usageRights: jsonb("usage_rights").$type<{
@@ -1207,7 +1207,7 @@ export const studioDownloadEvents = pgTable(
 export type StudioGallery = typeof studioGalleries.$inferSelect;
 
 /* ------------------------------------------------------------------------------------------------------------------
- * Operations: tasks, automation runs (the dedupe log: one run per key, ever), the owner's notification centre.
+ * Operations: tasks, automation runs (the dedupe log: one run per key, ever), the owner's notification center.
  * ---------------------------------------------------------------------------------------------------------------- */
 export const studioTasks = pgTable(
   "studio_tasks",
@@ -1423,7 +1423,7 @@ export const studioDownloadRules = pgTable(
     perVisitor: integer("per_visitor"),
     watermarkId: uuid("watermark_id"),
     pinHash: text("pin_hash"),
-    /** A licence the visitor must accept before downloading. */
+    /** A license the visitor must accept before downloading. */
     printRelease: text("print_release"),
     showAll: boolean("show_all").notNull().default(true),
     sort: integer("sort").notNull().default(0),

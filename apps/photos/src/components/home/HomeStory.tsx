@@ -23,6 +23,7 @@ import {
 import {
   type Mode,
   motionAllowed,
+  setBar,
   useAutoplay,
   useProgress,
   useScrollStory,
@@ -108,14 +109,65 @@ function Threshold({ photo }: { photo?: StoryPhoto }) {
   );
 }
 
-/** The whole process as a row of dots; the scenes after booking show where you are in it. */
-function Mini({ at }: { at: number }) {
+/**
+ * The process as a bar across the top, from the shoot to the end. It starts as the vertical timeline of the booking
+ * chapter: when that chapter ends, each dot flies from its place in the list to its place in the bar (FLIP).
+ */
+function TimelineBar() {
+  const { chapter, motion, bar } = useStory();
+  const ref = useRef<HTMLOListElement>(null);
+  const shown = motion && (chapter >= 4 || bar);
+  const was = useRef(false);
+  const at = chapter >= 4 ? chapter : 3;
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (shown && !was.current) {
+      const dots = [...document.querySelectorAll<HTMLElement>(".hj-tl .hj-tl-dot")];
+      const items = [...el.children] as HTMLElement[];
+      if (dots.length === items.length) {
+        items.forEach((li, i) => {
+          const to = li.querySelector("i")?.getBoundingClientRect();
+          const from = dots[i]?.getBoundingClientRect();
+          if (!to || !from || from.bottom < 0 || from.top > innerHeight) return;
+          li.style.transition = "none";
+          li.style.translate = `${from.x - to.x}px ${from.y - to.y}px`;
+          li.setAttribute("data-fly", "");
+          requestAnimationFrame(() =>
+            requestAnimationFrame(() => {
+              li.style.transition = `translate 0.5s var(--hm-ease-curtain) ${i * 22}ms`;
+              li.style.translate = "0 0";
+              setTimeout(() => {
+                li.removeAttribute("data-fly");
+                li.style.transition = "";
+              }, 700);
+            }),
+          );
+        });
+      }
+    }
+    was.current = shown;
+  }, [shown]);
+  const go = (i: number) => {
+    const id = ["booking", "booking", "booking", "booking", "moment", "darkroom", "delivered", "keep"][i];
+    const el = document.getElementById(`ch-${id}`);
+    if (!el) return;
+    scrollTo({ top: el.getBoundingClientRect().top + scrollY, behavior: "smooth" });
+    if (i < 4) setTimeout(() => dispatchEvent(new CustomEvent("hj-stage", { detail: i })), 700);
+  };
   return (
-    <ol className="hj-mini" aria-hidden="true">
+    <ol className="hj-mini" ref={ref} data-show={shown ? "" : undefined} aria-label="Timeline">
       {TIMELINE.map((t, i) => (
         <li key={t.id} data-state={i < at ? "done" : i === at ? "now" : "next"}>
           <i />
-          <span>{t.label}</span>
+          <button
+            type="button"
+            onClick={() => go(i)}
+            aria-current={i === at ? "step" : undefined}
+            tabIndex={shown ? 0 : -1}
+          >
+            {t.label}
+          </button>
         </li>
       ))}
     </ol>
@@ -261,7 +313,11 @@ function Booking({ packages, prep }: { packages: HomePackage[]; prep: StoryPhoto
       packages.findIndex((p) => p.featured),
     ),
   );
-  useProgress(ref, (p) => setStage(Math.min(3, Math.max(0, Math.floor((p - 0.04) * 4.2)))));
+  useProgress(ref, (p) => {
+    const n = Math.min(3, Math.max(0, Math.floor((p - 0.04) * 4.2)));
+    setStage(n);
+    setBar(p > 0.94);
+  });
   const motion = story.motion;
   const pkg = packages[pick];
   const state = (i: number) => (!motion ? "now" : i === stage ? "now" : i < stage ? "past" : "next");
@@ -289,7 +345,12 @@ function Booking({ packages, prep }: { packages: HomePackage[]; prep: StoryPhoto
             <h2 id="hj-booking-title" className="hj-h2">
               {BOOKING.title}
             </h2>
-            <ol className="hj-tl" aria-label="The process, step by step" style={vars({ "--s": motion ? stage : 7 })}>
+            <ol
+              className="hj-tl"
+              data-gone={motion && story.bar ? "" : undefined}
+              aria-label="The process, step by step"
+              style={vars({ "--s": motion ? stage : 7 })}
+            >
               {TIMELINE.map((t, i) => {
                 const body = (
                   <>
@@ -440,13 +501,15 @@ function Moment({ photo }: { photo?: StoryPhoto }) {
       data-chapter="moment"
       data-scroll="pin"
       aria-labelledby="hj-moment-title"
+      style={vars({ "--fx": focalOf(photo)[0], "--fy": focalOf(photo)[1] })}
     >
       <div className="hj-stick">
         <div className="hj-shot">
           <Ph photo={photo} sizes="100vw" />
         </div>
         <div className="hj-scrim" aria-hidden="true" />
-        <Mini at={4} />
+        <span className="hj-thirds" aria-hidden="true" />
+        <span className="hj-af" aria-hidden="true" />
         <h2 id="hj-moment-title" className="hj-mask hj-big">
           <span className="hj-big-line">{MOMENT.line}</span>
         </h2>
@@ -480,7 +543,6 @@ function Darkroom({ photo }: { photo?: StoryPhoto }) {
       aria-labelledby="hj-dark-title"
     >
       <div className="hj-stick">
-        <Mini at={5} />
         <div className="hj-dark-copy">
           <h2 id="hj-dark-title" className="hj-h2">
             {DARKROOM.title}
@@ -529,15 +591,109 @@ function Darkroom({ photo }: { photo?: StoryPhoto }) {
   );
 }
 
-/* ---- Chapter 7: galleries: a private proofing gallery, then a public showcase ---- */
+/* ---- Chapter 7: galleries: a private proofing gallery, then a public showcase (laptop and phone mirror each other) ---- */
+
+type Unlock = "locked" | "typing" | "open";
 
 function Delivered({ cover, photos }: { cover?: StoryPhoto; photos: StoryPhoto[] }) {
   const ref = useRef<HTMLElement>(null);
   const [phase, setPhase] = useState(0);
+  const [unlock, setUnlock] = useState<Unlock>("locked");
   const [hearts, setHearts] = useState<Record<number, boolean>>({});
-  useProgress(ref, (p) => setPhase(p > 0.55 ? 1 : 0));
+  const [toast, setToast] = useState("");
+  const timers = useRef<number[]>([]);
   const priv = DELIVERED.private;
   const pub = DELIVERED.public;
+  const hearted = Object.values(hearts).filter(Boolean).length;
+  const say = (m: string) => {
+    setToast(m);
+    for (const t of timers.current.filter((_, i) => i === 0)) clearTimeout(t);
+    timers.current[0] = window.setTimeout(() => setToast(""), 2600);
+  };
+  useEffect(() => () => timers.current.forEach(clearTimeout), []);
+  // the passcode screen shows for a beat (0.25 s), the dots fill in, then the screen lifts
+  useProgress(ref, (p) => {
+    setPhase(p > 0.55 ? 1 : 0);
+    if (p < 0.08) {
+      setUnlock((u) => (u === "locked" ? u : "locked"));
+    } else if (p > 0.26) {
+      setUnlock((u) => {
+        if (u !== "locked") return u;
+        timers.current[1] = window.setTimeout(() => setUnlock("typing"), 250);
+        timers.current[2] = window.setTimeout(() => setUnlock("open"), 250 + 700);
+        return "locked";
+      });
+    }
+  });
+  useEffect(() => {
+    if (unlock === "locked") {
+      clearTimeout(timers.current[1]);
+      clearTimeout(timers.current[2]);
+    }
+  }, [unlock]);
+  const acts = (
+    <div className="hj-acts">
+      <button
+        type="button"
+        className="hj-act hj-act--send"
+        onClick={() =>
+          say(`Selection sent (example): ${hearted} favorite${hearted === 1 ? "" : "s"}. Nothing was actually sent.`)
+        }
+      >
+        <HeartIcon aria-hidden="true" /> Send my selection
+      </button>
+      <button
+        type="button"
+        className="hj-act"
+        onClick={() => say("Download started (example). No file is downloaded.")}
+      >
+        <DownloadIcon aria-hidden="true" /> Download
+      </button>
+      <button
+        type="button"
+        className="hj-act"
+        onClick={() => say("Print order placed (example). Nothing was ordered.")}
+      >
+        Order prints
+      </button>
+      <button
+        type="button"
+        className="hj-act"
+        onClick={() => say("Link copied (example): photo.jerryqiu.com/g/example")}
+      >
+        Share
+      </button>
+    </div>
+  );
+  const lock = (
+    <div className="hj-lock" data-state={unlock} aria-hidden="true">
+      <LockIcon />
+      <strong>{priv.passcode}</strong>
+      <span className="hj-dots">
+        {[0, 1, 2, 3, 4, 5].map((i) => (
+          <i key={i} style={vars({ "--i": i })} />
+        ))}
+      </span>
+    </div>
+  );
+  const heart = (i: number) => (
+    <button
+      type="button"
+      aria-pressed={Boolean(hearts[i])}
+      aria-label={`Favorite photograph ${i + 1} in the example gallery`}
+      onClick={() => {
+        setHearts((h) => ({ ...h, [i]: !h[i] }));
+        say(hearts[i] ? "Removed from your favorites (example)" : "Added to your favorites (example)");
+      }}
+    >
+      <HeartIcon />
+    </button>
+  );
+  const toastEl = (
+    <div className="hj-toast" data-show={toast ? "" : undefined} aria-hidden="true">
+      {toast}
+    </div>
+  );
   return (
     <section
       id="ch-delivered"
@@ -548,7 +704,9 @@ function Delivered({ cover, photos }: { cover?: StoryPhoto; photos: StoryPhoto[]
       aria-labelledby="hj-del-title"
     >
       <div className="hj-stick" data-phase={phase}>
-        <Mini at={6} />
+        <div className="hm-sr-only" role="status">
+          {toast}
+        </div>
         <div className="hj-devices" data-hold="">
           <div className="hj-laptop">
             <div className="hj-screen">
@@ -564,14 +722,7 @@ function Delivered({ cover, photos }: { cover?: StoryPhoto; photos: StoryPhoto[]
                   {photos.slice(0, 12).map((p, i) => (
                     <div key={`${p.id ?? "p"}-${i}`} className="hj-cell">
                       <Ph photo={p} sizes="(min-width: 900px) 22vw, 45vw" />
-                      <button
-                        type="button"
-                        aria-pressed={Boolean(hearts[i])}
-                        aria-label={`Favourite photograph ${i + 1} in the example gallery`}
-                        onClick={() => setHearts((h) => ({ ...h, [i]: !h[i] }))}
-                      >
-                        <HeartIcon />
-                      </button>
+                      {heart(i)}
                     </div>
                   ))}
                 </div>
@@ -584,25 +735,34 @@ function Delivered({ cover, photos }: { cover?: StoryPhoto; photos: StoryPhoto[]
                   <LockIcon aria-hidden="true" /> {phase ? pub.label : priv.label}
                 </span>
               </div>
-              <div className="hj-lock" aria-hidden="true">
-                <LockIcon />
-                <strong>{priv.passcode}</strong>
-                <span className="hj-dots">
-                  {[0, 1, 2, 3, 4, 5].map((i) => (
-                    <i key={i} style={vars({ "--i": i })} />
+              {lock}
+              {acts}
+              {toastEl}
+            </div>
+          </div>
+          <div className="hj-phone">
+            <div className="hj-phone-screen">
+              <div className="hj-pscroll">
+                <div className="hj-pcover">
+                  <Ph photo={cover} sizes="(min-width: 900px) 20vw, 80vw" />
+                  <div className="hj-cover-text">
+                    <small>{DELIVERED.demo}</small>
+                    <strong>Your gallery</strong>
+                  </div>
+                </div>
+                <div className="hj-pgrid">
+                  {photos.slice(0, 12).map((p, i) => (
+                    <div key={`${p.id ?? "p"}-m${i}`} className="hj-cell">
+                      <Ph photo={p} sizes="(min-width: 900px) 10vw, 40vw" />
+                      {heart(i)}
+                    </div>
                   ))}
-                </span>
+                </div>
               </div>
-              <div className="hj-acts" aria-hidden="true">
-                <span className="hj-act hj-act--send">
-                  <HeartIcon /> Send my selection
-                </span>
-                {DELIVERED.actions.map((a) => (
-                  <span key={a} className="hj-act">
-                    {a}
-                  </span>
-                ))}
-              </div>
+              <div className="hj-pbar">{phase ? pub.label : priv.label}</div>
+              {lock}
+              {acts}
+              {toastEl}
             </div>
           </div>
         </div>
@@ -619,8 +779,13 @@ function Delivered({ cover, photos }: { cover?: StoryPhoto; photos: StoryPhoto[]
               </span>
             </span>
           </h2>
-          <ul className="hj-points">
-            {(phase ? pub.points : priv.points).map((t) => (
+          <ul className="hj-points" data-for="0">
+            {priv.points.map((t) => (
+              <li key={t}>{t}</li>
+            ))}
+          </ul>
+          <ul className="hj-points" data-for="1">
+            {pub.points.map((t) => (
               <li key={t}>{t}</li>
             ))}
           </ul>
@@ -647,7 +812,6 @@ function Keep({ photo }: { photo?: StoryPhoto }) {
       aria-labelledby="hj-keep-title"
     >
       <div className="hj-stick">
-        <Mini at={7} />
         <div className="hj-keep-copy">
           <h2 id="hj-keep-title" className="hj-h2">
             {KEEP.title}
@@ -865,6 +1029,7 @@ export function HomeStory({
       ) : (
         <Hud send={send} onCalm={toggleCalm} calm={false} bare />
       )}
+      {motion ? <TimelineBar /> : null}
       <Threshold photo={slots.threshold} />
       <About photo={slots.seeing} />
       <Range sheet={slots.sheet} subjects={subjects} />

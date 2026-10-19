@@ -476,6 +476,15 @@
 .pub[data-intro] :is(.pub-end, .pub-foot) {
   padding-left: var(--hm-sidebar);
 }
+.pub[data-intro] .pub-foot {
+  margin-top: 0;
+  padding-top: 0.5rem;
+  padding-bottom: 1rem;
+  border-top: 0;
+}
+.pub[data-intro] .pub-foot__base {
+  padding-top: 0.75rem;
+}
 .pub[data-intro] > .hm-shell > :is(.hm-dock, .hm-shell-toolbar) {
   transition: opacity var(--hm-dur-slow) var(--hm-ease-out), translate var(--hm-dur-slow) var(--hm-ease-glide),
     visibility 0s;

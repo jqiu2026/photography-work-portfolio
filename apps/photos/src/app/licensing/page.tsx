@@ -12,7 +12,7 @@ export default function Licensing() {
       <p>
         Please do not use a photograph without permission. To license one,{" "}
         <Link href="/book/licensing">send a request</Link> with the photograph, where it will appear and for how long,
-        or write to <a href={`mailto:${person.bookingEmail}`}>{person.bookingEmail}</a>. Licences are written down, name
+        or write to <a href={`mailto:${person.bookingEmail}`}>{person.bookingEmail}</a>. Licenses are written down, name
         the use and the term, and are tracked.
       </p>
       <p>

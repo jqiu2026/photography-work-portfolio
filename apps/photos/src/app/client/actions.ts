@@ -47,8 +47,8 @@ export async function toggleFavoriteAction(mediaId: string, galleryId?: string):
   const session = await portalSession();
   if (!db) return no("Open your gallery again to continue.");
   if (!z.string().uuid().safeParse(mediaId).success) return no("Unknown photograph.");
-  // A signed-in portal account may favourite in any published gallery of its own jobs; a passcode session only in its gallery.
-  if (session?.r === "v") return no("Favourites are for the client of this gallery.");
+  // A signed-in portal account may favorite in any published gallery of its own jobs; a passcode session only in its gallery.
+  if (session?.r === "v") return no("Favorites are for the client of this gallery.");
   let gid = session?.g;
   if (galleryId) {
     const me = await accountSession();
@@ -72,7 +72,7 @@ export async function toggleFavoriteAction(mediaId: string, galleryId?: string):
     await st.toggleFavorite(db, gid, mediaId);
     return { ok: true };
   } catch (e) {
-    return no(e instanceof st.StudioError ? e.message : "Could not save your favourite.");
+    return no(e instanceof st.StudioError ? e.message : "Could not save your favorite.");
   }
 }
 

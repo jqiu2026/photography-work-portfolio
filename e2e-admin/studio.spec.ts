@@ -70,7 +70,7 @@ test("owner creates a client, a job, a gallery with photographs, a contract and 
   await publishOpenGallery(page);
 });
 
-test("client opens the gallery with the passcode (wrong one refused), sees strict images, and keeps favourites", async ({
+test("client opens the gallery with the passcode (wrong one refused), sees strict images, and keeps favorites", async ({
   page,
   request,
 }) => {
@@ -87,11 +87,11 @@ test("client opens the gallery with the passcode (wrong one refused), sees stric
   expect(html).not.toMatch(/\/opt\/|originals?\//);
   await page.locator("[aria-label=Photographs]").scrollIntoViewIfNeeded();
   await expectSlow(page.locator("img[src^='blob:']").first()).toBeVisible({ timeout: 20_000 });
-  const heart = page.getByRole("button", { name: /Add .* to favourites/ }).first();
+  const heart = page.getByRole("button", { name: /Add .* to favorites/ }).first();
   await heart.click();
-  await expectSlow(page.getByRole("button", { name: /Remove .* from favourites/ }).first()).toBeVisible();
+  await expectSlow(page.getByRole("button", { name: /Remove .* from favorites/ }).first()).toBeVisible();
   await page.reload({ waitUntil: "networkidle" });
-  await expectSlow(page.getByRole("button", { name: /Remove .* from favourites/ }).first()).toBeVisible();
+  await expectSlow(page.getByRole("button", { name: /Remove .* from favorites/ }).first()).toBeVisible();
   // the image route refuses a client photograph without a token
   const id = await page.evaluate(
     () =>

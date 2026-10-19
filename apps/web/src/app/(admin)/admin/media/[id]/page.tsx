@@ -113,7 +113,7 @@ export default async function MediaDetail({ params }: { params: Promise<{ id: st
             <F name="caption" label="Caption" defaultValue={m.caption} />
             <F
               name="license"
-              label="Licence"
+              label="License"
               type="select"
               options={licenses}
               defaultValue={m.license}

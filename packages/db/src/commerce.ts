@@ -600,7 +600,7 @@ export async function declineQuote(db: Database, token: string, now = new Date()
 }
 
 /**
- * SAMPLE catalogue for a fresh install: clearly labelled, every price a placeholder (Q61). Plus = Standard + $20 and the
+ * SAMPLE catalog for a fresh install: clearly labelled, every price a placeholder (Q61). Plus = Standard + $20 and the
  * extension's standalone price is $30, as in the owner's illustration (also placeholders). Shared with the public
  * `/packages` page so it still works before a database exists.
  */

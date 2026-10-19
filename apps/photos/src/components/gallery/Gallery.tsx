@@ -99,9 +99,9 @@ const asset = (i: Pick<Item, "width" | "height" | "color" | "blur"> & { mediaId:
   blur: i.blur ?? undefined,
   files: [],
 });
-/** Black or white, whichever reads better on the owner's brand colour (WCAG relative luminance). */
-function onColour(colour: string) {
-  const m = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(colour.trim());
+/** Black or white, whichever reads better on the owner's brand color (WCAG relative luminance). */
+function onColour(color: string) {
+  const m = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(color.trim());
   if (!m) return "#fff";
   const hex = m[1].length === 3 ? [...m[1]].map((c) => c + c).join("") : m[1];
   const n = Number.parseInt(hex, 16);
@@ -114,7 +114,7 @@ function onColour(colour: string) {
 
 /**
  * The gallery, as the people it is for see it. A cover and title open it; albums (with sub-albums and locked albums) and
- * "All photos" organise it; the lightbox and the cart sit over the photographs. The client (passcode) also proofs: favourites,
+ * "All photos" organise it; the lightbox and the cart sit over the photographs. The client (passcode) also proofs: favorites,
  * ratings, approvals, comments, a selection to send, and the downloads they are owed. Visitors of the public link view and shop.
  */
 export function Gallery({ data }: { data: Data }) {
@@ -205,7 +205,7 @@ function GalleryView({ data }: { data: Data }) {
   // a refresh (for example after opening a locked album) brings the server's list of photographs
   useEffect(() => setItems(data.items), [data.items]);
   const [album, setAlbum] = useState("");
-  const [view, setView] = useState<"photos" | "favourites" | "shop" | "about">("photos");
+  const [view, setView] = useState<"photos" | "favorites" | "shop" | "about">("photos");
   const [stage, setStage] = useState<"pending" | "intro" | "gallery">("pending");
   const [rulesOpen, setRulesOpen] = useState(false);
   const [signIn, setSignIn] = useState(false);
@@ -263,8 +263,8 @@ function GalleryView({ data }: { data: Data }) {
     if (it.albumId === album) return true;
     return kids(album).some((k) => k.id === it.albumId);
   };
-  const shown = items.filter((i) => inAlbum(i) && (view !== "favourites" || i.favourite));
-  const chosen = items.filter((i) => i.favourite).length;
+  const shown = items.filter((i) => inAlbum(i) && (view !== "favorites" || i.favorite));
+  const chosen = items.filter((i) => i.favorite).length;
   const heroItem = items.find((i) => i.mediaId === data.coverMediaId) ?? items[0];
   const cartCount = cart.reduce((n, l) => n + l.qty, 0);
   const products = data.shop.products;
@@ -304,7 +304,7 @@ function GalleryView({ data }: { data: Data }) {
   /* ---- proofing (the client only) ---- */
   async function fav(i: Item) {
     const r = await toggleFavoriteAction(i.mediaId, gid);
-    if (r.ok) upd(i.mediaId, { favourite: !i.favourite });
+    if (r.ok) upd(i.mediaId, { favorite: !i.favorite });
     else say(false, r.error);
   }
   async function rate(i: Item, n: number | null) {
@@ -419,7 +419,7 @@ function GalleryView({ data }: { data: Data }) {
       </div>
     );
 
-  const heading = view === "favourites" ? "Favorites" : current ? current.name : data.title;
+  const heading = view === "favorites" ? "Favorites" : current ? current.name : data.title;
   const back =
     view === "photos" && (current || album === "all-photos")
       ? current?.parentId
@@ -461,8 +461,8 @@ function GalleryView({ data }: { data: Data }) {
             </PageTab>
           ) : null}
           {client ? (
-            <PageTab asChild current={view === "favourites"}>
-              <button type="button" onClick={() => setView("favourites")}>
+            <PageTab asChild current={view === "favorites"}>
+              <button type="button" onClick={() => setView("favorites")}>
                 Favorites <span className="gx-count-badge">{chosen}</span>
               </button>
             </PageTab>
@@ -631,12 +631,12 @@ function GalleryView({ data }: { data: Data }) {
                               <IconButton
                                 variant="secondary"
                                 className="gx-fav gx-round"
-                                aria-pressed={i.favourite}
-                                aria-label={`${i.favourite ? "Remove" : "Add"} ${i.filename} ${i.favourite ? "from" : "to"} favourites`}
+                                aria-pressed={i.favorite}
+                                aria-label={`${i.favorite ? "Remove" : "Add"} ${i.filename} ${i.favorite ? "from" : "to"} favorites`}
                                 disabled={sent}
                                 onClick={() => void fav(i)}
                               >
-                                <LikeIcon liked={i.favourite} />
+                                <LikeIcon liked={i.favorite} />
                               </IconButton>
                             ) : null}
                             {shopOn ? (
@@ -657,8 +657,8 @@ function GalleryView({ data }: { data: Data }) {
                   </ul>
                 ) : (
                   <EmptyState>
-                    {view === "favourites"
-                      ? "No favourites yet. Tap the heart on a photograph to keep it here."
+                    {view === "favorites"
+                      ? "No favorites yet. Tap the heart on a photograph to keep it here."
                       : "No photographs here yet."}
                   </EmptyState>
                 )}
@@ -669,10 +669,10 @@ function GalleryView({ data }: { data: Data }) {
                 <p role="status">
                   {sent
                     ? `Your selection of ${plural(chosen, "photograph")} was sent.`
-                    : `${plural(chosen, "favourite")} chosen${data.limit ? ` of ${data.limit}` : ""}.`}
+                    : `${plural(chosen, "favorite")} chosen${data.limit ? ` of ${data.limit}` : ""}.`}
                 </p>
                 {data.limit && !sent ? (
-                  <Progress value={chosen} max={data.limit} size="sm" aria-label="Favourites chosen" />
+                  <Progress value={chosen} max={data.limit} size="sm" aria-label="Favorites chosen" />
                 ) : null}
                 {!sent ? (
                   <Button disabled={!chosen} onClick={() => setConfirmSend(true)}>
@@ -777,7 +777,7 @@ function GalleryView({ data }: { data: Data }) {
       {confirmSend ? (
         <Modal title="Send your selection?" onClose={() => setConfirmSend(false)} size="sm">
           <DialogDescription>
-            {plural(chosen, "favourite")} will go to {data.brand.name || "your photographer"}. After sending you can't
+            {plural(chosen, "favorite")} will go to {data.brand.name || "your photographer"}. After sending you can't
             change them unless they reopen your selection.
           </DialogDescription>
           <DialogFooter>
@@ -1227,13 +1227,13 @@ function Lightbox({
                 <TabPanel value="proof">
                   <div className="gx-proof-row">
                     <Button
-                      variant={it.favourite ? "primary" : "secondary"}
-                      aria-pressed={it.favourite}
+                      variant={it.favorite ? "primary" : "secondary"}
+                      aria-pressed={it.favorite}
                       disabled={sent}
                       onClick={() => void fav(it)}
-                      aria-label={`${it.favourite ? "Remove" : "Add"} ${it.filename} ${it.favourite ? "from" : "to"} favourites`}
+                      aria-label={`${it.favorite ? "Remove" : "Add"} ${it.filename} ${it.favorite ? "from" : "to"} favorites`}
                     >
-                      <LikeIcon liked={it.favourite} /> Favourite
+                      <LikeIcon liked={it.favorite} /> Favorite
                     </Button>
                   </div>
                   {data.allowRatings ? (
@@ -1624,18 +1624,18 @@ function Downloads({
   );
 }
 
-/** A rule's licence, when it has one: read it, then tick to accept. */
-function Licence({ text, ok, onOk }: { text: string; ok: boolean; onOk: (v: boolean) => void }) {
+/** A rule's license, when it has one: read it, then tick to accept. */
+function License({ text, ok, onOk }: { text: string; ok: boolean; onOk: (v: boolean) => void }) {
   return (
     <details className="gx-fine">
-      <summary>Licence</summary>
+      <summary>License</summary>
       <RichText text={text} />
       <Checkbox label="I accept this licence" checked={ok} onChange={(e) => onOk(e.target.checked)} />
     </details>
   );
 }
 
-/** One free-download rule: its name and size, its PIN if it has one, its licence to accept, then the ZIP links. */
+/** One free-download rule: its name and size, its PIN if it has one, its license to accept, then the ZIP links. */
 function RuleRow({
   rule,
   data,
@@ -1680,7 +1680,7 @@ function RuleRow({
         />
       ) : (
         <>
-          {rule.printRelease ? <Licence text={rule.printRelease} ok={ok} onOk={setOk} /> : null}
+          {rule.printRelease ? <License text={rule.printRelease} ok={ok} onOk={setOk} /> : null}
           <span className="gx-rule__links">
             {Array.from({ length: parts }, (_, k) =>
               ok ? (
@@ -1691,7 +1691,7 @@ function RuleRow({
                 </Button>
               ) : (
                 <Button key={`${rule.id}-${k}`} variant="secondary" size="sm" disabled>
-                  Accept the licence to download
+                  Accept the license to download
                 </Button>
               ),
             )}
@@ -1729,7 +1729,7 @@ function PinForm({
   );
 }
 
-/** One rule for one photograph: unlock with its PIN, accept its licence, then download the resized copy. */
+/** One rule for one photograph: unlock with its PIN, accept its license, then download the resized copy. */
 function PhotoRule({ rule, mediaId, data }: { rule: Data["rules"][number]; mediaId: string; data: Data }) {
   const router = useRouter();
   const [pin, setPin] = useState("");
@@ -1761,7 +1761,7 @@ function PhotoRule({ rule, mediaId, data }: { rule: Data["rules"][number]; media
         />
       ) : (
         <>
-          {rule.printRelease ? <Licence text={rule.printRelease} ok={ok} onOk={setOk} /> : null}
+          {rule.printRelease ? <License text={rule.printRelease} ok={ok} onOk={setOk} /> : null}
           {ok ? (
             <Button asChild variant="secondary" size="sm">
               <a href={href} download>
@@ -1770,7 +1770,7 @@ function PhotoRule({ rule, mediaId, data }: { rule: Data["rules"][number]; media
             </Button>
           ) : (
             <Button variant="secondary" size="sm" disabled>
-              Accept the licence first
+              Accept the license first
             </Button>
           )}
         </>

@@ -1,5 +1,5 @@
 /*
- * App-wide Holominimal setup for the photo site: the site's fonts handed to Holominimal, the page colours, long-form
+ * App-wide Holominimal setup for the photo site: the site's fonts handed to Holominimal, the page colors, long-form
  * text, and a few shared form and document helpers (pm-*). Everything reads --hm-* tokens.
  */
 /* Hanken Grotesk and Martian Mono come from next/font; hand them to Holominimal so both systems share one face. */
@@ -35,7 +35,7 @@ body {
   text-underline-offset: 3px;
 }
 
-/* a form's confirmation (FormMessage ok): the hint style, in the success colour */
+/* a form's confirmation (FormMessage ok): the hint style, in the success color */
 .pm-ok {
   color: var(--hm-success-text);
 }

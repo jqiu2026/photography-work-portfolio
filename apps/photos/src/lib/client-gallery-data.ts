@@ -86,7 +86,7 @@ export type ClientGalleryData = {
     color: string | null;
     blur: string | null;
     albumId: string | null;
-    favourite: boolean;
+    favorite: boolean;
     rating: number | null;
     decision: "approved" | "rejected" | null;
     comments: { body: string; author: string; at: string }[];
@@ -111,7 +111,7 @@ export async function loadClientGallery(db: Database, a: GalleryAccess): Promise
   const ruleRows = a.role === "visitor" ? await listRules(db, g.id) : [];
   const openRules = ruleRows.length ? await unlockedRules(g.id) : [];
   const trackRows = await tracksByIds(db, readStyle(g.style).playlist);
-  const fav = new Set(proofs.favourites);
+  const fav = new Set(proofs.favorites);
   const live = a.state === "live" || a.state === "expiring";
   const plan = (size: "web" | "full") =>
     zipPlan(
@@ -204,7 +204,7 @@ export async function loadClientGallery(db: Database, a: GalleryAccess): Promise
           color: c.media.color,
           blur: c.media.blur,
           albumId: c.item.albumId,
-          favourite: fav.has(c.media.id),
+          favorite: fav.has(c.media.id),
           rating: proofs.ratings[c.media.id] ?? null,
           decision: proofs.approved.includes(c.media.id)
             ? "approved"

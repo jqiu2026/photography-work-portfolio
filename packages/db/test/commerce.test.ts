@@ -22,8 +22,8 @@ beforeAll(async () => {
 
 const pkg = async (name: string) => (await com.listPackages(db)).find((p) => p.name === name)!;
 
-describe("catalogue", () => {
-  it("seeds a labelled SAMPLE catalogue once, with Plus = Standard + $20 and the extension at $30", async () => {
+describe("catalog", () => {
+  it("seeds a labelled SAMPLE catalog once, with Plus = Standard + $20 and the extension at $30", async () => {
     expect(await com.seedSampleCatalog(db)).toBe(false);
     const packages = await com.listPackages(db);
     expect(packages.map((p) => p.name)).toEqual(["Essentials", "Standard", "Plus"]);
@@ -46,7 +46,7 @@ describe("catalogue", () => {
 });
 
 describe("quotes", () => {
-  it("prices on the server from the catalogue (a client cannot send prices), with tax as its own line", async () => {
+  it("prices on the server from the catalog (a client cannot send prices), with tax as its own line", async () => {
     await com.savePaymentsSettings(db, { taxRateBp: 888, depositPercent: 30 });
     const std = await pkg("Standard");
     const q = await com.createQuote(db, { clientId, title: "Spring shoot", packageId: std.id, promoCode: "WELCOME10" });

@@ -24,7 +24,7 @@ export default function HowAGalleryWorks() {
       <h2>2. Look around</h2>
       <ul>
         <li>Photos, grouped in albums (some albums have their own passcode).</li>
-        <li>Favourites: tap the heart on the ones you like, rate them, approve them, leave a comment.</li>
+        <li>Favorites: tap the heart on the ones you like, rate them, approve them, leave a comment.</li>
         <li>Share the link, or download what the gallery allows.</li>
       </ul>
       <h2>3. Order what you love</h2>

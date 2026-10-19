@@ -115,7 +115,7 @@ export const features: Feature[] = [
   {
     id: "F-42",
     group: "Contract and comply",
-    title: "Usage-rights and licence terms in contracts, licence tracker with expiry reminders",
+    title: "Usage-rights and license terms in contracts, license tracker with expiry reminders",
     priority: "P1/P2",
     status: "preview",
   },
@@ -187,7 +187,7 @@ export const features: Feature[] = [
     priority: "P2",
     status: "soon",
   },
-  { id: "F-60", group: "Deliver", title: "Private gallery with passcode, favourites", priority: "P1", status: "live" },
+  { id: "F-60", group: "Deliver", title: "Private gallery with passcode, favorites", priority: "P1", status: "live" },
   {
     id: "F-61",
     group: "Deliver",
@@ -236,7 +236,7 @@ export const features: Feature[] = [
   {
     id: "F-69",
     group: "Deliver",
-    title: "Client notifications (gallery ready, viewed, favourited)",
+    title: "Client notifications (gallery ready, viewed, favorited)",
     priority: "P1",
     status: "preview",
   },
@@ -367,7 +367,7 @@ export const features: Feature[] = [
   {
     id: "F-112",
     group: "Platform quality",
-    title: "Notifications centre and activity feed",
+    title: "Notifications center and activity feed",
     priority: "P3",
     status: "preview",
   },
@@ -420,7 +420,7 @@ export const features: Feature[] = [
     id: "F-120",
     group: "Platform quality",
     title:
-      "Gallery looks: four themes, seven type options, six arrangements, opening styles, spacing, corners, accent and background colour",
+      "Gallery looks: four themes, seven type options, six arrangements, opening styles, spacing, corners, accent and background color",
     priority: "P1",
     status: "live",
   },
@@ -443,7 +443,7 @@ export const features: Feature[] = [
     id: "F-123",
     group: "Platform quality",
     title:
-      "Free-download rules (size in pixels, per-visitor limit, visible watermark, PIN, licence to accept) per gallery or album",
+      "Free-download rules (size in pixels, per-visitor limit, visible watermark, PIN, license to accept) per gallery or album",
     priority: "P1",
     status: "live",
   },
@@ -501,7 +501,7 @@ export const features: Feature[] = [
     id: "F-131",
     group: "Platform quality",
     title:
-      "Custom typefaces (24), colours, header styles, layouts, album cards or tabs; pasted HTML notes converted to safe text",
+      "Custom typefaces (24), colors, header styles, layouts, album cards or tabs; pasted HTML notes converted to safe text",
     priority: "P1",
     status: "live",
   },

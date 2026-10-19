@@ -19,7 +19,7 @@ function Builtin() {
       <p>
         I am happy to license images for editorial, personal and some commercial uses. Email{" "}
         <a href={`mailto:${person.bookingEmail}`}>{person.bookingEmail}</a> with the image, where it will appear, for
-        how long, and your name or organisation.
+        how long, and your name or organization.
       </p>
       <h2 id="takedown">Misuse and removal</h2>
       <p>

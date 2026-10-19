@@ -1,4 +1,4 @@
-/* ph-* component styles. All colour/space/shape comes from tokens. */
+/* ph-* component styles. All color/space/shape comes from tokens. */
 
 /* Layout */
 .hl-container {
@@ -1523,7 +1523,7 @@
   inset: 0;
 }
 
-/* Accent dashes: small, deliberate touches of colour on a neutral page */
+/* Accent dashes: small, deliberate touches of color on a neutral page */
 .hl-eyebrow::before {
   content: "";
   display: inline-block;

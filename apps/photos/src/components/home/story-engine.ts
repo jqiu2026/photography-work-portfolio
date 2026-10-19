@@ -4,20 +4,34 @@ import { type RefObject, useEffect, useRef, useSyncExternalStore } from "react";
 import { CHAPTERS } from "@/content/home-story";
 
 const clamp = (v: number) => Math.min(1, Math.max(0, v));
+const rgb = (h: string) => [1, 3, 5].map((i) => Number.parseInt(h.slice(i, i + 2), 16));
+const mix = (a: string, b: string, t: number) => {
+  const x = rgb(a);
+  const y = rgb(b);
+  return `rgb(${x.map((v, i) => Math.round(v + ((y[i] ?? v) - v) * t)).join(" ")})`;
+};
 
 /* ---- the story store: which chapter is on screen, and how the automatic mode is doing ---- */
 
 export type Mode = "auto" | "manual" | "paused" | "done";
-type Snapshot = { chapter: number; mode: Mode; motion: boolean };
+type Snapshot = { chapter: number; mode: Mode; motion: boolean; bar: boolean };
 
-let snap: Snapshot = { chapter: 0, mode: "manual", motion: false };
+let snap: Snapshot = { chapter: 0, mode: "manual", motion: false, bar: false };
 const subs = new Set<() => void>();
 function set(next: Partial<Snapshot>) {
   const merged = { ...snap, ...next };
-  if (merged.chapter === snap.chapter && merged.mode === snap.mode && merged.motion === snap.motion) return;
+  if (
+    merged.chapter === snap.chapter &&
+    merged.mode === snap.mode &&
+    merged.motion === snap.motion &&
+    merged.bar === snap.bar
+  )
+    return;
   snap = merged;
   for (const s of subs) s();
 }
+/** The booking chapter is ending: the timeline bar can fly to the top of the screen. */
+export const setBar = (bar: boolean) => set({ bar });
 export function useStory(): Snapshot {
   return useSyncExternalStore(
     (cb) => {
@@ -88,7 +102,7 @@ export function useScrollStory(root: RefObject<HTMLElement | null>, motion: bool
     let raf = 0;
     const ease = (s: { target: number; current: number }) => {
       if (s.current < 0) s.current = s.target;
-      else s.current += (s.target - s.current) * 0.3;
+      else s.current += (s.target - s.current) * 0.4;
       if (Math.abs(s.target - s.current) < 0.0007) s.current = s.target;
       return s.current === s.target;
     };
@@ -128,6 +142,15 @@ export function useScrollStory(root: RefObject<HTMLElement | null>, motion: bool
         if (y + vh * 0.5 >= t) active = i;
       });
       set({ chapter: active });
+      // one continuous backdrop: the page color glides from each chapter's color to the next, in the last screen of a chapter
+      let c = 0;
+      tops.forEach((t, i) => {
+        if (t - vh <= y) c = i;
+      });
+      const into = CHAPTERS[c]?.bg ?? "#050505";
+      const from = c > 0 ? (CHAPTERS[c - 1]?.bg ?? into) : into;
+      const k = clamp((y - ((tops[c] ?? 0) - vh)) / vh);
+      el.style.setProperty("--bgc", mix(from, into, k * k * (3 - 2 * k)));
       const last = chapters[chapters.length - 1];
       const end = last ? tops[tops.length - 1]! + Math.max(0, last.offsetHeight - vh) : 0;
       segs.forEach((seg, i) => {

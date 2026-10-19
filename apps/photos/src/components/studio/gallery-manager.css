@@ -87,8 +87,8 @@
   gap: var(--hm-space-3);
 }
 
-/* colour: a native swatch beside the hex field */
-.gm-colour {
+/* color: a native swatch beside the hex field */
+.gm-color {
   display: flex;
   gap: var(--hm-space-2);
   align-items: center;

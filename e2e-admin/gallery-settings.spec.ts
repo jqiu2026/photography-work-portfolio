@@ -77,7 +77,7 @@ test("owner sets brand, a watermark, a track, rules and the branding of a galler
     .toBuffer();
   await uploadPhotos(page, [{ name: "wide.jpg", mimeType: "image/jpeg", buffer: photo }]);
 
-  // downloads: a free 720 px rule with the watermark, and a PIN-protected one with a limit and a licence
+  // downloads: a free 720 px rule with the watermark, and a PIN-protected one with a limit and a license
   await page.getByRole("tab", { name: "Downloads" }).click();
   const rule = page.getByRole("form", { name: "Download rule" });
   await rule.getByLabel("Rule name (visitors see it)").fill("Free (720 px)");
@@ -88,7 +88,7 @@ test("owner sets brand, a watermark, a track, rules and the branding of a galler
   await rule.getByLabel(/Longest side in pixels/).fill("1600");
   await rule.getByLabel(/Downloads per visitor/).fill("2");
   await rule.getByLabel(/^PIN/).fill("2468");
-  await rule.getByLabel(/Licence to accept/).fill("<p><b>Personal use only.</b> Credit <i>Set Studio</i>.</p>");
+  await rule.getByLabel(/License to accept/).fill("<p><b>Personal use only.</b> Credit <i>Set Studio</i>.</p>");
   await rule.getByRole("button", { name: "Add rule" }).click();
   await slow(page.getByRole("list", { name: "Download rules" })).toContainText("High resolution (PIN)");
 
@@ -154,7 +154,7 @@ test("a visitor gives an email, sees the cover, the rules note and the banner, a
   await ctx.close();
 });
 
-test("free downloads follow their rules: resized and marked, a PIN, a licence, a limit", async ({ browser, page }) => {
+test("free downloads follow their rules: resized and marked, a PIN, a license, a limit", async ({ browser, page }) => {
   const ctx = await browser.newContext();
   const v = await ctx.newPage();
   await v.goto(`${PHOTOS}/g/${slug}`, { waitUntil: "networkidle" });
@@ -174,7 +174,7 @@ test("free downloads follow their rules: resized and marked, a PIN, a licence, a
   const stats = await sharp(await got.body()).stats();
   expect(stats.channels.some((c) => c.max - c.min > 20)).toBe(true);
 
-  // the PIN rule: refused until the PIN is entered, then the licence must be accepted
+  // the PIN rule: refused until the PIN is entered, then the license must be accepted
   const pinHref = href.replace(/rule=[0-9a-f-]+/, "rule=RULE");
   const hi = lb.getByRole("listitem").filter({ hasText: "High resolution (PIN)" });
   await hi.getByLabel("PIN").fill("0000");
@@ -182,7 +182,7 @@ test("free downloads follow their rules: resized and marked, a PIN, a licence, a
   await slow(v.locator("p[role=alert]")).toContainText("not right");
   await hi.getByLabel("PIN").fill("2468");
   await hi.getByRole("button", { name: "Unlock" }).click();
-  await expect(hi.getByRole("button", { name: "Accept the licence first" })).toBeVisible({ timeout: 25_000 });
+  await expect(hi.getByRole("button", { name: "Accept the license first" })).toBeVisible({ timeout: 25_000 });
   await hi.locator("summary").click();
   await hi.getByLabel("I accept this licence").check();
   const link = hi.getByRole("link", { name: "Download" });

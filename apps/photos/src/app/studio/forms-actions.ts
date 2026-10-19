@@ -21,7 +21,7 @@ export async function saveTemplateAction(input: {
   return studio(async ({ db }) => {
     const months = input.termMonths?.trim() ? Number(input.termMonths) : null;
     if (months !== null && (!Number.isInteger(months) || months < 1 || months > 600))
-      throw new StudioError("The licence term is a whole number of months.");
+      throw new StudioError("The license term is a whole number of months.");
     const t = await forms.saveTemplate(db, {
       id: input.id && id.safeParse(input.id).success ? input.id : undefined,
       name: input.name,

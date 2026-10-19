@@ -6,7 +6,7 @@ export type Scene = {
   id: string;
   label: string;
   el: HTMLElement;
-  /** palette overrides for this scene (CSS colours); default is the page's field and accent */
+  /** palette overrides for this scene (CSS colors); default is the page's field and accent */
   field?: string;
   accent?: string;
   /** maps the scene's local progress (0..1) to the world's scalar (altitude, aperture, spotlight radius) */

@@ -17,7 +17,7 @@ function markdown(fields: Record<string, unknown>, body: string) {
 
 /**
  * Everything the owner can edit, as plain files: one JSON file per table, Markdown for posts and pages, and a media
- * manifest (file names, keys, alt text, licences). No lock-in: this is the format-of-last-resort backup.
+ * manifest (file names, keys, alt text, licenses). No lock-in: this is the format-of-last-resort backup.
  * Left out on purpose: tokens and secrets, and rate-limit counters.
  */
 export async function exportAll(db: Database): Promise<Record<string, string>> {
@@ -58,7 +58,7 @@ export async function exportAll(db: Database): Promise<Record<string, string>> {
   ]);
   const files: Record<string, string> = {
     "README.txt":
-      "Backup of jerryqiu.com content.\n\n- data/*.json: one file per table (dates are ISO strings).\n- posts/*.md and pages/*.md: Markdown with front matter.\n- media-manifest.json: every image with its storage keys, alt text and licence. The image files themselves live in storage and are not included here.\n- data/inbox_messages.json contains visitors' personal data. Keep this backup private.\n",
+      "Backup of jerryqiu.com content.\n\n- data/*.json: one file per table (dates are ISO strings).\n- posts/*.md and pages/*.md: Markdown with front matter.\n- media-manifest.json: every image with its storage keys, alt text and license. The image files themselves live in storage and are not included here.\n- data/inbox_messages.json contains visitors' personal data. Keep this backup private.\n",
     "data/users.json": json(users),
     "data/settings.json": json(settings),
     "data/social_links.json": json(socialLinks),

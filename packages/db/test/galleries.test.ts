@@ -293,12 +293,12 @@ describe("studio gallery tools", () => {
     await gal.updateGallery(db, g.id, { publishAt: null });
   });
 
-  it("counts photographs, favourites, downloads and views per gallery, and summarises the views", async () => {
+  it("counts photographs, favorites, downloads and views per gallery, and summarizes the views", async () => {
     const stats = await gal.galleryStats(db, [gid, "00000000-0000-4000-8000-000000000000"]);
     expect(stats.get(gid)?.photos).toBeGreaterThan(0);
     expect(stats.get("00000000-0000-4000-8000-000000000000")).toEqual({
       photos: 0,
-      favourites: 0,
+      favorites: 0,
       downloads: 0,
       views: 0,
       viewers: 0,

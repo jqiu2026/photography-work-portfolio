@@ -9,7 +9,7 @@ import { newToken, sha256Hex } from "./studio-crypto";
 
 /**
  * A gallery's own address and its shop. Visitors who open /g/<slug> see the photographs, can buy downloads and prints,
- * and (if the studio allows) download free web-size copies. Proofing (favourites, ratings, approvals, comments) stays
+ * and (if the studio allows) download free web-size copies. Proofing (favorites, ratings, approvals, comments) stays
  * with the client's passcode session: one named person, not every visitor.
  */
 
@@ -57,7 +57,7 @@ export const shopSchema = z.object({
   sellPrints: z.boolean().default(true),
   /** What a visitor gets without paying: nothing, or web-size copies. */
   freeDownloads: z.enum(["none", "web"]).default("none"),
-  /** Proofing (favourites, ratings, approvals) needs the client's passcode; visitors only view and buy. */
+  /** Proofing (favorites, ratings, approvals) needs the client's passcode; visitors only view and buy. */
   proofing: z.boolean().default(true),
   /** A line shown at the top of the shop (turnaround, shipping notes). */
   note: z.string().trim().max(240).default(""),
@@ -69,7 +69,7 @@ export const shopSchema = z.object({
   abandonedCart: z.boolean().default(true),
   /** A line shown at checkout (shipping times, thanks). */
   checkoutMessage: z.string().trim().max(1000).default(""),
-  /** A licence delivered with every order (shown on the buyer's order page). */
+  /** A license delivered with every order (shown on the buyer's order page). */
   printRelease: z.string().trim().max(7500).default(""),
   /** Where print orders ship from. Other countries are refused. */
   shipCountries: z.array(z.enum(["US", "CA", "MX"])).default(["US"]),
@@ -395,7 +395,7 @@ export async function cancelOrder(db: Database, orderId: string) {
   const [o] = await db.select().from(s.studioOrders).where(eq(s.studioOrders.id, orderId));
   if (!o) throw new StudioError("Unknown order.");
   if (o.status !== "pending")
-    throw new StudioError("Only an unpaid order can be cancelled here; refund a paid one from Billing.");
+    throw new StudioError("Only an unpaid order can be canceled here; refund a paid one from Billing.");
   await db.update(s.studioOrders).set({ status: "cancelled" }).where(eq(s.studioOrders.id, orderId));
   if (o.invoiceId)
     await db

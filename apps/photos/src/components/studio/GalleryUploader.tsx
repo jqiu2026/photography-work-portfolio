@@ -142,7 +142,7 @@ export function GalleryUploader({ galleryId, albumId }: { galleryId: string; alb
         accept="image/*"
         multiple
         label="Drop photographs here, or choose files"
-        description="JPEG, PNG, WebP, AVIF, GIF or TIFF, up to 60 MB each. Duplicates are recognised and skipped."
+        description="JPEG, PNG, WebP, AVIF, GIF or TIFF, up to 60 MB each. Duplicates are recognized and skipped."
       />
       {items.length ? (
         <>

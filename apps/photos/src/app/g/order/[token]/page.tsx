@@ -30,7 +30,7 @@ const STATUS: Record<string, string> = {
   pending: "Waiting for payment",
   paid: "Paid. Preparing your order",
   fulfilled: "Complete",
-  cancelled: "Cancelled",
+  cancelled: "Canceled",
   refunded: "Refunded",
 };
 

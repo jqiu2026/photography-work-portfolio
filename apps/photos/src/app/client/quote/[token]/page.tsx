@@ -59,7 +59,7 @@ export default async function QuotePage({ params }: { params: Promise<{ token: s
   );
   return (
     <Shell cta={false}>
-      {q.isSample ? <MockBanner what="This quote uses SAMPLE prices from the example catalogue" /> : null}
+      {q.isSample ? <MockBanner what="This quote uses SAMPLE prices from the example catalog" /> : null}
       <Section>
         <Container size="sm">
           <section className="pm-doc" aria-labelledby="q-title">

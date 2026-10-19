@@ -50,10 +50,10 @@ export default async function Terms() {
           </DataListItem>
         ))}
       </DataList>
-      <h2>Your photographs and licence</h2>
+      <h2>Your photographs and license</h2>
       <p>
-        I keep the copyright. You receive the licence in your contract (usually personal, non-commercial use).
-        Commercial use needs a separate licence.
+        I keep the copyright. You receive the license in your contract (usually personal, non-commercial use).
+        Commercial use needs a separate license.
       </p>
       <h2>Your data</h2>
       <p>You can ask me to export or delete everything I hold about you. See the privacy page.</p>

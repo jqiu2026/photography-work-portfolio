@@ -40,7 +40,7 @@ export default async function Category({ params }: { params: Promise<{ slug: str
           </PageTabs>
           <Text size="sm" tone="muted" className="cat-note">
             These photographs are protected. Screenshots and saving are discouraged; to use an image, get in touch for a
-            licence.
+            license.
           </Text>
           <ProtectedGallery
             items={items.map((p) => ({ asset: p, alt: p.alt }))}

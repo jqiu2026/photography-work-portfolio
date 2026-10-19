@@ -74,7 +74,7 @@ export const GALLERY_FONTS = [
 const hex = z
   .string()
   .trim()
-  .regex(/^(#[0-9a-fA-F]{6})?$/, "Colours are hex values like #101010.")
+  .regex(/^(#[0-9a-fA-F]{6})?$/, "Colors are hex values like #101010.")
   .default("");
 export const styleSchema = z.object({
   font: z.enum(GALLERY_FONTS).default("sans"),
@@ -91,13 +91,13 @@ export const styleSchema = z.object({
   brandLine: z.string().trim().max(60).default(""),
   /** Closing line under the photographs (contact details, a thank-you). */
   footer: z.string().trim().max(300).default(""),
-  /** Page background colour (hex); empty keeps the theme. */
+  /** Page background color (hex); empty keeps the theme. */
   background: z
     .string()
     .trim()
-    .regex(/^(#[0-9a-fA-F]{6})?$/, "The background is a hex colour like #101010.")
+    .regex(/^(#[0-9a-fA-F]{6})?$/, "The background is a hex color like #101010.")
     .default(""),
-  /** Colours: primary drives buttons and the active tab (the gallery accent is the same setting), secondary the links. */
+  /** Colors: primary drives buttons and the active tab (the gallery accent is the same setting), secondary the links. */
   primary: hex,
   secondary: hex,
   /** The cover page a visitor sees first, with a View Gallery button. */

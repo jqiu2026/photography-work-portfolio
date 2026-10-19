@@ -23,7 +23,7 @@ export type PublicAddOn = {
   isSample: boolean;
 };
 
-/** What the public Packages page shows: the database catalogue, or the shipped SAMPLE one before a database exists. Sample prices show as $XX. */
+/** What the public Packages page shows: the database catalog, or the shipped SAMPLE one before a database exists. Sample prices show as $XX. */
 export async function getPublicCatalog(): Promise<{
   packages: PublicPackage[];
   addOns: PublicAddOn[];

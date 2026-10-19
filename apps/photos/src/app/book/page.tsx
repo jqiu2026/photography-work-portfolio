@@ -8,7 +8,7 @@ import { Shell } from "@/components/Shell";
 import { shootTypes } from "@/content/shoot-types";
 import "../globals.css";
 
-export const metadata: Metadata = { title: "Book", description: "Ask about a shoot or a licence." };
+export const metadata: Metadata = { title: "Book", description: "Ask about a shoot or a license." };
 
 export default function Book() {
   return (

@@ -12,7 +12,7 @@ import { lockedMediaIds } from "@/lib/client-gallery";
 
 /**
  * Client portal session: a signed, httpOnly, host-only cookie holding the gallery the visitor opened with its passcode.
- * Separate from the staff session (Auth.js). Host-only, SameSite=Strict, 8 hours; sent on `/` so the image token endpoint can recognise the session. The `viewer` id binds image
+ * Separate from the staff session (Auth.js). Host-only, SameSite=Strict, 8 hours; sent on `/` so the image token endpoint can recognize the session. The `viewer` id binds image
  * tokens to this session so a leaked token is useless elsewhere.
  */
 const COOKIE = "hl_client";

@@ -22,14 +22,14 @@ export type StoryPhoto = {
 
 /** Chapters in page order. `seconds` is how long the automatic mode spends in the chapter. */
 export const CHAPTERS = [
-  { id: "threshold", label: "Threshold", seconds: 5 },
-  { id: "about", label: "About", seconds: 9 },
-  { id: "range", label: "My past work", seconds: 9 },
-  { id: "booking", label: "Booking", seconds: 20 },
-  { id: "moment", label: "The shoot", seconds: 7 },
-  { id: "darkroom", label: "The edit", seconds: 9 },
-  { id: "delivered", label: "Galleries", seconds: 12 },
-  { id: "keep", label: "Keep", seconds: 7 },
+  { id: "threshold", label: "Threshold", seconds: 5, bg: "#050505" },
+  { id: "about", label: "About", seconds: 9, bg: "#050505" },
+  { id: "range", label: "My past work", seconds: 9, bg: "#050505" },
+  { id: "booking", label: "Booking", seconds: 20, bg: "#050505" },
+  { id: "moment", label: "The shoot", seconds: 7, bg: "#050505" },
+  { id: "darkroom", label: "The edit", seconds: 9, bg: "#1c0707" },
+  { id: "delivered", label: "Galleries", seconds: 12, bg: "#101014" },
+  { id: "keep", label: "Keep", seconds: 7, bg: "#1b140e" },
 ] as const;
 export type ChapterId = (typeof CHAPTERS)[number]["id"];
 
@@ -144,7 +144,7 @@ export const MOMENT = {
 
 export const DARKROOM = {
   title: "Then I'll edit them.",
-  steps: ["Light and contrast", "Colour balance", "Crop and detail"],
+  steps: ["Light and contrast", "Color balance", "Crop and detail"],
   before: "Before",
   after: "After",
   note: "A prepared comparison for illustration. The left side is not a camera RAW file. TODO(owner): add a real before and after.",
@@ -158,7 +158,7 @@ export const DELIVERED = {
     line: "First, a private gallery to choose from.",
     points: [
       "Locked with a passcode only you share",
-      "Mark your favourites and send me your selection",
+      "Mark your favorites and send me your selection",
       "Download your photographs full size",
     ],
     passcode: "Enter passcode",

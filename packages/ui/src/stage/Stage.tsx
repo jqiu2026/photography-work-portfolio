@@ -213,7 +213,7 @@ export function StageProvider({
           const ms = now - lastFrame;
           lastFrame = now;
           const { field: f, accent: a } = mk();
-          // ease the palette toward the scene's colours (liquid wipe stand-in)
+          // ease the palette toward the scene's colors (liquid wipe stand-in)
           const lerp = (p: number[], q: number[]) => p.map((v, i) => v + (q[i] - v) * 0.06) as [number, number, number];
           renderer.inputs.field = lerp(renderer.inputs.field, f);
           renderer.inputs.accent = lerp(renderer.inputs.accent, a);

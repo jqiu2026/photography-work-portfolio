@@ -46,7 +46,7 @@ function Builtin() {
       <p>
         You can ask what I hold about you, ask me to correct or delete it, or ask me to stop contacting you. Email{" "}
         <a href={`mailto:${person.email}`}>{person.email}</a>. Depending on where you live you may have additional
-        rights (for example under the GDPR or the CCPA), and I will honour them.
+        rights (for example under the GDPR or the CCPA), and I will honor them.
       </p>
       <h2 id="who">Who is responsible</h2>
       <p>{person.name}, New York. [Postal address and legal entity to be added.]</p>

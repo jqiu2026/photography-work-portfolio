@@ -132,7 +132,7 @@ describe("messages and overview", () => {
 });
 
 describe("id references", () => {
-  it("only well-formed id: references are recognised, and they resolve documents by id", async () => {
+  it("only well-formed id: references are recognized, and they resolve documents by id", async () => {
     expect(isIdRef("id:123")).toBe(false);
     expect(isIdRef("id:0b7f3d52-6a41-4c8e-9a2b-1f3c5d7e9a01")).toBe(true);
     expect(isIdRef("abc")).toBe(false);

@@ -26,7 +26,7 @@ import {
   Urbanist,
 } from "next/font/google";
 
-// SIL Open Font License 1.1, self-hosted by next/font at build time (Q41: licence files verified in R2, see
+// SIL Open Font License 1.1, self-hosted by next/font at build time (Q41: license files verified in R2, see
 // THIRD_PARTY_LICENSES.md). Display: Anybody (variable width axis, driven by scroll velocity). Text: Hanken Grotesk.
 // Voice and journal: Newsreader. Data: Martian Mono. A custom typeface can replace any role through the variables (Q44).
 // `optional` for the two big-type faces: a late swap would re-measure the hero headline (LCP) and shift layout; with the

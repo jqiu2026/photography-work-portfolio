@@ -84,7 +84,7 @@ Gallery access. {{gallery_policy}}
 
 Cancellation. If you cancel more than {{cancellation_days}} days before the shoot the deposit is refunded less any costs already incurred; later than that the deposit is kept. TODO(owner): confirm.
 
-Copyright and licence. The photographer keeps the copyright. The client receives the licence described below.
+Copyright and license. The photographer keeps the copyright. The client receives the license described below.
 
 Electronic signature. Typing your name below is your signature. You agree to sign and keep records electronically.`;
 
@@ -100,7 +100,7 @@ export const SAMPLE_TEMPLATES: {
     name: "Event photography agreement",
     kind: "contract",
     usageRights: { personal: true, commercial: false, termMonths: null },
-    body: `${SAMPLE_BANNER}EVENT PHOTOGRAPHY AGREEMENT\n\n${common}\n\nLicence. Personal, non-commercial use, with no end date. The client may share photographs online with credit. Commercial use needs a separate licence.`,
+    body: `${SAMPLE_BANNER}EVENT PHOTOGRAPHY AGREEMENT\n\n${common}\n\nLicence. Personal, non-commercial use, with no end date. The client may share photographs online with credit. Commercial use needs a separate license.`,
   },
   {
     slug: "wedding",
@@ -121,7 +121,7 @@ export const SAMPLE_TEMPLATES: {
     name: "Photograph licence",
     kind: "licence",
     usageRights: { personal: false, commercial: true, termMonths: 12 },
-    body: `${SAMPLE_BANNER}PHOTOGRAPH LICENCE\n\nBetween {{business_name}} and {{client_name}} ({{client_email}}).\n\nWork. {{job_title}}.\n\nGrant. A non-exclusive licence to reproduce the work for the stated use, for 12 months from signing, in the stated territory. All other rights are reserved. The photographer must be credited where the use allows. TODO(owner): territory, media and credit line.\n\nFee. {{fee}}.\n\nElectronic signature. Typing your name below is your signature.`,
+    body: `${SAMPLE_BANNER}PHOTOGRAPH LICENCE\n\nBetween {{business_name}} and {{client_name}} ({{client_email}}).\n\nWork. {{job_title}}.\n\nGrant. A non-exclusive license to reproduce the work for the stated use, for 12 months from signing, in the stated territory. All other rights are reserved. The photographer must be credited where the use allows. TODO(owner): territory, media and credit line.\n\nFee. {{fee}}.\n\nElectronic signature. Typing your name below is your signature.`,
   },
   {
     slug: "model-release",

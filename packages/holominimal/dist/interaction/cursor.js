@@ -177,13 +177,14 @@ function createCursor(root, options = {}) {
 		const angle = "0deg";
 		const lead = ring ?? dot;
 		const wantMorph = !!(box && morph);
+		const squeeze = 1 - (1 - press) * (1 - cm);
 		if (dot) {
 			place(dot, dotP, angle);
-			dot.style.scale = `${press}`;
+			dot.style.scale = `${squeeze}`;
 		}
 		if (ring) {
 			place(ring, ringP, angle);
-			ring.style.scale = `${press}`;
+			ring.style.scale = `${squeeze}`;
 		}
 		if (lead && (wantMorph || ctl)) {
 			const base = lead === ring ? cssPx("--hm-cursor-ring", 38) : cssPx("--hm-cursor-dot", 8);

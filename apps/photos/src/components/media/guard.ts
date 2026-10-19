@@ -17,7 +17,7 @@ export type GuardLevel = "off" | "light" | "strict";
 /** What the guard noticed. `capture` is a page calling the screen-capture API; `devtools-open` is the docked-devtools size heuristic. */
 export type GuardEventKind = Trigger["kind"] | "capture" | "devtools-open";
 export type GuardEvent = { kind: GuardEventKind; combo: string };
-/** Per-use settings. Every field defaults to the strict behaviour described on ScreenshotGuard. */
+/** Per-use settings. Every field defaults to the strict behavior described on ScreenshotGuard. */
 export type GuardOptions = {
   /** Hide protected media while the tab or window is not focused (capture tools take focus). Default true. */
   blurOnLeave?: boolean;
@@ -83,7 +83,7 @@ export function detectTrigger(e: KeyLike): Trigger | null {
 /** Honest copy, shown in the dialog and mirrored in the admin help text. */
 export const guardCopy = {
   title: "Please don't capture these photographs",
-  body: "Screenshots and saving are discouraged to protect the photographer's work. If you'd like to use an image, please get in touch for a licence.",
+  body: "Screenshots and saving are discouraged to protect the photographer's work. If you'd like to use an image, please get in touch for a license.",
   note: "This is a courtesy reminder, not a lock: it can't detect every way of capturing a screen.",
   action: "OK, I understand",
 } as const;

@@ -117,7 +117,7 @@ export async function refundAction(input: { paymentId: string; amount: string; r
       by: user.email ?? undefined,
     });
     return {
-      message: `Refunded ${(amountCents / 100).toFixed(2)}. Invoice is now ${r.invoiceStatus}. Any print order that has not started should be cancelled too (Prints, later).`,
+      message: `Refunded ${(amountCents / 100).toFixed(2)}. Invoice is now ${r.invoiceStatus}. Any print order that has not started should be canceled too (Prints, later).`,
       audit: {
         action: "studio.payment.refund",
         entity: "studio_payment",

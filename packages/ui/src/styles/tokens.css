@@ -1,6 +1,6 @@
 /*
  * Halation UI tokens (v2, "Flow"). Prefix --hl-. Reasoning for every value: docs/project/redesign-brief.md and
- * design-language.md. Colour lives in themes.css; this file holds type, space, shape and motion.
+ * design-language.md. Color lives in themes.css; this file holds type, space, shape and motion.
  */
 :root {
   /* Type roles. Apps provide the font variables (next/font); fallbacks keep the page usable without them. */

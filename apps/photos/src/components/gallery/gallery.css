@@ -1,6 +1,6 @@
 /*
  * The client gallery. Its controls are Holominimal components; this file holds what no component covers: the four
- * gallery themes (as Holominimal token sets, so every component inside takes the gallery's colours), the type options,
+ * gallery themes (as Holominimal token sets, so every component inside takes the gallery's colors), the type options,
  * the cover, the photo layouts and the lightbox stage. Prefixed gx-.
  */
 
@@ -101,11 +101,11 @@
   --hm-on-fg: #f4efe6;
   --hm-chrome-bg: rgb(244 239 230 / 0.85);
 }
-/* the owner's own background colour */
+/* the owner's own background color */
 .gx.hm-theme[data-custom-bg] {
   --hm-bg: var(--gx-bg-custom);
 }
-/* the owner's brand colour on the one primary action of each view (its text colour is picked for contrast) */
+/* the owner's brand color on the one primary action of each view (its text color is picked for contrast) */
 .gx[data-brand] .hm-button[data-variant="primary"] {
   background: var(--gx-brand);
   border-color: var(--gx-brand);

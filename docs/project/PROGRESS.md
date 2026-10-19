@@ -100,3 +100,5 @@ Nothing below has been created or spent. Placeholders marked `TODO(owner): needs
 - 2026-10-18: Home revision 2 reverted at the owner's request; selected changes re-applied, faster pace, own sizes-and-formats mockup (Q102, Q103).
 
 - 2026-10-18: Home revision 3 (Q104): about lines, timeline, two-stage galleries, tabletop formats, fixed top text, folded footer links, fixed ending styles, snappier motion.
+
+- 2026-10-19: Home revision 4 (Q105), American English (Q106), Holominimal slider fix (Q107).

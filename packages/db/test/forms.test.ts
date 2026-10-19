@@ -56,7 +56,7 @@ describe("merge fields", () => {
 });
 
 describe("contracts from templates", () => {
-  it("merges the job, client and policies, records usage rights and a licence end date", async () => {
+  it("merges the job, client and policies, records usage rights and a license end date", async () => {
     const { contract, missing } = await forms.createContractFromTemplate(db, {
       jobId,
       templateId: (await tpl("licence")).id,

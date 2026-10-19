@@ -31,7 +31,7 @@ const steps: [string, string, "live" | "preview" | "soon"][] = [
   ["The shoot", "I send reminders and you can move or cancel inside the policy window from your portal.", "preview"],
   [
     "Your gallery",
-    "Private, protected previews you can favourite, rate, approve and comment on. Send me your selection when you are ready.",
+    "Private, protected previews you can favorite, rate, approve and comment on. Send me your selection when you are ready.",
     "live",
   ],
   [

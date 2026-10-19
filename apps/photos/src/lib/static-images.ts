@@ -8,7 +8,7 @@ import type { ImageSource } from "@jerryqiu/media";
  * Photographs that ship with the app (the repo portfolio and case-study images, the fallback when no database is
  * configured). They live in `private/opt/<group>/` (NOT `public/`), so no file is addressable by URL: every one is
  * served through `/api/img/[id]` with a signed token, exactly like a CMS photograph. Ids are stable UUIDs derived from
- * the group and key, so they never change between builds. The optimised derivatives and manifests are made by
+ * the group and key, so they never change between builds. The optimized derivatives and manifests are made by
  * `scripts/optimize-images.mjs`; originals sit in `private/images` and are never served.
  */
 const ROOT = path.join(process.cwd(), "private", "opt");

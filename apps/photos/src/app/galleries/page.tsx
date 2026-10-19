@@ -17,7 +17,7 @@ export default function Galleries() {
       <ul>
         <li>Open with a passcode, or sign in to a portal. Albums, a slideshow, and a welcome note.</li>
         <li>
-          Favourite, rate (1 to 5), approve or pass on photographs, comment on any of them, and send a selection
+          Favorite, rate (1 to 5), approve or pass on photographs, comment on any of them, and send a selection
           (optionally with a limit).
         </li>
         <li>Downloads in web size or full resolution, one at a time or as ZIP parts, behind an optional PIN.</li>
@@ -41,7 +41,7 @@ export default function Galleries() {
       <p>
         <strong>The honest limit:</strong> this deters casual copying and bulk scraping. It cannot stop a determined
         person who photographs or records their screen. The real protection is small previews, tracing, and asking for a
-        licence.
+        license.
       </p>
       <p>
         <Link href="/features">All features and statuses</Link> · <Link href="/terms">Terms for gallery access</Link>

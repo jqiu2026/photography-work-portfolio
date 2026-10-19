@@ -20,7 +20,7 @@ async function gate(token: string) {
   return { db, ip, ref };
 }
 
-/** Upsells: the client chooses extras; the quote is re-priced on the server from the catalogue. */
+/** Upsells: the client chooses extras; the quote is re-priced on the server from the catalog. */
 export async function repriceQuoteAction(token: string, extra: { id: string; qty: number }[]): Promise<QuoteResult> {
   const g = await gate(token);
   if (!g) return { ok: false, error: "Try again in a moment." };

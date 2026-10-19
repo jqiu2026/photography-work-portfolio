@@ -13,15 +13,15 @@ type Props = {
 };
 
 /**
- * The parts of a gallery's branding beyond type and layout: the cover page and rules note, colours, a banner across the top,
+ * The parts of a gallery's branding beyond type and layout: the cover page and rules note, colors, a banner across the top,
  * the About text and the music playlist. One Save at the bottom; the gallery shows each as soon as it is saved.
  */
 export function GalleryBranding({ sty, updSty, tracks, onSave, pending }: Props) {
   const hex = (v: string, fallback: string) => (/^#[0-9a-f]{6}$/i.test(v) ? v : fallback);
-  const colour = (k: "primary" | "secondary", label: string) => (
-    <div className="hm-field gm-colour-field" role="group" aria-label={label}>
+  const color = (k: "primary" | "secondary", label: string) => (
+    <div className="hm-field gm-color-field" role="group" aria-label={label}>
       <span className="hm-field-label">{label}</span>
-      <span className="gm-colour">
+      <span className="gm-color">
         <input
           className="gm-swatch"
           type="color"
@@ -67,13 +67,13 @@ export function GalleryBranding({ sty, updSty, tracks, onSave, pending }: Props)
           </Field>
         </div>
       </SettingsSection>
-      <SettingsSection title="Colours" className="gm-block">
+      <SettingsSection title="Colors" className="gm-block">
         <div className="gm-fields">
-          {colour("primary", "Primary colour")}
-          {colour("secondary", "Link colour")}
+          {color("primary", "Primary color")}
+          {color("secondary", "Link color")}
         </div>
         <Text size="sm" tone="muted">
-          The primary colour is used for buttons and the active tab. Leave blank for the theme's own.
+          The primary color is used for buttons and the active tab. Leave blank for the theme's own.
         </Text>
       </SettingsSection>
       <SettingsSection title="Banner" className="gm-block">

@@ -11,7 +11,7 @@ test("the public Packages page shows $XX for sample prices, deliverables, includ
   page,
   request,
 }) => {
-  await page.goto(`${PHOTOS}/studio/packages`, { waitUntil: "networkidle" }); // seeds the SAMPLE catalogue
+  await page.goto(`${PHOTOS}/studio/packages`, { waitUntil: "networkidle" }); // seeds the SAMPLE catalog
   const res = await request.get(`${PHOTOS}/packages`);
   const html = await res.text();
   expect(html).toContain("$XX");

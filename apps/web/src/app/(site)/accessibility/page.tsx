@@ -15,7 +15,7 @@ function Builtin() {
       <h2 id="what">What is in place</h2>
       <ul>
         <li>Everything works with a keyboard, with visible focus, and a "skip to content" link.</li>
-        <li>Text and controls meet AA colour contrast in light and dark themes.</li>
+        <li>Text and controls meet AA color contrast in light and dark themes.</li>
         <li>Photographs have text descriptions. Decorative images are hidden from screen readers.</li>
         <li>If your device asks for reduced motion, animations are replaced with a calm, static layout.</li>
         <li>Videos and music do not play or load until you press play.</li>

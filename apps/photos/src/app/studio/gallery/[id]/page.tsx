@@ -70,7 +70,7 @@ export default async function GalleryPage({ params }: { params: Promise<{ id: st
           density: g.density,
           publishAt: g.publishAt?.toISOString().slice(0, 16) ?? "",
           notes: g.notes ?? "",
-          stats: stats.get(id) ?? { photos: 0, favourites: 0, downloads: 0, views: 0, viewers: 0 },
+          stats: stats.get(id) ?? { photos: 0, favorites: 0, downloads: 0, views: 0, viewers: 0 },
           views: {
             total: views.total,
             viewers: views.viewers,
@@ -168,7 +168,7 @@ export default async function GalleryPage({ params }: { params: Promise<{ id: st
             rating: proofs.ratings[c.media.id] ?? null,
             approved: proofs.approved.includes(c.media.id),
             rejected: proofs.rejected.includes(c.media.id),
-            favourite: proofs.favourites.includes(c.media.id),
+            favorite: proofs.favorites.includes(c.media.id),
           })),
           comments: proofs.comments.map((c) => ({
             id: c.id,
@@ -187,7 +187,7 @@ export default async function GalleryPage({ params }: { params: Promise<{ id: st
             bytes: d.bytes,
           })),
           counts: {
-            favourites: proofs.favourites.length,
+            favorites: proofs.favorites.length,
             approved: proofs.approved.length,
             rejected: proofs.rejected.length,
           },

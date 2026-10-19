@@ -134,7 +134,7 @@ test("a visitor opens the link with no passcode: albums, a locked album that ope
   await expect(v.getByRole("button", { name: /Formals/ })).toContainText("locked");
   await expect(v.getByRole("button", { name: "Open formals-small.jpg" })).toHaveCount(0);
   // visitors do not proof
-  await expect(v.getByRole("button", { name: /to favourites/ })).toHaveCount(0);
+  await expect(v.getByRole("button", { name: /to favorites/ })).toHaveCount(0);
   await expect(v.getByRole("button", { name: /^Favorites/ })).toHaveCount(0);
   // the client signs in with the passcode right here (there is no other login)
   await expect(v.getByRole("button", { name: "Client sign-in" })).toBeVisible();
@@ -165,7 +165,7 @@ test("a visitor opens the link with no passcode: albums, a locked album that ope
   const m = (await v.locator("li[data-media-id]").first().getAttribute("data-media-id")) as string;
   expect((await v.request.get(`${PHOTOS}/client/download?m=${m}&size=web`)).status()).toBe(403);
   expect((await v.request.get(`${PHOTOS}/client/download?m=${m}&size=full`)).status()).toBe(403);
-  // nor favourite through the action's cookie session
+  // nor favorite through the action's cookie session
   await ctx.close();
 
   // a stranger with no session cannot see photographs of a locked album even by id
@@ -269,7 +269,7 @@ test("the order page unlocks exactly what was bought; the owner sees the order a
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
 });
 
-test("an unpaid order can be cancelled by the owner, and its invoice is voided", async ({ browser, page }) => {
+test("an unpaid order can be canceled by the owner, and its invoice is voided", async ({ browser, page }) => {
   const ctx = await browser.newContext();
   const v = await ctx.newPage();
   await v.goto(`${PHOTOS}/g/${slug}`, { waitUntil: "networkidle" });

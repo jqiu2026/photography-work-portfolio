@@ -87,7 +87,7 @@ type Item = {
   rating: number | null;
   approved: boolean;
   rejected: boolean;
-  favourite: boolean;
+  favorite: boolean;
 };
 export type GalleryManagerData = {
   id: string;
@@ -124,7 +124,7 @@ export type GalleryManagerData = {
   watermark: boolean;
   hasPin: boolean;
   selectionSentAt: string | null;
-  stats: { photos: number; favourites: number; downloads: number; views: number; viewers: number };
+  stats: { photos: number; favorites: number; downloads: number; views: number; viewers: number };
   views: {
     total: number;
     viewers: number;
@@ -157,7 +157,7 @@ export type GalleryManagerData = {
   items: Item[];
   comments: { id: string; mediaId: string; filename: string; body: string; author: string; at: string }[];
   downloads: { id: string; kind: string; part: number | null; file: string | null; at: string; bytes: number | null }[];
-  counts: { favourites: number; approved: number; rejected: number };
+  counts: { favorites: number; approved: number; rejected: number };
 };
 
 const TABS = [
@@ -325,7 +325,7 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
         (i) =>
           (album === "all" || (album === "none" ? !i.albumId : i.albumId === album)) &&
           (filter === "all" ||
-            (filter === "favourites" && i.favourite) ||
+            (filter === "favorites" && i.favorite) ||
             (filter === "rated" && i.rating) ||
             (filter === "approved" && i.approved) ||
             (filter === "hidden" && i.hidden)),
@@ -375,14 +375,14 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
   }, [viewing, shown.length]);
 
   /* ---- proofing export ---- */
-  const picked = data.items.filter((i) => i.favourite || i.approved);
+  const picked = data.items.filter((i) => i.favorite || i.approved);
   const csv = () => {
-    const rows = [["filename", "favourite", "rating", "decision", "comments"]].concat(
+    const rows = [["filename", "favorite", "rating", "decision", "comments"]].concat(
       data.items
-        .filter((i) => i.favourite || i.rating || i.approved || i.rejected)
+        .filter((i) => i.favorite || i.rating || i.approved || i.rejected)
         .map((i) => [
           i.filename,
-          i.favourite ? "yes" : "",
+          i.favorite ? "yes" : "",
           i.rating ? String(i.rating) : "",
           i.approved ? "approved" : i.rejected ? "rejected" : "",
           String(data.comments.filter((c) => c.mediaId === i.mediaId).length),
@@ -443,7 +443,7 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
           <Stat label="Photos" value={data.stats.photos} />
           <Stat label="Views" value={data.stats.views} />
           <Stat label="Visitors" value={data.stats.viewers} />
-          <Stat label="Favourites" value={data.stats.favourites} />
+          <Stat label="Favorites" value={data.stats.favorites} />
           <Stat label="Downloads" value={data.stats.downloads} />
         </StatGroup>
 
@@ -474,7 +474,7 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
               ) : null}
               <Select aria-label="Show" value={filter} onValueChange={(v) => setFilter(v)}>
                 <option value="all">Everything</option>
-                <option value="favourites">Favourites</option>
+                <option value="favorites">Favorites</option>
                 <option value="rated">Rated</option>
                 <option value="approved">Approved</option>
                 <option value="hidden">Hidden</option>
@@ -581,7 +581,7 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
                   <span className="gm-badges" aria-hidden="true">
                     {it.cover ? <b>Cover</b> : null}
                     {it.hidden ? <b>Hidden</b> : null}
-                    {it.favourite ? <b>♥</b> : null}
+                    {it.favorite ? <b>♥</b> : null}
                     {it.rating ? <b>{it.rating}★</b> : null}
                     {it.approved ? <b>✓</b> : null}
                     {it.rejected ? <b>✕</b> : null}
@@ -660,7 +660,7 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
                       <strong>{cur.filename}</strong>
                       <small>
                         {cur.width} × {cur.height} · {cur.views} views{cur.rating ? ` · ${cur.rating}★` : ""}
-                        {cur.favourite ? " · ♥" : ""}
+                        {cur.favorite ? " · ♥" : ""}
                         {cur.approved ? " · approved" : ""}
                         {cur.rejected ? " · rejected" : ""}
                       </small>
@@ -947,18 +947,18 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
                     <option value="slate">Slate (cool)</option>
                   </Select>
                 </Field>
-                <div className="hm-field gm-colour-field" role="group" aria-label="Accent colour">
-                  <span className="hm-field-label">Accent colour</span>
-                  <span className="gm-colour">
+                <div className="hm-field gm-color-field" role="group" aria-label="Accent color">
+                  <span className="hm-field-label">Accent color</span>
+                  <span className="gm-color">
                     <input
                       className="gm-swatch"
                       type="color"
-                      aria-label="Pick accent colour"
+                      aria-label="Pick accent color"
                       value={/^#[0-9a-f]{6}$/i.test(f.accent) ? f.accent : "#ffffff"}
                       onChange={(e) => upd("accent", e.target.value)}
                     />
                     <Input
-                      aria-label="Accent colour (optional, like #cc3322)"
+                      aria-label="Accent color (optional, like #cc3322)"
                       placeholder="#cc3322"
                       value={f.accent}
                       onChange={(e) => upd("accent", e.target.value)}
@@ -1021,18 +1021,18 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
                     <option value="round">Round</option>
                   </Select>
                 </Field>
-                <div className="hm-field gm-colour-field" role="group" aria-label="Background colour (optional)">
-                  <span className="hm-field-label">Background colour (optional)</span>
-                  <span className="gm-colour">
+                <div className="hm-field gm-color-field" role="group" aria-label="Background color (optional)">
+                  <span className="hm-field-label">Background color (optional)</span>
+                  <span className="gm-color">
                     <input
                       className="gm-swatch"
                       type="color"
-                      aria-label="Pick background colour"
+                      aria-label="Pick background color"
                       value={/^#[0-9a-f]{6}$/i.test(sty.background) ? sty.background : "#000000"}
                       onChange={(e) => updSty("background", e.target.value)}
                     />
                     <Input
-                      aria-label="Background colour (hex, optional)"
+                      aria-label="Background color (hex, optional)"
                       placeholder="#101010"
                       value={sty.background}
                       onChange={(e) => updSty("background", e.target.value)}
@@ -1201,7 +1201,7 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
           <TabPanel value="proofing" keepMounted className="gm-panel">
             <SettingsSection title="What the client picked" className="gm-block">
               <Text size="sm" tone="muted">
-                {data.counts.favourites} favourite{data.counts.favourites === 1 ? "" : "s"} · {data.counts.approved}{" "}
+                {data.counts.favorites} favorite{data.counts.favorites === 1 ? "" : "s"} · {data.counts.approved}{" "}
                 approved · {data.counts.rejected} rejected
                 {data.selectionLimit ? ` · limit ${data.selectionLimit}` : ""}
                 {data.selectionSentAt ? ` · sent ${data.selectionSentAt}` : ""}

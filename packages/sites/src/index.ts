@@ -14,7 +14,7 @@ export type SiteInfo = {
   url: string;
   /** Theme preset (see packages/ui themes.css). */
   preset: Preset;
-  /** The site's accent colour (a dash of colour in the switcher and footer). */
+  /** The site's accent color (a dash of color in the switcher and footer). */
   color: "blue" | "red" | "green" | "yellow";
 };
 

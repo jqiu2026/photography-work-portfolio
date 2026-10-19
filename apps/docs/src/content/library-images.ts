@@ -42,7 +42,7 @@ export const photos: Record<string, GalleryImage> = {
     "src": "/demo-photos/jry0473-1600.webp"
    }
   ],
-  "alt": "A trombonist performing in coloured stage haze."
+  "alt": "A trombonist performing in colored stage haze."
  },
  "2026-01-17-snow-7": {
   "width": 2147,

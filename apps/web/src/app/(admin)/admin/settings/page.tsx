@@ -115,7 +115,7 @@ export default async function SettingsPage() {
       <Group
         site={site}
         k="theme"
-        title="Accent colour"
+        title="Accent color"
         help="One small accent per site. Everything else stays neutral."
       >
         <F
@@ -160,7 +160,7 @@ export default async function SettingsPage() {
             options={[
               { value: "bottom-right", label: "Bottom right" },
               { value: "bottom-left", label: "Bottom left" },
-              { value: "center", label: "Centre" },
+              { value: "center", label: "Center" },
             ]}
           />
         </div>

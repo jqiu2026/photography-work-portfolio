@@ -77,7 +77,7 @@ test("owner creates a client, a job and an empty gallery, then uploads photograp
   await expect(page.locator("img[src*='/api/img/']")).toHaveCount(0);
 });
 
-test("owner sets up albums, downloads, a PIN, a selection limit, a welcome and an accent colour, and publishes", async ({
+test("owner sets up albums, downloads, a PIN, a selection limit, a welcome and an accent color, and publishes", async ({
   page,
 }) => {
   await page.goto(galleryUrl, { waitUntil: "networkidle" });
@@ -92,14 +92,14 @@ test("owner sets up albums, downloads, a PIN, a selection limit, a welcome and a
 
   await page.getByRole("tab", { name: "Branding" }).click();
   await page.getByLabel(/Shown above the photographs/).fill("Thank you for coming. Enjoy.");
-  await page.getByLabel(/Accent colour \(optional/).fill("#cc3322");
+  await page.getByLabel(/Accent color \(optional/).fill("#cc3322");
   await page.getByRole("radio", { name: "Masonry" }).click();
   await page.getByRole("button", { name: "Save design" }).click();
   await slow(page.getByRole("status").filter({ hasText: "Design saved" })).toBeVisible();
-  await page.getByLabel(/Accent colour \(optional/).fill("red");
+  await page.getByLabel(/Accent color \(optional/).fill("red");
   await page.getByRole("button", { name: "Save design" }).click();
   await slow(page.locator("p.st-error")).toContainText("hex");
-  await page.getByLabel(/Accent colour \(optional/).fill("#cc3322");
+  await page.getByLabel(/Accent color \(optional/).fill("#cc3322");
 
   await page.getByRole("tab", { name: "Downloads" }).click();
   await choose(page.getByLabel("What clients can download"), "Web size and full resolution");
@@ -142,9 +142,9 @@ test("the client sees albums, a welcome and the accent; picks within the limit, 
   await c.getByRole("button", { name: /^All photos/ }).click();
   await expect(c.locator("li[data-media-id]")).toHaveCount(3);
 
-  await c.getByRole("button", { name: "Add shot-1.jpg to favourites" }).click();
-  await c.getByRole("button", { name: "Add shot-2.jpg to favourites" }).click();
-  await c.getByRole("button", { name: "Add shot-3.jpg to favourites" }).click();
+  await c.getByRole("button", { name: "Add shot-1.jpg to favorites" }).click();
+  await c.getByRole("button", { name: "Add shot-2.jpg to favorites" }).click();
+  await c.getByRole("button", { name: "Add shot-3.jpg to favorites" }).click();
   await expect(c.getByRole("alert").filter({ hasText: "up to 2" })).toBeVisible();
   // proofing happens in the photograph's panel: stars, approval, comments
   await c.getByRole("button", { name: "Open shot-1.jpg" }).click();
@@ -172,7 +172,7 @@ test("the client sees albums, a welcome and the accent; picks within the limit, 
   // sending is final for the client, so it asks first
   await c.getByRole("dialog", { name: "Send your selection?" }).getByRole("button", { name: "Send selection" }).click();
   await slow(c.getByRole("status").filter({ hasText: "You chose 2 photographs" })).toBeVisible();
-  await expect(c.getByRole("button", { name: /from favourites/ }).first()).toBeDisabled();
+  await expect(c.getByRole("button", { name: /from favorites/ }).first()).toBeDisabled();
   await ctx.storageState({ path: `/tmp/gal-${uid}.json` });
   await ctx.close();
 });
@@ -235,7 +235,7 @@ test("the owner sees the picks, rating, approval, comment and the downloads; rep
   await page.goto(galleryUrl, { waitUntil: "networkidle" });
   await page.getByRole("tab", { name: "Proofing" }).click();
   const proof = page.getByRole("tabpanel", { name: "Proofing" });
-  await expect(proof).toContainText("2 favourites");
+  await expect(proof).toContainText("2 favorites");
   await expect(proof).toContainText("1 approved");
   await expect(proof).toContainText("Could this one be a little brighter?");
   await proof.getByLabel(/Reply to shot-1.jpg/).fill("Done, I've brightened it.");

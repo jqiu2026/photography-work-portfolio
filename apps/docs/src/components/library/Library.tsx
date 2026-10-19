@@ -115,7 +115,7 @@ export function Library() {
         </Wrap>
       </header>
 
-      <Sec id="foundations" title="Foundations" intro="Colour, type, space and motion tokens. Flip theme, accent and motion tier in the bar above: everything on the page follows.">
+      <Sec id="foundations" title="Foundations" intro="Color, type, space and motion tokens. Flip theme, accent and motion tier in the bar above: everything on the page follows.">
         <div className="lib-grid">
           <Card3 title="Field and ink" wide>
             <div className="lib-swatches">
@@ -187,7 +187,7 @@ export function Library() {
         </div>
       </Sec>
 
-      <Sec id="forms" title="Forms" intro="Visible labels, 56 px fields in the booking form, clear errors. Controls never rely on colour alone.">
+      <Sec id="forms" title="Forms" intro="Visible labels, 56 px fields in the booking form, clear errors. Controls never rely on color alone.">
         <div className="lib-grid">
           <Card3 title="Text"><Field label="Name"><Input placeholder="Ada Lovelace" /></Field><Field label="Email" hint="We reply by email." error="Please enter a valid address."><Input defaultValue="nope" /></Field></Card3>
           <Card3 title="Message and choice"><Field label="What do you need?"><Textarea rows={3} /></Field><Field label="Type of shoot"><Select><option>Event</option><option>Portrait</option><option>Theater</option></Select></Field></Card3>
@@ -262,13 +262,13 @@ export function Library() {
                 captions={slides.map((s) => s.alt)} />
             </div>
           </Card3>
-          <Card3 title="Ambient wash: the page glows in the photograph's colours">
+          <Card3 title="Ambient wash: the page glows in the photograph's colors">
             <div className="lib-stage" style={{ padding: 40, minHeight: 320 }}>
               <AmbientWash images={slides.map((s) => s.blur)} active={wash} strength={0.55} />
               <div className="lib-row" style={{ marginBottom: 24 }}>
                 {slides.map((s, i) => <Button key={i} variant={wash === i ? "accent" : "ghost"} onClick={() => setWash(i)}>Photo {i + 1}</Button>)}
               </div>
-              <p className="hl3-voice" style={{ maxWidth: "28ch" }}>Colour comes from the photograph, behind the text.</p>
+              <p className="hl3-voice" style={{ maxWidth: "28ch" }}>Color comes from the photograph, behind the text.</p>
             </div>
           </Card3>
           <Card3 title="Sticky stack (panels pin and are covered)">

@@ -46,7 +46,7 @@ export async function updateGallery(db: Database, id: string, p: GallerySettings
   }
   if (p.welcome !== undefined) set.welcome = p.welcome.trim().slice(0, 600) || null;
   if (p.accent !== undefined) {
-    if (p.accent && !ACCENT.test(p.accent)) throw new StudioError("The accent colour is a hex value like #cc3322.");
+    if (p.accent && !ACCENT.test(p.accent)) throw new StudioError("The accent color is a hex value like #cc3322.");
     set.accent = p.accent || null;
   }
   if (p.downloadPolicy) set.downloadPolicy = p.downloadPolicy;
@@ -385,7 +385,7 @@ export async function proofSummary(db: Database, galleryId: string) {
   ]);
   const ratings = proofs.filter((p) => p.kind === "rating" && p.rating);
   return {
-    favourites: favs.map((f) => f.mediaId),
+    favorites: favs.map((f) => f.mediaId),
     ratings: Object.fromEntries(ratings.map((p) => [p.mediaId, p.rating as number])),
     approved: proofs.filter((p) => p.kind === "approval" && p.decision === "approved").map((p) => p.mediaId),
     rejected: proofs.filter((p) => p.kind === "approval" && p.decision === "rejected").map((p) => p.mediaId),
@@ -671,11 +671,11 @@ export async function removeMany(db: Database, galleryId: string, mediaIds: stri
 /** The studio previewing its own photographs is not a client view. */
 const notStaff = sql`${s.studioViewEvents.viewer} not like 'staff.%'`;
 
-export type GalleryStats = { photos: number; favourites: number; downloads: number; views: number; viewers: number };
-/** Counts per gallery for the list: photographs, favourites, downloads, and views of its photographs (and distinct viewers). */
+export type GalleryStats = { photos: number; favorites: number; downloads: number; views: number; viewers: number };
+/** Counts per gallery for the list: photographs, favorites, downloads, and views of its photographs (and distinct viewers). */
 export async function galleryStats(db: Database, ids: string[]): Promise<Map<string, GalleryStats>> {
   const out = new Map<string, GalleryStats>(
-    ids.map((i) => [i, { photos: 0, favourites: 0, downloads: 0, views: 0, viewers: 0 }]),
+    ids.map((i) => [i, { photos: 0, favorites: 0, downloads: 0, views: 0, viewers: 0 }]),
   );
   if (!ids.length) return out;
   const photos = await db
@@ -689,7 +689,7 @@ export async function galleryStats(db: Database, ids: string[]): Promise<Map<str
     .from(s.studioFavorites)
     .where(inArray(s.studioFavorites.galleryId, ids))
     .groupBy(s.studioFavorites.galleryId);
-  for (const r of favs) out.get(r.id)!.favourites = r.n;
+  for (const r of favs) out.get(r.id)!.favorites = r.n;
   const dls = await db
     .select({ id: s.studioDownloadEvents.galleryId, n: sql<number>`count(*)::int` })
     .from(s.studioDownloadEvents)

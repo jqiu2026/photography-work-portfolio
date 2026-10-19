@@ -5,7 +5,7 @@ import { createHmac, timingSafeEqual } from "node:crypto";
  * Submit API (authenticate, import an order as JSON, check the response, confirm with the ConfirmationID, then webhooks). It
  * is NOT VERIFIED against the live service and is never constructed without WHCC_BASE_URL, WHCC_CONSUMER_KEY and
  * WHCC_CONSUMER_SECRET (TODO(owner): request API credentials from WHCC and test in their sandbox first). `MockPrintProvider`
- * is the labelled stand-in: a fixed SAMPLE catalogue and a deterministic order book, no network, off in production unless
+ * is the labelled stand-in: a fixed SAMPLE catalog and a deterministic order book, no network, off in production unless
  * mocks are enabled. Every base URL, id and price in the mock is a PLACEHOLDER.
  */
 export type ProductKind = "print" | "canvas" | "album" | "card";
@@ -218,7 +218,7 @@ export type WhccConfig = { baseUrl: string; consumerKey: string; consumerSecret:
 /**
  * Flow from the owner's notes (NOT VERIFIED, to be tested in WHCC's sandbox): get a token with the consumer key and secret, POST the
  * order JSON to the import endpoint, read back the ConfirmationID, then POST it to confirm. Products, option ids and shipping
- * come from the lab's catalogue; the mock's SKUs are placeholders. TODO(owner): replace the placeholder paths with WHCC's.
+ * come from the lab's catalog; the mock's SKUs are placeholders. TODO(owner): replace the placeholder paths with WHCC's.
  */
 export function createWhccProvider(cfg: WhccConfig): PrintProvider {
   const f = cfg.fetch ?? fetch;

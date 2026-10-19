@@ -43,7 +43,7 @@ export type GalleryCard = {
   publishAt: string | null;
   createdAt: string;
   photos: number;
-  favourites: number;
+  favorites: number;
   downloads: number;
   views: number;
   cover: { id: string; width: number; height: number; color: string | null; blur: string | null } | null;
@@ -110,8 +110,8 @@ export function GalleriesView({
           ? a.title.localeCompare(b.title)
           : sort === "expiring"
             ? (a.expiresAt ?? "9999").localeCompare(b.expiresAt ?? "9999")
-            : sort === "favourites"
-              ? b.favourites - a.favourites
+            : sort === "favorites"
+              ? b.favorites - a.favorites
               : b.createdAt.localeCompare(a.createdAt),
       );
   }, [galleries, q, filter, sort]);
@@ -180,7 +180,7 @@ export function GalleriesView({
           <option value="newest">Newest</option>
           <option value="name">Name</option>
           <option value="expiring">Expiring soon</option>
-          <option value="favourites">Most favourites</option>
+          <option value="favorites">Most favorites</option>
         </Select>
       </div>
 
@@ -261,7 +261,7 @@ export function GalleriesView({
                   <GalleryMeta>{g.jobTitle}</GalleryMeta>
                   <GalleryMeta>
                     {g.photos} photos
-                    {g.favourites ? ` · ${g.favourites} favourites` : ""}
+                    {g.favorites ? ` · ${g.favorites} favorites` : ""}
                     {g.views ? ` · ${g.views} views` : ""}
                     {g.downloads ? ` · ${g.downloads} downloads` : ""}
                   </GalleryMeta>

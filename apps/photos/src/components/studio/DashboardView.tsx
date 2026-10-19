@@ -146,7 +146,7 @@ const More = ({ href, children }: { href: string; children: ReactNode }) => (
   </Button>
 );
 
-/** A row icon in a tinted square, coloured by what the row is about. */
+/** A row icon in a tinted square, colored by what the row is about. */
 const Mark = ({ tone, children }: { tone: Tone; children: ReactNode }) => (
   <span className="db-mark" data-tone={tone} aria-hidden="true">
     {children}

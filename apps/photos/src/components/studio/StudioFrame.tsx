@@ -66,7 +66,7 @@ const TONES: Record<string, Tone> = {
   mock: "muted",
   lost: "muted",
 };
-/** One colour per meaning for every status badge in the studio: done is green, waiting on someone is blue, needs you is amber, went wrong is red, finished with is grey. */
+/** One color per meaning for every status badge in the studio: done is green, waiting on someone is blue, needs you is amber, went wrong is red, finished with is grey. */
 export const statusTone = (status: string): Tone => TONES[status] ?? "neutral";
 
 export type Result = { ok: boolean; message?: string; error?: string; link?: string };

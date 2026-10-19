@@ -59,12 +59,12 @@ export async function cancelAppointmentAction(appointmentId: string) {
     if (!p.success) throw new StudioError("Unknown appointment.");
     const a = await cal.cancelAppointment(db, p.data);
     return {
-      message: "Cancelled. Anyone on the waitlist can be told from the Calendar page.",
+      message: "Canceled. Anyone on the waitlist can be told from the Calendar page.",
       audit: {
         action: "studio.appointment.cancel",
         entity: "appointment",
         entityId: a.id,
-        summary: `Cancelled ${a.title}`,
+        summary: `Canceled ${a.title}`,
       },
     };
   });
@@ -161,7 +161,7 @@ export async function saveCalendarSettingsAction(input: {
     try {
       new Intl.DateTimeFormat("en-US", { timeZone: input.timezone });
     } catch {
-      throw new StudioError("That time zone is not recognised (use a name like America/New_York).");
+      throw new StudioError("That time zone is not recognized (use a name like America/New_York).");
     }
     const parsed = cal.calendarSettingsSchema.partial().safeParse({
       timezone: input.timezone,
