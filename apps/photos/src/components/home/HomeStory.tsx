@@ -9,8 +9,7 @@ import {
   CHAPTERS,
   DARKROOM,
   DELIVERED,
-  ROOM,
-  TIMELINE,
+  KEEP,
   HUD,
   MOMENT,
   RANGE,
@@ -26,7 +25,6 @@ import {
   useAutoplay,
   useProgress,
   useScrollStory,
-  setStage,
   useStory,
   yForProgress,
 } from "./story-engine";
@@ -93,26 +91,19 @@ function Threshold({ photo }: { photo?: StoryPhoto }) {
         <div className="hj-aperture">
           <Ph photo={photo} priority label={photo?.alt} sizes="100vw" className="hj-depth" />
         </div>
+        <span className="hj-seam" aria-hidden="true" />
         <div className="hj-scrim" aria-hidden="true" />
         <div className="hj-mask hj-title-mask">
           <h1 id="hj-title" className="hj-title">
             {THRESHOLD.title}
           </h1>
         </div>
+        <span className="hj-corners" aria-hidden="true" />
         <p className="hj-cue" aria-hidden="true">
           {THRESHOLD.cue}
         </p>
       </div>
     </section>
-  );
-}
-
-/** "03 / 08 · Booking": which step of the timeline this scene is. */
-function Kicker({ i }: { i: number }) {
-  return (
-    <p className="hj-kicker" aria-hidden="true">
-      <b>{String(i + 1).padStart(2, "0")}</b> / {String(TIMELINE.length).padStart(2, "0")} · {TIMELINE[i]?.label}
-    </p>
   );
 }
 
@@ -259,26 +250,17 @@ function Calendar() {
 function Booking({ packages, prep }: { packages: HomePackage[]; prep: StoryPhoto[] }) {
   const ref = useRef<HTMLElement>(null);
   const story = useStory();
-  const [stage, setStageLocal] = useState(0);
+  const [stage, setStage] = useState(0);
   const [pick, setPick] = useState(
     Math.max(
       0,
       packages.findIndex((p) => p.featured),
     ),
   );
-  useProgress(ref, (p) => {
-    const n = Math.min(3, Math.max(0, Math.floor((p - 0.04) * 4.2)));
-    setStageLocal(n);
-    setStage(n);
-  });
+  useProgress(ref, (p) => setStage(Math.min(3, Math.max(0, Math.floor((p - 0.04) * 4.2)))));
   const motion = story.motion;
   const pkg = packages[pick];
   const state = (i: number) => (!motion ? "now" : i === stage ? "now" : i < stage ? "past" : "next");
-  useEffect(() => {
-    const on = (e: Event) => go((e as CustomEvent<number>).detail);
-    addEventListener("hj-stage", on);
-    return () => removeEventListener("hj-stage", on);
-  });
   const go = (i: number) => {
     const el = ref.current;
     if (!el) return;
@@ -297,14 +279,11 @@ function Booking({ packages, prep }: { packages: HomePackage[]; prep: StoryPhoto
       <div className="hj-stick">
         <div className="hj-booking-grid">
           <div className="hj-booking-copy">
-            <p className="hj-eyebrow">
-              {BOOKING.eyebrow} · {BOOKING.timeline}
-            </p>
+            <p className="hj-eyebrow">{BOOKING.eyebrow}</p>
             <h2 id="hj-booking-title" className="hj-h2">
               {BOOKING.title}
             </h2>
-            <p className="hj-intro">{BOOKING.intro}</p>
-            <ol className="hj-stages" aria-label="The first four steps">
+            <ol className="hj-stages" aria-label="The four stages">
               {BOOKING.stages.map((s, i) => (
                 <li key={s.id}>
                   <button
@@ -443,11 +422,10 @@ function Moment({ photo }: { photo?: StoryPhoto }) {
       className="hj-ch hj-moment"
       data-chapter="moment"
       data-scroll="pin"
-      aria-label="The shoot"
+      aria-label="The moment"
       style={vars({ "--fx": fx, "--fy": fy })}
     >
       <div className="hj-stick">
-        <Kicker i={4} />
         <div className="hj-shot">
           <Ph photo={photo} sizes="100vw" />
         </div>
@@ -490,7 +468,6 @@ function Darkroom({ photo }: { photo?: StoryPhoto }) {
       aria-labelledby="hj-dark-title"
     >
       <div className="hj-stick">
-        <Kicker i={5} />
         <div className="hj-dark-copy">
           <h2 id="hj-dark-title" className="hj-h2">
             {DARKROOM.title}
@@ -541,10 +518,10 @@ function Darkroom({ photo }: { photo?: StoryPhoto }) {
 
 /* ---- Chapter 7: delivered ---- */
 
-function Delivered({ cover, photos }: { cover?: StoryPhoto; photos: StoryPhoto[] }) {
+function Delivered({ photos }: { photos: StoryPhoto[] }) {
+  const [cover, ...rest] = photos;
   const [hearts, setHearts] = useState<Record<number, boolean>>({});
   const [phoneHeart, setPhoneHeart] = useState(false);
-  const phonePhoto = photos[3] ?? cover;
   return (
     <section
       id="ch-delivered"
@@ -554,47 +531,55 @@ function Delivered({ cover, photos }: { cover?: StoryPhoto; photos: StoryPhoto[]
       aria-labelledby="hj-del-title"
     >
       <div className="hj-stick">
-        <Kicker i={6} />
+        <div className="hj-del-copy">
+          <h2 id="hj-del-title" className="hj-h2">
+            {DELIVERED.line}
+          </h2>
+          <ul className="hj-points">
+            {DELIVERED.points.map((t) => (
+              <li key={t}>{t}</li>
+            ))}
+          </ul>
+          <Button asChild variant="secondary">
+            <Link href={DELIVERED.cta.href}>
+              {DELIVERED.cta.label} <ArrowRightIcon animate="nudge-right" animateOn="group" />
+            </Link>
+          </Button>
+        </div>
         <div className="hj-devices" data-hold="">
           <div className="hj-laptop">
+            <div className="hj-bar">
+              <i />
+              <i />
+              <i />
+              <span>
+                <LockIcon aria-hidden="true" /> {DELIVERED.demo}
+              </span>
+            </div>
             <div className="hj-screen">
-              <div className="hj-scroll">
-                <div className="hj-cover">
-                  <Ph photo={cover} sizes="(min-width: 900px) 80vw, 100vw" />
-                  <div className="hj-cover-text">
-                    <small>{DELIVERED.demo}</small>
-                    <strong>Your gallery</strong>
-                  </div>
-                </div>
-                <div className="hj-grid">
-                  {photos.slice(0, 12).map((p, i) => (
-                    <div key={`${p.id ?? "p"}-${i}`} className="hj-cell">
-                      <Ph photo={p} sizes="(min-width: 900px) 22vw, 45vw" />
-                      <button
-                        type="button"
-                        aria-pressed={Boolean(hearts[i])}
-                        aria-label={`Favourite photograph ${i + 1} in the example gallery`}
-                        onClick={() => setHearts((h) => ({ ...h, [i]: !h[i] }))}
-                      >
-                        <HeartIcon />
-                      </button>
-                    </div>
-                  ))}
-                </div>
+              <div className="hj-cover">
+                <Ph photo={cover} sizes="(min-width: 900px) 40vw, 90vw" />
               </div>
-              <div className="hj-bar">
-                <i />
-                <i />
-                <i />
-                <span>
-                  <LockIcon aria-hidden="true" /> {DELIVERED.demo}
-                </span>
+              <div className="hj-grid">
+                {rest.slice(0, 5).map((p, i) => (
+                  <div key={p.id ?? i} className="hj-cell">
+                    <Ph photo={p} sizes="14vw" />
+                    <button
+                      type="button"
+                      aria-pressed={Boolean(hearts[i])}
+                      aria-label={`Favourite photograph ${i + 1} in the example gallery`}
+                      onClick={() => setHearts((h) => ({ ...h, [i]: !h[i] }))}
+                    >
+                      <HeartIcon />
+                    </button>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
           <div className="hj-phone" aria-hidden="true">
             <div className="hj-phone-photo">
-              <Ph photo={phonePhoto} sizes="16rem" />
+              <Ph photo={rest[1] ?? cover} sizes="14rem" />
             </div>
             <div className="hj-phone-actions">
               <button
@@ -611,218 +596,67 @@ function Delivered({ cover, photos }: { cover?: StoryPhoto; photos: StoryPhoto[]
             </div>
           </div>
         </div>
-        <div className="hj-del-copy">
-          <h2 id="hj-del-title" className="hj-h2">
-            {DELIVERED.line}
-          </h2>
-          <ul className="hj-points">
-            {DELIVERED.points.map((t) => (
-              <li key={t}>{t}</li>
-            ))}
-          </ul>
-          <Link href={DELIVERED.cta.href} className="hj-link">
-            {DELIVERED.cta.label} <ArrowRightIcon />
-          </Link>
-        </div>
       </div>
     </section>
   );
 }
 
-/* ---- Chapter 8: keep it: prints in real-looking rooms (CSS 3D; the photographs stay ordinary protected images) ---- */
+/* ---- Chapter 8: keep it: one photograph in several sizes and formats (our own mockup, plain DOM) ---- */
 
-type FrameKind = "black" | "oak" | "white" | "canvas";
-
-/** A framed print on a wall: a small 3D box (front, sides) with a mat, glass sheen and a soft shadow on the wall. */
-function Frame({
-  photo,
-  long,
-  x,
-  y,
-  kind,
-  tilt = 0,
-}: { photo?: StoryPhoto; long: number; x: number; y: number; kind: FrameKind; tilt?: number }) {
+function Keep({ photo }: { photo?: StoryPhoto }) {
   const r = photo ? photo.width / photo.height : 1.5;
-  const w = Math.round(r >= 1 ? long : long * r);
-  const h = Math.round(r >= 1 ? long / r : long);
-  const d = kind === "canvas" ? 34 : 22;
-  const left = 900 + x - w / 2;
-  const top = 520 + y - h / 2;
-  return (
-    <>
-      <span
-        className="hj-shadow"
-        style={vars({ left: left + 10, top: top + 18, width: w, height: h })}
-        aria-hidden="true"
-      />
-      <div
-        className="hj-b3 hj-frame"
-        data-kind={kind}
-        style={vars({
-          left,
-          top,
-          "--w": `${w}px`,
-          "--h": `${h}px`,
-          "--d": `${d}px`,
-          "--mat": `${kind === "canvas" ? 0 : Math.round(long * 0.075)}px`,
-          transform: `translateZ(${d / 2 + 1}px) rotate(${tilt}deg)`,
-        })}
-      >
-        <div className="hj-f hj-front">
-          <div className="hj-art">
-            <Ph photo={photo} sizes="(min-width: 900px) 30vw, 60vw" />
-          </div>
-        </div>
-        <i className="hj-f hj-side hj-s-r" />
-        <i className="hj-f hj-side hj-s-l" />
-        <i className="hj-f hj-side hj-s-t" />
-        <i className="hj-f hj-side hj-s-b" />
-      </div>
-    </>
-  );
-}
-
-/** A plain box (furniture): front and side faces coloured with a light from the left. */
-function Piece({
-  x,
-  y,
-  z,
-  w,
-  h,
-  d,
-  tone,
-  className,
-}: { x: number; y: number; z: number; w: number; h: number; d: number; tone: string; className?: string }) {
-  return (
-    <div
-      className={`hj-b3 hj-piece ${className ?? ""}`}
-      style={vars({
-        left: 900 + x - w / 2,
-        top: 856 - y - h,
-        "--w": `${w}px`,
-        "--h": `${h}px`,
-        "--d": `${d}px`,
-        "--tone": tone,
-        transform: `translateZ(${z}px)`,
-      })}
-    >
-      <i className="hj-f hj-front" />
-      <i className="hj-f hj-side hj-s-r" />
-      <i className="hj-f hj-side hj-s-l" />
-      <i className="hj-f hj-side hj-s-t" />
-    </div>
-  );
-}
-
-function Room({ photos }: { photos: StoryPhoto[] }) {
-  const stick = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const el = stick.current;
-    if (!el) return;
-    const fit = () => {
-      const k = Math.min(innerHeight / 900, innerWidth / 700);
-      el.style.setProperty("--k", Math.max(0.4, Math.min(1.2, k)).toFixed(3));
-    };
-    fit();
-    addEventListener("resize", fit);
-    return () => removeEventListener("resize", fit);
-  }, []);
-  const ph = (i: number) => photos[i % Math.max(1, photos.length)];
+  const art = (sizes: string) => <Ph photo={photo} sizes={sizes} />;
   return (
     <section
-      id="ch-room"
-      className="hj-ch hj-room"
-      data-chapter="room"
+      id="ch-keep"
+      className="hj-ch hj-keep"
+      data-chapter="keep"
       data-scroll="pin"
-      aria-labelledby="hj-room-title"
+      aria-labelledby="hj-keep-title"
     >
-      <div className="hj-stick" ref={stick}>
-        <Kicker i={7} />
-        <div className="hj-room-copy">
-          <h2 id="hj-room-title" className="hj-h2">
-            {ROOM.title}
+      <div className="hj-stick">
+        <div className="hj-keep-copy">
+          <h2 id="hj-keep-title" className="hj-h2">
+            {KEEP.title}
           </h2>
-          <Link href={ROOM.cta.href} className="hj-link">
-            {ROOM.cta.label} <ArrowRightIcon />
+          <p className="hj-note">{KEEP.note}</p>
+          <Link href={KEEP.cta.href} className="hj-link">
+            {KEEP.cta.label} <ArrowRightIcon />
           </Link>
         </div>
-        <div className="hj-cam" aria-hidden="true">
-          {/* a living room: one large framed print over the sofa */}
-          <div className="hj-set" data-room="a" style={vars({ "--n": 0 })}>
-            <div className="hj-floor" />
-            <div className="hj-wall3">
-              <div className="hj-glow hj-glow--window" />
-              <div className="hj-baseboard" />
-              <Frame photo={ph(0)} long={540} x={0} y={-120} kind="oak" />
-              <Frame photo={ph(1)} long={300} x={560} y={-90} kind="black" />
-              <Frame photo={ph(2)} long={190} x={-520} y={-160} kind="white" />
+        <div className="hj-spread" style={vars({ "--r": r })}>
+          <figure className="hj-fmt hj-fmt--wall" style={vars({ "--i": 0 })}>
+            <div className="hj-fmt-frame">
+              <div className="hj-fmt-mat">{art("(min-width: 900px) 36vw, 80vw")}</div>
             </div>
-            <div className="hj-stage3">
-              {" "}
-              <Piece x={0} y={0} z={150} w={860} h={92} d={300} tone="#5d6b73" className="hj-sofa" />
-              <Piece x={0} y={92} z={70} w={860} h={110} d={90} tone="#566268" className="hj-sofa" />
-              <Piece x={-470} y={0} z={150} w={110} h={150} d={300} tone="#4f5b61" className="hj-sofa" />
-              <Piece x={470} y={0} z={150} w={110} h={150} d={300} tone="#4f5b61" className="hj-sofa" />
-              <span
-                className="hj-flat hj-pole"
-                style={vars({ left: 900 - 690, top: 856 - 420 - 0, transform: "translateZ(260px)" })}
-              />
-              <span
-                className="hj-flat hj-lampshade"
-                style={vars({ left: 900 - 750, top: 856 - 520, transform: "translateZ(260px)" })}
-              />
+            <figcaption>{KEEP.items[0].label}</figcaption>
+          </figure>
+          <figure className="hj-fmt hj-fmt--frame" style={vars({ "--i": 1 })}>
+            <div className="hj-fmt-frame hj-fmt-frame--oak">
+              <div className="hj-fmt-mat">{art("20vw")}</div>
             </div>
-          </div>
-          {/* a gallery wall: frames of different sizes and finishes */}
-          <div className="hj-set" data-room="b" style={vars({ "--n": 1 })}>
-            <div className="hj-floor" />
-            <div className="hj-wall3">
-              <div className="hj-glow hj-glow--spot" />
-              <div className="hj-baseboard" />
-              <Frame photo={ph(3)} long={330} x={-430} y={-110} kind="black" />
-              <Frame photo={ph(4)} long={200} x={-110} y={-220} kind="white" />
-              <Frame photo={ph(5)} long={200} x={-110} y={0} kind="oak" />
-              <Frame photo={ph(6)} long={310} x={230} y={-100} kind="black" />
-              <Frame photo={ph(7)} long={210} x={550} y={-210} kind="oak" />
-              <Frame photo={ph(1)} long={170} x={550} y={-20} kind="white" />
+            <figcaption>{KEEP.items[1].label}</figcaption>
+          </figure>
+          <figure className="hj-fmt hj-fmt--canvas" style={vars({ "--i": 2 })}>
+            <div className="hj-fmt-canvas">{art("22vw")}</div>
+            <figcaption>{KEEP.items[2].label}</figcaption>
+          </figure>
+          <figure className="hj-fmt hj-fmt--small" style={vars({ "--i": 3 })}>
+            <div className="hj-fmt-print hj-fmt-print--back">{art("12vw")}</div>
+            <div className="hj-fmt-print">{art("12vw")}</div>
+            <figcaption>{KEEP.items[3].label}</figcaption>
+          </figure>
+          <figure className="hj-fmt hj-fmt--phone" style={vars({ "--i": 4 })}>
+            <div className="hj-fmt-phone">{art("14vw")}</div>
+            <figcaption>{KEEP.items[4].label}</figcaption>
+          </figure>
+          <figure className="hj-fmt hj-fmt--file" style={vars({ "--i": 5 })}>
+            <div className="hj-fmt-chip">
+              <DownloadIcon aria-hidden="true" />
+              <span>{KEEP.items[5].label}</span>
             </div>
-            <div className="hj-stage3">
-              {" "}
-              <Piece x={0} y={0} z={160} w={720} h={74} d={200} tone="#a98863" className="hj-bench" />
-            </div>
-          </div>
-          {/* an office: a canvas print over a desk */}
-          <div className="hj-set" data-room="c" style={vars({ "--n": 2 })}>
-            <div className="hj-floor" />
-            <div className="hj-wall3">
-              <div className="hj-glow hj-glow--window" />
-              <div className="hj-baseboard" />
-              <Frame photo={ph(8)} long={560} x={0} y={-150} kind="canvas" />
-              <Frame photo={ph(2)} long={180} x={-470} y={-40} kind="black" />
-            </div>
-            <div className="hj-stage3">
-              {" "}
-              <Piece x={0} y={238} z={170} w={900} h={26} d={340} tone="#b08a5c" className="hj-table" />
-              <Piece x={-410} y={0} z={170} w={26} h={238} d={320} tone="#2d2d2d" />
-              <Piece x={410} y={0} z={170} w={26} h={238} d={320} tone="#2d2d2d" />
-              <Piece x={-260} y={264} z={150} w={190} h={12} d={120} tone="#1d1d1d" />
-              <Piece x={300} y={264} z={110} w={14} h={150} d={14} tone="#222" />
-              <Piece x={300} y={414} z={110} w={90} h={60} d={90} tone="#f2e4c4" className="hj-shade" />
-            </div>
-          </div>
+          </figure>
         </div>
-        <ul className="hj-caps" aria-label="The scenes">
-          {ROOM.scenes.map((s, i) => (
-            <li key={s.label} style={vars({ "--i": i })}>
-              <span className="hj-mask">
-                <span className="hj-cap">
-                  <b>{s.label}</b> {s.note}
-                </span>
-              </span>
-            </li>
-          ))}
-        </ul>
-        <p className="hj-room-note">{ROOM.note}</p>
       </div>
     </section>
   );
@@ -836,19 +670,12 @@ function Hud({
   calm,
   bare,
 }: { send: (m: Mode) => void; onCalm: () => void; calm: boolean; bare?: boolean }) {
-  const { chapter, mode, motion, stage } = useStory();
-  const step = chapter === 3 ? stage : chapter >= 4 ? chapter : -1;
+  const { chapter, mode, motion } = useStory();
   const toChapter = (i: number) => {
     const el = document.getElementById(`ch-${CHAPTERS[i]?.id}`);
     if (!el) return;
     send("manual");
     scrollTo({ top: el.getBoundingClientRect().top + scrollY, behavior: "smooth" });
-  };
-  const toStep = (i: number) => {
-    if (i >= 4) return toChapter(i);
-    if (chapter === 3) return dispatchEvent(new CustomEvent("hj-stage", { detail: i }));
-    toChapter(3);
-    setTimeout(() => dispatchEvent(new CustomEvent("hj-stage", { detail: i })), 900);
   };
   const status = mode === "auto" ? HUD.auto : mode === "paused" ? HUD.paused : mode === "done" ? HUD.done : HUD.manual;
   return (
@@ -868,21 +695,8 @@ function Hud({
         >
           {HUD.skip} <ArrowRightIcon />
         </a>
-        {motion && step >= 0 ? (
-          <ol className="hj-timeline" aria-label="Timeline">
-            {TIMELINE.map((t, i) => (
-              <li key={t.id} data-state={i < step ? "done" : i === step ? "now" : "next"}>
-                <button type="button" onClick={() => toStep(i)} aria-current={i === step ? "step" : undefined}>
-                  <i />
-                  <span>{t.label}</span>
-                </button>
-              </li>
-            ))}
-          </ol>
-        ) : (
-          <p className="hj-id">{THRESHOLD.mark}</p>
-        )}
-        {motion && step < 0 ? (
+        <p className="hj-id">{THRESHOLD.mark}</p>
+        {motion ? (
           <p className="hj-chapter" aria-hidden="true">
             <b>{String(chapter + 1).padStart(2, "0")}</b> / {String(CHAPTERS.length).padStart(2, "0")}{" "}
             {CHAPTERS[chapter]?.label}
@@ -950,7 +764,7 @@ function Hud({
 }
 
 /**
- * The home page (docs/project/HOME-VISION.md): eight chapters from a photograph to a framed print on a wall, in one continuous
+ * The home page (docs/project/HOME-VISION.md): nine chapters from a seam of light to a framed print, in one continuous
  * scroll, which also plays by itself (the bar at the bottom) until the reader scrolls. Everything stands without motion:
  * no script, reduced motion or the Calm button show each chapter finished, in ordinary page flow.
  */
@@ -1034,8 +848,8 @@ export function HomeStory({
       <Booking packages={packages} prep={slots.prep} />
       <Moment photo={slots.moment} />
       <Darkroom photo={slots.darkroom} />
-      <Delivered cover={slots.delivered[0]} photos={slots.gallery} />
-      <Room photos={slots.room} />
+      <Delivered photos={slots.delivered} />
+      <Keep photo={slots.finale} />
     </div>
   );
 }

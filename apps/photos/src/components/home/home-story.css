@@ -15,7 +15,7 @@
   --paper-ink: #1b1a17;
   --pencil: #ffd166;
   --pad: max(1.25rem, 5vw);
-  --spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+  --spring: cubic-bezier(0.3, 1.6, 0.5, 1);
   --glide: cubic-bezier(0.22, 1, 0.36, 1);
   position: relative;
   isolation: isolate;
@@ -286,96 +286,6 @@
   }
 }
 
-.hj-timeline {
-  display: flex;
-  align-items: flex-start;
-  margin: 0;
-  padding: 0.15rem 0.9rem;
-  list-style: none;
-  border-radius: 999px;
-  background: rgb(10 10 10 / 0.6);
-  backdrop-filter: blur(10px);
-}
-.hj-timeline li {
-  position: relative;
-}
-.hj-timeline li:not(:last-child)::after {
-  content: "";
-  position: absolute;
-  top: 1.3rem;
-  left: 50%;
-  width: 100%;
-  height: 2px;
-  background: rgb(255 255 255 / 0.28);
-  transition: background 0.4s;
-}
-.hj-timeline li[data-state="done"]:not(:last-child)::after {
-  background: #fff;
-}
-.hj-timeline button {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  justify-items: center;
-  gap: 0.3rem;
-  min-width: clamp(2.2rem, 4.6vw, 4.2rem);
-  min-height: 2.75rem;
-  padding: 0.5rem 0.2rem 0.3rem;
-  border: 0;
-  background: none;
-  color: #fff;
-  font: inherit;
-  cursor: pointer;
-}
-.hj-timeline i {
-  display: block;
-  width: 11px;
-  height: 11px;
-  border: 2px solid #fff;
-  border-radius: 50%;
-  background: #0a0a0a;
-  transition: background 0.4s, scale 0.4s var(--spring), border-color 0.4s;
-}
-.hj-timeline li[data-state="done"] i {
-  background: #fff;
-}
-.hj-timeline li[data-state="now"] i {
-  background: var(--pencil);
-  border-color: var(--pencil);
-  scale: 1.5;
-}
-.hj-timeline span {
-  font-size: 0.66rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #e8e4da;
-  white-space: nowrap;
-}
-.hj-timeline li[data-state="now"] span {
-  color: #fff;
-  font-weight: 600;
-}
-.hj-kicker {
-  position: absolute;
-  left: var(--pad);
-  top: 4.8rem;
-  z-index: 5;
-  margin: 0;
-  font: 0.72rem ui-monospace, monospace;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: #fff;
-  text-shadow: 0 1px 8px rgb(0 0 0 / 0.8);
-}
-.hj-kicker b {
-  color: var(--pencil);
-}
-.hj-intro {
-  margin: 0.9rem 0 0;
-  max-width: 24rem;
-  color: var(--ink-2);
-  line-height: 1.5;
-}
 /* the cursor's ring snaps onto a button faster than the library default */
 .hm-cursor[data-morph] [data-part="ring"],
 .hm-cursor[data-morph] [data-part="dot"] {
@@ -392,6 +302,7 @@
   position: absolute;
   inset: 0;
 }
+.hj-seam,
 .hj-cue {
   display: none;
 }
@@ -410,6 +321,22 @@
   letter-spacing: -0.04em;
   text-wrap: balance;
   color: #fff;
+}
+.hj-corners {
+  position: absolute;
+  inset: 1.5rem;
+  pointer-events: none;
+  --b: 1.75rem;
+  --w: 2px;
+  background:
+    linear-gradient(#fff, #fff) left top / var(--b) var(--w) no-repeat,
+    linear-gradient(#fff, #fff) left top / var(--w) var(--b) no-repeat,
+    linear-gradient(#fff, #fff) right top / var(--b) var(--w) no-repeat,
+    linear-gradient(#fff, #fff) right top / var(--w) var(--b) no-repeat,
+    linear-gradient(#fff, #fff) left bottom / var(--b) var(--w) no-repeat,
+    linear-gradient(#fff, #fff) left bottom / var(--w) var(--b) no-repeat,
+    linear-gradient(#fff, #fff) right bottom / var(--b) var(--w) no-repeat,
+    linear-gradient(#fff, #fff) right bottom / var(--w) var(--b) no-repeat;
 }
 
 /* ---- 1 seeing ---- */
@@ -873,22 +800,43 @@
 /* ---- 7 delivered ---- */
 .hj-delivered .hj-stick {
   display: grid;
-  gap: 1.5rem;
-  padding: clamp(3rem, 8vh, 4.5rem) var(--pad) 2rem;
+  align-items: center;
+  gap: 2rem;
+  padding: clamp(2.5rem, 7vh, 4rem) var(--pad);
   min-height: 0;
-  background: radial-gradient(ellipse at 50% 30%, #1a1a20, #050505 70%);
+  background: radial-gradient(ellipse at 70% 40%, #17171c, #050505 70%);
+}
+.hj-del-copy {
+  display: grid;
+  gap: 1.2rem;
+  justify-items: start;
+}
+.hj-points {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--ink-2);
+  line-height: 1.45;
+}
+.hj-points li::before {
+  content: "—";
+  margin-right: 0.6rem;
+  color: var(--pencil);
 }
 .hj-devices {
   position: relative;
   display: grid;
+  gap: 1rem;
   justify-items: center;
 }
 .hj-laptop {
-  width: min(100%, 64rem);
+  width: min(100%, 40rem);
   padding: 0.85rem;
-  border-radius: 16px 16px 6px 6px;
+  border-radius: 14px 14px 6px 6px;
   background: #14141a;
-  box-shadow: 0 40px 90px -30px #000;
+  box-shadow: 0 40px 80px -30px #000;
 }
 .hj-screen {
   position: relative;
@@ -897,85 +845,16 @@
   border-radius: 4px;
   background: #0b0b0e;
 }
-.hj-scroll {
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 165%;
-}
-.hj-cover {
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 30%;
-  overflow: hidden;
-}
-.hj-cover-text {
-  position: absolute;
-  left: 1.5rem;
-  bottom: 1rem;
-  display: grid;
-  color: #fff;
-  text-shadow: 0 2px 14px rgb(0 0 0 / 0.8);
-}
-.hj-cover-text strong {
-  font-size: clamp(1.2rem, 3vw, 2.4rem);
-  font-weight: 500;
-  letter-spacing: -0.02em;
-}
-.hj-cover-text small {
-  font-size: 0.75rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-.hj-grid {
-  position: absolute;
-  inset: 30% 0 0 0;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  gap: 4px;
-  padding: 4px;
-  background: #0b0b0e;
-}
-.hj-cell {
-  position: relative;
-  overflow: hidden;
-}
-.hj-cell button {
-  position: absolute;
-  right: 6px;
-  bottom: 6px;
-  z-index: 2;
-  display: grid;
-  place-items: center;
-  width: 2.75rem;
-  height: 2.75rem;
-  padding: 0;
-  border: 0;
-  background: none;
-  color: #fff;
-  cursor: pointer;
-}
-.hj-cell button svg {
-  width: 1.7rem;
-  height: 1.7rem;
-  padding: 0.35rem;
-  border-radius: 50%;
-  background: rgb(0 0 0 / 0.7);
-}
-.hj-cell button[aria-pressed="true"] svg {
-  background: #fff;
-  color: #d3243b;
-}
 .hj-bar {
   position: absolute;
   inset: 0 0 auto;
-  z-index: 3;
+  z-index: 2;
   display: flex;
   align-items: center;
   gap: 0.35rem;
-  height: 1.7rem;
-  padding: 0 0.7rem;
-  background: rgb(10 10 14 / 0.9);
+  height: 1.6rem;
+  padding: 0 0.6rem;
+  background: rgb(10 10 14 / 0.88);
 }
 .hj-bar i {
   width: 7px;
@@ -995,442 +874,150 @@
   width: 0.8em;
   height: 0.8em;
 }
+.hj-cover {
+  position: absolute;
+  inset: 0 0 52% 0;
+}
+.hj-cover .hj-ph {
+  inset: 0;
+}
+.hj-grid {
+  position: absolute;
+  inset: 48% 0 0 0;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 3px;
+  padding: 3px;
+  background: #0b0b0e;
+}
+.hj-cell {
+  position: relative;
+  overflow: hidden;
+}
+.hj-cell button {
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  display: grid;
+  place-items: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgb(0 0 0 / 0.7);
+  color: #fff;
+  cursor: pointer;
+}
+.hj-cell button svg {
+  width: 0.85rem;
+  height: 0.85rem;
+}
+.hj-cell button[aria-pressed="true"] {
+  background: #fff;
+  color: #d3243b;
+}
 .hj-phone {
   display: none;
-  padding: 0.4rem;
+}
+
+/* ---- 8 keep it: one photograph, several sizes and formats ---- */
+.hj-keep .hj-stick {
+  display: grid;
+  gap: 2rem;
+  padding: clamp(3rem, 8vh, 4.5rem) var(--pad) 3rem;
+  min-height: 0;
+  background: radial-gradient(ellipse at 50% 12%, #3a2a1c, #15100c 60%, #070605);
+}
+.hj-keep-copy {
+  display: grid;
+  gap: 0.8rem;
+  justify-items: start;
+  max-width: 30rem;
+}
+.hj-spread {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: 1.75rem 1.25rem;
+  align-items: end;
+}
+.hj-fmt {
+  display: grid;
+  gap: 0.7rem;
+  justify-items: center;
+  margin: 0;
+}
+.hj-fmt figcaption {
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  color: #d4d0c6;
+}
+.hj-fmt-frame {
+  width: 100%;
+  border: 10px solid #151210;
+  background: #151210;
+  box-shadow: 0 26px 50px -22px #000;
+}
+.hj-fmt-frame--oak {
+  border-color: #b9895a;
+  background: #b9895a;
+}
+.hj-fmt-mat {
+  position: relative;
+  aspect-ratio: var(--r);
+  background: #efeae0;
+}
+.hj-fmt-mat .hj-ph {
+  inset: 9%;
+}
+.hj-fmt-canvas {
+  position: relative;
+  width: 100%;
+  aspect-ratio: var(--r);
+  box-shadow: 9px 7px 0 #ddd6c6, 0 30px 50px -20px #000;
+}
+.hj-fmt--small {
+  position: relative;
+  min-height: 6rem;
+}
+.hj-fmt-print {
+  position: relative;
+  width: 72%;
+  aspect-ratio: var(--r);
+  border: 6px solid #fbfaf6;
+  background: #fbfaf6;
+  box-shadow: 0 14px 30px -12px #000;
+  rotate: 3deg;
+}
+.hj-fmt-print--back {
+  position: absolute;
+  inset: 0 auto auto 8%;
+  rotate: -7deg;
+}
+.hj-fmt-phone {
+  position: relative;
+  width: min(9rem, 70%);
+  aspect-ratio: 9 / 18.5;
+  border: 6px solid #14141a;
   border-radius: 1.6rem;
-  background: #14141a;
-  box-shadow: 0 30px 60px -20px #000;
-}
-.hj-phone-photo {
-  position: relative;
-  aspect-ratio: 9 / 14;
+  background: #000;
   overflow: hidden;
-  border-radius: 1.2rem;
+  box-shadow: 0 26px 50px -20px #000;
 }
-.hj-phone-actions {
-  display: flex;
-  justify-content: space-around;
-  padding: 0.55rem 0 0.25rem;
-  font-size: 0.72rem;
-  color: #d4d0c6;
-}
-.hj-phone-actions > * {
+.hj-fmt-chip {
   display: inline-flex;
   align-items: center;
-  gap: 0.25rem;
-  border: 0;
-  background: none;
-  color: inherit;
-  font: inherit;
-}
-.hj-phone-actions svg {
-  width: 0.9em;
-  height: 0.9em;
-}
-.hj-phone-actions [data-on] {
-  color: #ff6b81;
-}
-.hj-del-copy {
-  display: grid;
-  gap: 1rem;
-  justify-items: start;
-  max-width: 34rem;
-}
-.hj-points {
-  display: grid;
   gap: 0.5rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  color: var(--ink-2);
-  line-height: 1.45;
-  font-size: 0.95rem;
-}
-.hj-points li::before {
-  content: "—";
-  margin-right: 0.6rem;
-  color: var(--pencil);
-}
-
-/* ---- 8 keep it: prints in rooms (CSS 3D) ---- */
-.hj-room .hj-stick {
-  min-height: min(82svh, 52rem);
-  background: linear-gradient(#1b1611, #0a0807);
-  perspective: 1500px;
-  perspective-origin: 50% 40%;
-}
-.hj-room .hj-stick::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  background: radial-gradient(ellipse at 50% 45%, transparent 55%, rgb(0 0 0 / 0.55)),
-    linear-gradient(0deg, rgb(0 0 0 / 0.7), transparent 28%);
-}
-.hj-room-copy {
-  position: absolute;
-  left: var(--pad);
-  top: 6.5rem;
-  z-index: 5;
-  display: grid;
-  gap: 0.5rem;
-  justify-items: start;
-  max-width: min(26rem, 80vw);
-  text-shadow: 0 2px 18px rgb(0 0 0 / 0.7);
-}
-.hj-room-note {
-  position: absolute;
-  right: var(--pad);
-  top: 4.8rem;
-  z-index: 5;
-  max-width: 15rem;
-  margin: 0;
-  text-align: right;
-  font-size: 0.78rem;
-  color: #e8e4da;
-}
-.hj-cam {
-  position: absolute;
-  left: 50%;
-  top: 52%;
-  width: 0;
-  height: 0;
-  transform-style: preserve-3d;
-  scale: var(--k, 1);
-}
-.hj-set {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 0;
-  height: 0;
-  transform-style: preserve-3d;
-  translate: calc(var(--n) * 1800px) 0 0;
-}
-.hj-wall3 {
-  position: absolute;
-  left: -900px;
-  top: -520px;
-  width: 1800px;
-  height: 860px;
-  transform: translateZ(-800px);
-  transform-style: preserve-3d;
-  box-shadow: inset -26px 0 40px -20px rgb(0 0 0 / 0.35), inset 26px 0 40px -20px rgb(0 0 0 / 0.2);
-}
-.hj-stage3 {
-  position: absolute;
-  left: -900px;
-  top: -520px;
-  width: 1800px;
-  height: 860px;
-  transform: translateZ(-800px);
-  transform-style: preserve-3d;
-  pointer-events: none;
-}
-.hj-set[data-room="a"] .hj-wall3 {
-  background: linear-gradient(90deg, #c9bfae, #d9d0c0 45%, #cfc5b4);
-}
-.hj-set[data-room="b"] .hj-wall3 {
-  background: linear-gradient(90deg, #dedad2, #e9e6df 50%, #dedad2);
-}
-.hj-set[data-room="c"] .hj-wall3 {
-  background: linear-gradient(90deg, #2f3d36, #3a4a42 50%, #2d3a33);
-}
-.hj-floor {
-  position: absolute;
-  left: -900px;
-  top: 340px;
-  width: 1800px;
-  height: 1700px;
-  transform-origin: top;
-  transform: translateZ(-800px) rotateX(90deg);
-  background: linear-gradient(180deg, rgb(255 235 200 / 0.18), transparent 25%, rgb(0 0 0 / 0.5)),
-    repeating-linear-gradient(90deg, #9a7650 0 9px, #8a6844 9px 18px, #94714b 18px 27px);
-}
-.hj-glow {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-.hj-glow--window {
-  background: radial-gradient(ellipse 55% 80% at 88% 18%, rgb(255 244 220 / 0.6), transparent 70%);
-}
-.hj-glow--spot {
-  background: radial-gradient(ellipse 50% 65% at 50% 30%, rgb(255 240 210 / 0.5), transparent 72%);
-}
-.hj-baseboard {
-  position: absolute;
-  inset: auto 0 0;
-  height: 26px;
-  background: #efe9dd;
-  box-shadow: 0 -2px 6px rgb(0 0 0 / 0.18);
-}
-.hj-set[data-room="c"] .hj-baseboard {
-  background: #26302b;
-}
-.hj-b3 {
-  position: absolute;
-  width: var(--w);
-  height: var(--h);
-  transform-style: preserve-3d;
-}
-.hj-f {
-  position: absolute;
-  display: block;
-  backface-visibility: hidden;
-}
-.hj-front {
-  inset: 0;
-  transform: translateZ(calc(var(--d) / 2));
-}
-.hj-s-r {
-  width: var(--d);
-  height: 100%;
-  top: 0;
-  left: calc(var(--w) - var(--d) / 2);
-  transform: rotateY(90deg);
-}
-.hj-s-l {
-  width: var(--d);
-  height: 100%;
-  top: 0;
-  left: calc(var(--d) / -2);
-  transform: rotateY(-90deg);
-}
-.hj-s-t {
-  width: 100%;
-  height: var(--d);
-  left: 0;
-  top: calc(var(--d) / -2);
-  transform: rotateX(90deg);
-}
-.hj-s-b {
-  width: 100%;
-  height: var(--d);
-  left: 0;
-  top: calc(var(--h) - var(--d) / 2);
-  transform: rotateX(-90deg);
-}
-.hj-frame {
-  --fc: #131313;
-}
-.hj-frame[data-kind="oak"] {
-  --fc: #b9895a;
-}
-.hj-frame[data-kind="white"] {
-  --fc: #f2efe8;
-}
-.hj-frame[data-kind="canvas"] {
-  --fc: #e9e4d8;
-}
-.hj-frame .hj-side {
-  background: var(--fc);
-}
-.hj-frame .hj-s-r {
-  filter: brightness(0.7);
-}
-.hj-frame .hj-s-t {
-  filter: brightness(1.15);
-}
-.hj-frame .hj-front {
-  box-sizing: border-box;
-  border: 12px solid var(--fc);
-  padding: var(--mat);
-  background: #f7f4ee;
-}
-.hj-frame[data-kind="canvas"] .hj-front {
-  border: 0;
-  padding: 0;
-}
-.hj-frame .hj-front::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  pointer-events: none;
-  background: linear-gradient(
-    115deg,
-    rgb(255 255 255 / 0.18),
-    transparent 34%,
-    transparent 62%,
-    rgb(255 255 255 / 0.09)
-  );
-}
-.hj-frame[data-kind="canvas"] .hj-front::after {
-  background: linear-gradient(115deg, rgb(255 255 255 / 0.08), transparent 40%, rgb(0 0 0 / 0.1));
-}
-.hj-art {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-.hj-art::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  box-shadow: inset 0 3px 9px rgb(0 0 0 / 0.38);
-}
-.hj-shadow {
-  position: absolute;
-  background: rgb(25 12 0 / 0.45);
-  filter: blur(16px);
-  transform: translateZ(1px);
-}
-.hj-piece .hj-f {
-  background: var(--tone);
-}
-.hj-piece .hj-s-r {
-  filter: brightness(0.68);
-}
-.hj-piece .hj-s-l {
-  filter: brightness(1.08);
-}
-.hj-piece .hj-s-t {
-  filter: brightness(1.28);
-}
-.hj-sofa .hj-front {
-  background: linear-gradient(var(--tone), color-mix(in srgb, var(--tone), #000 22%));
-}
-.hj-shade .hj-f {
-  background: #f6e7c3;
-  box-shadow: 0 0 70px 24px rgb(255 214 140 / 0.5);
-}
-.hj-flat {
-  position: absolute;
-  display: block;
-}
-.hj-pole {
-  width: 8px;
-  height: 420px;
-  background: #2a2a2a;
-}
-.hj-lampshade {
-  width: 120px;
-  height: 90px;
-  background: #f6e7c3;
-  box-shadow: 0 0 70px 24px rgb(255 214 140 / 0.5);
-}
-.hj-caps {
-  position: absolute;
-  inset: auto 0 5.8rem;
-  z-index: 5;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.5rem 2rem;
-  margin: 0;
-  padding: 0 var(--pad);
-  list-style: none;
-  text-align: center;
-}
-.hj-cap {
-  display: block;
-  font-size: clamp(1rem, 2vw, 1.35rem);
+  padding: 0.8rem 1rem;
+  border: 1px solid rgb(255 255 255 / 0.22);
+  border-radius: 12px;
+  background: #1b1b20;
   color: #fff;
-  text-shadow: 0 2px 14px rgb(0 0 0 / 0.8);
+  font-size: 0.9rem;
 }
-.hj-cap b {
-  font-weight: 600;
-  margin-right: 0.4rem;
-}
-.hj-set[data-room="b"],
-.hj-set[data-room="c"] {
-  display: none;
-}
-
-/* ---- the bottom of the page ---- */
-.hj-end {
-  padding: clamp(4rem, 12vh, 8rem) var(--hm-gutter, 1.25rem) 6rem;
-  background: #050505;
-  color: #f4f1ea;
-}
-.hj-end-inner {
-  display: grid;
-  gap: 2.2rem;
-  max-width: 62rem;
-  margin: 0 auto;
-}
-.hj-end h2 {
-  margin: 0;
-  font-size: clamp(2.4rem, 6.4vw, 5.4rem);
-  font-weight: 400;
-  line-height: 1;
-  letter-spacing: -0.04em;
-  text-wrap: balance;
-}
-.hj-end .hj-actions {
-  justify-content: flex-start;
-}
-.hj-faq {
-  display: grid;
-  margin-top: 2rem;
-  border-top: 1px solid rgb(255 255 255 / 0.2);
-}
-.hj-faq h3 {
-  margin: 0 0 1rem;
-  padding-top: 2rem;
-  font-size: 0.78rem;
-  font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: #d4d0c6;
-}
-.hj-faq details {
-  border-bottom: 1px solid rgb(255 255 255 / 0.16);
-}
-.hj-faq summary {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  min-height: 3.5rem;
-  cursor: pointer;
-  list-style: none;
-  font-size: 1.1rem;
-}
-.hj-faq summary::-webkit-details-marker {
-  display: none;
-}
-.hj-faq summary::after {
-  content: "+";
-  font-size: 1.4rem;
-  color: #d4d0c6;
-}
-.hj-faq details[open] summary::after {
-  content: "–";
-}
-.hj-faq details p {
-  margin: 0 0 1.3rem;
-  max-width: 44rem;
-  line-height: 1.6;
-  color: #d4d0c6;
-}
-.hj-faq a {
-  color: #fff;
-}
-.hj-faq summary:focus-visible,
-.hj-faq a:focus-visible {
-  outline: 2px solid #fff;
-  outline-offset: 3px;
-}
-.hj-faq-more {
-  display: inline-flex;
-  align-items: center;
-  min-height: 2.75rem;
-  margin-top: 1rem;
-  color: #fff;
-}
-.hj-bar-end {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 1px;
-  height: 1px;
-  pointer-events: none;
+.hj-fmt-chip svg {
+  width: 1.1em;
+  height: 1.1em;
 }
 
 /* ================= desktop wide static layouts ================= */
@@ -1446,6 +1033,9 @@
     grid-template-columns: minmax(14rem, 0.5fr) 1.5fr;
     align-items: center;
   }
+  .hj-delivered .hj-stick {
+    grid-template-columns: 0.8fr 1.2fr;
+  }
 }
 @media (max-width: 760px) {
   .hj-sheet {
@@ -1453,10 +1043,9 @@
   }
   .hj-grid {
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(4, 1fr);
   }
-  .hj-screen {
-    aspect-ratio: 4 / 5;
+  .hj-grid .hj-cell:nth-child(n + 4) {
+    display: none;
   }
 }
 
@@ -1472,25 +1061,25 @@
   --h: 150svh;
 }
 :root[data-hj-motion] .hj-seeing {
-  --h: 260svh;
+  --h: 190svh;
 }
 :root[data-hj-motion] .hj-range {
-  --h: 280svh;
+  --h: 210svh;
 }
 :root[data-hj-motion] .hj-booking {
-  --h: 420svh;
+  --h: 300svh;
 }
 :root[data-hj-motion] .hj-moment {
-  --h: 300svh;
+  --h: 220svh;
 }
 :root[data-hj-motion] .hj-darkroom {
-  --h: 300svh;
+  --h: 220svh;
 }
 :root[data-hj-motion] .hj-delivered {
-  --h: 320svh;
+  --h: 210svh;
 }
-:root[data-hj-motion] .hj-room {
-  --h: 360svh;
+:root[data-hj-motion] .hj-keep {
+  --h: 210svh;
 }
 :root[data-hj-motion] .hj-stick {
   position: sticky;
@@ -1498,34 +1087,62 @@
   height: 100svh;
 }
 
-/* -- threshold: the photograph fills the window; it settles as you scroll, the title rises on load -- */
+/* -- threshold: a seam of light opens into the photograph -- */
 :root[data-hj-motion] .hj-threshold .hj-stick {
+  --o: clamp(0, calc(var(--p) * 2.4), 1);
+  --e: calc(var(--o) * var(--o) * (3 - 2 * var(--o)));
+  --t: clamp(0, calc((var(--p) - 0.5) * 4), 1);
+  --c: clamp(0, calc((var(--p) - 0.66) * 4), 1);
   display: block;
 }
+:root[data-hj-motion] .hj-aperture {
+  clip-path: inset(calc((1 - var(--e)) * (50% - 1px)) calc((1 - var(--e)) * 38%));
+}
 :root[data-hj-motion] .hj-aperture .hj-ph {
-  scale: calc(1.14 - var(--p) * 0.14);
+  scale: calc(1.14 - var(--e) * 0.1);
   translate: calc(var(--mx, 0) * -14px) calc(var(--my, 0) * -9px);
+  filter: brightness(calc(0.5 + var(--e) * 0.5));
+}
+:root[data-hj-motion] .hj-seam {
+  display: block;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(24% + var(--e) * 76%);
+  height: 2px;
+  translate: -50% -50%;
+  background: linear-gradient(90deg, transparent, #fff 20%, #fff 80%, transparent);
+  box-shadow: 0 0 26px 3px rgb(255 232 190 / 0.75);
+  opacity: calc(1 - var(--e));
+  pointer-events: none;
+}
+:root[data-hj-motion] .hj-scrim {
+  opacity: var(--e, 1);
 }
 :root[data-hj-motion] .hj-title {
-  animation: hj-rise 1s var(--glide) 0.25s both;
+  translate: 0 calc((1 - var(--t)) * 115%);
 }
-@keyframes hj-rise {
-  from {
-    translate: 0 115%;
-  }
+:root[data-hj-motion] .hj-corners {
+  inset: calc(1.5rem + (1 - var(--c)) * 3rem);
+  opacity: var(--c);
 }
 :root[data-hj-motion] .hj-cue {
   display: block;
   position: absolute;
   left: 50%;
-  bottom: 5.4rem;
+  bottom: 1.2rem;
   margin: 0;
   translate: -50% 0;
   font-size: 0.72rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: #fff;
-  text-shadow: 0 1px 8px rgb(0 0 0 / 0.7);
+  animation: hj-bob 2.4s ease-in-out infinite;
+}
+@keyframes hj-bob {
+  50% {
+    translate: -50% -6px;
+  }
 }
 
 /* -- seeing: the viewpoint moves into the room, a frame closes on a detail -- */
@@ -1583,7 +1200,7 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: linear-gradient(90deg, rgb(0 0 0 / 0.92), rgb(0 0 0 / 0.6) 42%, rgb(0 0 0 / 0.05) 72%),
+  background: linear-gradient(90deg, rgb(0 0 0 / 0.85), rgb(0 0 0 / 0.1) 62%),
     linear-gradient(0deg, rgb(0 0 0 / 0.6), transparent 40%);
 }
 :root[data-hj-motion] .hj-sheet {
@@ -1661,7 +1278,7 @@
   width: min(30rem, 100%);
   height: fit-content;
   max-height: 100%;
-  transition: translate 0.9s var(--spring), rotate 0.9s var(--spring), scale 0.9s var(--spring), filter 0.6s;
+  transition: translate 0.45s var(--spring), rotate 0.45s var(--spring), scale 0.45s var(--spring), filter 0.3s;
   z-index: 1;
 }
 :root[data-hj-motion] .hj-paper[data-state="now"] {
@@ -1784,108 +1401,124 @@
   width: calc(clamp(0, calc((var(--p) - 0.14 - var(--k) * 0.13) * 4), 1) * 100%);
 }
 
-/* -- delivered: a print becomes a gallery that fills the screen -- */
+/* -- delivered: the print becomes a screen -- */
 :root[data-hj-motion] .hj-delivered .hj-stick {
-  --s: clamp(0, calc(var(--p) * 2.6), 1);
-  --e: calc(var(--s) * var(--s) * (3 - 2 * var(--s)));
-  --u0: clamp(0, calc((var(--p) - 0.14) * 3.4), 1);
-  --ui: calc(var(--u0) * var(--u0) * (3 - 2 * var(--u0)));
-  --g: clamp(0, calc((var(--p) - 0.32) * 1.5), 1);
-  --g2: calc(var(--g) * var(--g) * (3 - 2 * var(--g)));
-  --b0: clamp(0, calc((var(--p) - 0.5) * 2.4), 1);
-  --f: calc(var(--b0) * var(--b0) * (3 - 2 * var(--b0)));
-  display: grid;
-  place-items: center;
-  perspective: 1800px;
-  padding: 0;
-}
-:root[data-hj-motion] .hj-devices {
-  width: 100%;
+  --s: clamp(0, calc(var(--p) * 4), 1);
+  --s2: clamp(0, calc((var(--p) - 0.26) * 4), 1);
+  --s3: clamp(0, calc((var(--p) - 0.5) * 4), 1);
 }
 :root[data-hj-motion] .hj-laptop {
-  width: min(94vw, calc(82svh * 1.6));
-  padding: calc(0.5rem + var(--e) * 0.45rem);
-  background: color-mix(in srgb, #14141a calc(var(--e) * 100%), #efeae0);
-  rotate: 1 0 0 calc((1 - var(--e)) * 40deg);
-  scale: calc(0.5 + var(--e) * 0.5);
-  translate: 0 calc((1 - var(--e)) * 8%);
+  padding: calc(0.45rem + var(--s) * 0.45rem);
+  background: color-mix(in srgb, #14141a calc(var(--s) * 100%), #efeae0);
+  rotate: calc((1 - var(--s)) * 3deg);
+  scale: calc(0.82 + var(--s) * 0.18);
 }
 :root[data-hj-motion] .hj-bar {
-  translate: 0 calc((1 - var(--ui)) * -100%);
+  translate: 0 calc((1 - var(--s2)) * -100%);
 }
 :root[data-hj-motion] .hj-cover {
-  height: calc(60.6% - var(--ui) * 30.6%);
+  bottom: calc(var(--s2) * 52%);
 }
 :root[data-hj-motion] .hj-grid {
-  top: calc(60.6% - var(--ui) * 30.6%);
-}
-:root[data-hj-motion] .hj-scroll {
-  translate: 0 calc(var(--g2) * -39.4%);
+  top: calc(100% - var(--s2) * 52%);
 }
 :root[data-hj-motion] .hj-phone {
   display: block;
   position: absolute;
-  right: max(2vw, 1rem);
-  bottom: 9svh;
-  width: min(21vw, 14rem);
-  z-index: 2;
-  translate: calc((1 - var(--f)) * 80%) calc((1 - var(--f)) * 30%);
-  rotate: calc((1 - var(--f)) * 10deg);
+  right: -2%;
+  bottom: -8%;
+  width: min(34%, 10.5rem);
+  padding: 0.4rem;
+  border-radius: 1.4rem;
+  background: #14141a;
+  box-shadow: 0 30px 60px -20px #000;
+  translate: calc((1 - var(--s3)) * 60%) calc((1 - var(--s3)) * 40%);
+  rotate: calc((1 - var(--s3)) * 8deg);
 }
-:root[data-hj-motion] .hj-del-copy {
-  position: absolute;
-  left: var(--pad);
-  bottom: 5.8rem;
-  z-index: 3;
-  max-width: 23rem;
-  padding: 1.1rem 1.3rem;
-  border-radius: 14px;
-  background: rgb(8 8 10 / 0.74);
-  backdrop-filter: blur(14px);
-  translate: calc((1 - var(--f)) * -130%) 0;
+.hj-phone-photo {
+  position: relative;
+  aspect-ratio: 9 / 14;
+  overflow: hidden;
+  border-radius: 1rem;
 }
-:root[data-hj-motion] .hj-del-copy .hj-h2 {
-  font-size: 1.5rem;
+.hj-phone-actions {
+  display: flex;
+  justify-content: space-around;
+  padding: 0.5rem 0 0.2rem;
+  font-size: 0.7rem;
+  color: #d4d0c6;
+}
+.hj-phone-actions > * {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+}
+.hj-phone-actions svg {
+  width: 0.85em;
+  height: 0.85em;
+}
+.hj-phone-actions [data-on] {
+  color: #ff6b81;
 }
 
-/* -- room: the camera moves through three rooms (CSS 3D) -- */
-:root[data-hj-motion] .hj-room .hj-stick {
-  --a: clamp(0, calc((var(--p) - 0.33) * 8.5), 1);
-  --sa: calc(var(--a) * var(--a) * (3 - 2 * var(--a)));
-  --c2: clamp(0, calc((var(--p) - 0.66) * 8.5), 1);
-  --sb: calc(var(--c2) * var(--c2) * (3 - 2 * var(--c2)));
-  --z0: clamp(0, calc(var(--p) * 7), 1);
-  --sz: calc(var(--z0) * var(--z0) * (3 - 2 * var(--z0)));
+/* -- keep: the formats pop onto the wall one after another, quick -- */
+:root[data-hj-motion] .hj-keep .hj-stick {
+  display: block;
+  padding: 0;
 }
-:root[data-hj-motion] .hj-cam {
-  translate: calc((var(--sa) + var(--sb)) * -1800px * var(--k, 1)) calc((1 - var(--sz)) * 40px)
-    calc((1 - var(--sz)) * 900px * var(--k, 1));
-  rotate: 0 1 0 calc((var(--sa) * (1 - var(--sa)) + var(--sb) * (1 - var(--sb))) * 16deg);
-  will-change: translate, rotate;
+:root[data-hj-motion] .hj-keep-copy {
+  position: absolute;
+  left: var(--pad);
+  top: 6rem;
+  z-index: 3;
 }
-:root[data-hj-motion] .hj-caps li:nth-child(1) {
-  --v: calc(1 - var(--sa));
-}
-:root[data-hj-motion] .hj-caps li:nth-child(2) {
-  --v: calc(var(--sa) - var(--sb));
-}
-:root[data-hj-motion] .hj-caps li:nth-child(3) {
-  --v: var(--sb);
-}
-:root[data-hj-motion] .hj-set {
+:root[data-hj-motion] .hj-spread {
+  position: absolute;
+  inset: 0;
   display: block;
 }
-:root[data-hj-motion] .hj-caps {
-  display: grid;
+:root[data-hj-motion] .hj-fmt {
+  --t: clamp(0, calc(var(--p) * 7 - var(--i) * 0.8), 1);
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  translate: -50% calc(-50% + (1 - var(--t)) * 6svh);
+  scale: calc(0.45 + var(--t) * 0.55 + 0.08 * sin(calc(var(--t) * 180deg)));
+  width: var(--w);
 }
-:root[data-hj-motion] .hj-caps li {
-  grid-area: 1 / 1;
+:root[data-hj-motion] .hj-fmt--wall {
+  --x: 31%;
+  --y: 58%;
+  --w: min(36vw, calc(54svh * var(--r)));
 }
-:root[data-hj-motion] .hj-cap {
-  translate: 0 calc((1 - var(--v)) * 120%);
+:root[data-hj-motion] .hj-fmt--frame {
+  --x: 60%;
+  --y: 38%;
+  --w: min(19vw, calc(28svh * var(--r)));
 }
-:root[data-hj-motion] .hj-room-copy {
-  translate: 0 calc(clamp(0, calc((var(--p) - 0.9) * 10), 1) * -300%);
+:root[data-hj-motion] .hj-fmt--canvas {
+  --x: 60%;
+  --y: 74%;
+  --w: min(21vw, calc(30svh * var(--r)));
+}
+:root[data-hj-motion] .hj-fmt--small {
+  --x: 81%;
+  --y: 28%;
+  --w: 12vw;
+}
+:root[data-hj-motion] .hj-fmt--phone {
+  --x: 88%;
+  --y: 66%;
+  --w: 12vw;
+}
+:root[data-hj-motion] .hj-fmt--file {
+  --x: 78%;
+  --y: 47%;
+  --w: auto;
 }
 
 /* ---- phones ---- */
@@ -1922,16 +1555,14 @@
     position: static;
     max-width: none;
   }
-  :root[data-hj-motion] .hj-booking .hj-stick {
+  :root[data-hj-motion] .hj-booking .hj-stick,
+  :root[data-hj-motion] .hj-delivered .hj-stick {
     align-content: center;
     gap: 1.2rem;
     padding: 4.5rem var(--pad) 5rem;
   }
   :root[data-hj-motion] .hj-booking-grid {
     gap: 1rem;
-  }
-  :root[data-hj-motion] .hj-intro {
-    display: none;
   }
   :root[data-hj-motion] .hj-stages {
     grid-template-columns: repeat(4, auto);
@@ -1967,64 +1598,42 @@
   :root[data-hj-motion] .hj-edits {
     display: none;
   }
-  :root[data-hj-motion] .hj-laptop {
-    width: 96vw;
-  }
-  :root[data-hj-motion] .hj-screen {
-    aspect-ratio: 4 / 5;
-  }
-  :root[data-hj-motion] .hj-grid {
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(4, 1fr);
+  :root[data-hj-motion] .hj-del-copy {
+    order: 2;
   }
   :root[data-hj-motion] .hj-phone {
-    width: 36vw;
-    bottom: 14svh;
+    width: 32%;
+    bottom: -14%;
   }
-  :root[data-hj-motion] .hj-del-copy {
-    right: var(--pad);
-    bottom: 5.2rem;
-    max-width: none;
+  :root[data-hj-motion] .hj-keep {
+    --h: auto;
   }
-  :root[data-hj-motion] .hj-del-copy .hj-points {
-    display: none;
+  :root[data-hj-motion] .hj-keep .hj-stick {
+    position: relative;
+    height: auto;
+    display: grid;
+    gap: 1.5rem;
+    padding: 4.5rem var(--pad) 5rem;
   }
-  :root[data-hj-motion] .hj-room-note {
-    display: none;
+  :root[data-hj-motion] .hj-keep-copy,
+  :root[data-hj-motion] .hj-spread {
+    position: static;
+  }
+  :root[data-hj-motion] .hj-spread {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem 1rem;
+  }
+  :root[data-hj-motion] .hj-fmt {
+    position: relative;
+    left: auto;
+    top: auto;
+    translate: none;
+    scale: none;
+    width: auto;
   }
   :root[data-hj-motion] .hj-seeing-photo {
     translate: none;
-  }
-  .hj-skip {
-    flex: none;
-    padding: 0 0.8rem;
-    font-size: 0.78rem;
-    white-space: nowrap;
-  }
-  .hj-skip svg {
-    display: none;
-  }
-  .hj-top {
-    gap: 0.5rem;
-    padding-inline: 0.75rem;
-  }
-  .hj-timeline {
-    padding: 0.15rem 0.3rem;
-  }
-  .hj-timeline button {
-    min-width: 1.75rem;
-    padding-inline: 0.1rem;
-  }
-  .hj-timeline span {
-    display: none;
-  }
-  .hj-timeline li[data-state="now"] span {
-    display: block;
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    translate: -50% 0;
-    white-space: nowrap;
   }
 }
 @media (prefers-reduced-motion: reduce) {

@@ -8,24 +8,16 @@ const clamp = (v: number) => Math.min(1, Math.max(0, v));
 /* ---- the story store: which chapter is on screen, and how the automatic mode is doing ---- */
 
 export type Mode = "auto" | "manual" | "paused" | "done";
-type Snapshot = { chapter: number; mode: Mode; motion: boolean; stage: number };
+type Snapshot = { chapter: number; mode: Mode; motion: boolean };
 
-let snap: Snapshot = { chapter: 0, mode: "manual", motion: false, stage: 0 };
+let snap: Snapshot = { chapter: 0, mode: "manual", motion: false };
 const subs = new Set<() => void>();
 function set(next: Partial<Snapshot>) {
   const merged = { ...snap, ...next };
-  if (
-    merged.chapter === snap.chapter &&
-    merged.mode === snap.mode &&
-    merged.motion === snap.motion &&
-    merged.stage === snap.stage
-  )
-    return;
+  if (merged.chapter === snap.chapter && merged.mode === snap.mode && merged.motion === snap.motion) return;
   snap = merged;
   for (const s of subs) s();
 }
-/** The booking chapter reports which of its four sheets is showing (the timeline's first four steps). */
-export const setStage = (stage: number) => set({ stage });
 export function useStory(): Snapshot {
   return useSyncExternalStore(
     (cb) => {
@@ -96,7 +88,7 @@ export function useScrollStory(root: RefObject<HTMLElement | null>, motion: bool
     let raf = 0;
     const ease = (s: { target: number; current: number }) => {
       if (s.current < 0) s.current = s.target;
-      else s.current += (s.target - s.current) * 0.14;
+      else s.current += (s.target - s.current) * 0.3;
       if (Math.abs(s.target - s.current) < 0.0007) s.current = s.target;
       return s.current === s.target;
     };
@@ -229,7 +221,10 @@ export function useAutoplay(root: RefObject<HTMLElement | null>, enabled: boolea
       const a = tops[c] ?? 0;
       const b = c + 1 < tops.length ? tops[c + 1]! : end;
       const secs = CHAPTERS[c]?.seconds ?? 10;
-      pos = Math.min(end, pos + ((b - a) / secs) * dt);
+      // quick and slow: three beats per chapter (a fast push, then a slow hold)
+      const t = Math.min(1, Math.max(0, (pos - a) / Math.max(1, b - a)));
+      const beat = 1 + 0.78 * Math.sin(t * Math.PI * 6);
+      pos = Math.min(end, pos + ((b - a) / secs) * dt * beat);
       lastSet.current = pos;
       jump(pos);
     };
