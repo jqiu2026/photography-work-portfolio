@@ -98,3 +98,5 @@ Nothing below has been created or spent. Placeholders marked `TODO(owner): needs
 - 2026-10-18: **Home revision 2** from owner feedback (see Q99 to Q101). Worlds chapter, seam intro, By kind removed; My past work; timeline across the process chapters; full-screen self-scrolling gallery; CSS 3D rooms with framed prints and a canvas; merged bottom section with FAQ. `e2e/static-tier.spec.ts` now expects "Working with me" and "Let's make something worth keeping" (By kind is gone). Checked: lint, typecheck, unit tests, 1440 and 390 screenshots, reduced motion and no JS (7.3k px). Not run: full e2e, axe, profiling of the 3D room on a 2020 MacBook Air.
 
 - 2026-10-18: Home revision 2 reverted at the owner's request; selected changes re-applied, faster pace, own sizes-and-formats mockup (Q102, Q103).
+
+- 2026-10-18: Home revision 3 (Q104): about lines, timeline, two-stage galleries, tabletop formats, fixed top text, folded footer links, fixed ending styles, snappier motion.

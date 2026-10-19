@@ -68,20 +68,40 @@ export function PublicChrome({
       >
         {children}
         <footer className="pub-foot">
-          <div className="pub-foot__grid">
-            {FOOTER.map((col) => (
-              <nav key={col.title} aria-label={col.title}>
-                <h2>{col.title}</h2>
-                <ul>
-                  {col.links.map(([label, href]) => (
-                    <li key={href}>
-                      <Link href={href}>{label}</Link>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
-            ))}
-          </div>
+          {intro ? (
+            <details className="pub-foot__more">
+              <summary>More links</summary>
+              <div className="pub-foot__grid">
+                {FOOTER.map((col) => (
+                  <nav key={col.title} aria-label={col.title}>
+                    <h2>{col.title}</h2>
+                    <ul>
+                      {col.links.map(([label, href]) => (
+                        <li key={href}>
+                          <Link href={href}>{label}</Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </nav>
+                ))}
+              </div>
+            </details>
+          ) : (
+            <div className="pub-foot__grid">
+              {FOOTER.map((col) => (
+                <nav key={col.title} aria-label={col.title}>
+                  <h2>{col.title}</h2>
+                  <ul>
+                    {col.links.map(([label, href]) => (
+                      <li key={href}>
+                        <Link href={href}>{label}</Link>
+                      </li>
+                    ))}
+                  </ul>
+                </nav>
+              ))}
+            </div>
+          )}
           <div className="pub-foot__base">
             <p>© {year} Jerry Qiu. All photographs and writing are © Jerry Qiu unless stated.</p>
             <a className="pub-return" href={hub.url} data-return-to-hub>

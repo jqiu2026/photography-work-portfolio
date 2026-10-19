@@ -23,12 +23,12 @@ export type StoryPhoto = {
 /** Chapters in page order. `seconds` is how long the automatic mode spends in the chapter. */
 export const CHAPTERS = [
   { id: "threshold", label: "Threshold", seconds: 5 },
-  { id: "seeing", label: "Seeing", seconds: 9 },
+  { id: "about", label: "About", seconds: 9 },
   { id: "range", label: "My past work", seconds: 9 },
   { id: "booking", label: "Booking", seconds: 20 },
-  { id: "moment", label: "The moment", seconds: 8 },
-  { id: "darkroom", label: "Darkroom", seconds: 9 },
-  { id: "delivered", label: "Delivered", seconds: 9 },
+  { id: "moment", label: "The shoot", seconds: 7 },
+  { id: "darkroom", label: "The edit", seconds: 9 },
+  { id: "delivered", label: "Galleries", seconds: 12 },
   { id: "keep", label: "Keep", seconds: 7 },
 ] as const;
 export type ChapterId = (typeof CHAPTERS)[number]["id"];
@@ -70,7 +70,15 @@ export const PICKS = {
   finale: "jry0011",
 } as const;
 
-export const SEEING_LINES = ["I stay out of the way.", "I watch for the moment.", "Then I press the shutter."] as const;
+/**
+ * A few lines about me, over a photograph. TODO(owner): the photographs here will be of you; until then it shows the
+ * opening photograph. These are your existing words from the original site.
+ */
+export const ABOUT_LINES = [
+  "Photography is how I started, and it is still how I pay attention.",
+  "I make pictures of people at work,",
+  "then spend a long time trying to make them honest.",
+] as const;
 
 export const THRESHOLD = {
   mark: "Jerry Qiu / Photography",
@@ -85,9 +93,22 @@ export const RANGE = {
   all: "All photographs",
 } as const;
 
+/** The whole process, in order. The booking chapter draws it as a timeline; later scenes carry a small copy of it. */
+export const TIMELINE = [
+  { id: "inquiry", label: "Inquiry", text: "Tell me what you are planning." },
+  { id: "quote", label: "Quote", text: "You get a quote with every amount in it." },
+  { id: "booking", label: "Booking", text: "Pick a date. A deposit holds it." },
+  { id: "prep", label: "Preparation", text: "We agree the plan for the day." },
+  { id: "shoot", label: "The shoot", text: "I take the photographs." },
+  { id: "edit", label: "The edit", text: "Then I edit them." },
+  { id: "galleries", label: "Galleries", text: "A private gallery to pick from, then a public one to share." },
+  { id: "keep", label: "Keep", text: "Download them, or hang them." },
+] as const;
+
 export const BOOKING = {
   eyebrow: "Working with me",
-  title: "From the first message to a confirmed date.",
+  title: "From the first message to the last print.",
+  timeline: "The process",
   stages: [
     { id: "inquiry", label: "Inquiry", n: "01" },
     { id: "quote", label: "Quote", n: "02" },
@@ -118,26 +139,40 @@ export const BOOKING = {
 } as const;
 
 export const MOMENT = {
-  phases: ["Focus", "Compose", "Wait", "Press"],
+  line: "I'll take the photographs.",
 } as const;
 
 export const DARKROOM = {
-  title: "Every frame is edited by hand.",
+  title: "Then I'll edit them.",
   steps: ["Light and contrast", "Colour balance", "Crop and detail"],
   before: "Before",
   after: "After",
-  note: "A prepared comparison for illustration. The left side is not a camera RAW file.",
+  note: "A prepared comparison for illustration. The left side is not a camera RAW file. TODO(owner): add a real before and after.",
   control: "Move the before and after line",
 } as const;
 
 export const DELIVERED = {
-  line: "Your photographs, ready to revisit.",
   demo: "Example gallery",
-  points: [
-    "A private link, with a passcode only you share",
-    "Mark favourites and send me your selection",
-    "Download full size, or order prints",
-  ],
+  private: {
+    label: "Private proofing",
+    line: "First, a private gallery to choose from.",
+    points: [
+      "Locked with a passcode only you share",
+      "Mark your favourites and send me your selection",
+      "Download your photographs full size",
+    ],
+    passcode: "Enter passcode",
+  },
+  public: {
+    label: "Public showcase",
+    line: "Then a public one to show off.",
+    points: [
+      "Share one link with anyone",
+      "Anyone can download, or order prints",
+      "Lock it with a passcode whenever you like",
+    ],
+  },
+  actions: ["Download", "Order prints", "Share"],
   cta: { label: "See how galleries work", href: "/galleries" },
 } as const;
 
@@ -148,11 +183,9 @@ export const KEEP = {
   cta: { label: "About prints", href: "/prints" },
   items: [
     { id: "wall", label: "Large framed print" },
-    { id: "frame", label: "Framed, mid size" },
-    { id: "canvas", label: "Canvas" },
-    { id: "small", label: "Small print" },
+    { id: "frame", label: "Framed print" },
+    { id: "small", label: "Small prints" },
     { id: "phone", label: "On your phone" },
-    { id: "file", label: "Full size download" },
   ],
 } as const;
 
