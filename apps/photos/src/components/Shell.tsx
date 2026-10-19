@@ -10,7 +10,12 @@ export function Shell({
   children,
   bare,
   cta = true,
-}: { children: ReactNode; bare?: boolean; cinema?: boolean; cta?: boolean }) {
+  intro = false,
+}: { children: ReactNode; bare?: boolean; cinema?: boolean; cta?: boolean; intro?: boolean }) {
   if (bare) return <>{children}</>;
-  return <PublicChrome cta={cta}>{children}</PublicChrome>;
+  return (
+    <PublicChrome cta={cta} intro={intro}>
+      {children}
+    </PublicChrome>
+  );
 }

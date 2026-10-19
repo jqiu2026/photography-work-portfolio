@@ -465,3 +465,42 @@
     animation: none !important;
   }
 }
+
+/*
+ * The home page opens as a story: the dock and the top bar wait off stage until the end of the page (ChromeReveal sets
+ * data-bar), and the story uses the whole window. The sections at the end, and the footer, keep clear of the dock.
+ */
+.pub[data-intro] > .hm-shell > .hm-shell-stage {
+  padding-left: 0;
+}
+.pub[data-intro] :is(.pub-end, .pub-foot) {
+  padding-left: var(--hm-sidebar);
+}
+.pub[data-intro] > .hm-shell > :is(.hm-dock, .hm-shell-toolbar) {
+  transition: opacity var(--hm-dur-slow) var(--hm-ease-out), translate var(--hm-dur-slow) var(--hm-ease-glide),
+    visibility 0s;
+}
+.pub[data-bar="hidden"] > .hm-shell > :is(.hm-dock, .hm-shell-toolbar) {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity var(--hm-dur-base) var(--hm-ease-out), translate var(--hm-dur-base) var(--hm-ease-out), visibility
+    0s var(--hm-dur-base);
+}
+.pub[data-bar="hidden"] > .hm-shell > .hm-dock {
+  translate: -1.5rem 0;
+}
+.pub[data-bar="hidden"] > .hm-shell > .hm-shell-toolbar {
+  translate: 0 -0.75rem;
+}
+@media (max-width: 860px) {
+  .pub[data-intro] > .hm-shell > .hm-shell-stage {
+    padding-top: 0;
+  }
+  .pub[data-intro] :is(.pub-end, .pub-foot) {
+    padding-left: 0;
+  }
+  .pub[data-bar="hidden"] > .hm-shell > .hm-dock {
+    translate: 0 -100%;
+  }
+}

@@ -2,6 +2,7 @@ import { getSite } from "@jerryqiu/sites";
 import { AppShell, Atmosphere, Button, LightField } from "@holominimal/ui";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { ChromeReveal } from "./ChromeReveal";
 import { PublicDock } from "./PublicDock";
 import "./public.css";
 
@@ -39,14 +40,20 @@ const FOOTER = [
 
 /**
  * The photography site's frame, built on Holominimal: a night-sky atmosphere, the proximity dock for navigation, one
- * call to action pinned top right (left out where it would be noise: client documents, the booking pages), and a hairline footer. The only link that leaves this site is the one jerryqiu.com
+ * call to action pinned top right (left out where it would be noise: client documents, the booking pages), and a hairline footer.
+ * `intro` (the home page) keeps the dock and the top bar out of the story until the end of the page (ChromeReveal). The only link that leaves this site is the one jerryqiu.com
  * button (cross-site rule).
  */
-export function PublicChrome({ children, cta = true }: { children: ReactNode; cta?: boolean }) {
+export function PublicChrome({
+  children,
+  cta = true,
+  intro = false,
+}: { children: ReactNode; cta?: boolean; intro?: boolean }) {
   const hub = getSite("hub");
   const year = new Date().getFullYear();
   return (
-    <LightField className="pub">
+    <LightField className="pub" data-intro={intro ? "" : undefined}>
+      {intro ? <ChromeReveal /> : null}
       <AppShell
         backdrop={<Atmosphere />}
         sidebar={<PublicDock />}
