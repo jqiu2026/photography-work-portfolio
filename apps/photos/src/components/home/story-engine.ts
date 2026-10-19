@@ -8,16 +8,24 @@ const clamp = (v: number) => Math.min(1, Math.max(0, v));
 /* ---- the story store: which chapter is on screen, and how the automatic mode is doing ---- */
 
 export type Mode = "auto" | "manual" | "paused" | "done";
-type Snapshot = { chapter: number; mode: Mode; motion: boolean };
+type Snapshot = { chapter: number; mode: Mode; motion: boolean; stage: number };
 
-let snap: Snapshot = { chapter: 0, mode: "manual", motion: false };
+let snap: Snapshot = { chapter: 0, mode: "manual", motion: false, stage: 0 };
 const subs = new Set<() => void>();
 function set(next: Partial<Snapshot>) {
   const merged = { ...snap, ...next };
-  if (merged.chapter === snap.chapter && merged.mode === snap.mode && merged.motion === snap.motion) return;
+  if (
+    merged.chapter === snap.chapter &&
+    merged.mode === snap.mode &&
+    merged.motion === snap.motion &&
+    merged.stage === snap.stage
+  )
+    return;
   snap = merged;
   for (const s of subs) s();
 }
+/** The booking chapter reports which of its four sheets is showing (the timeline's first four steps). */
+export const setStage = (stage: number) => set({ stage });
 export function useStory(): Snapshot {
   return useSyncExternalStore(
     (cb) => {

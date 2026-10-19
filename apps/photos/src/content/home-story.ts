@@ -22,15 +22,14 @@ export type StoryPhoto = {
 
 /** Chapters in page order. `seconds` is how long the automatic mode spends in the chapter. */
 export const CHAPTERS = [
-  { id: "threshold", label: "Threshold", seconds: 7 },
-  { id: "seeing", label: "Seeing", seconds: 15 },
-  { id: "range", label: "A world of photographs", seconds: 14 },
-  { id: "worlds", label: "Worlds", seconds: 20 },
-  { id: "booking", label: "Booking", seconds: 28 },
-  { id: "moment", label: "The moment", seconds: 11 },
-  { id: "darkroom", label: "Darkroom", seconds: 13 },
-  { id: "delivered", label: "Delivered", seconds: 13 },
-  { id: "finale", label: "Keep", seconds: 6 },
+  { id: "threshold", label: "Threshold", seconds: 6 },
+  { id: "seeing", label: "Seeing", seconds: 14 },
+  { id: "range", label: "My past work", seconds: 14 },
+  { id: "booking", label: "Timeline: booking", seconds: 28 },
+  { id: "moment", label: "Timeline: the shoot", seconds: 11 },
+  { id: "darkroom", label: "Timeline: the edit", seconds: 13 },
+  { id: "delivered", label: "Timeline: delivery", seconds: 16 },
+  { id: "room", label: "Timeline: keep", seconds: 18 },
 ] as const;
 export type ChapterId = (typeof CHAPTERS)[number]["id"];
 
@@ -54,6 +53,7 @@ export const FOCAL_BY_SLUG: Record<string, readonly [number, number]> = {
   "jetblue-a220-300-1": [55, 50],
   "2026-03-25-stuyopenhouse-20": [45, 40],
   "jry0022-enhanced-nr": [33, 42],
+  "jry0126-enhanced-nr": [60, 45],
   "gf4a9402-2-3": [50, 40],
   jry0011: [50, 50],
 };
@@ -64,10 +64,21 @@ export const focalOf = (p?: StoryPhoto): readonly [number, number] =>
 export const PICKS = {
   threshold: "10-19-2025-maker-faire-coney-island-2025-98-1",
   seeing: "10-19-2025-maker-faire-coney-island-2025-51-1",
-  worlds: ["jry0473", "2026-01-17-snow-7", "jetblue-a220-300-1", "2026-03-25-stuyopenhouse-20"],
   moment: "jry0022-enhanced-nr",
-  darkroom: "gf4a9402-2-3",
-  finale: "jry0011",
+  // TODO(owner): choose the photograph for the edit comparison (one whose edit shows).
+  darkroom: "jry0126-enhanced-nr",
+  /** The prints on the walls of the room scenes, in order (framed, then the gallery wall, then the canvas). */
+  room: [
+    "gf4a9402-2-3",
+    "jry0011",
+    "jetblue-a220-300-1",
+    "jry0837",
+    "2026-01-17-snow-8",
+    "jry0473",
+    "2026-01-17-snow-9",
+    "jry1117",
+    "2026-03-25-stuyopenhouse-20",
+  ],
 } as const;
 
 export const SEEING_LINES = ["I stay out of the way.", "I watch for the moment.", "Then I press the shutter."] as const;
@@ -78,17 +89,39 @@ export const THRESHOLD = {
   cue: "Scroll, or let it play",
 } as const;
 
-/** The four worlds: which categories feed each, how it opens onto the next, and where it links. */
-export const WORLDS = [
-  { id: "stage", label: "Stage", from: ["theater", "dance"], href: "/portfolio/theater", open: "iris" },
-  { id: "street", label: "Street", from: ["street"], href: "/portfolio/street", open: "iris" },
-  { id: "sky", label: "Sky", from: ["aviation"], href: "/portfolio/aviation", open: "rise" },
-  { id: "people", label: "People", from: ["portrait", "event"], href: "/portfolio/portrait", open: "slant" },
+/** The eight steps of working together; the timeline across the top of the page follows them. */
+export const TIMELINE = [
+  { id: "inquiry", label: "Inquiry" },
+  { id: "quote", label: "Quote" },
+  { id: "booking", label: "Booking" },
+  { id: "prep", label: "Preparation" },
+  { id: "shoot", label: "The shoot" },
+  { id: "edit", label: "The edit" },
+  { id: "delivery", label: "Delivery" },
+  { id: "keep", label: "Keep" },
 ] as const;
-export type WorldOpen = (typeof WORLDS)[number]["open"];
+
+export const ROOM = {
+  title: "Download it, or hang it.",
+  note: "Illustrations of how a print can look in a room.",
+  scenes: [
+    { label: "Framed print", note: "Over the sofa" },
+    { label: "Gallery wall", note: "Frames of different sizes" },
+    { label: "Canvas", note: "Above the desk" },
+  ],
+  cta: { label: "About prints", href: "/prints" },
+} as const;
+
+export const END = {
+  line: "Let's make something worth keeping.",
+  primary: { label: "Book a shoot", href: "/book" },
+  secondary: { label: "Explore the portfolio", href: "/portfolio" },
+  faq: "Questions before you book",
+  allFaq: "All questions",
+} as const;
 
 export const RANGE = {
-  title: "A world of photographs",
+  title: "My past work",
   /** Only categories with enough work are shown (the page filters on this). */
   minPhotos: 1,
   all: "All photographs",
@@ -96,7 +129,9 @@ export const RANGE = {
 
 export const BOOKING = {
   eyebrow: "Working with me",
-  title: "From the first message to a confirmed date.",
+  title: "From the first message to a framed print.",
+  timeline: "The timeline",
+  intro: "Eight steps. You do the first two; I do the rest and keep you posted.",
   stages: [
     { id: "inquiry", label: "Inquiry", n: "01" },
     { id: "quote", label: "Quote", n: "02" },
@@ -150,12 +185,6 @@ export const DELIVERED = {
   cta: { label: "See how galleries work", href: "/galleries" },
 } as const;
 
-export const FINALE = {
-  line: "Let's make something worth keeping.",
-  primary: { label: "Book a shoot", href: "/book" },
-  secondary: { label: "Explore the portfolio", href: "/portfolio" },
-} as const;
-
 export const HUD = {
   skip: "Skip the story",
   auto: "Playing",
@@ -172,11 +201,11 @@ export type StorySlots = {
   threshold?: StoryPhoto;
   seeing?: StoryPhoto;
   sheet: StoryPhoto[];
-  worlds: (StoryPhoto | undefined)[];
   moment?: StoryPhoto;
   darkroom?: StoryPhoto;
   delivered: StoryPhoto[];
-  finale?: StoryPhoto;
+  gallery: StoryPhoto[];
+  room: StoryPhoto[];
   prep: StoryPhoto[];
 };
 
@@ -222,12 +251,11 @@ export function pickSlots(source: StoryPhoto[]): StorySlots {
     if (out.length < n && cats.length) out.push(...take([], n - out.length));
     return out;
   };
-  const worlds = WORLDS.map((w, i) => take(w.from, 1, 0, PICKS.worlds[i])[0]);
   const threshold = take(["event", "theater", "dance"], 1, 1, PICKS.threshold)[0];
   const seeing = take(["event", "theater", "portrait"], 1, 0, PICKS.seeing)[0];
   const moment = take(["dance", "theater", "aviation"], 1, 1, PICKS.moment)[0];
-  const darkroom = take(["portrait", "street", "event"], 1, 0, PICKS.darkroom)[0];
-  const finale = take(["composite", "street", "aviation"], 1, 0, PICKS.finale)[0];
+  const darkroom = take(["low-light", "portrait", "event"], 1, 0, PICKS.darkroom)[0];
+  const room = PICKS.room.map((slug, i) => take([], 1, i, slug)[0]).filter((p): p is StoryPhoto => Boolean(p));
   const delivered = take([], 6, 0);
   const prep = take([], 3, 0);
   // the contact sheet shows the whole portfolio: one frame per subject in turn, so the subjects are spread through it
@@ -245,11 +273,11 @@ export function pickSlots(source: StoryPhoto[]): StorySlots {
     threshold: threshold ?? any,
     seeing: seeing ?? any,
     sheet,
-    worlds: worlds.map((w, i) => w ?? all[i % Math.max(1, all.length)]),
     moment: moment ?? any,
     darkroom: darkroom ?? any,
     delivered: delivered.length >= 4 ? delivered : all.slice(0, 6),
-    finale: finale ?? any,
+    gallery: sheet.length >= 8 ? sheet.slice(0, 12) : all.slice(0, 12),
+    room: room.length >= 6 ? room : all.slice(0, 9),
     prep: prep.length ? prep : all.slice(0, 3),
   };
 }

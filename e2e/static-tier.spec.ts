@@ -12,7 +12,7 @@ const homes = [
     name: "photos",
     url: `${photos}/`,
     h1: /Pictures of people at work/i,
-    texts: [/By kind/i, /Working with me/i],
+    texts: [/Working with me/i, /Let.s make something worth keeping/i],
   },
   { name: "music", url: `${music}/`, h1: /Music/, texts: [/Say hello/i] },
   { name: "flying", url: `${flying}/`, h1: /Flying/, texts: [/Say hello/i, /The log/i] },

@@ -5,7 +5,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { HomeStory } from "@/components/home/HomeStory";
 import { Shell } from "@/components/Shell";
-import { pickSlots } from "@/content/home-story";
+import { faq } from "@/content/faq";
+import { END, pickSlots } from "@/content/home-story";
 import { getPublicCatalog } from "@/lib/catalog";
 import { getPortfolio } from "@/lib/portfolio";
 import { getWork } from "@/lib/work";
@@ -59,35 +60,8 @@ export default async function Home() {
         }))}
       />
 
-      {/* the coda: the plain site, for skimming and direct navigation */}
-      <div className="pub-end">
-        <section className="pub-section" aria-labelledby="by-kind">
-          <div className="pub-wrap">
-            <div className="pub-head-row">
-              <h2 id="by-kind">By kind</h2>
-              <Link href="/portfolio" className="pub-link">
-                All photographs →
-              </Link>
-            </div>
-            {cats.length ? null : <EmptyState>New photographs are on the way.</EmptyState>}
-            <ul className="pub-cats">
-              {cats.map((c) => (
-                <li key={c.slug}>
-                  <Link href={`/portfolio/${c.slug}`} className="pub-cat">
-                    {c.cover ? (
-                      <ProtectedImage asset={c.cover} alt="" sizes="(min-width: 900px) 16vw, 45vw" fill />
-                    ) : null}
-                    <span>
-                      {c.name}
-                      <small>{c.count}</small>
-                    </span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-
+      {/* the coda: the plain site, for skimming and direct navigation. The dock and the top bar arrive here (ChromeReveal). */}
+      <div className="pub-end" data-bar-end="">
         {projects.length ? (
           <section className="pub-section" aria-labelledby="projects">
             <div className="pub-wrap">
@@ -112,20 +86,33 @@ export default async function Home() {
           </section>
         ) : null}
 
-        <div className="pub-wrap">
-          <div className="pub-cta-band">
-            <div>
-              <h2>Book a shoot</h2>
-              {/* TODO(owner): rewrite in your voice. */}
-              <p>Tell me about the event or the idea. I'll reply by email.</p>
-            </div>
-            <div className="pub-actions" style={{ margin: 0 }}>
+        <section id="finale" className="hj-end" aria-labelledby="hj-finale-title">
+          <div className="hj-end-inner">
+            <h2 id="hj-finale-title" tabIndex={-1}>
+              {END.line}
+            </h2>
+            <div className="hj-actions">
               <Button asChild size="lg">
-                <Link href="/book">Start a booking</Link>
+                <Link href={END.primary.href}>{END.primary.label}</Link>
+              </Button>
+              <Button asChild size="lg" variant="secondary">
+                <Link href={END.secondary.href}>{END.secondary.label}</Link>
               </Button>
             </div>
+            <div className="hj-faq">
+              <h3>{END.faq}</h3>
+              {faq.slice(0, 6).map((f) => (
+                <details key={f.q}>
+                  <summary>{f.q}</summary>
+                  <p>{f.a}</p>
+                </details>
+              ))}
+              <Link href="/faq" className="hj-faq-more">
+                {END.allFaq} →
+              </Link>
+            </div>
           </div>
-        </div>
+        </section>
       </div>
     </Shell>
   );
