@@ -1368,15 +1368,25 @@
   scale: calc(1.12 - var(--p) * 0.08);
 }
 :root[data-hj-motion] .hj-frame-cell {
-  filter: brightness(0.46) saturate(0.7);
+  transition: scale 0.35s cubic-bezier(0.4, 0, 0.2, 1), outline-color 0.2s;
+}
+/* a dark veil instead of a filter: 25 filtered, rotated photographs were too heavy to scroll */
+:root[data-hj-motion] .hj-frame-cell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgb(0 0 0 / 0.58);
+  transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 :root[data-hj-motion] .hj-frame-cell:nth-child(n + 9) {
   display: block;
 }
 :root[data-hj-motion] .hj-frame-cell[data-on] {
-  filter: none;
   scale: 1.07;
   z-index: 2;
+}
+:root[data-hj-motion] .hj-frame-cell[data-on]::after {
+  opacity: 0;
 }
 :root[data-hj-motion] .hj-viewing {
   display: block;
@@ -1632,8 +1642,17 @@
   border-radius: 2rem;
   background: #14141a;
   box-shadow: 0 30px 60px -20px #000;
-  translate: calc((1 - var(--f)) * 90%) calc(-50% + 3svh + (1 - var(--f)) * 14%);
-  rotate: calc((1 - var(--f)) * 8deg);
+  translate: 90% calc(-50% + 3svh + 14%);
+  rotate: 8deg;
+  opacity: 0;
+  transition: translate 0.7s cubic-bezier(0.4, 0, 0.2, 1), rotate 0.7s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s
+    cubic-bezier(0.4, 0, 0.2, 1);
+}
+/* the phone comes in with the laptop's zoom */
+:root[data-hj-motion] .hj-stick[data-zoom] .hj-phone {
+  translate: 0 calc(-50% + 3svh);
+  rotate: 0deg;
+  opacity: 1;
 }
 .hj-phone-screen {
   position: relative;
@@ -1840,8 +1859,8 @@
     grid-template-columns: 1fr 1fr;
     gap: 0.5rem;
   }
-  :root[data-hj-motion] .hj-frame-cell {
-    filter: none;
+  :root[data-hj-motion] .hj-frame-cell::after {
+    display: none;
   }
   :root[data-hj-motion] .hj-frame-cell:nth-child(n + 9) {
     display: none;
@@ -1941,9 +1960,12 @@
     left: auto;
     top: auto;
     height: min(62svh, 120vw);
-    translate: 0 calc((1 - var(--f)) * 14%);
+    translate: 0 14%;
     rotate: none;
     margin-top: -4svh;
+  }
+  :root[data-hj-motion] .hj-stick[data-zoom] .hj-phone {
+    translate: 0 0;
   }
   :root[data-hj-motion] .hj-phone .hj-act {
     min-height: 2.5rem;

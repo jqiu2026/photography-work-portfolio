@@ -195,7 +195,7 @@ export function chapterTops(root: HTMLElement) {
   // the story plays on to the bottom of the page: the questions and the end
   const end = Math.max(pinned, document.documentElement.scrollHeight - innerHeight);
   // each chapter is two moves: the animation while it is pinned, then the scroll over to the next chapter
-  const moves: { a: number; b: number; secs: number; ramp?: number }[] = [];
+  const moves: { a: number; b: number; secs: number; ramp?: number; cross?: boolean }[] = [];
   els.forEach((c, i) => {
     const top = tops[i]!;
     const pinEnd = Math.min(end, top + Math.max(0, c.offsetHeight - innerHeight));
@@ -204,7 +204,7 @@ export function chapterTops(root: HTMLElement) {
     const id = CHAPTERS[i]?.id;
     const secs = CHAPTERS[i]?.seconds ?? 5;
     if (pinEnd - top > 2) moves.push({ a: top, b: pinEnd, secs, ramp: id ? RAMP[id] : undefined });
-    if (next - pinEnd > 2) moves.push({ a: pinEnd, b: next, secs: lastOne ? 2.4 : CROSS_SECONDS });
+    if (next - pinEnd > 2) moves.push({ a: pinEnd, b: next, secs: lastOne ? 2.4 : CROSS_SECONDS, cross: true });
   });
   return { tops, end, moves };
 }
@@ -282,7 +282,7 @@ export function useAutoplay(root: RefObject<HTMLElement | null>, enabled: boolea
       raf = requestAnimationFrame(tick);
       const dt = prev ? Math.min(0.05, (now - prev) / 1000) : 0;
       prev = now;
-      if (hold.current || document.hidden) return;
+      if (document.hidden) return;
       // something else moved the page (scrollbar drag, an anchor, find in page): that is the reader
       if (lastSet.current >= 0 && Math.abs(scrollY - lastSet.current) > 6) return change("manual");
       const { moves, end } = cache;
@@ -293,6 +293,8 @@ export function useAutoplay(root: RefObject<HTMLElement | null>, enabled: boolea
       });
       const mv = moves[m];
       if (!mv) return change("done");
+      // the pointer resting on a mockup holds the story still, but never in the middle of the scroll between chapters
+      if (hold.current && !mv.cross) return;
       if (m !== at) {
         at = m;
         u = unease(Math.min(1, Math.max(0, (pos - mv.a) / Math.max(1, mv.b - mv.a))), mv);
