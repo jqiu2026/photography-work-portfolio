@@ -2,7 +2,7 @@
 
 import { ArrowRightIcon, Button, Cursor, DownloadIcon, HeartIcon, LockIcon } from "@holominimal/ui";
 import Link from "next/link";
-import { type CSSProperties, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { type CSSProperties, useEffect, useRef, useState } from "react";
 import { ProtectedImage } from "@/components/media";
 import {
   BOOKING,
@@ -215,31 +215,17 @@ function Range({ sheet, subjects }: { sheet: StoryPhoto[]; subjects: Subject[] }
   const wall = Array.from({ length: sheet.length ? 25 : 0 }, (_, i) => sheet[i % sheet.length] as StoryPhoto);
   const [on, setOn] = useState(0);
   const [hop, setHop] = useState(0);
-  const [box, setBox] = useState<{ x: number; y: number; w: number; h: number } | null>(null);
-  const sheetRef = useRef<HTMLDivElement>(null);
   useProgress(ref, (p) => {
     const n = Math.max(1, cats.length);
     const at = Math.min(n - 0.001, Math.max(0, ((p - 0.12) / 0.78) * n));
     setOn(Math.floor(at));
-    // the frame visits each highlighted photograph of the subject in turn
+    // the frame shows each photograph of the subject in turn
     setHop(Math.floor((at % 1) * 3));
   });
   const active = cats[on]?.slug;
-  // the frame sits inside the moving sheet, so it travels with the photographs and only slides between them
-  // biome-ignore lint/correctness/useExhaustiveDependencies: the subject and the hop decide which cells are lit; the DOM is read
-  useLayoutEffect(() => {
-    const sheetEl = sheetRef.current;
-    if (!sheetEl) return;
-    const lit = [...sheetEl.querySelectorAll<HTMLElement>(".hj-frame-cell[data-on]")];
-    const view = innerWidth;
-    const seen = lit.filter((c) => {
-      const r = c.getBoundingClientRect();
-      return r.right > 0 && r.left < view && r.bottom > 0 && r.top < innerHeight;
-    });
-    const list = (seen.length ? seen : lit).sort((a, b) => a.offsetLeft - b.offsetLeft || a.offsetTop - b.offsetTop);
-    const c = list[hop % Math.max(1, list.length)];
-    if (c) setBox({ x: c.offsetLeft, y: c.offsetTop, w: c.offsetWidth, h: c.offsetHeight });
-  }, [active, hop]);
+  const chosen = [...new Map(wall.filter((p) => p.category === active).map((p) => [p.id ?? p.alt, p])).values()];
+  const shown = chosen[hop % Math.max(1, chosen.length)] ?? wall[0];
+  const shownKey = shown?.id ?? shown?.alt ?? "";
   return (
     <section
       id="ch-range"
@@ -250,7 +236,7 @@ function Range({ sheet, subjects }: { sheet: StoryPhoto[]; subjects: Subject[] }
       aria-labelledby="hj-range-title"
     >
       <div className="hj-stick">
-        <div className="hj-sheet" aria-hidden="true" ref={sheetRef}>
+        <div className="hj-sheet" aria-hidden="true">
           {wall.map((p, i) => (
             <Link
               key={`${p.id ?? "p"}-${i}`}
@@ -264,15 +250,11 @@ function Range({ sheet, subjects }: { sheet: StoryPhoto[]; subjects: Subject[] }
               <small>{String(i + 1).padStart(2, "0")}</small>
             </Link>
           ))}
-          <span
-            className="hj-viewing"
-            style={
-              box
-                ? vars({ "--x": `${box.x}px`, "--y": `${box.y}px`, "--w": `${box.w}px`, "--h": `${box.h}px` })
-                : undefined
-            }
-            data-set={box ? "" : undefined}
-          />
+        </div>
+        <div className="hj-viewing" aria-hidden="true">
+          <div className="hj-viewing-photo" key={shownKey} data-new="">
+            <Ph photo={shown} sizes="(min-width: 900px) 32vw, 60vw" />
+          </div>
         </div>
         <div className="hj-range-copy">
           <h2 id="hj-range-title" className="hj-h2">
@@ -628,6 +610,7 @@ function Delivered({ cover, photos }: { cover?: StoryPhoto; photos: StoryPhoto[]
   const ref = useRef<HTMLElement>(null);
   const [phase, setPhase] = useState(0);
   const [unlock, setUnlock] = useState<Unlock>("locked");
+  const [zoom, setZoom] = useState(false);
   const [hearts, setHearts] = useState<Record<number, boolean>>({});
   const [toast, setToast] = useState("");
   const timers = useRef<number[]>([]);
@@ -641,7 +624,7 @@ function Delivered({ cover, photos }: { cover?: StoryPhoto; photos: StoryPhoto[]
   };
   useEffect(() => () => timers.current.forEach(clearTimeout), []);
   useProgress(ref, (p) => setPhase(p > 0.55 ? 1 : 0));
-  // the passcode screen shows for a beat (0.25 s), the dots fill in, then the screen lifts; it starts when the stage is half in view
+  // the stage zooms in first when it is half in view; then the passcode is entered
   const stageRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const el = stageRef.current;
@@ -652,14 +635,17 @@ function Delivered({ cover, photos }: { cover?: StoryPhoto; photos: StoryPhoto[]
           if (e.intersectionRatio >= 0.5) {
             setUnlock((u) => {
               if (u !== "locked") return u;
-              timers.current[1] = window.setTimeout(() => setUnlock("typing"), 250);
-              timers.current[2] = window.setTimeout(() => setUnlock("open"), 250 + 700);
+              // the laptop zooms in (0.7 s), the screen waits a beat (0.25 s), then the dots fill and the screen lifts
+              timers.current[1] = window.setTimeout(() => setUnlock("typing"), 700 + 250);
+              timers.current[2] = window.setTimeout(() => setUnlock("open"), 700 + 250 + 700);
               return u;
             });
+            setZoom(true);
           } else if (e.intersectionRatio === 0) {
             clearTimeout(timers.current[1]);
             clearTimeout(timers.current[2]);
             setUnlock("locked");
+            setZoom(false);
           }
         }
       },
@@ -746,7 +732,7 @@ function Delivered({ cover, photos }: { cover?: StoryPhoto; photos: StoryPhoto[]
       data-scroll="pin"
       aria-labelledby="hj-del-title"
     >
-      <div className="hj-stick" data-phase={phase} ref={stageRef}>
+      <div className="hj-stick" data-phase={phase} data-zoom={zoom ? "" : undefined} ref={stageRef}>
         <div className="hm-sr-only" role="status">
           {toast}
         </div>

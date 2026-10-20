@@ -1381,18 +1381,36 @@
 :root[data-hj-motion] .hj-viewing {
   display: block;
   position: absolute;
-  left: calc(var(--x, 0px) - 0.5rem);
-  top: calc(var(--y, 0px) - 0.5rem);
-  width: calc(var(--w, 0px) + 1rem);
-  height: calc(var(--h, 0px) + 1rem);
-  z-index: 3;
-  opacity: 0;
+  left: 66%;
+  top: 50%;
+  z-index: 4;
+  width: min(32vw, 62svh);
+  aspect-ratio: 3 / 2;
+  translate: -50% -50%;
+  background: #000;
+  box-shadow: 0 30px 60px -20px #000;
+  pointer-events: none;
+}
+.hj-viewing-photo {
+  position: absolute;
+  inset: 0;
+}
+.hj-viewing-photo[data-new] {
+  animation: hj-view-in 0.45s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+@keyframes hj-view-in {
+  from {
+    opacity: 0;
+    scale: 1.06;
+  }
+}
+:root[data-hj-motion] .hj-viewing::after {
+  content: "";
+  position: absolute;
+  inset: -0.6rem;
+  z-index: 2;
   --b: 2.2rem;
   --lw: 3px;
-  pointer-events: none;
-  transition:
-    left 0.3s var(--hm-ease-curtain), top 0.3s var(--hm-ease-curtain), width 0.3s var(--hm-ease-curtain),
-    height 0.3s var(--hm-ease-curtain), opacity 0.2s;
   background:
     linear-gradient(#fff, #fff) left top / var(--b) var(--lw) no-repeat,
     linear-gradient(#fff, #fff) left top / var(--lw) var(--b) no-repeat,
@@ -1402,9 +1420,6 @@
     linear-gradient(#fff, #fff) left bottom / var(--lw) var(--b) no-repeat,
     linear-gradient(#fff, #fff) right bottom / var(--b) var(--lw) no-repeat,
     linear-gradient(#fff, #fff) right bottom / var(--lw) var(--b) no-repeat;
-}
-:root[data-hj-motion] .hj-viewing[data-set] {
-  opacity: 1;
 }
 :root[data-hj-motion] .hj-range-copy {
   position: absolute;
@@ -1437,8 +1452,9 @@
   width: min(30rem, 100%);
   height: fit-content;
   max-height: 100%;
-  transition: translate 0.7s var(--hm-ease-curtain), rotate 0.7s var(--hm-ease-curtain), scale 0.7s
-    var(--hm-ease-curtain), filter 0.5s var(--hm-ease-curtain);
+  transition:
+    translate 0.8s cubic-bezier(0.4, 0, 0.2, 1), rotate 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+    scale 0.8s cubic-bezier(0.4, 0, 0.2, 1), filter 0.6s cubic-bezier(0.4, 0, 0.2, 1), z-index 0s 0.35s;
   z-index: 1;
 }
 :root[data-hj-motion] .hj-paper[data-state="now"] {
@@ -1587,9 +1603,16 @@
 }
 :root[data-hj-motion] .hj-laptop {
   width: min(68vw, calc(64svh * 1.6));
-  scale: calc(0.6 + var(--e) * 0.4);
-  rotate: 1 0 0 calc((1 - var(--e)) * 30deg);
-  translate: 0 calc(2svh + (1 - var(--e)) * 6%);
+  scale: 0.6;
+  rotate: 1 0 0 30deg;
+  translate: 0 calc(2svh + 6%);
+  transition: scale 0.7s cubic-bezier(0.4, 0, 0.2, 1), rotate 0.7s cubic-bezier(0.4, 0, 0.2, 1), translate 0.7s
+    cubic-bezier(0.4, 0, 0.2, 1);
+}
+:root[data-hj-motion] .hj-stick[data-zoom] .hj-laptop {
+  scale: 1;
+  rotate: 1 0 0 0deg;
+  translate: 0 2svh;
 }
 :root[data-hj-motion] .hj-scroll {
   translate: 0 calc(var(--g2) * -39.4%);
@@ -2030,7 +2053,7 @@
   background: var(--pencil);
   transform-origin: top;
   scale: 1 calc(var(--s) / 7);
-  transition: scale 0.15s var(--glide);
+  transition: scale 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .hj-tl li {
   position: relative;
@@ -2046,7 +2069,8 @@
   border: 2px solid #fff;
   border-radius: 50%;
   background: #0a0a0a;
-  transition: background 0.09s, scale 0.12s var(--spring), box-shadow 0.12s;
+  transition: background 0.4s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.4s, scale 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.45s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .hj-tl li[data-state="done"] .hj-tl-dot {
   border-color: var(--pencil);
@@ -2088,7 +2112,7 @@
 :root[data-hj-motion] .hj-tl span {
   max-height: 3rem;
   overflow: hidden;
-  transition: max-height 0.12s var(--glide);
+  transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 :root[data-hj-motion] .hj-tl li:not([data-state="now"]) span {
   max-height: 0;
