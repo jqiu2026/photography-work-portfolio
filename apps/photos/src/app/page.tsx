@@ -93,7 +93,7 @@ export default async function Home() {
                 <span className="hm-sr-only">{END.line}</span>
                 <span aria-hidden="true">
                   {END.lead} <br />
-                  <em className="hj-emph">
+                  <em className="hj-emph hm-iridescent-text">
                     <noscript>{END.cycle[0]}</noscript>
                     <Typewriter text={[...END.cycle]} speed={70} hold={2200} />
                   </em>

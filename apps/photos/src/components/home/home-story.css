@@ -2537,8 +2537,23 @@
 /* the emphasized part of the headline types and erases its phrases (Holominimal's Typewriter) */
 .hj-emph {
   font-style: normal;
-  color: var(--hm-accent, #9ec5ff);
+  /* Holominimal's iridescent text, from white through violet to cyan */
+  background-image: linear-gradient(90deg, #fff 0%, hsl(var(--hm-violet)) 45%, hsl(var(--hm-cyan)) 100%);
+  background-size: 100% 100%;
+  padding-right: 0.12em;
+}
+.hj-emph .hm-typewriter-caret {
+  background: hsl(var(--hm-cyan));
 }
 .hj-end h2 {
   min-height: 2.05em;
+}
+
+@media (min-width: 900px) {
+  .hj-end h2 {
+    font-size: clamp(2.4rem, 4.6vw, 4.6rem);
+  }
+  .hj-emph {
+    white-space: nowrap;
+  }
 }
