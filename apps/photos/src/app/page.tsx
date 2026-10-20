@@ -1,11 +1,12 @@
 import { ProtectedImage } from "@/components/media";
 import { Button, EmptyState } from "@holominimal/ui";
 import { getSite } from "@jerryqiu/sites";
+import { person } from "@jerryqiu/sites/profile";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { HomeInquiry } from "@/components/home/HomeInquiry";
 import { HomeStory } from "@/components/home/HomeStory";
 import { Shell } from "@/components/Shell";
-import { faq } from "@/content/faq";
 import { END, pickSlots } from "@/content/home-story";
 import { getPublicCatalog } from "@/lib/catalog";
 import { getPortfolio } from "@/lib/portfolio";
@@ -88,29 +89,20 @@ export default async function Home() {
 
         <section id="finale" className="hj-end" aria-labelledby="hj-finale-title">
           <div className="hj-end-inner">
-            <h2 id="hj-finale-title" tabIndex={-1}>
-              {END.line}
-            </h2>
-            <div className="hj-actions">
-              <Button asChild size="lg">
-                <Link href={END.primary.href}>{END.primary.label}</Link>
-              </Button>
-              <Button asChild size="lg" variant="secondary">
-                <Link href={END.secondary.href}>{END.secondary.label}</Link>
-              </Button>
+            <div className="hj-end-copy">
+              <h2 id="hj-finale-title" tabIndex={-1}>
+                {END.line}
+              </h2>
+              <div className="hj-actions">
+                <Button asChild size="lg">
+                  <Link href={END.primary.href}>{END.primary.label}</Link>
+                </Button>
+                <Button asChild size="lg" variant="secondary">
+                  <Link href={END.secondary.href}>{END.secondary.label}</Link>
+                </Button>
+              </div>
             </div>
-            <div className="hj-faq">
-              <h3>{END.faq}</h3>
-              {faq.slice(0, 5).map((f) => (
-                <details key={f.q}>
-                  <summary>{f.q}</summary>
-                  <p>{f.a}</p>
-                </details>
-              ))}
-              <Link href="/faq" className="hj-faq-more">
-                {END.allFaq} →
-              </Link>
-            </div>
+            <HomeInquiry email={person.bookingEmail} />
           </div>
         </section>
       </div>

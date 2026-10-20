@@ -195,8 +195,29 @@ export const END = {
   line: "Let's make something worth keeping.",
   primary: { label: "Book a shoot", href: "/book" },
   secondary: { label: "Explore the portfolio", href: "/portfolio" },
-  faq: "Questions before you book",
-  allFaq: "All questions",
+  form: {
+    title: "Or send a note right here",
+    name: "Your name",
+    email: "Email",
+    type: "What is it?",
+    date: "Date, if you have one",
+    message: "Tell me about it",
+    consent: "I agree that my message is stored so you can reply, and that you may email me about it.",
+    send: "Send inquiry",
+    sending: "Sending",
+    orEmail: "or email",
+    sentTitle: "Thanks, I got your message.",
+    sentText: "A confirmation is on its way to your inbox. I reply myself, usually within two days.",
+    again: "Send another",
+    errors: {
+      name: "Please tell me your name.",
+      email: "That doesn't look like an email address.",
+      message: "Tell me a little about the shoot.",
+      consent: "Please tick the box so I can store your message.",
+      server: "Something went wrong.",
+      network: "Could not reach the server.",
+    },
+  },
 } as const;
 
 export const HUD = {
