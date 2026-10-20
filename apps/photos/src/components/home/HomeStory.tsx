@@ -214,18 +214,11 @@ function Range({ sheet, subjects }: { sheet: StoryPhoto[]; subjects: Subject[] }
   // TODO(owner): the sheet repeats the portfolio's photographs until there are enough different ones
   const wall = Array.from({ length: sheet.length ? 25 : 0 }, (_, i) => sheet[i % sheet.length] as StoryPhoto);
   const [on, setOn] = useState(0);
-  const [hop, setHop] = useState(0);
   useProgress(ref, (p) => {
     const n = Math.max(1, cats.length);
-    const at = Math.min(n - 0.001, Math.max(0, ((p - 0.12) / 0.78) * n));
-    setOn(Math.floor(at));
-    // the frame shows each photograph of the subject in turn
-    setHop(Math.floor((at % 1) * 3));
+    setOn(Math.min(n - 1, Math.max(0, Math.floor(((p - 0.12) / 0.78) * n))));
   });
   const active = cats[on]?.slug;
-  const chosen = [...new Map(wall.filter((p) => p.category === active).map((p) => [p.id ?? p.alt, p])).values()];
-  const shown = chosen[hop % Math.max(1, chosen.length)] ?? wall[0];
-  const shownKey = shown?.id ?? shown?.alt ?? "";
   return (
     <section
       id="ch-range"
@@ -251,11 +244,7 @@ function Range({ sheet, subjects }: { sheet: StoryPhoto[]; subjects: Subject[] }
             </Link>
           ))}
         </div>
-        <div className="hj-viewing" aria-hidden="true">
-          <div className="hj-viewing-photo" key={shownKey} data-new="">
-            <Ph photo={shown} sizes="(min-width: 900px) 32vw, 60vw" />
-          </div>
-        </div>
+        <span className="hj-viewing" aria-hidden="true" />
         <div className="hj-range-copy">
           <h2 id="hj-range-title" className="hj-h2">
             {RANGE.title}
@@ -315,6 +304,9 @@ function Calendar() {
   );
 }
 
+/** Where in the booking chapter each of the four cards takes over (Connect is short; a card then every 2 s of autoplay). */
+const STAGE_AT = [0, 0.15, 0.39, 0.63] as const;
+
 function Booking({ packages, prep }: { packages: HomePackage[]; prep: StoryPhoto[] }) {
   const ref = useRef<HTMLElement>(null);
   const story = useStory();
@@ -326,8 +318,7 @@ function Booking({ packages, prep }: { packages: HomePackage[]; prep: StoryPhoto
     ),
   );
   useProgress(ref, (p) => {
-    const n = Math.min(3, Math.max(0, Math.floor((p - 0.04) * 4.2)));
-    setStage(n);
+    setStage(STAGE_AT.filter((at) => p >= at).length - 1);
   });
   const motion = story.motion;
   const pkg = packages[pick];
@@ -336,8 +327,16 @@ function Booking({ packages, prep }: { packages: HomePackage[]; prep: StoryPhoto
     const el = ref.current;
     if (!el) return;
     if (!motion) return document.getElementById(`sheet-${BOOKING.stages[i]?.id}`)?.scrollIntoView({ block: "center" });
-    scrollTo({ top: yForProgress(el, (i + 0.5) / 4.2 + 0.04), behavior: "smooth" });
+    const from = STAGE_AT[i] ?? 0;
+    scrollTo({ top: yForProgress(el, (from + (STAGE_AT[i + 1] ?? 1)) / 2), behavior: "smooth" });
   };
+  // the timeline bar can ask for one of the four cards
+  // biome-ignore lint/correctness/useExhaustiveDependencies: go reads the latest section only
+  useEffect(() => {
+    const on = (e: Event) => go((e as CustomEvent<number>).detail);
+    addEventListener("hj-stage", on);
+    return () => removeEventListener("hj-stage", on);
+  }, []);
   return (
     <section
       id="ch-booking"
@@ -389,7 +388,7 @@ function Booking({ packages, prep }: { packages: HomePackage[]; prep: StoryPhoto
               })}
             </ol>
           </div>
-          <div className="hj-desk" data-hold="">
+          <div className="hj-desk" data-hold="" style={vars({ "--stage": stage })}>
             <article
               id="sheet-inquiry"
               className="hj-paper"
@@ -637,7 +636,7 @@ function Delivered({ cover, photos }: { cover?: StoryPhoto; photos: StoryPhoto[]
               if (u !== "locked") return u;
               // the laptop zooms in (0.7 s), the screen waits a beat (0.25 s), then the dots fill and the screen lifts
               timers.current[1] = window.setTimeout(() => setUnlock("typing"), 700 + 250);
-              timers.current[2] = window.setTimeout(() => setUnlock("open"), 700 + 250 + 700);
+              timers.current[2] = window.setTimeout(() => setUnlock("open"), 700 + 250 + 550);
               return u;
             });
             setZoom(true);

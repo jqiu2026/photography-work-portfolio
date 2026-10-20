@@ -25,11 +25,11 @@ export const CHAPTERS = [
   { id: "threshold", label: "Threshold", seconds: 3, bg: "#050505" },
   { id: "about", label: "About", seconds: 5, bg: "#050505" },
   { id: "range", label: "My past work", seconds: 5, bg: "#050505" },
-  { id: "booking", label: "Booking", seconds: 9.4, bg: "#07141c" },
-  { id: "moment", label: "The shoot", seconds: 4, bg: "#050505" },
-  { id: "darkroom", label: "The edit", seconds: 6, bg: "#1c0707" },
-  { id: "delivered", label: "Galleries", seconds: 8, bg: "#101014" },
-  { id: "keep", label: "Keep", seconds: 4, bg: "#1b140e" },
+  { id: "booking", label: "The process", seconds: 9.4, bg: "#07141c" },
+  { id: "moment", label: "Shoot", seconds: 4, bg: "#050505" },
+  { id: "darkroom", label: "Edit", seconds: 6, bg: "#1c0707" },
+  { id: "delivered", label: "Deliver", seconds: 8, bg: "#101014" },
+  { id: "keep", label: "Share", seconds: 4, bg: "#1b140e" },
 ] as const;
 export type ChapterId = (typeof CHAPTERS)[number]["id"];
 /** Chapters whose pinned animation runs at one steady speed between an ease in and an ease out of this many seconds. */
@@ -97,14 +97,14 @@ export const RANGE = {
 
 /** The whole process, in order. The booking chapter draws it as a timeline; later scenes carry a small copy of it. */
 export const TIMELINE = [
-  { id: "inquiry", label: "Inquiry", text: "Tell me what you are planning." },
+  { id: "inquiry", label: "Connect", text: "Tell me what you are planning." },
   { id: "quote", label: "Quote", text: "You get a quote with every amount in it." },
-  { id: "booking", label: "Booking", text: "Pick a date. A deposit holds it." },
-  { id: "prep", label: "Preparation", text: "We agree the plan for the day." },
-  { id: "shoot", label: "The shoot", text: "I take the photographs." },
-  { id: "edit", label: "The edit", text: "Then I edit them." },
-  { id: "galleries", label: "Galleries", text: "A private gallery to pick from, then a public one to share." },
-  { id: "keep", label: "Keep", text: "Download them, or hang them." },
+  { id: "booking", label: "Book", text: "Pick a date. A deposit holds it." },
+  { id: "prep", label: "Plan", text: "We agree the plan for the day." },
+  { id: "shoot", label: "Shoot", text: "I take the photographs." },
+  { id: "edit", label: "Edit", text: "Then I edit them." },
+  { id: "galleries", label: "Deliver", text: "Your photographs arrive in a private gallery to choose from." },
+  { id: "keep", label: "Share", text: "Download them, hang them, send them on." },
 ] as const;
 
 export const BOOKING = {
@@ -112,10 +112,10 @@ export const BOOKING = {
   title: "From the first message to the last print.",
   timeline: "The process",
   stages: [
-    { id: "inquiry", label: "Inquiry", n: "01" },
+    { id: "inquiry", label: "Connect", n: "01" },
     { id: "quote", label: "Quote", n: "02" },
-    { id: "booking", label: "Booking", n: "03" },
-    { id: "prep", label: "Preparation", n: "04" },
+    { id: "booking", label: "Book", n: "03" },
+    { id: "prep", label: "Plan", n: "04" },
   ],
   inquiry: {
     heading: "Tell me what you are planning",
