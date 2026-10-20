@@ -40,9 +40,9 @@ for (const app of apps) {
         const page = await ctx.newPage();
         await page.goto(base, { waitUntil: "load" });
         await expect(page.getByRole("heading", { level: 1 })).toContainText("Back soon");
-        await expect(page.getByRole("link", { name: /inquiry@jerryqiu\.com/ })).toHaveAttribute(
+        await expect(page.getByRole("link", { name: /info@jerryqiu\.com/ })).toHaveAttribute(
           "href",
-          "mailto:inquiry@jerryqiu.com",
+          "mailto:info@jerryqiu.com",
         );
         const overflow = await page.evaluate(
           () => document.documentElement.scrollWidth - document.documentElement.clientWidth,

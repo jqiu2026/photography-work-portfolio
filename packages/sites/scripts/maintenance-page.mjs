@@ -24,7 +24,7 @@ export const COPY = {
     "The new one is on the way, and I will have it up as soon as it is ready.",
   ],
   // TODO(owner): the one way to reach you 
-  email: "inquiry@jerryqiu.com",
+  email: "info@jerryqiu.com",
   emailLabel: "Inquiries",
   // TODO(owner): the copyright line; %YEAR% is filled in when the page is served
   copyright: "© %YEAR% Jerry Qiu.",
