@@ -2473,3 +2473,63 @@
 .hj-end .hj-actions a:hover {
   scale: 1.03;
 }
+
+/* ======== revision 13: the ending is a call to action: the headline across the top, the two buttons at its right, the steps below ======== */
+.hj-end {
+  display: flex;
+  min-height: calc(100svh - 8.5rem);
+  padding: 5rem var(--hm-gutter, 1.25rem) 2.5rem;
+}
+.hj-end-inner {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "copy cta"
+    "next next";
+  align-content: space-between;
+  gap: 2.5rem 3rem;
+  width: 100%;
+  max-width: 80rem;
+}
+.hj-end-copy {
+  grid-area: copy;
+  display: grid;
+  gap: 1.2rem;
+  align-content: start;
+}
+.hj-end h2 {
+  font-size: clamp(2.6rem, 6vw, 5.4rem);
+}
+.hj-end-cta {
+  grid-area: cta;
+  align-self: start;
+  flex-direction: column;
+  margin-top: 0.8rem;
+}
+.hj-next {
+  grid-area: next;
+}
+.hj-next ol {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: 2rem;
+}
+.hj-next li {
+  align-content: start;
+}
+@media (max-width: 899px) {
+  .hj-end {
+    min-height: 0;
+  }
+  .hj-end-inner {
+    grid-template-columns: 1fr;
+    grid-template-areas: "copy" "cta" "next";
+    align-content: start;
+  }
+  .hj-end-cta {
+    flex-direction: row;
+  }
+  .hj-next ol {
+    grid-template-columns: 1fr;
+  }
+}

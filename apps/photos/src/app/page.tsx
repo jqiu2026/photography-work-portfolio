@@ -93,17 +93,17 @@ export default async function Home() {
                 {END.line}
               </h2>
               <p className="hj-end-lede">{END.lede}</p>
-              <div className="hj-actions">
-                <Button asChild size="lg">
-                  <Link href={END.primary.href}>{END.primary.label}</Link>
-                </Button>
-                <Button asChild size="lg" variant="secondary">
-                  <Link href={END.secondary.href}>{END.secondary.label}</Link>
-                </Button>
-              </div>
               <p className="hj-end-mail">
                 {END.email} <a href={`mailto:${person.bookingEmail}`}>{person.bookingEmail}</a>
               </p>
+            </div>
+            <div className="hj-actions hj-end-cta">
+              <Button asChild size="lg">
+                <Link href={END.primary.href}>{END.primary.label}</Link>
+              </Button>
+              <Button asChild size="lg" variant="secondary">
+                <Link href={END.secondary.href}>{END.secondary.label}</Link>
+              </Button>
             </div>
             <div className="hj-next">
               <h3>{END.next.title}</h3>
