@@ -25,7 +25,7 @@ export const CHAPTERS = [
   { id: "threshold", label: "Threshold", seconds: 3, bg: "#050505" },
   { id: "about", label: "About", seconds: 5, bg: "#050505" },
   { id: "range", label: "My past work", seconds: 6, bg: "#050505" },
-  { id: "booking", label: "Booking", seconds: 12, bg: "#0b2230" },
+  { id: "booking", label: "Booking", seconds: 12, bg: "#07141c" },
   { id: "moment", label: "The shoot", seconds: 4, bg: "#050505" },
   { id: "darkroom", label: "The edit", seconds: 5, bg: "#1c0707" },
   { id: "delivered", label: "Galleries", seconds: 8, bg: "#101014" },
@@ -184,8 +184,7 @@ export const KEEP = {
   items: [
     { id: "wall", label: "Large framed print" },
     { id: "frame", label: "Framed print" },
-    { id: "small", label: "Small prints" },
-    { id: "phone", label: "On your phone" },
+    { id: "small", label: "Postcard and wallet prints" },
   ],
 } as const;
 

@@ -864,18 +864,20 @@ function Keep({ photo }: { photo?: StoryPhoto }) {
             <figcaption>{KEEP.items[1].label}</figcaption>
           </figure>
           <figure className="hj-fmt hj-fmt--small" style={vars({ "--i": 2 })}>
-            <div className="hj-fmt-wallet">
-              {[0, 1, 2, 3, 4, 5].map((n) => (
-                <div key={n} className="hj-fmt-id">
-                  {art("6vw")}
-                </div>
-              ))}
+            <div className="hj-small-row">
+              <div className="hj-fmt-post">
+                <div className="hj-fmt-print hj-fmt-print--back">{art("12vw")}</div>
+                <div className="hj-fmt-print">{art("12vw")}</div>
+              </div>
+              <div className="hj-fmt-wallet">
+                {[0, 1, 2, 3, 4, 5].map((n) => (
+                  <div key={n} className="hj-fmt-id">
+                    {art("6vw")}
+                  </div>
+                ))}
+              </div>
             </div>
             <figcaption>{KEEP.items[2].label}</figcaption>
-          </figure>
-          <figure className="hj-fmt hj-fmt--phone" style={vars({ "--i": 3 })}>
-            <div className="hj-fmt-phone">{art("14vw")}</div>
-            <figcaption>{KEEP.items[3].label}</figcaption>
           </figure>
         </div>
       </div>

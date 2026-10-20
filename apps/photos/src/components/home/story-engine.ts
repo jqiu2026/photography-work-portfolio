@@ -192,8 +192,21 @@ export function chapterTops(root: HTMLElement) {
   const tops = els.map((c) => c.getBoundingClientRect().top + scrollY);
   const last = els[els.length - 1];
   const end = last ? tops[tops.length - 1]! + Math.max(0, last.offsetHeight - innerHeight) : 0;
-  return { tops, end };
+  // each chapter is two moves: the animation while it is pinned, then the scroll over to the next chapter
+  const moves: { a: number; b: number; secs: number }[] = [];
+  els.forEach((c, i) => {
+    const top = tops[i]!;
+    const pinEnd = Math.min(end, top + Math.max(0, c.offsetHeight - innerHeight));
+    const next = i + 1 < tops.length ? tops[i + 1]! : end;
+    const secs = CHAPTERS[i]?.seconds ?? 5;
+    if (pinEnd - top > 2) moves.push({ a: top, b: pinEnd, secs });
+    if (next - pinEnd > 2) moves.push({ a: pinEnd, b: next, secs: CROSS_SECONDS });
+  });
+  return { tops, end, moves };
 }
+
+/** How long the scroll from one pinned chapter to the next takes in the automatic mode. */
+const CROSS_SECONDS = 1.1;
 
 /** Scroll position `y` to the page without the page's smooth scrolling getting in the way. */
 const jump = (y: number) => scrollTo({ top: y, behavior: "instant" as ScrollBehavior });
@@ -236,10 +249,10 @@ export function useAutoplay(root: RefObject<HTMLElement | null>, enabled: boolea
         raf = requestAnimationFrame(tick);
       }
     };
-    // each chapter is one move: slow start, quick middle, slow stop (u is how far through its time the chapter is)
+    // every move eases in and eases out (u is how far through its time the move is)
     let u = 0;
     let at = -1;
-    const ease = (x: number) => (x < 0.5 ? 8 * x ** 4 : 1 - (-2 * x + 2) ** 4 / 2);
+    const ease = (x: number) => (x < 0.5 ? 4 * x ** 3 : 1 - (-2 * x + 2) ** 3 / 2);
     const unease = (y: number) => {
       let lo = 0;
       let hi = 1;
@@ -257,24 +270,20 @@ export function useAutoplay(root: RefObject<HTMLElement | null>, enabled: boolea
       if (hold.current || document.hidden) return;
       // something else moved the page (scrollbar drag, an anchor, find in page): that is the reader
       if (lastSet.current >= 0 && Math.abs(scrollY - lastSet.current) > 6) return change("manual");
-      const { tops, end } = cache;
+      const { moves, end } = cache;
       if (pos >= end - 1) return change("done");
-      let c = 0;
-      tops.forEach((t, i) => {
-        if (pos >= t - 1) c = i;
+      let m = 0;
+      moves.forEach((mv, i) => {
+        if (pos >= mv.a - 1) m = i;
       });
-      const a = tops[c] ?? 0;
-      const b = c + 1 < tops.length ? tops[c + 1]! : end;
-      if (c !== at) {
-        at = c;
-        u = unease(Math.min(1, Math.max(0, (pos - a) / Math.max(1, b - a))));
+      const mv = moves[m];
+      if (!mv) return change("done");
+      if (m !== at) {
+        at = m;
+        u = unease(Math.min(1, Math.max(0, (pos - mv.a) / Math.max(1, mv.b - mv.a))));
       }
-      const secs = CHAPTERS[c]?.seconds ?? 6;
-      u = Math.min(1, u + dt / secs);
-      pos = a + (b - a) * ease(u);
-      // the last pixels of a chapter are the start of the next one
-      if (u >= 1) pos = b + 0.5;
-      pos = Math.min(end, pos);
+      u = Math.min(1, u + dt / mv.secs);
+      pos = Math.min(end, u >= 1 ? mv.b + 0.5 : mv.a + (mv.b - mv.a) * ease(u));
       lastSet.current = pos;
       jump(pos);
     };

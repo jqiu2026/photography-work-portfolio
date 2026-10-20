@@ -1083,8 +1083,25 @@
 }
 .hj-fmt--small {
   z-index: 3;
-  width: 9vw;
+  width: 19vw;
   margin-left: 1vw;
+}
+.hj-small-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 1.6vw;
+  width: 100%;
+}
+.hj-fmt-post {
+  position: relative;
+  display: grid;
+  align-items: end;
+  flex: 0 0 11vw;
+}
+.hj-fmt-wallet {
+  flex: 0 0 6vw;
+  width: 6vw;
 }
 .hj-fmt-wallet {
   display: grid;
@@ -1101,11 +1118,6 @@
   overflow: hidden;
   border: 2px solid #fbfaf6;
   background: #fbfaf6;
-}
-.hj-fmt--phone {
-  z-index: 2;
-  width: 10vw;
-  margin-left: 2vw;
 }
 .hj-fmt-frame {
   width: 100%;
@@ -1140,16 +1152,6 @@
   width: 100%;
   rotate: -6deg;
 }
-.hj-fmt-phone {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 9 / 18.5;
-  border: 5px solid #14141a;
-  border-radius: 1.4rem;
-  background: #000;
-  overflow: hidden;
-  box-shadow: 0 10px 24px -10px #000;
-}
 @media (max-width: 760px) {
   .hj-fmt--wall {
     width: min(44vw, calc(40svh * var(--r)));
@@ -1158,10 +1160,14 @@
     width: min(26vw, calc(24svh * var(--r)));
   }
   .hj-fmt--small {
-    width: 17vw;
+    width: 30vw;
   }
-  .hj-fmt--phone {
-    width: 16vw;
+  .hj-fmt-post {
+    flex-basis: 17vw;
+  }
+  .hj-fmt-wallet {
+    flex-basis: 9vw;
+    width: 9vw;
   }
   .hj-fmt figcaption {
     font-size: 0.62rem;
@@ -1242,8 +1248,10 @@
 :root[data-hj-motion] .hj-threshold .hj-stick {
   --o: clamp(0, calc(var(--p) * 3.6), 1);
   --e: calc(var(--o) * var(--o) * (3 - 2 * var(--o)));
-  --t: clamp(0, calc((var(--p) - 0.5) * 4), 1);
-  --c: clamp(0, calc((var(--p) - 0.66) * 4), 1);
+  --t-r: clamp(0, calc((var(--p) - 0.5) * 4), 1);
+  --t: calc(var(--t-r) * var(--t-r) * (3 - 2 * var(--t-r)));
+  --c-r: clamp(0, calc((var(--p) - 0.66) * 4), 1);
+  --c: calc(var(--c-r) * var(--c-r) * (3 - 2 * var(--c-r)));
   display: block;
 }
 :root[data-hj-motion] .hj-aperture {
@@ -1298,7 +1306,8 @@
 
 /* -- seeing: the viewpoint moves into the room, a frame closes on a detail -- */
 :root[data-hj-motion] .hj-seeing .hj-stick {
-  --c: clamp(0, calc((var(--p) - 0.78) * 4.5), 1);
+  --c-r: clamp(0, calc((var(--p) - 0.78) * 4.5), 1);
+  --c: calc(var(--c-r) * var(--c-r) * (3 - 2 * var(--c-r)));
 }
 :root[data-hj-motion] .hj-seeing-photo {
   transform-origin: calc(var(--fx) * 1%) calc(var(--fy) * 1%);
@@ -1331,8 +1340,10 @@
 :root[data-hj-motion] .hj-lines li {
   grid-area: 1 / 1;
   --a: calc(0.1 + var(--k) * 0.27);
-  --in: clamp(0, calc((var(--p) - var(--a)) * 18), 1);
-  --out: clamp(0, calc((var(--p) - var(--a) - 0.25) * 18), 1);
+  --in-r: clamp(0, calc((var(--p) - var(--a)) * 18), 1);
+  --in: calc(var(--in-r) * var(--in-r) * (3 - 2 * var(--in-r)));
+  --out-r: clamp(0, calc((var(--p) - var(--a) - 0.25) * 18), 1);
+  --out: calc(var(--out-r) * var(--out-r) * (3 - 2 * var(--out-r)));
 }
 :root[data-hj-motion] .hj-lines li:last-child {
   --out: 0;
@@ -1458,7 +1469,8 @@
 
 /* -- moment: focus, compose, wait, press -- */
 :root[data-hj-motion] .hj-moment .hj-stick {
-  --lock: clamp(0, calc((var(--p) - 0.36) * 5), 1);
+  --lock-r: clamp(0, calc((var(--p) - 0.36) * 5), 1);
+  --lock: calc(var(--lock-r) * var(--lock-r) * (3 - 2 * var(--lock-r)));
   --c: clamp(0, calc((var(--p) - 0.86) * 7), 1);
   background: color-mix(in srgb, #0b0202 calc(var(--c) * 100%), #000);
 }
@@ -1469,7 +1481,8 @@
 }
 :root[data-hj-motion] .hj-shot .hj-ph {
   scale: calc(1.08 - var(--p) * 0.06);
-  filter: blur(calc((1 - clamp(0, calc(var(--p) * 2.4), 1)) * 10px));
+  --bk-r: clamp(0, calc(var(--p) * 2.4), 1);
+  filter: blur(calc((1 - var(--bk-r) * var(--bk-r) * (3 - 2 * var(--bk-r))) * 10px));
 }
 :root[data-hj-motion] .hj-thirds {
   display: block;
@@ -1549,7 +1562,8 @@
   align-content: center;
 }
 :root[data-hj-motion] .hj-print {
-  scale: calc(0.92 + clamp(0, calc(var(--p) * 5), 1) * 0.08);
+  --pr-r: clamp(0, calc(var(--p) * 5), 1);
+  scale: calc(0.92 + var(--pr-r) * var(--pr-r) * (3 - 2 * var(--pr-r)) * 0.08);
 }
 :root[data-hj-motion] .hj-dark-stage {
   width: min(100%, calc(66svh * var(--ratio, 1.5)), 52rem);
@@ -1564,7 +1578,8 @@
   --e: calc(var(--s) * var(--s) * (3 - 2 * var(--s)));
   --g: clamp(0, calc((var(--p) - 0.34) * 1.45), 1);
   --g2: calc(var(--g) * var(--g) * (3 - 2 * var(--g)));
-  --a: clamp(0, calc((var(--p) - 0.36) * 9), 1);
+  --a-r: clamp(0, calc((var(--p) - 0.36) * 9), 1);
+  --a: calc(var(--a-r) * var(--a-r) * (3 - 2 * var(--a-r)));
   --f0: clamp(0, calc((var(--p) - 0.12) * 4), 1);
   --f: calc(var(--f0) * var(--f0) * (3 - 2 * var(--f0)));
   display: grid;
@@ -1780,7 +1795,8 @@
   translate: -50% 0;
 }
 :root[data-hj-motion] .hj-fmt {
-  --t: clamp(0, calc(var(--p) * 8 - var(--i) * 0.9), 1);
+  --t-r: clamp(0, calc(var(--p) * 8 - var(--i) * 0.9), 1);
+  --t: calc(var(--t-r) * var(--t-r) * (3 - 2 * var(--t-r)));
   translate: 0 calc((1 - var(--t)) * -70svh);
   scale: calc(1 + 0.05 * sin(calc(var(--t) * 180deg)));
 }
@@ -2189,7 +2205,8 @@
   letter-spacing: -0.04em;
 }
 :root[data-hj-motion] .hj-big-line {
-  translate: 0 calc((1 - clamp(0, calc((var(--p) - 0.1) * 9), 1)) * 115%);
+  --bl-r: clamp(0, calc((var(--p) - 0.1) * 9), 1);
+  translate: 0 calc((1 - var(--bl-r) * var(--bl-r) * (3 - 2 * var(--bl-r))) * 115%);
 }
 
 /* the bottom of the page */
@@ -2340,18 +2357,20 @@
   --ga: clamp(0, min(calc(var(--p) * 8), calc((1 - var(--p)) * 8)), 1);
   background: radial-gradient(
       ellipse at 20% 30%,
-      color-mix(in srgb, #16435a calc(var(--ga) * 100%), transparent),
+      color-mix(in srgb, #0e2d3d calc(var(--ga) * 70%), transparent),
       transparent 70%
     ),
-    radial-gradient(ellipse at 85% 85%, color-mix(in srgb, #3a2a5c calc(var(--ga) * 80%), transparent), transparent 65%);
+    radial-gradient(ellipse at 85% 85%, color-mix(in srgb, #2a2044 calc(var(--ga) * 60%), transparent), transparent 65%);
 }
 :root[data-hj-motion] .hj-moment .hj-stick {
   background: transparent;
 }
 /* a photograph that fills the window melts into the backdrop where its chapter begins and ends */
-:root[data-hj-motion] :is(.hj-seeing, .hj-moment) .hj-stick {
-  --ft: clamp(0, calc(1 - var(--p) * 14), 1);
-  --fb: clamp(0, calc((var(--p) - 0.93) * 14), 1);
+:root[data-hj-motion] :is(.hj-seeing, .hj-moment, .hj-range) .hj-stick {
+  --ft-r: clamp(0, calc(1 - var(--p) * 14), 1);
+  --ft: calc(var(--ft-r) * var(--ft-r) * (3 - 2 * var(--ft-r)));
+  --fb-r: clamp(0, calc((var(--p) - 0.93) * 14), 1);
+  --fb: calc(var(--fb-r) * var(--fb-r) * (3 - 2 * var(--fb-r)));
   mask-image: linear-gradient(
     to bottom,
     transparent 0,
@@ -2361,7 +2380,8 @@
   );
 }
 :root[data-hj-motion] .hj-threshold .hj-stick {
-  --fb: clamp(0, calc((var(--p) - 0.93) * 14), 1);
+  --fb-r: clamp(0, calc((var(--p) - 0.93) * 14), 1);
+  --fb: calc(var(--fb-r) * var(--fb-r) * (3 - 2 * var(--fb-r)));
   mask-image: linear-gradient(to bottom, #000 calc(100% - var(--fb) * 16%), transparent 100%);
 }
 
@@ -2375,7 +2395,8 @@
   opacity: calc(clamp(0, calc(1 - (var(--p) - 0.8) * (var(--p) - 0.8) * 9000), 1) * 0.95);
 }
 :root[data-hj-motion] .hj-moment .hj-stick {
-  --c: clamp(0, calc((var(--p) - 0.84) * 8), 1);
+  --c-r: clamp(0, calc((var(--p) - 0.84) * 8), 1);
+  --c: calc(var(--c-r) * var(--c-r) * (3 - 2 * var(--c-r)));
 }
 
 /* the formats wait off screen above, then drop onto the table */
