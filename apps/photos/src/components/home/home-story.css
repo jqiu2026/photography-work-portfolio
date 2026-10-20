@@ -2534,7 +2534,7 @@
   }
 }
 
-/* the emphasized part of the headline types and erases its phrases (Holominimal's Typewriter) */
+/* the emphasized part of the headline */
 .hj-emph {
   font-style: normal;
   /* Holominimal's iridescent text, from white through violet to cyan */
@@ -2542,9 +2542,7 @@
   background-size: 100% 100%;
   padding-right: 0.12em;
 }
-.hj-emph .hm-typewriter-caret {
-  background: hsl(var(--hm-cyan));
-}
+
 .hj-end h2 {
   min-height: 2.05em;
 }

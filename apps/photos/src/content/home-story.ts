@@ -193,14 +193,9 @@ export const KEEP = {
 
 export const END = {
   line: "Let's make something worth keeping.",
-  /** The lead-in and the phrases that take turns after it (the first is the line above). */
+  /** The headline in two parts: the lead-in, then the emphasized phrase. */
   lead: "Let's make",
-  cycle: [
-    "something worth keeping.",
-    "something worth framing.",
-    "something worth sharing.",
-    "something worth hanging.",
-  ],
+  emph: "something worth keeping.",
   lede: "Tell me what you are planning. I reply myself, usually within two days.",
   primary: { label: "Book a shoot", href: "/book" },
   secondary: { label: "Explore the portfolio", href: "/portfolio" },
