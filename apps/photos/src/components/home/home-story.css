@@ -2425,7 +2425,7 @@
   background: linear-gradient(to bottom, #1b140e, transparent 55vh);
 }
 .hj-end {
-  padding: 11rem var(--hm-gutter, 1.25rem) 0;
+  padding: 19rem var(--hm-gutter, 1.25rem) 0;
 }
 .hj-end-inner {
   gap: 1.4rem;
@@ -2517,7 +2517,7 @@
 }
 @media (min-width: 900px) {
   .hj-end-inner {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 26rem);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 28rem);
     gap: 3rem;
   }
 }
@@ -2525,184 +2525,68 @@
   display: grid;
   gap: 1.6rem;
 }
-.hj-form {
-  display: grid;
-  gap: 0.7rem;
-  padding: 1.2rem;
-  border: 1px solid rgb(255 255 255 / 0.16);
-  border-radius: 12px;
-  background: rgb(255 255 255 / 0.05);
-  backdrop-filter: blur(8px);
-  color: #f4f1ea;
-  transition: border-color 0.25s var(--hm-ease-curtain), background 0.25s var(--hm-ease-curtain);
-}
-.hj-form:focus-within {
-  border-color: rgb(255 255 255 / 0.4);
-  background: rgb(255 255 255 / 0.08);
-}
-.hj-form h3 {
+.hj-end-lede {
   margin: 0;
+  max-width: 30rem;
+  font-size: 1.1rem;
+  line-height: 1.5;
+  color: #d4d0c6;
+}
+.hj-end-mail {
+  margin: 0;
+  font-size: 0.92rem;
+  color: #d4d0c6;
+}
+.hj-end-mail a {
+  color: #fff;
+  text-underline-offset: 3px;
+  transition: opacity 0.2s var(--hm-ease-curtain);
+}
+.hj-end-mail a:hover {
+  opacity: 0.7;
+}
+.hj-next h3 {
+  margin: 0 0 0.9rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #d4d0c6;
+}
+.hj-next ol {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid rgb(255 255 255 / 0.18);
+}
+.hj-next li {
+  display: grid;
+  grid-template-columns: 2.4rem 1fr;
+  column-gap: 0.4rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid rgb(255 255 255 / 0.18);
+  transition: padding-left 0.3s var(--hm-ease-curtain);
+}
+.hj-next li:hover {
+  padding-left: 0.5rem;
+}
+.hj-next small {
+  grid-row: 1 / 3;
+  padding-top: 0.25rem;
+  font: 0.72rem ui-monospace, monospace;
+  color: #d4d0c6;
+}
+.hj-next b {
   font-size: 1.05rem;
   font-weight: 500;
-}
-.hj-form-pair {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.7rem;
-}
-.hj-field {
-  display: grid;
-  gap: 0.25rem;
-  font-size: 0.78rem;
-  color: #d4d0c6;
-}
-.hj-field input,
-.hj-field select,
-.hj-field textarea {
-  width: 100%;
-  min-height: 2.5rem;
-  padding: 0.5rem 0.7rem;
-  border: 1px solid rgb(255 255 255 / 0.22);
-  border-radius: 8px;
-  background: rgb(0 0 0 / 0.35);
-  color: #fff;
-  font: inherit;
-  font-size: 0.92rem;
-  transition: border-color 0.2s var(--hm-ease-curtain), background 0.2s var(--hm-ease-curtain), box-shadow 0.2s
-    var(--hm-ease-curtain);
-}
-.hj-field textarea {
-  resize: vertical;
-  min-height: 4.5rem;
-}
-.hj-field :is(input, select, textarea):hover {
-  border-color: rgb(255 255 255 / 0.45);
-}
-.hj-field :is(input, select, textarea):focus-visible {
-  outline: none;
-  border-color: #fff;
-  box-shadow: 0 0 0 3px rgb(255 255 255 / 0.22);
-}
-.hj-field select option {
-  color: #000;
-}
-.hj-field[data-error] :is(input, textarea) {
-  border-color: #ff8a80;
-}
-.hj-field small,
-.hj-check-error {
-  min-height: 0;
-  max-height: 0;
-  overflow: hidden;
-  color: #ffb4ab;
-  font-size: 0.74rem;
-  opacity: 0;
-  transition: max-height 0.25s var(--hm-ease-curtain), opacity 0.25s var(--hm-ease-curtain);
-}
-.hj-field[data-error] small,
-.hj-check[data-error] + .hj-check-error {
-  max-height: 2rem;
-  opacity: 1;
-}
-.hj-check {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.6rem;
-  font-size: 0.78rem;
-  line-height: 1.4;
-  color: #d4d0c6;
-  cursor: pointer;
-}
-.hj-check input {
-  flex: none;
-  width: 1.1rem;
-  height: 1.1rem;
-  margin-top: 0.1rem;
-  accent-color: #fff;
-}
-.hj-check[data-error] span {
-  color: #ffb4ab;
-}
-.hj-honey {
-  position: absolute;
-  left: -9999px;
-}
-.hj-form-row {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.9rem;
-}
-.hj-send {
-  min-height: 2.75rem;
-  padding: 0 1.4rem;
-  border: 0;
-  border-radius: 999px;
-  background: #fff;
-  color: #000;
-  font: inherit;
-  font-weight: 500;
-  cursor: pointer;
-  transition: scale 0.2s var(--hm-ease-curtain), background 0.2s var(--hm-ease-curtain), opacity 0.2s;
-}
-.hj-send:hover {
-  scale: 1.04;
-  background: #f1ece0;
-}
-.hj-send:active {
-  scale: 0.97;
-}
-.hj-send:focus-visible {
-  outline: 2px solid #fff;
-  outline-offset: 3px;
-}
-.hj-send[data-sending] {
-  opacity: 0.6;
-  cursor: progress;
-}
-.hj-form-mail {
-  color: #d4d0c6;
-  font-size: 0.82rem;
-  text-underline-offset: 3px;
-  transition: color 0.2s var(--hm-ease-curtain);
-}
-.hj-form-mail:hover {
   color: #fff;
 }
-.hj-form-problem {
-  margin: 0;
-  color: #ffb4ab;
-  font-size: 0.82rem;
-}
-.hj-form--sent {
-  animation: hj-form-in 0.4s var(--hm-ease-curtain) both;
-}
-.hj-form--sent p {
-  margin: 0;
+.hj-next span {
+  font-size: 0.9rem;
+  line-height: 1.45;
   color: #d4d0c6;
-  line-height: 1.5;
-}
-.hj-form-again {
-  justify-self: start;
-  padding: 0;
-  border: 0;
-  background: none;
-  color: #fff;
-  font: inherit;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  cursor: pointer;
-}
-@keyframes hj-form-in {
-  from {
-    opacity: 0;
-    translate: 0 0.8rem;
-  }
-}
-@media (max-width: 520px) {
-  .hj-form-pair {
-    grid-template-columns: 1fr;
-  }
 }
 
 /* the folded footer links open and close with a motion, and every control answers the pointer */
@@ -2739,11 +2623,4 @@
 }
 .hj-end .hj-actions a:hover {
   scale: 1.03;
-}
-@media (prefers-reduced-motion: reduce) {
-  .hj-form,
-  .hj-form * {
-    transition: none !important;
-    animation: none !important;
-  }
 }

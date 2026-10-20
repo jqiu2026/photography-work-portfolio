@@ -193,31 +193,22 @@ export const KEEP = {
 
 export const END = {
   line: "Let's make something worth keeping.",
+  lede: "Tell me what you are planning. I reply myself, usually within two days.",
   primary: { label: "Book a shoot", href: "/book" },
   secondary: { label: "Explore the portfolio", href: "/portfolio" },
-  form: {
-    title: "Or send a note right here",
-    name: "Your name",
-    email: "Email",
-    type: "What is it?",
-    date: "Date, if you have one",
-    message: "Tell me about it",
-    consent: "I agree that my message is stored so you can reply, and that you may email me about it.",
-    send: "Send inquiry",
-    sending: "Sending",
-    orEmail: "or email",
-    sentTitle: "Thanks, I got your message.",
-    sentText: "A confirmation is on its way to your inbox. I reply myself, usually within two days.",
-    again: "Send another",
-    errors: {
-      name: "Please tell me your name.",
-      email: "That doesn't look like an email address.",
-      message: "Tell me a little about the shoot.",
-      consent: "Please tick the box so I can store your message.",
-      server: "Something went wrong.",
-      network: "Could not reach the server.",
-    },
+  next: {
+    title: "What happens next",
+    steps: [
+      { n: "01", title: "You send a note", text: "A few lines about the day, the place and what matters most." },
+      { n: "02", title: "I send a quote", text: "Every amount in it, and a date held for you while you decide." },
+      {
+        n: "03",
+        title: "We make the pictures",
+        text: "A deposit confirms the date. A private gallery follows the shoot.",
+      },
+    ],
   },
+  email: "Prefer email?",
 } as const;
 
 export const HUD = {

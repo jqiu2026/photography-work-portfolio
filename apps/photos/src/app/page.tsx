@@ -4,7 +4,6 @@ import { getSite } from "@jerryqiu/sites";
 import { person } from "@jerryqiu/sites/profile";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { HomeInquiry } from "@/components/home/HomeInquiry";
 import { HomeStory } from "@/components/home/HomeStory";
 import { Shell } from "@/components/Shell";
 import { END, pickSlots } from "@/content/home-story";
@@ -93,6 +92,7 @@ export default async function Home() {
               <h2 id="hj-finale-title" tabIndex={-1}>
                 {END.line}
               </h2>
+              <p className="hj-end-lede">{END.lede}</p>
               <div className="hj-actions">
                 <Button asChild size="lg">
                   <Link href={END.primary.href}>{END.primary.label}</Link>
@@ -101,8 +101,22 @@ export default async function Home() {
                   <Link href={END.secondary.href}>{END.secondary.label}</Link>
                 </Button>
               </div>
+              <p className="hj-end-mail">
+                {END.email} <a href={`mailto:${person.bookingEmail}`}>{person.bookingEmail}</a>
+              </p>
             </div>
-            <HomeInquiry email={person.bookingEmail} />
+            <div className="hj-next">
+              <h3>{END.next.title}</h3>
+              <ol>
+                {END.next.steps.map((st) => (
+                  <li key={st.n}>
+                    <small>{st.n}</small>
+                    <b>{st.title}</b>
+                    <span>{st.text}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
           </div>
         </section>
       </div>
