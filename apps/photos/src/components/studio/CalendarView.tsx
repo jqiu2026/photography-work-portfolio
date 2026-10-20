@@ -1,5 +1,6 @@
 "use client";
 
+import { DateField } from "@/components/DateField";
 import { Button, Field, Input, Select, Text } from "@holominimal/ui";
 
 import {
@@ -118,7 +119,7 @@ export function CalendarView({ user, data }: { user: string; data: CalendarData 
               <Input value={f.title ?? ""} onChange={set("title")} />
             </Field>
             <Field label="Date">
-              <Input type="date" value={f.date ?? ""} onChange={set("date")} />
+              <DateField value={f.date ?? ""} onChange={set("date")} />
             </Field>
             <Field label="Start">
               <Input type="time" value={f.start ?? ""} onChange={set("start")} />
@@ -228,7 +229,7 @@ export function CalendarView({ user, data }: { user: string; data: CalendarData 
             )}
           >
             <Field label="Day">
-              <Input type="date" value={f.bd ?? ""} onChange={set("bd")} />
+              <DateField value={f.bd ?? ""} onChange={set("bd")} />
             </Field>
             <Field label="Reason (private)">
               <Input value={f.br ?? ""} onChange={set("br")} />
@@ -264,7 +265,7 @@ export function CalendarView({ user, data }: { user: string; data: CalendarData 
               <Input value={f.ml ?? ""} onChange={set("ml")} placeholder="Fall minis" />
             </Field>
             <Field label="Day">
-              <Input type="date" value={f.md ?? ""} onChange={set("md")} />
+              <DateField value={f.md ?? ""} onChange={set("md")} />
             </Field>
             <Field label="First slot">
               <Input type="time" value={f.ms ?? ""} onChange={set("ms")} />

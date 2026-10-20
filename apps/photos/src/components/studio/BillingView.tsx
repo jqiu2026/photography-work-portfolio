@@ -1,5 +1,6 @@
 "use client";
 
+import { DateField } from "@/components/DateField";
 import { Button, Checkbox, Field, Input, Select, Status, Text } from "@holominimal/ui";
 
 import { useState } from "react";
@@ -164,7 +165,7 @@ export function BillingView({ user, data }: { user: string; data: BillingData })
               <Input inputMode="numeric" value={f.pc ?? "3"} onChange={set("pc")} />
             </Field>
             <Field label="First due">
-              <Input type="date" value={f.pd ?? ""} onChange={set("pd")} />
+              <DateField value={f.pd ?? ""} onChange={set("pd")} />
             </Field>
             <Field label="Every">
               <Select value={f.pe ?? "month"} onValueChange={(v) => set("pe")({ target: { value: v } })}>
@@ -233,10 +234,10 @@ export function BillingView({ user, data }: { user: string; data: BillingData })
               <Input inputMode="numeric" value={f.rm ?? "1"} onChange={set("rm")} />
             </Field>
             <Field label="First invoice">
-              <Input type="date" value={f.rs ?? ""} onChange={set("rs")} />
+              <DateField value={f.rs ?? ""} onChange={set("rs")} />
             </Field>
             <Field label="Last invoice (optional)">
-              <Input type="date" value={f.re ?? ""} onChange={set("re")} />
+              <DateField value={f.re ?? ""} onChange={set("re")} />
             </Field>
             <Button type="submit" disabled={pending}>
               Start

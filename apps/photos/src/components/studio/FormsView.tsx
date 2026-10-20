@@ -137,14 +137,14 @@ export function FormsView({ user, data }: { user: string; data: FormsData }) {
             <Checkbox
               checked={flags.personal}
               onChange={(e) => setFlags({ ...flags, personal: e.target.checked })}
-              label="Licence: personal use"
+              label="License: personal use"
             />
             <Checkbox
               checked={flags.commercial}
               onChange={(e) => setFlags({ ...flags, commercial: e.target.checked })}
-              label="Licence: commercial use"
+              label="License: commercial use"
             />
-            <Field label="Licence term (months, blank = no end)">
+            <Field label="License term (months, blank = no end)">
               <Input inputMode="numeric" value={f.tterm ?? ""} onChange={set("tterm")} />
             </Field>
             <Button type="submit" disabled={pending}>

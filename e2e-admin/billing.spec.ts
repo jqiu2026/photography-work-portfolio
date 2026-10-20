@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { choose } from "./ui";
+import { choose, pickDate } from "./ui";
 
 /** Payment plans, tips, bank and card options with the surcharge disclosure, PDFs, refunds, recurring billing. */
 const PHOTOS = "http://localhost:3302";
@@ -47,7 +47,7 @@ test("a three-part plan is created, the first invoice is emailed with a pay link
   await pick(plan, /^Job/, `Billing job ${uid}`);
   await plan.getByLabel("Total (dollars)").fill("900");
   await plan.getByLabel("Instalments").fill("3");
-  await plan.getByLabel("First due").fill(today);
+  await pickDate(plan.getByLabel("First due"), today);
   await plan.getByRole("button", { name: "Create plan" }).click();
   await slow(page.getByRole("status")).toContainText("3 instalments");
   await page.goto(`${PHOTOS}/studio/inbox`, { waitUntil: "networkidle" });
@@ -124,7 +124,7 @@ test("recurring billing: due items are invoiced and emailed once, and the button
   await pick(rec, /^Job/, `Billing job ${uid}`);
   await rec.getByLabel("What is billed").fill(`Retainer ${uid}`);
   await rec.getByLabel("Amount (dollars)").fill("150");
-  await rec.getByLabel("First invoice").fill(today);
+  await pickDate(rec.getByLabel("First invoice"), today);
   await rec.getByRole("button", { name: "Start" }).click();
   await slow(page.getByRole("status")).toContainText("Recurring billing started");
   await page.getByRole("button", { name: "Run billing now" }).click();

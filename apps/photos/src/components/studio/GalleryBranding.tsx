@@ -1,5 +1,6 @@
 "use client";
 
+import { DateField } from "@/components/DateField";
 import { Button, Checkbox, Field, Input, SettingsSection, Text, Textarea } from "@holominimal/ui";
 
 import type { GalleryStyle } from "@jerryqiu/db/gallery-security";
@@ -90,7 +91,7 @@ export function GalleryBranding({ sty, updSty, tracks, onSave, pending }: Props)
             <Input maxLength={300} value={sty.bannerLink} onChange={(e) => updSty("bannerLink", e.target.value)} />
           </Field>
           <Field label="Stops showing after (optional)">
-            <Input type="date" value={sty.bannerExpires} onChange={(e) => updSty("bannerExpires", e.target.value)} />
+            <DateField value={sty.bannerExpires} onChange={(e) => updSty("bannerExpires", e.target.value)} />
           </Field>
         </div>
       </SettingsSection>

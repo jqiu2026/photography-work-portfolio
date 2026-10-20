@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { choose } from "./ui";
+import { choose, pickDate } from "./ui";
 
 /** Pipeline, calendar, availability, online booking with a deposit hold, mini-sessions, the .ics feed and the embed. */
 const PHOTOS = "http://localhost:3302";
@@ -27,7 +27,7 @@ test("owner sets bookable hours and a blocked day; the calendar refuses a double
   const add = page.locator('section[aria-labelledby="cal-add"]');
   const fill = async (title: string, start: string, end: string) => {
     await add.getByLabel("Title").fill(title);
-    await add.getByLabel("Date", { exact: true }).fill(monday(3));
+    await pickDate(add.getByLabel("Date", { exact: true }), monday(3));
     await add.getByLabel("Start").fill(start);
     await add.getByLabel("End").fill(end);
     await add.getByRole("button", { name: "Add" }).click();
@@ -41,7 +41,7 @@ test("owner sets bookable hours and a blocked day; the calendar refuses a double
   await expect(page.locator("li[data-appointment-id]").filter({ hasText: `Wedding ${uid}` })).toHaveCount(1);
 
   const black = page.locator('section[aria-labelledby="cal-black"]');
-  await black.getByLabel("Day").fill(monday(4));
+  await pickDate(black.getByLabel("Day"), monday(4));
   await black.getByRole("button", { name: "Block day" }).click();
   await slow(page.getByRole("status")).toContainText("Day blocked");
 });
@@ -66,7 +66,7 @@ test("the slots API offers free times only, and not on a blocked day or outside 
 
 test("a visitor books a free consultation; it is confirmed, emailed, and that time disappears", async ({ page }) => {
   await page.goto(`${PHOTOS}/book/schedule`, { waitUntil: "networkidle" });
-  await page.getByLabel("Pick a day").fill(MON);
+  await pickDate(page.getByLabel("Pick a day"), MON);
   const first = page.getByRole("group", { name: "Free times" }).getByRole("button").first();
   await expect(first).toBeVisible({ timeout: 15_000 });
   const label = (await first.textContent()) as string;
@@ -77,7 +77,7 @@ test("a visitor books a free consultation; it is confirmed, emailed, and that ti
   await page.getByRole("button", { name: "Book this time" }).click();
   await slow(page.getByRole("status")).toContainText("You're booked");
   await page.goto(`${PHOTOS}/book/schedule`, { waitUntil: "networkidle" });
-  await page.getByLabel("Pick a day").fill(MON);
+  await pickDate(page.getByLabel("Pick a day"), MON);
   await expect(page.getByRole("group", { name: "Free times" }).getByRole("button").first()).not.toHaveText(label, {
     timeout: 15_000,
   });
@@ -95,7 +95,7 @@ test("a paid session is held until the deposit is paid (mock card), then confirm
 }) => {
   await page.goto(`${PHOTOS}/book/schedule`, { waitUntil: "networkidle" });
   await page.getByLabel(/Portrait session/).check();
-  await page.getByLabel("Pick a day").fill(monday(1));
+  await pickDate(page.getByLabel("Pick a day"), monday(1));
   const slot = page.getByRole("group", { name: "Free times" }).getByRole("button").first();
   await expect(slot).toBeVisible({ timeout: 15_000 });
   await slot.click();
@@ -140,7 +140,7 @@ test("mini-sessions: the owner opens slots, one visitor wins a slot, the next se
   await page.goto(`${PHOTOS}/studio/calendar`, { waitUntil: "networkidle" });
   const mini = page.locator('section[aria-labelledby="cal-mini"]');
   await mini.getByLabel("Name").fill(`Minis ${uid}`);
-  await mini.getByLabel("Day").fill(monday(6).replace(/-\d\d$/, (m) => m)); // a Monday far out (outside weekly hours: minis ignore hours)
+  await pickDate(mini.getByLabel("Day"), monday(6)); // a Monday far out (outside weekly hours: minis ignore hours)
   await mini.getByLabel("First slot").fill("16:00");
   await mini.getByLabel("Slots", { exact: true }).fill("2");
   await mini.getByRole("button", { name: "Open slots" }).click();

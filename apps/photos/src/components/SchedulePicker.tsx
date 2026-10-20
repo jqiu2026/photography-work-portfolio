@@ -1,5 +1,6 @@
 "use client";
 
+import { DateField } from "@/components/DateField";
 import { Radio, RadioGroup, Step, Stepper, ToggleGroup, ToggleGroupItem } from "@holominimal/ui";
 import { Alert, Button, Checkbox, Field, FormMessage, Input, ResultCard, Text, Textarea } from "@/components/ui";
 import NextLink from "next/link";
@@ -99,11 +100,10 @@ export function SchedulePicker({ minDate, initialKind = "consult" }: { minDate: 
         ))}
       </RadioGroup>
       <Field label="Pick a day">
-        <Input
-          type="date"
+        <DateField
           min={minDate}
           value={date}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+          onChange={(e) => {
             setDate(e.target.value);
             void load(kind, e.target.value);
           }}

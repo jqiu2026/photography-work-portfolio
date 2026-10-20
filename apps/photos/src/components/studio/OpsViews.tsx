@@ -1,5 +1,6 @@
 "use client";
 
+import { DateField } from "@/components/DateField";
 import { Button, Checkbox, Field, Input, Status, Text } from "@holominimal/ui";
 
 import Link from "next/link";
@@ -85,7 +86,7 @@ export function TasksView({ user, data }: { user: string; data: TasksData }) {
               <Input value={f.t ?? ""} onChange={set("t")} />
             </Field>
             <Field label="Due">
-              <Input type="date" value={f.d ?? ""} onChange={set("d")} />
+              <DateField value={f.d ?? ""} onChange={set("d")} />
             </Field>
             <Field label="Notes">
               <Input value={f.n ?? ""} onChange={set("n")} />

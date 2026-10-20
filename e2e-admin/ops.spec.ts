@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { choose } from "./ui";
+import { choose, pickDate } from "./ui";
 
 /** Cron, automations (dedupe, switch-off), reminders honouring preferences, tasks, activity. */
 const PHOTOS = "http://localhost:3302";
@@ -41,7 +41,7 @@ test("setup: a client with a job and an invoice due in two days (sent)", async (
   await choose(plan.getByLabel(/^Job/), `Ops job ${uid}`);
   await plan.getByLabel("Total (dollars)").fill("200");
   await plan.getByLabel("Instalments").fill("2");
-  await plan.getByLabel("First due").fill(inDays(2));
+  await pickDate(plan.getByLabel("First due"), inDays(2));
   await plan.getByRole("button", { name: "Create plan" }).click();
   await slow(page.getByRole("status")).toContainText("2 instalments");
 });
@@ -80,7 +80,7 @@ test("tasks: add, complete, delete", async ({ page }) => {
   await page.goto(`${PHOTOS}/studio/tasks`, { waitUntil: "networkidle" });
   const f = inForm(page, "New task");
   await f.getByLabel("Task").fill(`Edit set ${uid}`);
-  await f.getByLabel("Due").fill(inDays(-1));
+  await pickDate(f.getByLabel("Due"), inDays(-1));
   await f.getByRole("button", { name: "Add task" }).click();
   await slow(page.getByRole("status")).toContainText("Task added");
   const row = page.locator("li[data-task-id]").filter({ hasText: `Edit set ${uid}` });

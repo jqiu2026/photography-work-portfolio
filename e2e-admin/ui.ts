@@ -31,3 +31,39 @@ export async function choose(target: Locator, label: string | RegExp) {
     await control.press("ArrowDown");
   await control.press("Enter");
 }
+
+/**
+ * Picks a day ("YYYY-MM-DD") in a Holominimal DatePicker: opens it, pages to the month, and presses the day (every day
+ * button is named with its full date).
+ */
+export async function pickDate(target: Locator, iso: string) {
+  const [y, m, d] = iso.split("-").map(Number) as [number, number, number];
+  const date = new Date(y, m - 1, d);
+  const page = target.page();
+  await target.click();
+  const popover = page.locator(".hm-calendar").last();
+  const title = new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric" }).format(date);
+  for (let i = 0; i < 60 && !((await popover.locator(".hm-calendar-title").textContent()) ?? "").includes(title); i++) {
+    const now = (await popover.locator(".hm-calendar-title").textContent()) ?? "";
+    const shown = new Date(`${now} 1`);
+    await popover
+      .getByRole("button", { name: shown < new Date(y, m - 1, 1) ? "Next month" : "Previous month" })
+      .click();
+  }
+  const full = new Intl.DateTimeFormat("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  }).format(date);
+  await popover.getByRole("button", { name: full }).click();
+}
+
+/** Sets a "day and time" field (a DatePicker beside a time Select with a slot every half hour); rounds down to the slot. */
+export async function pickDateTime(page: import("@playwright/test").Page, label: string, when: Date) {
+  const pad = (n: number) => String(n).padStart(2, "0");
+  await pickDate(page.getByLabel(label), `${when.getFullYear()}-${pad(when.getMonth() + 1)}-${pad(when.getDate())}`);
+  const h = when.getHours();
+  const m = when.getMinutes() < 30 ? "00" : "30";
+  await choose(page.getByLabel("Time", { exact: true }), `${h % 12 || 12}:${m} ${h < 12 ? "AM" : "PM"}`);
+}

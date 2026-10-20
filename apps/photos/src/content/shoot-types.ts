@@ -69,7 +69,7 @@ export const shootTypes: ShootType[] = [
   },
   {
     slug: "licensing",
-    label: "Licence a photograph",
+    label: "License a photograph",
     headline: "Licensing",
     blurb: "Ask to use one of my photographs.",
     messageHint: "Which photograph (a page link or a description), where will it appear, and for how long?",

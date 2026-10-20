@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { choose } from "./ui";
+import { choose, pickDateTime } from "./ui";
 import sharp from "sharp";
 import { clientOpen, newGallery, publishOpenGallery, uploadPhotos } from "./gallery-helpers";
 
@@ -164,7 +164,7 @@ test("duplicate as a draft, schedule it for the past, and the hourly job publish
   await expect(page.locator(".gm-stats")).toContainText("Photos3");
 
   await page.getByRole("tab", { name: "Settings" }).click();
-  await page.getByLabel("Publish automatically at").fill(localStamp(new Date(Date.now() - 3_600_000)));
+  await pickDateTime(page, "Publish automatically at", new Date(Date.now() - 3 * 3_600_000));
   await page.getByRole("button", { name: "Save", exact: true }).first().click();
   await slow(page.getByRole("status").filter({ hasText: "Publishing saved" })).toBeVisible();
 

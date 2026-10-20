@@ -1,5 +1,6 @@
 "use client";
 
+import { DateField } from "@/components/DateField";
 import { Button, Field, Input, Progress, Select, Stat, StatGroup, Status, Step, Stepper, Text } from "@holominimal/ui";
 
 import Link from "next/link";
@@ -369,7 +370,7 @@ export function StudioApp({ section, user, data }: { section: string; user: stri
               <Input value={form.title ?? ""} onChange={set("title")} />
             </Field>
             <Field label="Date">
-              <Input type="date" value={form.date ?? ""} onChange={set("date")} />
+              <DateField value={form.date ?? ""} onChange={set("date")} />
             </Field>
             <Field label="Fee (dollars)">
               <Input inputMode="decimal" value={form.fee ?? ""} onChange={set("fee")} />

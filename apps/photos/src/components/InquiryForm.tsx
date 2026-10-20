@@ -1,5 +1,6 @@
 "use client";
 
+import { DateField } from "@/components/DateField";
 import { Alert, Button, Checkbox, Field, FormMessage, Input, ResultCard, Select, Textarea } from "@/components/ui";
 import NextLink from "next/link";
 import { type FormEvent, useEffect, useRef, useState } from "react";
@@ -111,7 +112,7 @@ export function InquiryForm({
           <Input name="phone" type="tel" autoComplete="tel" />
         </Field>
         <Field label="Date (if you have one)">
-          <Input name="eventDate" type="date" />
+          <DateField name="eventDate" />
         </Field>
       </div>
       <Field label="Where">

@@ -1,5 +1,13 @@
 import { getSite } from "@jerryqiu/sites";
-import { AppShell, Atmosphere, Button, LightField } from "@holominimal/ui";
+import {
+  AppShell,
+  Atmosphere,
+  Button,
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+  LightField,
+} from "@holominimal/ui";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { ChromeReveal } from "./ChromeReveal";
@@ -69,23 +77,28 @@ export function PublicChrome({
         {children}
         <footer className="pub-foot">
           {intro ? (
-            <details className="pub-foot__more">
-              <summary>More links</summary>
-              <div className="pub-foot__grid">
-                {FOOTER.map((col) => (
-                  <nav key={col.title} aria-label={col.title}>
-                    <h2>{col.title}</h2>
-                    <ul>
-                      {col.links.map(([label, href]) => (
-                        <li key={href}>
-                          <Link href={href}>{label}</Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </nav>
-                ))}
-              </div>
-            </details>
+            <Collapsible className="pub-foot__more">
+              <CollapsibleTrigger className="pub-foot__toggle">
+                More links
+                <span aria-hidden="true" className="pub-foot__plus" />
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <div className="pub-foot__grid">
+                  {FOOTER.map((col) => (
+                    <nav key={col.title} aria-label={col.title}>
+                      <h2>{col.title}</h2>
+                      <ul>
+                        {col.links.map(([label, href]) => (
+                          <li key={href}>
+                            <Link href={href}>{label}</Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </nav>
+                  ))}
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
           ) : (
             <div className="pub-foot__grid">
               {FOOTER.map((col) => (

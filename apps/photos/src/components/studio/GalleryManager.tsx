@@ -1,5 +1,6 @@
 "use client";
 
+import { DateField, DateTimeField } from "@/components/DateField";
 import { ProtectedImage } from "@/components/media";
 import type { GallerySecurity, GalleryStyle } from "@jerryqiu/db/gallery-security";
 import Link from "next/link";
@@ -1356,10 +1357,10 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
                   <Textarea rows={2} value={f.notes} onChange={(e) => upd("notes", e.target.value)} />
                 </Field>
                 <Field label="Shoot date">
-                  <Input type="date" value={f.shootDate} onChange={(e) => upd("shootDate", e.target.value)} />
+                  <DateField value={f.shootDate} onChange={(e) => upd("shootDate", e.target.value)} />
                 </Field>
                 <Field label="Orders due by (optional)">
-                  <Input type="date" value={f.orderDueDate} onChange={(e) => upd("orderDueDate", e.target.value)} />
+                  <DateField value={f.orderDueDate} onChange={(e) => upd("orderDueDate", e.target.value)} />
                 </Field>
                 <Checkbox
                   checked={f.watermark}
@@ -1398,8 +1399,7 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
             <SettingsSection title="Publishing" className="gm-block">
               <div className="gm-fields">
                 <Field label="Publish automatically at">
-                  <Input
-                    type="datetime-local"
+                  <DateTimeField
                     value={f.publishAt}
                     disabled={live}
                     onChange={(e) => upd("publishAt", e.target.value)}

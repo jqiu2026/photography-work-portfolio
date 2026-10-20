@@ -113,25 +113,6 @@
 .hj-top > * {
   pointer-events: auto;
 }
-.hj-skip {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  min-height: 2.75rem;
-  padding: 0 1rem;
-  border: 1px solid rgb(255 255 255 / 0.28);
-  border-radius: 999px;
-  background: rgb(10 10 10 / 0.7);
-  backdrop-filter: blur(10px);
-  color: #fff;
-  font: inherit;
-  font-size: 0.85rem;
-  cursor: pointer;
-}
-.hj-skip:hover {
-  background: #fff;
-  color: #000;
-}
 .hj-id,
 .hj-chapter {
   margin: 0;
@@ -166,18 +147,6 @@
 .hj-hud .hj-segs button {
   font: inherit;
   color: inherit;
-}
-.hj-play {
-  flex: none;
-  display: grid;
-  place-items: center;
-  width: 2.75rem;
-  height: 2.75rem;
-  border: 0;
-  border-radius: 50%;
-  background: #fff;
-  color: #000 !important;
-  cursor: pointer;
 }
 .hj-segs {
   flex: 1;
@@ -228,25 +197,6 @@
   min-width: 7.5rem;
   font-size: 0.78rem;
   color: #e8e4da;
-}
-.hj-resume,
-.hj-calm {
-  flex: none;
-  min-height: 2.25rem;
-  padding: 0 0.9rem;
-  border: 1px solid rgb(255 255 255 / 0.3);
-  border-radius: 999px;
-  background: none;
-  font-size: 0.78rem;
-  cursor: pointer;
-}
-.hj-resume {
-  background: #fff;
-  color: #000 !important;
-  border-color: #fff;
-}
-.hj-calm[aria-pressed="true"] {
-  border-color: #fff;
 }
 .hj-hud:not(:has(.hj-segs)) {
   left: auto;
@@ -494,6 +444,23 @@
   gap: 1rem;
 }
 .hj-paper {
+  /* the paper is a light object on the dark page: Holominimal's controls inside it read these values */
+  --hm-bg: #efeae0;
+  --hm-surface: #e4ded0;
+  --hm-control-bg: rgb(27 26 23 / 0.06);
+  --hm-surface-raised: #e4ded0;
+  --hm-surface-selected: rgb(27 26 23 / 0.12);
+  --hm-selected-edge: none;
+  --hm-fg: #1b1a17;
+  --hm-fg-strong: #000;
+  --hm-fg-soft: #3a372f;
+  --hm-muted: #5b574d;
+  --hm-line: rgb(27 26 23 / 0.2);
+  --hm-line-strong: rgb(27 26 23 / 0.5);
+  --hm-line-hover: rgb(27 26 23 / 0.75);
+  --hm-on-fg: #efeae0;
+  --hm-chrome-bg: rgb(27 26 23 / 0.06);
+  --hm-focus-color: #111;
   position: relative;
   display: grid;
   align-content: start;
@@ -533,26 +500,6 @@
   padding: 0.55rem 0 0.35rem;
   border-bottom: 1.5px dashed #8b8578;
   font-size: 1.02rem;
-}
-.hj-pick {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-}
-.hj-pick button {
-  min-height: 2.75rem;
-  padding: 0 0.9rem;
-  border: 1.5px solid #1b1a17;
-  border-radius: 999px;
-  background: none;
-  color: #1b1a17;
-  font: inherit;
-  font-size: 0.9rem;
-  cursor: pointer;
-}
-.hj-pick button[aria-pressed="true"] {
-  background: #1b1a17;
-  color: #efeae0;
 }
 .hj-quote {
   display: grid;
@@ -637,32 +584,12 @@
   line-height: 1.45;
 }
 
-.hj-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
+.hj-paper .hm-button {
   justify-self: start;
-  min-height: 2.75rem;
-  padding: 0 1.2rem;
-  border: 1.5px solid #1b1a17;
-  border-radius: 999px;
-  background: #1b1a17;
-  color: #efeae0;
-  font-size: 0.95rem;
-  text-decoration: none;
 }
-.hj-btn[data-kind="secondary"] {
-  background: none;
-  color: #1b1a17;
-}
-.hj-btn:hover {
-  background: #000;
-  color: #fff;
-}
-.hj-btn svg {
-  width: 1em;
-  height: 1em;
+.hj-paper .hm-calendar {
+  --_cell: 2rem;
+  margin-inline: auto;
 }
 
 /* ---- 5 the moment ---- */
@@ -785,13 +712,7 @@
   display: block;
   width: 100%;
 }
-.hj-compare input {
-  width: 100%;
-  height: 2.75rem;
-  margin: 0;
-  accent-color: #fff;
-  cursor: ew-resize;
-}
+
 .hj-dark-stage .hj-note {
   color: var(--ink-2);
   text-align: center;
@@ -935,28 +856,14 @@
   gap: 0.5rem;
 }
 .hj-act {
-  font: inherit;
-  font-size: 0.78rem;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  min-height: 2rem;
-  padding: 0 0.9rem;
-  border: 1px solid rgb(255 255 255 / 0.25);
-  border-radius: 999px;
-  background: rgb(10 10 14 / 0.85);
-  color: #fff;
-  font-size: 0.78rem;
   backdrop-filter: blur(8px);
+}
+.hj-act:not(.hj-act--send) {
+  background: rgb(10 10 14 / 0.85);
 }
 .hj-act svg {
   width: 0.9em;
   height: 0.9em;
-}
-.hj-act--send {
-  background: #fff;
-  color: #111;
 }
 .hj-del-copy {
   display: grid;
@@ -1432,7 +1339,7 @@
 :root[data-hj-motion] .hj-desk {
   position: relative;
   display: block;
-  height: min(35rem, 72svh);
+  height: min(38rem, 78svh);
 }
 :root[data-hj-motion] .hj-paper {
   --d: calc(var(--k) - var(--stage, 0));
@@ -1440,7 +1347,7 @@
   inset: 0;
   margin: auto;
   width: min(30rem, 100%);
-  height: min(29rem, 100%);
+  height: min(32rem, 100%);
   overflow: hidden;
   align-content: start;
   transition:
@@ -1963,15 +1870,6 @@
   :root[data-hj-motion] .hj-seeing-photo {
     translate: none;
   }
-  .hj-skip {
-    flex: none;
-    padding: 0 0.8rem;
-    font-size: 0.78rem;
-    white-space: nowrap;
-  }
-  .hj-skip svg {
-    display: none;
-  }
   .hj-chapter {
     width: 7.5rem;
   }
@@ -2003,12 +1901,6 @@
   display: block;
   height: 4.4rem;
   padding: 0;
-}
-.hj-skip {
-  position: absolute;
-  left: var(--pad);
-  top: 0.9rem;
-  text-decoration: none;
 }
 .hj-id,
 .hj-chapter {
@@ -2309,27 +2201,30 @@
   color: #fff;
 }
 
-/* footer links are folded away on the home page until asked for */
-.pub-foot__more > summary {
-  margin-left: auto;
-  margin-right: auto;
+/* footer links are folded away on the home page until asked for (Holominimal's Collapsible) */
+.pub-foot__toggle {
   display: flex;
-  width: fit-content;
   align-items: center;
+  gap: 0.5rem;
+  width: fit-content;
   min-height: 2.75rem;
+  margin-inline: auto;
+  padding: 0;
+  border: 0;
+  background: none;
   cursor: pointer;
   color: #d4d0c6;
+  font: inherit;
   font-size: 0.9rem;
-  list-style: none;
+  transition: color 0.2s var(--hm-ease-curtain);
 }
-.pub-foot__more > summary::-webkit-details-marker {
-  display: none;
+.pub-foot__toggle:hover {
+  color: #fff;
 }
-.pub-foot__more > summary::after {
+.pub-foot__plus::before {
   content: "+";
-  margin-left: 0.5rem;
 }
-.pub-foot__more[open] > summary::after {
+.pub-foot__toggle[aria-expanded="true"] .pub-foot__plus::before {
   content: "–";
 }
 
@@ -2458,33 +2353,6 @@
 .hj-hud {
   width: min(52rem, calc(100% - 1.5rem));
 }
-.hj-hud .hj-skip {
-  position: static;
-  flex: none;
-  min-height: 2.25rem;
-  padding: 0 0.9rem;
-  font-size: 0.78rem;
-  white-space: nowrap;
-  background: none;
-  backdrop-filter: none;
-}
-.hj-hud .hj-skip:hover {
-  background: #fff;
-  color: #000;
-}
-.hj-hud .hj-calm {
-  display: grid;
-  place-items: center;
-  width: 2.25rem;
-  padding: 0;
-}
-.hj-hud .hj-calm[aria-pressed="true"] {
-  background: #fff;
-  color: #000;
-}
-.hj-hud .hj-calm:hover {
-  border-color: #fff;
-}
 .pub-foot__more {
   margin-top: 1.4rem;
 }
@@ -2500,7 +2368,10 @@
     display: inline;
   }
   .hj-hud .hj-segs {
-    min-width: 2rem;
+    display: none;
+  }
+  .hj-hud {
+    justify-content: space-between;
   }
   .hj-hud {
     gap: 0.4rem;
@@ -2590,28 +2461,6 @@
 }
 
 /* the folded footer links open and close with a motion, and every control answers the pointer */
-.pub-foot__more > summary {
-  transition: color 0.2s var(--hm-ease-curtain);
-}
-.pub-foot__more > summary:hover {
-  color: #fff;
-}
-.pub-foot__more > summary::after {
-  display: inline-block;
-  transition: rotate 0.3s var(--hm-ease-curtain);
-}
-.pub-foot__more[open] > summary::after {
-  rotate: 180deg;
-}
-.pub-foot__more[open] > .pub-foot__grid {
-  animation: hj-foot-open 0.4s var(--hm-ease-curtain) both;
-}
-@keyframes hj-foot-open {
-  from {
-    opacity: 0;
-    translate: 0 -0.6rem;
-  }
-}
 .pub-foot a,
 .pub-foot .pub-return {
   transition: color 0.2s var(--hm-ease-curtain), border-color 0.2s var(--hm-ease-curtain), background 0.2s

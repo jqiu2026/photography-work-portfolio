@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { choose } from "./ui";
+import { choose, pickDate } from "./ui";
 import sharp from "sharp";
 import { enterGallery, newGallery, publishOpenGallery, uploadPhotos } from "./gallery-helpers";
 import { signStripePayload } from "../packages/payments/src/index";
@@ -202,7 +202,7 @@ test("an inquiry becomes a scored lead, the visitor and the owner get email (lab
   await expect(page).toHaveURL(/\/book\/performance$/);
   await page.getByLabel("Your name").fill(who);
   await page.getByRole("textbox", { name: "Email", exact: true }).fill(`lead-${uid}@example.com`);
-  await page.getByLabel("Date (if you have one)").fill("2027-03-01");
+  await pickDate(page.getByLabel("Date (if you have one)"), "2027-03-01");
   await page.getByLabel("Where").fill("Brooklyn");
   await page.getByLabel("Production or ensemble").fill("Spring concert");
   await page

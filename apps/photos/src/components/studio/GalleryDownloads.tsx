@@ -168,7 +168,7 @@ export function GalleryDownloads({
           <Input autoComplete="off" value={f.pin} onChange={(e) => set("pin", e.target.value)} />
         </Field>
         <Field
-          label="Licence to accept before downloading (optional; **bold**, *italic*, [links](https://…) work)"
+          label="License to accept before downloading (optional; **bold**, *italic*, [links](https://…) work)"
           className="gm-wide"
         >
           <Textarea

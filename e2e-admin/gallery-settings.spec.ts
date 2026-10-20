@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { choose } from "./ui";
+import { choose, pickDate } from "./ui";
 import sharp from "sharp";
 import { enterGallery, newGallery, publishOpenGallery, uploadPhotos } from "./gallery-helpers";
 
@@ -107,7 +107,7 @@ test("owner sets brand, a watermark, a track, rules and the branding of a galler
 
   // access: ask visitors for an email, a shoot date, open link, published
   await page.getByRole("tab", { name: "Settings" }).click();
-  await page.getByLabel("Shoot date").fill("2026-06-06");
+  await pickDate(page.getByLabel("Shoot date"), "2026-06-06");
   await page.getByRole("button", { name: "Save settings" }).click();
   await slow(page.getByRole("status").filter({ hasText: "Gallery settings saved" })).toBeVisible();
   await page.getByRole("tab", { name: "Share" }).click();

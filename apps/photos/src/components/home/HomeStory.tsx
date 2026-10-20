@@ -1,6 +1,18 @@
 "use client";
 
-import { ArrowRightIcon, Button, Cursor, DownloadIcon, HeartIcon, LockIcon } from "@holominimal/ui";
+import {
+  ArrowRightIcon,
+  Button,
+  Calendar,
+  Cursor,
+  DownloadIcon,
+  HeartIcon,
+  IconButton,
+  LockIcon,
+  Segment,
+  SegmentedControl,
+  Slider,
+} from "@holominimal/ui";
 import Link from "next/link";
 import { type CSSProperties, useEffect, useRef, useState } from "react";
 import { ProtectedImage } from "@/components/media";
@@ -252,10 +264,12 @@ function Range({ sheet, subjects }: { sheet: StoryPhoto[]; subjects: Subject[] }
           <ul className="hj-cats" aria-label="What I photograph">
             {subjects.map((s) => (
               <li key={s.slug}>
-                <Link href={`/portfolio/${s.slug}`} data-on={s.slug === active ? "" : undefined}>
-                  {s.name}
-                  <small>{s.count}</small>
-                </Link>
+                <Button asChild size="sm" shape="pill" variant={s.slug === active ? "primary" : "secondary"}>
+                  <Link href={`/portfolio/${s.slug}`}>
+                    {s.name}
+                    <small>{s.count}</small>
+                  </Link>
+                </Button>
               </li>
             ))}
           </ul>
@@ -270,37 +284,22 @@ function Range({ sheet, subjects }: { sheet: StoryPhoto[]; subjects: Subject[] }
 
 /* ---- Chapter 4: from idea to booking ---- */
 
-const OPEN_DAYS = [5, 6, 12, 13, 19, 20, 26] as const;
+/** Days of the month that are open in the example calendar. */
+const OPEN_DAYS = [5, 6, 12, 13, 19, 20, 26];
 
-function Calendar() {
-  const [day, setDay] = useState<number>(13);
-  const days = Array.from({ length: 35 }, (_, i) => i - 2);
+/** The example calendar in the booking sheet is Holominimal's own Calendar, with only some days open. */
+function ExampleCalendar() {
+  const [month] = useState(() => {
+    const t = new Date();
+    return new Date(t.getFullYear(), t.getMonth() + 1, 1);
+  });
   return (
-    <div className="hj-cal">
-      <div className="hj-cal-grid">
-        {["M", "T", "W", "T", "F", "S", "S"].map((d, i) => (
-          <b key={`${d}${i}`}>{d}</b>
-        ))}
-        {days.map((d) =>
-          (OPEN_DAYS as readonly number[]).includes(d) ? (
-            <button
-              type="button"
-              key={d}
-              data-open=""
-              data-picked={d === day ? "" : undefined}
-              aria-pressed={d === day}
-              onClick={() => setDay(d)}
-            >
-              {d}
-            </button>
-          ) : (
-            <span key={d} data-out={d < 1 || d > 30 ? "" : undefined}>
-              {d < 1 ? d + 30 : d > 30 ? d - 30 : d}
-            </span>
-          ),
-        )}
-      </div>
-    </div>
+    <Calendar
+      aria-label="Example calendar"
+      defaultMonth={month}
+      defaultValue={new Date(month.getFullYear(), month.getMonth(), 13)}
+      isDisabled={(d) => !OPEN_DAYS.includes(d.getDate()) || d.getMonth() !== month.getMonth()}
+    />
   );
 }
 
@@ -405,9 +404,11 @@ function Booking({ packages, prep }: { packages: HomePackage[]; prep: StoryPhoto
                   <li key={q}>{q}</li>
                 ))}
               </ul>
-              <Link href={BOOKING.inquiry.cta.href} className="hj-btn" data-kind="primary">
-                {BOOKING.inquiry.cta.label} <ArrowRightIcon />
-              </Link>
+              <Button asChild shape="pill" variant="primary">
+                <Link href={BOOKING.inquiry.cta.href}>
+                  {BOOKING.inquiry.cta.label} <ArrowRightIcon />
+                </Link>
+              </Button>
             </article>
 
             <article
@@ -423,13 +424,18 @@ function Booking({ packages, prep }: { packages: HomePackage[]; prep: StoryPhoto
               <h3 id="sh-quote">{BOOKING.quote.heading}</h3>
               {pkg ? (
                 <>
-                  <div className="hj-pick" role="group" aria-label="Packages">
+                  <SegmentedControl
+                    className="hj-pick"
+                    aria-label="Packages"
+                    value={String(pick)}
+                    onValueChange={(v) => setPick(Number(v))}
+                  >
                     {packages.map((p, i) => (
-                      <button type="button" key={p.id} aria-pressed={i === pick} onClick={() => setPick(i)}>
+                      <Segment key={p.id} value={String(i)}>
                         {p.name}
-                      </button>
+                      </Segment>
                     ))}
-                  </div>
+                  </SegmentedControl>
                   <div className="hj-quote">
                     <strong className="hj-price">{pkg.price}</strong>
                     {pkg.tagline ? <p>{pkg.tagline}</p> : null}
@@ -447,9 +453,11 @@ function Booking({ packages, prep }: { packages: HomePackage[]; prep: StoryPhoto
               ) : (
                 <p>{BOOKING.quote.empty}</p>
               )}
-              <Link href={BOOKING.quote.cta.href} className="hj-btn" data-kind="secondary">
-                {BOOKING.quote.cta.label} <ArrowRightIcon />
-              </Link>
+              <Button asChild shape="pill" variant="secondary">
+                <Link href={BOOKING.quote.cta.href}>
+                  {BOOKING.quote.cta.label} <ArrowRightIcon />
+                </Link>
+              </Button>
             </article>
 
             <article
@@ -463,12 +471,14 @@ function Booking({ packages, prep }: { packages: HomePackage[]; prep: StoryPhoto
             >
               <small className="hj-paper-n">03</small>
               <h3 id="sh-booking">{BOOKING.booking.heading}</h3>
-              <Calendar />
+              <ExampleCalendar />
               <p className="hj-note">{BOOKING.booking.note}</p>
               <p>{BOOKING.booking.terms}</p>
-              <Link href={BOOKING.booking.cta.href} className="hj-btn" data-kind="primary">
-                {BOOKING.booking.cta.label} <ArrowRightIcon />
-              </Link>
+              <Button asChild shape="pill" variant="primary">
+                <Link href={BOOKING.booking.cta.href}>
+                  {BOOKING.booking.cta.label} <ArrowRightIcon />
+                </Link>
+              </Button>
             </article>
 
             <article
@@ -534,13 +544,11 @@ function Moment({ photo }: { photo?: StoryPhoto }) {
 function Darkroom({ photo }: { photo?: StoryPhoto }) {
   const stage = useRef<HTMLDivElement>(null);
   const ref = useRef<HTMLElement>(null);
-  const range = useRef<HTMLInputElement>(null);
+  const [split, setSplit] = useState(50);
   const user = useRef(false);
   useProgress(ref, (p) => {
     if (user.current) return;
-    const v = 100 - Math.min(1, Math.max(0, (p - 0.12) * 1.45)) * 100;
-    stage.current?.style.setProperty("--split", `${v.toFixed(2)}%`);
-    if (range.current) range.current.value = String(Math.round(v));
+    setSplit(Math.round(100 - Math.min(1, Math.max(0, (p - 0.12) * 1.45)) * 100));
   });
   const ratio = photo ? photo.width / photo.height : 1.5;
   return (
@@ -568,7 +576,7 @@ function Darkroom({ photo }: { photo?: StoryPhoto }) {
             ))}
           </ul>
         </div>
-        <div ref={stage} className="hj-dark-stage" style={vars({ "--ratio": ratio, "--split": "50%" })}>
+        <div ref={stage} className="hj-dark-stage" style={vars({ "--ratio": ratio, "--split": `${split}%` })}>
           <div className="hj-print">
             <div className="hj-dark-img">
               <Ph photo={photo} sizes="(min-width: 900px) 60vw, 92vw" />
@@ -580,20 +588,18 @@ function Darkroom({ photo }: { photo?: StoryPhoto }) {
               <small className="hj-tag hj-tag--r">{DARKROOM.after}</small>
             </div>
           </div>
-          <label className="hj-compare">
-            <span className="hm-sr-only">{DARKROOM.control}</span>
-            <input
-              ref={range}
-              type="range"
+          <div className="hj-compare">
+            <Slider
+              aria-label={DARKROOM.control}
               min={0}
               max={100}
-              defaultValue={50}
-              onInput={(e) => {
+              value={split}
+              onValueChange={(v) => {
                 user.current = true;
-                stage.current?.style.setProperty("--split", `${e.currentTarget.value}%`);
+                setSplit(v);
               }}
             />
-          </label>
+          </div>
           <p className="hj-note">{DARKROOM.note}</p>
         </div>
       </div>
@@ -661,36 +667,47 @@ function Delivered({ cover, photos }: { cover?: StoryPhoto; photos: StoryPhoto[]
   }, [unlock]);
   const acts = (
     <div className="hj-acts">
-      <button
+      <Button
         type="button"
+        size="sm"
+        shape="pill"
         className="hj-act hj-act--send"
         onClick={() =>
           say(`Selection sent (example): ${hearted} favorite${hearted === 1 ? "" : "s"}. Nothing was actually sent.`)
         }
       >
         <HeartIcon aria-hidden="true" /> Send my selection
-      </button>
-      <button
+      </Button>
+      <Button
         type="button"
+        size="sm"
+        shape="pill"
+        variant="secondary"
         className="hj-act"
         onClick={() => say("Download started (example). No file is downloaded.")}
       >
         <DownloadIcon aria-hidden="true" /> Download
-      </button>
-      <button
+      </Button>
+      <Button
         type="button"
+        size="sm"
+        shape="pill"
+        variant="secondary"
         className="hj-act"
         onClick={() => say("Print order placed (example). Nothing was ordered.")}
       >
         Order prints
-      </button>
-      <button
+      </Button>
+      <Button
         type="button"
+        size="sm"
+        shape="pill"
+        variant="secondary"
         className="hj-act"
         onClick={() => say("Link copied (example): photo.jerryqiu.com/g/example")}
       >
         Share
-      </button>
+      </Button>
     </div>
   );
   const lock = (
@@ -705,8 +722,9 @@ function Delivered({ cover, photos }: { cover?: StoryPhoto; photos: StoryPhoto[]
     </div>
   );
   const heart = (i: number) => (
-    <button
+    <IconButton
       type="button"
+      variant="ghost"
       aria-pressed={Boolean(hearts[i])}
       aria-label={`Favorite photograph ${i + 1} in the example gallery`}
       onClick={() => {
@@ -715,7 +733,7 @@ function Delivered({ cover, photos }: { cover?: StoryPhoto; photos: StoryPhoto[]
       }}
     >
       <HeartIcon />
-    </button>
+    </IconButton>
   );
   const toastEl = (
     <div className="hj-toast" data-show={toast ? "" : undefined} aria-hidden="true">
@@ -933,8 +951,9 @@ function Hud({
       <div className="hj-hud" role="group" aria-label="Story controls" data-mode={mode}>
         {motion ? (
           <>
-            <button
+            <IconButton
               type="button"
+              variant="primary"
               className="hj-play"
               aria-label={mode === "auto" ? HUD.pause : HUD.play}
               onClick={() => {
@@ -954,7 +973,7 @@ function Hud({
                   <path d="M4 2.5v11l9-5.5z" fill="currentColor" />
                 </svg>
               )}
-            </button>
+            </IconButton>
             <ol className="hj-segs" aria-label="Chapters">
               {CHAPTERS.map((c, i) => (
                 <li key={c.id} style={{ flexGrow: c.seconds }}>
@@ -974,15 +993,16 @@ function Hud({
               {status}
             </p>
             {mode === "manual" ? (
-              <button type="button" className="hj-resume" onClick={() => send("auto")}>
+              <Button type="button" size="sm" shape="pill" className="hj-resume" onClick={() => send("auto")}>
                 {HUD.resume}
-              </button>
+              </Button>
             ) : null}
           </>
         ) : null}
         {bare ? null : (
-          <button
+          <IconButton
             type="button"
+            variant="secondary"
             className="hj-calm"
             aria-pressed={calm}
             aria-label="Reduce motion"
@@ -1002,22 +1022,23 @@ function Hud({
               <path d="M3 8c2.2-2 3.8 2 6 0s3.8 2 6 0 3.8 2 6 0M3 14c2.2-2 3.8 2 6 0s3.8 2 6 0 3.8 2 6 0" />
               {calm ? <path d="M4 20 20 4" /> : null}
             </svg>
-          </button>
+          </IconButton>
         )}
-        <a
-          href="#finale"
-          className="hj-skip"
-          onClick={(e) => {
-            e.preventDefault();
-            send("manual");
-            const f = document.getElementById("finale");
-            if (!f) return;
-            scrollTo({ top: f.getBoundingClientRect().top + scrollY, behavior: motion ? "smooth" : "auto" });
-            document.getElementById("hj-finale-title")?.focus({ preventScroll: true });
-          }}
-        >
-          {HUD.skip} <ArrowRightIcon />
-        </a>
+        <Button asChild size="sm" shape="pill" variant="secondary" className="hj-skip">
+          <a
+            href="#finale"
+            onClick={(e) => {
+              e.preventDefault();
+              send("manual");
+              const f = document.getElementById("finale");
+              if (!f) return;
+              scrollTo({ top: f.getBoundingClientRect().top + scrollY, behavior: motion ? "smooth" : "auto" });
+              document.getElementById("hj-finale-title")?.focus({ preventScroll: true });
+            }}
+          >
+            {HUD.skip} <ArrowRightIcon />
+          </a>
+        </Button>
       </div>
     </>
   );
