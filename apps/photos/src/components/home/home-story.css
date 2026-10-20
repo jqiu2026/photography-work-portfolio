@@ -2317,10 +2317,10 @@
 
 /* the bottom of the page: the heading stays in view at the very end */
 .hj-coda {
-  background: linear-gradient(to bottom, #1b140e, transparent 55vh);
+  background: linear-gradient(to bottom, #1b140e, transparent 9rem);
 }
 .hj-end {
-  padding: 19rem var(--hm-gutter, 1.25rem) 0;
+  padding: 9rem var(--hm-gutter, 1.25rem) 2.5rem;
 }
 .hj-end-inner {
   gap: 1.4rem;
