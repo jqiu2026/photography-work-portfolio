@@ -2,7 +2,7 @@
 
 import { ArrowRightIcon, Button, Cursor, DownloadIcon, HeartIcon, LockIcon } from "@holominimal/ui";
 import Link from "next/link";
-import { type CSSProperties, useEffect, useRef, useState } from "react";
+import { type CSSProperties, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { ProtectedImage } from "@/components/media";
 import {
   BOOKING,
@@ -213,11 +213,32 @@ function Range({ sheet, subjects }: { sheet: StoryPhoto[]; subjects: Subject[] }
   const ref = useRef<HTMLElement>(null);
   const cats = subjects.filter((s) => sheet.some((p) => p.category === s.slug));
   const [on, setOn] = useState(0);
+  const [hop, setHop] = useState(0);
+  const [box, setBox] = useState<{ x: number; y: number; w: number; h: number } | null>(null);
+  const sheetRef = useRef<HTMLDivElement>(null);
   useProgress(ref, (p) => {
     const n = Math.max(1, cats.length);
-    setOn(Math.min(n - 1, Math.max(0, Math.floor(((p - 0.12) / 0.78) * n))));
+    const at = Math.min(n - 0.001, Math.max(0, ((p - 0.12) / 0.78) * n));
+    setOn(Math.floor(at));
+    // the frame visits each highlighted photograph of the subject in turn
+    setHop(Math.floor((at % 1) * 3));
   });
   const active = cats[on]?.slug;
+  // the frame sits inside the moving sheet, so it travels with the photographs and only slides between them
+  // biome-ignore lint/correctness/useExhaustiveDependencies: the subject and the hop decide which cells are lit; the DOM is read
+  useLayoutEffect(() => {
+    const sheetEl = sheetRef.current;
+    if (!sheetEl) return;
+    const lit = [...sheetEl.querySelectorAll<HTMLElement>(".hj-frame-cell[data-on]")];
+    const view = innerWidth;
+    const seen = lit.filter((c) => {
+      const r = c.getBoundingClientRect();
+      return r.right > 0 && r.left < view && r.bottom > 0 && r.top < innerHeight;
+    });
+    const list = (seen.length ? seen : lit).sort((a, b) => a.offsetLeft - b.offsetLeft || a.offsetTop - b.offsetTop);
+    const c = list[hop % Math.max(1, list.length)];
+    if (c) setBox({ x: c.offsetLeft, y: c.offsetTop, w: c.offsetWidth, h: c.offsetHeight });
+  }, [active, hop]);
   return (
     <section
       id="ch-range"
@@ -228,7 +249,7 @@ function Range({ sheet, subjects }: { sheet: StoryPhoto[]; subjects: Subject[] }
       aria-labelledby="hj-range-title"
     >
       <div className="hj-stick">
-        <div className="hj-sheet" aria-hidden="true">
+        <div className="hj-sheet" aria-hidden="true" ref={sheetRef}>
           {sheet.map((p, i) => (
             <Link
               key={p.id ?? i}
@@ -242,8 +263,16 @@ function Range({ sheet, subjects }: { sheet: StoryPhoto[]; subjects: Subject[] }
               <small>{String(i + 1).padStart(2, "0")}</small>
             </Link>
           ))}
+          <span
+            className="hj-viewing"
+            style={
+              box
+                ? vars({ "--x": `${box.x}px`, "--y": `${box.y}px`, "--w": `${box.w}px`, "--h": `${box.h}px` })
+                : undefined
+            }
+            data-set={box ? "" : undefined}
+          />
         </div>
-        <span className="hj-viewing" aria-hidden="true" />
         <div className="hj-range-copy">
           <h2 id="hj-range-title" className="hj-h2">
             {RANGE.title}
@@ -506,10 +535,10 @@ function Moment({ photo }: { photo?: StoryPhoto }) {
       <div className="hj-stick">
         <div className="hj-shot">
           <Ph photo={photo} sizes="100vw" />
+          <span className="hj-thirds" aria-hidden="true" />
+          <span className="hj-af" aria-hidden="true" />
         </div>
         <div className="hj-scrim" aria-hidden="true" />
-        <span className="hj-thirds" aria-hidden="true" />
-        <span className="hj-af" aria-hidden="true" />
         <h2 id="hj-moment-title" className="hj-mask hj-big">
           <span className="hj-big-line">{MOMENT.line}</span>
         </h2>
@@ -835,8 +864,13 @@ function Keep({ photo }: { photo?: StoryPhoto }) {
             <figcaption>{KEEP.items[1].label}</figcaption>
           </figure>
           <figure className="hj-fmt hj-fmt--small" style={vars({ "--i": 2 })}>
-            <div className="hj-fmt-print hj-fmt-print--back">{art("12vw")}</div>
-            <div className="hj-fmt-print">{art("12vw")}</div>
+            <div className="hj-fmt-wallet">
+              {[0, 1, 2, 3, 4, 5].map((n) => (
+                <div key={n} className="hj-fmt-id">
+                  {art("6vw")}
+                </div>
+              ))}
+            </div>
             <figcaption>{KEEP.items[2].label}</figcaption>
           </figure>
           <figure className="hj-fmt hj-fmt--phone" style={vars({ "--i": 3 })}>

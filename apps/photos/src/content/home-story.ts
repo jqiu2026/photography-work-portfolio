@@ -22,14 +22,14 @@ export type StoryPhoto = {
 
 /** Chapters in page order. `seconds` is how long the automatic mode spends in the chapter. */
 export const CHAPTERS = [
-  { id: "threshold", label: "Threshold", seconds: 5, bg: "#050505" },
-  { id: "about", label: "About", seconds: 9, bg: "#050505" },
-  { id: "range", label: "My past work", seconds: 9, bg: "#050505" },
-  { id: "booking", label: "Booking", seconds: 20, bg: "#050505" },
-  { id: "moment", label: "The shoot", seconds: 7, bg: "#050505" },
-  { id: "darkroom", label: "The edit", seconds: 9, bg: "#1c0707" },
-  { id: "delivered", label: "Galleries", seconds: 12, bg: "#101014" },
-  { id: "keep", label: "Keep", seconds: 7, bg: "#1b140e" },
+  { id: "threshold", label: "Threshold", seconds: 3, bg: "#050505" },
+  { id: "about", label: "About", seconds: 5, bg: "#050505" },
+  { id: "range", label: "My past work", seconds: 6, bg: "#050505" },
+  { id: "booking", label: "Booking", seconds: 12, bg: "#0b2230" },
+  { id: "moment", label: "The shoot", seconds: 4, bg: "#050505" },
+  { id: "darkroom", label: "The edit", seconds: 5, bg: "#1c0707" },
+  { id: "delivered", label: "Galleries", seconds: 8, bg: "#101014" },
+  { id: "keep", label: "Keep", seconds: 4, bg: "#1b140e" },
 ] as const;
 export type ChapterId = (typeof CHAPTERS)[number]["id"];
 

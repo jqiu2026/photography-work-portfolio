@@ -100,13 +100,19 @@ export function useScrollStory(root: RefObject<HTMLElement | null>, motion: bool
     const segs = [...document.querySelectorAll<HTMLElement>("[data-seg]")];
     const state = items.map(() => ({ target: 0, current: -1 }));
     let raf = 0;
+    let last = 0;
+    let k = 0.4;
     const ease = (s: { target: number; current: number }) => {
       if (s.current < 0) s.current = s.target;
-      else s.current += (s.target - s.current) * 0.4;
+      else s.current += (s.target - s.current) * k;
       if (Math.abs(s.target - s.current) < 0.0007) s.current = s.target;
       return s.current === s.target;
     };
-    const frame = () => {
+    const frame = (now: number) => {
+      // glide at the same speed on any display: about 0.4 of the gap per 60 Hz frame
+      const dt = last ? Math.min(0.05, (now - last) / 1000) : 1 / 60;
+      last = now;
+      k = 1 - (1 - 0.4) ** (dt * 60);
       let done = true;
       items.forEach((it, i) => {
         const s = state[i];
@@ -119,6 +125,7 @@ export function useScrollStory(root: RefObject<HTMLElement | null>, motion: bool
           if (ls) for (const l of ls) l(s.current);
         }
       });
+      if (done) last = 0;
       raf = done ? 0 : requestAnimationFrame(frame);
     };
     let tops: number[] = [];
@@ -224,13 +231,28 @@ export function useAutoplay(root: RefObject<HTMLElement | null>, enabled: boolea
       if (m === "auto") {
         pos = scrollY;
         prev = 0;
+        at = -1;
         lastSet.current = -1;
         raf = requestAnimationFrame(tick);
       }
     };
+    // each chapter is one move: slow start, quick middle, slow stop (u is how far through its time the chapter is)
+    let u = 0;
+    let at = -1;
+    const ease = (x: number) => (x < 0.5 ? 8 * x ** 4 : 1 - (-2 * x + 2) ** 4 / 2);
+    const unease = (y: number) => {
+      let lo = 0;
+      let hi = 1;
+      for (let i = 0; i < 14; i++) {
+        const m = (lo + hi) / 2;
+        if (ease(m) < y) lo = m;
+        else hi = m;
+      }
+      return (lo + hi) / 2;
+    };
     const tick = (now: number) => {
       raf = requestAnimationFrame(tick);
-      const dt = prev ? Math.min(0.1, (now - prev) / 1000) : 0;
+      const dt = prev ? Math.min(0.05, (now - prev) / 1000) : 0;
       prev = now;
       if (hold.current || document.hidden) return;
       // something else moved the page (scrollbar drag, an anchor, find in page): that is the reader
@@ -243,11 +265,16 @@ export function useAutoplay(root: RefObject<HTMLElement | null>, enabled: boolea
       });
       const a = tops[c] ?? 0;
       const b = c + 1 < tops.length ? tops[c + 1]! : end;
-      const secs = CHAPTERS[c]?.seconds ?? 10;
-      // quick and slow: three beats per chapter (a fast push, then a slow hold)
-      const t = Math.min(1, Math.max(0, (pos - a) / Math.max(1, b - a)));
-      const beat = 1 + 0.78 * Math.sin(t * Math.PI * 6);
-      pos = Math.min(end, pos + ((b - a) / secs) * dt * beat);
+      if (c !== at) {
+        at = c;
+        u = unease(Math.min(1, Math.max(0, (pos - a) / Math.max(1, b - a))));
+      }
+      const secs = CHAPTERS[c]?.seconds ?? 6;
+      u = Math.min(1, u + dt / secs);
+      pos = a + (b - a) * ease(u);
+      // the last pixels of a chapter are the start of the next one
+      if (u >= 1) pos = b + 0.5;
+      pos = Math.min(end, pos);
       lastSet.current = pos;
       jump(pos);
     };

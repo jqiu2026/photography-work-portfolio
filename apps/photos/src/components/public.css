@@ -473,7 +473,7 @@
 .pub[data-intro] > .hm-shell > .hm-shell-stage {
   padding-left: 0;
 }
-.pub[data-intro] :is(.pub-end, .pub-foot) {
+.pub[data-intro] .pub-end {
   padding-left: var(--hm-sidebar);
 }
 .pub[data-intro] .pub-foot {

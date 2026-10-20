@@ -108,7 +108,7 @@
   gap: 1rem;
   padding: 0.9rem var(--pad);
   pointer-events: none;
-  transition: translate 0.25s var(--glide), visibility 0.25s;
+  transition: translate 0.15s var(--glide), visibility 0.15s;
 }
 .hj-top > * {
   pointer-events: auto;
@@ -160,7 +160,7 @@
   backdrop-filter: blur(14px);
   color: #fff;
   translate: -50% 0;
-  transition: translate 0.25s var(--glide), visibility 0.25s;
+  transition: translate 0.15s var(--glide), visibility 0.15s;
 }
 .hj-hud > button,
 .hj-hud .hj-segs button {
@@ -209,7 +209,7 @@
   border-radius: 2px;
   background: rgb(255 255 255 / 0.24);
   overflow: hidden;
-  transition: height 0.15s var(--glide);
+  transition: height 0.09s var(--glide);
 }
 .hj-segs i::after {
   content: "";
@@ -389,7 +389,7 @@
   background: #0d0d0d;
   border: 5px solid #0d0d0d;
   outline: 1px solid #2c2c2c;
-  transition: filter 0.22s var(--glide), scale 0.25s var(--spring), outline-color 0.15s;
+  transition: filter 0.132s var(--glide), scale 0.15s var(--spring), outline-color 0.09s;
 }
 .hj-frame-cell:nth-child(n + 9) {
   display: none;
@@ -432,7 +432,7 @@
   border-radius: 999px;
   color: #fff;
   text-decoration: none;
-  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  transition: background 0.09s, color 0.09s, border-color 0.09s;
 }
 .hj-cats a small {
   font-size: 0.72rem;
@@ -475,7 +475,7 @@
   font-size: 1.05rem;
   text-align: left;
   cursor: pointer;
-  transition: color 0.15s, translate 0.2s var(--glide);
+  transition: color 0.09s, translate 0.12s var(--glide);
 }
 .hj-stages b {
   font: 0.72rem ui-monospace, monospace;
@@ -1005,7 +1005,7 @@
   text-align: center;
   translate: -50% -250%;
   visibility: hidden;
-  transition: translate 0.25s var(--glide), visibility 0s 0.25s;
+  transition: translate 0.15s var(--glide), visibility 0s 0.15s;
   pointer-events: none;
 }
 .hj-toast[data-show] {
@@ -1083,9 +1083,24 @@
 }
 .hj-fmt--small {
   z-index: 3;
-  width: 11vw;
-  min-height: 7rem;
+  width: 9vw;
   margin-left: 1vw;
+}
+.hj-fmt-wallet {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.35rem;
+  width: 100%;
+  padding: 0.4rem;
+  background: #efeae0;
+  box-shadow: 0 8px 18px -8px #000;
+}
+.hj-fmt-id {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border: 2px solid #fbfaf6;
+  background: #fbfaf6;
 }
 .hj-fmt--phone {
   z-index: 2;
@@ -1364,25 +1379,30 @@
 :root[data-hj-motion] .hj-viewing {
   display: block;
   position: absolute;
-  left: 66%;
-  top: 50%;
-  z-index: 1;
-  width: 30vw;
-  aspect-ratio: 3 / 2;
-  translate: calc(-50% + (0.5 - var(--p)) * 36vw) calc(-50% + sin(calc(var(--p) * 720deg)) * 10svh);
-  scale: calc(0.95 + 0.2 * sin(calc(var(--p) * 360deg)));
-  --b: 1.6rem;
-  --w: 2px;
+  left: calc(var(--x, 0px) - 0.5rem);
+  top: calc(var(--y, 0px) - 0.5rem);
+  width: calc(var(--w, 0px) + 1rem);
+  height: calc(var(--h, 0px) + 1rem);
+  z-index: 3;
+  opacity: 0;
+  --b: 2.2rem;
+  --lw: 3px;
   pointer-events: none;
+  transition:
+    left 0.3s var(--hm-ease-curtain), top 0.3s var(--hm-ease-curtain), width 0.3s var(--hm-ease-curtain),
+    height 0.3s var(--hm-ease-curtain), opacity 0.2s;
   background:
-    linear-gradient(#fff, #fff) left top / var(--b) var(--w) no-repeat,
-    linear-gradient(#fff, #fff) left top / var(--w) var(--b) no-repeat,
-    linear-gradient(#fff, #fff) right top / var(--b) var(--w) no-repeat,
-    linear-gradient(#fff, #fff) right top / var(--w) var(--b) no-repeat,
-    linear-gradient(#fff, #fff) left bottom / var(--b) var(--w) no-repeat,
-    linear-gradient(#fff, #fff) left bottom / var(--w) var(--b) no-repeat,
-    linear-gradient(#fff, #fff) right bottom / var(--b) var(--w) no-repeat,
-    linear-gradient(#fff, #fff) right bottom / var(--w) var(--b) no-repeat;
+    linear-gradient(#fff, #fff) left top / var(--b) var(--lw) no-repeat,
+    linear-gradient(#fff, #fff) left top / var(--lw) var(--b) no-repeat,
+    linear-gradient(#fff, #fff) right top / var(--b) var(--lw) no-repeat,
+    linear-gradient(#fff, #fff) right top / var(--lw) var(--b) no-repeat,
+    linear-gradient(#fff, #fff) left bottom / var(--b) var(--lw) no-repeat,
+    linear-gradient(#fff, #fff) left bottom / var(--lw) var(--b) no-repeat,
+    linear-gradient(#fff, #fff) right bottom / var(--b) var(--lw) no-repeat,
+    linear-gradient(#fff, #fff) right bottom / var(--lw) var(--b) no-repeat;
+}
+:root[data-hj-motion] .hj-viewing[data-set] {
+  opacity: 1;
 }
 :root[data-hj-motion] .hj-range-copy {
   position: absolute;
@@ -1415,7 +1435,7 @@
   width: min(30rem, 100%);
   height: fit-content;
   max-height: 100%;
-  transition: translate 0.28s var(--spring), rotate 0.28s var(--spring), scale 0.28s var(--spring), filter 0.2s;
+  transition: translate 0.168s var(--spring), rotate 0.168s var(--spring), scale 0.168s var(--spring), filter 0.12s;
   z-index: 1;
 }
 :root[data-hj-motion] .hj-paper[data-state="now"] {
@@ -1562,7 +1582,7 @@
   width: min(68vw, calc(64svh * 1.6));
   scale: calc(0.6 + var(--e) * 0.4);
   rotate: 1 0 0 calc((1 - var(--e)) * 30deg);
-  translate: calc(-8vw + 0px) calc(2svh + (1 - var(--e)) * 6%);
+  translate: 0 calc(2svh + (1 - var(--e)) * 6%);
 }
 :root[data-hj-motion] .hj-scroll {
   translate: 0 calc(var(--g2) * -39.4%);
@@ -1573,7 +1593,7 @@
 :root[data-hj-motion] .hj-phone {
   display: block;
   position: absolute;
-  left: calc(50% + 14vw);
+  left: calc(50% + 22vw);
   top: 50%;
   z-index: 3;
   height: min(66svh, 36vw);
@@ -1663,7 +1683,7 @@
   gap: 0.9rem;
   background: #0b0b0e;
   color: #fff;
-  transition: translate 0.5s var(--hm-ease-curtain);
+  transition: translate 0.3s var(--hm-ease-curtain);
 }
 :root[data-hj-motion] .hj-lock[data-state="open"] {
   translate: 0 -101%;
@@ -1688,7 +1708,7 @@
   background: transparent;
 }
 .hj-lock[data-state="typing"] .hj-dots i {
-  animation: hj-dot 0.12s var(--hm-ease-curtain) calc(var(--i) * 0.1s) both;
+  animation: hj-dot 0.072s var(--hm-ease-curtain) calc(var(--i) * 0.06s) both;
 }
 .hj-lock[data-state="open"] .hj-dots i {
   background: #fff;
@@ -1730,7 +1750,7 @@
 :root[data-hj-motion] .hj-swap {
   translate: 0 130%;
   visibility: hidden;
-  transition: translate 0.2s var(--glide), visibility 0s 0.2s;
+  transition: translate 0.12s var(--glide), visibility 0s 0.12s;
 }
 :root[data-hj-motion] .hj-swap[data-on] {
   translate: 0 0;
@@ -2002,7 +2022,7 @@
   background: var(--pencil);
   transform-origin: top;
   scale: 1 calc(var(--s) / 7);
-  transition: scale 0.25s var(--glide);
+  transition: scale 0.15s var(--glide);
 }
 .hj-tl li {
   position: relative;
@@ -2018,7 +2038,7 @@
   border: 2px solid #fff;
   border-radius: 50%;
   background: #0a0a0a;
-  transition: background 0.15s, scale 0.2s var(--spring), box-shadow 0.2s;
+  transition: background 0.09s, scale 0.12s var(--spring), box-shadow 0.12s;
 }
 .hj-tl li[data-state="done"] .hj-tl-dot {
   border-color: var(--pencil);
@@ -2060,7 +2080,7 @@
 :root[data-hj-motion] .hj-tl span {
   max-height: 3rem;
   overflow: hidden;
-  transition: max-height 0.2s var(--glide);
+  transition: max-height 0.12s var(--glide);
 }
 :root[data-hj-motion] .hj-tl li:not([data-state="now"]) span {
   max-height: 0;
@@ -2079,7 +2099,7 @@
   opacity: 0;
   visibility: hidden;
   translate: 0 -0.5rem;
-  transition: opacity 0.2s, translate 0.3s var(--hm-ease-curtain), visibility 0s 0.2s;
+  transition: opacity 0.12s, translate 0.18s var(--hm-ease-curtain), visibility 0s 0.12s;
 }
 .hj-mini[data-show] {
   opacity: 1;
@@ -2106,7 +2126,7 @@
   width: 100%;
   height: 2px;
   background: rgb(255 255 255 / 0.3);
-  transition: opacity 0.2s 0.4s, background 0.2s;
+  transition: opacity 0.12s 0.24s, background 0.12s;
 }
 .hj-mini li[data-fly]::after {
   opacity: 0;
@@ -2258,8 +2278,10 @@
 
 /* footer links are folded away on the home page until asked for */
 .pub-foot__more > summary {
-  margin-left: 48px;
-  display: inline-flex;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  width: fit-content;
   align-items: center;
   min-height: 2.75rem;
   cursor: pointer;
@@ -2279,6 +2301,7 @@
 }
 
 /* ======== revision 4 ======== */
+/* stage glows fade in and out with their chapter so no edge of a stage shows against the backdrop */
 
 /* one continuous backdrop: the page color glides between chapters (set by the scroll engine); the stages are clear */
 .hj {
@@ -2290,13 +2313,37 @@
   background: transparent;
 }
 :root[data-hj-motion] .hj-darkroom .hj-stick {
-  background: radial-gradient(ellipse at 50% 35%, #2b0909, transparent 72%);
+  --ga: clamp(0, min(calc(var(--p) * 5), calc((1 - var(--p)) * 5)), 1);
+  background: radial-gradient(
+    ellipse at 50% 35%,
+    color-mix(in srgb, #2b0909 calc(var(--ga) * 100%), transparent),
+    transparent 72%
+  );
 }
 :root[data-hj-motion] .hj-delivered .hj-stick {
-  background: radial-gradient(ellipse at 50% 30%, #1d1d24, transparent 70%);
+  --ga: clamp(0, min(calc(var(--p) * 5), calc((1 - var(--p)) * 5)), 1);
+  background: radial-gradient(
+    ellipse at 50% 30%,
+    color-mix(in srgb, #1d1d24 calc(var(--ga) * 100%), transparent),
+    transparent 70%
+  );
 }
 :root[data-hj-motion] .hj-keep .hj-stick {
-  background: radial-gradient(ellipse at 50% 18%, #43301f, transparent 62%);
+  --ga: clamp(0, min(calc(var(--p) * 5), calc((1 - var(--p)) * 5)), 1);
+  background: radial-gradient(
+    ellipse at 50% 18%,
+    color-mix(in srgb, #43301f calc(var(--ga) * 100%), transparent),
+    transparent 62%
+  );
+}
+:root[data-hj-motion] .hj-booking .hj-stick {
+  --ga: clamp(0, min(calc(var(--p) * 8), calc((1 - var(--p)) * 8)), 1);
+  background: radial-gradient(
+      ellipse at 20% 30%,
+      color-mix(in srgb, #16435a calc(var(--ga) * 100%), transparent),
+      transparent 70%
+    ),
+    radial-gradient(ellipse at 85% 85%, color-mix(in srgb, #3a2a5c calc(var(--ga) * 80%), transparent), transparent 65%);
 }
 :root[data-hj-motion] .hj-moment .hj-stick {
   background: transparent;
@@ -2341,7 +2388,7 @@
   background: linear-gradient(to bottom, #1b140e, transparent 55vh);
 }
 .hj-end {
-  padding: 2.5rem var(--hm-gutter, 1.25rem) 0;
+  padding: 8rem var(--hm-gutter, 1.25rem) 0;
 }
 .hj-end-inner {
   gap: 1.4rem;
@@ -2363,7 +2410,7 @@
   margin-bottom: 0;
 }
 .hj-tl {
-  transition: opacity 0.25s var(--hm-ease-curtain) 0.15s;
+  transition: opacity 0.15s var(--hm-ease-curtain) 0.09s;
 }
 .hj-tl[data-gone] {
   opacity: 0;
