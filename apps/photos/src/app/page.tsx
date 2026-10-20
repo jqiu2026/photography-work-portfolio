@@ -1,5 +1,5 @@
 import { ProtectedImage } from "@/components/media";
-import { Button, EmptyState } from "@holominimal/ui";
+import { Button, EmptyState, Typewriter } from "@holominimal/ui";
 import { getSite } from "@jerryqiu/sites";
 import { person } from "@jerryqiu/sites/profile";
 import type { Metadata } from "next";
@@ -90,7 +90,14 @@ export default async function Home() {
           <div className="hj-end-inner">
             <div className="hj-end-copy">
               <h2 id="hj-finale-title" tabIndex={-1}>
-                {END.line}
+                <span className="hm-sr-only">{END.line}</span>
+                <span aria-hidden="true">
+                  {END.lead} <br />
+                  <em className="hj-emph">
+                    <noscript>{END.cycle[0]}</noscript>
+                    <Typewriter text={[...END.cycle]} speed={70} hold={2200} />
+                  </em>
+                </span>
               </h2>
               <p className="hj-end-lede">{END.lede}</p>
               <p className="hj-end-mail">
