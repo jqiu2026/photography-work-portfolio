@@ -24,14 +24,16 @@ export type StoryPhoto = {
 export const CHAPTERS = [
   { id: "threshold", label: "Threshold", seconds: 3, bg: "#050505" },
   { id: "about", label: "About", seconds: 5, bg: "#050505" },
-  { id: "range", label: "My past work", seconds: 6, bg: "#050505" },
-  { id: "booking", label: "Booking", seconds: 12, bg: "#07141c" },
+  { id: "range", label: "My past work", seconds: 5, bg: "#050505" },
+  { id: "booking", label: "Booking", seconds: 9.4, bg: "#07141c" },
   { id: "moment", label: "The shoot", seconds: 4, bg: "#050505" },
-  { id: "darkroom", label: "The edit", seconds: 5, bg: "#1c0707" },
+  { id: "darkroom", label: "The edit", seconds: 6, bg: "#1c0707" },
   { id: "delivered", label: "Galleries", seconds: 8, bg: "#101014" },
   { id: "keep", label: "Keep", seconds: 4, bg: "#1b140e" },
 ] as const;
 export type ChapterId = (typeof CHAPTERS)[number]["id"];
+/** Chapters whose pinned animation runs at one steady speed between an ease in and an ease out of this many seconds. */
+export const RAMP: Partial<Record<ChapterId, number>> = { range: 1, booking: 1 };
 
 /** Where the camera looks in a photograph, as percentages from its top left. Keyed by category (a default). */
 export const FOCAL: Record<string, readonly [number, number]> = {
@@ -184,7 +186,8 @@ export const KEEP = {
   items: [
     { id: "wall", label: "Large framed print" },
     { id: "frame", label: "Framed print" },
-    { id: "small", label: "Postcard and wallet prints" },
+    { id: "post", label: "Postcard prints" },
+    { id: "wallet", label: "Wallet prints" },
   ],
 } as const;
 

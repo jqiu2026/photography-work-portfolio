@@ -1081,27 +1081,22 @@
   z-index: 2;
   width: min(20vw, calc(30svh * var(--r)));
 }
-.hj-fmt--small {
+.hj-fmt--post {
   z-index: 3;
-  width: 19vw;
+  width: 11vw;
   margin-left: 1vw;
 }
-.hj-small-row {
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  gap: 1.6vw;
-  width: 100%;
+.hj-fmt--wallet {
+  z-index: 3;
+  width: 6vw;
+  margin-left: 1.6vw;
 }
 .hj-fmt-post {
   position: relative;
   display: grid;
   align-items: end;
-  flex: 0 0 11vw;
-}
-.hj-fmt-wallet {
-  flex: 0 0 6vw;
-  width: 6vw;
+  width: 100%;
+  min-height: 7rem;
 }
 .hj-fmt-wallet {
   display: grid;
@@ -1159,14 +1154,10 @@
   .hj-fmt--frame {
     width: min(26vw, calc(24svh * var(--r)));
   }
-  .hj-fmt--small {
-    width: 30vw;
+  .hj-fmt--post {
+    width: 17vw;
   }
-  .hj-fmt-post {
-    flex-basis: 17vw;
-  }
-  .hj-fmt-wallet {
-    flex-basis: 9vw;
+  .hj-fmt--wallet {
     width: 9vw;
   }
   .hj-fmt figcaption {
@@ -1372,7 +1363,7 @@
   width: 150vw;
   grid-template-columns: repeat(5, 1fr);
   gap: 1.1vw;
-  translate: calc(-50% + (0.5 - var(--p)) * 22vw) calc(-50% + (0.5 - var(--p)) * 12svh);
+  translate: calc(-50% + (0.5 - var(--p)) * 22vw) calc(-50% + (0.5 - var(--p)) * 70svh);
   rotate: -3deg;
   scale: calc(1.12 - var(--p) * 0.08);
 }
@@ -1446,7 +1437,8 @@
   width: min(30rem, 100%);
   height: fit-content;
   max-height: 100%;
-  transition: translate 0.168s var(--spring), rotate 0.168s var(--spring), scale 0.168s var(--spring), filter 0.12s;
+  transition: translate 0.7s var(--hm-ease-curtain), rotate 0.7s var(--hm-ease-curtain), scale 0.7s
+    var(--hm-ease-curtain), filter 0.5s var(--hm-ease-curtain);
   z-index: 1;
 }
 :root[data-hj-motion] .hj-paper[data-state="now"] {
@@ -2428,11 +2420,65 @@
 }
 .hj-faq-more {
   margin-top: 0;
-  margin-bottom: 0;
+  margin-bottom: 1.6rem;
 }
 .hj-tl {
   transition: opacity 0.15s var(--hm-ease-curtain) 0.09s;
 }
 .hj-tl[data-gone] {
   opacity: 0;
+}
+
+/* ======== revision 7 ======== */
+/* the skip link and the reduced motion button live together at the bottom */
+.hj-hud {
+  width: min(52rem, calc(100% - 1.5rem));
+}
+.hj-hud .hj-skip {
+  position: static;
+  flex: none;
+  min-height: 2.25rem;
+  padding: 0 0.9rem;
+  font-size: 0.78rem;
+  white-space: nowrap;
+  background: none;
+  backdrop-filter: none;
+}
+.hj-hud .hj-skip:hover {
+  background: #fff;
+  color: #000;
+}
+.hj-hud .hj-calm {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  padding: 0;
+}
+.hj-hud .hj-calm[aria-pressed="true"] {
+  background: #fff;
+  color: #000;
+}
+.hj-hud .hj-calm:hover {
+  border-color: #fff;
+}
+.pub-foot__more {
+  margin-top: 1.4rem;
+}
+.hj-skip-short {
+  display: none;
+}
+@media (max-width: 760px) {
+  .hj-hud .hj-skip svg,
+  .hj-skip-full {
+    display: none;
+  }
+  .hj-skip-short {
+    display: inline;
+  }
+  .hj-hud .hj-segs {
+    min-width: 2rem;
+  }
+  .hj-hud {
+    gap: 0.4rem;
+  }
 }

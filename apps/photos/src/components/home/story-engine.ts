@@ -1,7 +1,7 @@
 "use client";
 
 import { type RefObject, useEffect, useRef, useSyncExternalStore } from "react";
-import { CHAPTERS } from "@/content/home-story";
+import { CHAPTERS, RAMP } from "@/content/home-story";
 
 const clamp = (v: number) => Math.min(1, Math.max(0, v));
 const rgb = (h: string) => [1, 3, 5].map((i) => Number.parseInt(h.slice(i, i + 2), 16));
@@ -30,8 +30,6 @@ function set(next: Partial<Snapshot>) {
   snap = merged;
   for (const s of subs) s();
 }
-/** The booking chapter is ending: the timeline bar can fly to the top of the screen. */
-export const setBar = (bar: boolean) => set({ bar });
 export function useStory(): Snapshot {
   return useSyncExternalStore(
     (cb) => {
@@ -148,7 +146,9 @@ export function useScrollStory(root: RefObject<HTMLElement | null>, motion: bool
       tops.forEach((t, i) => {
         if (y + vh * 0.5 >= t) active = i;
       });
-      set({ chapter: active });
+      // the timeline bar leaves the booking chapter once the scroll to the shoot is under way
+      const shoot = chapters.findIndex((c) => c.dataset.chapter === "moment");
+      set({ chapter: active, bar: shoot >= 0 && y + vh * 0.7 >= (tops[shoot] ?? Number.POSITIVE_INFINITY) });
       // one continuous backdrop: the page color glides from each chapter's color to the next, in the last screen of a chapter
       let c = 0;
       tops.forEach((t, i) => {
@@ -191,16 +191,20 @@ export function chapterTops(root: HTMLElement) {
   const els = [...root.querySelectorAll<HTMLElement>("[data-chapter]")];
   const tops = els.map((c) => c.getBoundingClientRect().top + scrollY);
   const last = els[els.length - 1];
-  const end = last ? tops[tops.length - 1]! + Math.max(0, last.offsetHeight - innerHeight) : 0;
+  const pinned = last ? tops[tops.length - 1]! + Math.max(0, last.offsetHeight - innerHeight) : 0;
+  // the story plays on to the bottom of the page: the questions and the end
+  const end = Math.max(pinned, document.documentElement.scrollHeight - innerHeight);
   // each chapter is two moves: the animation while it is pinned, then the scroll over to the next chapter
-  const moves: { a: number; b: number; secs: number }[] = [];
+  const moves: { a: number; b: number; secs: number; ramp?: number }[] = [];
   els.forEach((c, i) => {
     const top = tops[i]!;
     const pinEnd = Math.min(end, top + Math.max(0, c.offsetHeight - innerHeight));
-    const next = i + 1 < tops.length ? tops[i + 1]! : end;
+    const lastOne = i + 1 >= tops.length;
+    const next = lastOne ? end : tops[i + 1]!;
+    const id = CHAPTERS[i]?.id;
     const secs = CHAPTERS[i]?.seconds ?? 5;
-    if (pinEnd - top > 2) moves.push({ a: top, b: pinEnd, secs });
-    if (next - pinEnd > 2) moves.push({ a: pinEnd, b: next, secs: CROSS_SECONDS });
+    if (pinEnd - top > 2) moves.push({ a: top, b: pinEnd, secs, ramp: id ? RAMP[id] : undefined });
+    if (next - pinEnd > 2) moves.push({ a: pinEnd, b: next, secs: lastOne ? 2.4 : CROSS_SECONDS });
   });
   return { tops, end, moves };
 }
@@ -252,13 +256,24 @@ export function useAutoplay(root: RefObject<HTMLElement | null>, enabled: boolea
     // every move eases in and eases out (u is how far through its time the move is)
     let u = 0;
     let at = -1;
-    const ease = (x: number) => (x < 0.5 ? 4 * x ** 3 : 1 - (-2 * x + 2) ** 3 / 2);
-    const unease = (y: number) => {
+    const cubic = (x: number) => (x < 0.5 ? 4 * x ** 3 : 1 - (-2 * x + 2) ** 3 / 2);
+    // a capped speed: ease in for `r` seconds, one steady speed, ease out for `r` seconds (sine ramps)
+    const trapezoid = (x: number, T: number, r: number) => {
+      const v = 1 / (T - r);
+      const ramp = (t: number) => v * (t / 2 - (r * Math.sin((Math.PI * t) / r)) / (2 * Math.PI));
+      const t = x * T;
+      if (t < r) return ramp(t);
+      if (t > T - r) return 1 - ramp(T - t);
+      return (v * r) / 2 + v * (t - r);
+    };
+    const ease = (x: number, mv: { secs: number; ramp?: number }) =>
+      mv.ramp ? trapezoid(x, mv.secs, mv.ramp) : cubic(x);
+    const unease = (y: number, mv: { secs: number; ramp?: number }) => {
       let lo = 0;
       let hi = 1;
-      for (let i = 0; i < 14; i++) {
+      for (let i = 0; i < 16; i++) {
         const m = (lo + hi) / 2;
-        if (ease(m) < y) lo = m;
+        if (ease(m, mv) < y) lo = m;
         else hi = m;
       }
       return (lo + hi) / 2;
@@ -280,10 +295,10 @@ export function useAutoplay(root: RefObject<HTMLElement | null>, enabled: boolea
       if (!mv) return change("done");
       if (m !== at) {
         at = m;
-        u = unease(Math.min(1, Math.max(0, (pos - mv.a) / Math.max(1, mv.b - mv.a))));
+        u = unease(Math.min(1, Math.max(0, (pos - mv.a) / Math.max(1, mv.b - mv.a))), mv);
       }
       u = Math.min(1, u + dt / mv.secs);
-      pos = Math.min(end, u >= 1 ? mv.b + 0.5 : mv.a + (mv.b - mv.a) * ease(u));
+      pos = Math.min(end, u >= 1 ? mv.b + 0.5 : mv.a + (mv.b - mv.a) * ease(u, mv));
       lastSet.current = pos;
       jump(pos);
     };

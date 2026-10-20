@@ -23,7 +23,6 @@ import {
 import {
   type Mode,
   motionAllowed,
-  setBar,
   useAutoplay,
   useProgress,
   useScrollStory,
@@ -212,6 +211,8 @@ function About({ photo }: { photo?: StoryPhoto }) {
 function Range({ sheet, subjects }: { sheet: StoryPhoto[]; subjects: Subject[] }) {
   const ref = useRef<HTMLElement>(null);
   const cats = subjects.filter((s) => sheet.some((p) => p.category === s.slug));
+  // TODO(owner): the sheet repeats the portfolio's photographs until there are enough different ones
+  const wall = Array.from({ length: sheet.length ? 25 : 0 }, (_, i) => sheet[i % sheet.length] as StoryPhoto);
   const [on, setOn] = useState(0);
   const [hop, setHop] = useState(0);
   const [box, setBox] = useState<{ x: number; y: number; w: number; h: number } | null>(null);
@@ -250,9 +251,9 @@ function Range({ sheet, subjects }: { sheet: StoryPhoto[]; subjects: Subject[] }
     >
       <div className="hj-stick">
         <div className="hj-sheet" aria-hidden="true" ref={sheetRef}>
-          {sheet.map((p, i) => (
+          {wall.map((p, i) => (
             <Link
-              key={p.id ?? i}
+              key={`${p.id ?? "p"}-${i}`}
               href={`/portfolio/${p.category}`}
               tabIndex={-1}
               className="hj-frame-cell"
@@ -345,7 +346,6 @@ function Booking({ packages, prep }: { packages: HomePackage[]; prep: StoryPhoto
   useProgress(ref, (p) => {
     const n = Math.min(3, Math.max(0, Math.floor((p - 0.04) * 4.2)));
     setStage(n);
-    setBar(p > 0.94);
   });
   const motion = story.motion;
   const pkg = packages[pick];
@@ -640,20 +640,34 @@ function Delivered({ cover, photos }: { cover?: StoryPhoto; photos: StoryPhoto[]
     timers.current[0] = window.setTimeout(() => setToast(""), 2600);
   };
   useEffect(() => () => timers.current.forEach(clearTimeout), []);
-  // the passcode screen shows for a beat (0.25 s), the dots fill in, then the screen lifts
-  useProgress(ref, (p) => {
-    setPhase(p > 0.55 ? 1 : 0);
-    if (p < 0.08) {
-      setUnlock((u) => (u === "locked" ? u : "locked"));
-    } else if (p > 0.26) {
-      setUnlock((u) => {
-        if (u !== "locked") return u;
-        timers.current[1] = window.setTimeout(() => setUnlock("typing"), 250);
-        timers.current[2] = window.setTimeout(() => setUnlock("open"), 250 + 700);
-        return "locked";
-      });
-    }
-  });
+  useProgress(ref, (p) => setPhase(p > 0.55 ? 1 : 0));
+  // the passcode screen shows for a beat (0.25 s), the dots fill in, then the screen lifts; it starts when the stage is half in view
+  const stageRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = stageRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.intersectionRatio >= 0.5) {
+            setUnlock((u) => {
+              if (u !== "locked") return u;
+              timers.current[1] = window.setTimeout(() => setUnlock("typing"), 250);
+              timers.current[2] = window.setTimeout(() => setUnlock("open"), 250 + 700);
+              return u;
+            });
+          } else if (e.intersectionRatio === 0) {
+            clearTimeout(timers.current[1]);
+            clearTimeout(timers.current[2]);
+            setUnlock("locked");
+          }
+        }
+      },
+      { threshold: [0, 0.5] },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
   useEffect(() => {
     if (unlock === "locked") {
       clearTimeout(timers.current[1]);
@@ -732,7 +746,7 @@ function Delivered({ cover, photos }: { cover?: StoryPhoto; photos: StoryPhoto[]
       data-scroll="pin"
       aria-labelledby="hj-del-title"
     >
-      <div className="hj-stick" data-phase={phase}>
+      <div className="hj-stick" data-phase={phase} ref={stageRef}>
         <div className="hm-sr-only" role="status">
           {toast}
         </div>
@@ -831,6 +845,24 @@ function Delivered({ cover, photos }: { cover?: StoryPhoto; photos: StoryPhoto[]
 
 function Keep({ photo }: { photo?: StoryPhoto }) {
   const r = photo ? photo.width / photo.height : 1.5;
+  // the four formats drop onto the table one after another once the stage is mostly in view
+  const stageRef = useRef<HTMLDivElement>(null);
+  const [drop, setDrop] = useState(false);
+  useEffect(() => {
+    const el = stageRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.intersectionRatio >= 0.5) setDrop(true);
+          else if (e.intersectionRatio === 0) setDrop(false);
+        }
+      },
+      { threshold: [0, 0.5] },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
   const art = (sizes: string) => <Ph photo={photo} sizes={sizes} />;
   return (
     <section
@@ -840,7 +872,7 @@ function Keep({ photo }: { photo?: StoryPhoto }) {
       data-scroll="pin"
       aria-labelledby="hj-keep-title"
     >
-      <div className="hj-stick">
+      <div className="hj-stick" ref={stageRef}>
         <div className="hj-keep-copy">
           <h2 id="hj-keep-title" className="hj-h2">
             {KEEP.title}
@@ -850,7 +882,7 @@ function Keep({ photo }: { photo?: StoryPhoto }) {
             {KEEP.cta.label} <ArrowRightIcon />
           </Link>
         </div>
-        <div className="hj-spread" style={vars({ "--r": r })}>
+        <div className="hj-spread" style={vars({ "--r": r })} data-drop={drop ? "" : undefined}>
           <figure className="hj-fmt hj-fmt--wall" style={vars({ "--i": 0 })}>
             <div className="hj-fmt-frame">
               <div className="hj-fmt-mat">{art("(min-width: 900px) 34vw, 60vw")}</div>
@@ -863,21 +895,22 @@ function Keep({ photo }: { photo?: StoryPhoto }) {
             </div>
             <figcaption>{KEEP.items[1].label}</figcaption>
           </figure>
-          <figure className="hj-fmt hj-fmt--small" style={vars({ "--i": 2 })}>
-            <div className="hj-small-row">
-              <div className="hj-fmt-post">
-                <div className="hj-fmt-print hj-fmt-print--back">{art("12vw")}</div>
-                <div className="hj-fmt-print">{art("12vw")}</div>
-              </div>
-              <div className="hj-fmt-wallet">
-                {[0, 1, 2, 3, 4, 5].map((n) => (
-                  <div key={n} className="hj-fmt-id">
-                    {art("6vw")}
-                  </div>
-                ))}
-              </div>
+          <figure className="hj-fmt hj-fmt--post" style={vars({ "--i": 2 })}>
+            <div className="hj-fmt-post">
+              <div className="hj-fmt-print hj-fmt-print--back">{art("12vw")}</div>
+              <div className="hj-fmt-print">{art("12vw")}</div>
             </div>
             <figcaption>{KEEP.items[2].label}</figcaption>
+          </figure>
+          <figure className="hj-fmt hj-fmt--wallet" style={vars({ "--i": 3 })}>
+            <div className="hj-fmt-wallet">
+              {[0, 1, 2, 3, 4, 5].map((n) => (
+                <div key={n} className="hj-fmt-id">
+                  {art("6vw")}
+                </div>
+              ))}
+            </div>
+            <figcaption>{KEEP.items[3].label}</figcaption>
           </figure>
         </div>
       </div>
@@ -904,6 +937,88 @@ function Hud({
   return (
     <>
       <div className="hj-top">
+        <p className="hj-id">{THRESHOLD.mark}</p>
+        {motion ? (
+          <p className="hj-chapter" aria-hidden="true">
+            <b>{String(chapter + 1).padStart(2, "0")}</b> / {String(CHAPTERS.length).padStart(2, "0")}{" "}
+            {CHAPTERS[chapter]?.label}
+          </p>
+        ) : null}
+      </div>
+      <div className="hj-hud" role="group" aria-label="Story controls" data-mode={mode}>
+        {motion ? (
+          <>
+            <button
+              type="button"
+              className="hj-play"
+              aria-label={mode === "auto" ? HUD.pause : HUD.play}
+              onClick={() => {
+                if (mode === "auto") send("paused");
+                else if (mode === "done") {
+                  scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+                  send("auto");
+                } else send("auto");
+              }}
+            >
+              {mode === "auto" ? (
+                <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+                  <path d="M4 3h3v10H4zM9 3h3v10H9z" fill="currentColor" />
+                </svg>
+              ) : (
+                <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+                  <path d="M4 2.5v11l9-5.5z" fill="currentColor" />
+                </svg>
+              )}
+            </button>
+            <ol className="hj-segs" aria-label="Chapters">
+              {CHAPTERS.map((c, i) => (
+                <li key={c.id} style={{ flexGrow: c.seconds }}>
+                  <button
+                    type="button"
+                    data-seg=""
+                    aria-label={c.label}
+                    aria-current={i === chapter ? "step" : undefined}
+                    onClick={() => toChapter(i)}
+                  >
+                    <i />
+                  </button>
+                </li>
+              ))}
+            </ol>
+            <p className="hj-status" aria-live="polite">
+              {status}
+            </p>
+            {mode === "manual" ? (
+              <button type="button" className="hj-resume" onClick={() => send("auto")}>
+                {HUD.resume}
+              </button>
+            ) : null}
+          </>
+        ) : null}
+        {bare ? null : (
+          <button
+            type="button"
+            className="hj-calm"
+            aria-pressed={calm}
+            aria-label="Reduce motion"
+            title={calm ? "Motion is reduced. Turn motion back on" : "Reduce motion"}
+            onClick={onCalm}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              width="18"
+              height="18"
+              aria-hidden="true"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+            >
+              <path d="M3 8c2.2-2 3.8 2 6 0s3.8 2 6 0 3.8 2 6 0M3 14c2.2-2 3.8 2 6 0s3.8 2 6 0 3.8 2 6 0" />
+              {calm ? <path d="M4 20 20 4" /> : null}
+            </svg>
+          </button>
+        )}
         <a
           href="#finale"
           className="hj-skip"
@@ -918,70 +1033,7 @@ function Hud({
         >
           {HUD.skip} <ArrowRightIcon />
         </a>
-        <p className="hj-id">{THRESHOLD.mark}</p>
-        {motion ? (
-          <p className="hj-chapter" aria-hidden="true">
-            <b>{String(chapter + 1).padStart(2, "0")}</b> / {String(CHAPTERS.length).padStart(2, "0")}{" "}
-            {CHAPTERS[chapter]?.label}
-          </p>
-        ) : null}
       </div>
-      {bare ? null : (
-        <div className="hj-hud" role="group" aria-label="Story controls" data-mode={mode}>
-          {motion ? (
-            <>
-              <button
-                type="button"
-                className="hj-play"
-                aria-label={mode === "auto" ? HUD.pause : HUD.play}
-                onClick={() => {
-                  if (mode === "auto") send("paused");
-                  else if (mode === "done") {
-                    scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
-                    send("auto");
-                  } else send("auto");
-                }}
-              >
-                {mode === "auto" ? (
-                  <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
-                    <path d="M4 3h3v10H4zM9 3h3v10H9z" fill="currentColor" />
-                  </svg>
-                ) : (
-                  <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
-                    <path d="M4 2.5v11l9-5.5z" fill="currentColor" />
-                  </svg>
-                )}
-              </button>
-              <ol className="hj-segs" aria-label="Chapters">
-                {CHAPTERS.map((c, i) => (
-                  <li key={c.id} style={{ flexGrow: c.seconds }}>
-                    <button
-                      type="button"
-                      data-seg=""
-                      aria-label={c.label}
-                      aria-current={i === chapter ? "step" : undefined}
-                      onClick={() => toChapter(i)}
-                    >
-                      <i />
-                    </button>
-                  </li>
-                ))}
-              </ol>
-              <p className="hj-status" aria-live="polite">
-                {status}
-              </p>
-              {mode === "manual" ? (
-                <button type="button" className="hj-resume" onClick={() => send("auto")}>
-                  {HUD.resume}
-                </button>
-              ) : null}
-            </>
-          ) : null}
-          <button type="button" className="hj-calm" aria-pressed={calm} onClick={onCalm}>
-            {calm ? "Motion on" : "Calm"}
-          </button>
-        </div>
-      )}
     </>
   );
 }
