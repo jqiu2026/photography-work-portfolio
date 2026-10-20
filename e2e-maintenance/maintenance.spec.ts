@@ -40,14 +40,19 @@ for (const app of apps) {
         const page = await ctx.newPage();
         await page.goto(base, { waitUntil: "load" });
         await expect(page.getByRole("heading", { level: 1 })).toContainText("Back soon");
-        await expect(page.getByRole("link", { name: /bookings@jerryqiu\.com/ })).toHaveAttribute(
+        await expect(page.getByRole("link", { name: /inquiry@jerryqiu\.com/ })).toHaveAttribute(
           "href",
-          "mailto:bookings@jerryqiu.com",
+          "mailto:inquiry@jerryqiu.com",
         );
         const overflow = await page.evaluate(
           () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
         );
         expect(overflow, "no horizontal scroll").toBeLessThanOrEqual(1);
+        const fits = await page.evaluate(() => ({
+          locked: getComputedStyle(document.body).overflow === "hidden",
+          fits: document.documentElement.scrollHeight <= window.innerHeight + 1,
+        }));
+        expect(fits, "the page does not scroll").toEqual({ locked: true, fits: true });
         const results = await new AxeBuilder({ page })
           .withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"])
           .analyze();

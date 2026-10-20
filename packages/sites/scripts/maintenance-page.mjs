@@ -23,25 +23,25 @@ export const COPY = {
     "I am rebuilding this site from the ground up.",
     "The new one is on the way, and I will have it up as soon as it is ready.",
   ],
-  // TODO(owner): the one way to reach you (bookings@ is the booking address)
-  email: "bookings@jerryqiu.com",
-  emailLabel: "Write to me",
+  // TODO(owner): the one way to reach you 
+  email: "inquiry@jerryqiu.com",
+  emailLabel: "Inquiries",
   // TODO(owner): the copyright line; %YEAR% is filled in when the page is served
   copyright: "© %YEAR% Jerry Qiu.",
 };
 
 /** The rules of the page itself: layout only; color, type and shape come from the Holominimal tokens. */
 const PAGE_CSS = `
-html{color-scheme:dark;background:var(--hm-bg,#000)}
-body{margin:0;min-height:100vh;min-height:100svh}
-.soon{position:relative;display:grid;place-items:center;min-height:100vh;min-height:100svh;padding:clamp(1.5rem,6vw,4rem) var(--hm-gutter,1.25rem);overflow:hidden;
+html{color-scheme:dark;background:var(--hm-bg,#000);height:100%;overflow:hidden}
+body{margin:0;height:100vh;height:100svh;overflow:hidden}
+.soon{position:relative;display:grid;place-items:center;height:100vh;height:100svh;box-sizing:border-box;padding:1.5rem var(--hm-gutter,1.25rem);overflow:hidden;
 background:radial-gradient(60rem 36rem at 12% 8%,hsl(var(--hm-violet) / .26),transparent 70%),radial-gradient(48rem 30rem at 92% 96%,hsl(var(--hm-cyan) / .14),transparent 70%),var(--hm-bg,#000)}
-.soon-inner{display:grid;justify-items:start;gap:1.4rem;width:min(100%,54rem)}
-.soon .soon-title{margin:0;font-size:clamp(3.4rem,13vw,9rem);font-weight:400;line-height:.98;letter-spacing:-.04em}
-.soon-lede{display:grid;gap:.6rem;max-width:34rem;margin:0}
+.soon-inner{display:grid;justify-items:center;text-align:center;gap:1.1rem;width:min(100%,44rem)}
+.soon .soon-title{margin:0;font-size:clamp(2.6rem,9vw,6rem);font-weight:400;line-height:.98;letter-spacing:-.04em}
+.soon-lede{display:grid;gap:.5rem;max-width:30rem;margin:0}
 .soon-lede p{margin:0}
 .soon .soon-title .hm-iridescent-text{display:inline-block;padding-right:.08em;background-image:linear-gradient(90deg,#fff 0%,hsl(var(--hm-violet)) 45%,hsl(var(--hm-cyan)) 100%);background-size:100% 100%}
-.soon-foot{margin-top:2.4rem}
+.soon-foot{margin-top:1.2rem}
 `;
 
 /** Keeps the rules of `css` that matter for `html`: those naming a class it uses, plus the page-wide ones. */
@@ -131,13 +131,13 @@ export function renderMaintenancePage() {
           `${COPY.headline[0]} `,
           h("span", { className: "hm-iridescent-text" }, COPY.headline[1]),
         ),
-        h("div", { className: "soon-lede" }, ...COPY.lede.map((t) => h(Text, { key: t, size: "xl", tone: "soft" }, t))),
+        h("div", { className: "soon-lede" }, ...COPY.lede.map((t) => h(Text, { key: t, size: "lg", tone: "soft" }, t))),
         h(
           "div",
           { className: "soon-foot" },
           h(
             Button,
-            { asChild: true, size: "lg" },
+            { asChild: true, size: "md" },
             h("a", { href: `mailto:${COPY.email}` }, `${COPY.emailLabel}: ${COPY.email}`),
           ),
         ),
