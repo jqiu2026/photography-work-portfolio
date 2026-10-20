@@ -312,6 +312,9 @@ importers:
       '@halation/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      '@jerryqiu/sites':
+        specifier: workspace:*
+        version: link:../../packages/sites
       '@vercel/analytics':
         specifier: ^2.0.1
         version: 2.0.1(next@16.3.8(@opentelemetry/api@1.9.1)(@playwright/test@1.64.0)(@types/node@24.19.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(sass@1.105.1))(react@19.2.8)
@@ -919,6 +922,9 @@ importers:
       '@halation/ui':
         specifier: workspace:*
         version: link:../ui
+      '@holominimal/ui':
+        specifier: workspace:^
+        version: link:../holominimal
       '@jerryqiu/mocks':
         specifier: workspace:*
         version: link:../mocks
@@ -938,6 +944,9 @@ importers:
       react:
         specifier: 19.2.8
         version: 19.2.8
+      react-dom:
+        specifier: 19.2.8
+        version: 19.2.8(react@19.2.8)
       typescript:
         specifier: ~6.0.3
         version: 6.0.3

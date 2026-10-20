@@ -24,7 +24,8 @@
     "db:backup": "pnpm --filter @jerryqiu/db backup",
     "db:seed": "pnpm --filter @jerryqiu/db seed",
     "db:generate": "pnpm --filter @jerryqiu/db generate",
-    "test:admin": "playwright test -c playwright.admin.config.ts"
+    "test:admin": "playwright test -c playwright.admin.config.ts",
+    "test:maintenance": "playwright test -c playwright.maintenance.config.ts"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",

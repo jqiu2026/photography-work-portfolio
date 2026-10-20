@@ -10,6 +10,7 @@
     "ignore": [
       "**/.next",
       "**/.next-e2e*",
+      "**/.next-maintenance",
       "**/dist",
       "**/node_modules",
       "DRAFTS",

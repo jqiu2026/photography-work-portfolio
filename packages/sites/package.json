@@ -12,11 +12,13 @@
     "./theme-script": "./src/ThemeScript.tsx",
     "./contact": "./src/ContactForm.tsx",
     "./index-control": "./src/ShellIndex.tsx",
-    "./mock": "./src/MockBanner.tsx"
+    "./mock": "./src/MockBanner.tsx",
+    "./maintenance": "./src/maintenance.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "maintenance:build": "node scripts/build-maintenance.mjs"
   },
   "devDependencies": {
     "@jerryqiu/config": "workspace:*",
@@ -24,11 +26,13 @@
     "typescript": "~6.0.3",
     "@types/react": "^19.2.0",
     "next": "16.3.8",
-    "react": "19.2.8"
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
   },
   "dependencies": {
     "@halation/ui": "workspace:*",
-    "@jerryqiu/mocks": "workspace:*"
+    "@jerryqiu/mocks": "workspace:*",
+    "@holominimal/ui": "workspace:^"
   },
   "peerDependencies": {
     "next": "^16",
