@@ -36,7 +36,7 @@ html{color-scheme:dark;background:var(--hm-bg,#000);height:100%;overflow:hidden}
 body{margin:0;height:100vh;height:100svh;overflow:hidden}
 .soon{position:relative;display:grid;place-items:center;height:100vh;height:100svh;box-sizing:border-box;padding:1.5rem var(--hm-gutter,1.25rem);overflow:hidden;
 background:radial-gradient(60rem 36rem at 12% 8%,hsl(var(--hm-violet) / .26),transparent 70%),radial-gradient(48rem 30rem at 92% 96%,hsl(var(--hm-cyan) / .14),transparent 70%),var(--hm-bg,#000)}
-.soon-inner{display:grid;justify-items:center;text-align:center;gap:1.1rem;width:min(100%,44rem)}
+.soon-inner{display:grid;justify-items:start;gap:1.1rem;width:min(100%,54rem)}
 .soon .soon-title{margin:0;font-size:clamp(2.6rem,9vw,6rem);font-weight:400;line-height:.98;letter-spacing:-.04em}
 .soon-lede{display:grid;gap:.5rem;max-width:30rem;margin:0}
 .soon-lede p{margin:0}
