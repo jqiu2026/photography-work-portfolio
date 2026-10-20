@@ -2478,7 +2478,7 @@
 .hj-end {
   display: flex;
   min-height: calc(100svh - 8.5rem);
-  padding: 5rem var(--hm-gutter, 1.25rem) 2.5rem;
+  padding: 33svh var(--hm-gutter, 1.25rem) 2.5rem;
 }
 .hj-end-inner {
   flex: 1;
@@ -2487,7 +2487,7 @@
   grid-template-areas:
     "copy cta"
     "next next";
-  align-content: space-between;
+  align-content: start;
   gap: 2.5rem 3rem;
   width: 100%;
   max-width: 80rem;
