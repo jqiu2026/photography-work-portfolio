@@ -1,9 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { type FormEvent, type ReactNode, useCallback, useState, useTransition } from "react";
+import { type FormEvent, type ReactNode, useCallback, useEffect, useState, useTransition } from "react";
 import {
-  Alert,
   Button,
   CardContent,
   CardHeader,
@@ -22,6 +21,7 @@ import {
   PageTab,
   PageTabs,
   PageTitle,
+  useToast,
 } from "@holominimal/ui";
 import Link from "next/link";
 import { groupOf, sectionInfo, studioSections } from "./sections";
@@ -92,17 +92,25 @@ export function useAct() {
   return { pending, note, act, submit };
 }
 
-/** The answer to the last action: a Holominimal alert (status or alert role), and the client link when one was made. */
+/**
+ * The answer to the last action, as a toast in the corner (it fades by itself and never pushes the page down). When
+ * the action made a client link, the toast stays until dismissed and offers a Copy button.
+ */
 export function Banner({ note }: { note: Result | null }) {
-  if (!note) return null;
-  return (
-    <Alert tone={note.ok ? "success" : "danger"} className="st-banner">
-      <p className={note.ok ? "hm-alert-description" : "hm-alert-description st-error"}>
-        {note.ok ? note.message : note.error}
-      </p>
-      {note.link ? <CopyLink link={note.link} /> : null}
-    </Alert>
-  );
+  const { toast } = useToast();
+  useEffect(() => {
+    if (!note) return;
+    const text = note.ok ? note.message : note.error;
+    const link = note.link;
+    toast({
+      title: text || (note.ok ? "Done" : "That didn't work"),
+      tone: note.ok ? "success" : "danger",
+      description: link,
+      duration: link ? 0 : note.ok ? 4000 : 8000,
+      action: link ? { label: "Copy link", onClick: () => void navigator.clipboard?.writeText(link) } : undefined,
+    });
+  }, [note, toast]);
+  return null;
 }
 
 /** A link for the client, with a copy button (the owner pastes it into a message). */

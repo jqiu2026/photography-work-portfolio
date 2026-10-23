@@ -28,7 +28,8 @@
     "./plan": "./src/plan.ts",
     "./reports": "./src/reports.ts",
     "./gallery-expiry": "./src/gallery-expiry.ts",
-    "./automation": "./src/automation.ts"
+    "./automation": "./src/automation.ts",
+    "./specs": "./src/specs.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

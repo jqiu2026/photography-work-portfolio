@@ -1,9 +1,27 @@
 // usage: node scripts/optimize-images.mjs <srcDir> <outDir> [publicPrefix]
 // Writes responsive WebP derivatives next to (never over) the originals, plus manifest.json
-// with intrinsic size, dominant color and a tiny blur placeholder. Strips EXIF/GPS.
+// with intrinsic size, dominant color, a tiny blur placeholder and the camera facts (exif) read from the original.
+// The derivatives themselves carry no EXIF/GPS.
 import { mkdir, readdir, writeFile, stat } from "node:fs/promises";
 import path from "node:path";
+import { createRequire } from "node:module";
 import sharp from "sharp";
+
+// EXIF is read from the ORIGINAL (derivatives carry none). Only camera facts are kept: never GPS, owner or serial numbers.
+const exifr = createRequire(new URL("../packages/media/package.json", import.meta.url))("exifr");
+const readSpecs = async (file) => {
+  try {
+    const t = await (exifr.default ?? exifr).parse(file, {
+      pick: ["Make", "Model", "LensModel", "FNumber", "ExposureTime", "ISO", "FocalLength", "DateTimeOriginal"],
+    });
+    if (!t) return undefined;
+    const out = {};
+    for (const [k, v] of Object.entries(t)) if (v != null) out[k] = v instanceof Date ? v.toISOString() : v;
+    return Object.keys(out).length ? out : undefined;
+  } catch {
+    return undefined;
+  }
+};
 
 const [srcDir, outDir, prefix = "/opt"] = process.argv.slice(2);
 if (!srcDir || !outDir) throw new Error("usage: optimize-images.mjs <srcDir> <outDir> [prefix]");
@@ -57,6 +75,7 @@ for (const file of await walk(srcDir)) {
     height: h,
     color: `rgb(${r}, ${g}, ${b})`,
     blur: `data:image/webp;base64,${blur.toString("base64")}`,
+    exif: await readSpecs(file),
     files,
   };
   console.log(id, `${w}x${h}`, files.length, "sizes");

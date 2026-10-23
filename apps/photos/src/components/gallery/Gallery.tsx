@@ -1,6 +1,6 @@
 "use client";
 
-import { ProtectedImage } from "@/components/media";
+import { ProtectedImage, ZoomStage } from "@/components/media";
 import {
   Alert,
   ArrowLeftIcon,
@@ -1144,7 +1144,9 @@ function Lightbox({
             <span />
           )}
           <div className="gx-lb__photo">
-            <ProtectedImage key={it.mediaId} asset={asset(it)} alt={it.filename} fit="contain" priority />
+            <ZoomStage key={it.mediaId}>
+              <ProtectedImage asset={asset(it)} alt={it.filename} fit="contain" fill priority full />
+            </ZoomStage>
           </div>
           {items.length > 1 ? (
             <IconButton variant="secondary" size="lg" className="gx-round" aria-label="Next photograph" onClick={next}>

@@ -2,7 +2,17 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { AppShell, Atmosphere, Dock, DockBrand, DockItem, LightField } from "@holominimal/ui";
+import {
+  AppShell,
+  Atmosphere,
+  Dock,
+  DockBrand,
+  DockItem,
+  DockSubItem,
+  DockSubnav,
+  LightField,
+  ToastProvider,
+} from "@holominimal/ui";
 import { type ReactNode, ViewTransition } from "react";
 import { groupOf, studioGroups, studioSections } from "./sections";
 import { StudioPalette } from "./StudioPalette";
@@ -28,32 +38,51 @@ export function StudioChrome({ children }: { children: ReactNode }) {
   const section = activeSection(pathname);
   const active = groupOf(section).id;
   return (
-    <LightField className="st-root">
-      <AppShell
-        entrance="curtain"
-        backdrop={<Atmosphere />}
-        sidebar={
-          <Dock
-            aria-label="Studio sections"
-            brand={
-              <DockBrand asChild>
-                <Link href="/">Studio</Link>
-              </DockBrand>
-            }
-          >
-            {studioGroups.map((g) => (
-              <DockItem key={g.id} asChild current={g.id === active}>
-                <Link href={`/studio/${g.sections[0]}`}>{g.label}</Link>
-              </DockItem>
-            ))}
-          </Dock>
-        }
-      >
-        <StudioPalette />
-        <ViewTransition key={pathname} name="st-page" enter="st-in" exit="st-out" default="none">
-          <div className="st-page">{children}</div>
-        </ViewTransition>
-      </AppShell>
-    </LightField>
+    <ToastProvider position="bottom-right" label="Studio notifications">
+      <LightField className="st-root">
+        <AppShell
+          entrance="curtain"
+          backdrop={<Atmosphere />}
+          sidebar={
+            <Dock
+              aria-label="Studio sections"
+              brand={
+                <DockBrand asChild>
+                  <Link href="/">Studio</Link>
+                </DockBrand>
+              }
+            >
+              {studioGroups.map((g) => (
+                <DockItem
+                  key={g.id}
+                  asChild
+                  current={g.id === active}
+                  subnav={
+                    g.id === active && g.sections.length > 1 ? (
+                      <DockSubnav aria-label={`${g.label} pages`}>
+                        {g.sections.map((id) => (
+                          <li key={id}>
+                            <DockSubItem asChild current={id === section}>
+                              <Link href={`/studio/${id}`}>{studioSections.find((x) => x.id === id)?.label}</Link>
+                            </DockSubItem>
+                          </li>
+                        ))}
+                      </DockSubnav>
+                    ) : undefined
+                  }
+                >
+                  <Link href={`/studio/${g.sections[0]}`}>{g.label}</Link>
+                </DockItem>
+              ))}
+            </Dock>
+          }
+        >
+          <StudioPalette />
+          <ViewTransition key={pathname} name="st-page" enter="st-in" exit="st-out" default="none">
+            <div className="st-page">{children}</div>
+          </ViewTransition>
+        </AppShell>
+      </LightField>
+    </ToastProvider>
   );
 }

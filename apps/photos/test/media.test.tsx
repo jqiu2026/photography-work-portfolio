@@ -1,6 +1,8 @@
 import { renderToString } from "react-dom/server";
 import { describe, expect, it } from "vitest";
+import { specLines, specSummary, specsFromExif } from "@jerryqiu/db/specs";
 import { detectTrigger, devtoolsDocked, ProtectedImage } from "@/components/media";
+import { modifierState } from "@/components/media/guard";
 
 describe("detectTrigger", () => {
   const cases: [string, Parameters<typeof detectTrigger>[0], string][] = [
@@ -15,6 +17,13 @@ describe("detectTrigger", () => {
     ["Ctrl+U", { key: "u", code: "KeyU", ctrlKey: true }, "source"],
     ["F12", { key: "F12" }, "devtools"],
     ["Cmd+Opt+I", { key: "i", code: "KeyI", metaKey: true, altKey: true }, "devtools"],
+    ["Cmd+Shift+6", { key: "^", code: "Digit6", metaKey: true, shiftKey: true }, "screenshot"],
+    ["Cmd+Ctrl+Shift+4", { key: "$", code: "Digit4", metaKey: true, ctrlKey: true, shiftKey: true }, "screenshot"],
+    ["Alt+PrintScreen", { key: "PrintScreen", altKey: true }, "screenshot"],
+    ["Win+Alt+R", { key: "r", code: "KeyR", metaKey: true, altKey: true }, "screenshot"],
+    ["Ctrl+Shift+K", { key: "K", code: "KeyK", ctrlKey: true, shiftKey: true }, "devtools"],
+    ["Cmd+Shift+C", { key: "C", code: "KeyC", metaKey: true, shiftKey: true }, "devtools"],
+    ["Cmd+Opt+U", { key: "u", code: "KeyU", metaKey: true, altKey: true }, "source"],
   ];
   for (const [name, ev, kind] of cases)
     it(`${name} is a ${kind} trigger`, () => expect(detectTrigger(ev)?.kind).toBe(kind));
@@ -28,6 +37,16 @@ describe("detectTrigger", () => {
       { key: "Tab" },
     ])
       expect(detectTrigger(ev)).toBeNull();
+  });
+
+  it("modifierState: Shift or Option alone hide, any two together are a combo, Cmd or Ctrl alone are free", () => {
+    expect(modifierState({ key: "Shift", shiftKey: true })).toBe("hide");
+    expect(modifierState({ key: "Alt", altKey: true })).toBe("hide");
+    expect(modifierState({ key: "Meta", metaKey: true })).toBeNull();
+    expect(modifierState({ key: "Control", ctrlKey: true })).toBeNull();
+    expect(modifierState({ key: "Shift", metaKey: true, shiftKey: true })).toBe("combo");
+    expect(modifierState({ key: "Alt", ctrlKey: true, altKey: true })).toBe("combo");
+    expect(modifierState({ key: "a" })).toBeNull();
   });
 
   it("devtoolsDocked looks for a large gap between the outer and inner window", () => {
@@ -57,5 +76,40 @@ describe("ProtectedImage", () => {
     expect(html).toContain('data-protected="plain"');
     expect(html).toContain('alt="A plane"');
     expect(html).toContain("pm-shield");
+  });
+});
+
+describe("photo specs", () => {
+  it("reads display facts from the kept EXIF fields and nothing else", () => {
+    const s = specsFromExif({
+      Make: "Canon",
+      Model: "Canon EOS R6",
+      LensModel: "RF70-200mm F2.8",
+      FNumber: 2.8,
+      ExposureTime: 0.004,
+      ISO: 3200,
+      FocalLength: 135,
+      DateTimeOriginal: "2026-02-14T19:30:00.000Z",
+      GPSLatitude: 40.7,
+    });
+    expect(s).toEqual({
+      camera: "Canon EOS R6",
+      lens: "RF70-200mm F2.8",
+      focal: 135,
+      aperture: 2.8,
+      shutter: 0.004,
+      iso: 3200,
+      taken: "2026-02-14",
+    });
+    expect(specSummary(s)).toBe("135 mm · f/2.8 · 1/250 s · ISO 3200");
+  });
+  it("no metadata: undefined, and the size lines still say something true", () => {
+    expect(specsFromExif({})).toBeUndefined();
+    expect(specsFromExif(null)).toBeUndefined();
+    const lines = specLines(undefined, { width: 6000, height: 4000 });
+    expect(lines).toEqual([
+      { label: "Size", value: "6000 × 4000 px · 24.0 MP" },
+      { label: "Shape", value: "3:2" },
+    ]);
   });
 });

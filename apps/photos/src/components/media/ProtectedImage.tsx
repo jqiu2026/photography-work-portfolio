@@ -1,6 +1,7 @@
 "use client";
 
 import { type CSSProperties, useCallback, useEffect, useRef, useState } from "react";
+import type { PhotoSpecs } from "@jerryqiu/db/specs";
 import { useGuardClaim } from "./ScreenshotGuard";
 import { type Tokens, requestTokens } from "./tokens";
 
@@ -18,6 +19,8 @@ export type ImageAsset = {
   files: { width: number; src: string }[];
   alt?: string;
   caption?: string;
+  /** Camera facts shown beside the photograph (see @jerryqiu/db/specs). */
+  specs?: PhotoSpecs;
 };
 
 export type ProtectedAsset = Omit<ImageAsset, "files"> & { id?: string; files?: ImageAsset["files"] };
@@ -32,6 +35,8 @@ export type ProtectedImageProps = {
   fill?: boolean;
   className?: string;
   style?: CSSProperties;
+  /** Fetch the sharpest size on offer (for a viewer where the picture can be zoomed). */
+  full?: boolean;
   /** Optional tokens minted on the server (client galleries bind them to the viewer). Without them the browser asks the token endpoint. */
   tokens?: Record<number, string>;
   /** Image route base and token endpoint. */
@@ -115,6 +120,7 @@ function BlobImage({
   priority,
   fit = "cover",
   fill,
+  full,
   className,
   style,
 }: ProtectedImageProps & { id: string }) {
@@ -157,9 +163,14 @@ function BlobImage({
       if (started) return;
       started = true;
       const need = el.clientWidth * (window.devicePixelRatio || 1);
-      const width = WIDTHS.find((w) => w >= need) ?? WIDTHS[WIDTHS.length - 1];
+      const width = full ? WIDTHS[WIDTHS.length - 1] : (WIDTHS.find((w) => w >= need) ?? WIDTHS[WIDTHS.length - 1]);
       try {
-        const u = await load(width);
+        let u = await load(width);
+        // a photograph smaller than the sharpest size has no such copy: step down to the biggest one it has
+        for (const w of [...WIDTHS].reverse().filter((x) => x < width)) {
+          if (u || !full) break;
+          u = await load(w);
+        }
         if (cancelled) return u && URL.revokeObjectURL(u);
         if (u) {
           url = u;
@@ -188,7 +199,7 @@ function BlobImage({
       io?.disconnect();
       if (url) URL.revokeObjectURL(url);
     };
-  }, [load, priority]);
+  }, [load, priority, full]);
 
   return (
     <span

@@ -1,6 +1,7 @@
 import { and, asc, desc, eq, inArray, isNull, lte, or, sql } from "drizzle-orm";
 import type { Database } from "./client";
 import * as s from "./schema";
+import { type PhotoSpecs, specsFromExif } from "./specs";
 
 /**
  * The typed content layer the public sites read. Everything returned is plain JSON (dates are ISO strings), so apps can
@@ -17,6 +18,7 @@ export type PublicAsset = {
   blur?: string;
   alt?: string;
   caption?: string;
+  specs?: PhotoSpecs;
   /** Responsive sources served by `/api/img/[id]`; `v` busts caches when an image is replaced in place. */
   files: { width: number; src: string }[];
   protectedLevel?: "off" | "light" | "strict";
@@ -39,6 +41,7 @@ export function toAsset(m: MediaRow, over?: { alt?: string | null; caption?: str
     blur: m.blur ?? undefined,
     alt: over?.alt ?? m.alt ?? undefined,
     caption: over?.caption ?? m.caption ?? undefined,
+    specs: specsFromExif(m.exif),
     files: widths.map((w) => ({ width: w, src: mediaSrc(m.id, w, version) })),
   };
 }

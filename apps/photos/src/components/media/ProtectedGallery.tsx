@@ -2,7 +2,9 @@
 
 import { ChevronLeftIcon, ChevronRightIcon, CloseIcon, useSwipe } from "@holominimal/ui";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { specLines, specSummary } from "@jerryqiu/db/specs";
 import { type ProtectedAsset, ProtectedImage } from "./ProtectedImage";
+import { ZoomStage } from "./ZoomStage";
 
 export type ProtectedGalleryItem = { asset: ProtectedAsset; alt: string; tokens?: Record<number, string> };
 
@@ -19,6 +21,7 @@ export function ProtectedGallery({
   layout = "masonry",
   rowHeight = 280,
   lightbox = false,
+  details = false,
   base,
   refreshUrl,
   className,
@@ -28,6 +31,8 @@ export function ProtectedGallery({
   layout?: "justified" | "masonry";
   rowHeight?: number;
   lightbox?: boolean;
+  /** Show each photograph's caption and camera facts when its tile is hovered or focused, and in the viewer. */
+  details?: boolean;
   base?: string;
   refreshUrl?: string;
   className?: string;
@@ -67,14 +72,49 @@ export function ProtectedGallery({
               ) : (
                 image
               )}
+              {details ? <TileDetails item={it} /> : null}
             </li>
           );
         })}
       </ul>
       {lightbox ? (
-        <ProtectedViewer items={items} index={open} onIndexChange={setOpen} base={base} refreshUrl={refreshUrl} />
+        <ProtectedViewer
+          items={items}
+          index={open}
+          onIndexChange={setOpen}
+          base={base}
+          refreshUrl={refreshUrl}
+          details={details}
+        />
       ) : null}
     </>
+  );
+}
+
+/** A slide-up strip on a tile: the caption and the exposure in one line. Reads as part of the button's label too. */
+function TileDetails({ item }: { item: ProtectedGalleryItem }) {
+  const line = specSummary(item.asset.specs) || specLines(undefined, item.asset)[0]?.value;
+  return (
+    <div className="pm-tile-info" aria-hidden="true">
+      <strong>{item.asset.caption ?? item.alt}</strong>
+      {line ? <span>{line}</span> : null}
+    </div>
+  );
+}
+
+/** Everything the file's metadata says, as a quiet definition list under the caption. */
+function SpecList({ asset }: { asset: ProtectedAsset }) {
+  const lines = specLines(asset.specs, asset);
+  if (!lines.length) return null;
+  return (
+    <dl className="pm-specs" aria-label="Photograph details">
+      {lines.map((l) => (
+        <div key={l.label}>
+          <dt>{l.label}</dt>
+          <dd>{l.value}</dd>
+        </div>
+      ))}
+    </dl>
   );
 }
 
@@ -86,6 +126,7 @@ export function ProtectedViewer({
   base,
   refreshUrl,
   label = "Photographs",
+  details = false,
 }: {
   items: ProtectedGalleryItem[];
   index: number | null;
@@ -93,9 +134,11 @@ export function ProtectedViewer({
   base?: string;
   refreshUrl?: string;
   label?: string;
+  details?: boolean;
 }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const stage = useRef<HTMLDivElement>(null);
+  const zoomed = useRef(false);
   const open = index !== null;
   const last = items.length - 1;
   const go = useCallback(
@@ -128,7 +171,13 @@ export function ProtectedViewer({
     stage,
     {
       onSwipe: (d) =>
-        index === null ? undefined : d === "left" ? go(index + 1) : d === "right" ? go(index - 1) : undefined,
+        index === null || zoomed.current
+          ? undefined
+          : d === "left"
+            ? go(index + 1)
+            : d === "right"
+              ? go(index - 1)
+              : undefined,
     },
     [go, index],
   );
@@ -141,7 +190,7 @@ export function ProtectedViewer({
       className="hm-lightbox pm-viewer"
       onClose={() => onIndexChange(null)}
       onClick={(e) => {
-        if (e.target === e.currentTarget || e.target === stage.current) onIndexChange(null);
+        if (e.target === e.currentTarget || (e.target === stage.current && !zoomed.current)) onIndexChange(null);
       }}
     >
       {item && index !== null ? (
@@ -155,18 +204,28 @@ export function ProtectedViewer({
             </button>
           </header>
           <div ref={stage} className="hm-lightbox-stage pm-viewer-stage">
-            <ProtectedImage
+            <ZoomStage
               key={item.asset.id ?? index}
-              asset={item.asset}
-              alt={item.alt}
-              base={base}
-              refreshUrl={refreshUrl}
-              fit="contain"
-              fill
-              priority
-            />
+              onZoomChange={(z) => {
+                zoomed.current = z;
+              }}
+            >
+              <ProtectedImage
+                asset={item.asset}
+                alt={item.alt}
+                base={base}
+                refreshUrl={refreshUrl}
+                fit="contain"
+                fill
+                priority
+                full
+              />
+            </ZoomStage>
           </div>
-          <p className="hm-lightbox-caption">{item.asset.caption ?? item.alt}</p>
+          <div className="pm-viewer-info">
+            <p className="hm-lightbox-caption">{item.asset.caption ?? item.alt}</p>
+            {details ? <SpecList asset={item.asset} /> : null}
+          </div>
           {items.length > 1 ? (
             <>
               <button

@@ -9,6 +9,8 @@ import {
   detectTrigger,
   devtoolsDocked,
   guardCopy,
+  isModifierKey,
+  modifierState,
 } from "./guard";
 
 type Ctx = {
@@ -72,14 +74,21 @@ export function ScreenshotGuard({ level = "light", children }: { level?: GuardLe
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const dialogOpen = useRef(false);
 
-  const hide = useCallback((on: boolean) => {
-    document.documentElement.classList.toggle("pm-guard-hide", on);
+  /**
+   * Fade the photographs away (or back). `snap` skips the fade for the moment a capture shortcut is pressed, because a
+   * photograph that is still fading out when the screen is grabbed has not been hidden.
+   */
+  const hide = useCallback((on: boolean, snap = false) => {
+    const root = document.documentElement;
+    if (on && snap) root.classList.add("pm-guard-snap");
+    root.classList.toggle("pm-guard-hide", on);
+    if (!on) setTimeout(() => root.classList.remove("pm-guard-snap"), 50);
   }, []);
 
   const trigger = useCallback(
     (combo: string, kind: GuardEventKind = "screenshot") => {
       optsRef.current.onEvent?.({ kind, combo });
-      hide(true);
+      hide(true, true);
       if (optsRef.current.showDialog === false) {
         clearTimeout(timer.current);
         timer.current = setTimeout(() => hide(false), 1500);
@@ -126,23 +135,47 @@ export function ScreenshotGuard({ level = "light", children }: { level?: GuardLe
         root.removeAttribute("data-guard");
       };
     }
+    let restore: ReturnType<typeof setTimeout> | undefined;
+    // Shift or Option alone, or any two modifiers together, hide the photographs for as long as they are held (capture
+    // tools start with them, and the browser often never sees the last key). Command or Control alone are left free.
+    const editable = (t: EventTarget | null) =>
+      t instanceof HTMLElement && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName));
+    const inStudio = location.pathname.startsWith("/studio");
+    let modifierHidden = false;
+    const syncModifiers = (e: KeyboardEvent) => {
+      const state = modifierState(e);
+      const want = state === "combo" || (state === "hide" && !editable(e.target) && !inStudio);
+      if (want && !modifierHidden) {
+        modifierHidden = true;
+        hide(true, state === "combo");
+        if (state === "combo") optsRef.current.onEvent?.({ kind: "screenshot", combo: "modifier combo" });
+      } else if (!want && modifierHidden) {
+        modifierHidden = false;
+        clearTimeout(restore);
+        restore = setTimeout(() => dialogOpen.current || !document.hasFocus() || hide(false), 250);
+      }
+    };
     const onKey = (e: KeyboardEvent) => {
       const t = detectTrigger(e);
-      if (!t) return;
+      if (!t) {
+        if (isModifierKey(e) || e.metaKey || e.ctrlKey || e.altKey) syncModifiers(e);
+        return;
+      }
       if ((t.kind === "save" || t.kind === "print") && o.blockPrint !== false) e.preventDefault();
       trigger(t.combo, t.kind);
     };
     const onKeyUp = (e: KeyboardEvent) => {
-      if (e.key === "PrintScreen") {
+      if (/^(PrintScreen|Print|Snapshot)$/.test(e.key)) {
         navigator.clipboard?.writeText("").catch(() => {});
         trigger("PrintScreen", "screenshot");
+        return;
       }
+      syncModifiers(e);
     };
-    let restore: ReturnType<typeof setTimeout> | undefined;
     const onLeave = () => o.blurOnLeave !== false && hide(true);
     const onReturn = () => {
       clearTimeout(restore);
-      restore = setTimeout(() => dialogOpen.current || hide(false), 300);
+      restore = setTimeout(() => dialogOpen.current || hide(false), 200);
     };
     const onVisibility = () => (document.visibilityState === "hidden" ? onLeave() : onReturn());
     // a page asking to record or share the screen is a capture attempt (it cannot see other tabs or other apps)

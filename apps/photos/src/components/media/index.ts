@@ -15,4 +15,5 @@ export {
   guardCopy,
   type Trigger,
 } from "./guard";
+export { ZoomStage } from "./ZoomStage";
 export { requestTokens } from "./tokens";

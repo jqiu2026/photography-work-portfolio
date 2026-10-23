@@ -1435,8 +1435,16 @@
   top: calc(var(--fy) * 1%);
   width: calc(6rem - var(--lock) * 1.5rem);
   aspect-ratio: 1.3;
-  translate: calc(-50% + (1 - var(--lock)) * sin(calc(var(--p) * 2200deg)) * 7vw)
-    calc(-50% + (1 - var(--lock)) * sin(calc(var(--p) * 1700deg)) * 5svh);
+  translate: calc(
+      -50% +
+      (1 - var(--lock)) *
+      (sin(calc(var(--p) * 1300deg)) * 30vw + sin(calc(var(--p) * 3100deg)) * 9vw)
+    )
+    calc(
+      -50% +
+      (1 - var(--lock)) *
+      (sin(calc(var(--p) * 1900deg + 70deg)) * 26svh + sin(calc(var(--p) * 2900deg)) * 7svh)
+    );
   border: calc(2px + var(--lock) * 2px) solid #fff;
   box-shadow: 0 0 0 1px rgb(0 0 0 / 0.4);
   scale: calc(1 - var(--c));
@@ -2554,4 +2562,15 @@
   .hj-emph {
     white-space: nowrap;
   }
+}
+
+/* while Skip glides, the costly page effects rest so every frame stays light */
+html.hj-gliding .hj-ch :is(.hj-scrim, .hj-dim, .hj-shot) {
+  will-change: auto;
+}
+html.hj-gliding .hj-ch * {
+  animation-play-state: paused !important;
+}
+.hj-frame-cell {
+  pointer-events: none;
 }

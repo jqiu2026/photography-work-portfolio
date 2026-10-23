@@ -47,6 +47,7 @@ export default async function Category({ params }: { params: Promise<{ slug: str
             layout={items.length > 3 ? "masonry" : "justified"}
             rowHeight={380}
             lightbox
+            details
           />
         </Container>
       </Section>

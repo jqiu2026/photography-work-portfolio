@@ -31,7 +31,7 @@ export default async function Portfolio() {
             ))}
           </PageTabs>
           {photos.length ? (
-            <ProtectedGallery items={photos.map((p) => ({ asset: p, alt: p.alt }))} layout="masonry" lightbox />
+            <ProtectedGallery items={photos.map((p) => ({ asset: p, alt: p.alt }))} layout="masonry" lightbox details />
           ) : (
             <EmptyState>New photographs are on the way. Projects has the latest work.</EmptyState>
           )}

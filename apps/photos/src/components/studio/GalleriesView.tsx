@@ -85,9 +85,16 @@ export function GalleriesView({
   const [sort, setSort] = useState("newest");
   const [open, setOpen] = useState(false);
   // "New gallery" in the studio toolbar and on the dashboard arrives with ?new=1
+  // the page fade (a View Transition) draws above everything for about half a second; opening the dialog inside it
+  // made the dialog flash under the fading page, so it opens once the transition is over
   useEffect(() => {
-    if (params.has("new")) setOpen(true);
-  }, [params]);
+    if (!params.has("new")) return;
+    const t = setTimeout(() => {
+      setOpen(true);
+      router.replace("/studio/galleries", { scroll: false });
+    }, 480);
+    return () => clearTimeout(t);
+  }, [params, router]);
   const [job, setJob] = useState(jobs[0]?.id ?? "");
   const [title, setTitle] = useState("");
   const [made, setMade] = useState<{ id: string; passcode: string } | null>(null);

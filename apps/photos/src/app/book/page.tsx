@@ -1,4 +1,5 @@
-import { Button, CalendarIcon, ClockIcon, Surface } from "@holominimal/ui";
+import { Button, CalendarIcon, ClockIcon } from "@holominimal/ui";
+import { BookingWizard } from "@/components/BookingWizard";
 import { PageHeader } from "@/components/PageHeader";
 import { Container, Section, Text } from "@/components/ui";
 import { person } from "@jerryqiu/sites/profile";
@@ -10,24 +11,19 @@ import "../globals.css";
 
 export const metadata: Metadata = { title: "Book", description: "Ask about a shoot or a license." };
 
-export default function Book() {
+export default async function Book({ searchParams }: { searchParams: Promise<{ type?: string }> }) {
+  const q = (await searchParams).type;
+  const initialType = shootTypes.some((t) => t.slug === q) ? q : undefined;
   return (
     <Shell cta={false}>
-      <PageHeader eyebrow="Book" title="Book a shoot" intro="Pick the kind of shoot. I'll reply by email." />
+      <PageHeader
+        eyebrow="Book"
+        title="Book a shoot"
+        intro="A few quick questions, one at a time. I'll reply by email."
+      />
       <Section style={{ paddingTop: 0 }}>
         <Container>
-          <ul className="book-types" aria-label="Kinds of shoot">
-            {shootTypes.map((t) => (
-              <li key={t.slug}>
-                <Surface asChild variant="outlined" interactive lit padding="md">
-                  <Link href={`/book/${t.slug}`}>
-                    <strong>{t.headline}</strong>
-                    <span>{t.blurb}</span>
-                  </Link>
-                </Surface>
-              </li>
-            ))}
-          </ul>
+          <BookingWizard fallbackEmail={person.bookingEmail} initialType={initialType} />
           <div className="book-more">
             <Button asChild variant="secondary">
               <Link href="/book/schedule">

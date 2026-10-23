@@ -2,7 +2,9 @@ import "server-only";
 import { createHash } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
+import { type PhotoSpecs, specsFromExif } from "@jerryqiu/db/specs";
 import type { ImageSource } from "@jerryqiu/media";
+import { photoDetails } from "@/content/photo-details";
 
 /**
  * Photographs that ship with the app (the repo portfolio and case-study images, the fallback when no database is
@@ -13,8 +15,24 @@ import type { ImageSource } from "@jerryqiu/media";
  */
 const ROOT = path.join(process.cwd(), "private", "opt");
 
-type Raw = { width: number; height: number; color?: string; blur?: string; files: { width: number; src: string }[] };
-export type StaticAsset = { id: string; width: number; height: number; color?: string; blur?: string; files: [] };
+type Raw = {
+  width: number;
+  height: number;
+  color?: string;
+  blur?: string;
+  exif?: Record<string, unknown>;
+  files: { width: number; src: string }[];
+};
+export type StaticAsset = {
+  id: string;
+  width: number;
+  height: number;
+  color?: string;
+  blur?: string;
+  caption?: string;
+  specs?: PhotoSpecs;
+  files: [];
+};
 
 const groups = new Map<string, Record<string, Raw>>();
 const byId = new Map<string, { group: string; raw: Raw }>();
@@ -47,6 +65,8 @@ export function staticAsset(group: string, key: string): StaticAsset {
     height: raw.height,
     color: raw.color,
     blur: raw.blur,
+    caption: group === "gallery" ? photoDetails[key]?.caption : undefined,
+    specs: group === "gallery" ? { ...specsFromExif(raw.exif), ...photoDetails[key]?.specs } : undefined,
     files: [],
   };
 }

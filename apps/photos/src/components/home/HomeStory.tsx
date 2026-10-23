@@ -243,17 +243,15 @@ function Range({ sheet, subjects }: { sheet: StoryPhoto[]; subjects: Subject[] }
       <div className="hj-stick">
         <div className="hj-sheet" aria-hidden="true">
           {wall.map((p, i) => (
-            <Link
+            <div
               key={`${p.id ?? "p"}-${i}`}
-              href={`/portfolio/${p.category}`}
-              tabIndex={-1}
               className="hj-frame-cell"
               data-on={p.category === active ? "" : undefined}
               style={vars({ "--i": i })}
             >
               <Ph photo={p} sizes="(min-width: 900px) 24vw, 60vw" />
               <small>{String(i + 1).padStart(2, "0")}</small>
-            </Link>
+            </div>
           ))}
         </div>
         <span className="hj-viewing" aria-hidden="true" />
@@ -921,6 +919,43 @@ function Keep({ photo }: { photo?: StoryPhoto }) {
   );
 }
 
+/**
+ * One eased glide of fixed length to a place far down the page. The browser's own smooth scroll takes as long as the
+ * distance and repaints every pinned chapter on the way; this one lasts under a second and tells the stylesheet
+ * (html.hj-gliding) to drop the costly effects while it runs.
+ */
+let gliding = 0;
+function glideTo(top: number, then?: () => void) {
+  cancelAnimationFrame(gliding);
+  const from = scrollY;
+  const dist = top - from;
+  const ms = Math.min(1100, 450 + Math.abs(dist) / 12);
+  const root = document.documentElement;
+  const start = performance.now();
+  root.classList.add("hj-gliding");
+  const stop = () => {
+    cancelAnimationFrame(gliding);
+    removeEventListener("wheel", stop);
+    removeEventListener("touchstart", stop);
+    removeEventListener("keydown", stop);
+    root.classList.remove("hj-gliding");
+  };
+  addEventListener("wheel", stop, { passive: true, once: true });
+  addEventListener("touchstart", stop, { passive: true, once: true });
+  addEventListener("keydown", stop, { once: true });
+  const step = (now: number) => {
+    const t = Math.min(1, (now - start) / ms);
+    const e = t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2;
+    scrollTo({ top: from + dist * e, behavior: "instant" as ScrollBehavior });
+    if (t < 1) gliding = requestAnimationFrame(step);
+    else {
+      stop();
+      then?.();
+    }
+  };
+  gliding = requestAnimationFrame(step);
+}
+
 /* ---- the heads-up display: skip, progress through the chapters, play and pause ---- */
 
 function Hud({
@@ -1032,8 +1067,12 @@ function Hud({
               send("manual");
               const f = document.getElementById("finale");
               if (!f) return;
-              scrollTo({ top: f.getBoundingClientRect().top + scrollY, behavior: motion ? "smooth" : "auto" });
-              document.getElementById("hj-finale-title")?.focus({ preventScroll: true });
+              const done = () => document.getElementById("hj-finale-title")?.focus({ preventScroll: true });
+              if (motion) glideTo(f.getBoundingClientRect().top + scrollY, done);
+              else {
+                scrollTo({ top: f.getBoundingClientRect().top + scrollY, behavior: "auto" });
+                done();
+              }
             }}
           >
             {HUD.skip} <ArrowRightIcon />
