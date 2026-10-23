@@ -13,7 +13,7 @@ import {
   LightField,
   ToastProvider,
 } from "@holominimal/ui";
-import { type ReactNode, ViewTransition } from "react";
+import { type CSSProperties, type ReactNode, ViewTransition } from "react";
 import { groupOf, groupsFor, studioSections } from "./sections";
 import { StudioPalette } from "./StudioPalette";
 import "./studio.css";
@@ -46,6 +46,7 @@ export function StudioChrome({ children, role }: { children: ReactNode; role?: s
           sidebar={
             <Dock
               aria-label="Studio sections"
+              style={{ "--st-n": groupsFor(role).length } as CSSProperties}
               brand={
                 <DockBrand asChild>
                   <Link href="/">Studio</Link>

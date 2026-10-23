@@ -192,3 +192,18 @@
     transition: none;
   }
 }
+
+/*
+ * The sidebar is anchored at the top, at the height where its entries sat when it was centered (half the screen minus
+ * half the closed list; --st-n is the number of entries). Opening a group's sub-items then pushes only what is BELOW the
+ * pointed entry down: before, the whole centered list re-centered and everything moved up and down together.
+ */
+.st-root .hm-dock {
+  justify-content: flex-start;
+  padding-top: calc(50dvh - var(--st-n, 7) * clamp(2.6rem, 6.4vh, 3.4rem) / 2);
+}
+@media (max-width: 860px) {
+  .st-root .hm-dock {
+    padding-top: 0;
+  }
+}

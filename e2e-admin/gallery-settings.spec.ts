@@ -87,6 +87,7 @@ test("owner sets brand, a watermark, a track, rules and the branding of a galler
   await rule.getByRole("button", { name: "Add rule" }).click();
   await slow(note(page).filter({ hasText: "Download rule saved" }).first()).toBeVisible();
   await rule.getByLabel("Rule name (visitors see it)").fill("High resolution (PIN)");
+  await choose(rule.getByLabel("Size"), "Custom size (pixels)");
   await rule.getByLabel(/Longest side in pixels/).fill("1600");
   await rule.getByLabel(/Downloads per visitor/).fill("2");
   await rule.getByLabel(/^PIN/).fill("2468");

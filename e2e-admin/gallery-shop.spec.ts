@@ -191,7 +191,9 @@ test("a visitor buys a download and a print: the shop prices it, nothing ships b
   // the price the studio set, and a size too big for the photograph is not offered
   await expect(lb.getByText("Web-size download")).toBeVisible();
   await expect(lb.getByText("$7.50")).toBeVisible();
-  const row = (name: string) => lb.getByRole("listitem").filter({ hasText: name });
+  // match the product name from its start: "Print 8 × 10 in" is also inside "Metal print 8 × 10 in"
+  const row = (name: string) =>
+    lb.getByRole("listitem").filter({ hasText: new RegExp(`^\\s*${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`) });
   await expect(row("Print 8 × 10 in")).toContainText("Too small");
   await expect(row("Print 8 × 10 in").getByRole("button")).toBeDisabled();
   await row("Web-size download").getByRole("button", { name: "Add" }).click();

@@ -24,6 +24,7 @@ export type DroneData = {
   } | null;
 };
 
+const num = (v: string) => (v.trim() === "" ? undefined : Number(v));
 const VERDICT_TONE = { go: "success", caution: "warning", "no-go": "danger" } as const;
 const VERDICT_WORD = { go: "Go", caution: "Take care", "no-go": "No-go" } as const;
 
@@ -37,7 +38,6 @@ export function DroneView({ user, data }: { user: string; data: DroneData }) {
   const [vis, setVis] = useState(w.visibilityMi?.toString() ?? "");
   const [rain, setRain] = useState(Boolean(w.precipitation));
   const [wnote, setWnote] = useState(w.note ?? "");
-  const num = (v: string) => (v.trim() === "" ? undefined : Number(v));
   const verdict = useMemo(
     () => droneVerdict({ windMph: num(wind), gustMph: num(gust), visibilityMi: num(vis), precipitation: rain }),
     [wind, gust, vis, rain],
