@@ -270,3 +270,23 @@
   color: var(--hm-muted);
   font-size: var(--hm-text-sm);
 }
+
+.st-verdict {
+  margin: var(--hm-space-3) 0;
+}
+.st-secret code {
+  overflow-wrap: anywhere;
+}
+.st-checks {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--hm-space-2);
+}
+.st-checks legend {
+  font-size: var(--hm-text-sm);
+  color: var(--hm-muted);
+  padding: 0;
+  margin-bottom: var(--hm-space-1);
+}

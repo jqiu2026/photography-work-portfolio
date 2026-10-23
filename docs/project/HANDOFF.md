@@ -10,7 +10,9 @@ Done and committed: PHOTO-M1 foundation, M2 ShootProof removed, M3 protection ev
 
 **Done 2026-10-23 (see PROGRESS log, Q124 to Q132):** the owner request batch, expenses and mileage, testimonials with consent, gear, call sheets, usage-rights tracker, newsletter list, studio search, installable manifest.
 
-**Next (see PROGRESS.md table):** M13 leftovers (tracking emails from the lab webhook, cancel a submitted print after a refund; the QR code for the link is done), M14 rest (event privacy opt-outs, revenue and true-hourly-rate reports, publish-to-portfolio, storage cost per gallery, data export and delete), M15 rest (team roles, drone checklist, owner API and outgoing webhooks), M16 face search, culling and video mocks, M17 deployment prep, M18 polish and accessibility (axe on the new pages: /book questionnaire, studio Expenses, Gear, Call sheets, Rights, Subscribers, Testimonials).
+**Also done (round two):** team roles, print store (sample WHCC catalog), download sizes, privacy requests, drone checklist, outgoing webhooks, publish to portfolio, release prep.
+
+**Next (see PROGRESS.md table):** M13 leftovers (tracking emails from the lab webhook, cancel a submitted print after a refund; the QR code for the link is done), M14 rest (revenue and true-hourly-rate reports, storage cost in money, data export and delete), M15 rest (the owner REST API with keys), M16 face search, culling and video mocks, M17 deployment prep, M18 polish and accessibility (axe on the new pages: /book questionnaire, studio Expenses, Gear, Call sheets, Rights, Subscribers, Testimonials).
 
 **Studio tests read toasts:** use `note(page)` from `e2e-admin/ui.ts` (toast or status element), not `getByRole("status")`; the toast's Dismiss button label repeats its text, so `getByLabel("Email")` can match it: use `getByRole("textbox", { name })`.
 

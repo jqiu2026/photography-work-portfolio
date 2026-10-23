@@ -1,6 +1,7 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { PGlite } from "@electric-sql/pglite";
+import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/pglite";
 import { migrate } from "drizzle-orm/pglite/migrator";
 import { beforeAll, describe, expect, it } from "vitest";
@@ -253,5 +254,48 @@ describe("privacy requests", () => {
       status: "open",
       resolution: null,
     });
+  });
+});
+
+describe("publish to the portfolio", () => {
+  it("needs a consent note, skips what is already there, and records the release", async () => {
+    const [m1, m2] = await db
+      .insert(schema.media)
+      .values([
+        { filename: "a.jpg", mime: "image/jpeg", originalKey: "orig/a", width: 100, height: 100 },
+        { filename: "b.jpg", mime: "image/jpeg", originalKey: "orig/b", width: 100, height: 100 },
+      ])
+      .returning();
+    const [subject] = await db
+      .insert(schema.galleries)
+      .values({ site: "photos", slug: "street-test", title: "Street test" })
+      .returning();
+    const ids = [(m1 as { id: string }).id, (m2 as { id: string }).id];
+    const sid = (subject as { id: string }).id;
+    await expect(biz.publishToPortfolio(db, { mediaIds: ids, subjectId: sid, consentNote: " " })).rejects.toThrow(
+      "agreed",
+    );
+    await expect(
+      biz.publishToPortfolio(db, { mediaIds: [], subjectId: sid, consentNote: "Release signed" }),
+    ).rejects.toThrow("Select");
+    await expect(
+      biz.publishToPortfolio(db, {
+        mediaIds: ids,
+        subjectId: "00000000-0000-4000-8000-000000000000",
+        consentNote: "Release signed",
+      }),
+    ).rejects.toThrow("where");
+    expect(
+      await biz.publishToPortfolio(db, { mediaIds: ids, subjectId: sid, consentNote: "Release signed" }),
+    ).toMatchObject({ added: 2, skipped: 0 });
+    expect(
+      await biz.publishToPortfolio(db, { mediaIds: ids, subjectId: sid, consentNote: "Release signed" }),
+    ).toMatchObject({ added: 0, skipped: 2 });
+    const rows = await db
+      .select()
+      .from(schema.media)
+      .where(eq(schema.media.id, ids[0] as string));
+    expect(rows[0]).toMatchObject({ releaseOnFile: true, reviewStatus: "ok" });
+    expect((await biz.portfolioSubjects(db)).map((x) => x.slug)).toContain("street-test");
   });
 });

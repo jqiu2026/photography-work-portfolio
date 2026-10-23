@@ -644,3 +644,61 @@ export async function reopenPrivacyRequest(db: Database, id: string) {
     .set({ status: "open", resolution: null, handledAt: null })
     .where(eq(s.studioPrivacyRequests.id, id));
 }
+
+/* ---- publish to the portfolio, with the consent written down ---- */
+
+/** The portfolio's subjects (Theater, Event, Portrait...), which are the public galleries of the photo site. */
+export async function portfolioSubjects(db: Database) {
+  return db
+    .select({ id: s.galleries.id, title: s.galleries.title, slug: s.galleries.slug })
+    .from(s.galleries)
+    .where(and(eq(s.galleries.site, "photos"), isNull(s.galleries.deletedAt)))
+    .orderBy(asc(s.galleries.sort), asc(s.galleries.title));
+}
+
+/**
+ * Puts photographs from a client gallery into a portfolio subject. It needs a written consent note (how the people in
+ * them, or their parents, agreed, or that none are identifiable), which is kept on each photograph (release on file) and in
+ * the audit log by the caller. Photographs already in that subject are skipped. Returns how many were added.
+ */
+export async function publishToPortfolio(
+  db: Database,
+  input: { mediaIds: string[]; subjectId: string; consentNote: string },
+) {
+  if (input.consentNote.trim().length < 3)
+    throw new StudioError("Say how the people in these photographs agreed (or that nobody is identifiable).");
+  if (!input.mediaIds.length) throw new StudioError("Select some photographs first.");
+  const [subject] = await db
+    .select()
+    .from(s.galleries)
+    .where(and(eq(s.galleries.id, input.subjectId), eq(s.galleries.site, "photos"), isNull(s.galleries.deletedAt)));
+  if (!subject) throw new StudioError("Pick where in the portfolio they go.");
+  const have = new Set(
+    (
+      await db
+        .select({ m: s.galleryItems.mediaId })
+        .from(s.galleryItems)
+        .where(eq(s.galleryItems.galleryId, subject.id))
+    ).map((r) => r.m),
+  );
+  const add = [...new Set(input.mediaIds)].filter((m) => !have.has(m));
+  if (add.length) {
+    const [{ n }] = await db
+      .select({ n: sql<number>`coalesce(max(${s.galleryItems.sort}), -1) + 1` })
+      .from(s.galleryItems)
+      .where(eq(s.galleryItems.galleryId, subject.id));
+    await db
+      .insert(s.galleryItems)
+      .values(add.map((mediaId, i) => ({ galleryId: subject.id, mediaId, sort: Number(n) + i })));
+    await db
+      .update(s.media)
+      .set({ releaseOnFile: true, reviewStatus: "ok", updatedAt: new Date() })
+      .where(
+        sql`${s.media.id} in (${sql.join(
+          add.map((m) => sql`${m}`),
+          sql`, `,
+        )})`,
+      );
+  }
+  return { added: add.length, skipped: input.mediaIds.length - add.length, subject: subject.title };
+}

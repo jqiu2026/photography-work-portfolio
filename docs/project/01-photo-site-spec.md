@@ -166,7 +166,7 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | F-73 | Face search (consent-gated, off by default) | OPT | missing | gallery settings | `FaceSearchProvider` / mock | unit | M16 |
 | F-74 | Video delivery | P3 | missing | gallery video items | Blob | e2e | M16 |
 | F-75 | Storage cost per gallery, auto-archive | P2 | partial (each gallery card shows what its originals take to keep; auto-archive on the expiry date; a cost estimate in money is not built) | studio meter | n/a | unit | M14 |
-| F-76 | Publish to portfolio with recorded consent | P2 | missing | gallery to portfolio | n/a | e2e | M14 |
+| F-76 | Publish to portfolio with recorded consent | P2 | done (owner selects photographs in a client gallery and publishes them to a portfolio subject; how people agreed is written down and kept as the release on file and in the audit log) | gallery to portfolio | n/a | e2e | M14 |
 
 ### Client portal
 
@@ -190,7 +190,7 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | F-97 | Shot lists and call sheets | P3 | done (one per job: call time, place, notes, shot list, people) | call_sheets | n/a | e2e | M15 |
 | F-98 | Roles: second shooter, assistant; job assignment | P3 | done (invite a helper by Google address as Photographer or Bookkeeper; pages and actions are limited by role; a helper can remove only what they added in the last 5 minutes) | team_members | n/a | unit | M15 |
 | F-99 | Gear inventory, double-booking warnings | P3 | done (gear on jobs by day, a clash is flagged) | gear | n/a | unit | M15 |
-| F-100 | Drone job checklist (Part 107, weather go/no-go) | P3 | missing | drone_checklists | weather: mock | unit | M15 |
+| F-100 | Drone job checklist (Part 107, weather go/no-go) | P3 | done (a pre-flight checklist per job, a go or no-go from typed-in weather with cautious limits; a live weather feed needs an API key) | drone_checklists | weather: mock | unit | M15 |
 | F-101 | Mileage and expense tracking with receipts | P2 | partial (expenses, mileage at the rate on the day, CSV; receipt uploads need file storage, a note says where the paper one is) | `/studio/expenses` | Blob | e2e | M14 |
 | F-102 | True hourly rate, revenue and storage-cost reports, dashboards | P2/P3 | missing | `/studio/reports` | n/a | unit | M14 |
 | F-103 | Audit log | P1 | done | studio actions | n/a | e2e | done |
@@ -202,7 +202,7 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | Id | Feature | Pri | Status | Where | Test | Milestone |
 |---|---|---|---|---|---|---|
 | F-110 | Roles and sessions, rate limits | P1 | done (owner/editor, per-IP limits) | auth, db | unit | done |
-| F-111 | Webhooks in (Stripe) and out (owner endpoints), owner API | P3 | partial (in only) | `/api/v1/*` | unit | M15 |
+| F-111 | Webhooks in (Stripe) and out (owner endpoints), owner API | P3 | partial (outgoing signed webhooks for inquiries, payments, gallery publishes and shop orders; Stripe webhooks in; the owner REST API with keys is not built) | `/api/v1/*` | unit | M15 |
 | F-112 | Notifications centre and activity feed | P3 | partial (owner activity feed with unread; client notification centre is the portal home) | studio | e2e | M15 |
 | F-113 | Mobile-friendly photographer side, installable PWA | P1 | partial (responsive board and forms, installable manifest and icon; offline mode and push are not built) | studio CSS, manifest | e2e 390px | M5, M18 |
 | F-114 | Dark and light themes | P1 | done | `@halation/ui` | e2e | done |

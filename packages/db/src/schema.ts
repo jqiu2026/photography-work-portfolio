@@ -1603,3 +1603,47 @@ export const studioPrivacyRequests = pgTable("studio_privacy_requests", {
   handledAt: timestamp("handled_at", { withTimezone: true }),
 });
 export type StudioPrivacyRequest = typeof studioPrivacyRequests.$inferSelect;
+
+/** One drone checklist per job: the pre-flight items, the weather that was entered, and the go or no-go that followed. */
+export const studioDroneChecklists = pgTable("studio_drone_checklists", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  jobId: uuid("job_id")
+    .notNull()
+    .unique()
+    .references(() => studioJobs.id, { onDelete: "cascade" }),
+  items: jsonb("items").$type<{ text: string; done: boolean }[]>().notNull().default([]),
+  weather: jsonb("weather")
+    .$type<{ windMph?: number; gustMph?: number; visibilityMi?: number; precipitation?: boolean; note?: string }>()
+    .notNull()
+    .default({}),
+  /** go | no-go | null (not decided yet) */
+  decision: text("decision"),
+  decidedAt: timestamp("decided_at", { withTimezone: true }),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+/** Endpoints that get a signed message when something happens in the studio (an inquiry, a payment, a gallery going live). */
+export const studioWebhooks = pgTable("studio_webhooks", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  url: text("url").notNull(),
+  /** Shown once when the endpoint is made; messages are signed with it (HMAC-SHA256). */
+  secret: text("secret").notNull(),
+  events: jsonb("events").$type<string[]>().notNull().default([]),
+  active: boolean("active").notNull().default(true),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
+export const studioWebhookDeliveries = pgTable(
+  "studio_webhook_deliveries",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    webhookId: uuid("webhook_id")
+      .notNull()
+      .references(() => studioWebhooks.id, { onDelete: "cascade" }),
+    event: text("event").notNull(),
+    status: integer("status"),
+    error: text("error"),
+    at: timestamp("at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("studio_webhook_deliveries_hook_idx").on(t.webhookId, t.at)],
+);
+export type StudioWebhook = typeof studioWebhooks.$inferSelect;

@@ -1,3 +1,4 @@
+import { emit } from "@jerryqiu/db/webhooks";
 import "server-only";
 import { type Database, schema } from "@jerryqiu/db";
 import { sendTemplate } from "@jerryqiu/email";
@@ -22,6 +23,7 @@ export async function afterPayment(db: Database, invoiceId: string) {
   if (inv.kind === "shop") {
     // a shop order is not the client's invoice: the buyer gets their own email and the studio an order notice
     await afterShopPayment(db, invoiceId);
+    await emit(db, "order.paid", { invoice: inv.number, totalCents: inv.totalCents });
     return;
   }
   await notify(db, {
@@ -30,6 +32,7 @@ export async function afterPayment(db: Database, invoiceId: string) {
     body: `${row.client.name}, ${usd(inv.totalCents)}`,
     link: "/studio/billing",
   });
+  await emit(db, "payment.succeeded", { invoice: inv.number, totalCents: inv.totalCents, status: inv.status });
   const related = { type: "invoice", id: inv.id };
   if (inv.status === "paid")
     await sendTemplate(

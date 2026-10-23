@@ -1,3 +1,4 @@
+import { emit } from "@jerryqiu/db/webhooks";
 import "server-only";
 import { type Database, schema } from "@jerryqiu/db";
 import { galleryReadyAllowed } from "@jerryqiu/db/automation";
@@ -43,6 +44,7 @@ export async function publishAndNotify(db: Database, galleryId: string, by?: str
   const g = await publishGallery(db, galleryId, by);
   if (g) {
     await emailGalleryLink(db, g.id);
+    await emit(db, "gallery.published", { id: g.id, title: g.title, slug: g.slug });
     await db.update(schema.studioGalleries).set({ publishAt: null }).where(eq(schema.studioGalleries.id, g.id));
   }
   return g;

@@ -31,6 +31,7 @@ export const studioSections = [
   { id: "rights", label: "Rights" },
   { id: "subscribers", label: "Subscribers" },
   { id: "privacy", label: "Privacy" },
+  { id: "drone", label: "Drone" },
 ] as const;
 
 /**
@@ -47,7 +48,7 @@ export const studioGroups = [
     sections: ["clients", "bookings", "contracts", "inbox", "testimonials", "rights"],
     hue: 265,
   },
-  { id: "calendar", label: "Calendar", sections: ["calendar", "shoots", "callsheets", "gear"], hue: 285 },
+  { id: "calendar", label: "Calendar", sections: ["calendar", "shoots", "callsheets", "gear", "drone"], hue: 285 },
   { id: "store", label: "Sales", sections: ["orders", "quotes", "invoices", "billing"], hue: 150 },
   {
     id: "reports",
@@ -96,6 +97,7 @@ export const sectionInfo: Record<string, string> = {
   rights: "Who may use your photographs, for what, and until when.",
   subscribers: "People who asked for your newsletter. Only confirmed addresses count.",
   privacy: "People who asked to be taken out of a photograph.",
+  drone: "The pre-flight checklist and a go or no-go from the weather, for each drone job.",
 };
 
 export const groupOf = (section: string) =>
@@ -117,6 +119,7 @@ const PHOTOGRAPHER = new Set([
   "shoots",
   "callsheets",
   "gear",
+  "drone",
   "clients",
   "bookings",
 ]);

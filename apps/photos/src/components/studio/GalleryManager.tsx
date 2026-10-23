@@ -33,6 +33,7 @@ import {
   sortGalleryAction,
   unpublishAction,
 } from "@/app/studio/gallery-actions";
+import { publishToPortfolioAction } from "@/app/studio/business-actions";
 import {
   ArrowLeftIcon,
   Button,
@@ -40,6 +41,11 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   CloseIcon,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogTitle,
   EmptyState,
   Field,
   Input,
@@ -92,6 +98,8 @@ type Item = {
   favorite: boolean;
 };
 export type GalleryManagerData = {
+  /** The portfolio subjects photographs can be published to (empty unless the viewer is the owner). */
+  portfolioSubjects: { id: string; title: string }[];
   id: string;
   title: string;
   jobTitle: string;
@@ -340,6 +348,9 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
       return n;
     });
   const [ask, confirmEl] = useConfirm();
+  const [pub, setPub] = useState(false);
+  const [pubSubject, setPubSubject] = useState("");
+  const [pubConsent, setPubConsent] = useState("");
   const bulk = async (op: "hide" | "show" | "remove" | "album" | "front", albumId?: string) => {
     if (
       op === "remove" &&
@@ -640,6 +651,11 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
                     onClick={() => run(() => setCoverAction({ galleryId: gid, mediaId: [...sel][0] }))}
                   >
                     Make cover
+                  </Button>
+                ) : null}
+                {data.portfolioSubjects.length ? (
+                  <Button variant="secondary" disabled={pending} onClick={() => setPub(true)}>
+                    Publish to portfolio…
                   </Button>
                 ) : null}
                 <Button variant="danger" disabled={pending} onClick={() => bulk("remove")}>
@@ -1499,6 +1515,57 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
         </Tabs>
       </div>
       {confirmEl}
+      <Dialog open={pub} onOpenChange={setPub}>
+        <DialogContent size="sm">
+          <DialogTitle>Publish to the portfolio</DialogTitle>
+          <DialogDescription>
+            {sel.size} photograph{sel.size === 1 ? "" : "s"} will appear on the public site. Write down how the people
+            in them (or their parents) agreed, or that nobody can be identified. It is kept with the photographs.
+          </DialogDescription>
+          <form
+            className="st-stack"
+            aria-label="Publish to the portfolio"
+            noValidate
+            onSubmit={(e) => {
+              e.preventDefault();
+              run(
+                () => publishToPortfolioAction({ mediaIds: [...sel], subjectId: pubSubject, consentNote: pubConsent }),
+                () => {
+                  setPub(false);
+                  setSel(new Set());
+                  setPubConsent("");
+                },
+              );
+            }}
+          >
+            <Field label="Where in the portfolio">
+              <Select value={pubSubject} onValueChange={setPubSubject}>
+                <option value="">Choose</option>
+                {data.portfolioSubjects.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.title}
+                  </option>
+                ))}
+              </Select>
+            </Field>
+            <Field label="How they agreed">
+              <Input
+                value={pubConsent}
+                onChange={(e) => setPubConsent(e.target.value)}
+                placeholder="Model release signed, 3 March"
+              />
+            </Field>
+            <DialogFooter>
+              <Button type="button" variant="secondary" onClick={() => setPub(false)}>
+                Cancel
+              </Button>
+              <Button type="submit" disabled={pending}>
+                Publish
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </Frame>
   );
 }

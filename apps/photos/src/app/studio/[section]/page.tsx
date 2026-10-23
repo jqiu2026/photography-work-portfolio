@@ -37,6 +37,9 @@ import {
 } from "@/components/studio/BusinessViews";
 import * as newsDb from "@jerryqiu/db/newsletter";
 import * as teamDb from "@jerryqiu/db/team";
+import * as droneDb from "@jerryqiu/db/drone";
+import * as hookDb from "@jerryqiu/db/webhooks";
+import { DroneView, WebhooksCard } from "@/components/studio/IntegrationViews";
 import * as bizDb from "@jerryqiu/db/business";
 import * as brandDb from "@jerryqiu/db/brand";
 import * as extras from "@jerryqiu/db/gallery-extras";
@@ -274,6 +277,26 @@ export default async function StudioSection({
       </Shell>
     );
   }
+  if (section === "drone") {
+    const jobRows = await st.listJobs(db);
+    const selected = q.job && jobRows.some((r) => r.job.id === q.job) ? q.job : (jobRows[0]?.job.id ?? null);
+    const saved = selected ? await droneDb.getChecklist(db, selected) : null;
+    const haveRows = await db.select({ jobId: schema.studioDroneChecklists.jobId }).from(schema.studioDroneChecklists);
+    return (
+      <Shell>
+        <DroneView
+          key={selected ?? "none"}
+          user={user.name ?? user.email ?? "owner"}
+          data={{
+            jobs: jobRows.map((r) => ({ id: r.job.id, title: r.job.title, date: r.job.date ?? null })),
+            selected,
+            have: haveRows.map((r) => r.jobId),
+            saved: saved ? { items: saved.items, weather: saved.weather, decision: saved.decision } : null,
+          }}
+        />
+      </Shell>
+    );
+  }
   if (section === "privacy") {
     const items = await bizDb.listPrivacyRequests(db);
     return (
@@ -429,6 +452,7 @@ export default async function StudioSection({
   }
   if (section === "automations") {
     const [rules, runs] = await Promise.all([autoDb.ruleConfig(db), autoDb.recentRuns(db, 40)]);
+    const [hookRows, deliveries] = await Promise.all([hookDb.listWebhooks(db), hookDb.recentDeliveries(db, 20)]);
     return (
       <Shell>
         <AutomationsView
@@ -441,6 +465,20 @@ export default async function StudioSection({
               entity: `${r.entityType ?? ""} ${r.entityId?.slice(0, 8) ?? ""}`.trim(),
               at: r.at.toISOString().slice(0, 16).replace("T", " "),
               status: r.status,
+            })),
+          }}
+        />
+        <WebhooksCard
+          data={{
+            events: hookDb.WEBHOOK_EVENTS.map((e) => ({ id: e.id, label: e.label })),
+            hooks: hookRows.map((h) => ({ id: h.id, host: new URL(h.url).host, events: h.events, active: h.active })),
+            deliveries: deliveries.map((d) => ({
+              id: d.id,
+              event: d.event,
+              status: d.status,
+              error: d.error,
+              at: d.at.toISOString(),
+              host: new URL(d.url).host,
             })),
           }}
         />

@@ -1,3 +1,4 @@
+import { portfolioSubjects } from "@jerryqiu/db/business";
 import { canSeeSection } from "@/components/studio/sections";
 import { getDb, schema } from "@jerryqiu/db";
 import * as gal from "@jerryqiu/db/galleries";
@@ -59,6 +60,7 @@ export default async function GalleryPage({ params }: { params: Promise<{ id: st
       <GalleryManager
         user={user.name ?? user.email ?? "owner"}
         data={{
+          portfolioSubjects: user.role === "owner" ? await portfolioSubjects(db) : [],
           id,
           title: g.title,
           jobTitle: row.job.title,

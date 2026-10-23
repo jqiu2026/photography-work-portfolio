@@ -281,3 +281,42 @@ test("the booking questionnaire asks for a little more, and refuses a throwaway 
   await page.getByRole("button", { name: "Next", exact: true }).click();
   await expect(page.getByText(/temporary email address/)).toBeVisible();
 });
+
+test("a drone job: the weather decides, every item must be done before a go", async ({ page }) => {
+  await page.goto(`${PHOTOS}/studio/drone`, { waitUntil: "networkidle" });
+  await choose(page.getByLabel("Which job"), `Gear job A ${uid}`);
+  await page.waitForURL(/job=/);
+  await page.getByLabel("Wind (mph)").fill("24");
+  await expect(page.getByRole("status").filter({ hasText: "No-go" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Record: go" })).toBeDisabled();
+  await page.getByLabel("Wind (mph)").fill("7");
+  await page.getByLabel("Visibility (miles)").fill("10");
+  await expect(page.getByRole("status").filter({ hasText: "Within the limits." })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Record: go" })).toBeDisabled();
+  for (const box of await page.getByRole("list", { name: "Pre-flight checklist" }).getByRole("checkbox").all())
+    await box.check();
+  await page.getByRole("button", { name: "Record: go" }).click();
+  await slow(note(page).filter({ hasText: "Marked go" }).first()).toBeVisible();
+  await page.reload({ waitUntil: "networkidle" });
+  await expect(page.getByText("Recorded:")).toContainText("Go");
+});
+
+test("a webhook is refused for a private address, and added for a public one with its secret shown once", async ({
+  page,
+}) => {
+  await page.goto(`${PHOTOS}/studio/automations`, { waitUntil: "networkidle" });
+  const form = inForm(page, "New webhook");
+  await form.getByLabel("Address (https)").fill("https://127.0.0.1/hook");
+  await form.getByLabel("A new inquiry arrives").check();
+  await form.getByRole("button", { name: "Add webhook" }).click();
+  await slow(
+    note(page)
+      .filter({ hasText: /not a private one|private/ })
+      .first(),
+  ).toBeVisible();
+  await form.getByLabel("Address (https)").fill("https://example.com/hook");
+  await form.getByLabel("A new inquiry arrives").check();
+  await form.getByRole("button", { name: "Add webhook" }).click();
+  await slow(page.getByText(/Secret \(shown once\)/)).toContainText("whsec_");
+  await expect(page.getByRole("list", { name: "Webhooks" })).toContainText("example.com");
+});

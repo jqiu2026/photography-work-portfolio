@@ -162,6 +162,13 @@
       "when": 1792778154981,
       "tag": "0022_privacy_requests",
       "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1792778451836,
+      "tag": "0023_drone_webhooks",
+      "breakpoints": true
     }
   ]
 }

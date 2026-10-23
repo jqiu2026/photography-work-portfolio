@@ -34,7 +34,10 @@
     "./newsletter": "./src/newsletter.ts",
     "./email-check": "./src/email-check.ts",
     "./download-presets": "./src/download-presets.ts",
-    "./team": "./src/team.ts"
+    "./team": "./src/team.ts",
+    "./drone": "./src/drone.ts",
+    "./drone-rules": "./src/drone-rules.ts",
+    "./webhooks": "./src/webhooks.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

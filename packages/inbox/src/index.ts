@@ -2,6 +2,7 @@ import { type Database, getDb, hitRateLimit, schema } from "@jerryqiu/db";
 import { sendTemplate } from "@jerryqiu/email";
 import { clientIpHash } from "@jerryqiu/protect";
 import { notify } from "@jerryqiu/db/automation";
+import { emit as emitWebhook } from "@jerryqiu/db/webhooks";
 import { checkEmail } from "@jerryqiu/db/email-check";
 import * as st from "@jerryqiu/db/studio";
 import { sql } from "drizzle-orm";
@@ -251,6 +252,13 @@ export async function submitInquiry(
     title: `New inquiry from ${v.name}`,
     body: [v.shootType, v.eventDate, v.location].filter(Boolean).join(" · ") || undefined,
     link: "/studio/bookings",
+  });
+  // tell any webhook the owner set up (never throws); only what the owner already sees in the studio
+  await emitWebhook(db, "inquiry.created", {
+    id: lead.id,
+    name: v.name,
+    shootType: v.shootType,
+    eventDate: v.eventDate,
   });
   const related = { type: "booking", id: lead.id };
   const summary = [v.shootType, v.eventDate, v.location].filter(Boolean).join(" · ");

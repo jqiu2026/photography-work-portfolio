@@ -206,3 +206,29 @@ export async function reopenPrivacyAction(requestId: string) {
     return { message: "Reopened" };
   });
 }
+
+/** Owner only: puts selected client-gallery photographs in the public portfolio, with how the people agreed written down. */
+export async function publishToPortfolioAction(input: { mediaIds: string[]; subjectId: string; consentNote: string }) {
+  return studioOwner(async ({ db, user }) => {
+    const ids = z.array(id).max(500).safeParse(input.mediaIds);
+    const subject = id.safeParse(input.subjectId);
+    if (!ids.success) throw new StudioError("Select some photographs first.");
+    if (!subject.success) throw new StudioError("Pick where in the portfolio they go.");
+    const r = await biz.publishToPortfolio(db, {
+      mediaIds: ids.data,
+      subjectId: subject.data,
+      consentNote: input.consentNote,
+    });
+    return {
+      message: r.added
+        ? `${r.added} photograph${r.added === 1 ? "" : "s"} added to ${r.subject}${r.skipped ? ` (${r.skipped} already there)` : ""}`
+        : `Already in ${r.subject}`,
+      audit: {
+        action: "studio.portfolio.publish",
+        entity: "gallery",
+        entityId: subject.data,
+        summary: `Published ${r.added} photograph(s) to the portfolio (${r.subject}). Consent: ${input.consentNote.trim().slice(0, 200)} (by ${user.email})`,
+      },
+    };
+  });
+}
