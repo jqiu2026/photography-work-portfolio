@@ -13,7 +13,7 @@ import {
   LightField,
   ToastProvider,
 } from "@holominimal/ui";
-import { type CSSProperties, type ReactNode, ViewTransition } from "react";
+import { type CSSProperties, type ReactNode, ViewTransition, useEffect, useState } from "react";
 import { groupOf, groupsFor, studioSections } from "./sections";
 import { StudioPalette } from "./StudioPalette";
 import "./studio.css";
@@ -37,6 +37,9 @@ export function StudioChrome({ children, role }: { children: ReactNode; role?: s
   const pathname = usePathname();
   const section = activeSection(pathname);
   const active = groupOf(section).id;
+  // the first page rides in on the shell's own curtain; the page fade is only for moving between studio pages
+  const [moved, setMoved] = useState(false);
+  useEffect(() => setMoved(true), []);
   return (
     <ToastProvider position="bottom-right" label="Studio notifications">
       <LightField className="st-root">
@@ -77,7 +80,7 @@ export function StudioChrome({ children, role }: { children: ReactNode; role?: s
           }
         >
           <StudioPalette role={role} />
-          <ViewTransition key={pathname} name="st-page" enter="st-in" exit="st-out" default="none">
+          <ViewTransition key={pathname} name="st-page" enter={moved ? "st-in" : "none"} exit="st-out" default="none">
             <div className="st-page">{children}</div>
           </ViewTransition>
         </AppShell>

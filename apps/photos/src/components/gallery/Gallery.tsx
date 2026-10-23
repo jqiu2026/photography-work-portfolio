@@ -53,6 +53,7 @@ import {
   Tabs,
   Textarea,
 } from "@holominimal/ui";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@holominimal/ui";
 import { useRouter } from "next/navigation";
 import { type ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { leaveGalleryAction, toggleFavoriteAction } from "@/app/client/actions";
@@ -275,16 +276,17 @@ function GalleryView({ data }: { data: Data }) {
     .filter((l) => l.product);
   const subtotal = cartLines.reduce((n, l) => n + (l.product?.priceCents ?? 0) * l.qty, 0);
   const printQty = cartLines.filter((l) => !DIGITAL.includes(l.product?.kind ?? "")).reduce((n, l) => n + l.qty, 0);
-  const addToCart = (productId: string, mediaId: string | null) => {
+  const addToCart = (productId: string, mediaId: string | null, count = 1) => {
+    const n = Math.max(1, Math.min(50, Math.floor(count) || 1));
     const p = byId.get(productId);
     if (!p) return;
     const digital = DIGITAL.includes(p.kind);
     setCart((c) => {
       const at = c.findIndex((l) => l.productId === productId && l.mediaId === mediaId);
-      if (at >= 0) return digital ? c : c.map((l, i) => (i === at ? { ...l, qty: Math.min(50, l.qty + 1) } : l));
-      return [...c, { productId, mediaId, qty: 1 }];
+      if (at >= 0) return digital ? c : c.map((l, i) => (i === at ? { ...l, qty: Math.min(50, l.qty + n) } : l));
+      return [...c, { productId, mediaId, qty: n }];
     });
-    say(true, `${p.name} added to your cart.`);
+    say(true, `${n > 1 ? `${n} × ` : ""}${p.name} added to your cart.`);
   };
 
   const brand = data.style.primary || data.accent;
@@ -968,21 +970,45 @@ function AlbumCards({
   );
 }
 
+/** Product kinds in the order they are listed, with the heading each goes under. */
+const PRODUCT_GROUPS: [string, string[]][] = [
+  ["Downloads", ["digital-web", "digital-full", "digital-all"]],
+  ["Prints", ["print"]],
+  ["Mounted prints", ["mounted"]],
+  ["Framed prints", ["framed"]],
+  ["Canvas", ["canvas"]],
+  ["Metal prints", ["metal"]],
+  ["Cards", ["card"]],
+  ["Albums", ["album"]],
+];
+
+/** Everything for sale, grouped like the downloads are: one fold per kind (all prints, all canvases...) listing its sizes. */
+function ProductGroups({ products, row }: { products: Product[]; row: (p: Product) => ReactNode }) {
+  const groups = PRODUCT_GROUPS.map(
+    ([name, kinds]) => [name, products.filter((p) => kinds.includes(p.kind))] as const,
+  ).filter(([, list]) => list.length);
+  if (!groups.length) return null;
+  return (
+    <Accordion type="multiple" defaultValue={groups.slice(0, 1).map(([name]) => name)} className="gx-groups">
+      {groups.map(([name, list]) => (
+        <AccordionItem key={name} value={name}>
+          <AccordionTrigger>
+            {name} <span className="gx-fine">({list.length})</span>
+          </AccordionTrigger>
+          <AccordionContent>
+            <DataList>{list.map(row)}</DataList>
+          </AccordionContent>
+        </AccordionItem>
+      ))}
+    </Accordion>
+  );
+}
+
 function ShopView({
   data,
   onAdd,
   onBrowse,
-}: { data: Data; onAdd: (productId: string, mediaId: string | null) => void; onBrowse: () => void }) {
-  const groups: [string, string[]][] = [
-    ["Downloads", ["digital-web", "digital-full", "digital-all"]],
-    ["Prints", ["print"]],
-    ["Mounted prints", ["mounted"]],
-    ["Framed prints", ["framed"]],
-    ["Canvas", ["canvas"]],
-    ["Metal prints", ["metal"]],
-    ["Cards", ["card"]],
-    ["Albums", ["album"]],
-  ];
+}: { data: Data; onAdd: (productId: string, mediaId: string | null, qty?: number) => void; onBrowse: () => void }) {
   const sell = (k: string) => (DIGITAL.includes(k) ? data.shop.sellDigital : data.shop.sellPrints);
   const any = data.shop.products.some((p) => sell(p.kind));
   return (
@@ -997,37 +1023,29 @@ function ShopView({
         </Button>
       </div>
       {any ? null : <EmptyState>Nothing is for sale here yet.</EmptyState>}
-      {groups.map(([name, kinds]) => {
-        const list = data.shop.products.filter((p) => kinds.includes(p.kind) && sell(p.kind));
-        if (!list.length) return null;
-        return (
-          <section key={name} aria-label={name}>
-            <h2>{name}</h2>
-            <DataList>
-              {list.map((p) => (
-                <DataListItem
-                  key={p.id}
-                  description={p.description || undefined}
-                  meta={
-                    <span className="gx-price">
-                      {usd(p.priceCents)} {p.sample ? <Badge tone="warning">SAMPLE</Badge> : null}
-                    </span>
-                  }
-                  actions={
-                    p.kind === "digital-all" ? (
-                      <Button variant="secondary" size="sm" onClick={() => onAdd(p.id, null)}>
-                        Add whole gallery
-                      </Button>
-                    ) : undefined
-                  }
-                >
-                  {p.name}
-                </DataListItem>
-              ))}
-            </DataList>
-          </section>
-        );
-      })}
+      <ProductGroups
+        products={data.shop.products.filter((p) => sell(p.kind))}
+        row={(p) => (
+          <DataListItem
+            key={p.id}
+            description={p.description || undefined}
+            meta={
+              <span className="gx-price">
+                {usd(p.priceCents)} {p.sample ? <Badge tone="warning">SAMPLE</Badge> : null}
+              </span>
+            }
+            actions={
+              p.kind === "digital-all" ? (
+                <Button variant="secondary" size="sm" onClick={() => onAdd(p.id, null)}>
+                  Add whole gallery
+                </Button>
+              ) : undefined
+            }
+          >
+            {p.name}
+          </DataListItem>
+        )}
+      />
     </section>
   );
 }
@@ -1059,7 +1077,7 @@ function Lightbox({
   cart: Line[];
   msg: Msg;
   onClose: () => void;
-  onAdd: (productId: string, mediaId: string | null) => void;
+  onAdd: (productId: string, mediaId: string | null, qty?: number) => void;
   onOpenCart: () => void;
   fav: (i: Item) => Promise<void>;
   rate: (i: Item, n: number | null) => Promise<void>;
@@ -1074,6 +1092,7 @@ function Lightbox({
   const [panel, setPanel] = useState<"buy" | "proof">(buyTab ? "buy" : "proof");
   const hasPanel = buyTab || client;
   const [draft, setDraft] = useState("");
+  const [qty, setQty] = useState<Record<string, number>>({});
   useEffect(() => {
     ref.current?.showModal();
     return () => ref.current?.close();
@@ -1173,8 +1192,9 @@ function Lightbox({
               {buyTab ? (
                 <TabPanel value="buy">
                   {shopOn && options.length ? (
-                    <DataList>
-                      {options.map((p) => {
+                    <ProductGroups
+                      products={options}
+                      row={(p) => {
                         const ok = fits(p, it);
                         return (
                           <DataListItem
@@ -1186,21 +1206,39 @@ function Lightbox({
                               </span>
                             }
                             actions={
-                              <Button
-                                variant="secondary"
-                                size="sm"
-                                disabled={!ok || (inCart(p.id) && DIGITAL.includes(p.kind))}
-                                onClick={() => onAdd(p.id, it.mediaId)}
-                              >
-                                {inCart(p.id) ? (DIGITAL.includes(p.kind) ? "In cart" : "Add another") : "Add"}
-                              </Button>
+                              <span className="gx-add">
+                                {DIGITAL.includes(p.kind) ? null : (
+                                  <input
+                                    type="number"
+                                    min={1}
+                                    max={50}
+                                    inputMode="numeric"
+                                    className="gx-addqty"
+                                    aria-label={`Quantity of ${p.name}`}
+                                    value={qty[p.id] ?? 1}
+                                    disabled={!ok}
+                                    onChange={(e) => setQty({ ...qty, [p.id]: Number(e.target.value) })}
+                                  />
+                                )}
+                                <Button
+                                  variant="secondary"
+                                  size="sm"
+                                  disabled={!ok || (inCart(p.id) && DIGITAL.includes(p.kind))}
+                                  onClick={() => {
+                                    onAdd(p.id, it.mediaId, qty[p.id] ?? 1);
+                                    setQty({ ...qty, [p.id]: 1 });
+                                  }}
+                                >
+                                  {inCart(p.id) ? (DIGITAL.includes(p.kind) ? "In cart" : "Add more") : "Add"}
+                                </Button>
+                              </span>
                             }
                           >
                             {p.name}
                           </DataListItem>
                         );
-                      })}
-                    </DataList>
+                      }}
+                    />
                   ) : shopOn ? (
                     <EmptyState>Nothing is for sale here yet.</EmptyState>
                   ) : null}
@@ -1376,6 +1414,7 @@ function Cart({
     region: "",
     postalCode: "",
     country: data.shop.shipCountries[0] ?? "US",
+    code: "",
   });
   const [err, setErr] = useState("");
   const [busy, setBusy] = useState(false);
@@ -1389,6 +1428,7 @@ function Cart({
       galleryId: data.galleryId,
       lines: lines.map((l) => ({ productId: l.productId, mediaId: l.mediaId, qty: l.qty })),
       buyer: { name: f.name, email: f.email },
+      code: f.code.trim() || undefined,
       ship: printQty
         ? {
             name: f.name,
@@ -1482,6 +1522,9 @@ function Cart({
                 </Field>
                 <Field label="Email" hint="Your receipt and downloads go here.">
                   <Input type="email" value={f.email} onChange={set("email")} autoComplete="email" required />
+                </Field>
+                <Field label="Discount code (optional)" hint="Applied when you check out.">
+                  <Input value={f.code} onChange={set("code")} autoComplete="off" />
                 </Field>
                 {printQty ? (
                   <fieldset>

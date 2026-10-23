@@ -321,7 +321,9 @@ export function useAutoplay(root: RefObject<HTMLElement | null>, enabled: boolea
       const t = e.target as HTMLElement;
       if (t.closest?.("[data-hold]") && !t.closest("[data-hold]:hover, [data-hold]:focus-within")) hold.current = false;
     };
-    const sync = () => {
+    const sync = (e?: Event) => {
+      // only a move on or off a held thing needs the (costly) query
+      if (e && !(e.target as HTMLElement).closest?.("[data-hold]")) return;
       hold.current = Boolean(el.querySelector("[data-hold]:hover, [data-hold]:focus-within"));
     };
     addEventListener("wheel", toManual, { passive: true });
@@ -332,7 +334,6 @@ export function useAutoplay(root: RefObject<HTMLElement | null>, enabled: boolea
     el.addEventListener("pointerout", leave);
     el.addEventListener("focusin", enter);
     el.addEventListener("focusout", sync);
-    el.addEventListener("pointerout", sync);
     const ro = new ResizeObserver(refresh);
     ro.observe(document.documentElement);
     // a first visit plays after a beat; coming back to a place (a link with #, a restored scroll) does not
@@ -363,7 +364,6 @@ export function useAutoplay(root: RefObject<HTMLElement | null>, enabled: boolea
       el.removeEventListener("pointerout", leave);
       el.removeEventListener("focusin", enter);
       el.removeEventListener("focusout", sync);
-      el.removeEventListener("pointerout", sync);
       el.removeEventListener("hj-mode", ctl);
     };
   }, [root, enabled]);

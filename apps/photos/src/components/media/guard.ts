@@ -27,7 +27,7 @@ export type GuardOptions = {
   blockContextMenu?: boolean;
   /** Cancel Ctrl/Cmd+S and +P. Default true. */
   blockPrint?: boolean;
-  /** Treat a docked devtools panel (a large gap between outer and inner window size) as a trigger. Default false: it can misfire. */
+  /** Treat a docked devtools panel (a large gap between outer and inner window size) as a trigger. Default true. */
   detectDevtools?: boolean;
   /** Protected media stays blurred until the pointer or Shift is held down. Default false. */
   holdToView?: boolean;
@@ -126,6 +126,5 @@ export function detectTrigger(e: KeyLike): Trigger | null {
 export const guardCopy = {
   title: "Please don't capture these photographs",
   body: "Screenshots and saving are discouraged to protect the photographer's work. If you'd like to use an image, please get in touch for a license.",
-  note: "This is a courtesy reminder, not a lock: it can't detect every way of capturing a screen.",
   action: "OK, I understand",
 } as const;

@@ -13,14 +13,15 @@ import {
   saveRuleAction,
   toggleTaskAction,
 } from "@/app/studio/ops-actions";
-import { Card, Frame, useAct, useConfirm } from "./StudioFrame";
+import { Card, FormDialog, Frame, useAct, useConfirm } from "./StudioFrame";
 
 export type TasksData = {
   tasks: { id: string; title: string; dueOn: string | null; notes: string | null; done: boolean; overdue: boolean }[];
 };
 
 export function TasksView({ user, data }: { user: string; data: TasksData }) {
-  const { pending, note, act, submit } = useAct();
+  const { pending, note, act, go } = useAct();
+  const [adding, setAdding] = useState(false);
   const [ask, confirmEl] = useConfirm();
   const [f, setF] = useState<Record<string, string>>({});
   const set = (k: string) => (e: { target: { value: string } }) => setF((x) => ({ ...x, [k]: e.target.value }));
@@ -28,7 +29,15 @@ export function TasksView({ user, data }: { user: string; data: TasksData }) {
     <Frame section="tasks" user={user} note={note}>
       {confirmEl}
       <div className="st-grid">
-        <Card title="Tasks" id="t-list">
+        <Card
+          title="Tasks"
+          id="t-list"
+          actions={
+            <Button size="sm" onClick={() => setAdding(true)}>
+              Add a task
+            </Button>
+          }
+        >
           {data.tasks.length ? (
             <ul className="hm-data-list st-list st-list--tall">
               {data.tasks.map((t) => (
@@ -72,31 +81,30 @@ export function TasksView({ user, data }: { user: string; data: TasksData }) {
             </Text>
           )}
         </Card>
-        <Card title="Add a task" id="t-add">
-          <form
-            noValidate
-            className="st-form"
-            aria-label="New task"
-            onSubmit={submit(
-              () => addTaskAction({ title: f.t ?? "", dueOn: f.d, notes: f.n }),
-              () => setF({}),
-            )}
-          >
-            <Field label="Task">
-              <Input value={f.t ?? ""} onChange={set("t")} />
-            </Field>
-            <Field label="Due">
-              <DateField value={f.d ?? ""} onChange={set("d")} />
-            </Field>
-            <Field label="Notes">
-              <Input value={f.n ?? ""} onChange={set("n")} />
-            </Field>
-            <Button type="submit" disabled={pending}>
-              Add task
-            </Button>
-          </form>
-        </Card>
       </div>
+      <FormDialog
+        open={adding}
+        onOpenChange={setAdding}
+        title="Add a task"
+        submitLabel={"Add task"}
+        pending={pending}
+        onSubmit={() =>
+          go(
+            () => addTaskAction({ title: f.t ?? "", dueOn: f.d, notes: f.n }),
+            () => setF({}),
+          )
+        }
+      >
+        <Field label="Task">
+          <Input value={f.t ?? ""} onChange={set("t")} />
+        </Field>
+        <Field label="Due">
+          <DateField value={f.d ?? ""} onChange={set("d")} />
+        </Field>
+        <Field label="Notes">
+          <Input value={f.n ?? ""} onChange={set("n")} />
+        </Field>
+      </FormDialog>
     </Frame>
   );
 }

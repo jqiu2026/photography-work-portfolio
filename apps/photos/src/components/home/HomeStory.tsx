@@ -986,9 +986,10 @@ function Hud({
       <div className="hj-hud" role="group" aria-label="Story controls" data-mode={mode}>
         {motion ? (
           <>
-            <IconButton
+            <Button
               type="button"
-              variant="primary"
+              size="sm"
+              shape="pill"
               className="hj-play"
               aria-label={mode === "auto" ? HUD.pause : HUD.play}
               onClick={() => {
@@ -1008,7 +1009,8 @@ function Hud({
                   <path d="M4 2.5v11l9-5.5z" fill="currentColor" />
                 </svg>
               )}
-            </IconButton>
+              <span aria-hidden="true">{mode === "auto" ? HUD.pause : mode === "done" ? "Replay" : HUD.play}</span>
+            </Button>
             <ol className="hj-segs" aria-label="Chapters">
               {CHAPTERS.map((c, i) => (
                 <li key={c.id} style={{ flexGrow: c.seconds }}>

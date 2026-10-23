@@ -190,7 +190,7 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | F-97 | Shot lists and call sheets | P3 | done (one per job: call time, place, notes, shot list, people) | call_sheets | n/a | e2e | M15 |
 | F-98 | Roles: second shooter, assistant; job assignment | P3 | done (invite a helper by Google address as Photographer or Bookkeeper; pages and actions are limited by role; a helper can remove only what they added in the last 5 minutes) | team_members | n/a | unit | M15 |
 | F-99 | Gear inventory, double-booking warnings | P3 | done (gear on jobs by day, a clash is flagged) | gear | n/a | unit | M15 |
-| F-100 | Drone job checklist (Part 107, weather go/no-go) | P3 | done (a pre-flight checklist per job, a go or no-go from typed-in weather with cautious limits; a live weather feed needs an API key) | drone_checklists | weather: mock | unit | M15 |
+| F-100 | Drone job checklist (Part 107, weather go/no-go) | P3 | dropped (the owner removed it; the table stays so migrations stay additive) | drone_checklists | n/a | n/a | M15 |
 | F-101 | Mileage and expense tracking with receipts | P2 | partial (expenses, mileage at the rate on the day, CSV; receipt uploads need file storage, a note says where the paper one is) | `/studio/expenses` | Blob | e2e | M14 |
 | F-102 | True hourly rate, revenue and storage-cost reports, dashboards | P2/P3 | missing | `/studio/reports` | n/a | unit | M14 |
 | F-103 | Audit log | P1 | done | studio actions | n/a | e2e | done |

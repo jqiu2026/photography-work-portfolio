@@ -15,6 +15,7 @@ import { BillingView } from "@/components/studio/BillingView";
 import * as bill from "@jerryqiu/db/billing";
 import { AutomationsView, NotificationsView, TasksView } from "@/components/studio/OpsViews";
 import * as autoDb from "@jerryqiu/db/automation";
+import { CodesView } from "@/components/studio/CodesView";
 import { OrdersView } from "@/components/studio/OrdersView";
 import { syncPrintCatalog } from "@/lib/print-catalog";
 import {
@@ -37,9 +38,8 @@ import {
 } from "@/components/studio/BusinessViews";
 import * as newsDb from "@jerryqiu/db/newsletter";
 import * as teamDb from "@jerryqiu/db/team";
-import * as droneDb from "@jerryqiu/db/drone";
 import * as hookDb from "@jerryqiu/db/webhooks";
-import { DroneView, WebhooksCard } from "@/components/studio/IntegrationViews";
+import { WebhooksCard } from "@/components/studio/IntegrationViews";
 import * as bizDb from "@jerryqiu/db/business";
 import * as brandDb from "@jerryqiu/db/brand";
 import * as extras from "@jerryqiu/db/gallery-extras";
@@ -64,7 +64,10 @@ export const metadata = { title: "Studio", robots: { index: false, follow: false
 export default async function StudioSection({
   params,
   searchParams,
-}: { params: Promise<{ section: string }>; searchParams: Promise<{ tab?: string; days?: string; job?: string }> }) {
+}: {
+  params: Promise<{ section: string }>;
+  searchParams: Promise<{ tab?: string; days?: string; job?: string; month?: string }>;
+}) {
   const { section } = await params;
   const q = await searchParams;
   if (!studioSections.some((s) => s.id === section)) notFound();
@@ -153,16 +156,78 @@ export default async function StudioSection({
   if (section === "calendar")
     return (
       <Shell>
-        <CalendarView user={user.name ?? user.email ?? "owner"} data={await calendarData(db)} />
+        <CalendarView user={user.name ?? user.email ?? "owner"} data={await calendarData(db)} month={q.month} />
       </Shell>
     );
+  if (section === "codes") {
+    const [promos, gifts, clients, galleries] = await Promise.all([
+      com.listPromos(db),
+      com.listGiftCards(db),
+      st.listClients(db),
+      db
+        .select({ id: schema.studioGalleries.id, title: schema.studioGalleries.title })
+        .from(schema.studioGalleries)
+        .where(isNull(schema.studioGalleries.deletedAt)),
+    ]);
+    const gname = new Map(galleries.map((g) => [g.id, g.title]));
+    const now = Date.now();
+    return (
+      <Shell>
+        <CodesView
+          user={user.name ?? user.email ?? "owner"}
+          data={{
+            promos: promos.map((p) => ({
+              id: p.id,
+              code: p.code,
+              kind: p.kind,
+              off: p.percentOff ? `${p.percentOff}% off` : `$${((p.amountOffCents ?? 0) / 100).toFixed(2)} off`,
+              uses: p.uses,
+              maxUses: p.maxUses,
+              note: p.note,
+              kindRaw: p.kind === "amount" ? "amount" : "percent",
+              value: p.kind === "amount" ? ((p.amountOffCents ?? 0) / 100).toFixed(2) : String(p.percentOff ?? ""),
+              minSubtotal: p.minSubtotalCents ? (p.minSubtotalCents / 100).toFixed(2) : "",
+              galleryId: p.galleryId ?? "",
+              gallery: p.galleryId ? (gname.get(p.galleryId) ?? "a gallery") : "",
+              expires: p.expiresAt ? p.expiresAt.toISOString().slice(0, 10) : "",
+              state: !p.active
+                ? "inactive"
+                : p.expiresAt && p.expiresAt.getTime() < now
+                  ? "expired"
+                  : p.maxUses !== null && p.uses >= p.maxUses
+                    ? "used"
+                    : "active",
+            })),
+            gifts: gifts.map((g) => ({
+              id: g.id,
+              code: g.code,
+              initial: g.initialCents,
+              balance: g.balanceCents,
+              recipient: g.recipientName ?? "",
+              email: g.purchaserEmail ?? "",
+              expires: g.expiresAt ? g.expiresAt.toISOString().slice(0, 10) : "",
+              created: g.createdAt.toISOString().slice(0, 10),
+              state:
+                g.status !== "active"
+                  ? "inactive"
+                  : g.expiresAt && g.expiresAt.getTime() < now
+                    ? "expired"
+                    : g.balanceCents <= 0
+                      ? "used"
+                      : "active",
+            })),
+            clients: clients.map((c) => ({ id: c.id, name: c.name })),
+            galleries: galleries.map((g) => ({ id: g.id, title: g.title })),
+          }}
+        />
+      </Shell>
+    );
+  }
   if (section === "packages") {
     await com.seedSampleCatalog(db);
-    const [packages, addOns, promos, clients, settings] = await Promise.all([
+    const [packages, addOns, settings] = await Promise.all([
       com.listPackages(db),
       com.listAddOns(db),
-      com.listPromos(db),
-      st.listClients(db),
       com.getPaymentsSettings(db),
     ]);
     return (
@@ -195,17 +260,6 @@ export default async function StudioSection({
               upsell: a.upsell,
               isSample: a.isSample,
             })),
-            promos: promos.map((p) => ({
-              id: p.id,
-              code: p.code,
-              kind: p.kind,
-              off: p.percentOff ? `${p.percentOff}% off` : `${((p.amountOffCents ?? 0) / 100).toFixed(2)} off`,
-              uses: p.uses,
-              maxUses: p.maxUses,
-              active: p.active,
-              note: p.note,
-            })),
-            clients: clients.map((c) => ({ id: c.id, name: c.name })),
             settings: {
               depositPercent: settings.depositPercent,
               quoteValidDays: settings.quoteValidDays,
@@ -272,26 +326,6 @@ export default async function StudioSection({
               expiresAt: l.expiresAt?.toISOString() ?? null,
               state: l.state,
             })),
-          }}
-        />
-      </Shell>
-    );
-  }
-  if (section === "drone") {
-    const jobRows = await st.listJobs(db);
-    const selected = q.job && jobRows.some((r) => r.job.id === q.job) ? q.job : (jobRows[0]?.job.id ?? null);
-    const saved = selected ? await droneDb.getChecklist(db, selected) : null;
-    const haveRows = await db.select({ jobId: schema.studioDroneChecklists.jobId }).from(schema.studioDroneChecklists);
-    return (
-      <Shell>
-        <DroneView
-          key={selected ?? "none"}
-          user={user.name ?? user.email ?? "owner"}
-          data={{
-            jobs: jobRows.map((r) => ({ id: r.job.id, title: r.job.title, date: r.job.date ?? null })),
-            selected,
-            have: haveRows.map((r) => r.jobId),
-            saved: saved ? { items: saved.items, weather: saved.weather, decision: saved.decision } : null,
           }}
         />
       </Shell>
@@ -725,9 +759,11 @@ export default async function StudioSection({
   }
   if (section === "users") {
     const rows = await teamDb.listTeam(db);
+    const undoMinutes = await teamDb.getUndoMinutes(db);
     return (
       <Shell>
         <UsersView
+          undoMinutes={undoMinutes}
           users={rows.map((u) => ({
             id: u.id,
             name: u.name ?? "",

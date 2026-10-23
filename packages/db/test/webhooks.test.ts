@@ -5,7 +5,6 @@ import { drizzle } from "drizzle-orm/pglite";
 import { migrate } from "drizzle-orm/pglite/migrator";
 import { beforeAll, describe, expect, it } from "vitest";
 import type { Database } from "../src/client";
-import * as drone from "../src/drone";
 import * as schema from "../src/schema";
 import * as st from "../src/studio";
 import * as hooks from "../src/webhooks";
@@ -19,39 +18,6 @@ beforeAll(async () => {
   db = d as unknown as Database;
   const c = await st.createClient(db, { name: "Drone Client", email: "drone@example.com" });
   jobId = (await st.createJob(db, { clientId: c.id, title: "Roof inspection" })).id;
-});
-
-describe("drone go or no-go", () => {
-  it("is a go inside the limits, careful when the wind is up, and no-go for gusts, rain or low visibility", () => {
-    expect(drone.droneVerdict({ windMph: 8, gustMph: 12, visibilityMi: 10 }).decision).toBe("go");
-    expect(drone.droneVerdict({ windMph: 17, visibilityMi: 10 }).decision).toBe("caution");
-    expect(drone.droneVerdict({ windMph: 21 }).decision).toBe("no-go");
-    expect(drone.droneVerdict({ windMph: 5, gustMph: 30 }).decision).toBe("no-go");
-    expect(drone.droneVerdict({ windMph: 5, visibilityMi: 2 }).decision).toBe("no-go");
-    expect(drone.droneVerdict({ windMph: 5, precipitation: true }).decision).toBe("no-go");
-    expect(drone.droneVerdict({}).decision).toBe("caution");
-  });
-  it("a go needs every item done and weather that is not a no-go", async () => {
-    const items = drone.DRONE_ITEMS.map((text) => ({ text, done: true }));
-    await expect(
-      drone.saveChecklist(db, jobId, { items: [{ text: "x", done: false }], weather: { windMph: 5 }, decision: "go" }),
-    ).rejects.toThrow("every checklist item");
-    await expect(drone.saveChecklist(db, jobId, { items, weather: { windMph: 30 }, decision: "go" })).rejects.toThrow(
-      "no-go",
-    );
-    await expect(drone.saveChecklist(db, jobId, { items, weather: { windMph: 500 } })).rejects.toThrow("between");
-    const ok = await drone.saveChecklist(db, jobId, {
-      items,
-      weather: { windMph: 6, visibilityMi: 10 },
-      decision: "go",
-    });
-    expect(ok?.decision).toBe("go");
-    expect(ok?.decidedAt).toBeInstanceOf(Date);
-    // saving again replaces it
-    const again = await drone.saveChecklist(db, jobId, { items, weather: { windMph: 6 }, decision: null });
-    expect(again?.decision).toBeNull();
-    expect((await drone.getChecklist(db, jobId))?.items).toHaveLength(items.length);
-  });
 });
 
 describe("outgoing webhooks", () => {

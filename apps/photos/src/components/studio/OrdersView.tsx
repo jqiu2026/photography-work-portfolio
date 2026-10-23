@@ -1,6 +1,22 @@
 "use client";
 
-import { Button, Checkbox, Input, Segment, SegmentedControl, Stat, StatGroup, Status, Text } from "@holominimal/ui";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+  Badge,
+  Button,
+  Checkbox,
+  Field,
+  Input,
+  Segment,
+  SegmentedControl,
+  Stat,
+  StatGroup,
+  Status,
+  Text,
+} from "@holominimal/ui";
 
 import Link from "next/link";
 import { useState } from "react";
@@ -12,7 +28,7 @@ import {
   renameSheetAction,
   saveProductAction,
 } from "@/app/studio/gallery-actions";
-import { Card, Frame, useAct, useConfirm } from "./StudioFrame";
+import { Card, FormDialog, Frame, useAct, useConfirm, useNotify } from "./StudioFrame";
 import "./galleries.css";
 
 type Product = {
@@ -54,15 +70,23 @@ const KIND: Record<string, string> = {
 
 /** The shop: one price list for every gallery, and the orders that came in. Prices marked SAMPLE are placeholders until you set them. */
 export function OrdersView({ data }: { data: { products: Product[]; sheets: Sheet[]; orders: Order[] } }) {
-  const { pending, note, act } = useAct();
+  const { pending, note, act, go } = useAct();
+  const notify = useNotify();
   const [ask, confirmEl] = useConfirm();
-  const [edit, setEdit] = useState<Record<string, Partial<Product>>>({});
+  const [editing, setEditing] = useState<{ p: Product; name: string; price: string; active: boolean } | null>(null);
+  const [sheetDlg, setSheetDlg] = useState<"new" | "rename" | null>(null);
   const [sheetId, setSheetId] = useState(data.sheets[0]?.id ?? "");
   const [newName, setNewName] = useState("");
   const [rename, setRename] = useState("");
   const sheet = data.sheets.find((x) => x.id === sheetId) ?? data.sheets[0];
-  const val = (p: Product, k: keyof Product) => (edit[p.id]?.[k] as string | undefined) ?? (p[k] as string);
-  const set = (id: string, k: keyof Product, v: string) => setEdit((e) => ({ ...e, [id]: { ...e[id], [k]: v } }));
+  const groups = [
+    ...data.products
+      .filter((p) => p.sheetId === sheet?.id)
+      .reduce(
+        (m, p) => m.set(KIND[p.kind] ?? p.kind, [...(m.get(KIND[p.kind] ?? p.kind) ?? []), p]),
+        new Map<string, Product[]>(),
+      ),
+  ];
   const paid = data.orders.filter((o) => o.status === "paid" || o.status === "fulfilled");
   const revenue = paid.reduce((n, o) => n + o.totalCents, 0);
   return (
@@ -94,30 +118,33 @@ export function OrdersView({ data }: { data: { products: Product[]; sheets: Shee
             </Segment>
           ))}
         </SegmentedControl>
-        <div className="gm-row">
-          <Input
-            aria-label="Rename this sheet"
-            placeholder={sheet?.name}
-            value={rename}
-            onChange={(e) => setRename(e.target.value)}
-          />
+        <div className="st-actions">
           <Button
             variant="secondary"
-            disabled={pending || !rename.trim() || !sheet}
-            onClick={() =>
-              sheet &&
-              act(
-                () => renameSheetAction({ id: sheet.id, name: rename }),
-                () => setRename(""),
-              )
-            }
+            size="sm"
+            disabled={!sheet}
+            onClick={() => {
+              setRename(sheet?.name ?? "");
+              setSheetDlg("rename");
+            }}
           >
             Rename
+          </Button>
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => {
+              setNewName("");
+              setSheetDlg("new");
+            }}
+          >
+            New sheet
           </Button>
           {sheet && !sheet.isDefault ? (
             <>
               <Button
                 variant="secondary"
+                size="sm"
                 disabled={pending}
                 onClick={() => act(() => makeDefaultSheetAction(sheet.id))}
               >
@@ -125,6 +152,7 @@ export function OrdersView({ data }: { data: { products: Product[]; sheets: Shee
               </Button>
               <Button
                 variant="danger"
+                size="sm"
                 disabled={pending}
                 onClick={async () =>
                   (await ask({
@@ -143,76 +171,41 @@ export function OrdersView({ data }: { data: { products: Product[]; sheets: Shee
             </>
           ) : null}
         </div>
-        <form
-          className="gm-inline"
-          aria-label="New price sheet"
-          noValidate
-          onSubmit={(e) => {
-            e.preventDefault();
-            act(
-              () => createSheetAction({ name: newName, copyFrom: sheet?.id }),
-              () => setNewName(""),
-            );
-          }}
-        >
-          <Input
-            aria-label="New sheet name"
-            placeholder="New sheet (copies this one)"
-            value={newName}
-            onChange={(e) => setNewName(e.target.value)}
-          />
-          <Button type="submit" disabled={pending}>
-            Add sheet
-          </Button>
-        </form>
-        <ul className="hm-data-list st-list">
-          {data.products
-            .filter((p) => p.sheetId === sheet?.id)
-            .map((p) => (
-              <li className="hm-data-list-item" key={p.id}>
-                <span style={{ display: "grid", gap: ".3rem", flex: 1 }}>
-                  <small>{KIND[p.kind] ?? p.kind}</small>
-                  <Input
-                    aria-label={`Name of ${p.name}`}
-                    value={val(p, "name")}
-                    onChange={(e) => set(p.id, "name", e.target.value)}
-                  />
-                </span>
-                <span>
-                  <Input
-                    aria-label={`Price of ${p.name}`}
-                    inputMode="decimal"
-                    style={{ width: "6rem" }}
-                    value={val(p, "price")}
-                    onChange={(e) => set(p.id, "price", e.target.value)}
-                  />{" "}
-                  {p.sample && !edit[p.id]?.price ? <small>SAMPLE</small> : null}
-                </span>
-                <Checkbox
-                  checked={edit[p.id]?.active === undefined ? p.active : Boolean(edit[p.id]?.active)}
-                  onChange={(e) => setEdit((x) => ({ ...x, [p.id]: { ...x[p.id], active: e.target.checked } }))}
-                  label="For sale"
-                />
-                <Button
-                  disabled={pending || !edit[p.id]}
-                  onClick={() =>
-                    act(
-                      () =>
-                        saveProductAction({
-                          id: p.id,
-                          name: edit[p.id]?.name,
-                          price: edit[p.id]?.price,
-                          active: edit[p.id]?.active,
-                        }),
-                      () => setEdit((x) => ({ ...x, [p.id]: undefined as never })),
-                    )
-                  }
-                >
-                  Save
-                </Button>
-              </li>
-            ))}
-        </ul>
+        <Accordion type="multiple" defaultValue={groups.slice(0, 1).map(([k]) => k)}>
+          {groups.map(([kind, items]) => (
+            <AccordionItem key={kind} value={kind}>
+              <AccordionTrigger>
+                {kind} <small>({items.length})</small>
+              </AccordionTrigger>
+              <AccordionContent>
+                <ul className="hm-data-list st-list" aria-label={kind}>
+                  {items.map((p) => (
+                    <li className="hm-data-list-item" key={p.id}>
+                      <span>
+                        {p.name}
+                        <small>
+                          ${p.price} {p.sample ? <Badge tone="warning">SAMPLE</Badge> : null}{" "}
+                          {p.active ? "" : <Badge tone="muted">Not for sale</Badge>}
+                        </small>
+                      </span>
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        aria-label={`Edit ${p.name}`}
+                        onClick={() => {
+                          setEditing({ p, name: p.name, price: p.price, active: p.active });
+                          notify(`Loaded ${p.name}`);
+                        }}
+                      >
+                        Edit
+                      </Button>
+                    </li>
+                  ))}
+                </ul>
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
       </Card>
 
       <Card title="Orders" id="ord-list">
@@ -265,6 +258,62 @@ export function OrdersView({ data }: { data: { products: Product[]; sheets: Shee
         )}
       </Card>
       {confirmEl}
+      <FormDialog
+        open={editing !== null}
+        onOpenChange={(o) => !o && setEditing(null)}
+        title={editing ? `Edit ${editing.p.name}` : "Edit"}
+        pending={pending}
+        onSubmit={() =>
+          editing &&
+          go(() =>
+            saveProductAction({ id: editing.p.id, name: editing.name, price: editing.price, active: editing.active }),
+          )
+        }
+      >
+        <Field label="Name">
+          <Input
+            value={editing?.name ?? ""}
+            onChange={(e) => editing && setEditing({ ...editing, name: e.target.value })}
+          />
+        </Field>
+        <Field label="Price (dollars)">
+          <Input
+            inputMode="decimal"
+            value={editing?.price ?? ""}
+            onChange={(e) => editing && setEditing({ ...editing, price: e.target.value })}
+          />
+        </Field>
+        <Checkbox
+          checked={editing?.active ?? false}
+          onChange={(e) => editing && setEditing({ ...editing, active: e.target.checked })}
+          label="For sale"
+        />
+      </FormDialog>
+      <FormDialog
+        open={sheetDlg === "new"}
+        onOpenChange={(o) => !o && setSheetDlg((d) => (d === "new" ? null : d))}
+        title="New price sheet"
+        description="It starts as a copy of the sheet you are looking at."
+        submitLabel="Add sheet"
+        pending={pending}
+        onSubmit={() => go(() => createSheetAction({ name: newName, copyFrom: sheet?.id }))}
+      >
+        <Field label="Name">
+          <Input value={newName} onChange={(e) => setNewName(e.target.value)} />
+        </Field>
+      </FormDialog>
+      <FormDialog
+        open={sheetDlg === "rename"}
+        onOpenChange={(o) => !o && setSheetDlg((d) => (d === "rename" ? null : d))}
+        title="Rename this sheet"
+        submitLabel="Rename"
+        pending={pending}
+        onSubmit={() => sheet && go(() => renameSheetAction({ id: sheet.id, name: rename }))}
+      >
+        <Field label="Name">
+          <Input value={rename} onChange={(e) => setRename(e.target.value)} />
+        </Field>
+      </FormDialog>
     </Frame>
   );
 }

@@ -20,7 +20,7 @@ export const securitySchema = z.object({
   blockSelection: z.boolean().default(true),
   blockContextMenu: z.boolean().default(true),
   blockPrint: z.boolean().default(true),
-  detectDevtools: z.boolean().default(false),
+  detectDevtools: z.boolean().default(true),
   /** Photographs stay blurred until the viewer holds the pointer (or Shift) down. */
   holdToView: z.boolean().default(false),
   /** A faint tiled viewer code over the page, so a photographed or recorded screen traces back to the session. */

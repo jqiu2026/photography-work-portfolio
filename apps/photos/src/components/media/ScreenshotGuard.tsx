@@ -214,15 +214,28 @@ export function ScreenshotGuard({ level = "light", children }: { level?: GuardLe
         return Promise.reject(new DOMException("Screen capture is not allowed on this page.", "NotAllowedError"));
       };
     }
-    // docked devtools (best effort, off unless asked for): once per time it opens
+    // devtools, docked (the window shrinks) or floating (Chrome reads a logged object's properties only while the console
+    // is open): the photos hide once each time it opens. On unless the gallery turned it off.
     let devtoolsOpen = false;
-    const devtoolsTimer = o.detectDevtools
-      ? setInterval(() => {
-          const docked = devtoolsDocked(window);
-          if (docked && !devtoolsOpen) trigger("DevTools open", "devtools-open");
-          devtoolsOpen = docked;
-        }, 1000)
-      : undefined;
+    const probe = new Image();
+    let probed = false;
+    Object.defineProperty(probe, "id", {
+      get() {
+        probed = true;
+        return "";
+      },
+    });
+    const devtoolsTimer =
+      o.detectDevtools !== false
+        ? setInterval(() => {
+            probed = false;
+            console.debug(probe);
+            console.clear();
+            const open = devtoolsDocked(window) || probed;
+            if (open && !devtoolsOpen) trigger("DevTools open", "devtools-open");
+            devtoolsOpen = open;
+          }, 1000)
+        : undefined;
     // hold to view: media is blurred until the pointer (or Shift) is held down
     let releaseHold: (() => void) | undefined;
     if (o.holdToView) {
@@ -296,9 +309,6 @@ export function ScreenshotGuard({ level = "light", children }: { level?: GuardLe
         <DialogContent size="sm" role="alertdialog" className="pm-guard" data-guard-dialog="">
           <DialogTitle>{optsRef.current.title || guardCopy.title}</DialogTitle>
           <DialogDescription>{optsRef.current.message || guardCopy.body}</DialogDescription>
-          <Text size="sm" tone="muted">
-            {guardCopy.note}
-          </Text>
           <DialogFooter>
             <Button onClick={dismiss} autoFocus>
               {guardCopy.action}

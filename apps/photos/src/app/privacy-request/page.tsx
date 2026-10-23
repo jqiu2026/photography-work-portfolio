@@ -4,19 +4,24 @@ import { PrivacyRequestForm } from "@/components/PrivacyRequestForm";
 
 export const metadata: Metadata = {
   title: "Remove a photo of me",
-  description: "Ask for a photograph you appear in to be taken down.",
+  description: "Ask for a photograph from a private event to be taken down.",
 };
 
 export default function PrivacyRequest() {
   return (
     <Page
       title="Remove a photo of me"
-      lede="If you are in a photograph here and would rather you were not, tell me which one and I will take it down."
+      lede="If a photograph from a private event shows you and you would rather it did not, tell me which one."
     >
       <p>
-        I photograph public events and school events, and people sometimes would rather not appear online. You never
-        have to explain why. I hide the photograph from every gallery and from the portfolio, then email you to say it
-        is done. A request about a minor can come from them or from a parent or guardian.
+        This is for photographs taken at <strong>private events and in non-public settings</strong>: a party, a private
+        school function, someone&rsquo;s home. If it is gone from every gallery and the portfolio, I email you to say
+        so. You never have to explain why. A request about a minor can come from them or from a parent or guardian.
+      </p>
+      <p>
+        Photographs taken in a <strong>public setting</strong> (a street, a public performance, a parade, a game open to
+        everyone) are not covered, because nobody has a privacy expectation there. I may still take one down if you ask
+        kindly, but I am not obliged to.
       </p>
       <PrivacyRequestForm />
     </Page>

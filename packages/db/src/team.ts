@@ -3,6 +3,7 @@ import type { Database } from "./client";
 import { checkEmail } from "./email-check";
 import { StudioError } from "./errors";
 import * as s from "./schema";
+import { z } from "zod";
 
 /**
  * The studio's team: people the owner invites by Google address with a role. Two roles exist for helpers:
@@ -13,8 +14,26 @@ import * as s from "./schema";
  */
 export const TEAM_ROLES = ["bookkeeper", "photographer"] as const;
 export type TeamRole = (typeof TEAM_ROLES)[number];
-/** How long a person can take back something they added. */
-export const UNDO_WINDOW_MS = 5 * 60 * 1000;
+/** How long a person can take back something they added, unless the owner changed it (Settings, Team). */
+export const DEFAULT_UNDO_MINUTES = 5;
+export const MAX_UNDO_MINUTES = 24 * 60;
+const undoSchema = z.object({ minutes: z.number().int().min(0).max(MAX_UNDO_MINUTES).default(DEFAULT_UNDO_MINUTES) });
+
+export async function getUndoMinutes(db: Database): Promise<number> {
+  const [row] = await db.select().from(s.studioSettings).where(eq(s.studioSettings.key, "team-undo"));
+  const p = undoSchema.safeParse(row?.value ?? {});
+  return p.success ? p.data.minutes : DEFAULT_UNDO_MINUTES;
+}
+/** 0 means helpers cannot take anything back; only the owner removes. */
+export async function setUndoMinutes(db: Database, minutes: number) {
+  if (!Number.isInteger(minutes) || minutes < 0 || minutes > MAX_UNDO_MINUTES)
+    throw new StudioError(`Pick a whole number of minutes from 0 to ${MAX_UNDO_MINUTES}.`);
+  await db
+    .insert(s.studioSettings)
+    .values({ key: "team-undo", value: { minutes } })
+    .onConflictDoUpdate({ target: s.studioSettings.key, set: { value: { minutes }, updatedAt: new Date() } });
+  return minutes;
+}
 
 export async function listTeam(db: Database) {
   return db
@@ -96,7 +115,9 @@ export async function canRemove(
   now = new Date(),
 ): Promise<boolean> {
   if (who.role === "owner" || who.role === "editor") return true;
-  const since = new Date(now.getTime() - UNDO_WINDOW_MS);
+  const minutes = await getUndoMinutes(db);
+  if (minutes === 0) return false;
+  const since = new Date(now.getTime() - minutes * 60 * 1000);
   const [row] = await db
     .select({ at: s.studioCreated.at })
     .from(s.studioCreated)

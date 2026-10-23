@@ -1,5 +1,6 @@
 "use client";
 
+import { QuoteCard } from "@/components/QuoteCard";
 import { DateField } from "@/components/DateField";
 import { Badge, Button, Checkbox, DownloadIcon, Field, Input, Select, Text, Textarea } from "@holominimal/ui";
 import { useState } from "react";
@@ -20,7 +21,7 @@ import {
   unassignGearAction,
   withdrawConsentAction,
 } from "@/app/studio/business-actions";
-import { Card, Frame, useAct, useConfirm } from "./StudioFrame";
+import { Card, FormDialog, Frame, useAct, useConfirm, useNotify } from "./StudioFrame";
 
 const money = (c: number) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(c / 100);
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
@@ -50,7 +51,8 @@ export type ExpensesData = {
 };
 
 export function ExpensesView({ user, data }: { user: string; data: ExpensesData }) {
-  const { pending, note, act, submit } = useAct();
+  const { pending, note, act, go } = useAct();
+  const [adding, setAdding] = useState(false);
   const [ask, confirmEl] = useConfirm();
   const [kind, setKind] = useState<"expense" | "mileage">("expense");
   const [f, setF] = useState<Record<string, string>>({ category: "gear", rate: (data.mileageRate / 100).toFixed(2) });
@@ -86,96 +88,16 @@ export function ExpensesView({ user, data }: { user: string; data: ExpensesData 
             <DownloadIcon /> Download CSV for {data.year}
           </Button>
         </Card>
-        <Card title="Add an entry" id="x-add">
-          <form
-            noValidate
-            className="st-form"
-            aria-label="New expense"
-            onSubmit={submit(
-              () =>
-                addExpenseAction({
-                  kind,
-                  spentOn: f.date ?? "",
-                  category: f.category,
-                  description: f.desc,
-                  vendor: f.vendor,
-                  amount: f.amount,
-                  miles: f.miles,
-                  rate: f.rate,
-                  jobId: f.job,
-                  receiptNote: f.receipt,
-                }),
-              () => setF({ category: f.category ?? "gear", rate: f.rate ?? "" }),
-            )}
-          >
-            <Field label="Type">
-              <Select value={kind} onValueChange={(v) => setKind(v as "expense" | "mileage")}>
-                <option value="expense">Expense</option>
-                <option value="mileage">Mileage</option>
-              </Select>
-            </Field>
-            <Field label="Date">
-              <DateField value={f.date ?? ""} onChange={set("date")} />
-            </Field>
-            {kind === "expense" ? (
-              <>
-                <Field label="Category">
-                  <Select value={f.category} onValueChange={(v) => setF({ ...f, category: v })}>
-                    {data.categories.map((c) => (
-                      <option key={c} value={c}>
-                        {cap(c)}
-                      </option>
-                    ))}
-                  </Select>
-                </Field>
-                <Field label="Amount (USD)">
-                  <Input inputMode="decimal" value={f.amount ?? ""} onChange={set("amount")} />
-                </Field>
-                <Field label="Vendor">
-                  <Input value={f.vendor ?? ""} onChange={set("vendor")} />
-                </Field>
-              </>
-            ) : (
-              <>
-                <Field label="Miles">
-                  <Input inputMode="decimal" value={f.miles ?? ""} onChange={set("miles")} />
-                </Field>
-                <Field
-                  label="Rate (dollars per mile)"
-                  hint="TODO(owner): set the current IRS standard rate with your accountant."
-                >
-                  <Input inputMode="decimal" value={f.rate ?? ""} onChange={set("rate")} />
-                </Field>
-              </>
-            )}
-            <Field label="What for">
-              <Input value={f.desc ?? ""} onChange={set("desc")} />
-            </Field>
-            <Field label="Job (optional)">
-              <Select value={f.job ?? ""} onValueChange={(v) => setF({ ...f, job: v })}>
-                <option value="">No job</option>
-                {data.jobs.map((j) => (
-                  <option key={j.id} value={j.id}>
-                    {j.title}
-                  </option>
-                ))}
-              </Select>
-            </Field>
-            {kind === "expense" ? (
-              <Field
-                label="Where the receipt is"
-                hint="Receipt uploads switch on with file storage. Until then, note where it is kept."
-              >
-                <Input value={f.receipt ?? ""} onChange={set("receipt")} />
-              </Field>
-            ) : null}
-            <Button type="submit" disabled={pending}>
-              {kind === "mileage" ? "Add trip" : "Add expense"}
-            </Button>
-          </form>
-        </Card>
       </div>
-      <Card title="Entries" id="x-list">
+      <Card
+        title="Entries"
+        id="x-list"
+        actions={
+          <Button size="sm" onClick={() => setAdding(true)}>
+            Add an entry
+          </Button>
+        }
+      >
         {data.rows.length ? (
           <ul className="hm-data-list st-list st-list--tall">
             {data.rows.map((r) => (
@@ -210,6 +132,93 @@ export function ExpensesView({ user, data }: { user: string; data: ExpensesData 
           </Text>
         )}
       </Card>
+      <FormDialog
+        open={adding}
+        onOpenChange={setAdding}
+        title="Add an entry"
+        submitLabel={kind === "mileage" ? "Add trip" : "Add expense"}
+        pending={pending}
+        onSubmit={() =>
+          go(
+            () =>
+              addExpenseAction({
+                kind,
+                spentOn: f.date ?? "",
+                category: f.category,
+                description: f.desc,
+                vendor: f.vendor,
+                amount: f.amount,
+                miles: f.miles,
+                rate: f.rate,
+                jobId: f.job,
+                receiptNote: f.receipt,
+              }),
+            () => setF({ category: f.category ?? "gear", rate: f.rate ?? "" }),
+          )
+        }
+      >
+        <Field label="Type">
+          <Select value={kind} onValueChange={(v) => setKind(v as "expense" | "mileage")}>
+            <option value="expense">Expense</option>
+            <option value="mileage">Mileage</option>
+          </Select>
+        </Field>
+        <Field label="Date">
+          <DateField value={f.date ?? ""} onChange={set("date")} />
+        </Field>
+        {kind === "expense" ? (
+          <>
+            <Field label="Category">
+              <Select value={f.category} onValueChange={(v) => setF({ ...f, category: v })}>
+                {data.categories.map((c) => (
+                  <option key={c} value={c}>
+                    {cap(c)}
+                  </option>
+                ))}
+              </Select>
+            </Field>
+            <Field label="Amount (USD)">
+              <Input inputMode="decimal" value={f.amount ?? ""} onChange={set("amount")} />
+            </Field>
+            <Field label="Vendor">
+              <Input value={f.vendor ?? ""} onChange={set("vendor")} />
+            </Field>
+          </>
+        ) : (
+          <>
+            <Field label="Miles">
+              <Input inputMode="decimal" value={f.miles ?? ""} onChange={set("miles")} />
+            </Field>
+            <Field
+              label="Rate (dollars per mile)"
+              hint="TODO(owner): set the current IRS standard rate with your accountant."
+            >
+              <Input inputMode="decimal" value={f.rate ?? ""} onChange={set("rate")} />
+            </Field>
+          </>
+        )}
+        <Field label="What for">
+          <Input value={f.desc ?? ""} onChange={set("desc")} />
+        </Field>
+        <Field label="Job (optional)">
+          <Select value={f.job ?? ""} onValueChange={(v) => setF({ ...f, job: v })}>
+            <option value="">No job</option>
+            {data.jobs.map((j) => (
+              <option key={j.id} value={j.id}>
+                {j.title}
+              </option>
+            ))}
+          </Select>
+        </Field>
+        {kind === "expense" ? (
+          <Field
+            label="Where the receipt is"
+            hint="Receipt uploads switch on with file storage. Until then, note where it is kept."
+          >
+            <Input value={f.receipt ?? ""} onChange={set("receipt")} />
+          </Field>
+        ) : null}
+      </FormDialog>
     </Frame>
   );
 }
@@ -229,7 +238,8 @@ export type TestimonialsData = {
 };
 
 export function TestimonialsView({ user, data }: { user: string; data: TestimonialsData }) {
-  const { pending, note, act, submit } = useAct();
+  const { pending, note, act, submit, go } = useAct();
+  const [adding, setAdding] = useState(false);
   const [ask, confirmEl] = useConfirm();
   const [f, setF] = useState<Record<string, string>>({});
   const set = (k: string) => (e: { target: { value: string } }) => setF((x) => ({ ...x, [k]: e.target.value }));
@@ -238,19 +248,29 @@ export function TestimonialsView({ user, data }: { user: string; data: Testimoni
     <Frame section="testimonials" user={user} note={note}>
       {confirmEl}
       <div className="st-grid">
-        <Card title="Testimonials" id="tm-list">
+        <Card
+          title="Testimonials"
+          id="tm-list"
+          actions={
+            <Button size="sm" onClick={() => setAdding(true)}>
+              Add a testimonial
+            </Button>
+          }
+        >
           {data.items.length ? (
             <ul className="hm-data-list st-list st-list--tall">
               {data.items.map((t) => (
                 <li className="hm-data-list-item st-stack" key={t.id} data-testimonial-id={t.id}>
-                  <blockquote className="st-quote">“{t.quote}”</blockquote>
-                  <p>
-                    <b>{t.displayName}</b>
-                    {t.role ? `, ${t.role}` : ""}{" "}
-                    <Badge tone={t.published ? "success" : t.consentAt ? "info" : "warning"}>
-                      {t.published ? "Public" : t.consentAt ? "Agreed, not public" : "No consent yet"}
-                    </Badge>
-                  </p>
+                  <QuoteCard
+                    quote={t.quote}
+                    name={t.displayName}
+                    role={t.role}
+                    meta={
+                      <Badge tone={t.published ? "success" : t.consentAt ? "info" : "warning"}>
+                        {t.published ? "Public" : t.consentAt ? "Agreed, not public" : "No consent yet"}
+                      </Badge>
+                    }
+                  />
                   {t.consentAt ? (
                     <small>
                       Agreed {t.consentAt.slice(0, 10)}: {t.consentNote}
@@ -321,43 +341,39 @@ export function TestimonialsView({ user, data }: { user: string; data: Testimoni
             </Text>
           )}
         </Card>
-        <Card title="Add one" id="tm-add">
-          <form
-            noValidate
-            className="st-form"
-            aria-label="New testimonial"
-            onSubmit={submit(
-              () =>
-                addTestimonialAction({
-                  displayName: f.name ?? "",
-                  quote: f.quote ?? "",
-                  role: f.role,
-                  consentNote: f.consent,
-                }),
-              () => setF({}),
-            )}
-          >
-            <Field label="Name to show" hint="As they want it, such as “Maria R.” or “A parent”.">
-              <Input value={f.name ?? ""} onChange={set("name")} />
-            </Field>
-            <Field label="Role (optional)">
-              <Input value={f.role ?? ""} onChange={set("role")} />
-            </Field>
-            <Field label="What they said">
-              <Textarea rows={4} value={f.quote ?? ""} onChange={set("quote")} />
-            </Field>
-            <Field
-              label="How they agreed (leave empty if not yet)"
-              hint="Nothing can be published until this is recorded."
-            >
-              <Input value={f.consent ?? ""} onChange={set("consent")} />
-            </Field>
-            <Button type="submit" disabled={pending}>
-              Save
-            </Button>
-          </form>
-        </Card>
       </div>
+      <FormDialog
+        open={adding}
+        onOpenChange={setAdding}
+        title="Add a testimonial"
+        submitLabel={"Save"}
+        pending={pending}
+        onSubmit={() =>
+          go(
+            () =>
+              addTestimonialAction({
+                displayName: f.name ?? "",
+                quote: f.quote ?? "",
+                role: f.role,
+                consentNote: f.consent,
+              }),
+            () => setF({}),
+          )
+        }
+      >
+        <Field label="Name to show" hint="As they want it, such as “Maria R.” or “A parent”.">
+          <Input value={f.name ?? ""} onChange={set("name")} />
+        </Field>
+        <Field label="Role (optional)">
+          <Input value={f.role ?? ""} onChange={set("role")} />
+        </Field>
+        <Field label="What they said">
+          <Textarea rows={4} value={f.quote ?? ""} onChange={set("quote")} />
+        </Field>
+        <Field label="How they agreed (leave empty if not yet)" hint="Nothing can be published until this is recorded.">
+          <Input value={f.consent ?? ""} onChange={set("consent")} />
+        </Field>
+      </FormDialog>
     </Frame>
   );
 }
@@ -373,7 +389,9 @@ export type GearData = {
 };
 
 export function GearView({ user, data }: { user: string; data: GearData }) {
-  const { pending, note, act, submit } = useAct();
+  const { pending, note, act, go } = useAct();
+  const [addingGear, setAddingGear] = useState(false);
+  const [assigning, setAssigning] = useState(false);
   const [f, setF] = useState<Record<string, string>>({ kind: "camera" });
   const [a, setA] = useState<Record<string, string>>({});
   const set = (k: string) => (e: { target: { value: string } }) => setF((x) => ({ ...x, [k]: e.target.value }));
@@ -392,7 +410,20 @@ export function GearView({ user, data }: { user: string; data: GearData }) {
         </Card>
       ) : null}
       <div className="st-grid">
-        <Card title="Gear" id="g-list">
+        <Card
+          title="Gear"
+          id="g-list"
+          actions={
+            <>
+              <Button size="sm" onClick={() => setAddingGear(true)}>
+                Add gear
+              </Button>
+              <Button size="sm" variant="secondary" onClick={() => setAssigning(true)}>
+                Put gear on a job
+              </Button>
+            </>
+          }
+        >
           {data.gear.length ? (
             <ul className="hm-data-list st-list st-list--tall">
               {data.gear.map((g) => (
@@ -442,81 +473,73 @@ export function GearView({ user, data }: { user: string; data: GearData }) {
             </Text>
           )}
         </Card>
-        <div className="st-stack">
-          <Card title="Add gear" id="g-add">
-            <form
-              noValidate
-              className="st-form"
-              aria-label="New gear"
-              onSubmit={submit(
-                () => addGearAction({ name: f.name ?? "", kind: f.kind ?? "other", notes: f.notes }),
-                () => setF({ kind: f.kind ?? "camera" }),
-              )}
-            >
-              <Field label="Name">
-                <Input value={f.name ?? ""} onChange={set("name")} />
-              </Field>
-              <Field label="Kind">
-                <Select value={f.kind} onValueChange={(v) => setF({ ...f, kind: v })}>
-                  {data.kinds.map((k) => (
-                    <option key={k} value={k}>
-                      {cap(k)}
-                    </option>
-                  ))}
-                </Select>
-              </Field>
-              <Field label="Notes">
-                <Input value={f.notes ?? ""} onChange={set("notes")} />
-              </Field>
-              <Button type="submit" disabled={pending}>
-                Add gear
-              </Button>
-            </form>
-          </Card>
-          <Card title="Put gear on a job" id="g-assign">
-            <form
-              noValidate
-              className="st-form"
-              aria-label="Assign gear"
-              onSubmit={submit(() =>
-                assignGearAction({ gearId: a.gear ?? "", jobId: a.job ?? "", onDate: a.date ?? "" }),
-              )}
-            >
-              <Field label="Gear">
-                <Select value={a.gear ?? ""} onValueChange={(v) => setA({ ...a, gear: v })}>
-                  <option value="">Choose</option>
-                  {active.map((g) => (
-                    <option key={g.id} value={g.id}>
-                      {g.name}
-                    </option>
-                  ))}
-                </Select>
-              </Field>
-              <Field label="Job">
-                <Select
-                  value={a.job ?? ""}
-                  onValueChange={(v) =>
-                    setA({ ...a, job: v, date: a.date || (data.jobs.find((j) => j.id === v)?.date ?? "") })
-                  }
-                >
-                  <option value="">Choose</option>
-                  {data.jobs.map((j) => (
-                    <option key={j.id} value={j.id}>
-                      {j.title}
-                    </option>
-                  ))}
-                </Select>
-              </Field>
-              <Field label="Day">
-                <DateField value={a.date ?? ""} onChange={(e) => setA({ ...a, date: e.target.value })} />
-              </Field>
-              <Button type="submit" disabled={pending}>
-                Assign
-              </Button>
-            </form>
-          </Card>
-        </div>
       </div>
+      <FormDialog
+        open={addingGear}
+        onOpenChange={setAddingGear}
+        title="Add gear"
+        submitLabel={"Add gear"}
+        pending={pending}
+        onSubmit={() =>
+          go(
+            () => addGearAction({ name: f.name ?? "", kind: f.kind ?? "other", notes: f.notes }),
+            () => setF({ kind: f.kind ?? "camera" }),
+          )
+        }
+      >
+        <Field label="Name">
+          <Input value={f.name ?? ""} onChange={set("name")} />
+        </Field>
+        <Field label="Kind">
+          <Select value={f.kind} onValueChange={(v) => setF({ ...f, kind: v })}>
+            {data.kinds.map((k) => (
+              <option key={k} value={k}>
+                {cap(k)}
+              </option>
+            ))}
+          </Select>
+        </Field>
+        <Field label="Notes">
+          <Input value={f.notes ?? ""} onChange={set("notes")} />
+        </Field>
+      </FormDialog>
+      <FormDialog
+        open={assigning}
+        onOpenChange={setAssigning}
+        title="Put gear on a job"
+        submitLabel={"Put on job"}
+        pending={pending}
+        onSubmit={() => go(() => assignGearAction({ gearId: a.gear ?? "", jobId: a.job ?? "", onDate: a.date ?? "" }))}
+      >
+        <Field label="Gear">
+          <Select value={a.gear ?? ""} onValueChange={(v) => setA({ ...a, gear: v })}>
+            <option value="">Choose</option>
+            {active.map((g) => (
+              <option key={g.id} value={g.id}>
+                {g.name}
+              </option>
+            ))}
+          </Select>
+        </Field>
+        <Field label="Job">
+          <Select
+            value={a.job ?? ""}
+            onValueChange={(v) =>
+              setA({ ...a, job: v, date: a.date || (data.jobs.find((j) => j.id === v)?.date ?? "") })
+            }
+          >
+            <option value="">Choose</option>
+            {data.jobs.map((j) => (
+              <option key={j.id} value={j.id}>
+                {j.title}
+              </option>
+            ))}
+          </Select>
+        </Field>
+        <Field label="Day">
+          <DateField value={a.date ?? ""} onChange={(e) => setA({ ...a, date: e.target.value })} />
+        </Field>
+      </FormDialog>
     </Frame>
   );
 }

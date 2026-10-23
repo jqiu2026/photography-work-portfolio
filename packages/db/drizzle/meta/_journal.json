@@ -169,6 +169,13 @@
       "when": 1792778451836,
       "tag": "0023_drone_webhooks",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1792783783953,
+      "tag": "0024_codes_scope_drop_drone",
+      "breakpoints": true
     }
   ]
 }

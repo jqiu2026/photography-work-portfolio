@@ -1,3 +1,4 @@
+import { QuoteCard } from "@/components/QuoteCard";
 import { Button, Container, Grid, Section, Text } from "@/components/ui";
 import { getDb } from "@jerryqiu/db";
 import { publicTestimonials, seedSamples } from "@jerryqiu/db/business";
@@ -55,11 +56,11 @@ export default async function About() {
             <ul className="about-quotes" aria-label="What clients say">
               {said.map((q) => (
                 <li key={q.id}>
-                  <blockquote>“{q.quote}”</blockquote>
-                  <p>
-                    {q.displayName}
-                    {q.role === "SAMPLE" ? " · sample, not a real client" : q.role ? `, ${q.role}` : ""}
-                  </p>
+                  <QuoteCard
+                    quote={q.quote}
+                    name={q.displayName}
+                    role={q.role === "SAMPLE" ? "Sample, not a real client" : q.role}
+                  />
                 </li>
               ))}
             </ul>

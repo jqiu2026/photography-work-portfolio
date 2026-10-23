@@ -17,31 +17,40 @@ const MON = monday(0);
 
 test("owner sets bookable hours and a blocked day; the calendar refuses a double booking", async ({ page }) => {
   await page.goto(`${PHOTOS}/studio/calendar`, { waitUntil: "networkidle" });
-  const hours = page.locator('section[aria-labelledby="cal-hours"]');
+  await page.getByRole("button", { name: "Bookable hours" }).click();
+  const hours = page.getByRole("form", { name: "Bookable hours" });
   await choose(hours.getByLabel("Day"), "Monday");
   await hours.getByLabel("From").fill("10:00");
   await hours.getByLabel("To").fill("14:00");
   await hours.getByRole("button", { name: "Add hours" }).click();
   await slow(note(page).last()).toContainText("Hours added");
 
-  const add = page.locator('section[aria-labelledby="cal-add"]');
+  const add = page.getByRole("form", { name: "Add to the calendar" });
   const fill = async (title: string, start: string, end: string) => {
+    if (!(await add.isVisible())) await page.getByRole("button", { name: "Add to the calendar" }).click();
     await add.getByLabel("Title").fill(title);
-    await pickDate(add.getByLabel("Date", { exact: true }), monday(3));
+    await add.getByLabel("Date", { exact: true }).fill(monday(3));
     await add.getByLabel("Start").fill(start);
     await add.getByLabel("End").fill(end);
-    await add.getByRole("button", { name: "Add" }).click();
+    await add.getByRole("button", { name: "Add", exact: true }).click();
   };
   await fill(`Wedding ${uid}`, "09:00", "11:00");
   await slow(note(page).last()).toContainText("Added to the calendar");
+  await expect(add).toBeHidden();
   await fill(`Clash ${uid}`, "10:30", "12:00");
   await slow(note(page).last()).toContainText(`conflicts with "Wedding ${uid}"`);
   await fill(`Buffer clash ${uid}`, "11:05", "12:00"); // inside the 15 minute default buffer
   await slow(note(page).last()).toContainText("conflicts");
+  await page.keyboard.press("Escape");
+  // the day shows the wedding once
+  await page.goto(`${PHOTOS}/studio/calendar?month=${monday(3).slice(0, 7)}`, { waitUntil: "networkidle" });
+  await page.getByRole("gridcell", { name: new RegExp(`^${monday(3)}`) }).click();
   await expect(page.locator("li[data-appointment-id]").filter({ hasText: `Wedding ${uid}` })).toHaveCount(1);
+  await page.keyboard.press("Escape");
 
-  const black = page.locator('section[aria-labelledby="cal-black"]');
-  await pickDate(black.getByLabel("Day"), monday(4));
+  await page.getByRole("button", { name: "Blocked days" }).click();
+  const black = page.getByRole("form", { name: "Blocked days" });
+  await black.getByLabel("Day").fill(monday(4));
   await black.getByRole("button", { name: "Block day" }).click();
   await slow(note(page).last()).toContainText("Day blocked");
 });
@@ -112,7 +121,8 @@ test("a paid session is held until the deposit is paid (mock card), then confirm
   await page.getByRole("button", { name: /^Pay/ }).click();
   await slow(note(page).last()).toContainText("Receipt rcpt_mock_");
 
-  await page.goto(`${PHOTOS}/studio/calendar`, { waitUntil: "networkidle" });
+  await page.goto(`${PHOTOS}/studio/calendar?month=${monday(1).slice(0, 7)}`, { waitUntil: "networkidle" });
+  await page.getByRole("gridcell", { name: new RegExp(`^${monday(1)}`) }).click();
   const row = page.locator("li[data-appointment-id]").filter({ hasText: `Deposit ${uid}` });
   await expect(row).toContainText("confirmed");
   await page.goto(`${PHOTOS}/studio/pipeline`, { waitUntil: "networkidle" });
@@ -138,9 +148,10 @@ test("mini-sessions: the owner opens slots, one visitor wins a slot, the next se
   browser,
 }) => {
   await page.goto(`${PHOTOS}/studio/calendar`, { waitUntil: "networkidle" });
-  const mini = page.locator('section[aria-labelledby="cal-mini"]');
+  await page.getByRole("button", { name: "Mini-sessions" }).click();
+  const mini = page.getByRole("form", { name: "Mini-sessions" });
   await mini.getByLabel("Name").fill(`Minis ${uid}`);
-  await pickDate(mini.getByLabel("Day"), monday(6)); // a Monday far out (outside weekly hours: minis ignore hours)
+  await mini.getByLabel("Day").fill(monday(6)); // a Monday far out (outside weekly hours: minis ignore hours)
   await mini.getByLabel("First slot").fill("16:00");
   await mini.getByLabel("Slots", { exact: true }).fill("2");
   await mini.getByRole("button", { name: "Open slots" }).click();
@@ -169,6 +180,7 @@ test("mini-sessions: the owner opens slots, one visitor wins a slot, the next se
 
 test("the owner's .ics feed needs its secret link and is valid iCalendar", async ({ page, request }) => {
   await page.goto(`${PHOTOS}/studio/calendar`, { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: "Settings and feed" }).click();
   const url = ((await page.locator("code").filter({ hasText: "/api/ics/" }).first().textContent()) as string).trim();
   const path = url.replace(/^https?:\/\/[^/]+/, "");
   const ok = await request.get(`${PHOTOS}${path}`);

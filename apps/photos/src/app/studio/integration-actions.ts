@@ -1,32 +1,11 @@
 "use server";
 
-import * as drone from "@jerryqiu/db/drone";
 import { StudioError } from "@jerryqiu/db/studio";
 import * as hooks from "@jerryqiu/db/webhooks";
 import { z } from "zod";
 import { studio, studioOwner } from "@/lib/studio-run";
 
 const id = z.string().uuid();
-
-export async function saveDroneAction(input: {
-  jobId: string;
-  items: { text: string; done: boolean }[];
-  weather: { windMph?: string; gustMph?: string; visibilityMi?: string; precipitation?: boolean; note?: string };
-  decision: "go" | "no-go" | null;
-}) {
-  return studio(async ({ db }) => {
-    const p = id.safeParse(input.jobId);
-    if (!p.success) throw new StudioError("Pick a job.");
-    await drone.saveChecklist(db, p.data, {
-      items: input.items,
-      weather: input.weather,
-      decision: input.decision,
-    });
-    return {
-      message: input.decision === "go" ? "Marked go" : input.decision === "no-go" ? "Marked no-go" : "Checklist saved",
-    };
-  });
-}
 
 export async function addWebhookAction(input: { url: string; events: string[] }) {
   return studioOwner(async ({ db }) => {

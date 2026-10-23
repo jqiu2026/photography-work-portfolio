@@ -74,7 +74,9 @@ export type Result = { ok: boolean; message?: string; error?: string; link?: str
 /** Shared pieces for studio sections: the section nav, a result banner, cards, and an action runner with refresh. */
 export function useAct() {
   const router = useRouter();
-  const [pending, start] = useTransition();
+  const [busy, setBusy] = useState(false);
+  const [working, start] = useTransition();
+  const pending = working || busy;
   const [note, setNote] = useState<Result | null>(null);
   const act = (fn: () => Promise<unknown>, after?: () => void) =>
     start(async () => {
@@ -89,7 +91,22 @@ export function useAct() {
     e.preventDefault();
     act(fn, after);
   };
-  return { pending, note, act, submit };
+  /** Like `act`, but resolves to whether it worked, so a dialog can stay open (with its fields) when it did not. */
+  const go = async (fn: () => Promise<unknown>, after?: () => void) => {
+    setBusy(true);
+    try {
+      const r = (await fn()) as Result;
+      setNote(r);
+      if (r.ok) {
+        after?.();
+        router.refresh();
+      }
+      return r.ok;
+    } finally {
+      setBusy(false);
+    }
+  };
+  return { pending, note, act, submit, go };
 }
 
 /**
@@ -135,13 +152,19 @@ export function CopyLink({ link }: { link: string }) {
   );
 }
 
-export function Card({ title, children, id }: { title: string; children: ReactNode; id: string }) {
+export function Card({
+  title,
+  children,
+  id,
+  actions,
+}: { title: string; children: ReactNode; id: string; actions?: ReactNode }) {
   return (
     <HmCard as="section" variant="section" padding="none" className="st-card" aria-labelledby={id}>
-      <CardHeader>
+      <CardHeader className={actions ? "st-card__head" : undefined}>
         <CardTitle as="h2" id={id}>
           {title}
         </CardTitle>
+        {actions ? <div className="st-card__actions">{actions}</div> : null}
       </CardHeader>
       <CardContent className="st-card__body">{children}</CardContent>
     </HmCard>
@@ -216,4 +239,76 @@ export function useConfirm(): [(a: Ask) => Promise<boolean>, ReactNode] {
     </Dialog>
   );
   return [ask, el];
+}
+
+/** A small toast for things that are not a saved result: "Loaded saved settings", "Copied", "Opened". */
+export function useNotify() {
+  const { toast } = useToast();
+  return useCallback(
+    (title: string, tone: Tone = "info", description?: string) =>
+      toast({
+        title,
+        tone: tone === "muted" ? "neutral" : tone === "accent" ? "info" : tone,
+        description,
+        duration: 3200,
+      }),
+    [toast],
+  );
+}
+
+/**
+ * A form inside a dialog, so a page can keep its fields out of sight until they are wanted. The form submits with Enter
+ * or the main button, and the dialog closes itself when `onSubmit` returns true (or nothing).
+ */
+export function FormDialog({
+  open,
+  onOpenChange,
+  title,
+  description,
+  submitLabel = "Save",
+  pending,
+  onSubmit,
+  children,
+  danger,
+  size = "md",
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  title: string;
+  description?: ReactNode;
+  submitLabel?: string;
+  pending?: boolean;
+  onSubmit: () => unknown;
+  children: ReactNode;
+  danger?: boolean;
+  size?: "sm" | "md" | "lg";
+}) {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent size={size}>
+        <DialogTitle>{title}</DialogTitle>
+        {description ? <DialogDescription>{description}</DialogDescription> : null}
+        <form
+          noValidate
+          aria-label={title}
+          className="st-form st-modal-form"
+          onSubmit={async (e) => {
+            e.preventDefault();
+            const r = await onSubmit();
+            if (r !== false) onOpenChange(false);
+          }}
+        >
+          {children}
+          <DialogFooter>
+            <Button type="button" variant="secondary" onClick={() => onOpenChange(false)}>
+              Cancel
+            </Button>
+            <Button type="submit" variant={danger ? "danger" : "primary"} disabled={pending}>
+              {submitLabel}
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
 }

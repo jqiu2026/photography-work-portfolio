@@ -40,11 +40,13 @@ let orderUrl = "";
 
 test("owner builds a gallery with nested and locked albums, a public link and an open shop", async ({ page }) => {
   await page.goto(`${PHOTOS}/studio/clients`, { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: "Add a client" }).click();
   await page.getByLabel("Name").fill(`Shop Client ${uid}`);
   await page.getByLabel("Email").fill(email);
   await page.getByRole("button", { name: "Add client" }).click();
   await slow(note(page).last()).toContainText("Client added");
   await page.goto(`${PHOTOS}/studio/shoots`, { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: "Add a job" }).click();
   await choose(page.getByLabel("Client"), `Shop Client ${uid}`);
   await page.getByLabel("Title").fill(`Shop job ${uid}`);
   await page.getByRole("button", { name: "Add job" }).click();
@@ -92,12 +94,9 @@ test("owner builds a gallery with nested and locked albums, a public link and an
   // the price list: a real price replaces SAMPLE
   await page.goto(`${PHOTOS}/studio/orders`, { waitUntil: "networkidle" });
   await expect(page.getByText("SAMPLE").first()).toBeVisible();
-  await page.getByLabel("Price of Web-size download").fill("7.50");
-  await page
-    .getByRole("listitem")
-    .filter({ has: page.getByLabel("Price of Web-size download") })
-    .getByRole("button", { name: "Save" })
-    .click();
+  await page.getByRole("button", { name: "Edit Web-size download" }).click();
+  await page.getByLabel("Price (dollars)").fill("7.50");
+  await page.getByRole("form", { name: "Edit Web-size download" }).getByRole("button", { name: "Save" }).click();
   await slow(note(page).filter({ hasText: "Product saved" }).first()).toBeVisible();
 
   // link and shop
@@ -194,11 +193,15 @@ test("a visitor buys a download and a print: the shop prices it, nothing ships b
   // match the product name from its start: "Print 8 × 10 in" is also inside "Metal print 8 × 10 in"
   const row = (name: string) =>
     lb.getByRole("listitem").filter({ hasText: new RegExp(`^\\s*${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`) });
+  await lb.getByRole("button", { name: /^Prints/ }).click();
   await expect(row("Print 8 × 10 in")).toContainText("Too small");
   await expect(row("Print 8 × 10 in").getByRole("button")).toBeDisabled();
   await row("Web-size download").getByRole("button", { name: "Add" }).click();
+  // the quantity is chosen when adding
+  await row("Print 4 × 6 in")
+    .getByLabel(/Quantity of/)
+    .fill("2");
   await row("Print 4 × 6 in").getByRole("button", { name: "Add" }).click();
-  await row("Print 4 × 6 in").getByRole("button", { name: "Add another" }).click();
   await lb.getByRole("button", { name: /Open cart/ }).click();
 
   const cart = v.getByRole("dialog", { name: "Your cart" });

@@ -19,6 +19,9 @@ export function PrivacyRequestForm() {
     const mail = checkEmail(get("email"));
     if (!mail.ok) next.email = mail.message;
     if (get("details").length < 20) next.details = "Tell me where you saw the photograph and which one it is.";
+    if (!f.get("private"))
+      next.private =
+        "Removal is only for photographs taken somewhere private. If it was in a public place, see the note above.";
     if (!f.get("consent")) next.consent = "Please tick the box so I can keep your request.";
     setErrors(next);
     if (Object.keys(next).length) return;
@@ -31,7 +34,7 @@ export function PrivacyRequestForm() {
         body: JSON.stringify({
           name: get("name"),
           email: get("email"),
-          details: get("details"),
+          details: `${get("details")}\n\n(Confirmed: taken at a private event or place, not in a public setting.)`,
           consent: true,
           website: get("website"),
         }),
@@ -77,6 +80,12 @@ export function PrivacyRequestForm() {
         </label>
       </div>
       <div className="pm-stack">
+        <Checkbox
+          name="private"
+          aria-invalid={errors.private ? true : undefined}
+          label="This photograph was taken at a private event or in a private place, not in a public setting."
+        />
+        <FormMessage>{errors.private}</FormMessage>
         <Checkbox
           name="consent"
           aria-invalid={errors.consent ? true : undefined}

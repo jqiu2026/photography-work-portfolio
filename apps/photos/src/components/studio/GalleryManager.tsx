@@ -1159,7 +1159,7 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
                 <Checkbox
                   checked={sec.detectDevtools}
                   onChange={(e) => updSec("detectDevtools", e.target.checked)}
-                  label="Treat a docked developer-tools panel as an attempt (can misfire)"
+                  label="Hide photos when developer tools are open"
                 />
                 <Checkbox
                   checked={sec.viewerOverlay}

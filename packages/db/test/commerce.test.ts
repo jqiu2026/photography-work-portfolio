@@ -154,3 +154,37 @@ describe("promo, referral and gift cards", () => {
     await expect(com.createGiftCard(db, { cents: 5 })).rejects.toThrow();
   });
 });
+
+describe("editing and deleting codes and gift cards", () => {
+  it("edits what a code gives but not its code, refuses fewer uses than were used, and deletes it", async () => {
+    const promo = await com.createPromo(db, { code: "spring10", percentOff: 10, maxUses: 5 });
+    expect(await com.updatePromo(db, promo.id, { kind: "amount", amountOffCents: 2500, maxUses: 3 })).toBe("spring10");
+    const [edited] = (await com.listPromos(db)).filter((p) => p.id === promo.id);
+    expect(edited).toMatchObject({
+      kind: "amount",
+      amountOffCents: 2500,
+      percentOff: null,
+      maxUses: 3,
+      code: "spring10",
+    });
+    await com.redeemPromo(db, promo.id);
+    await com.redeemPromo(db, promo.id);
+    await expect(com.updatePromo(db, promo.id, { kind: "percent", percentOff: 10, maxUses: 1 })).rejects.toThrow(
+      "already used",
+    );
+    expect(await com.deletePromo(db, promo.id)).toBe("spring10");
+    expect(await com.findPromo(db, "spring10")).toBeNull();
+    await expect(com.deletePromo(db, promo.id)).rejects.toThrow("gone");
+  });
+  it("edits a gift card's balance with a ledger line, voids it, and deletes it with its ledger", async () => {
+    const card = await com.createGiftCard(db, { cents: 5000, recipientName: "Sam" });
+    await com.updateGiftCard(db, card.id, { recipientName: "Sam R.", balanceCents: 4000 });
+    const [after] = (await com.listGiftCards(db)).filter((g) => g.id === card.id);
+    expect(after).toMatchObject({ recipientName: "Sam R.", balanceCents: 4000 });
+    await expect(com.updateGiftCard(db, card.id, { balanceCents: -5 })).rejects.toThrow("negative");
+    await com.setGiftCardStatus(db, card.id, "void");
+    expect(await com.findGiftCard(db, card.code)).toBeNull();
+    expect(await com.deleteGiftCard(db, card.id)).toBe(card.code);
+    expect((await com.listGiftCards(db)).some((g) => g.id === card.id)).toBe(false);
+  });
+});

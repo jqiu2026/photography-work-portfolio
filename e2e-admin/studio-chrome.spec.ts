@@ -2,15 +2,7 @@ import { expect, test } from "@playwright/test";
 
 const PHOTOS = "http://localhost:3302";
 
-/** Scale applied to a sidebar entry (the matrix `a` of its transform). */
-const scaleOf = (page: import("@playwright/test").Page, label: string) =>
-  page
-    .getByRole("navigation", { name: "Studio sections" })
-    .locator("a[data-hm-dock-item]")
-    .filter({ hasText: new RegExp(`^${label}$`) })
-    .evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).a);
-
-test("the studio sidebar: selected entry is largest, the pointer magnifies the nearest, the rest shrink", async ({
+test("the studio sidebar is steady: one size, the current group lists its pages, nothing moves under the pointer", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
@@ -22,31 +14,25 @@ test("the studio sidebar: selected entry is largest, the pointer magnifies the n
   );
   await expect(page.getByRole("heading", { level: 1 })).toContainText(/Good (morning|afternoon|evening)/);
 
-  // no pointer yet: the selected entry is the largest, far ones are the smallest
-  await expect.poll(() => scaleOf(page, "Dashboard")).toBeGreaterThan(1.4);
-  const far = await scaleOf(page, "Settings");
-  expect(far).toBeLessThan(1);
-
-  // move to an entry far from the selected one: it grows past its resting size, the selected one stays the largest
+  // hovering another group changes nothing: no magnification, no layout shift
   const target = nav.getByRole("link", { name: "Sales", exact: true });
-  const box = (await target.boundingBox())!;
-  await page.mouse.move(box.x + 30, box.y + box.height / 2, { steps: 6 });
-  // (1.2: the entry opens its pages below it while pointed at, so the pointer ends a little off its center)
-  await expect.poll(() => scaleOf(page, "Sales")).toBeGreaterThan(1.2);
-  expect(await scaleOf(page, "Dashboard")).toBeGreaterThanOrEqual(await scaleOf(page, "Sales"));
-
-  // leaving the sidebar area relaxes it again
-  await page.mouse.move(900, 450, { steps: 4 });
-  await expect.poll(() => scaleOf(page, "Sales")).toBeLessThan(1.1);
+  const before = (await target.boundingBox())!;
+  await page.mouse.move(before.x + 30, before.y + before.height / 2, { steps: 6 });
+  await page.waitForTimeout(400);
+  const after = (await target.boundingBox())!;
+  expect(Math.abs(after.y - before.y)).toBeLessThan(1);
+  expect(Math.abs(after.width - before.width)).toBeLessThan(1);
 
   // entries are real links
   await target.click();
   await expect(page).toHaveURL(/\/studio\/orders$/);
   await expect(nav.getByRole("link", { name: "Sales", exact: true })).toHaveAttribute("aria-current", "page");
-  // the group's pages are quiet tabs on the page itself
+  // the group's pages open as a menu beside it, and are tabs on the page itself
   const tabs = page.getByRole("navigation", { name: "Sales pages" });
-  for (const t of ["Store", "Quotes", "Invoices", "Payments"])
+  for (const t of ["Store", "Quotes", "Invoices", "Payments", "Codes"])
     await expect(tabs.getByRole("link", { name: t })).toBeVisible();
+  await target.hover();
+  await expect(nav.getByRole("link", { name: "Codes" })).toBeVisible();
 });
 
 test("the dashboard shows real totals and every other section keeps its heading and the sidebar", async ({ page }) => {

@@ -10,7 +10,7 @@ export async function calendarData(db: Database): Promise<CalendarData> {
   const c = await cal.getCalendarSettings(db);
   const now = new Date();
   const [appointments, rules, blackouts, jobs, clients, token] = await Promise.all([
-    cal.listAppointments(db, new Date(now.getTime() - 86_400_000), new Date(now.getTime() + 400 * 86_400_000)),
+    cal.listAppointments(db, new Date(now.getTime() - 400 * 86_400_000), new Date(now.getTime() + 400 * 86_400_000)),
     cal.listRules(db),
     cal.listBlackouts(db),
     db

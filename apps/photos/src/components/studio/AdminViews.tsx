@@ -23,7 +23,12 @@ import {
 import Link from "next/link";
 import { useRef, useState } from "react";
 import { deleteTrackAction, deleteWatermarkAction, setDefaultWatermarkAction } from "@/app/studio/gallery-actions";
-import { changeMemberRoleAction, inviteMemberAction, setMemberActiveAction } from "@/app/studio/team-actions";
+import {
+  changeMemberRoleAction,
+  inviteMemberAction,
+  setMemberActiveAction,
+  setUndoMinutesAction,
+} from "@/app/studio/team-actions";
 import {
   billMonthAction,
   downgradePlanAction,
@@ -31,7 +36,7 @@ import {
   upgradePlanAction,
 } from "@/app/studio/settings-actions";
 import { FormMessage } from "@/components/ui";
-import { Card, Frame, statusTone, useAct, useConfirm } from "./StudioFrame";
+import { Card, FormDialog, Frame, statusTone, useAct, useConfirm, useNotify } from "./StudioFrame";
 import "./galleries.css";
 
 const usd = (c: number) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(c / 100);
@@ -104,9 +109,13 @@ export function MusicView({
   const [artist, setArtist] = useState("");
   const [err, setErr] = useState("");
   const [busy, setBusy] = useState(false);
+  const [adding, setAdding] = useState(false);
   async function upload() {
     const f = file.current?.files?.[0];
-    if (!f) return setErr("Choose an audio file.");
+    if (!f) {
+      setErr("Choose an audio file.");
+      return false;
+    }
     setBusy(true);
     setErr("");
     const fd = new FormData();
@@ -116,44 +125,35 @@ export function MusicView({
     const r = await fetch("/api/studio/track", { method: "POST", body: fd });
     const j = (await r.json().catch(() => ({}))) as { error?: string };
     setBusy(false);
-    if (!r.ok) return setErr(j.error ?? "Could not upload that file.");
+    if (!r.ok) {
+      setErr(j.error ?? "Could not upload that file.");
+      return false;
+    }
     setTitle("");
     setArtist("");
     if (file.current) file.current.value = "";
     location.reload();
+    return true;
   }
   return (
     <Frame section="music" note={note}>
       {confirmEl}
-      <Card title="Gallery music" id="mu-h">
+      <Card
+        title="Gallery music"
+        id="mu-h"
+        actions={
+          allowed ? (
+            <Button size="sm" onClick={() => setAdding(true)}>
+              Add a track
+            </Button>
+          ) : undefined
+        }
+      >
         <Text size="sm" tone="muted">
           Upload tracks you have the right to play (your own, or licensed for this use). Choose a playlist for each
           gallery under its Branding tab. Visitors can pause or skip it.
         </Text>
-        {allowed ? (
-          <form
-            className="st-form"
-            aria-label="Add a track"
-            onSubmit={(e) => {
-              e.preventDefault();
-              void upload();
-            }}
-          >
-            <Field label="Audio file" hint="MP3, M4A, AAC, OGG or WAV, up to 40 MB.">
-              <input ref={file} type="file" accept="audio/*" className="pm-file" />
-            </Field>
-            <Field label="Title (blank = the file name)">
-              <Input value={title} onChange={(e) => setTitle(e.target.value)} maxLength={100} />
-            </Field>
-            <Field label="Artist (optional)">
-              <Input value={artist} onChange={(e) => setArtist(e.target.value)} maxLength={100} />
-            </Field>
-            {err ? <FormMessage className="st-error">{err}</FormMessage> : null}
-            <Button type="submit" disabled={busy}>
-              {busy ? "Uploading…" : "Add track"}
-            </Button>
-          </form>
-        ) : (
+        {allowed ? null : (
           <Text size="sm" tone="muted">
             Gallery music is part of Full Frame. See Settings, Plan and billing.
           </Text>
@@ -191,6 +191,25 @@ export function MusicView({
           </Text>
         )}
       </Card>
+      <FormDialog
+        open={adding}
+        onOpenChange={setAdding}
+        title="Add a track"
+        submitLabel={busy ? "Uploading…" : "Add track"}
+        pending={busy}
+        onSubmit={upload}
+      >
+        <Field label="Audio file" hint="MP3, M4A, AAC, OGG or WAV, up to 40 MB.">
+          <input ref={file} type="file" accept="audio/*" className="pm-file" />
+        </Field>
+        <Field label="Title (blank = the file name)">
+          <Input value={title} onChange={(e) => setTitle(e.target.value)} maxLength={100} />
+        </Field>
+        <Field label="Artist (optional)">
+          <Input value={artist} onChange={(e) => setArtist(e.target.value)} maxLength={100} />
+        </Field>
+        {err ? <FormMessage className="st-error">{err}</FormMessage> : null}
+      </FormDialog>
     </Frame>
   );
 }
@@ -451,15 +470,32 @@ const ROLE_WORDS: Record<string, string> = {
 };
 
 /** Who can sign in, and what each role may do. The owner invites helpers by Google address. */
-export function UsersView({ users }: { users: TeamRow[] }) {
-  const { pending, note, act, submit } = useAct();
+export function UsersView({ users, undoMinutes }: { users: TeamRow[]; undoMinutes: number }) {
+  const { pending, note, act, go } = useAct();
+  const notify = useNotify();
+  const [inviting, setInviting] = useState(false);
+  const [windowOpen, setWindowOpen] = useState(false);
+  const [mins, setMins] = useState(String(undoMinutes));
   const [ask, confirmEl] = useConfirm();
   const [f, setF] = useState({ email: "", name: "", role: "photographer" });
   return (
     <Frame section="users" note={note}>
       {confirmEl}
       <div className="st-grid">
-        <Card title="Team" id="us-h">
+        <Card
+          title="Team"
+          id="us-h"
+          actions={
+            <>
+              <Button variant="secondary" size="sm" onClick={() => setWindowOpen(true)}>
+                Take-back window: {undoMinutes} min
+              </Button>
+              <Button size="sm" onClick={() => setInviting(true)}>
+                Invite someone
+              </Button>
+            </>
+          }
+        >
           <Text size="sm" tone="muted">
             People who can sign in to this studio with Google. Clients never sign in: they use the link to their
             gallery.
@@ -514,55 +550,56 @@ export function UsersView({ users }: { users: TeamRow[] }) {
             </Text>
           )}
         </Card>
-        <Card title="Invite someone" id="us-invite">
-          <form
-            noValidate
-            className="st-form"
-            aria-label="Invite a team member"
-            onSubmit={submit(
-              () => inviteMemberAction(f),
-              () => setF({ email: "", name: "", role: f.role }),
-            )}
-          >
-            <Field label="Google email" hint="Any Google account works, such as a personal Gmail.">
-              <Input
-                type="email"
-                value={f.email}
-                autoComplete="off"
-                onChange={(e) => setF({ ...f, email: e.target.value })}
-              />
-            </Field>
-            <Field label="Name (optional)">
-              <Input value={f.name} onChange={(e) => setF({ ...f, name: e.target.value })} />
-            </Field>
-            <Field label="Role">
-              <Select value={f.role} onValueChange={(v) => setF({ ...f, role: v })}>
-                <option value="photographer">Photographer</option>
-                <option value="bookkeeper">Bookkeeper</option>
-              </Select>
-            </Field>
-            <Button type="submit" disabled={pending}>
-              Invite
-            </Button>
-          </form>
-          <dl className="st-roles">
-            <div>
-              <dt>Photographer</dt>
-              <dd>
-                Runs shoots and galleries: uploads, albums, the calendar, call sheets, gear, clients. Adds freely, but
-                can remove only what they added in the last 5 minutes. Sees no money, settings or team.
-              </dd>
-            </div>
-            <div>
-              <dt>Bookkeeper</dt>
-              <dd>
-                Sees and edits the money side: orders, quotes, invoices, payments, expenses, reports, and the client
-                list. Sees no galleries or settings, and can remove only what they added in the last 5 minutes.
-              </dd>
-            </div>
-          </dl>
-        </Card>
       </div>
+      <FormDialog
+        open={inviting}
+        onOpenChange={setInviting}
+        title="Invite someone"
+        description="They sign in with their Google account. Any Google account works, such as a personal Gmail."
+        submitLabel="Send invite"
+        pending={pending}
+        onSubmit={() =>
+          go(
+            () => inviteMemberAction(f),
+            () => setF({ email: "", name: "", role: f.role }),
+          )
+        }
+      >
+        <Field label="Google email">
+          <Input
+            type="email"
+            value={f.email}
+            autoComplete="off"
+            onChange={(e) => setF({ ...f, email: e.target.value })}
+          />
+        </Field>
+        <Field label="Name (optional)">
+          <Input value={f.name} onChange={(e) => setF({ ...f, name: e.target.value })} />
+        </Field>
+        <Field label="Role">
+          <Select value={f.role} onValueChange={(v) => setF({ ...f, role: v })}>
+            <option value="photographer">Photographer</option>
+            <option value="bookkeeper">Bookkeeper</option>
+          </Select>
+        </Field>
+        <Text size="sm" tone="muted" className="st-wide">
+          {f.role === "bookkeeper"
+            ? `Bookkeeper: sees and edits the money side (orders, quotes, invoices, payments, expenses, reports) and the client list. Sees no galleries or settings, and can remove only what they added in the last ${undoMinutes} minutes.`
+            : `Photographer: runs shoots and galleries (uploads, albums, calendar, call sheets, gear, clients). Adds freely, but can remove only what they added in the last ${undoMinutes} minutes. Sees no money, settings or team.`}
+        </Text>
+      </FormDialog>
+      <FormDialog
+        open={windowOpen}
+        onOpenChange={setWindowOpen}
+        title="Take-back window"
+        description="How long a photographer or bookkeeper can remove something they just added, to fix a slip. After that only you can remove it. 0 means they can never remove anything."
+        pending={pending}
+        onSubmit={() => go(() => setUndoMinutesAction(Number(mins)))}
+      >
+        <Field label="Minutes">
+          <Input inputMode="numeric" value={mins} onChange={(e) => setMins(e.target.value.replace(/[^0-9]/g, ""))} />
+        </Field>
+      </FormDialog>
     </Frame>
   );
 }

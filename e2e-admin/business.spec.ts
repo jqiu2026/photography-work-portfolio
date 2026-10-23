@@ -12,7 +12,8 @@ const today = new Date().toISOString().slice(0, 10);
 
 test("results of an action appear as a toast in the corner, not a banner above the page", async ({ page }) => {
   await page.goto(`${PHOTOS}/studio/expenses`, { waitUntil: "networkidle" });
-  const form = inForm(page, "New expense");
+  await page.getByRole("button", { name: "Add an entry" }).click();
+  const form = inForm(page, "Add an entry");
   await pickDate(form.getByLabel("Date"), today);
   await form.getByLabel("Amount (USD)").fill("49.99");
   await form.getByLabel("What for").fill(`Memory card ${uid}`);
@@ -28,7 +29,8 @@ test("results of an action appear as a toast in the corner, not a banner above t
 
 test("mileage multiplies miles by the rate, and the CSV link is offered", async ({ page }) => {
   await page.goto(`${PHOTOS}/studio/expenses`, { waitUntil: "networkidle" });
-  const form = inForm(page, "New expense");
+  await page.getByRole("button", { name: "Add an entry" }).click();
+  const form = inForm(page, "Add an entry");
   await choose(form.getByLabel("Type"), "Mileage");
   await pickDate(form.getByLabel("Date"), today);
   await form.getByLabel("Miles").fill("20");
@@ -41,7 +43,8 @@ test("mileage multiplies miles by the rate, and the CSV link is offered", async 
 
 test("a testimonial cannot go public until consent is recorded", async ({ page }) => {
   await page.goto(`${PHOTOS}/studio/testimonials`, { waitUntil: "networkidle" });
-  const add = inForm(page, "New testimonial");
+  await page.getByRole("button", { name: "Add a testimonial" }).click();
+  const add = inForm(page, "Add a testimonial");
   await add.getByLabel(/^Name to show/).fill(`Pat ${uid}`);
   await add.getByLabel("What they said").fill(`Calm, quick and kind to the kids ${uid}.`);
   await add.getByRole("button", { name: "Save" }).click();
@@ -63,12 +66,14 @@ test("a testimonial cannot go public until consent is recorded", async ({ page }
 
 test("setup: a client with two jobs on the same day", async ({ page }) => {
   await page.goto(`${PHOTOS}/studio/clients`, { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: "Add a client" }).click();
   await page.getByLabel("Name").fill(`Gear Client ${uid}`);
   await page.getByLabel("Email").fill(`gear-${uid}@example.test`);
   await page.getByRole("button", { name: "Add client" }).click();
   await slow(note(page).filter({ hasText: "Client added" }).first()).toBeVisible();
   for (const t of ["A", "B"]) {
     await page.goto(`${PHOTOS}/studio/shoots`, { waitUntil: "networkidle" });
+    await page.getByRole("button", { name: "Add a job" }).click();
     await choose(page.getByLabel("Client"), `Gear Client ${uid}`);
     await page.getByLabel("Title").fill(`Gear job ${t} ${uid}`);
     await page.getByRole("button", { name: "Add job" }).click();
@@ -78,17 +83,19 @@ test("setup: a client with two jobs on the same day", async ({ page }) => {
 
 test("gear on two jobs the same day shows a clash", async ({ page }) => {
   await page.goto(`${PHOTOS}/studio/gear`, { waitUntil: "networkidle" });
-  const add = inForm(page, "New gear");
+  await page.getByRole("button", { name: "Add gear" }).click();
+  const add = inForm(page, "Add gear");
   await add.getByLabel("Name").fill(`Body ${uid}`);
   await add.getByRole("button", { name: "Add gear" }).click();
   await slow(note(page).filter({ hasText: "Gear added" }).first()).toBeVisible();
-  const assign = inForm(page, "Assign gear");
+  const assign = inForm(page, "Put gear on a job");
   for (const t of ["A", "B"]) {
+    await page.getByRole("button", { name: "Put gear on a job" }).first().click();
     await choose(assign.getByLabel("Gear"), `Body ${uid}`);
     await choose(assign.getByLabel("Job"), `Gear job ${t} ${uid}`);
     // the day stays selected between the two, and picking it again would clear it
     if (t === "A") await pickDate(assign.getByLabel("Day"), today);
-    await assign.getByRole("button", { name: "Assign" }).click();
+    await assign.getByRole("button", { name: "Put on job" }).click();
     // the second one is the clash, and the toast says so
     await slow(
       note(page)
@@ -114,9 +121,11 @@ test("a call sheet keeps its shot list and people", async ({ page }) => {
   await expect(sheet.getByLabel("Call time")).toHaveValue("6:30 pm");
 });
 
-test("the sidebar lists the current group's pages as sub-items", async ({ page }) => {
+test("the sidebar opens a group's pages as a menu beside it", async ({ page }) => {
   await page.goto(`${PHOTOS}/studio/galleries`, { waitUntil: "networkidle" });
   const sub = page.getByRole("list", { name: "Galleries pages" });
+  await expect(sub).toBeHidden();
+  await page.getByRole("navigation", { name: "Studio sections" }).getByRole("link", { name: "Galleries" }).hover();
   for (const name of ["Visitors", "Watermarks", "Music"]) await expect(sub.getByRole("link", { name })).toBeVisible();
 });
 
@@ -186,6 +195,7 @@ test("someone asks to be taken out of a photograph, and the owner closes the req
     .getByRole("textbox", { name: /^Which photograph/ })
     .fill("The open house gallery, third row, a blue coat.");
   await form.getByLabel(/I agree that you keep this request/).check();
+  await form.getByLabel(/private event or in a private place/).check();
   await form.getByRole("button", { name: "Send the request" }).click();
   await expect(page.getByText(/temporary email address/)).toBeVisible();
   await form.getByRole("textbox", { name: /^Email/ }).fill(`pat-${uid}@gmail.com`);
@@ -202,9 +212,10 @@ test("someone asks to be taken out of a photograph, and the owner closes the req
 
 test("the owner invites a photographer, a throwaway address is refused, and the role can change", async ({ page }) => {
   await page.goto(`${PHOTOS}/studio/users`, { waitUntil: "networkidle" });
-  const invite = inForm(page, "Invite a team member");
+  await page.getByRole("button", { name: "Invite someone" }).click();
+  const invite = inForm(page, "Invite someone");
   await invite.getByLabel("Google email").fill("x@mailinator.com");
-  await invite.getByRole("button", { name: "Invite" }).click();
+  await invite.getByRole("button", { name: "Send invite" }).click();
   await slow(
     note(page)
       .filter({ hasText: /temporary email/ })
@@ -212,7 +223,7 @@ test("the owner invites a photographer, a throwaway address is refused, and the 
   ).toBeVisible();
   const mail = `helper-${uid}@gmail.com`;
   await invite.getByLabel("Google email").fill(mail);
-  await invite.getByRole("button", { name: "Invite" }).click();
+  await invite.getByRole("button", { name: "Send invite" }).click();
   await slow(note(page).filter({ hasText: "can now sign in with Google" }).first()).toBeVisible();
   const row = page.locator("li[data-member]", { hasText: mail });
   await expect(row).toContainText("Photographer");
@@ -224,10 +235,12 @@ test("the owner invites a photographer, a throwaway address is refused, and the 
 test("the print store lists WHCC-style lines, and the price list gains the new products", async ({ page }) => {
   await page.goto(`${PHOTOS}/prints`, { waitUntil: "networkidle" });
   for (const line of ["Photo prints", "Canvas gallery wraps", "Metal prints", "Albums"])
-    await expect(page.getByRole("heading", { name: line })).toBeVisible();
+    await expect(page.getByRole("button", { name: new RegExp(line) })).toBeVisible();
+  await page.getByRole("button", { name: /Metal prints/ }).click();
   await expect(page.getByText("Metal print 16 × 24 in")).toBeVisible();
   await page.goto(`${PHOTOS}/studio/orders`, { waitUntil: "networkidle" });
-  await expect(page.getByLabel("Name of Metal print 16 × 24 in")).toBeVisible();
+  await page.getByRole("button", { name: /^Metal print/ }).click();
+  await expect(page.getByRole("button", { name: "Edit Metal print 16 × 24 in" })).toBeVisible();
 });
 
 test("downloads offer full size, high, low, social and preview sizes", async ({ page }) => {
@@ -254,9 +267,11 @@ test("downloads offer full size, high, low, social and preview sizes", async ({ 
 
 test("the color theme switch changes the scheme, and Jump to colors its results by kind", async ({ page }) => {
   await page.goto(`${PHOTOS}/studio/overview`, { waitUntil: "networkidle" });
-  await page.getByRole("button", { name: "Dawn" }).click();
+  await page.getByRole("button", { name: /Color theme: Dark/ }).click();
   await expect(page.locator('[data-hm-scheme="dawn"]').first()).toBeAttached();
-  await page.getByRole("button", { name: "Dark" }).click();
+  await page.getByRole("button", { name: /Color theme: Dawn/ }).click();
+  await page.getByRole("button", { name: /Color theme: Dusk/ }).click();
+  await expect(page.locator('[data-hm-scheme="dark"]').first()).toBeAttached();
   await page.getByRole("button", { name: /Jump to/ }).click();
   const palette = page.getByRole("dialog", { name: "Jump to" });
   await expect(palette.locator(".hm-palette-option[data-kind='start']").first()).toBeVisible();
@@ -280,25 +295,6 @@ test("the booking questionnaire asks for a little more, and refuses a throwaway 
   await page.getByLabel(/I agree that my answers are stored/).check();
   await page.getByRole("button", { name: "Next", exact: true }).click();
   await expect(page.getByText(/temporary email address/)).toBeVisible();
-});
-
-test("a drone job: the weather decides, every item must be done before a go", async ({ page }) => {
-  await page.goto(`${PHOTOS}/studio/drone`, { waitUntil: "networkidle" });
-  await choose(page.getByLabel("Which job"), `Gear job A ${uid}`);
-  await page.waitForURL(/job=/);
-  await page.getByLabel("Wind (mph)").fill("24");
-  await expect(page.getByRole("status").filter({ hasText: "No-go" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Record: go" })).toBeDisabled();
-  await page.getByLabel("Wind (mph)").fill("7");
-  await page.getByLabel("Visibility (miles)").fill("10");
-  await expect(page.getByRole("status").filter({ hasText: "Within the limits." })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Record: go" })).toBeDisabled();
-  for (const box of await page.getByRole("list", { name: "Pre-flight checklist" }).getByRole("checkbox").all())
-    await box.check();
-  await page.getByRole("button", { name: "Record: go" }).click();
-  await slow(note(page).filter({ hasText: "Marked go" }).first()).toBeVisible();
-  await page.reload({ waitUntil: "networkidle" });
-  await expect(page.getByText("Recorded:")).toContainText("Go");
 });
 
 test("a webhook is refused for a private address, and added for a public one with its secret shown once", async ({

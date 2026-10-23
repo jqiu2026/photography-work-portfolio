@@ -104,3 +104,6 @@ Nothing below has been created or spent. Placeholders marked `TODO(owner): needs
 - 2026-10-18: Home revision 3 (Q104): about lines, timeline, two-stage galleries, tabletop formats, fixed top text, folded footer links, fixed ending styles, snappier motion.
 
 - 2026-10-19: Home revision 4 (Q105), American English (Q106), Holominimal slider fix (Q107).
+
+- 2026-10-23: Owner feedback round 4. Viewfinder box now starts in the middle, drifts, circles the subject and locks, always inside the frame, with clearer edges; Projects removed from the home; email and phone are buttons; Play/Pause is a labelled pill; images show a small copy first, decode off screen, fade in without blur; zoom keys in a key-cap panel; privacy opt-out narrowed to private settings; take-back window is an owner setting; theme switch is one morphing button with an animated change; drone checklist removed; codes and gift cards can be edited and deleted; many forms moved into dialogs; testimonials use a quote card; prints grouped inside every gallery shop. See Q147 to Q155.
+

@@ -27,11 +27,13 @@ const studioSetting = async (page: Page, tab: string) => {
 
 test("owner makes a gallery and sets its security and look", async ({ page }) => {
   await page.goto(`${PHOTOS}/studio/clients`, { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: "Add a client" }).click();
   await page.getByLabel("Name").fill(`Sec Client ${uid}`);
   await page.getByLabel("Email").fill(email);
   await page.getByRole("button", { name: "Add client" }).click();
   await slow(note(page).last()).toContainText("Client added");
   await page.goto(`${PHOTOS}/studio/shoots`, { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: "Add a job" }).click();
   await choose(page.getByLabel("Client"), `Sec Client ${uid}`);
   await page.getByLabel("Title").fill(`Sec job ${uid}`);
   await page.getByRole("button", { name: "Add job" }).click();

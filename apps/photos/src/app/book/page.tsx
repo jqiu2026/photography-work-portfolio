@@ -1,3 +1,4 @@
+import { MailIcon, PhoneIcon } from "@holominimal/ui";
 import { Button, CalendarIcon, ClockIcon } from "@holominimal/ui";
 import { BookingWizard } from "@/components/BookingWizard";
 import { PageHeader } from "@/components/PageHeader";
@@ -36,10 +37,19 @@ export default async function Book({ searchParams }: { searchParams: Promise<{ t
               </Link>
             </Button>
           </div>
-          <Text size="sm" tone="muted" style={{ marginTop: "var(--hm-space-4)" }}>
-            Prefer email or a call? <a href={`mailto:${person.bookingEmail}`}>{person.bookingEmail}</a>, or{" "}
-            <a href={person.phoneHref}>{person.phone}</a>
-          </Text>
+          <p className="book-reach">
+            <span>Prefer email or a call?</span>
+            <Button asChild variant="secondary" size="sm">
+              <a href={`mailto:${person.bookingEmail}`}>
+                <MailIcon /> {person.bookingEmail}
+              </a>
+            </Button>
+            <Button asChild variant="secondary" size="sm">
+              <a href={person.phoneHref}>
+                <PhoneIcon /> {person.phone}
+              </a>
+            </Button>
+          </p>
         </Container>
       </Section>
     </Shell>

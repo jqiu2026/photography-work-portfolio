@@ -40,6 +40,16 @@
   margin-top: var(--hm-space-7);
 }
 
+.book-reach {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--hm-space-3);
+  margin: var(--hm-space-5) 0 0;
+  font-size: var(--hm-text-sm);
+  color: var(--hm-text-muted, inherit);
+}
+
 .cat-tabs {
   margin-bottom: var(--hm-space-6);
   max-width: 100%;
@@ -414,4 +424,41 @@
 }
 .pr-grid small {
   color: var(--hm-muted);
+}
+
+/* a client's quote in a card */
+.qc-fig {
+  position: relative;
+  display: grid;
+  gap: var(--hm-space-3);
+  margin: 0;
+}
+.qc-mark {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 3.4rem;
+  line-height: 0.7;
+  height: 1.4rem;
+  color: var(--hm-accent, currentColor);
+  opacity: 0.8;
+}
+.qc-text {
+  margin: 0;
+  font-size: var(--hm-text-lg);
+  line-height: 1.5;
+}
+.qc-by {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--hm-space-3);
+  font-size: var(--hm-text-sm);
+}
+.qc-by > span:nth-child(2) {
+  display: grid;
+}
+.qc-by small {
+  color: var(--hm-muted);
+}
+.qc-meta {
+  margin-left: auto;
 }

@@ -19,7 +19,7 @@ import {
 } from "@/app/studio/actions";
 import "./studio.css";
 import { FormMessage } from "@/components/ui";
-import { Banner, Card, StudioHead, statusTone } from "./StudioFrame";
+import { Banner, Card, FormDialog, StudioHead, statusTone } from "./StudioFrame";
 import { studioSections } from "./sections";
 
 const JOB_STEPS = ["inquiry", "booked", "shot", "editing", "delivered", "paid"] as const;
@@ -99,6 +99,17 @@ export function StudioApp({ section, user, data }: { section: string; user: stri
     e.preventDefault();
     run(fn, after);
   };
+
+  const go = async (fn: () => Promise<unknown>, after?: () => void) => {
+    const r = (await fn()) as Result;
+    setNote(r);
+    if (r.ok) {
+      after?.();
+      router.refresh();
+    }
+    return r.ok;
+  };
+  const [adding, setAdding] = useState<"client" | "job" | null>(null);
 
   let body: ReactNode = null;
   if (section === "overview") {
@@ -231,7 +242,15 @@ export function StudioApp({ section, user, data }: { section: string; user: stri
   } else if (section === "clients") {
     body = (
       <div className="st-grid">
-        <Card title="Clients" id="st-c">
+        <Card
+          title="Clients"
+          id="st-c"
+          actions={
+            <Button size="sm" onClick={() => setAdding("client")}>
+              Add a client
+            </Button>
+          }
+        >
           {data.clients.length ? (
             <ul className="hm-data-list st-list">
               {data.clients.map((c) => (
@@ -247,32 +266,20 @@ export function StudioApp({ section, user, data }: { section: string; user: stri
             </Text>
           )}
         </Card>
-        <Card title="Add a client" id="st-ac">
-          <form
-            noValidate
-            className="st-form pm-stack"
-            onSubmit={submit(
-              () => addClientAction({ name: form.cname ?? "", email: form.cemail ?? "" }),
-              () => setForm({}),
-            )}
-          >
-            <Field label="Name">
-              <Input value={form.cname ?? ""} onChange={set("cname")} />
-            </Field>
-            <Field label="Email">
-              <Input type="email" value={form.cemail ?? ""} onChange={set("cemail")} />
-            </Field>
-            <Button type="submit" disabled={pending}>
-              Add client
-            </Button>
-          </form>
-        </Card>
       </div>
     );
   } else if (section === "shoots") {
     body = (
       <div className="st-grid">
-        <Card title="Jobs" id="st-s">
+        <Card
+          title="Jobs"
+          id="st-s"
+          actions={
+            <Button size="sm" disabled={!data.clients.length} onClick={() => setAdding("job")}>
+              Add a job
+            </Button>
+          }
+        >
           {data.jobs.length ? (
             <ul className="hm-data-list st-list st-list--tall">
               {data.jobs.map((j) => (
@@ -339,46 +346,6 @@ export function StudioApp({ section, user, data }: { section: string; user: stri
               No jobs yet.
             </Text>
           )}
-        </Card>
-        <Card title="New job" id="st-ns">
-          <form
-            className="st-form pm-stack"
-            onSubmit={submit(
-              () =>
-                addJobAction({
-                  clientId: form.client ?? data.clients[0]?.id ?? "",
-                  title: form.title ?? "",
-                  date: form.date,
-                  feeDollars: form.fee,
-                }),
-              () => setForm({}),
-            )}
-          >
-            <Field label="Client">
-              <Select
-                value={form.client ?? data.clients[0]?.id ?? ""}
-                onValueChange={(v) => set("client")({ target: { value: v } })}
-              >
-                {data.clients.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name}
-                  </option>
-                ))}
-              </Select>
-            </Field>
-            <Field label="Title">
-              <Input value={form.title ?? ""} onChange={set("title")} />
-            </Field>
-            <Field label="Date">
-              <DateField value={form.date ?? ""} onChange={set("date")} />
-            </Field>
-            <Field label="Fee (dollars)">
-              <Input inputMode="decimal" value={form.fee ?? ""} onChange={set("fee")} />
-            </Field>
-            <Button type="submit" disabled={pending || !data.clients.length}>
-              Add job
-            </Button>
-          </form>
         </Card>
       </div>
     );
@@ -472,6 +439,67 @@ export function StudioApp({ section, user, data }: { section: string; user: stri
       <StudioHead section={section} />
       <Banner note={note} />
       {body}
+      <FormDialog
+        open={adding === "client"}
+        onOpenChange={(o) => !o && setAdding((a) => (a === "client" ? null : a))}
+        title="Add a client"
+        submitLabel="Add client"
+        pending={pending}
+        onSubmit={() =>
+          go(
+            () => addClientAction({ name: form.cname ?? "", email: form.cemail ?? "" }),
+            () => setForm({}),
+          )
+        }
+      >
+        <Field label="Name">
+          <Input value={form.cname ?? ""} onChange={set("cname")} />
+        </Field>
+        <Field label="Email">
+          <Input type="email" value={form.cemail ?? ""} onChange={set("cemail")} />
+        </Field>
+      </FormDialog>
+      <FormDialog
+        open={adding === "job"}
+        onOpenChange={(o) => !o && setAdding((a) => (a === "job" ? null : a))}
+        title="Add a job"
+        submitLabel="Add job"
+        pending={pending}
+        onSubmit={() =>
+          go(
+            () =>
+              addJobAction({
+                clientId: form.client ?? data.clients[0]?.id ?? "",
+                title: form.title ?? "",
+                date: form.date,
+                feeDollars: form.fee,
+              }),
+            () => setForm({}),
+          )
+        }
+      >
+        <Field label="Client">
+          <Select
+            value={form.client ?? data.clients[0]?.id ?? ""}
+            onValueChange={(v) => set("client")({ target: { value: v } })}
+          >
+            {data.clients.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
+          </Select>
+        </Field>
+        <Field label="Title">
+          <Input value={form.title ?? ""} onChange={set("title")} />
+        </Field>
+        <Field label="Date">
+          <DateField value={form.date ?? ""} onChange={set("date")} />
+        </Field>
+        <Field label="Fee (dollars)">
+          <Input inputMode="decimal" value={form.fee ?? ""} onChange={set("fee")} />
+        </Field>
+      </FormDialog>
     </div>
   );
 }

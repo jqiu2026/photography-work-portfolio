@@ -15,11 +15,13 @@ let payLink = "";
 
 test("setup: a client and a job; tips, bank transfer and a card surcharge are switched on", async ({ page }) => {
   await page.goto(`${PHOTOS}/studio/clients`, { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: "Add a client" }).click();
   await page.getByLabel("Name").fill(`Billing Client ${uid}`);
   await page.getByLabel("Email").fill(email);
   await page.getByRole("button", { name: "Add client" }).click();
   await slow(note(page).last()).toContainText("Client added");
   await page.goto(`${PHOTOS}/studio/shoots`, { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: "Add a job" }).click();
   await choose(page.getByLabel("Client"), `Billing Client ${uid}`);
   await page.getByLabel("Title").fill(`Billing job ${uid}`);
   await page.getByLabel("Fee (dollars)").fill("900");
@@ -27,13 +29,15 @@ test("setup: a client and a job; tips, bank transfer and a card surcharge are sw
   await slow(page.getByRole("listitem").filter({ hasText: `Billing job ${uid}` })).toBeVisible();
 
   await page.goto(`${PHOTOS}/studio/billing`, { waitUntil: "networkidle" });
-  const opts = inForm(page, "Payment options");
+  await page.getByRole("button", { name: "Change" }).click();
+  const opts = inForm(page, "Tips, bank payment and surcharge");
   await opts.getByLabel("Offer a tip at payment").check();
   await opts.getByLabel(/Offer bank transfer/).check();
   await opts.getByLabel(/Add a credit card surcharge/).check();
   await opts.getByLabel(/Surcharge percent/).fill("2.5");
   await opts.getByRole("button", { name: "Save" }).click();
   await slow(note(page).last()).toContainText("Saved");
+  await page.getByRole("button", { name: "Change" }).click();
   await opts.getByLabel(/Surcharge percent/).fill("4");
   await opts.getByRole("button", { name: "Save" }).click();
   await slow(note(page).last()).toContainText("cannot exceed 3 percent");
@@ -43,6 +47,7 @@ test("a three-part plan is created, the first invoice is emailed with a pay link
   page,
 }) => {
   await page.goto(`${PHOTOS}/studio/billing`, { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: "New plan" }).click();
   const plan = inForm(page, "New payment plan");
   await pick(plan, /^Job/, `Billing job ${uid}`);
   await plan.getByLabel("Total (dollars)").fill("900");
@@ -120,6 +125,7 @@ test("recurring billing: due items are invoiced and emailed once, and the button
   page,
 }) => {
   await page.goto(`${PHOTOS}/studio/billing`, { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: "New recurring invoice" }).click();
   const rec = inForm(page, "New recurring invoice");
   await pick(rec, /^Job/, `Billing job ${uid}`);
   await rec.getByLabel("What is billed").fill(`Retainer ${uid}`);

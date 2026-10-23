@@ -1,5 +1,6 @@
 "use client";
 
+import { HelpIcon, Kbd, KbdGroup, Tooltip } from "@holominimal/ui";
 import { type ReactNode, useCallback, useEffect, useRef, useState } from "react";
 
 const MIN = 1;
@@ -147,21 +148,6 @@ export function ZoomStage({
       }}
     >
       <div className="pm-zoom-inner">{children}</div>
-      <p className="pm-zoom-hint" aria-label="Zoom controls">
-        <span>
-          <kbd>Scroll</kbd> or pinch to zoom
-        </span>
-        <span>
-          <kbd>Double-click</kbd> toggles
-        </span>
-        <span>
-          <kbd>+</kbd> <kbd>−</kbd> zoom
-        </span>
-        <span>
-          <kbd>0</kbd> reset
-        </span>
-        <span>Drag to move</span>
-      </p>
       <div className="pm-zoom-bar" role="group" aria-label="Zoom">
         <button
           type="button"
@@ -182,6 +168,51 @@ export function ZoomStage({
         >
           +
         </button>
+        <Tooltip
+          side="top"
+          align="end"
+          content={
+            <dl className="pm-zoom-hint">
+              <div>
+                <dt>
+                  <Kbd>Scroll</Kbd>
+                </dt>
+                <dd>Zoom</dd>
+              </div>
+              <div>
+                <dt>
+                  <KbdGroup>
+                    <Kbd>+</Kbd>
+                    <Kbd>−</Kbd>
+                  </KbdGroup>
+                </dt>
+                <dd>Zoom in, out</dd>
+              </div>
+              <div>
+                <dt>
+                  <Kbd>0</Kbd>
+                </dt>
+                <dd>Reset</dd>
+              </div>
+              <div>
+                <dt>
+                  <Kbd>Double-click</Kbd>
+                </dt>
+                <dd>Toggle</dd>
+              </div>
+              <div>
+                <dt>
+                  <Kbd>Drag</Kbd>
+                </dt>
+                <dd>Move</dd>
+              </div>
+            </dl>
+          }
+        >
+          <button type="button" className="pm-zoom-help" aria-label="Zoom shortcuts">
+            <HelpIcon />
+          </button>
+        </Tooltip>
       </div>
     </div>
   );

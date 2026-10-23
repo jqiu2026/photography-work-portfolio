@@ -32,32 +32,32 @@ test("owner creates a client, a code, a gift card and a quote; sends it; the ema
   page,
 }) => {
   await page.goto(`${PHOTOS}/studio/clients`, { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: "Add a client" }).click();
   await page.getByLabel("Name").first().fill(`Quote Client ${uid}`);
   await page.getByLabel("Email").first().fill(`quote-${uid}@example.com`);
-  await page
-    .getByRole("button", { name: /Add client|Add/ })
-    .first()
-    .click();
+  await page.getByRole("button", { name: "Add client", exact: true }).click();
   await slow(note(page).last()).toContainText("Client added");
 
-  await page.goto(`${PHOTOS}/studio/packages`, { waitUntil: "networkidle" });
-  await page.getByRole("form", { name: "New code" }).getByLabel("Code").fill(`SAVE10-${uid}`);
-  await page.getByRole("form", { name: "New code" }).getByLabel("Value").fill("10");
+  await page.goto(`${PHOTOS}/studio/codes`, { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: "New code" }).click();
+  await page.getByLabel("Code", { exact: true }).fill(`SAVE10-${uid}`);
+  await page.getByLabel("Value").fill("10");
   await page.getByRole("button", { name: "Create code" }).click();
   await slow(note(page).last()).toContainText("created");
-  await page
-    .getByRole("form", { name: "Gift card" })
-    .getByLabel(/Gift card amount/)
-    .fill("50");
+  await expect(page.locator("li[data-promo]").filter({ hasText: `save10-${uid}` })).toContainText("Active");
+  await page.getByRole("button", { name: "New gift card" }).click();
+  await page.getByLabel(/Gift card amount/).fill("50");
   await page.getByRole("button", { name: "Create gift card" }).click();
   await slow(note(page).last()).toContainText(/Gift card gift-[0-9a-f]+ created/);
 
-  const settings = page.getByRole("form", { name: "Deposit and tax" });
-  await settings.getByLabel("Tax rate (percent)").fill("8.875");
-  await settings.getByRole("button", { name: "Save" }).click();
+  await page.goto(`${PHOTOS}/studio/packages`, { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: "Change" }).click();
+  await page.getByLabel("Tax rate (percent)").fill("8.875");
+  await page.getByRole("button", { name: "Save", exact: true }).click();
   await slow(note(page).last()).toContainText("Saved");
 
   await page.goto(`${PHOTOS}/studio/quotes`, { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: "New quote" }).click();
   await choose(page.getByLabel(/^Client/), `Quote Client ${uid}`);
   await page.getByRole("textbox", { name: "Title" }).fill(`Spring shoot ${uid}`);
   await choose(page.getByLabel(/^Package/), "Standard ($400.00)");

@@ -1095,3 +1095,21 @@
     transition: none !important;
   }
 }
+
+/* quantity beside Add */
+.gx-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.gx-addqty {
+  width: 3.6rem;
+  min-height: 2.25rem;
+  padding: 0 0.4rem;
+  text-align: center;
+  border: 1px solid var(--hm-line-strong, currentColor);
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}

@@ -255,7 +255,7 @@ async function nextOrderNumber(db: Database, now: Date) {
  */
 export async function placeOrder(
   db: Database,
-  input: { galleryId: string; lines: CartLine[]; buyer: Buyer; ship?: ShipTo | null },
+  input: { galleryId: string; lines: CartLine[]; buyer: Buyer; ship?: ShipTo | null; code?: string | null },
   now = new Date(),
 ) {
   const name = input.buyer.name.trim();
@@ -314,14 +314,23 @@ export async function placeOrder(
   const subtotal = lines.reduce((n, r) => n + r.product.priceCents * r.qty, 0);
   if (shop.minOrderCents && subtotal < shop.minOrderCents)
     throw new StudioError(`The smallest order here is $${(shop.minOrderCents / 100).toFixed(2)}.`);
+  const discount = input.code?.trim() ? await codeDiscount(db, g.id, input.code, subtotal, now) : null;
   const shipping = shippingFor(printQty);
   const [job] = await db.select().from(s.studioJobs).where(eq(s.studioJobs.id, g.jobId));
   if (!job) throw new StudioError("This gallery has no job.");
 
-  const invoiceLines: s.InvoiceLine[] = lines.map((r) => ({
-    description: `${r.product.name}${r.qty > 1 ? ` × ${r.qty}` : ""}${r.mediaId ? " (photo)" : ""}`,
-    amountCents: r.product.priceCents * r.qty,
-  }));
+  // a code lowers the goods (not shipping); invoice lines cannot be negative, so it is shared across them by price
+  const off = discount?.cents ?? 0;
+  let left = off;
+  const invoiceLines: s.InvoiceLine[] = lines.map((r, i) => {
+    const full = r.product.priceCents * r.qty;
+    const cut = i === lines.length - 1 ? left : Math.min(left, Math.floor((off * full) / (subtotal || 1)));
+    left -= cut;
+    return {
+      description: `${r.product.name}${r.qty > 1 ? ` × ${r.qty}` : ""}${r.mediaId ? " (photo)" : ""}${cut ? ` (code ${discount?.code})` : ""}`,
+      amountCents: Math.max(1, full - cut),
+    };
+  });
   if (shipping) invoiceLines.push({ description: "Shipping (SAMPLE rate)", amountCents: shipping });
   const inv = await createInvoice(db, { jobId: job.id, lines: invoiceLines }, "shop", now);
   await db.update(s.studioInvoices).set({ kind: "shop", galleryId: null }).where(eq(s.studioInvoices.id, inv.id));
@@ -339,7 +348,7 @@ export async function placeOrder(
       ship: printQty && input.ship ? { ...input.ship } : null,
       subtotalCents: subtotal,
       shippingCents: shipping,
-      totalCents: subtotal + shipping,
+      totalCents: subtotal - off + shipping,
       tokenHash: hash,
     })
     .returning();
@@ -355,7 +364,29 @@ export async function placeOrder(
       unitCents: r.product.priceCents,
     })),
   );
+  if (discount)
+    await db
+      .update(s.studioPromoCodes)
+      .set({ uses: sql`${s.studioPromoCodes.uses} + 1` })
+      .where(eq(s.studioPromoCodes.id, discount.id));
   return { order, payToken, orderToken };
+}
+
+/** A code for a shop order: sitewide codes work in any gallery, a gallery's own code only in that gallery. */
+export async function codeDiscount(db: Database, galleryId: string, raw: string, subtotal: number, now = new Date()) {
+  const code = raw.trim().toLowerCase().replace(/\s+/g, "");
+  const [p] = await db.select().from(s.studioPromoCodes).where(eq(s.studioPromoCodes.code, code));
+  if (!p || !p.active) throw new StudioError("That code does not exist.");
+  if (p.galleryId && p.galleryId !== galleryId) throw new StudioError("That code is for a different gallery.");
+  if (p.expiresAt && p.expiresAt < now) throw new StudioError("That code has expired.");
+  if (p.maxUses !== null && p.uses >= p.maxUses) throw new StudioError("That code has been used up.");
+  if (subtotal < p.minSubtotalCents)
+    throw new StudioError(`That code needs an order of at least $${(p.minSubtotalCents / 100).toFixed(2)}.`);
+  const cents =
+    p.kind === "amount"
+      ? Math.min(p.amountOffCents ?? 0, subtotal - 1)
+      : Math.floor((subtotal * (p.percentOff ?? 0)) / 100);
+  return { id: p.id, code: p.code, cents: Math.max(0, Math.min(cents, subtotal - 1)) };
 }
 
 export async function orderByToken(db: Database, token: string) {

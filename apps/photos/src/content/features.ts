@@ -331,7 +331,7 @@ export const features: Feature[] = [
     group: "Run the business",
     title: "Drone job checklist (Part 107, weather go/no-go)",
     priority: "P3",
-    status: "live",
+    status: "soon",
   },
   {
     id: "F-101",

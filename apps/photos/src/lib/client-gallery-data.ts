@@ -10,6 +10,7 @@ import { eq } from "drizzle-orm";
 import type { GalleryAccess } from "@/lib/client-gallery";
 import { downloadsUnlocked, lockedMediaIds, unlockedAlbums, unlockedRules } from "@/lib/client-gallery";
 import { zipPlan } from "@/lib/downloads";
+import { ensurePrintCatalog } from "@/lib/print-catalog";
 
 export type ClientGalleryData = {
   /** client: the person the gallery was delivered to (proofing, selections). visitor: the public link (view and shop). */
@@ -106,6 +107,7 @@ export async function loadClientGallery(db: Database, a: GalleryAccess): Promise
   // photographs in locked albums that this browser has not opened never reach the page
   const contents = allContents.filter((c) => !shut.has(c.media.id));
   const shopCfg = readShop(a.gallery.shop);
+  if (shopCfg.enabled && shopCfg.sellPrints) await ensurePrintCatalog(db);
   const products = shopCfg.enabled
     ? await listProducts(db, { activeOnly: true, sheetId: shopCfg.priceSheetId || undefined })
     : [];

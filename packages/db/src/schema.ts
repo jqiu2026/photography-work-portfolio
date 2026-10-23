@@ -886,6 +886,8 @@ export const studioPromoCodes = pgTable(
     expiresAt: timestamp("expires_at", { withTimezone: true }),
     active: boolean("active").notNull().default(true),
     referrerClientId: uuid("referrer_client_id").references(() => studioClients.id),
+    /** null: works on any quote or gallery order. Set: only for that gallery's shop. */
+    galleryId: uuid("gallery_id").references(() => studioGalleries.id, { onDelete: "cascade" }),
     note: text("note"),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
@@ -1603,24 +1605,6 @@ export const studioPrivacyRequests = pgTable("studio_privacy_requests", {
   handledAt: timestamp("handled_at", { withTimezone: true }),
 });
 export type StudioPrivacyRequest = typeof studioPrivacyRequests.$inferSelect;
-
-/** One drone checklist per job: the pre-flight items, the weather that was entered, and the go or no-go that followed. */
-export const studioDroneChecklists = pgTable("studio_drone_checklists", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  jobId: uuid("job_id")
-    .notNull()
-    .unique()
-    .references(() => studioJobs.id, { onDelete: "cascade" }),
-  items: jsonb("items").$type<{ text: string; done: boolean }[]>().notNull().default([]),
-  weather: jsonb("weather")
-    .$type<{ windMph?: number; gustMph?: number; visibilityMi?: number; precipitation?: boolean; note?: string }>()
-    .notNull()
-    .default({}),
-  /** go | no-go | null (not decided yet) */
-  decision: text("decision"),
-  decidedAt: timestamp("decided_at", { withTimezone: true }),
-  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
-});
 
 /** Endpoints that get a signed message when something happens in the studio (an inquiry, a payment, a gallery going live). */
 export const studioWebhooks = pgTable("studio_webhooks", {

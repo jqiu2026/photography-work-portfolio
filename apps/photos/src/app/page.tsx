@@ -1,4 +1,4 @@
-import { ProtectedImage } from "@/components/media";
+import { MailIcon, PhoneIcon } from "@holominimal/ui";
 import { Button, EmptyState } from "@holominimal/ui";
 import { getSite } from "@jerryqiu/sites";
 import { person } from "@jerryqiu/sites/profile";
@@ -9,7 +9,6 @@ import { Shell } from "@/components/Shell";
 import { END, pickSlots } from "@/content/home-story";
 import { getPublicCatalog } from "@/lib/catalog";
 import { getPortfolio } from "@/lib/portfolio";
-import { getWork } from "@/lib/work";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -17,11 +16,8 @@ export const metadata: Metadata = {
   description: "Photography by Jerry Qiu: theater, events, street and aviation, shot mostly around New York.",
 };
 
-const fmt = (d: string) => new Date(d).toLocaleDateString("en-US", { month: "long", year: "numeric" });
-
 export default async function Home() {
   const { categories, photosIn, featured, photos } = await getPortfolio();
-  const projects = (await getWork()).filter((w) => w.cover).slice(0, 4);
   const { packages } = await getPublicCatalog();
   const slots = pickSlots(photos);
   const cats = categories
@@ -62,30 +58,6 @@ export default async function Home() {
 
       {/* the coda: the plain site, for skimming and direct navigation. The dock and the top bar arrive here (ChromeReveal). */}
       <div className="pub-end hj-coda" data-bar-end="">
-        {projects.length ? (
-          <section className="pub-section" aria-labelledby="projects">
-            <div className="pub-wrap">
-              <div className="pub-head-row">
-                <h2 id="projects">Projects</h2>
-                <Link href="/work" className="pub-link">
-                  All projects →
-                </Link>
-              </div>
-              <ul className="pub-projects">
-                {projects.map((w) => (
-                  <li key={w.slug}>
-                    <Link href={`/work/${w.slug}`}>
-                      {w.cover ? <ProtectedImage asset={w.cover} alt="" sizes="(min-width: 900px) 46vw, 92vw" /> : null}
-                      <strong>{w.title}</strong>
-                      <small>{[fmt(w.date), w.summary].filter(Boolean).join(" · ")}</small>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </section>
-        ) : null}
-
         <section id="finale" className="hj-end" aria-labelledby="hj-finale-title">
           <div className="hj-end-inner">
             <div className="hj-end-copy">
@@ -98,7 +70,17 @@ export default async function Home() {
               </h2>
               <p className="hj-end-lede">{END.lede}</p>
               <p className="hj-end-mail">
-                {END.email} <a href={`mailto:${person.bookingEmail}`}>{person.bookingEmail}</a>
+                <span>{END.email}</span>
+                <Button asChild variant="secondary" size="sm">
+                  <a href={`mailto:${person.bookingEmail}`}>
+                    <MailIcon /> {person.bookingEmail}
+                  </a>
+                </Button>
+                <Button asChild variant="secondary" size="sm">
+                  <a href={person.phoneHref}>
+                    <PhoneIcon /> {person.phone}
+                  </a>
+                </Button>
               </p>
             </div>
             <div className="hj-actions hj-end-cta">

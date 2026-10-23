@@ -1,7 +1,8 @@
 "use client";
 
-import { Segment, SegmentedControl, Theme } from "@holominimal/ui";
+import { IconButton, SunMoonIcon, Theme, Tooltip } from "@holominimal/ui";
 import { type ReactNode, createContext, useCallback, useContext, useEffect, useState } from "react";
+import { flushSync } from "react-dom";
 
 /** Holominimal's three color schemes: Dark (the default), Dawn (warm) and Dusk (dark brightened with the accent). */
 export type Scheme = "dark" | "dawn" | "dusk";
@@ -23,10 +24,14 @@ export function SchemeProvider({ children }: { children: ReactNode }) {
     } catch {}
   }, []);
   const setScheme = useCallback((s: Scheme) => {
-    setState(s);
     try {
       localStorage.setItem(KEY, s);
     } catch {}
+    // the whole page cross-fades to the new theme, unless the visitor asked for reduced motion
+    const doc = document as Document & { startViewTransition?: (cb: () => void) => unknown };
+    if (doc.startViewTransition && !matchMedia("(prefers-reduced-motion: reduce)").matches)
+      doc.startViewTransition(() => flushSync(() => setState(s)));
+    else setState(s);
   }, []);
   return (
     <Ctx value={{ scheme, setScheme }}>
@@ -37,19 +42,23 @@ export function SchemeProvider({ children }: { children: ReactNode }) {
 
 export const useScheme = () => useContext(Ctx);
 
-/** Dark, Dawn or Dusk. */
+const MODE = { dark: "moon", dawn: "dawn", dusk: "sun" } as const;
+const LABEL = { dark: "Dark", dawn: "Dawn", dusk: "Dusk" } as const;
+
+/** One button that cycles Dark, Dawn and Dusk; its icon morphs into each theme (Holominimal's sun and moon). */
 export function SchemeSwitch({ className }: { className?: string }) {
   const { scheme, setScheme } = useScheme();
+  const next = SCHEMES[(SCHEMES.indexOf(scheme) + 1) % SCHEMES.length] ?? "dark";
   return (
-    <SegmentedControl
-      aria-label="Color theme"
-      value={scheme}
-      onValueChange={(v) => setScheme(v as Scheme)}
-      className={className}
-    >
-      <Segment value="dark">Dark</Segment>
-      <Segment value="dawn">Dawn</Segment>
-      <Segment value="dusk">Dusk</Segment>
-    </SegmentedControl>
+    <Tooltip content={`Theme: ${LABEL[scheme]}. Switch to ${LABEL[next]}`}>
+      <IconButton
+        variant="secondary"
+        className={className}
+        aria-label={`Color theme: ${LABEL[scheme]}. Switch to ${LABEL[next]}`}
+        onClick={() => setScheme(next)}
+      >
+        <SunMoonIcon mode={MODE[scheme]} />
+      </IconButton>
+    </Tooltip>
   );
 }

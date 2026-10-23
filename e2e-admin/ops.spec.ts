@@ -25,11 +25,13 @@ test("the scheduled endpoint refuses callers without the secret and runs with it
 
 test("setup: a client with a job and an invoice due in two days (sent)", async ({ page }) => {
   await page.goto(`${PHOTOS}/studio/clients`, { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: "Add a client" }).click();
   await page.getByLabel("Name").fill(`Ops Client ${uid}`);
   await page.getByLabel("Email").fill(email);
   await page.getByRole("button", { name: "Add client" }).click();
   await slow(note(page).last()).toContainText("Client added");
   await page.goto(`${PHOTOS}/studio/shoots`, { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: "Add a job" }).click();
   await choose(page.getByLabel("Client"), `Ops Client ${uid}`);
   await page.getByLabel("Title").fill(`Ops job ${uid}`);
   await page.getByLabel("Fee (dollars)").fill("200");
@@ -37,6 +39,7 @@ test("setup: a client with a job and an invoice due in two days (sent)", async (
   await slow(page.getByRole("listitem").filter({ hasText: `Ops job ${uid}` })).toBeVisible();
   // one-line payment plan whose only due date is two days away gives an invoice with a due date
   await page.goto(`${PHOTOS}/studio/billing`, { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: "New plan" }).click();
   const plan = inForm(page, "New payment plan");
   await choose(plan.getByLabel(/^Job/), `Ops job ${uid}`);
   await plan.getByLabel("Total (dollars)").fill("200");
@@ -78,7 +81,8 @@ test("a rule can be switched off, and then nothing is sent for it", async ({ pag
 
 test("tasks: add, complete, delete", async ({ page }) => {
   await page.goto(`${PHOTOS}/studio/tasks`, { waitUntil: "networkidle" });
-  const f = inForm(page, "New task");
+  await page.getByRole("button", { name: "Add a task" }).click();
+  const f = inForm(page, "Add a task");
   await f.getByLabel("Task").fill(`Edit set ${uid}`);
   await pickDate(f.getByLabel("Due"), inDays(-1));
   await f.getByRole("button", { name: "Add task" }).click();

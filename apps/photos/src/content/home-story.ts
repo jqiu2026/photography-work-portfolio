@@ -211,7 +211,7 @@ export const END = {
       },
     ],
   },
-  email: "Prefer email?",
+  email: "Prefer email or a call?",
 } as const;
 
 export const HUD = {

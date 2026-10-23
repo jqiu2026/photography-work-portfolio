@@ -79,3 +79,22 @@ describe("taking back what you just added", () => {
     );
   });
 });
+
+describe("the take-back window is the owner's to set", () => {
+  const photographer = { role: "photographer", email: "window@gmail.com" };
+  it("defaults to five minutes and follows what the owner saves", async () => {
+    expect(await team.getUndoMinutes(db)).toBe(5);
+    await team.markCreated(db, "window@gmail.com", "gallery", "w-1");
+    const in30 = new Date(Date.now() + 30 * 60_000);
+    expect(await team.canRemove(db, photographer, "gallery", "w-1", in30)).toBe(false);
+    await team.setUndoMinutes(db, 60);
+    expect(await team.getUndoMinutes(db)).toBe(60);
+    expect(await team.canRemove(db, photographer, "gallery", "w-1", in30)).toBe(true);
+    await team.setUndoMinutes(db, 0);
+    expect(await team.canRemove(db, photographer, "gallery", "w-1")).toBe(false);
+    expect(await team.canRemove(db, { role: "owner", email: "o@jerryqiu.com" }, "gallery", "w-1")).toBe(true);
+    await expect(team.setUndoMinutes(db, -1)).rejects.toThrow("whole number");
+    await expect(team.setUndoMinutes(db, 5000)).rejects.toThrow("whole number");
+    await team.setUndoMinutes(db, 5);
+  });
+});

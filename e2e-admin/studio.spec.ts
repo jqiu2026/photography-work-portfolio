@@ -28,6 +28,7 @@ async function linkFrom(page: import("@playwright/test").Page, path: string) {
 
 test("owner creates a client, a job, a gallery with photographs, a contract and an invoice", async ({ page }) => {
   await page.goto(`${PHOTOS}/studio/clients`, { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: "Add a client" }).click();
   await page.getByLabel("Name").fill(`E2E Client ${uid}`);
   await page.getByRole("textbox", { name: "Email" }).fill("not-an-email");
   await page.getByRole("button", { name: "Add client" }).click();
@@ -36,6 +37,7 @@ test("owner creates a client, a job, a gallery with photographs, a contract and 
   await page.getByRole("button", { name: "Add client" }).click();
   await expectSlow(note(page).last()).toContainText("Client added");
   await expectSlow(page.getByText(email)).toBeVisible();
+  await page.getByRole("button", { name: "Add a client" }).click();
   await page.getByLabel("Name").fill("Dup");
   await page.getByRole("textbox", { name: "Email" }).fill(email);
   await page.getByRole("button", { name: "Add client" }).click();
@@ -46,6 +48,7 @@ test("owner creates a client, a job, a gallery with photographs, a contract and 
   ).toBeVisible();
 
   await page.goto(`${PHOTOS}/studio/shoots`, { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: "Add a job" }).click();
   await choose(page.getByLabel("Client"), `E2E Client ${uid}`);
   await page.getByLabel("Title").fill(`E2E job ${uid}`);
   await page.getByLabel("Fee (dollars)").fill("350");

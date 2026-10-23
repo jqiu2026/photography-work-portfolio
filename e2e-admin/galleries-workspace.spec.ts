@@ -24,11 +24,13 @@ const localStamp = (d: Date) => {
 
 test("create a gallery from a job, upload inside it, and find it in the list", async ({ page }) => {
   await page.goto(`${PHOTOS}/studio/clients`, { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: "Add a client" }).click();
   await page.getByLabel("Name").fill(`WS Client ${uid}`);
   await page.getByLabel("Email").fill(email);
   await page.getByRole("button", { name: "Add client" }).click();
   await slow(note(page).last()).toContainText("Client added");
   await page.goto(`${PHOTOS}/studio/shoots`, { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: "Add a job" }).click();
   await choose(page.getByLabel("Client"), `WS Client ${uid}`);
   await page.getByLabel("Title").fill(`WS job ${uid}`);
   await page.getByRole("button", { name: "Add job" }).click();

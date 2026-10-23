@@ -53,6 +53,7 @@ test("owner sets brand, a watermark, a track, rules and the branding of a galler
 
   // a track
   await page.goto(`${PHOTOS}/studio/music`, { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: "Add a track" }).click();
   await page.locator("input[type=file]").setInputFiles({ name: "quiet.wav", mimeType: "audio/wav", buffer: wav() });
   await page.getByLabel("Title (blank = the file name)").fill(`Quiet ${uid}`);
   await page.getByRole("button", { name: "Add track" }).click();
@@ -60,11 +61,13 @@ test("owner sets brand, a watermark, a track, rules and the branding of a galler
 
   // a client, a job, a gallery with one large photograph
   await page.goto(`${PHOTOS}/studio/clients`, { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: "Add a client" }).click();
   await page.getByLabel("Name").fill(`Set Client ${uid}`);
   await page.getByLabel("Email").fill(email);
   await page.getByRole("button", { name: "Add client" }).click();
   await slow(note(page).last()).toContainText("Client added");
   await page.goto(`${PHOTOS}/studio/shoots`, { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: "Add a job" }).click();
   await choose(page.getByLabel("Client"), `Set Client ${uid}`);
   await page.getByLabel("Title").fill(`Set job ${uid}`);
   await page.getByRole("button", { name: "Add job" }).click();
@@ -242,8 +245,10 @@ test("the music file plays with byte ranges for people who opened the gallery, a
 test("price sheets, reports, and the Free plan's limits (then back to Full Frame)", async ({ page }) => {
   // a second price sheet, picked by the gallery
   await page.goto(`${PHOTOS}/studio/orders`, { waitUntil: "networkidle" });
-  await page.getByLabel("New sheet name").fill(`Sheet ${uid}`);
-  await page.getByRole("form", { name: "New price sheet" }).getByRole("button", { name: "Add sheet" }).click();
+  await page.getByRole("button", { name: "New sheet" }).click();
+  const sheetForm = page.getByRole("form", { name: "New price sheet" });
+  await sheetForm.getByLabel("Name").fill(`Sheet ${uid}`);
+  await sheetForm.getByRole("button", { name: "Add sheet" }).click();
   await slow(note(page).filter({ hasText: "Price sheet created" }).first()).toBeVisible();
   await page.goto(`${url}#shop`, { waitUntil: "networkidle" });
   await choose(page.getByLabel("Price sheet"), `Sheet ${uid}`);

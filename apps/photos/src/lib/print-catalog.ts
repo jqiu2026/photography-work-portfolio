@@ -1,9 +1,8 @@
 import "server-only";
 import { type Database, schema } from "@jerryqiu/db";
 import * as shop from "@jerryqiu/db/gallery-shop";
-import * as st from "@jerryqiu/db/studio";
 import { PRINT_KINDS, type CatalogProduct, printProviderFromEnv, retailCents } from "@jerryqiu/prints";
-import { and, eq, inArray, isNull } from "drizzle-orm";
+import { and, eq, isNull } from "drizzle-orm";
 
 /** The lab's catalog: WHCC when its credentials exist, otherwise the labelled sample catalog shaped like WHCC's lines. */
 export async function labCatalog(): Promise<{ products: CatalogProduct[]; provider: "whcc" | "mock" | "none" }> {
@@ -62,63 +61,23 @@ export async function syncPrintCatalog(db: Database): Promise<number> {
   return missing.length;
 }
 
+let inFlight: Promise<number> | null = null;
+let lastSync = 0;
 /**
- * The portfolio print store: one hidden-from-lists gallery at /g/prints that holds every portfolio photograph and sells
- * prints only, so a visitor can order a print of anything in the portfolio with the same cart, payment and lab flow as
- * a client gallery. Made once; later calls add portfolio photographs that are not in it yet.
+ * Makes sure the lab's products are on the price sheet every gallery sells from, so prints are part of every gallery's
+ * shop. At most one sync runs at a time and it is repeated at most every ten minutes per server process.
  */
-export async function ensurePortfolioStore(db: Database): Promise<{ id: string; slug: string } | null> {
-  const portfolio = await db
-    .select({ mediaId: schema.galleryItems.mediaId })
-    .from(schema.galleryItems)
-    .innerJoin(schema.galleries, eq(schema.galleries.id, schema.galleryItems.galleryId))
-    .where(and(eq(schema.galleries.site, "photos"), isNull(schema.galleries.deletedAt)));
-  const wanted = [...new Set(portfolio.map((r) => r.mediaId).filter((x): x is string => Boolean(x)))];
-  let [g] = await db
-    .select()
-    .from(schema.studioGalleries)
-    .where(and(eq(schema.studioGalleries.slug, "prints"), isNull(schema.studioGalleries.deletedAt)));
-  if (!g) {
-    if (!wanted.length) return null;
-    const [existing] = await db
-      .select()
-      .from(schema.studioClients)
-      .where(eq(schema.studioClients.email, "store@portfolio.invalid"));
-    const client =
-      existing ?? (await st.createClient(db, { name: "Portfolio print store", email: "store@portfolio.invalid" }));
-    const job = await st.createJob(db, { clientId: client.id, title: "Portfolio print store", type: "other" });
-    const created = await st.createGallery(db, {
-      jobId: job.id,
-      title: "Print store",
-      passcode: `store-${crypto.randomUUID().slice(0, 12)}`,
-      mediaIds: wanted,
+export async function ensurePrintCatalog(db: Database): Promise<number> {
+  if (inFlight) return inFlight;
+  if (Date.now() - lastSync < 10 * 60 * 1000) return 0;
+  inFlight = syncPrintCatalog(db)
+    .catch((error) => {
+      console.error("[prints] the lab catalog could not be added to the price sheet", error);
+      return 0;
+    })
+    .finally(() => {
+      lastSync = Date.now();
+      inFlight = null;
     });
-    await shop.setLink(db, created.id, { slug: "prints", visibility: "link" });
-    await shop.saveShop(db, created.id, {
-      enabled: true,
-      listed: false,
-      sellDigital: false,
-      sellPrints: true,
-      proofing: false,
-      note: "Prints of photographs from the portfolio, made by a professional lab and shipped to you.",
-    });
-    await st.publishGallery(db, created.id);
-    [g] = await db.select().from(schema.studioGalleries).where(eq(schema.studioGalleries.id, created.id));
-  } else if (wanted.length) {
-    const have = new Set(
-      (
-        await db
-          .select({ m: schema.studioGalleryItems.mediaId })
-          .from(schema.studioGalleryItems)
-          .where(eq(schema.studioGalleryItems.galleryId, g.id))
-      ).map((r) => r.m),
-    );
-    const add = wanted.filter((m) => !have.has(m));
-    if (add.length)
-      await db
-        .insert(schema.studioGalleryItems)
-        .values(add.map((mediaId, i) => ({ galleryId: g!.id, mediaId, sort: 1000 + i })));
-  }
-  void inArray;
-  return g ? { id: g.id, slug: g.slug ?? "prints" } : null;
+  return inFlight;
 }

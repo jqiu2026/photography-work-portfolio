@@ -12,7 +12,7 @@ import {
   saveBillingSettingsAction,
   stopRecurringAction,
 } from "@/app/studio/billing-actions";
-import { Card, Frame, statusTone, useAct, useConfirm } from "./StudioFrame";
+import { Card, FormDialog, Frame, statusTone, useAct, useConfirm } from "./StudioFrame";
 
 const usd = (c: number) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(c / 100);
 
@@ -38,8 +38,11 @@ export type BillingData = {
 
 /** Payments and refunds, instalment plans, recurring invoices, and the tip, bank and surcharge settings. */
 export function BillingView({ user, data }: { user: string; data: BillingData }) {
-  const { pending, note, act, submit } = useAct();
+  const { pending, note, act, submit, go } = useAct();
   const [ask, confirmEl] = useConfirm();
+  const [planOpen, setPlanOpen] = useState(false);
+  const [recOpen, setRecOpen] = useState(false);
+  const [setOpen, setSetOpen] = useState(false);
   const [f, setF] = useState<Record<string, string>>({});
   const [flags, setFlags] = useState({
     tips: data.settings.tips,
@@ -130,7 +133,15 @@ export function BillingView({ user, data }: { user: string; data: BillingData })
           </Text>
         </Card>
 
-        <Card title="Payment plan" id="b-plan">
+        <Card
+          title="Payment plan"
+          actions={
+            <Button size="sm" onClick={() => setPlanOpen(true)}>
+              New plan
+            </Button>
+          }
+          id="b-plan"
+        >
           <ul className="hm-data-list st-list">
             {data.plans.map((p) => (
               <li className="hm-data-list-item" key={p.id}>
@@ -141,46 +152,17 @@ export function BillingView({ user, data }: { user: string; data: BillingData })
               </li>
             ))}
           </ul>
-          <form
-            noValidate
-            className="st-form"
-            aria-label="New payment plan"
-            onSubmit={submit(
-              () =>
-                createPlanAction({
-                  jobId: f.pj ?? "",
-                  total: f.pt ?? "",
-                  count: f.pc ?? "3",
-                  firstDue: f.pd ?? "",
-                  every: f.pe ?? "month",
-                }),
-              () => setF({}),
-            )}
-          >
-            {jobField("pj")}
-            <Field label="Total (dollars)">
-              <Input inputMode="decimal" value={f.pt ?? ""} onChange={set("pt")} />
-            </Field>
-            <Field label="Instalments">
-              <Input inputMode="numeric" value={f.pc ?? "3"} onChange={set("pc")} />
-            </Field>
-            <Field label="First due">
-              <DateField value={f.pd ?? ""} onChange={set("pd")} />
-            </Field>
-            <Field label="Every">
-              <Select value={f.pe ?? "month"} onValueChange={(v) => set("pe")({ target: { value: v } })}>
-                <option value="month">Month</option>
-                <option value="2weeks">Two weeks</option>
-                <option value="week">Week</option>
-              </Select>
-            </Field>
-            <Button type="submit" disabled={pending}>
-              Create plan
-            </Button>
-          </form>
         </Card>
 
-        <Card title="Recurring billing" id="b-rec">
+        <Card
+          title="Recurring billing"
+          actions={
+            <Button size="sm" onClick={() => setRecOpen(true)}>
+              New recurring invoice
+            </Button>
+          }
+          id="b-rec"
+        >
           <ul className="hm-data-list st-list">
             {data.recurring.map((r) => (
               <li className="hm-data-list-item" key={r.id}>
@@ -206,43 +188,7 @@ export function BillingView({ user, data }: { user: string; data: BillingData })
               </li>
             ))}
           </ul>
-          <form
-            noValidate
-            className="st-form"
-            aria-label="New recurring invoice"
-            onSubmit={submit(
-              () =>
-                createRecurringAction({
-                  jobId: f.rj ?? "",
-                  description: f.rd ?? "",
-                  amount: f.ra ?? "",
-                  months: f.rm ?? "1",
-                  startOn: f.rs ?? "",
-                  endsOn: f.re,
-                }),
-              () => setF({}),
-            )}
-          >
-            {jobField("rj")}
-            <Field label="What is billed">
-              <Input value={f.rd ?? ""} onChange={set("rd")} />
-            </Field>
-            <Field label="Amount (dollars)">
-              <Input inputMode="decimal" value={f.ra ?? ""} onChange={set("ra")} />
-            </Field>
-            <Field label="Every (months)">
-              <Input inputMode="numeric" value={f.rm ?? "1"} onChange={set("rm")} />
-            </Field>
-            <Field label="First invoice">
-              <DateField value={f.rs ?? ""} onChange={set("rs")} />
-            </Field>
-            <Field label="Last invoice (optional)">
-              <DateField value={f.re ?? ""} onChange={set("re")} />
-            </Field>
-            <Button type="submit" disabled={pending}>
-              Start
-            </Button>
-          </form>
+
           <Text size="sm" tone="muted">
             Recurring invoices and due instalments are sent automatically each day (a Vercel Cron job); this button runs
             them now.
@@ -252,53 +198,151 @@ export function BillingView({ user, data }: { user: string; data: BillingData })
           </Button>
         </Card>
 
-        <Card title="Tips, bank payment and surcharge" id="b-set">
-          <form
-            noValidate
-            className="st-form"
-            aria-label="Payment options"
-            onSubmit={submit(() =>
-              saveBillingSettingsAction({
-                tips: flags.tips,
-                percents: f.sp ?? data.settings.percents,
-                ach: flags.ach,
-                surcharge: flags.surcharge,
-                surchargePercent: f.ss ?? data.settings.surchargePercent,
-              }),
-            )}
-          >
-            <Checkbox
-              checked={flags.tips}
-              onChange={(e) => setFlags({ ...flags, tips: e.target.checked })}
-              label="Offer a tip at payment"
-            />
-            <Field label="Tip choices (percent, comma separated)">
-              <Input value={f.sp ?? data.settings.percents} onChange={set("sp")} />
-            </Field>
-            <Checkbox
-              checked={flags.ach}
-              onChange={(e) => setFlags({ ...flags, ach: e.target.checked })}
-              label="Offer bank transfer (ACH, needs it enabled in Stripe)"
-            />
-            <Checkbox
-              checked={flags.surcharge}
-              onChange={(e) => setFlags({ ...flags, surcharge: e.target.checked })}
-              label="Add a credit card surcharge (default off)"
-            />
-            <Field label="Surcharge percent (at most 3)">
-              <Input inputMode="decimal" value={f.ss ?? data.settings.surchargePercent} onChange={set("ss")} />
-            </Field>
-            <Text size="sm" tone="muted">
-              A surcharge is allowed on credit cards only (never debit), must be disclosed before the sale, is capped at
-              the lower of 3% or your actual cost, needs advance notice to the card networks, and is banned in some
-              states. Check the rules where you work before turning it on. Not legal advice.
-            </Text>
-            <Button type="submit" disabled={pending}>
-              Save
+        <Card
+          title="Tips, bank payment and surcharge"
+          id="b-set"
+          actions={
+            <Button size="sm" variant="secondary" onClick={() => setSetOpen(true)}>
+              Change
             </Button>
-          </form>
+          }
+        >
+          <dl className="st-roles">
+            <div>
+              <dt>Tips at payment</dt>
+              <dd>{flags.tips ? `On (${data.settings.percents}%)` : "Off"}</dd>
+            </div>
+            <div>
+              <dt>Bank transfer (ACH)</dt>
+              <dd>{flags.ach ? "On" : "Off"}</dd>
+            </div>
+            <div>
+              <dt>Card surcharge</dt>
+              <dd>{flags.surcharge ? `${data.settings.surchargePercent}%` : "Off"}</dd>
+            </div>
+          </dl>
         </Card>
       </div>
+      <FormDialog
+        open={planOpen}
+        onOpenChange={setPlanOpen}
+        title="New payment plan"
+        submitLabel="Create plan"
+        pending={pending}
+        onSubmit={() =>
+          go(
+            () =>
+              createPlanAction({
+                jobId: f.pj ?? "",
+                total: f.pt ?? "",
+                count: f.pc ?? "3",
+                firstDue: f.pd ?? "",
+                every: f.pe ?? "month",
+              }),
+            () => setF({}),
+          )
+        }
+      >
+        {jobField("pj")}
+        <Field label="Total (dollars)">
+          <Input inputMode="decimal" value={f.pt ?? ""} onChange={set("pt")} />
+        </Field>
+        <Field label="Instalments">
+          <Input inputMode="numeric" value={f.pc ?? "3"} onChange={set("pc")} />
+        </Field>
+        <Field label="First due">
+          <DateField value={f.pd ?? ""} onChange={set("pd")} />
+        </Field>
+        <Field label="Every">
+          <Select value={f.pe ?? "month"} onValueChange={(v) => set("pe")({ target: { value: v } })}>
+            <option value="month">Month</option>
+            <option value="2weeks">Two weeks</option>
+            <option value="week">Week</option>
+          </Select>
+        </Field>
+      </FormDialog>
+      <FormDialog
+        open={recOpen}
+        onOpenChange={setRecOpen}
+        title="New recurring invoice"
+        submitLabel="Start"
+        pending={pending}
+        onSubmit={() =>
+          go(
+            () =>
+              createRecurringAction({
+                jobId: f.rj ?? "",
+                description: f.rd ?? "",
+                amount: f.ra ?? "",
+                months: f.rm ?? "1",
+                startOn: f.rs ?? "",
+                endsOn: f.re,
+              }),
+            () => setF({}),
+          )
+        }
+      >
+        {jobField("rj")}
+        <Field label="What is billed">
+          <Input value={f.rd ?? ""} onChange={set("rd")} />
+        </Field>
+        <Field label="Amount (dollars)">
+          <Input inputMode="decimal" value={f.ra ?? ""} onChange={set("ra")} />
+        </Field>
+        <Field label="Every (months)">
+          <Input inputMode="numeric" value={f.rm ?? "1"} onChange={set("rm")} />
+        </Field>
+        <Field label="First invoice">
+          <DateField value={f.rs ?? ""} onChange={set("rs")} />
+        </Field>
+        <Field label="Last invoice (optional)">
+          <DateField value={f.re ?? ""} onChange={set("re")} />
+        </Field>
+      </FormDialog>
+      <FormDialog
+        open={setOpen}
+        onOpenChange={setSetOpen}
+        title="Tips, bank payment and surcharge"
+        pending={pending}
+        onSubmit={() =>
+          go(() =>
+            saveBillingSettingsAction({
+              tips: flags.tips,
+              percents: f.sp ?? data.settings.percents,
+              ach: flags.ach,
+              surcharge: flags.surcharge,
+              surchargePercent: f.ss ?? data.settings.surchargePercent,
+            }),
+          )
+        }
+      >
+        <Checkbox
+          checked={flags.tips}
+          onChange={(e) => setFlags({ ...flags, tips: e.target.checked })}
+          label="Offer a tip at payment"
+        />
+        <Field label="Tip choices (percent, comma separated)">
+          <Input value={f.sp ?? data.settings.percents} onChange={set("sp")} />
+        </Field>
+        <Checkbox
+          checked={flags.ach}
+          onChange={(e) => setFlags({ ...flags, ach: e.target.checked })}
+          label="Offer bank transfer (ACH, needs it enabled in Stripe)"
+        />
+        <Checkbox
+          checked={flags.surcharge}
+          onChange={(e) => setFlags({ ...flags, surcharge: e.target.checked })}
+          label="Add a credit card surcharge (default off)"
+        />
+        <Field label="Surcharge percent (at most 3)">
+          <Input inputMode="decimal" value={f.ss ?? data.settings.surchargePercent} onChange={set("ss")} />
+        </Field>
+        <Text size="sm" tone="muted">
+          A surcharge is allowed on credit cards only (never debit), must be disclosed before the sale, is capped at the
+          lower of 3% or your actual cost, needs advance notice to the card networks, and is banned in some states.
+          Check the rules where you work before turning it on. Not legal advice.
+        </Text>
+      </FormDialog>
     </Frame>
   );
 }

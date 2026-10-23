@@ -44,6 +44,9 @@ export type ProtectedImageProps = {
   refreshUrl?: string;
 };
 
+/** How many images have asked for tokens early on this page (the rest ask when they near the screen). */
+let prefetched = 0;
+
 const cls = (...c: (string | false | undefined)[]) => c.filter(Boolean).join(" ");
 
 /**
@@ -153,28 +156,44 @@ function BlobImage({
     [base, id, refreshUrl],
   );
 
+  // ask for the tokens as soon as the image mounts (one batched request for the whole page), so by the time the
+  // picture nears the screen the only thing left to wait for is the bytes
+  useEffect(() => {
+    if (!live.current && prefetched++ < 48) void requestTokens(id, refreshUrl);
+  }, [id, refreshUrl]);
+
   useEffect(() => {
     const el = box.current;
     if (!el) return;
-    let url: string | null = null;
+    const made: string[] = [];
     let cancelled = false;
     let started = false;
+    // decode off screen so the picture appears whole instead of painting in strips
+    const ready = async (u: string) => {
+      const probe = new Image();
+      probe.src = u;
+      try {
+        await probe.decode();
+      } catch {}
+      return u;
+    };
     const start = async () => {
       if (started) return;
       started = true;
-      const need = el.clientWidth * (window.devicePixelRatio || 1);
+      // always the full-quality copy for the size on screen: a step above what the screen needs, never a stand-in
+      const need = el.clientWidth * (window.devicePixelRatio || 1) * 1.25;
       const width = full ? WIDTHS[WIDTHS.length - 1] : (WIDTHS.find((w) => w >= need) ?? WIDTHS[WIDTHS.length - 1]);
       try {
         let u = await load(width);
         // a photograph smaller than the sharpest size has no such copy: step down to the biggest one it has
         for (const w of [...WIDTHS].reverse().filter((x) => x < width)) {
-          if (u || !full) break;
+          if (u) break;
           u = await load(w);
         }
         if (cancelled) return u && URL.revokeObjectURL(u);
         if (u) {
-          url = u;
-          setSrc(u);
+          made.push(u);
+          setSrc(await ready(u));
         } else setFailed(true);
       } catch {
         if (!cancelled) setFailed(true);
@@ -190,14 +209,14 @@ function BlobImage({
             void start();
           }
         },
-        { rootMargin: "300px" },
+        { rootMargin: "1200px 0px" },
       );
       io.observe(el);
     }
     return () => {
       cancelled = true;
       io?.disconnect();
-      if (url) URL.revokeObjectURL(url);
+      for (const u of made) URL.revokeObjectURL(u);
     };
   }, [load, priority, full]);
 

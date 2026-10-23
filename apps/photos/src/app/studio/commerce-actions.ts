@@ -6,7 +6,7 @@ import { sendTemplate } from "@jerryqiu/email";
 import { taxProviderFromEnv } from "@jerryqiu/payments/tax";
 import { getSite } from "@jerryqiu/sites";
 import { z } from "zod";
-import { studioMoney } from "@/lib/studio-run";
+import { created, mayRemove, studioMoney } from "@/lib/studio-run";
 
 const id = z.string().uuid();
 const dollars = (v: string | undefined, what: string) => {
@@ -127,14 +127,25 @@ export async function deleteAddOnAction(addOnId: string) {
   });
 }
 
+const scope = (v: string | undefined) => (v && id.safeParse(v).success ? v : null);
+const when = (v: string | undefined) => {
+  if (!v?.trim()) return null;
+  const d = new Date(`${v.trim()}T23:59:59`);
+  if (Number.isNaN(d.getTime())) throw new StudioError("Enter the last day as a date.");
+  return d;
+};
+
 export async function createPromoAction(input: {
   code: string;
   kind: string;
   value: string;
   maxUses?: string;
   minSubtotal?: string;
+  galleryId?: string;
+  expires?: string;
 }) {
-  return studioMoney(async ({ db }) => {
+  return studioMoney(async (ctx) => {
+    const { db } = ctx;
     const kind = input.kind === "amount" ? "amount" : "percent";
     const p = await com.createPromo(db, {
       code: input.code,
@@ -143,7 +154,10 @@ export async function createPromoAction(input: {
       amountOffCents: kind === "amount" ? dollars(input.value, "the amount off") : undefined,
       maxUses: input.maxUses?.trim() ? Number(input.maxUses) : null,
       minSubtotalCents: input.minSubtotal?.trim() ? dollars(input.minSubtotal, "the minimum") : 0,
+      galleryId: scope(input.galleryId),
+      expiresAt: when(input.expires),
     });
+    await created(ctx, "studio_promo", p.id);
     return {
       message: `Code ${p.code} created`,
       audit: {
@@ -165,6 +179,117 @@ export async function togglePromoAction(promoId: string, active: boolean) {
   });
 }
 
+export async function updatePromoAction(input: {
+  promoId: string;
+  kind: string;
+  value: string;
+  maxUses?: string;
+  minSubtotal?: string;
+  galleryId?: string;
+  expires?: string;
+  note?: string;
+}) {
+  return studioMoney(async ({ db }) => {
+    const p = id.safeParse(input.promoId);
+    if (!p.success) throw new StudioError("Unknown code.");
+    const kind = input.kind === "amount" ? "amount" : "percent";
+    const code = await com.updatePromo(db, p.data, {
+      kind,
+      percentOff: kind === "percent" ? Number(input.value) : undefined,
+      amountOffCents: kind === "amount" ? dollars(input.value, "the amount off") : undefined,
+      maxUses: input.maxUses?.trim() ? Number(input.maxUses) : null,
+      minSubtotalCents: input.minSubtotal?.trim() ? dollars(input.minSubtotal, "the minimum") : 0,
+      galleryId: scope(input.galleryId),
+      expiresAt: when(input.expires),
+      note: input.note,
+    });
+    return {
+      message: `Code ${code} updated`,
+      audit: {
+        action: "studio.promo.update",
+        entity: "studio_promo",
+        entityId: p.data,
+        summary: `Edited code ${code}`,
+      },
+    };
+  });
+}
+
+export async function deletePromoAction(promoId: string) {
+  return studioMoney(async (ctx) => {
+    const p = id.safeParse(promoId);
+    if (!p.success) throw new StudioError("Unknown code.");
+    await mayRemove(ctx, "studio_promo", p.data);
+    const code = await com.deletePromo(ctx.db, p.data);
+    return {
+      message: `Code ${code} deleted`,
+      audit: {
+        action: "studio.promo.delete",
+        entity: "studio_promo",
+        entityId: p.data,
+        summary: `Deleted code ${code}`,
+      },
+    };
+  });
+}
+
+export async function updateGiftCardAction(input: {
+  cardId: string;
+  recipient?: string;
+  email?: string;
+  expires?: string;
+  balance?: string;
+}) {
+  return studioMoney(async ({ db }) => {
+    const p = id.safeParse(input.cardId);
+    if (!p.success) throw new StudioError("Unknown gift card.");
+    const when = input.expires?.trim() ? new Date(`${input.expires.trim()}T23:59:59`) : null;
+    if (when && Number.isNaN(when.getTime())) throw new StudioError("Enter the expiry as a date.");
+    const code = await com.updateGiftCard(db, p.data, {
+      recipientName: input.recipient,
+      purchaserEmail: input.email,
+      expiresAt: when,
+      balanceCents: input.balance?.trim() ? dollars(input.balance, "the balance") : undefined,
+    });
+    return {
+      message: `Gift card ${code} updated`,
+      audit: {
+        action: "studio.giftcard.update",
+        entity: "studio_gift_card",
+        entityId: p.data,
+        summary: "Edited a gift card",
+      },
+    };
+  });
+}
+
+export async function setGiftCardStatusAction(cardId: string, active: boolean) {
+  return studioMoney(async ({ db }) => {
+    const p = id.safeParse(cardId);
+    if (!p.success) throw new StudioError("Unknown gift card.");
+    await com.setGiftCardStatus(db, p.data, active ? "active" : "void");
+    return { message: active ? "Gift card switched on" : "Gift card voided: it can no longer be spent" };
+  });
+}
+
+export async function deleteGiftCardAction(cardId: string) {
+  return studioMoney(async (ctx) => {
+    const p = id.safeParse(cardId);
+    if (!p.success) throw new StudioError("Unknown gift card.");
+    await mayRemove(ctx, "studio_gift_card", p.data);
+    const code = await com.deleteGiftCard(ctx.db, p.data);
+    return {
+      message: `Gift card ${code} deleted`,
+      audit: {
+        action: "studio.giftcard.delete",
+        entity: "studio_gift_card",
+        entityId: p.data,
+        summary: "Deleted a gift card",
+      },
+    };
+  });
+}
+
 export async function createReferralAction(clientId: string) {
   return studioMoney(async ({ db }) => {
     const p = id.safeParse(clientId);
@@ -183,14 +308,17 @@ export async function createReferralAction(clientId: string) {
 }
 
 export async function createGiftCardAction(input: { amount: string; email?: string; recipient?: string }) {
-  return studioMoney(async ({ db }) => {
+  return studioMoney(async (ctx) => {
+    const { db } = ctx;
     const g = await com.createGiftCard(db, {
       cents: dollars(input.amount, "the amount"),
       purchaserEmail: input.email,
       recipientName: input.recipient,
     });
+    await created(ctx, "studio_gift_card", g.id);
     return {
-      message: `Gift card ${g.code} created. Copy the code now.`,
+      message: `Gift card ${g.code} created`,
+      extra: { code: g.code },
       audit: {
         action: "studio.giftcard.create",
         entity: "studio_gift_card",

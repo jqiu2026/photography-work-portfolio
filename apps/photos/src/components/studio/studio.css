@@ -290,3 +290,129 @@
   padding: 0;
   margin-bottom: var(--hm-space-1);
 }
+
+/* a card whose header carries buttons (Invite, Add, Edit) at its right */
+.st-card__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--hm-space-3);
+}
+.st-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--hm-space-2);
+}
+/* forms inside dialogs */
+.st-modal-form {
+  margin-top: var(--hm-space-4);
+}
+.st-modal-form > :last-child {
+  grid-column: 1 / -1;
+}
+.st-pick {
+  display: grid;
+  gap: var(--hm-space-2);
+}
+.st-pick > button {
+  text-align: left;
+}
+
+/* the month calendar */
+.cal {
+  display: grid;
+  gap: 1px;
+}
+.cal-head,
+.cal-body {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 1px;
+}
+.cal-head span {
+  padding: 0.4rem 0.5rem;
+  font-size: var(--hm-text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--hm-muted);
+}
+.cal-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.2rem;
+  min-height: 5.6rem;
+  padding: 0.35rem 0.4rem;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  background: color-mix(in srgb, var(--hm-fg) 3%, transparent);
+  border: 1px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: background 0.15s var(--hm-ease-out), border-color 0.15s var(--hm-ease-out);
+}
+.cal-cell--empty {
+  background: none;
+  cursor: default;
+}
+button.cal-cell:hover {
+  background: color-mix(in srgb, var(--hm-fg) 8%, transparent);
+  border-color: var(--hm-line-strong, var(--hm-line));
+}
+.cal-cell b {
+  font-weight: 600;
+  font-size: var(--hm-text-sm);
+}
+.cal-cell[data-today] b {
+  display: inline-grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background: var(--hm-fg);
+  color: var(--hm-bg, #000);
+}
+.cal-cell[data-blocked] {
+  background: repeating-linear-gradient(
+    135deg,
+    transparent 0 6px,
+    color-mix(in srgb, var(--hm-fg) 7%, transparent) 6px 12px
+  );
+}
+.cal-cell small {
+  color: var(--hm-muted);
+  font-size: 0.7rem;
+}
+.cal-chip {
+  display: block;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background: color-mix(in srgb, #4c8dff 26%, transparent);
+}
+.cal-chip[data-kind="consult"] {
+  background: color-mix(in srgb, #3ddc84 26%, transparent);
+}
+.cal-chip[data-kind="block"] {
+  background: color-mix(in srgb, var(--hm-fg) 16%, transparent);
+}
+.cal-chip[data-hold] {
+  background: color-mix(in srgb, #f5a524 30%, transparent);
+}
+@media (max-width: 640px) {
+  .cal-cell {
+    min-height: 3.6rem;
+  }
+  .cal-chip {
+    font-size: 0;
+    height: 0.4rem;
+    padding: 0;
+  }
+}

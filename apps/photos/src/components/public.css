@@ -477,6 +477,7 @@
   padding-left: var(--hm-sidebar);
 }
 .pub[data-intro] .pub-foot {
+  padding-left: var(--hm-sidebar);
   margin-top: 0;
   padding-top: 0.5rem;
   padding-bottom: 1rem;

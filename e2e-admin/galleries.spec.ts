@@ -41,11 +41,13 @@ test("owner creates a client, a job and an empty gallery, then uploads photograp
 }) => {
   buffers = [await jpeg("#aa4433"), await jpeg("#33aa66"), await jpeg("#3344aa")];
   await page.goto(`${PHOTOS}/studio/clients`, { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: "Add a client" }).click();
   await page.getByLabel("Name").fill(`Gal Client ${uid}`);
   await page.getByLabel("Email").fill(email);
   await page.getByRole("button", { name: "Add client" }).click();
   await slow(note(page).last()).toContainText("Client added");
   await page.goto(`${PHOTOS}/studio/shoots`, { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: "Add a job" }).click();
   await choose(page.getByLabel("Client"), `Gal Client ${uid}`);
   await page.getByLabel("Title").fill(`Gal job ${uid}`);
   await page.getByRole("button", { name: "Add job" }).click();

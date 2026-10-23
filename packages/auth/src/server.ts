@@ -52,7 +52,9 @@ export function createAuthKit() {
   const cookieDomain = prod ? process.env.AUTH_COOKIE_DOMAIN || undefined : undefined;
 
   const nextAuth = NextAuth({
-    providers: [Google({ authorization: { params: { hd: domain, prompt: "select_account" } } })],
+    // no `hd` hint: it would hide personal Google accounts from the chooser, and invited helpers may use one. The domain is
+    // still checked on the server (policy.ts), so this only widens who can try, not who gets in.
+    providers: [Google({ authorization: { params: { prompt: "select_account" } } })],
     session: { strategy: "jwt", maxAge: 60 * 60 * 24 * 14 },
     pages: { signIn: "/sign-in", error: "/sign-in" },
     trustHost: true,

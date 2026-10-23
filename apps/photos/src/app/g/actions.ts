@@ -50,6 +50,7 @@ const cartSchema = z.object({
     .min(1)
     .max(60),
   buyer: z.object({ name: z.string().max(120), email: z.string().max(200) }),
+  code: z.string().max(40).optional(),
   ship: z
     .object({
       name: z.string().max(120),
@@ -82,6 +83,7 @@ export async function checkoutAction(input: unknown): Promise<GResult<{ url: str
       lines: p.data.lines,
       buyer: p.data.buyer,
       ship: p.data.ship ?? null,
+      code: p.data.code ?? null,
     });
     return { ok: true, url: `/client/pay/${r.payToken}` };
   } catch (e) {

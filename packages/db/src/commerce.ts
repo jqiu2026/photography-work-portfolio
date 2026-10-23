@@ -184,6 +184,8 @@ export async function createPromo(
     maxUses?: number | null;
     expiresAt?: Date | null;
     referrerClientId?: string | null;
+    /** A gallery's own code; leave out for a sitewide one. */
+    galleryId?: string | null;
     note?: string;
   },
 ) {
@@ -209,6 +211,7 @@ export async function createPromo(
       maxUses: p.maxUses ?? null,
       expiresAt: p.expiresAt ?? null,
       referrerClientId: p.referrerClientId ?? null,
+      galleryId: p.galleryId ?? null,
       note: p.note?.slice(0, 200) ?? null,
     })
     .returning();
@@ -241,6 +244,92 @@ export async function redeemPromo(db: Database, id: string): Promise<boolean> {
     )
     .returning({ id: s.studioPromoCodes.id });
   return rows.length > 0;
+}
+/** Changes what a code gives or how often it can be used; the code itself stays (clients may already hold it). */
+export async function updatePromo(
+  db: Database,
+  id: string,
+  p: {
+    kind: "percent" | "amount";
+    percentOff?: number;
+    amountOffCents?: number;
+    maxUses?: number | null;
+    minSubtotalCents?: number;
+    galleryId?: string | null;
+    expiresAt?: Date | null;
+    note?: string;
+  },
+) {
+  const [have] = await db.select().from(s.studioPromoCodes).where(eq(s.studioPromoCodes.id, id));
+  if (!have) throw new StudioError("That code is gone.");
+  if (p.kind === "amount") {
+    if (!Number.isInteger(p.amountOffCents) || (p.amountOffCents as number) <= 0)
+      throw new StudioError("Enter an amount off.");
+  } else if (!Number.isInteger(p.percentOff) || (p.percentOff as number) < 1 || (p.percentOff as number) > 100)
+    throw new StudioError("Enter a percentage between 1 and 100.");
+  if (p.maxUses != null && (!Number.isInteger(p.maxUses) || p.maxUses < Math.max(1, have.uses)))
+    throw new StudioError(`Max uses cannot be below the ${have.uses} already used.`);
+  await db
+    .update(s.studioPromoCodes)
+    .set({
+      kind: have.kind === "referral" ? "referral" : p.kind,
+      percentOff: p.kind === "amount" ? null : (p.percentOff as number),
+      amountOffCents: p.kind === "amount" ? (p.amountOffCents as number) : null,
+      maxUses: p.maxUses ?? null,
+      minSubtotalCents: p.minSubtotalCents ?? have.minSubtotalCents,
+      galleryId: p.galleryId === undefined ? have.galleryId : p.galleryId,
+      expiresAt: p.expiresAt === undefined ? have.expiresAt : p.expiresAt,
+      note: p.note === undefined ? have.note : p.note.slice(0, 200) || null,
+    })
+    .where(eq(s.studioPromoCodes.id, id));
+  return have.code;
+}
+/** Quotes keep the code as text, so deleting one never breaks a quote that already used it. */
+export async function deletePromo(db: Database, id: string) {
+  const rows = await db
+    .delete(s.studioPromoCodes)
+    .where(eq(s.studioPromoCodes.id, id))
+    .returning({ code: s.studioPromoCodes.code });
+  if (!rows.length) throw new StudioError("That code is gone.");
+  return rows[0].code;
+}
+export async function listGiftCards(db: Database) {
+  return db.select().from(s.studioGiftCards).orderBy(desc(s.studioGiftCards.createdAt));
+}
+/** Who it is for, the buyer's email, the expiry, and (logged in the ledger) the balance. */
+export async function updateGiftCard(
+  db: Database,
+  id: string,
+  p: { recipientName?: string; purchaserEmail?: string; expiresAt?: Date | null; balanceCents?: number },
+) {
+  const [card] = await db.select().from(s.studioGiftCards).where(eq(s.studioGiftCards.id, id));
+  if (!card) throw new StudioError("That gift card is gone.");
+  if (p.balanceCents !== undefined && (!Number.isInteger(p.balanceCents) || p.balanceCents < 0))
+    throw new StudioError("The balance cannot be negative.");
+  await db
+    .update(s.studioGiftCards)
+    .set({
+      recipientName: p.recipientName?.trim() || null,
+      purchaserEmail: p.purchaserEmail?.trim().toLowerCase() || null,
+      expiresAt: p.expiresAt ?? null,
+      ...(p.balanceCents === undefined ? {} : { balanceCents: p.balanceCents }),
+    })
+    .where(eq(s.studioGiftCards.id, id));
+  if (p.balanceCents !== undefined && p.balanceCents !== card.balanceCents)
+    await db
+      .insert(s.studioGiftLedger)
+      .values({ cardId: id, deltaCents: p.balanceCents - card.balanceCents, note: "Adjusted by the studio" });
+  return card.code;
+}
+export async function setGiftCardStatus(db: Database, id: string, status: "active" | "void") {
+  await db.update(s.studioGiftCards).set({ status }).where(eq(s.studioGiftCards.id, id));
+}
+export async function deleteGiftCard(db: Database, id: string) {
+  const [card] = await db.select().from(s.studioGiftCards).where(eq(s.studioGiftCards.id, id));
+  if (!card) throw new StudioError("That gift card is gone.");
+  await db.delete(s.studioGiftLedger).where(eq(s.studioGiftLedger.cardId, id));
+  await db.delete(s.studioGiftCards).where(eq(s.studioGiftCards.id, id));
+  return card.code;
 }
 /** A referral code for a client: a percent code that remembers who referred. */
 export async function createReferralCode(db: Database, clientId: string, percentOff = 10) {

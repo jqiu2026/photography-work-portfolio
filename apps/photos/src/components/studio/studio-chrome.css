@@ -140,70 +140,85 @@
 }
 
 /*
- * Sidebar sub-items open when the pointer is on an entry (and stay open under the current page's entry), and close
- * again when it leaves. The height and opacity animate; the library's own entrance animation is switched off here so
- * it cannot fight the transition. There is padding, not margin, between an entry and its pages, so the pointer never
- * crosses a gap that would close them.
- */
-.st-root .hm-dock-sub {
-  animation: none;
-  max-height: 0;
-  opacity: 0;
-  overflow: hidden;
-  margin: 0 0 0 0.1rem;
-  padding-top: 0;
-  padding-bottom: 0;
-  pointer-events: none;
-  transition: max-height 0.38s var(--hm-ease-glide), opacity 0.26s var(--hm-ease-out), padding 0.38s
-    var(--hm-ease-glide);
-}
-.st-root .hm-dock-entry:is(:hover, :focus-within) > .hm-dock-sub,
-.st-root .hm-dock-entry:has(> .hm-dock-item[aria-current="page"]) > .hm-dock-sub {
-  max-height: 14rem;
-  opacity: 1;
-  padding-top: 0.3rem;
-  padding-bottom: 0.6rem;
-  pointer-events: auto;
-}
-.st-root .hm-dock-sub-item {
-  animation: none;
-  opacity: 0;
-  translate: -0.5rem 0;
-  transition: opacity 0.28s var(--hm-ease-out), translate 0.34s var(--hm-ease-glide), color var(--hm-dur-fast)
-    var(--hm-ease-out), transform var(--hm-dur-base) var(--hm-ease-glide);
-}
-.st-root .hm-dock-entry:is(:hover, :focus-within) .hm-dock-sub-item,
-.st-root .hm-dock-entry:has(> .hm-dock-item[aria-current="page"]) .hm-dock-sub-item {
-  opacity: 1;
-  translate: 0 0;
-}
-.st-root .hm-dock-entry:hover .hm-dock-sub-item:nth-child(2) {
-  transition-delay: 0.04s, 0.04s, 0s, 0s;
-}
-.st-root .hm-dock-entry:hover .hm-dock-sub-item:nth-child(3) {
-  transition-delay: 0.08s, 0.08s, 0s, 0s;
-}
-.st-root .hm-dock-entry:hover .hm-dock-sub-item:nth-child(n + 4) {
-  transition-delay: 0.12s, 0.12s, 0s, 0s;
-}
-@media (prefers-reduced-motion: reduce) {
-  .st-root .hm-dock-sub,
-  .st-root .hm-dock-sub-item {
-    transition: none;
-  }
-}
-
-/*
- * The sidebar is anchored at the top, at the height where its entries sat when it was centered (half the screen minus
- * half the closed list; --st-n is the number of entries). Opening a group's sub-items then pushes only what is BELOW the
- * pointed entry down: before, the whole centered list re-centered and everything moved up and down together.
+ * A plain, steady sidebar: every group is one line at one size, nothing swells or moves when the pointer passes, and
+ * a group's pages open as a menu beside it (also as tabs at the top of the page). The list is anchored at the top, at the
+ * height where it would sit if centered, so it never shifts between pages.
  */
 .st-root .hm-dock {
   justify-content: flex-start;
   padding-top: calc(50dvh - var(--st-n, 7) * clamp(2.6rem, 6.4vh, 3.4rem) / 2);
 }
+.st-root .hm-dock-item {
+  transform: none;
+  will-change: auto;
+  font-size: 0.95rem;
+  color: var(--hm-dim);
+  transition: color var(--hm-dur-fast) var(--hm-ease-out);
+}
+.st-root .hm-dock-item:hover {
+  color: var(--hm-fg);
+}
+.st-root .hm-dock-item[aria-current="page"] {
+  color: var(--hm-fg);
+  font-weight: 600;
+}
+/* a group's pages open as a small menu beside the entry (on hover, focus or tap), so the list itself never moves */
+.st-root .hm-dock-entry {
+  position: relative;
+}
+.st-root .hm-dock-sub {
+  animation: none;
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  z-index: 5;
+  min-width: 11rem;
+  margin: 0;
+  padding: 0.4rem;
+  border: 1px solid var(--hm-line-overlay, var(--hm-line));
+  border-radius: 12px;
+  background: var(--hm-surface-overlay, var(--hm-bg));
+  box-shadow: 0 12px 32px rgb(0 0 0 / 0.35);
+  opacity: 0;
+  visibility: hidden;
+  translate: -0.4rem -50%;
+  pointer-events: none;
+  transition: opacity 0.14s var(--hm-ease-out), translate 0.18s var(--hm-ease-glide), visibility 0s 0.14s;
+}
+.st-root .hm-dock-entry:is(:hover, :focus-within) > .hm-dock-sub {
+  opacity: 1;
+  visibility: visible;
+  translate: 0 -50%;
+  pointer-events: auto;
+  transition-delay: 0s;
+}
+.st-root .hm-dock-sub-item {
+  animation: none;
+  padding: 0.45rem 0.7rem;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  white-space: nowrap;
+  transition: color var(--hm-dur-fast) var(--hm-ease-out), background var(--hm-dur-fast) var(--hm-ease-out);
+}
+.st-root .hm-dock-sub-item:hover {
+  color: var(--hm-fg);
+  background: color-mix(in srgb, var(--hm-fg) 9%, transparent);
+}
+.st-root .hm-dock-sub-item[aria-current="page"] {
+  color: var(--hm-fg);
+  font-weight: 600;
+  background: color-mix(in srgb, var(--hm-fg) 13%, transparent);
+}
 @media (max-width: 860px) {
   .st-root .hm-dock {
     padding-top: 0;
+  }
+  .st-root .hm-dock-sub {
+    top: 100%;
+    left: 0;
+    translate: 0 0;
+  }
+  .st-root .hm-dock-entry:is(:hover, :focus-within) > .hm-dock-sub {
+    translate: 0 0;
   }
 }
