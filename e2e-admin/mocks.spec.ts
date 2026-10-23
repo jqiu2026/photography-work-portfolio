@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { note } from "./ui";
 
 /**
  * Clickable local mocks (Phase 2.5): score store and flight map (the studio and client portal are real as of Phase 3: studio.spec.ts). Everything is labelled MOCK, runs
@@ -26,7 +27,7 @@ test.describe("score store mock", () => {
     await page.getByRole("link", { name: /Window Music/ }).click();
     await expect(page.getByRole("img", { name: /Preview page 1 of 14, watermarked/ })).toBeVisible();
     await page.getByRole("button", { name: "Add score to cart" }).click();
-    await expect(page.getByRole("status")).toContainText("Added to your cart");
+    await expect(note(page).last()).toContainText("Added to your cart");
     await page.getByRole("link", { name: "View cart" }).click();
     await expect(page.getByText("$15.00").first()).toBeVisible();
     await page.getByRole("link", { name: "Checkout" }).click();

@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { choose, pickDate } from "./ui";
+import { choose, pickDate, note } from "./ui";
 import sharp from "sharp";
 import { enterGallery, newGallery, publishOpenGallery, uploadPhotos } from "./gallery-helpers";
 import { signStripePayload } from "../packages/payments/src/index";
@@ -21,7 +21,7 @@ test.describe.configure({ mode: "serial" });
 const expectSlow = expect.configure({ timeout: 25_000 });
 
 async function linkFrom(page: import("@playwright/test").Page, path: string) {
-  const code = page.locator("code").first();
+  const code = page.locator(".hm-toast-description").last();
   await expectSlow(code).toContainText(path);
   return (await code.textContent())!.replace(/^https?:\/\/[^/]+/, "");
 }
@@ -29,19 +29,18 @@ async function linkFrom(page: import("@playwright/test").Page, path: string) {
 test("owner creates a client, a job, a gallery with photographs, a contract and an invoice", async ({ page }) => {
   await page.goto(`${PHOTOS}/studio/clients`, { waitUntil: "networkidle" });
   await page.getByLabel("Name").fill(`E2E Client ${uid}`);
-  await page.getByLabel("Email").fill("not-an-email");
+  await page.getByRole("textbox", { name: "Email" }).fill("not-an-email");
   await page.getByRole("button", { name: "Add client" }).click();
-  await expectSlow(page.locator("[role=alert]").filter({ hasText: /email/i }).first()).toBeVisible();
-  await page.getByLabel("Email").fill(email);
+  await expectSlow(note(page).filter({ hasText: /email/i }).first()).toBeVisible();
+  await page.getByRole("textbox", { name: "Email" }).fill(email);
   await page.getByRole("button", { name: "Add client" }).click();
-  await expectSlow(page.getByRole("status")).toContainText("Client added");
+  await expectSlow(note(page).last()).toContainText("Client added");
   await expectSlow(page.getByText(email)).toBeVisible();
   await page.getByLabel("Name").fill("Dup");
-  await page.getByLabel("Email").fill(email);
+  await page.getByRole("textbox", { name: "Email" }).fill(email);
   await page.getByRole("button", { name: "Add client" }).click();
   await expectSlow(
-    page
-      .locator("[role=alert]")
+    note(page)
       .filter({ hasText: /already exists/ })
       .first(),
   ).toBeVisible();
@@ -56,9 +55,9 @@ test("owner creates a client, a job, a gallery with photographs, a contract and 
   await row.getByRole("button", { name: "Advance" }).click();
   await expectSlow(row.getByRole("progressbar", { name: "Progress: booked" })).toBeVisible();
   await row.getByRole("button", { name: "New contract" }).click();
-  await expectSlow(page.getByRole("status")).toContainText("Contract created");
+  await expectSlow(note(page).last()).toContainText("Contract created");
   await row.getByRole("button", { name: "New invoice" }).click();
-  await expectSlow(page.getByRole("status")).toContainText(/Invoice \d{4}-\d{4} created/);
+  await expectSlow(note(page).last()).toContainText(/Invoice \d{4}-\d{4} created/);
 
   const buffer = await sharp({ create: { width: 1600, height: 1000, channels: 3, background: "#7a3ea5" } })
     .jpeg()
@@ -119,7 +118,7 @@ test("contract: one-time link, name and agreement required, signed once", async 
   await page.getByLabel(/I agree to these terms/).check();
   await page.getByLabel(/sign, and to keep records/).check();
   await page.getByRole("button", { name: "Sign contract" }).click();
-  await expectSlow(page.getByRole("status")).toContainText("Signed");
+  await expectSlow(note(page).last()).toContainText("Signed");
   await page.reload({ waitUntil: "networkidle" });
   await expectSlow(page.getByText(/signed by E2E Client/)).toBeVisible();
   await page.goto(`${PHOTOS}/client/sign/not-a-real-token`);
@@ -140,7 +139,7 @@ test("invoice: payment link, declined then successful mock card, then marked pai
   await expectSlow(page.locator("p[role=alert]")).toContainText("declined");
   await page.getByLabel("Card number").fill("4242 4242 4242 4242");
   await page.getByRole("button", { name: /^Pay/ }).click();
-  await expectSlow(page.getByRole("status")).toContainText("Receipt rcpt_mock_");
+  await expectSlow(note(page).last()).toContainText("Receipt rcpt_mock_");
   await page.goto(`${PHOTOS}${link}`, { waitUntil: "networkidle" });
   await expectSlow(page.getByText(/is paid/)).toBeVisible();
   await page.goto(`${PHOTOS}/studio/invoices`, { waitUntil: "networkidle" });
@@ -161,7 +160,7 @@ test("the Stripe webhook: bad signatures refused, a signed event pays the invoic
   await page.goto(`${PHOTOS}/studio/shoots`, { waitUntil: "networkidle" });
   const job = page.getByRole("listitem").filter({ hasText: `E2E job ${uid}` });
   await job.getByRole("button", { name: "New invoice" }).click();
-  await expectSlow(page.getByRole("status")).toContainText(/Invoice \d{4}-\d{4} created/);
+  await expectSlow(note(page).last()).toContainText(/Invoice \d{4}-\d{4} created/);
   await page.goto(`${PHOTOS}/studio/invoices`, { waitUntil: "networkidle" });
   const open = page.locator("li[data-invoice-id]").filter({ hasText: /draft/ }).first();
   const invoiceId = await open.getAttribute("data-invoice-id");
@@ -198,21 +197,30 @@ test("an inquiry becomes a scored lead, the visitor and the owner get email (lab
 }) => {
   const who = `Lead ${uid}`;
   await page.goto(`${PHOTOS}/book`, { waitUntil: "networkidle" });
-  await page.getByRole("link", { name: /Performances/ }).click();
-  await expect(page).toHaveURL(/\/book\/performance$/);
-  await page.getByLabel("Your name").fill(who);
-  await page.getByRole("textbox", { name: "Email", exact: true }).fill(`lead-${uid}@example.com`);
-  await pickDate(page.getByLabel("Date (if you have one)"), "2027-03-01");
-  await page.getByLabel("Where").fill("Brooklyn");
+  // the questionnaire: one question at a time
+  await page.getByRole("radio", { name: /Performances/ }).click();
   await page.getByLabel("Production or ensemble").fill("Spring concert");
+  await page.getByLabel("Where will it be?").fill("Brooklyn");
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await pickDate(page.getByLabel("Date (if you have one)"), "2027-03-01");
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await page.getByRole("button", { name: "Skip", exact: true }).click();
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await expect(page.getByText("Tell me a little about the shoot.")).toBeVisible();
   await page
-    .getByLabel("Tell me about it")
+    .getByLabel(/Which production or ensemble/)
     .fill("A spring concert with about 120 people; I'd like coverage and a gallery.");
-  await page.getByRole("button", { name: "Send inquiry" }).click();
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await page.getByRole("textbox", { name: /^Your name/ }).fill(who);
+  await page.getByRole("textbox", { name: /^Email/ }).fill(`lead-${uid}@example.com`);
+  await page.getByRole("button", { name: "Next", exact: true }).click();
   await expect(page.getByText("Please tick the box")).toBeVisible();
-  await page.getByLabel(/I agree that my message is stored/).check();
-  await page.getByRole("button", { name: "Send inquiry" }).click();
-  await expectSlow(page.getByRole("status")).toContainText("Thanks, I got your message");
+  await page.getByLabel(/I agree that my answers are stored/).check();
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Look right?" })).toBeVisible();
+  await expect(page.getByText("Spring concert").first()).toBeVisible();
+  await page.getByRole("button", { name: "Send it to Jerry" }).click();
+  await expectSlow(page.getByText("Thanks, I got your story.")).toBeVisible();
 
   await page.goto(`${PHOTOS}/studio/bookings`, { waitUntil: "networkidle" });
   const lead = page.locator("li[data-lead-id]").filter({ hasText: who });
@@ -231,5 +239,5 @@ test("an inquiry becomes a scored lead, the visitor and the owner get email (lab
     .filter({ hasText: who })
     .getByRole("button", { name: "Convert to client" })
     .click();
-  await expectSlow(page.getByRole("status")).toContainText(/client/i);
+  await expectSlow(note(page).last()).toContainText(/client/i);
 });

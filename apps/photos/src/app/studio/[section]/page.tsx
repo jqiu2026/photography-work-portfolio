@@ -25,6 +25,8 @@ import {
   WatermarksView,
 } from "@/components/studio/AdminViews";
 import { ReportsView } from "@/components/studio/ReportsView";
+import { CallSheetsView, ExpensesView, GearView, TestimonialsView } from "@/components/studio/BusinessViews";
+import * as bizDb from "@jerryqiu/db/business";
 import * as brandDb from "@jerryqiu/db/brand";
 import * as extras from "@jerryqiu/db/gallery-extras";
 import * as planDb from "@jerryqiu/db/plan";
@@ -48,7 +50,7 @@ export const metadata = { title: "Studio", robots: { index: false, follow: false
 export default async function StudioSection({
   params,
   searchParams,
-}: { params: Promise<{ section: string }>; searchParams: Promise<{ tab?: string; days?: string }> }) {
+}: { params: Promise<{ section: string }>; searchParams: Promise<{ tab?: string; days?: string; job?: string }> }) {
   const { section } = await params;
   const q = await searchParams;
   if (!studioSections.some((s) => s.id === section)) notFound();
@@ -195,6 +197,129 @@ export default async function StudioSection({
               taxLabel: settings.taxLabel,
               taxIsSample: settings.taxIsSample,
             },
+          }}
+        />
+      </Shell>
+    );
+  }
+  if (section === "expenses") {
+    const year = new Date().getFullYear();
+    const rows = await bizDb.listExpenses(db, { from: `${year}-01-01`, to: `${year}-12-31` });
+    const sum = bizDb.summarizeExpenses(rows.map((r) => r.expense));
+    const jobRows = await st.listJobs(db);
+    return (
+      <Shell>
+        <ExpensesView
+          user={user.name ?? user.email ?? "owner"}
+          data={{
+            year,
+            csv: bizDb.expensesCsv(rows),
+            totalCents: sum.totalCents,
+            miles: sum.miles,
+            byCategory: sum.byCategory,
+            categories: [...bizDb.EXPENSE_CATEGORIES],
+            jobs: jobRows.map((r) => ({ id: r.job.id, title: r.job.title })),
+            mileageRate: bizDb.DEFAULT_MILEAGE_CENTS,
+            rows: rows.map(({ expense: e, jobTitle }) => ({
+              id: e.id,
+              spentOn: e.spentOn,
+              kind: e.kind,
+              category: e.category,
+              description: e.description,
+              vendor: e.vendor,
+              amountCents: e.amountCents,
+              miles: e.tenthMiles != null ? e.tenthMiles / 10 : null,
+              jobTitle,
+            })),
+          }}
+        />
+      </Shell>
+    );
+  }
+  if (section === "testimonials") {
+    const items = await bizDb.listTestimonials(db);
+    return (
+      <Shell>
+        <TestimonialsView
+          user={user.name ?? user.email ?? "owner"}
+          data={{
+            items: items.map((t) => ({
+              id: t.id,
+              displayName: t.displayName,
+              role: t.role,
+              quote: t.quote,
+              consentAt: t.consentAt?.toISOString() ?? null,
+              consentNote: t.consentNote,
+              published: Boolean(t.publishedAt),
+            })),
+          }}
+        />
+      </Shell>
+    );
+  }
+  if (section === "gear") {
+    const today = new Date().toISOString().slice(0, 10);
+    const [gear, uses, jobRows] = await Promise.all([bizDb.listGear(db), bizDb.gearUses(db, today), st.listJobs(db)]);
+    const seen = new Map<string, string[]>();
+    for (const u of uses) {
+      const key = `${u.gearId}|${u.onDate}`;
+      seen.set(key, [...(seen.get(key) ?? []), u.jobTitle]);
+    }
+    const clashes = [...seen]
+      .filter(([, jobs]) => jobs.length > 1)
+      .map(([key, jobs]) => {
+        const [gid, date] = key.split("|");
+        return `${gear.find((g) => g.id === gid)?.name ?? "Gear"} is on ${jobs.map((j) => `"${j}"`).join(" and ")} on ${date}`;
+      });
+    return (
+      <Shell>
+        <GearView
+          user={user.name ?? user.email ?? "owner"}
+          data={{
+            gear: gear.map((g) => ({
+              id: g.id,
+              name: g.name,
+              kind: g.kind,
+              notes: g.notes,
+              retired: Boolean(g.retiredAt),
+            })),
+            kinds: [...bizDb.GEAR_KINDS],
+            jobs: jobRows.map((r) => ({ id: r.job.id, title: r.job.title, date: r.job.date ?? null })),
+            uses,
+            clashes,
+          }}
+        />
+      </Shell>
+    );
+  }
+  if (section === "callsheets") {
+    const jobRows = await st.listJobs(db);
+    const sheets = await bizDb.listCallSheets(db);
+    const selected = q.job && jobRows.some((r) => r.job.id === q.job) ? q.job : (jobRows[0]?.job.id ?? null);
+    const sheet = selected ? await bizDb.getCallSheet(db, selected) : null;
+    return (
+      <Shell>
+        <CallSheetsView
+          key={selected ?? "none"}
+          user={user.name ?? user.email ?? "owner"}
+          data={{
+            jobs: jobRows.map((r) => ({
+              id: r.job.id,
+              title: r.job.title,
+              date: r.job.date ?? null,
+              client: r.client.name,
+            })),
+            selected,
+            have: sheets.map((x) => x.job.id),
+            sheet: sheet
+              ? {
+                  callTime: sheet.callTime ?? "",
+                  location: sheet.location ?? "",
+                  notes: sheet.notes ?? "",
+                  shots: sheet.shots,
+                  contacts: sheet.contacts,
+                }
+              : null,
           }}
         />
       </Shell>

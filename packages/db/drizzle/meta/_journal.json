@@ -127,6 +127,13 @@
       "when": 1792189667861,
       "tag": "0017_gallery_settings",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1792731080676,
+      "tag": "0018_business_ops",
+      "breakpoints": true
     }
   ]
 }

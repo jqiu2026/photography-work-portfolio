@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { choose } from "./ui";
+import { choose, note } from "./ui";
 
 /** Packages, add-ons, codes, quotes with upsell and accept-and-pay, gift cards. Dev servers and the throwaway database. */
 const PHOTOS = "http://localhost:3302";
@@ -38,24 +38,24 @@ test("owner creates a client, a code, a gift card and a quote; sends it; the ema
     .getByRole("button", { name: /Add client|Add/ })
     .first()
     .click();
-  await slow(page.getByRole("status")).toContainText("Client added");
+  await slow(note(page).last()).toContainText("Client added");
 
   await page.goto(`${PHOTOS}/studio/packages`, { waitUntil: "networkidle" });
   await page.getByRole("form", { name: "New code" }).getByLabel("Code").fill(`SAVE10-${uid}`);
   await page.getByRole("form", { name: "New code" }).getByLabel("Value").fill("10");
   await page.getByRole("button", { name: "Create code" }).click();
-  await slow(page.getByRole("status")).toContainText("created");
+  await slow(note(page).last()).toContainText("created");
   await page
     .getByRole("form", { name: "Gift card" })
     .getByLabel(/Gift card amount/)
     .fill("50");
   await page.getByRole("button", { name: "Create gift card" }).click();
-  await slow(page.getByRole("status")).toContainText(/Gift card gift-[0-9a-f]+ created/);
+  await slow(note(page).last()).toContainText(/Gift card gift-[0-9a-f]+ created/);
 
   const settings = page.getByRole("form", { name: "Deposit and tax" });
   await settings.getByLabel("Tax rate (percent)").fill("8.875");
   await settings.getByRole("button", { name: "Save" }).click();
-  await slow(page.getByRole("status")).toContainText("Saved");
+  await slow(note(page).last()).toContainText("Saved");
 
   await page.goto(`${PHOTOS}/studio/quotes`, { waitUntil: "networkidle" });
   await choose(page.getByLabel(/^Client/), `Quote Client ${uid}`);
@@ -63,12 +63,15 @@ test("owner creates a client, a code, a gift card and a quote; sends it; the ema
   await choose(page.getByLabel(/^Package/), "Standard ($400.00)");
   await page.getByLabel("Promo code").fill(`save10-${uid}`);
   await page.getByRole("button", { name: "Create quote" }).click();
-  await slow(page.getByRole("status")).toContainText(/Quote Q\d{4}-\d{4} created/);
+  await slow(note(page).last()).toContainText(/Quote Q\d{4}-\d{4} created/);
   const row = page.locator("li[data-quote-id]").filter({ hasText: `Spring shoot ${uid}` });
   await expect(row).toContainText("SAMPLE");
   await row.getByRole("button", { name: "Send" }).click();
-  await slow(page.locator("code").first()).toContainText("/client/quote/");
-  const link = ((await page.locator("code").first().textContent()) as string).replace(/^https?:\/\/[^/]+/, "");
+  await slow(page.locator(".hm-toast-description").last()).toContainText("/client/quote/");
+  const link = ((await page.locator(".hm-toast-description").last().textContent()) as string).replace(
+    /^https?:\/\/[^/]+/,
+    "",
+  );
   test.info().annotations.push({ type: "quote-link", description: link });
   process.env.E2E_QUOTE_LINK = link;
   await page.goto(`${PHOTOS}/studio/inbox`, { waitUntil: "networkidle" });
@@ -94,7 +97,7 @@ test("the client sees tax as its own line and the bundle price, adds an extra (r
   const before = await total();
   await page.getByLabel("Extra edited images quantity").fill("3");
   await page.getByLabel("Extra edited images quantity").press("Tab"); // a typed number counts once you leave the field
-  await slow(page.getByRole("status")).toContainText("Updated");
+  await slow(note(page).last()).toContainText("Updated");
   await expect.poll(total, { timeout: 15_000 }).not.toBe(before);
   // accept needs consent and a name
   await page.getByRole("button", { name: /^Accept and pay/ }).click();
@@ -113,7 +116,7 @@ test("the client sees tax as its own line and the bundle price, adds an extra (r
   await page.getByLabel(/Expiry/).fill("12 / 34");
   await page.getByLabel("Security code").fill("123");
   await page.getByRole("button", { name: /^Pay/ }).click();
-  await slow(page.getByRole("status")).toContainText("Receipt rcpt_mock_");
+  await slow(note(page).last()).toContainText("Receipt rcpt_mock_");
   // the quote now reads accepted and cannot be accepted again
   await page.goto(`${PHOTOS}${link}`, { waitUntil: "networkidle" });
   await expect(page.getByText(`Accepted by Quote Client ${uid}`)).toBeVisible();

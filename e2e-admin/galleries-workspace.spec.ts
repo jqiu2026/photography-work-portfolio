@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { choose, pickDateTime } from "./ui";
+import { choose, pickDateTime, note } from "./ui";
 import sharp from "sharp";
 import { clientOpen, newGallery, publishOpenGallery, uploadPhotos } from "./gallery-helpers";
 
@@ -27,7 +27,7 @@ test("create a gallery from a job, upload inside it, and find it in the list", a
   await page.getByLabel("Name").fill(`WS Client ${uid}`);
   await page.getByLabel("Email").fill(email);
   await page.getByRole("button", { name: "Add client" }).click();
-  await slow(page.getByRole("status")).toContainText("Client added");
+  await slow(note(page).last()).toContainText("Client added");
   await page.goto(`${PHOTOS}/studio/shoots`, { waitUntil: "networkidle" });
   await choose(page.getByLabel("Client"), `WS Client ${uid}`);
   await page.getByLabel("Title").fill(`WS job ${uid}`);
@@ -68,7 +68,7 @@ test("select several photographs: hide, show, make the cover; sort; open one and
   const bar = page.getByRole("toolbar", { name: "Selected photographs" });
   await expect(bar).toContainText("2 selected");
   await bar.getByRole("button", { name: "Hide", exact: true }).click();
-  await slow(page.getByRole("status").filter({ hasText: "Hid 2 photographs" })).toBeVisible();
+  await slow(note(page).filter({ hasText: "Hid 2 photographs" }).first()).toBeVisible();
   await expect(page.locator("li[data-hidden]")).toHaveCount(2);
   await page.getByRole("button", { name: "Select a-first.jpg" }).click();
   await page.getByRole("button", { name: "Select b-second.jpg" }).click();
@@ -76,17 +76,17 @@ test("select several photographs: hide, show, make the cover; sort; open one and
     .getByRole("toolbar", { name: "Selected photographs" })
     .getByRole("button", { name: "Show", exact: true })
     .click();
-  await slow(page.getByRole("status").filter({ hasText: "Showed 2 photographs" })).toBeVisible();
+  await slow(note(page).filter({ hasText: "Showed 2 photographs" }).first()).toBeVisible();
   await expect(page.locator("li[data-hidden]")).toHaveCount(0);
 
   await page.getByRole("button", { name: "Select c-third.jpg" }).click();
   await page.getByRole("toolbar", { name: "Selected photographs" }).getByRole("button", { name: "Make cover" }).click();
-  await slow(page.getByRole("status").filter({ hasText: /cover/i })).toBeVisible();
+  await slow(note(page).filter({ hasText: /cover/i }).first()).toBeVisible();
   await expect(page.locator("li[data-media-id]").filter({ hasText: "c-third.jpg" })).toContainText("Cover");
   await page.getByRole("button", { name: "Done" }).click();
 
   await choose(page.getByLabel("Sort photographs"), "Filename");
-  await slow(page.getByRole("status").filter({ hasText: "Sorted 3 photographs" })).toBeVisible();
+  await slow(note(page).filter({ hasText: "Sorted 3 photographs" }).first()).toBeVisible();
   await choose(page.getByLabel("Show", { exact: true }), "Hidden");
   await expect(page.getByText("No photographs match this filter.")).toBeVisible();
   await choose(page.getByLabel("Show", { exact: true }), "Everything");
@@ -107,7 +107,7 @@ test("design: rows and light; the client sees them after the gallery is publishe
   await choose(page.getByLabel("Theme"), "Light");
   await page.getByLabel(/Shown above the photographs/).fill(`Welcome ${uid}`);
   await page.getByRole("button", { name: "Save design" }).click();
-  await slow(page.getByRole("status").filter({ hasText: "Design saved" })).toBeVisible();
+  await slow(note(page).filter({ hasText: "Design saved" }).first()).toBeVisible();
   await publishOpenGallery(page);
 
   const ctx = await browser.newContext();
@@ -129,7 +129,7 @@ test("a new passcode locks out the old one; the email goes to the client's addre
   const next = ((await fresh.textContent()) ?? "").trim();
   expect(next).not.toBe(pass);
   await page.getByRole("button", { name: /^Email WS Client/ }).click();
-  await slow(page.getByRole("status").filter({ hasText: "Email sent to the client" })).toBeVisible();
+  await slow(note(page).filter({ hasText: "Email sent to the client" }).first()).toBeVisible();
   await expect(page.getByText(`Goes to ${email}`)).toBeVisible();
 
   const ctx = await browser.newContext();
@@ -166,7 +166,7 @@ test("duplicate as a draft, schedule it for the past, and the hourly job publish
   await page.getByRole("tab", { name: "Settings" }).click();
   await pickDateTime(page, "Publish automatically at", new Date(Date.now() - 3 * 3_600_000));
   await page.getByRole("button", { name: "Save", exact: true }).first().click();
-  await slow(page.getByRole("status").filter({ hasText: "Publishing saved" })).toBeVisible();
+  await slow(note(page).filter({ hasText: "Publishing saved" }).first()).toBeVisible();
 
   const r = await request.get(`${PHOTOS}/api/cron/run`, {
     headers: { authorization: "Bearer e2e-cron-secret-0123456789" },

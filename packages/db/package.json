@@ -29,7 +29,8 @@
     "./reports": "./src/reports.ts",
     "./gallery-expiry": "./src/gallery-expiry.ts",
     "./automation": "./src/automation.ts",
-    "./specs": "./src/specs.ts"
+    "./specs": "./src/specs.ts",
+    "./business": "./src/business.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

@@ -1,5 +1,5 @@
 import { expect, type Page } from "@playwright/test";
-import { choose } from "./ui";
+import { choose, note } from "./ui";
 
 type File = { name: string; mimeType: string; buffer: Buffer };
 
@@ -33,12 +33,13 @@ export async function uploadPhotos(page: Page, files: File[], expected = files.l
   if (!(await page.locator("input[type=file]").count()))
     await page.getByRole("button", { name: "Upload photographs" }).click();
   await page.locator("input[type=file]").setInputFiles(files);
-  await expect(page.getByRole("status").filter({ hasText: /of \d+ done/ })).toContainText(
-    `${files.length} of ${files.length} done`,
-    {
-      timeout: 60_000,
-    },
-  );
+  await expect(
+    note(page)
+      .filter({ hasText: /of \d+ done/ })
+      .first(),
+  ).toContainText(`${files.length} of ${files.length} done`, {
+    timeout: 60_000,
+  });
   await page.reload({ waitUntil: "networkidle" });
   await expect(page.locator("li[data-media-id]")).toHaveCount(expected);
 }
@@ -46,7 +47,7 @@ export async function uploadPhotos(page: Page, files: File[], expected = files.l
 /** Publishes the open gallery from its header. */
 export async function publishOpenGallery(page: Page) {
   await page.getByRole("button", { name: "Publish", exact: true }).click();
-  await expect(page.getByRole("status").filter({ hasText: "Published" })).toBeVisible({ timeout: 25_000 });
+  await expect(note(page).filter({ hasText: "Published" }).first()).toBeVisible({ timeout: 25_000 });
 }
 
 /** Past the cover page and the rules note, if the gallery has them (they appear once per visit). */

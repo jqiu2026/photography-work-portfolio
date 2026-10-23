@@ -1456,3 +1456,89 @@ export type StudioWatermark = typeof studioWatermarks.$inferSelect;
 export type StudioDownloadRule = typeof studioDownloadRules.$inferSelect;
 export type StudioTrack = typeof studioTracks.$inferSelect;
 export type StudioPriceSheet = typeof studioPriceSheets.$inferSelect;
+
+/* ------------------------------------------------------------------------------------------------------------------
+ * Business operations: expenses and mileage, testimonials with recorded consent, gear, call sheets.
+ * ---------------------------------------------------------------------------------------------------------------- */
+export const studioExpenses = pgTable(
+  "studio_expenses",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    /** expense | mileage */
+    kind: text("kind").notNull().default("expense"),
+    spentOn: date("spent_on").notNull(),
+    category: text("category").notNull().default("other"),
+    description: text("description").notNull().default(""),
+    vendor: text("vendor"),
+    /** What it cost (for mileage: miles times the rate that was in force on the day, so old entries never change). */
+    amountCents: integer("amount_cents").notNull().default(0),
+    /** Tenths of a mile (mileage only). */
+    tenthMiles: integer("tenth_miles"),
+    rateCentsPerMile: integer("rate_cents_per_mile"),
+    jobId: uuid("job_id").references(() => studioJobs.id),
+    /** Where the paper or file receipt is kept (free text until receipt uploads are switched on). */
+    receiptNote: text("receipt_note"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("studio_expenses_date_idx").on(t.spentOn)],
+);
+
+export const studioTestimonials = pgTable("studio_testimonials", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  clientId: uuid("client_id").references(() => studioClients.id),
+  jobId: uuid("job_id").references(() => studioJobs.id),
+  /** How the person wants to be named in public ("Maria R.", "A parent"). */
+  displayName: text("display_name").notNull(),
+  role: text("role"),
+  quote: text("quote").notNull(),
+  /** When and how they agreed to it being public. A testimonial cannot be published without this. */
+  consentAt: timestamp("consent_at", { withTimezone: true }),
+  consentNote: text("consent_note"),
+  publishedAt: timestamp("published_at", { withTimezone: true }),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+export const studioGear = pgTable("studio_gear", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  name: text("name").notNull(),
+  /** camera | lens | light | drone | audio | other */
+  kind: text("kind").notNull().default("other"),
+  notes: text("notes"),
+  retiredAt: timestamp("retired_at", { withTimezone: true }),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+/** One piece of gear is on one job on one day (a second job that day is a warning, not a block). */
+export const studioGearUses = pgTable(
+  "studio_gear_uses",
+  {
+    gearId: uuid("gear_id")
+      .notNull()
+      .references(() => studioGear.id, { onDelete: "cascade" }),
+    jobId: uuid("job_id")
+      .notNull()
+      .references(() => studioJobs.id, { onDelete: "cascade" }),
+    onDate: date("on_date").notNull(),
+  },
+  (t) => [primaryKey({ columns: [t.gearId, t.jobId, t.onDate] }), index("studio_gear_uses_date_idx").on(t.onDate)],
+);
+
+export const studioCallSheets = pgTable("studio_call_sheets", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  jobId: uuid("job_id")
+    .notNull()
+    .unique()
+    .references(() => studioJobs.id, { onDelete: "cascade" }),
+  callTime: text("call_time"),
+  location: text("location"),
+  notes: text("notes"),
+  /** Shot list: [{ text, done }] */
+  shots: jsonb("shots").$type<{ text: string; done: boolean }[]>().notNull().default([]),
+  /** People on the day: [{ name, role, phone }] */
+  contacts: jsonb("contacts").$type<{ name: string; role: string; phone: string }[]>().notNull().default([]),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+});
+export type StudioExpense = typeof studioExpenses.$inferSelect;
+export type StudioTestimonial = typeof studioTestimonials.$inferSelect;
+export type StudioGearRow = typeof studioGear.$inferSelect;
+export type StudioCallSheet = typeof studioCallSheets.$inferSelect;

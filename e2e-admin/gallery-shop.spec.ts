@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { choose } from "./ui";
+import { choose, note } from "./ui";
 import sharp from "sharp";
 import { enterGallery, newGallery, publishOpenGallery, uploadPhotos } from "./gallery-helpers";
 
@@ -43,7 +43,7 @@ test("owner builds a gallery with nested and locked albums, a public link and an
   await page.getByLabel("Name").fill(`Shop Client ${uid}`);
   await page.getByLabel("Email").fill(email);
   await page.getByRole("button", { name: "Add client" }).click();
-  await slow(page.getByRole("status")).toContainText("Client added");
+  await slow(note(page).last()).toContainText("Client added");
   await page.goto(`${PHOTOS}/studio/shoots`, { waitUntil: "networkidle" });
   await choose(page.getByLabel("Client"), `Shop Client ${uid}`);
   await page.getByLabel("Title").fill(`Shop job ${uid}`);
@@ -58,21 +58,21 @@ test("owner builds a gallery with nested and locked albums, a public link and an
   const add = page.getByRole("form", { name: "New album" });
   await add.getByLabel("Album name").fill("Ceremony");
   await add.getByRole("button", { name: "Add album" }).click();
-  await slow(page.getByRole("status").filter({ hasText: "Album added" })).toBeVisible();
+  await slow(note(page).filter({ hasText: "Album added" }).first()).toBeVisible();
   await add.getByLabel("Album name").fill("Vows");
   await choose(add.getByLabel("Inside"), "Inside Ceremony");
   await add.getByRole("button", { name: "Add album" }).click();
-  await slow(page.getByRole("status").filter({ hasText: "Sub-album added" })).toBeVisible();
+  await slow(note(page).filter({ hasText: "Sub-album added" }).first()).toBeVisible();
   await add.getByLabel("Album name").fill("Formals");
   await choose(add.getByLabel("Inside"), "Top level");
   await add.getByRole("button", { name: "Add album" }).click();
-  await slow(page.getByRole("status").filter({ hasText: "Album added" })).toBeVisible();
+  await slow(note(page).filter({ hasText: "Album added" }).first()).toBeVisible();
   await page.getByLabel("Passcode for Formals").fill("ab");
   await page.getByRole("form", { name: "Lock Formals" }).getByRole("button").click();
-  await slow(page.locator("p.st-error")).toContainText("at least 4");
+  await slow(note(page).last()).toContainText("at least 4");
   await page.getByLabel("Passcode for Formals").fill(FORMALS);
   await page.getByRole("form", { name: "Lock Formals" }).getByRole("button").click();
-  await slow(page.getByRole("status").filter({ hasText: "Album locked" })).toBeVisible();
+  await slow(note(page).filter({ hasText: "Album locked" }).first()).toBeVisible();
 
   // the large one (fits a 4 x 6 print, not an 8 x 10), two small ones, and one with no album
   const big = await jpeg("#aa4433", 1403, 907);
@@ -98,7 +98,7 @@ test("owner builds a gallery with nested and locked albums, a public link and an
     .filter({ has: page.getByLabel("Price of Web-size download") })
     .getByRole("button", { name: "Save" })
     .click();
-  await slow(page.getByRole("status").filter({ hasText: "Product saved" })).toBeVisible();
+  await slow(note(page).filter({ hasText: "Product saved" }).first()).toBeVisible();
 
   // link and shop
   await page.goto(`${galleryUrl}#share`, { waitUntil: "networkidle" });
@@ -108,14 +108,14 @@ test("owner builds a gallery with nested and locked albums, a public link and an
     "Anyone with the link (view and shop; the passcode adds proofing)",
   );
   await page.getByRole("button", { name: "Save link" }).click();
-  await slow(page.locator("p.st-error")).toContainText("address");
+  await slow(note(page).last()).toContainText("address");
   await page.getByLabel("Gallery address").fill(slug);
   await page.getByRole("button", { name: "Save link" }).click();
-  await slow(page.getByRole("status").filter({ hasText: "Link saved" })).toBeVisible();
+  await slow(note(page).filter({ hasText: "Link saved" }).first()).toBeVisible();
   await page.getByRole("tab", { name: "Store" }).click();
   await page.getByLabel("Open the store in this gallery").check();
   await page.getByRole("button", { name: "Save store settings" }).click();
-  await slow(page.getByRole("status").filter({ hasText: "Store settings saved" })).toBeVisible();
+  await slow(note(page).filter({ hasText: "Store settings saved" }).first()).toBeVisible();
   await publishOpenGallery(page);
 });
 
@@ -295,6 +295,6 @@ test("an unpaid order can be canceled by the owner, and its invoice is voided", 
   await expect(pending).toContainText("pending");
   await pending.getByRole("button", { name: "Cancel" }).click();
   await page.getByRole("alertdialog").getByRole("button", { name: "Cancel order" }).click();
-  await slow(page.getByRole("status").filter({ hasText: "Order cancelled" })).toBeVisible();
+  await slow(note(page).filter({ hasText: "Order cancelled" }).first()).toBeVisible();
   await expect(pending).toContainText("cancelled");
 });

@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { choose, pickDate } from "./ui";
+import { choose, pickDate, note } from "./ui";
 import sharp from "sharp";
 import { enterGallery, newGallery, publishOpenGallery, uploadPhotos } from "./gallery-helpers";
 
@@ -42,7 +42,7 @@ test("owner sets brand, a watermark, a track, rules and the branding of a galler
   await page.getByLabel("Brand name").fill(`Set Studio ${uid}`);
   await page.getByLabel("Email", { exact: true }).fill(`hello-${uid}@example.test`);
   await page.getByRole("button", { name: "Save brand details" }).click();
-  await slow(page.getByRole("status").filter({ hasText: "Brand details saved" })).toBeVisible();
+  await slow(note(page).filter({ hasText: "Brand details saved" }).first()).toBeVisible();
 
   // a watermark
   await page.goto(`${PHOTOS}/studio/watermarks`, { waitUntil: "networkidle" });
@@ -63,7 +63,7 @@ test("owner sets brand, a watermark, a track, rules and the branding of a galler
   await page.getByLabel("Name").fill(`Set Client ${uid}`);
   await page.getByLabel("Email").fill(email);
   await page.getByRole("button", { name: "Add client" }).click();
-  await slow(page.getByRole("status")).toContainText("Client added");
+  await slow(note(page).last()).toContainText("Client added");
   await page.goto(`${PHOTOS}/studio/shoots`, { waitUntil: "networkidle" });
   await choose(page.getByLabel("Client"), `Set Client ${uid}`);
   await page.getByLabel("Title").fill(`Set job ${uid}`);
@@ -83,7 +83,7 @@ test("owner sets brand, a watermark, a track, rules and the branding of a galler
   await rule.getByLabel("Rule name (visitors see it)").fill("Free (720 px)");
   await choose(rule.getByLabel("Watermark"), `Mark ${uid}`);
   await rule.getByRole("button", { name: "Add rule" }).click();
-  await slow(page.getByRole("status").filter({ hasText: "Download rule saved" })).toBeVisible();
+  await slow(note(page).filter({ hasText: "Download rule saved" }).first()).toBeVisible();
   await rule.getByLabel("Rule name (visitors see it)").fill("High resolution (PIN)");
   await rule.getByLabel(/Longest side in pixels/).fill("1600");
   await rule.getByLabel(/Downloads per visitor/).fill("2");
@@ -103,23 +103,23 @@ test("owner sets brand, a watermark, a track, rules and the branding of a galler
   await page.getByLabel(/A few lines about you/).fill(`About text ${uid}`);
   await page.getByLabel(`Quiet ${uid}`).check();
   await page.getByRole("button", { name: "Save branding" }).click();
-  await slow(page.getByRole("status").filter({ hasText: "Look saved" })).toBeVisible();
+  await slow(note(page).filter({ hasText: "Look saved" }).first()).toBeVisible();
 
   // access: ask visitors for an email, a shoot date, open link, published
   await page.getByRole("tab", { name: "Settings" }).click();
   await pickDate(page.getByLabel("Shoot date"), "2026-06-06");
   await page.getByRole("button", { name: "Save settings" }).click();
-  await slow(page.getByRole("status").filter({ hasText: "Gallery settings saved" })).toBeVisible();
+  await slow(note(page).filter({ hasText: "Gallery settings saved" }).first()).toBeVisible();
   await page.getByRole("tab", { name: "Share" }).click();
   await page.getByLabel("Ask visitors for their email address before they see the gallery").check();
   await page.getByRole("button", { name: "Save", exact: true }).first().click();
-  await slow(page.getByRole("status").filter({ hasText: "Access settings saved" })).toBeVisible();
+  await slow(note(page).filter({ hasText: "Access settings saved" }).first()).toBeVisible();
   await choose(
     page.getByLabel("Who can open the link"),
     "Anyone with the link (view and shop; the passcode adds proofing)",
   );
   await page.getByRole("button", { name: "Save link" }).click();
-  await slow(page.getByRole("status").filter({ hasText: "Link saved" })).toBeVisible();
+  await slow(note(page).filter({ hasText: "Link saved" }).first()).toBeVisible();
   await publishOpenGallery(page);
 });
 
@@ -241,12 +241,12 @@ test("price sheets, reports, and the Free plan's limits (then back to Full Frame
   await page.goto(`${PHOTOS}/studio/orders`, { waitUntil: "networkidle" });
   await page.getByLabel("New sheet name").fill(`Sheet ${uid}`);
   await page.getByRole("form", { name: "New price sheet" }).getByRole("button", { name: "Add sheet" }).click();
-  await slow(page.getByRole("status").filter({ hasText: "Price sheet created" })).toBeVisible();
+  await slow(note(page).filter({ hasText: "Price sheet created" }).first()).toBeVisible();
   await page.goto(`${url}#shop`, { waitUntil: "networkidle" });
   await choose(page.getByLabel("Price sheet"), `Sheet ${uid}`);
   await page.getByLabel(/Smallest order/).fill("25");
   await page.getByRole("button", { name: "Save store settings" }).click();
-  await slow(page.getByRole("status").filter({ hasText: "Store settings saved" })).toBeVisible();
+  await slow(note(page).filter({ hasText: "Store settings saved" }).first()).toBeVisible();
 
   // reports
   await page.goto(`${PHOTOS}/studio/reports`, { waitUntil: "networkidle" });
@@ -261,15 +261,15 @@ test("price sheets, reports, and the Free plan's limits (then back to Full Frame
   await expect(page.getByText("No payment needed").first()).toBeVisible();
   await page.getByRole("button", { name: "Switch to Free" }).click();
   await page.getByRole("alertdialog").getByRole("button", { name: "Switch to Free" }).click();
-  await slow(page.getByRole("status").filter({ hasText: "Switched to Free" })).toBeVisible();
+  await slow(note(page).filter({ hasText: "Switched to Free" }).first()).toBeVisible();
   await page.goto(`${url}#shop`, { waitUntil: "networkidle" });
   await page.getByLabel("Open the store in this gallery").check();
   await page.getByRole("button", { name: "Save store settings" }).click();
-  await slow(page.locator("p.st-error")).toContainText("Full Frame");
+  await slow(note(page).last()).toContainText("Full Frame");
   await page.goto(`${PHOTOS}/studio/reports`, { waitUntil: "networkidle" });
   await expect(page.getByText("Reports are part of Full Frame")).toBeVisible();
   await page.goto(`${PHOTOS}/studio/plan`, { waitUntil: "networkidle" });
   await page.getByRole("button", { name: /^Upgrade/ }).click();
-  await slow(page.getByRole("status").filter({ hasText: "Back on Full Frame" })).toBeVisible();
+  await slow(note(page).filter({ hasText: "Back on Full Frame" }).first()).toBeVisible();
   await expect(page.getByText("100% discount, billed monthly at $0.00")).toBeVisible();
 });

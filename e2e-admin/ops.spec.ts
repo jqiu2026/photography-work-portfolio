@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { choose, pickDate } from "./ui";
+import { choose, pickDate, note } from "./ui";
 
 /** Cron, automations (dedupe, switch-off), reminders honouring preferences, tasks, activity. */
 const PHOTOS = "http://localhost:3302";
@@ -28,7 +28,7 @@ test("setup: a client with a job and an invoice due in two days (sent)", async (
   await page.getByLabel("Name").fill(`Ops Client ${uid}`);
   await page.getByLabel("Email").fill(email);
   await page.getByRole("button", { name: "Add client" }).click();
-  await slow(page.getByRole("status")).toContainText("Client added");
+  await slow(note(page).last()).toContainText("Client added");
   await page.goto(`${PHOTOS}/studio/shoots`, { waitUntil: "networkidle" });
   await choose(page.getByLabel("Client"), `Ops Client ${uid}`);
   await page.getByLabel("Title").fill(`Ops job ${uid}`);
@@ -43,19 +43,19 @@ test("setup: a client with a job and an invoice due in two days (sent)", async (
   await plan.getByLabel("Instalments").fill("2");
   await pickDate(plan.getByLabel("First due"), inDays(2));
   await plan.getByRole("button", { name: "Create plan" }).click();
-  await slow(page.getByRole("status")).toContainText("2 instalments");
+  await slow(note(page).last()).toContainText("2 instalments");
 });
 
 test("running the automations sends one reminder, and running again sends nothing more", async ({ page }) => {
   await page.goto(`${PHOTOS}/studio/automations`, { waitUntil: "networkidle" });
   await page.getByRole("button", { name: "Run everything now" }).click();
-  await slow(page.getByRole("status")).toContainText("Ran now");
+  await slow(note(page).last()).toContainText("Ran now");
   await page.goto(`${PHOTOS}/studio/inbox`, { waitUntil: "networkidle" });
   const reminders = page.locator("li").filter({ hasText: email }).filter({ hasText: "is due soon" });
   await expect(reminders).toHaveCount(1);
   await page.goto(`${PHOTOS}/studio/automations`, { waitUntil: "networkidle" });
   await page.getByRole("button", { name: "Run everything now" }).click();
-  await slow(page.getByRole("status")).toContainText("Ran now");
+  await slow(note(page).last()).toContainText("Ran now");
   await page.goto(`${PHOTOS}/studio/inbox`, { waitUntil: "networkidle" });
   await expect(page.locator("li").filter({ hasText: email }).filter({ hasText: "is due soon" })).toHaveCount(1);
   await page.goto(`${PHOTOS}/studio/automations`, { waitUntil: "networkidle" });
@@ -68,10 +68,10 @@ test("a rule can be switched off, and then nothing is sent for it", async ({ pag
   await rule.getByLabel("Enabled").uncheck();
   await rule.getByLabel("Days").fill("10");
   await rule.getByRole("button", { name: "Save" }).click();
-  await slow(page.getByRole("status")).toContainText("Rule saved");
+  await slow(note(page).last()).toContainText("Rule saved");
   // the second instalment is due ~in 30 days; widen nothing: it stays unreminded while the rule is off
   await page.getByRole("button", { name: "Run everything now" }).click();
-  await slow(page.getByRole("status")).toContainText("Ran now");
+  await slow(note(page).last()).toContainText("Ran now");
   await page.goto(`${PHOTOS}/studio/inbox`, { waitUntil: "networkidle" });
   expect(await page.locator("li").filter({ hasText: email }).filter({ hasText: "is due soon" }).count()).toBe(1);
 });
@@ -82,15 +82,15 @@ test("tasks: add, complete, delete", async ({ page }) => {
   await f.getByLabel("Task").fill(`Edit set ${uid}`);
   await pickDate(f.getByLabel("Due"), inDays(-1));
   await f.getByRole("button", { name: "Add task" }).click();
-  await slow(page.getByRole("status")).toContainText("Task added");
+  await slow(note(page).last()).toContainText("Task added");
   const row = page.locator("li[data-task-id]").filter({ hasText: `Edit set ${uid}` });
   await expect(row).toContainText("overdue");
   await row.getByRole("checkbox").click();
-  await slow(page.getByRole("status")).toContainText("Done");
+  await slow(note(page).last()).toContainText("Done");
   await expect(row).not.toContainText("overdue");
   await row.getByRole("button", { name: /Delete/ }).click();
   await page.getByRole("alertdialog").getByRole("button", { name: "Delete task" }).click();
-  await slow(page.getByRole("status")).toContainText("Task removed");
+  await slow(note(page).last()).toContainText("Task removed");
   await expect(row).toHaveCount(0);
 });
 
@@ -109,6 +109,6 @@ test("the activity feed shows what happened and can be cleared", async ({ page, 
   const list = page.getByRole("list", { name: "Activity" });
   await expect(list.locator("li").filter({ hasText: `New inquiry from Feed Person ${uid}` })).toHaveCount(1);
   await page.getByRole("button", { name: "Mark all read" }).click();
-  await slow(page.getByRole("status")).toContainText("All marked read");
+  await slow(note(page).last()).toContainText("All marked read");
   await expect(page.locator("li[data-unread]")).toHaveCount(0);
 });

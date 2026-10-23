@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { choose, pickDate } from "./ui";
+import { choose, pickDate, note } from "./ui";
 
 /** Pipeline, calendar, availability, online booking with a deposit hold, mini-sessions, the .ics feed and the embed. */
 const PHOTOS = "http://localhost:3302";
@@ -22,7 +22,7 @@ test("owner sets bookable hours and a blocked day; the calendar refuses a double
   await hours.getByLabel("From").fill("10:00");
   await hours.getByLabel("To").fill("14:00");
   await hours.getByRole("button", { name: "Add hours" }).click();
-  await slow(page.getByRole("status")).toContainText("Hours added");
+  await slow(note(page).last()).toContainText("Hours added");
 
   const add = page.locator('section[aria-labelledby="cal-add"]');
   const fill = async (title: string, start: string, end: string) => {
@@ -33,17 +33,17 @@ test("owner sets bookable hours and a blocked day; the calendar refuses a double
     await add.getByRole("button", { name: "Add" }).click();
   };
   await fill(`Wedding ${uid}`, "09:00", "11:00");
-  await slow(page.getByRole("status")).toContainText("Added to the calendar");
+  await slow(note(page).last()).toContainText("Added to the calendar");
   await fill(`Clash ${uid}`, "10:30", "12:00");
-  await slow(page.locator("p.st-error")).toContainText(`conflicts with "Wedding ${uid}"`);
+  await slow(note(page).last()).toContainText(`conflicts with "Wedding ${uid}"`);
   await fill(`Buffer clash ${uid}`, "11:05", "12:00"); // inside the 15 minute default buffer
-  await slow(page.locator("p.st-error")).toContainText("conflicts");
+  await slow(note(page).last()).toContainText("conflicts");
   await expect(page.locator("li[data-appointment-id]").filter({ hasText: `Wedding ${uid}` })).toHaveCount(1);
 
   const black = page.locator('section[aria-labelledby="cal-black"]');
   await pickDate(black.getByLabel("Day"), monday(4));
   await black.getByRole("button", { name: "Block day" }).click();
-  await slow(page.getByRole("status")).toContainText("Day blocked");
+  await slow(note(page).last()).toContainText("Day blocked");
 });
 
 test("the slots API offers free times only, and not on a blocked day or outside the hours", async ({ request }) => {
@@ -75,7 +75,7 @@ test("a visitor books a free consultation; it is confirmed, emailed, and that ti
   await page.getByRole("textbox", { name: "Email", exact: true }).fill(`consult-${uid}@example.com`);
   await page.getByLabel(/I agree that my details are stored/).check();
   await page.getByRole("button", { name: "Book this time" }).click();
-  await slow(page.getByRole("status")).toContainText("You're booked");
+  await slow(note(page).last()).toContainText("You're booked");
   await page.goto(`${PHOTOS}/book/schedule`, { waitUntil: "networkidle" });
   await pickDate(page.getByLabel("Pick a day"), MON);
   await expect(page.getByRole("group", { name: "Free times" }).getByRole("button").first()).not.toHaveText(label, {
@@ -110,7 +110,7 @@ test("a paid session is held until the deposit is paid (mock card), then confirm
   await page.getByLabel(/Expiry/).fill("12 / 34");
   await page.getByLabel("Security code").fill("123");
   await page.getByRole("button", { name: /^Pay/ }).click();
-  await slow(page.getByRole("status")).toContainText("Receipt rcpt_mock_");
+  await slow(note(page).last()).toContainText("Receipt rcpt_mock_");
 
   await page.goto(`${PHOTOS}/studio/calendar`, { waitUntil: "networkidle" });
   const row = page.locator("li[data-appointment-id]").filter({ hasText: `Deposit ${uid}` });
@@ -144,7 +144,7 @@ test("mini-sessions: the owner opens slots, one visitor wins a slot, the next se
   await mini.getByLabel("First slot").fill("16:00");
   await mini.getByLabel("Slots", { exact: true }).fill("2");
   await mini.getByRole("button", { name: "Open slots" }).click();
-  await slow(page.getByRole("status")).toContainText("2 slots opened");
+  await slow(note(page).last()).toContainText("2 slots opened");
 
   const book = async (ctxPage: import("@playwright/test").Page, who: string) => {
     await ctxPage.goto(`${PHOTOS}/book/minis`, { waitUntil: "networkidle" });
@@ -156,7 +156,7 @@ test("mini-sessions: the owner opens slots, one visitor wins a slot, the next se
     await ctxPage.getByRole("button", { name: "Book this slot" }).click();
   };
   await book(page, `Mini One ${uid}`);
-  await slow(page.getByRole("status")).toContainText("You're booked");
+  await slow(note(page).last()).toContainText("You're booked");
   const ctx2 = await browser.newContext();
   const p2 = await ctx2.newPage();
   await book(p2, `Mini Two ${uid}`);

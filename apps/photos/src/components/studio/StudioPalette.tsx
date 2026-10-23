@@ -3,7 +3,7 @@
 import { Button, type CommandItem, CommandPalette, Kbd, PlusIcon, SearchIcon } from "@holominimal/ui";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { groupOf, sectionInfo, studioSections } from "./sections";
 
 type Entry = { label: string; hint: string; href: string; keys: string };
@@ -51,9 +51,62 @@ const ITEMS: CommandItem[] = ALL.map((e) => ({
  * "Jump to": one box that finds any studio page or common action by name (Ctrl or Command K, or the button), on the
  * Holominimal command palette. The sidebar stays quiet; this is the fast way across the studio.
  */
+type Hit = { kind: string; id: string; label: string; detail: string; href: string };
+const KIND: Record<string, string> = {
+  client: "Client",
+  job: "Job",
+  gallery: "Gallery",
+  invoice: "Invoice",
+  testimonial: "Testimonial",
+  expense: "Expense",
+};
+
 export function StudioPalette() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [hits, setHits] = useState<Hit[]>([]);
+  // The palette owns its input, so the typed text is read from the field's own input events while it is open, and the
+  // studio's records are searched (after a short pause) alongside the pages and actions.
+  useEffect(() => {
+    if (!open) {
+      setHits([]);
+      return;
+    }
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    let seq = 0;
+    const onInput = (e: Event) => {
+      const t = e.target;
+      if (!(t instanceof HTMLInputElement) || t.getAttribute("role") !== "combobox") return;
+      const q = t.value.trim();
+      clearTimeout(timer);
+      if (q.length < 2) return setHits([]);
+      const mine = ++seq;
+      timer = setTimeout(async () => {
+        try {
+          const r = await fetch(`/api/studio/search?q=${encodeURIComponent(q)}`, { credentials: "same-origin" });
+          if (!r.ok || mine !== seq) return;
+          setHits(((await r.json()) as { hits: Hit[] }).hits);
+        } catch {}
+      }, 180);
+    };
+    document.addEventListener("input", onInput);
+    return () => {
+      document.removeEventListener("input", onInput);
+      clearTimeout(timer);
+    };
+  }, [open]);
+  const items = useMemo<CommandItem[]>(
+    () => [
+      ...ITEMS,
+      ...hits.map((h) => ({
+        id: `hit:${h.kind}:${h.id}`,
+        label: h.label,
+        group: `Found: ${KIND[h.kind] ?? h.kind}`,
+        keywords: h.detail,
+      })),
+    ],
+    [hits],
+  );
   return (
     <>
       <div className="st-util">
@@ -69,14 +122,20 @@ export function StudioPalette() {
       <CommandPalette
         open={open}
         onOpenChange={setOpen}
-        items={ITEMS}
+        items={items}
+        filter={(item, query) =>
+          item.id.startsWith("hit:") ||
+          `${item.label} ${item.group ?? ""} ${item.keywords ?? ""}`.toLowerCase().includes(query.trim().toLowerCase())
+        }
         shortcut
         label="Jump to"
         placeholder="Go to a page or start something…"
         emptyMessage="Nothing matches."
         onSelect={(item) => {
-          const e = ALL.find((x) => x.href + x.label === item.id);
           setOpen(false);
+          const hit = item.id.startsWith("hit:") ? hits.find((h) => `hit:${h.kind}:${h.id}` === item.id) : undefined;
+          if (hit) return router.push(hit.href);
+          const e = ALL.find((x) => x.href + x.label === item.id);
           if (e) router.push(e.href);
         }}
       />

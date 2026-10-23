@@ -98,7 +98,7 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | F-08 | Referral codes | P2 | done | promo_codes kind=referral | n/a | unit | M6 |
 | F-09 | Gift cards | P2 | partial (issue by owner, redeem on quotes, ledger; online purchase in M13) | gift_cards | Stripe / mock | unit | M6 |
 | F-10 | Discount and promo codes | P2 | done | promo_codes | n/a | unit | M6 |
-| F-11 | Testimonials and reviews with consent | P2 | missing | publish-to-portfolio | n/a | e2e | M14 |
+| F-11 | Testimonials and reviews with consent | P2 | partial (testimonials with recorded consent, published on About, withdrawn consent takes it down; review-site import not built) | publish-to-portfolio | n/a | e2e | M14 |
 | F-12 | SEO pages and structured data | P1 | done (sitemap, robots, JSON-LD on home, work and FAQ, text-card link previews) | all public pages | n/a | e2e | M11 |
 | F-13 | Newsletter signup (own stream, unsubscribe) | OPT | missing | footer form | Resend / outbox | e2e | M12 |
 
@@ -145,7 +145,7 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | F-54 | Receipts by email, PDF invoices | P1 | done (receipt email, invoice and receipt PDFs) | email templates | Resend / outbox | unit | M8 |
 | F-55 | Manual mark paid (cash, Zelle, check) | P1 | done | studio invoices | n/a | e2e | done |
 | F-56 | Optional card surcharge, default off | P2 | done (off by default, capped at 3%, disclosed before paying, cards only) | settings | Stripe | unit | M8 |
-| F-57 | Revenue reports from Stripe data, CSV export, tax-export | P2 | missing | `/studio/reports` | n/a | unit | M14 |
+| F-57 | Revenue reports from Stripe data, CSV export, tax-export | P2 | partial (sales reports with CSV; expenses and mileage CSV for the accountant; no tax-specific format) | `/studio/reports` | n/a | unit | M14 |
 
 ### Deliver
 
@@ -187,15 +187,15 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | F-94 | Tasks and reminders | P2 | done | tasks | n/a | e2e | M12 |
 | F-95 | Email templates and threads in studio | P1 | partial (templates and a studio inbox of every email; threads with replies in M9) | `/studio/inbox` | Resend / outbox | e2e | M4 |
 | F-96 | Automations: trigger, condition, action on Vercel Cron | P2 | done (7 rules, tunable, deduped, hourly cron) | automations | cron | unit | M12 |
-| F-97 | Shot lists and call sheets | P3 | missing | call_sheets | n/a | e2e | M15 |
+| F-97 | Shot lists and call sheets | P3 | done (one per job: call time, place, notes, shot list, people) | call_sheets | n/a | e2e | M15 |
 | F-98 | Roles: second shooter, assistant; job assignment | P3 | missing | team_members | n/a | unit | M15 |
-| F-99 | Gear inventory, double-booking warnings | P3 | missing | gear | n/a | unit | M15 |
+| F-99 | Gear inventory, double-booking warnings | P3 | done (gear on jobs by day, a clash is flagged) | gear | n/a | unit | M15 |
 | F-100 | Drone job checklist (Part 107, weather go/no-go) | P3 | missing | drone_checklists | weather: mock | unit | M15 |
-| F-101 | Mileage and expense tracking with receipts | P2 | missing | `/studio/expenses` | Blob | e2e | M14 |
+| F-101 | Mileage and expense tracking with receipts | P2 | partial (expenses, mileage at the rate on the day, CSV; receipt uploads need file storage, a note says where the paper one is) | `/studio/expenses` | Blob | e2e | M14 |
 | F-102 | True hourly rate, revenue and storage-cost reports, dashboards | P2/P3 | missing | `/studio/reports` | n/a | unit | M14 |
 | F-103 | Audit log | P1 | done | studio actions | n/a | e2e | done |
 | F-104 | Backups, restore, full data export | P1 | partial (`db:backup`, zip export) | studio data page | n/a | unit | M14 |
-| F-105 | Search across everything | P3 | missing | studio search | n/a | e2e | M15 |
+| F-105 | Search across everything | P3 | partial (Jump-to finds pages plus clients, jobs, galleries, invoices, testimonials and expenses; not full text of emails or contracts) | studio search | n/a | e2e | M15 |
 
 ### Platform quality
 

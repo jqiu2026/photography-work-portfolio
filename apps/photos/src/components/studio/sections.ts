@@ -24,6 +24,10 @@ export const studioSections = [
   { id: "users", label: "Users" },
   { id: "plan", label: "Plan" },
   { id: "automations", label: "Automations" },
+  { id: "expenses", label: "Expenses" },
+  { id: "testimonials", label: "Testimonials" },
+  { id: "gear", label: "Gear" },
+  { id: "callsheets", label: "Call sheets" },
 ] as const;
 
 /**
@@ -34,10 +38,15 @@ export const studioSections = [
 export const studioGroups = [
   { id: "overview", label: "Dashboard", sections: ["overview", "tasks"], hue: 210 },
   { id: "galleries", label: "Galleries", sections: ["galleries", "visitors", "watermarks", "music"], hue: 330 },
-  { id: "clients", label: "Clients", sections: ["clients", "bookings", "contracts", "inbox"], hue: 265 },
-  { id: "calendar", label: "Calendar", sections: ["calendar", "shoots"], hue: 285 },
+  {
+    id: "clients",
+    label: "Clients",
+    sections: ["clients", "bookings", "contracts", "inbox", "testimonials"],
+    hue: 265,
+  },
+  { id: "calendar", label: "Calendar", sections: ["calendar", "shoots", "callsheets", "gear"], hue: 285 },
   { id: "store", label: "Sales", sections: ["orders", "quotes", "invoices", "billing"], hue: 150 },
-  { id: "reports", label: "Reports", sections: ["reports", "pipeline", "activity"], hue: 38 },
+  { id: "reports", label: "Reports", sections: ["reports", "expenses", "pipeline", "activity"], hue: 38 },
   {
     id: "settings",
     label: "Settings",
@@ -72,6 +81,10 @@ export const sectionInfo: Record<string, string> = {
   users: "Who can sign in to the studio.",
   plan: "Your plan, what you use, and your billing history.",
   automations: "Reminders and follow-ups that run by themselves.",
+  expenses: "What the business spends and the miles it drives, ready for tax time.",
+  testimonials: "What clients said. Nothing is public until they agree.",
+  gear: "Cameras, lenses and lights, and which job each is on.",
+  callsheets: "Call time, place, people and the shot list for each shoot.",
 };
 
 export const groupOf = (section: string) =>

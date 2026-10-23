@@ -426,7 +426,7 @@ export function BookingWizard({ fallbackEmail, initialType }: { fallbackEmail: s
         )}
         {step === 0 ? null : step < STEPS.length - 1 ? (
           <Button key="next" type="button" onClick={next}>
-            {step === 2 || step === 3 ? (a.eventDate || a.flexibility || a.budget ? "Next" : "Skip") : "Next"}
+            {step === 2 && !a.eventDate && !a.flexibility ? "Skip" : step === 3 && !a.budget ? "Skip" : "Next"}
           </Button>
         ) : (
           <Button key="send" type="submit" size="lg" loading={state === "sending"}>

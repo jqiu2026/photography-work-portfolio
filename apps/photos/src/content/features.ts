@@ -46,7 +46,7 @@ export const features: Feature[] = [
   { id: "F-08", group: "Acquire", title: "Referral codes", priority: "P2", status: "live" },
   { id: "F-09", group: "Acquire", title: "Gift cards", priority: "P2", status: "preview" },
   { id: "F-10", group: "Acquire", title: "Discount and promo codes", priority: "P2", status: "live" },
-  { id: "F-11", group: "Acquire", title: "Testimonials and reviews with consent", priority: "P2", status: "soon" },
+  { id: "F-11", group: "Acquire", title: "Testimonials and reviews with consent", priority: "P2", status: "preview" },
   { id: "F-12", group: "Acquire", title: "SEO pages and structured data", priority: "P1", status: "live" },
   {
     id: "F-13",
@@ -115,7 +115,7 @@ export const features: Feature[] = [
   {
     id: "F-42",
     group: "Contract and comply",
-    title: "Usage-rights and license terms in contracts, license tracker with expiry reminders",
+    title: "Usage-rights and licence terms in contracts, licence tracker with expiry reminders",
     priority: "P1/P2",
     status: "preview",
   },
@@ -185,9 +185,9 @@ export const features: Feature[] = [
     group: "Payments",
     title: "Revenue reports from Stripe data, CSV export, tax-export",
     priority: "P2",
-    status: "soon",
+    status: "preview",
   },
-  { id: "F-60", group: "Deliver", title: "Private gallery with passcode, favorites", priority: "P1", status: "live" },
+  { id: "F-60", group: "Deliver", title: "Private gallery with passcode, favourites", priority: "P1", status: "live" },
   {
     id: "F-61",
     group: "Deliver",
@@ -236,7 +236,7 @@ export const features: Feature[] = [
   {
     id: "F-69",
     group: "Deliver",
-    title: "Client notifications (gallery ready, viewed, favorited)",
+    title: "Client notifications (gallery ready, viewed, favourited)",
     priority: "P1",
     status: "preview",
   },
@@ -311,7 +311,7 @@ export const features: Feature[] = [
     priority: "P2",
     status: "live",
   },
-  { id: "F-97", group: "Run the business", title: "Shot lists and call sheets", priority: "P3", status: "soon" },
+  { id: "F-97", group: "Run the business", title: "Shot lists and call sheets", priority: "P3", status: "live" },
   {
     id: "F-98",
     group: "Run the business",
@@ -324,7 +324,7 @@ export const features: Feature[] = [
     group: "Run the business",
     title: "Gear inventory, double-booking warnings",
     priority: "P3",
-    status: "soon",
+    status: "live",
   },
   {
     id: "F-100",
@@ -338,7 +338,7 @@ export const features: Feature[] = [
     group: "Run the business",
     title: "Mileage and expense tracking with receipts",
     priority: "P2",
-    status: "soon",
+    status: "preview",
   },
   {
     id: "F-102",
@@ -355,7 +355,7 @@ export const features: Feature[] = [
     priority: "P1",
     status: "preview",
   },
-  { id: "F-105", group: "Run the business", title: "Search across everything", priority: "P3", status: "soon" },
+  { id: "F-105", group: "Run the business", title: "Search across everything", priority: "P3", status: "preview" },
   { id: "F-110", group: "Platform quality", title: "Roles and sessions, rate limits", priority: "P1", status: "live" },
   {
     id: "F-111",
@@ -367,7 +367,7 @@ export const features: Feature[] = [
   {
     id: "F-112",
     group: "Platform quality",
-    title: "Notifications center and activity feed",
+    title: "Notifications centre and activity feed",
     priority: "P3",
     status: "preview",
   },
@@ -420,7 +420,7 @@ export const features: Feature[] = [
     id: "F-120",
     group: "Platform quality",
     title:
-      "Gallery looks: four themes, seven type options, six arrangements, opening styles, spacing, corners, accent and background color",
+      "Gallery looks: four themes, seven type options, six arrangements, opening styles, spacing, corners, accent and background colour",
     priority: "P1",
     status: "live",
   },
@@ -443,7 +443,7 @@ export const features: Feature[] = [
     id: "F-123",
     group: "Platform quality",
     title:
-      "Free-download rules (size in pixels, per-visitor limit, visible watermark, PIN, license to accept) per gallery or album",
+      "Free-download rules (size in pixels, per-visitor limit, visible watermark, PIN, licence to accept) per gallery or album",
     priority: "P1",
     status: "live",
   },
@@ -501,7 +501,7 @@ export const features: Feature[] = [
     id: "F-131",
     group: "Platform quality",
     title:
-      "Custom typefaces (24), colors, header styles, layouts, album cards or tabs; pasted HTML notes converted to safe text",
+      "Custom typefaces (24), colours, header styles, layouts, album cards or tabs; pasted HTML notes converted to safe text",
     priority: "P1",
     status: "live",
   },

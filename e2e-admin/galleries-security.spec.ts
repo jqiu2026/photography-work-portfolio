@@ -1,5 +1,5 @@
 import { expect, type Page, test } from "@playwright/test";
-import { choose } from "./ui";
+import { choose, note } from "./ui";
 import sharp from "sharp";
 import { clientOpen, newGallery, publishOpenGallery, uploadPhotos } from "./gallery-helpers";
 
@@ -30,7 +30,7 @@ test("owner makes a gallery and sets its security and look", async ({ page }) =>
   await page.getByLabel("Name").fill(`Sec Client ${uid}`);
   await page.getByLabel("Email").fill(email);
   await page.getByRole("button", { name: "Add client" }).click();
-  await slow(page.getByRole("status")).toContainText("Client added");
+  await slow(note(page).last()).toContainText("Client added");
   await page.goto(`${PHOTOS}/studio/shoots`, { waitUntil: "networkidle" });
   await choose(page.getByLabel("Client"), `Sec Client ${uid}`);
   await page.getByLabel("Title").fill(`Sec job ${uid}`);
@@ -55,22 +55,22 @@ test("owner makes a gallery and sets its security and look", async ({ page }) =>
   await page.getByLabel(/Closing note/).fill(`Thanks, ${uid}`);
   await page.getByLabel("Background color (hex, optional)").fill("red");
   await page.getByRole("button", { name: "Save look" }).click();
-  await slow(page.locator("p.st-error")).toContainText("hex");
+  await slow(note(page).last()).toContainText("hex");
   await page.getByLabel("Background color (hex, optional)").fill("#101820");
   await page.getByRole("button", { name: "Save look" }).click();
-  await slow(page.getByRole("status").filter({ hasText: "Look saved" })).toBeVisible();
+  await slow(note(page).filter({ hasText: "Look saved" }).first()).toBeVisible();
 
   // filenames shown (Settings, Advanced)
   await page.getByRole("tab", { name: "Settings" }).click();
   await page.getByLabel(/Show filenames/).check();
   await page.getByRole("button", { name: "Save advanced settings" }).click();
-  await slow(page.getByRole("status").filter({ hasText: "Look saved" })).toBeVisible();
+  await slow(note(page).filter({ hasText: "Look saved" }).first()).toBeVisible();
 
   // downloads allowed, capped at one a day
   await page.getByRole("tab", { name: "Downloads" }).click();
   await choose(page.getByLabel("What clients can download"), "Web size");
   await page.getByRole("button", { name: "Save", exact: true }).click();
-  await slow(page.getByRole("status").filter({ hasText: "Download setting saved" })).toBeVisible();
+  await slow(note(page).filter({ hasText: "Download setting saved" }).first()).toBeVisible();
 
   // security: lock after two attempts, overlay on, one download a day
   await page.getByRole("tab", { name: "Security" }).click();
@@ -84,7 +84,7 @@ test("owner makes a gallery and sets its security and look", async ({ page }) =>
   await page.getByLabel(/Tile a faint viewer code/).check();
   await page.getByLabel(/Most downloads per viewer per day/).fill("1");
   await page.getByRole("button", { name: "Save security" }).click();
-  await slow(page.getByRole("status").filter({ hasText: "Security settings saved" })).toBeVisible();
+  await slow(note(page).filter({ hasText: "Security settings saved" }).first()).toBeVisible();
   await publishOpenGallery(page);
 });
 
@@ -164,7 +164,7 @@ test("the studio sees the attempts and the lock, and can let the viewer back in"
 
   await studioSetting(page, "Security");
   await page.getByRole("button", { name: "Let locked-out viewers back in" }).click();
-  await slow(page.getByRole("status").filter({ hasText: "Let them back in" })).toBeVisible();
+  await slow(note(page).filter({ hasText: "Let them back in" }).first()).toBeVisible();
 
   const ctx = await browser.newContext();
   const c = await ctx.newPage();
@@ -178,7 +178,7 @@ test("hold to view conceals photographs until the pointer is held; log-only neve
   await page.getByLabel(/stay blurred until the viewer presses and holds/).check();
   await choose(page.getByLabel("When a key or capture attempt is seen"), "Log it only (hide photographs briefly)");
   await page.getByRole("button", { name: "Save security" }).click();
-  await slow(page.getByRole("status").filter({ hasText: "Security settings saved" })).toBeVisible();
+  await slow(note(page).filter({ hasText: "Security settings saved" }).first()).toBeVisible();
 
   const ctx = await browser.newContext();
   const c = await ctx.newPage();
@@ -203,7 +203,7 @@ test("a gallery with protection off has no guard, no overlay and no events", asy
   await choose(page.getByLabel("Level"), "Off");
   await page.getByLabel(/Tile a faint viewer code/).uncheck();
   await page.getByRole("button", { name: "Save security" }).click();
-  await slow(page.getByRole("status").filter({ hasText: "Security settings saved" })).toBeVisible();
+  await slow(note(page).filter({ hasText: "Security settings saved" }).first()).toBeVisible();
 
   const ctx = await browser.newContext();
   const c = await ctx.newPage();

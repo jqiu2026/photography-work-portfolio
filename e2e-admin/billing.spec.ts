@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { choose, pickDate } from "./ui";
+import { choose, pickDate, note } from "./ui";
 
 /** Payment plans, tips, bank and card options with the surcharge disclosure, PDFs, refunds, recurring billing. */
 const PHOTOS = "http://localhost:3302";
@@ -18,7 +18,7 @@ test("setup: a client and a job; tips, bank transfer and a card surcharge are sw
   await page.getByLabel("Name").fill(`Billing Client ${uid}`);
   await page.getByLabel("Email").fill(email);
   await page.getByRole("button", { name: "Add client" }).click();
-  await slow(page.getByRole("status")).toContainText("Client added");
+  await slow(note(page).last()).toContainText("Client added");
   await page.goto(`${PHOTOS}/studio/shoots`, { waitUntil: "networkidle" });
   await choose(page.getByLabel("Client"), `Billing Client ${uid}`);
   await page.getByLabel("Title").fill(`Billing job ${uid}`);
@@ -33,10 +33,10 @@ test("setup: a client and a job; tips, bank transfer and a card surcharge are sw
   await opts.getByLabel(/Add a credit card surcharge/).check();
   await opts.getByLabel(/Surcharge percent/).fill("2.5");
   await opts.getByRole("button", { name: "Save" }).click();
-  await slow(page.getByRole("status")).toContainText("Saved");
+  await slow(note(page).last()).toContainText("Saved");
   await opts.getByLabel(/Surcharge percent/).fill("4");
   await opts.getByRole("button", { name: "Save" }).click();
-  await slow(page.locator("p.st-error")).toContainText("cannot exceed 3 percent");
+  await slow(note(page).last()).toContainText("cannot exceed 3 percent");
 });
 
 test("a three-part plan is created, the first invoice is emailed with a pay link, the rest wait until they fall due", async ({
@@ -49,7 +49,7 @@ test("a three-part plan is created, the first invoice is emailed with a pay link
   await plan.getByLabel("Instalments").fill("3");
   await pickDate(plan.getByLabel("First due"), today);
   await plan.getByRole("button", { name: "Create plan" }).click();
-  await slow(page.getByRole("status")).toContainText("3 instalments");
+  await slow(note(page).last()).toContainText("3 instalments");
   await page.goto(`${PHOTOS}/studio/inbox`, { waitUntil: "networkidle" });
   const mail = page.locator("li").filter({ hasText: email }).filter({ hasText: "invoice-sent" }).first();
   await mail.locator("summary").click();
@@ -74,7 +74,7 @@ test("paying: the card option shows the surcharge disclosure, a tip is added, ti
   await page.getByLabel(/Expiry/).fill("12 / 34");
   await page.getByLabel("Security code").fill("123");
   await page.getByRole("button", { name: /^Pay/ }).click();
-  await slow(page.getByRole("status")).toContainText("Receipt rcpt_mock_");
+  await slow(note(page).last()).toContainText("Receipt rcpt_mock_");
   const inv = await request.get(`${PHOTOS}${payLink}/pdf`);
   expect(inv.status()).toBe(200);
   expect(inv.headers()["content-type"]).toBe("application/pdf");
@@ -96,7 +96,7 @@ test("billing shows the tip and surcharge; a partial refund then a full refund u
   await form.getByRole("textbox").fill("100");
   await form.getByRole("button", { name: "Refund" }).click();
   await page.getByRole("alertdialog").getByRole("button", { name: "Refund $100" }).click();
-  await slow(page.getByRole("status")).toContainText("Invoice is now partial");
+  await slow(note(page).last()).toContainText("Invoice is now partial");
   await page.goto(`${PHOTOS}/studio/billing`, { waitUntil: "networkidle" });
   const again = page
     .locator("li[data-payment-id]")
@@ -105,7 +105,7 @@ test("billing shows the tip and surcharge; a partial refund then a full refund u
   await again.getByRole("textbox").fill("999");
   await again.getByRole("button", { name: "Refund" }).click();
   await page.getByRole("alertdialog").getByRole("button", { name: "Refund $999" }).click();
-  await slow(page.locator("p.st-error")).toContainText("At most");
+  await slow(note(page).last()).toContainText("At most");
   await again.getByRole("textbox").fill("");
   await again.getByRole("button", { name: "Refund" }).click();
   // an empty amount refunds what is left, and the dialog says how much
@@ -113,7 +113,7 @@ test("billing shows the tip and surcharge; a partial refund then a full refund u
     .getByRole("alertdialog")
     .getByRole("button", { name: /^Refund \$/ })
     .click();
-  await slow(page.getByRole("status")).toContainText("Invoice is now refunded");
+  await slow(note(page).last()).toContainText("Invoice is now refunded");
 });
 
 test("recurring billing: due items are invoiced and emailed once, and the button is safe to press twice", async ({
@@ -126,11 +126,11 @@ test("recurring billing: due items are invoiced and emailed once, and the button
   await rec.getByLabel("Amount (dollars)").fill("150");
   await pickDate(rec.getByLabel("First invoice"), today);
   await rec.getByRole("button", { name: "Start" }).click();
-  await slow(page.getByRole("status")).toContainText("Recurring billing started");
+  await slow(note(page).last()).toContainText("Recurring billing started");
   await page.getByRole("button", { name: "Run billing now" }).click();
-  await slow(page.getByRole("status")).toContainText(/1 recurring/);
+  await slow(note(page).last()).toContainText(/1 recurring/);
   await page.getByRole("button", { name: "Run billing now" }).click();
-  await slow(page.getByRole("status")).toContainText(/0 recurring/);
+  await slow(note(page).last()).toContainText(/0 recurring/);
   await page.goto(`${PHOTOS}/studio/invoices`, { waitUntil: "networkidle" });
   await expect(page.getByRole("listitem").filter({ hasText: `Retainer ${uid}` })).toHaveCount(1);
 });

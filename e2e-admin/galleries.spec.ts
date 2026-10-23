@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { choose } from "./ui";
+import { choose, note } from "./ui";
 import sharp from "sharp";
 import { clientOpen, enterGallery, newGallery, publishOpenGallery } from "./gallery-helpers";
 import { detectViewerCode } from "../packages/media/src/forensic";
@@ -44,7 +44,7 @@ test("owner creates a client, a job and an empty gallery, then uploads photograp
   await page.getByLabel("Name").fill(`Gal Client ${uid}`);
   await page.getByLabel("Email").fill(email);
   await page.getByRole("button", { name: "Add client" }).click();
-  await slow(page.getByRole("status")).toContainText("Client added");
+  await slow(note(page).last()).toContainText("Client added");
   await page.goto(`${PHOTOS}/studio/shoots`, { waitUntil: "networkidle" });
   await choose(page.getByLabel("Client"), `Gal Client ${uid}`);
   await page.getByLabel("Title").fill(`Gal job ${uid}`);
@@ -63,7 +63,11 @@ test("owner creates a client, a job and an empty gallery, then uploads photograp
       { name: "shot-1-copy.jpg", mimeType: "image/jpeg", buffer: buffers[0] },
       { name: "notes.txt", mimeType: "text/plain", buffer: Buffer.from("not an image") },
     ]);
-  await expect(page.getByRole("status").filter({ hasText: /of 4 done/ })).toContainText("4 of 4 done", {
+  await expect(
+    note(page)
+      .filter({ hasText: /of 4 done/ })
+      .first(),
+  ).toContainText("4 of 4 done", {
     timeout: 60_000,
   });
   await expect(page.locator("[data-upload-state=duplicate]")).toHaveCount(1);
@@ -84,10 +88,10 @@ test("owner sets up albums, downloads, a PIN, a selection limit, a welcome and a
   const alb = inForm(page, "New album");
   await alb.getByLabel("Album name").fill("Highlights");
   await alb.getByRole("button", { name: "Add album" }).click();
-  await slow(page.getByRole("status").filter({ hasText: "Album added" })).toBeVisible();
+  await slow(note(page).filter({ hasText: "Album added" }).first()).toBeVisible();
   await page.getByRole("button", { name: "Open shot-1.jpg" }).click();
   await choose(page.getByLabel("Album for shot-1.jpg"), "Highlights");
-  await slow(page.getByRole("status").filter({ hasText: "Moved" })).toBeVisible();
+  await slow(note(page).filter({ hasText: "Moved" }).first()).toBeVisible();
   await page.keyboard.press("Escape");
 
   await page.getByRole("tab", { name: "Branding" }).click();
@@ -95,33 +99,33 @@ test("owner sets up albums, downloads, a PIN, a selection limit, a welcome and a
   await page.getByLabel(/Accent color \(optional/).fill("#cc3322");
   await page.getByRole("radio", { name: "Masonry" }).click();
   await page.getByRole("button", { name: "Save design" }).click();
-  await slow(page.getByRole("status").filter({ hasText: "Design saved" })).toBeVisible();
+  await slow(note(page).filter({ hasText: "Design saved" }).first()).toBeVisible();
   await page.getByLabel(/Accent color \(optional/).fill("red");
   await page.getByRole("button", { name: "Save design" }).click();
-  await slow(page.locator("p.st-error")).toContainText("hex");
+  await slow(note(page).last()).toContainText("hex");
   await page.getByLabel(/Accent color \(optional/).fill("#cc3322");
 
   await page.getByRole("tab", { name: "Downloads" }).click();
   await choose(page.getByLabel("What clients can download"), "Web size and full resolution");
   await page.getByRole("button", { name: "Save", exact: true }).click();
-  await slow(page.getByRole("status").filter({ hasText: "Download setting saved" })).toBeVisible();
+  await slow(note(page).filter({ hasText: "Download setting saved" }).first()).toBeVisible();
   const pin = inForm(page, "Download PIN");
   await pin.getByLabel(/Download PIN/).fill("12");
   await pin.getByRole("button", { name: "Save PIN" }).click();
-  await slow(page.locator("p.st-error")).toContainText("4 to 8");
+  await slow(note(page).last()).toContainText("4 to 8");
   await pin.getByLabel(/Download PIN/).fill("4821");
   await pin.getByRole("button", { name: "Save PIN" }).click();
-  await slow(page.getByRole("status").filter({ hasText: "Download PIN set" })).toBeVisible();
+  await slow(note(page).filter({ hasText: "Download PIN set" }).first()).toBeVisible();
 
   await page.getByRole("tab", { name: "Proofing" }).click();
   await page.getByLabel(/Selection limit/).fill("2");
   await page.getByRole("button", { name: "Save", exact: true }).click();
-  await slow(page.getByRole("status").filter({ hasText: "Proofing saved" })).toBeVisible();
+  await slow(note(page).filter({ hasText: "Proofing saved" }).first()).toBeVisible();
 
   await page.getByRole("tab", { name: "Settings" }).click();
   await page.getByLabel(/Access from today/).fill("3");
   await page.getByRole("button", { name: "Save", exact: true }).click();
-  await slow(page.getByRole("status").filter({ hasText: "Publishing saved" })).toBeVisible();
+  await slow(note(page).filter({ hasText: "Publishing saved" }).first()).toBeVisible();
 
   await publishOpenGallery(page);
 });
@@ -240,9 +244,9 @@ test("the owner sees the picks, rating, approval, comment and the downloads; rep
   await expect(proof).toContainText("Could this one be a little brighter?");
   await proof.getByLabel(/Reply to shot-1.jpg/).fill("Done, I've brightened it.");
   await proof.getByRole("button", { name: "Reply" }).click();
-  await slow(page.getByRole("status").filter({ hasText: "Reply added" })).toBeVisible();
+  await slow(note(page).filter({ hasText: "Reply added" }).first()).toBeVisible();
   await page.getByRole("button", { name: "Reopen the selection" }).click();
-  await slow(page.getByRole("status").filter({ hasText: "Selection reopened" })).toBeVisible();
+  await slow(note(page).filter({ hasText: "Selection reopened" }).first()).toBeVisible();
   await page.getByRole("tab", { name: "Photos" }).click();
   const photo = page.locator("li[data-media-id]").filter({ hasText: "shot-1.jpg" });
   await expect(photo).toContainText("4★");
@@ -261,7 +265,7 @@ test("an archived gallery offers the client an extension; paying it brings the g
   await page.goto(galleryUrl, { waitUntil: "networkidle" });
   await page.getByRole("tab", { name: "Settings" }).click();
   await page.getByRole("button", { name: "Archive" }).click();
-  await slow(page.getByRole("status").filter({ hasText: "Archived" })).toBeVisible();
+  await slow(note(page).filter({ hasText: "Archived" }).first()).toBeVisible();
 
   const ctx = await browser.newContext();
   const c = await ctx.newPage();
@@ -274,7 +278,7 @@ test("an archived gallery offers the client an extension; paying it brings the g
   const pol = inForm(page, "Policies");
   await pol.getByLabel(/Extension and reactivation fee/).fill("30");
   await pol.getByRole("button", { name: "Save" }).click();
-  await slow(page.getByRole("status")).toContainText("Policies saved");
+  await slow(note(page).last()).toContainText("Policies saved");
 
   await c.getByRole("button", { name: "Extend access" }).click();
   await expect(c).toHaveURL(/\/client\/pay\//, { timeout: 25_000 });

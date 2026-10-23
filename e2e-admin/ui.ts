@@ -67,3 +67,10 @@ export async function pickDateTime(page: import("@playwright/test").Page, label:
   const m = when.getMinutes() < 30 ? "00" : "30";
   await choose(page.getByLabel("Time", { exact: true }), `${h % 12 || 12}:${m} ${h < 12 ? "AM" : "PM"}`);
 }
+
+/**
+ * The answer to the last studio action. It is a toast (Holominimal's toast region has no `status` role on each toast), or
+ * a `status` element elsewhere on the page (an uploader's progress, a client gallery notice). Unfiltered use takes the
+ * newest one: `note(page).last()`.
+ */
+export const note = (page: import("@playwright/test").Page) => page.locator(".hm-toast, [role=status]");
