@@ -1,11 +1,10 @@
 /**
- * Camera facts shown beside a photograph. They come from the file's own metadata when it has any (the ingest step keeps
- * only Make, Model, LensModel, FNumber, ExposureTime, ISO, FocalLength and DateTimeOriginal; never GPS, owner or serial
- * numbers). Pure functions so they are unit-tested.
+ * Exposure settings shown beside a photograph: focal length, aperture, shutter speed, ISO and the day. They come from
+ * the file's own metadata when it has any. Deliberately NOT here, and never sent to a browser: the camera body, the
+ * lens, serial numbers, GPS, and the image's resolution, so what the photographer owns and how big the files are stay
+ * private. Pure functions so they are unit-tested.
  */
 export type PhotoSpecs = {
-  camera?: string;
-  lens?: string;
   /** Focal length in millimetres. */
   focal?: number;
   /** f-number, e.g. 1.8. */
@@ -26,18 +25,8 @@ const str = (v: unknown) => (typeof v === "string" && v.trim() ? v.trim() : unde
 /** The raw EXIF object from the media table (or the optimize script) as display-ready specs, or undefined if empty. */
 export function specsFromExif(exif: Record<string, unknown> | null | undefined): PhotoSpecs | undefined {
   if (!exif) return undefined;
-  const make = str(exif.Make);
-  const model = str(exif.Model);
-  // "Canon" + "Canon EOS R5" is "Canon EOS R5", not "Canon Canon EOS R5"
-  const camera = model
-    ? make && !model.toLowerCase().startsWith(make.toLowerCase().split(" ")[0] ?? "")
-      ? `${make} ${model}`
-      : model
-    : make;
   const taken = str(exif.DateTimeOriginal)?.slice(0, 10);
   const out: PhotoSpecs = {
-    camera,
-    lens: str(exif.LensModel),
     focal: num(exif.FocalLength),
     aperture: num(exif.FNumber),
     shutter: num(exif.ExposureTime),
@@ -54,14 +43,9 @@ export function formatShutter(seconds: number): string {
 }
 
 /** The exposure facts as short labeled pairs, in the order a photographer reads them. */
-export function specLines(
-  s: PhotoSpecs | undefined,
-  size?: { width: number; height: number },
-): { label: string; value: string }[] {
+export function specLines(s: PhotoSpecs | undefined): { label: string; value: string }[] {
   const out: { label: string; value: string }[] = [];
-  if (!s) return size ? sizeLines(size) : out;
-  if (s.camera) out.push({ label: "Camera", value: s.camera });
-  if (s.lens) out.push({ label: "Lens", value: s.lens });
+  if (!s) return out;
   if (s.focal) out.push({ label: "Focal length", value: `${Math.round(s.focal)} mm` });
   if (s.aperture)
     out.push({ label: "Aperture", value: `f/${Number.isInteger(s.aperture) ? s.aperture : s.aperture.toFixed(1)}` });
@@ -78,29 +62,7 @@ export function specLines(
       }),
     });
   }
-  return size ? [...out, ...sizeLines(size)] : out;
-}
-
-/** Facts every photograph has, camera data or not: its pixel size, megapixels and shape. */
-function sizeLines({ width, height }: { width: number; height: number }) {
-  const g = (a: number, b: number): number => (b ? g(b, a % b) : a);
-  const d = g(width, height);
-  const ratio = width / height;
-  const nice = [
-    [3, 2],
-    [4, 3],
-    [16, 9],
-    [1, 1],
-    [5, 4],
-    [2, 3],
-    [3, 4],
-    [4, 5],
-    [9, 16],
-  ].find(([a, b]) => Math.abs(ratio - (a as number) / (b as number)) < 0.02);
-  return [
-    { label: "Size", value: `${width} × ${height} px · ${((width * height) / 1e6).toFixed(1)} MP` },
-    { label: "Shape", value: nice ? `${nice[0]}:${nice[1]}` : `${width / d}:${height / d}` },
-  ];
+  return out;
 }
 
 /** One line for a tile: "50 mm · f/1.8 · 1/250 s · ISO 400". */

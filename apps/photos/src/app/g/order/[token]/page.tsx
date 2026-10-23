@@ -1,3 +1,4 @@
+import { PRINT_KINDS } from "@jerryqiu/db/gallery-shop";
 import { getDb, schema } from "@jerryqiu/db";
 import * as shop from "@jerryqiu/db/gallery-shop";
 import { RichTextBlock } from "@/components/gallery/RichTextBlock";
@@ -129,7 +130,7 @@ export default async function OrderPage({ params }: { params: Promise<{ token: s
               </DataList>
             </section>
           ) : null}
-          {paid && items.some((i) => ["print", "canvas", "album", "card"].includes(i.kind)) ? (
+          {paid && items.some((i) => (PRINT_KINDS as readonly string[]).includes(i.kind)) ? (
             <Alert tone="info" role="status" className="ord-block">
               {order.labOrderId
                 ? "Your prints were sent to the lab. They ship to the address you gave, and a tracking email follows."

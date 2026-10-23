@@ -1,5 +1,6 @@
 "use client";
 
+import { checkEmail } from "@jerryqiu/db/email-check";
 import { DateField } from "@/components/DateField";
 import { Button, Checkbox, Field, FormMessage, Input, ResultCard, Textarea } from "@/components/ui";
 import { type ShootType, budgetOptions, shootTypes } from "@/content/shoot-types";
@@ -34,6 +35,8 @@ const EMPTY: Answers = {
   consent: false,
 };
 const KEY = "jq-book-draft";
+/** A story shorter than this is not enough to quote from; asking for a little more gets better replies. */
+const MIN_STORY = 30;
 const FLEX = ["That exact day", "A few days around it", "I'm flexible", "I don't have a date yet"];
 const STEPS = ["Kind", "Details", "When", "Budget", "Story", "You", "Review"] as const;
 
@@ -100,10 +103,11 @@ export function BookingWizard({ fallbackEmail, initialType }: { fallbackEmail: s
   const check = (s: number): Record<string, string> => {
     const e: Record<string, string> = {};
     if (s === 0 && !a.type) e.type = "Pick the closest kind of shoot, or Something else.";
-    if (s === 4 && a.message.trim().length < 5) e.message = "Tell me a little about the shoot.";
+    if (s === 4 && a.message.trim().length < MIN_STORY) e.message = "Tell me a little more about the shoot.";
     if (s === 5) {
       if (a.name.trim().length < 2) e.name = "Please tell me your name.";
-      if (!/^\S+@\S+\.\S+$/.test(a.email.trim())) e.email = "That doesn't look like an email address.";
+      const mail = checkEmail(a.email);
+      if (!mail.ok) e.email = mail.message;
       if (!a.consent) e.consent = "Please tick the box so I can store your message.";
     }
     return e;

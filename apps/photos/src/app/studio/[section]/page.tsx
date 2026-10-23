@@ -16,6 +16,7 @@ import * as bill from "@jerryqiu/db/billing";
 import { AutomationsView, NotificationsView, TasksView } from "@/components/studio/OpsViews";
 import * as autoDb from "@jerryqiu/db/automation";
 import { OrdersView } from "@/components/studio/OrdersView";
+import { syncPrintCatalog } from "@/lib/print-catalog";
 import {
   BrandView,
   MusicView,
@@ -29,11 +30,13 @@ import {
   CallSheetsView,
   ExpensesView,
   GearView,
+  PrivacyView,
   RightsView,
   SubscribersView,
   TestimonialsView,
 } from "@/components/studio/BusinessViews";
 import * as newsDb from "@jerryqiu/db/newsletter";
+import * as teamDb from "@jerryqiu/db/team";
 import * as bizDb from "@jerryqiu/db/business";
 import * as brandDb from "@jerryqiu/db/brand";
 import * as extras from "@jerryqiu/db/gallery-extras";
@@ -49,7 +52,7 @@ import { calendarData } from "@/lib/studio-calendar";
 import * as forms from "@jerryqiu/db/forms";
 import { formatMoney } from "@jerryqiu/db/pricing";
 import * as com from "@jerryqiu/db/commerce";
-import { studioSections } from "@/components/studio/sections";
+import { canSeeSection, studioSections } from "@/components/studio/sections";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Studio", robots: { index: false, follow: false } };
@@ -63,6 +66,7 @@ export default async function StudioSection({
   const q = await searchParams;
   if (!studioSections.some((s) => s.id === section)) notFound();
   const user = await requirePageUser("studio.access", `/studio/${section}`);
+  if (!canSeeSection(user.role, section)) notFound();
   const db = getDb();
   if (!db)
     return (
@@ -270,6 +274,27 @@ export default async function StudioSection({
       </Shell>
     );
   }
+  if (section === "privacy") {
+    const items = await bizDb.listPrivacyRequests(db);
+    return (
+      <Shell>
+        <PrivacyView
+          user={user.name ?? user.email ?? "owner"}
+          data={{
+            items: items.map((r) => ({
+              id: r.id,
+              name: r.name,
+              email: r.email,
+              details: r.details,
+              status: r.status,
+              resolution: r.resolution,
+              at: r.createdAt.toISOString(),
+            })),
+          }}
+        />
+      </Shell>
+    );
+  }
   if (section === "subscribers") {
     const [all, active] = await Promise.all([newsDb.listSubscribers(db), newsDb.activeSubscribers(db)]);
     return (
@@ -291,6 +316,7 @@ export default async function StudioSection({
     );
   }
   if (section === "testimonials") {
+    if (mocksEnabled()) await bizDb.seedSamples(db);
     const items = await bizDb.listTestimonials(db);
     return (
       <Shell>
@@ -312,6 +338,7 @@ export default async function StudioSection({
     );
   }
   if (section === "gear") {
+    if (mocksEnabled()) await bizDb.seedSamples(db);
     const today = new Date().toISOString().slice(0, 10);
     const [gear, uses, jobRows] = await Promise.all([bizDb.listGear(db), bizDb.gearUses(db, today), st.listJobs(db)]);
     const seen = new Map<string, string[]>();
@@ -560,6 +587,7 @@ export default async function StudioSection({
   }
   void formatMoney;
   if (section === "orders") {
+    await syncPrintCatalog(db);
     const sheets = await shopDb.listSheets(db);
     const perSheet = await Promise.all(sheets.map((x) => shopDb.listProducts(db, { sheetId: x.id })));
     const orders = await shopDb.listOrders(db);
@@ -658,7 +686,7 @@ export default async function StudioSection({
     );
   }
   if (section === "users") {
-    const rows = await db.select().from(schema.users).orderBy(schema.users.createdAt);
+    const rows = await teamDb.listTeam(db);
     return (
       <Shell>
         <UsersView
@@ -668,6 +696,7 @@ export default async function StudioSection({
             email: u.email,
             role: u.role,
             active: u.active,
+            external: u.external,
             since: u.createdAt.toISOString().slice(0, 10),
           }))}
         />

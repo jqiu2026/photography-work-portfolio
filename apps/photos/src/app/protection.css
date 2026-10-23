@@ -136,17 +136,21 @@ html[data-guard-noselect] :is(input, textarea, [contenteditable]) {
   -webkit-user-select: text;
   user-select: text;
 }
-/* hiding is a fade: quick out (a capture tool may be about to grab the screen), slow and soft back in */
+/* hiding is a fade: quick out (a capture tool may be about to grab the screen), slow and soft back in. !important
+   because pages with their own scroll animations (the home page) set opacity and transitions on these elements too */
 .pm-img {
   transition: opacity 0.6s var(--hm-ease-glide);
+}
+html[data-guard] .pm-img {
+  transition: opacity 0.6s var(--hm-ease-glide) !important;
 }
 .pm-img img {
   transition: filter 0.6s var(--hm-ease-glide), transform 1.2s var(--hm-ease-glide);
 }
 html.pm-guard-hide .pm-img,
 html.pm-guard-hide [data-protected] {
-  opacity: 0;
-  transition-duration: 0.18s;
+  opacity: 0 !important;
+  transition-duration: 0.18s !important;
 }
 html.pm-guard-hide .pm-img img {
   filter: blur(18px);
@@ -156,6 +160,9 @@ html.pm-guard-hide .pm-img img {
 html.pm-guard-snap .pm-img,
 html.pm-guard-snap [data-protected],
 html.pm-guard-snap .pm-img img {
+  transition: none !important;
+}
+html[data-guard].pm-guard-snap .pm-img {
   transition: none !important;
 }
 html.pm-guard-conceal:not(.pm-guard-reveal) .pm-img,
@@ -346,5 +353,35 @@ html.pm-guard-half:not(.pm-guard-half-off) [data-protected]::after {
 @media (prefers-reduced-motion: reduce) {
   .pm-tile-info {
     transition: none;
+  }
+}
+
+/* the zoom controls, written out (they are otherwise invisible) */
+.pm-zoom-hint {
+  position: absolute;
+  left: var(--hm-space-3);
+  bottom: calc(var(--hm-space-3) + 0.1rem);
+  z-index: 4;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.9rem;
+  max-width: min(22rem, 38%);
+  margin: 0;
+  font-size: 0.72rem;
+  line-height: 1.3;
+  color: color-mix(in srgb, var(--hm-on-photo, #fff) 62%, transparent);
+  pointer-events: none;
+}
+.pm-zoom-hint kbd {
+  padding: 0.05rem 0.35rem;
+  border: 1px solid color-mix(in srgb, var(--hm-on-photo, #fff) 28%, transparent);
+  border-radius: 4px;
+  font: inherit;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  color: var(--hm-on-photo, #fff);
+}
+@media (max-width: 760px) {
+  .pm-zoom-hint {
+    display: none;
   }
 }

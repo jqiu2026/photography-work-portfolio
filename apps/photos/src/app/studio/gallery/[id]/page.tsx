@@ -1,3 +1,4 @@
+import { canSeeSection } from "@/components/studio/sections";
 import { getDb, schema } from "@jerryqiu/db";
 import * as gal from "@jerryqiu/db/galleries";
 import { lockedUntil, readSecurity, readStyle, securityLog } from "@jerryqiu/db/gallery-security";
@@ -17,6 +18,7 @@ const when = (d: Date | null) => (d ? d.toISOString().slice(0, 16).replace("T", 
 export default async function GalleryPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const user = await requirePageUser("studio.access", `/studio/gallery/${id}`);
+  if (!canSeeSection(user.role, "galleries")) notFound();
   const db = getDb();
   if (!db || !/^[0-9a-f-]{36}$/i.test(id)) notFound();
   const [row] = await db
@@ -136,6 +138,8 @@ export default async function GalleryPage({ params }: { params: Promise<{ id: st
             id: r.id,
             albumId: r.albumId,
             name: r.name,
+            preset: r.preset,
+            previewText: r.previewText ?? "",
             maxPx: r.maxPx,
             perVisitor: r.perVisitor,
             watermarkId: r.watermarkId,

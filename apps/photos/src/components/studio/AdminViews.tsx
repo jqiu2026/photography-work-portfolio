@@ -23,6 +23,7 @@ import {
 import Link from "next/link";
 import { useRef, useState } from "react";
 import { deleteTrackAction, deleteWatermarkAction, setDefaultWatermarkAction } from "@/app/studio/gallery-actions";
+import { changeMemberRoleAction, inviteMemberAction, setMemberActiveAction } from "@/app/studio/team-actions";
 import {
   billMonthAction,
   downgradePlanAction,
@@ -433,37 +434,135 @@ export function BrandView({ brand }: { brand: BrandForm }) {
 }
 
 /* ------------------------------------------------------------------- Users */
-export function UsersView({
-  users,
-}: { users: { id: string; name: string; email: string; role: string; active: boolean; since: string }[] }) {
-  const { note } = useAct();
+export type TeamRow = {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  active: boolean;
+  external: boolean;
+  since: string;
+};
+const ROLE_WORDS: Record<string, string> = {
+  owner: "Owner: everything",
+  editor: "Editor",
+  bookkeeper: "Bookkeeper: money pages only",
+  photographer: "Photographer: shoots and galleries",
+};
+
+/** Who can sign in, and what each role may do. The owner invites helpers by Google address. */
+export function UsersView({ users }: { users: TeamRow[] }) {
+  const { pending, note, act, submit } = useAct();
+  const [ask, confirmEl] = useConfirm();
+  const [f, setF] = useState({ email: "", name: "", role: "photographer" });
   return (
     <Frame section="users" note={note}>
-      <Card title="Users and permissions" id="us-h">
-        <Text size="sm" tone="muted">
-          People who can sign in to this studio. Clients never sign in anywhere: they use the link to their gallery.
-          Sign-in is by Google for the addresses on the allow-list (ADMIN_EMAILS).
-        </Text>
-        {users.length ? (
-          <ul className="hm-data-list st-list">
-            {users.map((u) => (
-              <li className="hm-data-list-item" key={u.id}>
-                <span>
-                  {u.name || u.email}
-                  <small>
-                    {u.email} · {u.role}
-                    {u.active ? "" : " · inactive"} · since {u.since}
-                  </small>
-                </span>
-              </li>
-            ))}
-          </ul>
-        ) : (
+      {confirmEl}
+      <div className="st-grid">
+        <Card title="Team" id="us-h">
           <Text size="sm" tone="muted">
-            Nobody has signed in yet. The first owner address in ADMIN_EMAILS is added when they sign in.
+            People who can sign in to this studio with Google. Clients never sign in: they use the link to their
+            gallery.
           </Text>
-        )}
-      </Card>
+          <ul className="hm-data-list st-list st-list--tall" aria-label="Team">
+            {users.map((u) => {
+              const helper = u.role === "photographer" || u.role === "bookkeeper";
+              return (
+                <li className="hm-data-list-item" key={u.id} data-member={u.email}>
+                  <span>
+                    {u.name || u.email}
+                    <small>
+                      {u.email} · {ROLE_WORDS[u.role] ?? u.role}
+                      {u.active ? "" : " · switched off"} · since {u.since}
+                    </small>
+                  </span>
+                  {helper ? (
+                    <span className="st-actions">
+                      <Select
+                        aria-label={`Role of ${u.email}`}
+                        value={u.role}
+                        onValueChange={(v) => act(() => changeMemberRoleAction({ memberId: u.id, role: v }))}
+                      >
+                        <option value="photographer">Photographer</option>
+                        <option value="bookkeeper">Bookkeeper</option>
+                      </Select>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        disabled={pending}
+                        onClick={async () =>
+                          u.active
+                            ? (await ask({
+                                title: `Switch off ${u.email}?`,
+                                body: "They can no longer sign in. Nothing they added is removed.",
+                                action: "Switch off",
+                              })) && act(() => setMemberActiveAction({ memberId: u.id, active: false }))
+                            : act(() => setMemberActiveAction({ memberId: u.id, active: true }))
+                        }
+                      >
+                        {u.active ? "Switch off" : "Switch on"}
+                      </Button>
+                    </span>
+                  ) : null}
+                </li>
+              );
+            })}
+          </ul>
+          {users.length ? null : (
+            <Text size="sm" tone="muted">
+              Nobody has signed in yet. The first owner address in ADMIN_EMAILS is added when they sign in.
+            </Text>
+          )}
+        </Card>
+        <Card title="Invite someone" id="us-invite">
+          <form
+            noValidate
+            className="st-form"
+            aria-label="Invite a team member"
+            onSubmit={submit(
+              () => inviteMemberAction(f),
+              () => setF({ email: "", name: "", role: f.role }),
+            )}
+          >
+            <Field label="Google email" hint="Any Google account works, such as a personal Gmail.">
+              <Input
+                type="email"
+                value={f.email}
+                autoComplete="off"
+                onChange={(e) => setF({ ...f, email: e.target.value })}
+              />
+            </Field>
+            <Field label="Name (optional)">
+              <Input value={f.name} onChange={(e) => setF({ ...f, name: e.target.value })} />
+            </Field>
+            <Field label="Role">
+              <Select value={f.role} onValueChange={(v) => setF({ ...f, role: v })}>
+                <option value="photographer">Photographer</option>
+                <option value="bookkeeper">Bookkeeper</option>
+              </Select>
+            </Field>
+            <Button type="submit" disabled={pending}>
+              Invite
+            </Button>
+          </form>
+          <dl className="st-roles">
+            <div>
+              <dt>Photographer</dt>
+              <dd>
+                Runs shoots and galleries: uploads, albums, the calendar, call sheets, gear, clients. Adds freely, but
+                can remove only what they added in the last 5 minutes. Sees no money, settings or team.
+              </dd>
+            </div>
+            <div>
+              <dt>Bookkeeper</dt>
+              <dd>
+                Sees and edits the money side: orders, quotes, invoices, payments, expenses, reports, and the client
+                list. Sees no galleries or settings, and can remove only what they added in the last 5 minutes.
+              </dd>
+            </div>
+          </dl>
+        </Card>
+      </div>
     </Frame>
   );
 }

@@ -175,7 +175,7 @@ export async function sendContractAction(contractId: string) {
 }
 
 export async function createInvoiceAction(input: { jobId: string; description: string; amountDollars: string }) {
-  return guarded("studio.access", async ({ db, audit }) => {
+  return guarded("studio.money", async ({ db, audit }) => {
     const p = id.safeParse(input.jobId);
     const dollars = Number(input.amountDollars);
     if (!p.success) return actionError("Unknown job.");
@@ -203,7 +203,7 @@ export async function createInvoiceAction(input: { jobId: string; description: s
 }
 
 export async function sendInvoiceAction(invoiceId: string) {
-  return guarded("studio.access", async ({ db, audit }) => {
+  return guarded("studio.money", async ({ db, audit }) => {
     const p = id.safeParse(invoiceId);
     if (!p.success) return actionError("Unknown invoice.");
     try {
@@ -228,7 +228,7 @@ export async function sendInvoiceAction(invoiceId: string) {
 }
 
 export async function markInvoicePaidAction(invoiceId: string) {
-  return guarded("studio.access", async ({ db, audit, user }) => {
+  return guarded("studio.money", async ({ db, audit, user }) => {
     const p = id.safeParse(invoiceId);
     if (!p.success) return actionError("Unknown invoice.");
     const rows = await st.listInvoices(db);

@@ -1,6 +1,9 @@
 import { and, asc, desc, eq, gte, ilike, isNotNull, isNull, lte, or, sql } from "drizzle-orm";
 import type { Database } from "./client";
+import { z } from "zod";
 import { claimRun, notify } from "./automation";
+import { getStudioSetting, setStudioSetting } from "./calendar";
+import { checkEmail } from "./email-check";
 import { StudioError } from "./errors";
 import * as s from "./schema";
 
@@ -564,4 +567,80 @@ export async function remindLicenses(db: Database, now = new Date()) {
     told++;
   }
   return told;
+}
+
+/* ---- sample data (labelled SAMPLE, only where mocks are enabled) ---- */
+
+const sampledSchema = z.object({ done: z.boolean().default(false) });
+export const SAMPLE_TESTIMONIAL = {
+  displayName: "Sample Client",
+  role: "SAMPLE",
+  quote:
+    "SAMPLE: this is placeholder text that shows where a client's words go. It was not said by a real person, so delete it before the site goes live.",
+  consentNote: "SAMPLE: not a real person, no consent needed. Delete before launch.",
+};
+export const SAMPLE_GEAR = [
+  { name: "Sample camera body", kind: "camera", notes: "SAMPLE: replace with your own" },
+  { name: "Sample 24-70mm lens", kind: "lens", notes: "SAMPLE: replace with your own" },
+  { name: "Sample on-camera flash", kind: "light", notes: "SAMPLE: replace with your own" },
+  { name: "Sample drone", kind: "drone", notes: "SAMPLE: replace with your own" },
+] as const;
+
+/**
+ * Adds one sample testimonial (published, so you can see where it appears) and a few pieces of sample gear, once, so the
+ * pages are not empty while you try them. Everything is labelled SAMPLE. The caller only does this where mocks are
+ * enabled (never in production). Deleting them is permanent: they are not added again.
+ */
+export async function seedSamples(db: Database): Promise<boolean> {
+  const state = await getStudioSetting(db, "samples", sampledSchema);
+  if (state.done) return false;
+  await setStudioSetting(db, "samples", { done: true });
+  const [t] = await db.select({ c: sql<number>`count(*)::int` }).from(s.studioTestimonials);
+  const [g] = await db.select({ c: sql<number>`count(*)::int` }).from(s.studioGear);
+  if (!t?.c)
+    await db.insert(s.studioTestimonials).values({
+      ...SAMPLE_TESTIMONIAL,
+      consentAt: new Date(),
+      publishedAt: new Date(),
+    });
+  if (!g?.c) await db.insert(s.studioGear).values(SAMPLE_GEAR.map((x) => ({ ...x })));
+  return true;
+}
+
+/* ---- privacy requests: "please take me out of a photograph" ---- */
+
+export async function addPrivacyRequest(db: Database, input: { name: string; email: string; details: string }) {
+  if (input.name.trim().length < 2) throw new StudioError("Please tell me your name.");
+  const mail = checkEmail(input.email);
+  if (!mail.ok) throw new StudioError(mail.message);
+  if (input.details.trim().length < 20)
+    throw new StudioError("Tell me where you saw the photograph and which one it is, so I can find it.");
+  const [row] = await db
+    .insert(s.studioPrivacyRequests)
+    .values({
+      name: input.name.trim().slice(0, 120),
+      email: input.email.trim().toLowerCase(),
+      details: input.details.trim().slice(0, 4000),
+    })
+    .returning();
+  return row as s.StudioPrivacyRequest;
+}
+export async function listPrivacyRequests(db: Database) {
+  return db
+    .select()
+    .from(s.studioPrivacyRequests)
+    .orderBy(sql`${s.studioPrivacyRequests.status} = 'open' desc`, desc(s.studioPrivacyRequests.createdAt));
+}
+export async function resolvePrivacyRequest(db: Database, id: string, status: "done" | "declined", resolution: string) {
+  if (resolution.trim().length < 3) throw new StudioError("Write what you did, for the record.");
+  await db
+    .update(s.studioPrivacyRequests)
+    .set({ status, resolution: resolution.trim().slice(0, 1000), handledAt: new Date() })
+    .where(eq(s.studioPrivacyRequests.id, id));
+}
+export async function reopenPrivacyRequest(db: Database, id: string) {
+  await db
+    .update(s.studioPrivacyRequests)
+    .set({ status: "open", resolution: null, handledAt: null })
+    .where(eq(s.studioPrivacyRequests.id, id));
 }

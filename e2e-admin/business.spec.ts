@@ -175,3 +175,109 @@ test("a gallery link has a QR code and copying it raises a toast, and each card 
   await page.goto(`${PHOTOS}/studio/galleries`, { waitUntil: "networkidle" });
   await expect(page.getByText(`QR gallery ${uid}`).first()).toBeVisible();
 });
+
+test("someone asks to be taken out of a photograph, and the owner closes the request", async ({ page }) => {
+  const who = `Pat ${uid}`;
+  await page.goto(`${PHOTOS}/privacy-request`, { waitUntil: "networkidle" });
+  const form = page.getByRole("form", { name: "Photo removal request" });
+  await form.getByRole("textbox", { name: /^Your name/ }).fill(who);
+  await form.getByRole("textbox", { name: /^Email/ }).fill("pat@mailinator.com");
+  await form
+    .getByRole("textbox", { name: /^Which photograph/ })
+    .fill("The open house gallery, third row, a blue coat.");
+  await form.getByLabel(/I agree that you keep this request/).check();
+  await form.getByRole("button", { name: "Send the request" }).click();
+  await expect(page.getByText(/temporary email address/)).toBeVisible();
+  await form.getByRole("textbox", { name: /^Email/ }).fill(`pat-${uid}@gmail.com`);
+  await form.getByRole("button", { name: "Send the request" }).click();
+  await slow(page.getByText("Thank you, I have your request.")).toBeVisible();
+  await page.goto(`${PHOTOS}/studio/privacy`, { waitUntil: "networkidle" });
+  const item = page.locator("li", { hasText: who });
+  await expect(item.getByText("Waiting")).toBeVisible();
+  await item.getByLabel(`What you did for ${who}`).fill("Hid it in the open house gallery.");
+  await item.getByRole("button", { name: "Mark done" }).click();
+  await slow(note(page).filter({ hasText: "Marked done" }).first()).toBeVisible();
+  await expect(page.locator("li", { hasText: who }).getByText("Done")).toBeVisible();
+});
+
+test("the owner invites a photographer, a throwaway address is refused, and the role can change", async ({ page }) => {
+  await page.goto(`${PHOTOS}/studio/users`, { waitUntil: "networkidle" });
+  const invite = inForm(page, "Invite a team member");
+  await invite.getByLabel("Google email").fill("x@mailinator.com");
+  await invite.getByRole("button", { name: "Invite" }).click();
+  await slow(
+    note(page)
+      .filter({ hasText: /temporary email/ })
+      .first(),
+  ).toBeVisible();
+  const mail = `helper-${uid}@gmail.com`;
+  await invite.getByLabel("Google email").fill(mail);
+  await invite.getByRole("button", { name: "Invite" }).click();
+  await slow(note(page).filter({ hasText: "can now sign in with Google" }).first()).toBeVisible();
+  const row = page.locator("li[data-member]", { hasText: mail });
+  await expect(row).toContainText("Photographer");
+  await choose(row.getByLabel(`Role of ${mail}`), "Bookkeeper");
+  await slow(note(page).filter({ hasText: "Role changed" }).first()).toBeVisible();
+  await expect(page.locator("li[data-member]", { hasText: mail })).toContainText("Bookkeeper");
+});
+
+test("the print store lists WHCC-style lines, and the price list gains the new products", async ({ page }) => {
+  await page.goto(`${PHOTOS}/prints`, { waitUntil: "networkidle" });
+  for (const line of ["Photo prints", "Canvas gallery wraps", "Metal prints", "Albums"])
+    await expect(page.getByRole("heading", { name: line })).toBeVisible();
+  await expect(page.getByText("Metal print 16 × 24 in")).toBeVisible();
+  await page.goto(`${PHOTOS}/studio/orders`, { waitUntil: "networkidle" });
+  await expect(page.getByLabel("Name of Metal print 16 × 24 in")).toBeVisible();
+});
+
+test("downloads offer full size, high, low, social and preview sizes", async ({ page }) => {
+  await newGallery(page, PHOTOS, `Gear job A ${uid}`, `Sizes ${uid}`);
+  await page.getByRole("tab", { name: "Downloads" }).click();
+  const rule = inForm(page, "Download rule");
+  await rule.getByLabel("Size").click();
+  for (const label of [
+    "Full size (original)",
+    "High resolution (80% of full size)",
+    "Low resolution (50% of full size)",
+    "Social media (longest side 1920 px)",
+    "Preview (watermarked, preview only)",
+  ])
+    await expect(page.getByRole("option", { name: label })).toBeVisible();
+  await page.keyboard.press("Escape");
+  await choose(rule.getByLabel("Size"), "Preview (watermarked, preview only)");
+  await rule.getByLabel("Rule name (visitors see it)").fill("Proofs");
+  await rule.getByLabel("Words across the photograph").fill("PROOF ONLY");
+  await rule.getByRole("button", { name: "Add rule" }).click();
+  await slow(note(page).filter({ hasText: "Download rule saved" }).first()).toBeVisible();
+  await expect(page.getByRole("list", { name: "Download rules" })).toContainText("Preview");
+});
+
+test("the color theme switch changes the scheme, and Jump to colors its results by kind", async ({ page }) => {
+  await page.goto(`${PHOTOS}/studio/overview`, { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: "Dawn" }).click();
+  await expect(page.locator('[data-hm-scheme="dawn"]').first()).toBeAttached();
+  await page.getByRole("button", { name: "Dark" }).click();
+  await page.getByRole("button", { name: /Jump to/ }).click();
+  const palette = page.getByRole("dialog", { name: "Jump to" });
+  await expect(palette.locator(".hm-palette-option[data-kind='start']").first()).toBeVisible();
+  await expect(palette.locator(".hm-palette-option[data-kind='page']").first()).toBeVisible();
+});
+
+test("the booking questionnaire asks for a little more, and refuses a throwaway email", async ({ page }) => {
+  await page.goto(`${PHOTOS}/book?type=portrait`, { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await page.getByRole("button", { name: "Skip", exact: true }).click();
+  await page.getByRole("button", { name: "Skip", exact: true }).click();
+  await page.getByLabel(/Who is in the photographs/).fill("Me and a friend.");
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await expect(page.getByText("Tell me a little more about the shoot.")).toBeVisible();
+  await page
+    .getByLabel(/Who is in the photographs/)
+    .fill("Me and a friend, for graduation photos on campus next month.");
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await page.getByRole("textbox", { name: /^Your name/ }).fill("Test Person");
+  await page.getByRole("textbox", { name: /^Email/ }).fill("someone@yopmail.com");
+  await page.getByLabel(/I agree that my answers are stored/).check();
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await expect(page.getByText(/temporary email address/)).toBeVisible();
+});

@@ -256,3 +256,17 @@
   gap: var(--hm-space-2);
   flex-wrap: wrap;
 }
+
+.st-roles {
+  display: grid;
+  gap: var(--hm-space-3);
+  margin: var(--hm-space-5) 0 0;
+}
+.st-roles dt {
+  font-weight: 600;
+}
+.st-roles dd {
+  margin: 0.15rem 0 0;
+  color: var(--hm-muted);
+  font-size: var(--hm-text-sm);
+}

@@ -206,7 +206,7 @@ test("an inquiry becomes a scored lead, the visitor and the owner get email (lab
   await page.getByRole("button", { name: "Next", exact: true }).click();
   await page.getByRole("button", { name: "Skip", exact: true }).click();
   await page.getByRole("button", { name: "Next", exact: true }).click();
-  await expect(page.getByText("Tell me a little about the shoot.")).toBeVisible();
+  await expect(page.getByText("Tell me a little more about the shoot.")).toBeVisible();
   await page
     .getByLabel(/Which production or ensemble/)
     .fill("A spring concert with about 120 people; I'd like coverage and a gallery.");

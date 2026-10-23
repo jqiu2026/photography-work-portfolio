@@ -12,7 +12,7 @@ const MAX = 40 * 1024 * 1024;
 
 /** Adds a music track: a multipart POST with `file` and `title` (the studio only). Audio is kept with the private originals. */
 export const POST = guardedRoute(
-  "studio.access",
+  "settings.write",
   async (req) => {
     const db = getDb();
     if (!db) return NextResponse.json({ error: "No database." }, { status: 503 });

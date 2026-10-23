@@ -1,6 +1,7 @@
 "use client";
 
 import { ProtectedImage, ZoomStage } from "@/components/media";
+import { ruleSizeLabel } from "@jerryqiu/db/download-presets";
 import {
   Alert,
   ArrowLeftIcon,
@@ -975,7 +976,10 @@ function ShopView({
   const groups: [string, string[]][] = [
     ["Downloads", ["digital-web", "digital-full", "digital-all"]],
     ["Prints", ["print"]],
+    ["Mounted prints", ["mounted"]],
+    ["Framed prints", ["framed"]],
     ["Canvas", ["canvas"]],
+    ["Metal prints", ["metal"]],
     ["Cards", ["card"]],
     ["Albums", ["album"]],
   ];
@@ -1311,21 +1315,16 @@ function Lightbox({
                     </form>
                   ) : null}
                   {(data.downloads.full && data.downloads.unlocked) || web ? (
-                    <div className="gx-proof-row">
-                      {data.downloads.full && data.downloads.unlocked ? (
-                        <Button asChild variant="secondary" size="sm">
-                          <a href={dl("full")} download>
-                            <DownloadIcon /> Full size
+                    <div className="gx-proof-row gx-sizes" role="group" aria-label="Download this photograph">
+                      {SIZE_CHOICES.filter((c) =>
+                        c.tier === "full" ? data.downloads.full && data.downloads.unlocked : web,
+                      ).map((c) => (
+                        <Button key={c.id} asChild variant="secondary" size="sm">
+                          <a href={dl(c.id)} download>
+                            <DownloadIcon /> {c.label}
                           </a>
                         </Button>
-                      ) : null}
-                      {web ? (
-                        <Button asChild variant="secondary" size="sm">
-                          <a href={dl("web")} download>
-                            <DownloadIcon /> Web size
-                          </a>
-                        </Button>
-                      ) : null}
+                      ))}
                     </div>
                   ) : null}
                 </TabPanel>
@@ -1337,6 +1336,15 @@ function Lightbox({
     </dialog>
   );
 }
+
+/** The sizes a client can download, in the words they see. Original and high resolution need the full-size policy. */
+const SIZE_CHOICES = [
+  { id: "full", label: "Full size (original)", tier: "full" },
+  { id: "high", label: "High resolution", tier: "full" },
+  { id: "low", label: "Low resolution", tier: "web" },
+  { id: "social", label: "Social media (1920 px)", tier: "web" },
+  { id: "preview", label: "Preview (watermarked)", tier: "web" },
+] as const;
 
 const COUNTRY: Record<string, string> = { US: "United States", CA: "Canada", MX: "Mexico" };
 
@@ -1577,7 +1585,7 @@ function Downloads({
       </Modal>
     );
   }
-  const zip = (size: "web" | "full", parts: number, label: string) =>
+  const zip = (size: string, parts: number, label: string) =>
     Array.from({ length: parts }, (_, k) => (
       <DataListItem
         key={`${size}${k}`}
@@ -1616,10 +1624,14 @@ function Downloads({
         </form>
       ) : (
         <DataList>
-          {data.downloads.web ? zip("web", data.downloads.webParts, "All photographs, web size") : null}
-          {client && data.downloads.full
-            ? zip("full", data.downloads.fullParts, "All photographs, full resolution")
-            : null}
+          {SIZE_CHOICES.filter((c) => (c.tier === "full" ? client && data.downloads.full : data.downloads.web)).map(
+            (c) =>
+              zip(
+                c.id,
+                c.tier === "full" ? data.downloads.fullParts : data.downloads.webParts,
+                `All photographs: ${c.label.toLowerCase().replace("full size (original)", "full size, original")}`,
+              ),
+          )}
         </DataList>
       )}
     </Modal>
@@ -1662,7 +1674,7 @@ function RuleRow({
       <div>
         <strong>{rule.name}</strong>
         <p className="gx-fine">
-          {rule.maxPx ? `${rule.maxPx} px` : "Original size"}
+          {ruleSizeLabel(rule)}
           {rule.perVisitor ? ` · up to ${rule.perVisitor} per visit` : ""}
           {rule.watermarked ? " · watermarked" : ""}
         </p>
@@ -1744,7 +1756,7 @@ function PhotoRule({ rule, mediaId, data }: { rule: Data["rules"][number]; media
       <div>
         {rule.name}
         <p className="gx-fine">
-          {rule.maxPx ? `${rule.maxPx} px` : "original size"}
+          {ruleSizeLabel(rule).toLowerCase()}
           {rule.watermarked ? ", watermarked" : ""}
         </p>
       </div>

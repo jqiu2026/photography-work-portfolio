@@ -5,7 +5,7 @@ import { StudioError } from "@jerryqiu/db/studio";
 import { createRefund } from "@jerryqiu/payments";
 import { z } from "zod";
 import { emailInvoice, runBillingJobs } from "@/lib/billing-jobs";
-import { studio } from "@/lib/studio-run";
+import { studioMoney } from "@/lib/studio-run";
 
 const id = z.string().uuid();
 const cents = (v: string, what: string) => {
@@ -22,7 +22,7 @@ export async function createPlanAction(input: {
   every: string;
   name?: string;
 }) {
-  return studio(async ({ db }) => {
+  return studioMoney(async ({ db }) => {
     const j = id.safeParse(input.jobId);
     if (!j.success) throw new StudioError("Pick a job.");
     const every = input.every === "week" ? "week" : input.every === "2weeks" ? "2weeks" : "month";
@@ -55,7 +55,7 @@ export async function createRecurringAction(input: {
   startOn: string;
   endsOn?: string;
 }) {
-  return studio(async ({ db }) => {
+  return studioMoney(async ({ db }) => {
     const j = id.safeParse(input.jobId);
     if (!j.success) throw new StudioError("Pick a job.");
     const r = await bill.createRecurring(db, {
@@ -79,7 +79,7 @@ export async function createRecurringAction(input: {
 }
 
 export async function stopRecurringAction(recurringId: string) {
-  return studio(async ({ db }) => {
+  return studioMoney(async ({ db }) => {
     const p = id.safeParse(recurringId);
     if (!p.success) throw new StudioError("Unknown item.");
     await bill.stopRecurring(db, p.data);
@@ -89,7 +89,7 @@ export async function stopRecurringAction(recurringId: string) {
 
 /** Refunds through Stripe when the payment was a Stripe payment and a key is set; otherwise records the refund you made yourself. */
 export async function refundAction(input: { paymentId: string; amount: string; reason?: string }) {
-  return studio(async ({ db, user }) => {
+  return studioMoney(async ({ db, user }) => {
     const p = id.safeParse(input.paymentId);
     if (!p.success) throw new StudioError("Unknown payment.");
     const { payment, remainingCents } = await bill.refundable(db, p.data);
@@ -135,7 +135,7 @@ export async function saveBillingSettingsAction(input: {
   surcharge: boolean;
   surchargePercent: string;
 }) {
-  return studio(async ({ db }) => {
+  return studioMoney(async ({ db }) => {
     const percents = input.percents
       .split(",")
       .map((x) => Number(x.trim()))
@@ -162,7 +162,7 @@ export async function saveBillingSettingsAction(input: {
 }
 
 export async function runBillingNowAction() {
-  return studio(async ({ db }) => {
+  return studioMoney(async ({ db }) => {
     const r = await runBillingJobs(db);
     return { message: `Done: ${r.recurring} recurring and ${r.installments} instalment invoice(s) sent.` };
   });

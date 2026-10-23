@@ -8,7 +8,7 @@ import { and, eq, gte, or, sql } from "drizzle-orm";
 import type { GalleryAccess } from "@/lib/client-gallery";
 import { unlockedRules } from "@/lib/client-gallery";
 import { baseName, zipPlan } from "@/lib/downloads";
-import { ruleFile } from "@/lib/gallery-files";
+import { ruleFile, sizeTag } from "@/lib/gallery-files";
 
 type Contents = Awaited<ReturnType<typeof gal.galleryContents>>;
 
@@ -75,7 +75,7 @@ export async function ruleDownload(opts: {
     await gal.logDownload(db, { galleryId: g.id, kind, part, viewer: a.viewer, ipHash: ip });
     const stream = zipStream(
       parts[part - 1].map((it) => ({
-        name: `${baseName(names.get(it.mediaId) ?? it.filename)}-${rule.maxPx ? `${rule.maxPx}px` : "original"}.jpg`,
+        name: `${baseName(names.get(it.mediaId) ?? it.filename)}-${rule.preset === "custom" ? (rule.maxPx ? `${rule.maxPx}px` : "original") : (sizeTag[rule.preset] ?? "original")}.jpg`,
         read: async () => {
           const f = await ruleFile(contents, it.mediaId, rule, watermark, a.viewer);
           return f ? new Uint8Array(f.bytes) : new Uint8Array();

@@ -1,6 +1,7 @@
 import { createHash, randomBytes } from "node:crypto";
 import { and, desc, eq, isNotNull, isNull, sql } from "drizzle-orm";
 import type { Database } from "./client";
+import { checkEmail } from "./email-check";
 import { StudioError } from "./errors";
 import * as s from "./schema";
 
@@ -9,7 +10,6 @@ import * as s from "./schema";
  * unsubscribe, no tracking. One secret token per address serves both links; only its hash is stored. Sending
  * newsletters is not built (it needs a verified sending domain): this keeps a clean, consented list until then.
  */
-const EMAIL = /^[^\s@,;<>]+@[^\s@,;<>]+\.[^\s@,;<>]+$/;
 const hash = (t: string) => createHash("sha256").update(t).digest("hex");
 
 export type Signup = { status: "pending" | "already"; token?: string };
@@ -21,7 +21,8 @@ export type Signup = { status: "pending" | "already"; token?: string };
  */
 export async function subscribe(db: Database, input: { email: string; source?: string }): Promise<Signup> {
   const email = input.email.trim().toLowerCase();
-  if (!EMAIL.test(email) || email.length > 200) throw new StudioError("That doesn't look like an email address.");
+  const check = checkEmail(email);
+  if (!check.ok) throw new StudioError(check.message);
   const [have] = await db.select().from(s.studioSubscribers).where(eq(s.studioSubscribers.email, email)).limit(1);
   if (have?.confirmedAt && !have.unsubscribedAt) return { status: "already" };
   const token = randomBytes(24).toString("base64url");

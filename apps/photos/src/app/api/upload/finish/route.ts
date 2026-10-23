@@ -1,3 +1,4 @@
+import { markCreated } from "@jerryqiu/db/team";
 import { createHash } from "node:crypto";
 import { getDb, schema, writeAudit } from "@jerryqiu/db";
 import * as gal from "@jerryqiu/db/galleries";
@@ -50,6 +51,8 @@ export const POST = guardedRoute(
       });
       await db.update(schema.media).set({ sha256 }).where(eq(schema.media.id, r.id));
       await gal.addItems(db, galleryId, [r.id], albumId ?? null);
+      // a photographer can take back what they just uploaded, for a few minutes
+      await markCreated(db, user.email, "photo", `${galleryId}:${r.id}`);
       await writeAudit(db, {
         actor: user.email,
         action: "studio.gallery.upload",

@@ -9,6 +9,7 @@ import {
   detectTrigger,
   devtoolsDocked,
   guardCopy,
+  heldModifiers,
   isModifierKey,
   modifierState,
 } from "./guard";
@@ -142,17 +143,41 @@ export function ScreenshotGuard({ level = "light", children }: { level?: GuardLe
       t instanceof HTMLElement && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName));
     const inStudio = location.pathname.startsWith("/studio");
     let modifierHidden = false;
+    let promptTimer: ReturnType<typeof setTimeout> | undefined;
+    let promptShown = false;
     const syncModifiers = (e: KeyboardEvent) => {
       const state = modifierState(e);
       const want = state === "combo" || (state === "hide" && !editable(e.target) && !inStudio);
       if (want && !modifierHidden) {
         modifierHidden = true;
         hide(true, state === "combo");
-        if (state === "combo") optsRef.current.onEvent?.({ kind: "screenshot", combo: "modifier combo" });
+        const combo = state === "combo" ? heldModifiers(e).join("+") : (heldModifiers(e)[0] ?? "Shift");
+        optsRef.current.onEvent?.({ kind: "screenshot", combo: `${combo} held` });
+        // the same reminder a capture shortcut shows, once the key has been held for a moment (a quick tap of Shift to
+        // type a capital letter only fades the photographs, it does not raise a dialog)
+        if (optsRef.current.showDialog !== false) {
+          clearTimeout(promptTimer);
+          promptTimer = setTimeout(
+            () => {
+              promptShown = true;
+              dialogOpen.current = true;
+              setOpen(`${combo} held`);
+            },
+            state === "combo" ? 0 : 250,
+          );
+        }
       } else if (!want && modifierHidden) {
         modifierHidden = false;
+        clearTimeout(promptTimer);
         clearTimeout(restore);
-        restore = setTimeout(() => dialogOpen.current || !document.hasFocus() || hide(false), 250);
+        if (promptShown) {
+          promptShown = false;
+          restore = setTimeout(() => {
+            dialogOpen.current = false;
+            setOpen(null);
+            if (document.hasFocus()) hide(false);
+          }, 500);
+        } else restore = setTimeout(() => dialogOpen.current || !document.hasFocus() || hide(false), 250);
       }
     };
     const onKey = (e: KeyboardEvent) => {
@@ -252,6 +277,7 @@ export function ScreenshotGuard({ level = "light", children }: { level?: GuardLe
       window.removeEventListener("focus", onReturn);
       document.removeEventListener("visibilitychange", onVisibility);
       clearTimeout(restore);
+      clearTimeout(promptTimer);
       clearInterval(devtoolsTimer);
       if (media && originalCapture) media.getDisplayMedia = originalCapture;
       releaseHold?.();

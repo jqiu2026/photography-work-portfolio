@@ -4,7 +4,7 @@ import * as biz from "@jerryqiu/db/business";
 import * as news from "@jerryqiu/db/newsletter";
 import { StudioError } from "@jerryqiu/db/studio";
 import { z } from "zod";
-import { studio } from "@/lib/studio-run";
+import { created, mayRemove, studio, studioMoney, studioOwner } from "@/lib/studio-run";
 
 const id = z.string().uuid();
 const day = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
@@ -28,7 +28,7 @@ export async function addExpenseAction(input: {
   jobId?: string;
   receiptNote?: string;
 }) {
-  return studio(async ({ db }) => {
+  return studioMoney(async ({ db }) => {
     if (!day.safeParse(input.spentOn).success) throw new StudioError("Enter the date.");
     const job = input.jobId ? id.safeParse(input.jobId) : null;
     await biz.addExpense(db, {
@@ -47,7 +47,7 @@ export async function addExpenseAction(input: {
   });
 }
 export async function deleteExpenseAction(expenseId: string) {
-  return studio(async ({ db }) => {
+  return studioMoney(async ({ db }) => {
     const p = id.safeParse(expenseId);
     if (!p.success) throw new StudioError("Unknown entry.");
     await biz.deleteExpense(db, p.data);
@@ -61,7 +61,7 @@ export async function addTestimonialAction(input: {
   role?: string;
   consentNote?: string;
 }) {
-  return studio(async ({ db }) => {
+  return studioOwner(async ({ db }) => {
     await biz.addTestimonial(db, {
       displayName: input.displayName,
       quote: input.quote,
@@ -72,7 +72,7 @@ export async function addTestimonialAction(input: {
   });
 }
 export async function consentAction(input: { testimonialId: string; note: string }) {
-  return studio(async ({ db }) => {
+  return studioOwner(async ({ db }) => {
     const p = id.safeParse(input.testimonialId);
     if (!p.success) throw new StudioError("Unknown testimonial.");
     await biz.recordConsent(db, p.data, input.note);
@@ -80,7 +80,7 @@ export async function consentAction(input: { testimonialId: string; note: string
   });
 }
 export async function publishTestimonialAction(input: { testimonialId: string; on: boolean }) {
-  return studio(async ({ db }) => {
+  return studioOwner(async ({ db }) => {
     const p = id.safeParse(input.testimonialId);
     if (!p.success) throw new StudioError("Unknown testimonial.");
     await biz.setTestimonialPublished(db, p.data, input.on);
@@ -96,7 +96,7 @@ export async function publishTestimonialAction(input: { testimonialId: string; o
   });
 }
 export async function withdrawConsentAction(testimonialId: string) {
-  return studio(async ({ db }) => {
+  return studioOwner(async ({ db }) => {
     const p = id.safeParse(testimonialId);
     if (!p.success) throw new StudioError("Unknown testimonial.");
     await biz.withdrawConsent(db, p.data);
@@ -104,7 +104,7 @@ export async function withdrawConsentAction(testimonialId: string) {
   });
 }
 export async function deleteTestimonialAction(testimonialId: string) {
-  return studio(async ({ db }) => {
+  return studioOwner(async ({ db }) => {
     const p = id.safeParse(testimonialId);
     if (!p.success) throw new StudioError("Unknown testimonial.");
     await biz.deleteTestimonial(db, p.data);
@@ -169,10 +169,40 @@ export async function saveCallSheetAction(input: {
 }
 
 export async function deleteSubscriberAction(subscriberId: string) {
-  return studio(async ({ db }) => {
+  return studioOwner(async ({ db }) => {
     const p = id.safeParse(subscriberId);
     if (!p.success) throw new StudioError("Unknown subscriber.");
     await news.deleteSubscriber(db, p.data);
     return { message: "Removed from the list" };
+  });
+}
+
+export async function resolvePrivacyAction(input: {
+  requestId: string;
+  status: "done" | "declined";
+  resolution: string;
+}) {
+  return studioOwner(async ({ db }) => {
+    const p = id.safeParse(input.requestId);
+    if (!p.success) throw new StudioError("Unknown request.");
+    if (input.status !== "done" && input.status !== "declined") throw new StudioError("Pick done or declined.");
+    await biz.resolvePrivacyRequest(db, p.data, input.status, input.resolution);
+    return {
+      message: input.status === "done" ? "Marked done" : "Marked declined",
+      audit: {
+        action: "studio.privacy.resolve",
+        entity: "privacy_request",
+        entityId: p.data,
+        summary: `Privacy request ${input.status}`,
+      },
+    };
+  });
+}
+export async function reopenPrivacyAction(requestId: string) {
+  return studioOwner(async ({ db }) => {
+    const p = id.safeParse(requestId);
+    if (!p.success) throw new StudioError("Unknown request.");
+    await biz.reopenPrivacyRequest(db, p.data);
+    return { message: "Reopened" };
   });
 }

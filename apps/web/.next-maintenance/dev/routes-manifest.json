@@ -1,0 +1,74 @@
+{
+  "version": 3,
+  "caseSensitive": false,
+  "basePath": "",
+  "rewrites": { "beforeFiles": [], "afterFiles": [], "fallback": [] },
+  "redirects": [
+    {
+      "source": "/:path+/",
+      "destination": "/:path+",
+      "permanent": true,
+      "internal": true,
+      "priority": true,
+      "regex": "^(?:\\/((?:[^\\/]+?)(?:\\/(?:[^\\/]+?))*))\\/$"
+    },
+    { "source": "/blog", "destination": "/writing", "permanent": true, "regex": "^(?!\\/_next)\\/blog(?:\\/)?$" },
+    {
+      "source": "/blog/:slug",
+      "destination": "/writing/:slug",
+      "permanent": true,
+      "regex": "^(?!\\/_next)\\/blog(?:\\/([^\\/]+?))(?:\\/)?$"
+    },
+    { "source": "/contact", "destination": "/connect", "permanent": true, "regex": "^(?!\\/_next)\\/contact(?:\\/)?$" },
+    {
+      "source": "/work",
+      "destination": "http://localhost:3002/work",
+      "statusCode": 301,
+      "regex": "^(?!\\/_next)\\/work(?:\\/)?$"
+    },
+    {
+      "source": "/work/:slug",
+      "destination": "http://localhost:3002/work/:slug",
+      "statusCode": 301,
+      "regex": "^(?!\\/_next)\\/work(?:\\/([^\\/]+?))(?:\\/)?$"
+    },
+    {
+      "source": "/gallery",
+      "destination": "http://localhost:3002/",
+      "permanent": false,
+      "regex": "^(?!\\/_next)\\/gallery(?:\\/)?$"
+    },
+    {
+      "source": "/music",
+      "destination": "http://localhost:3003/",
+      "permanent": true,
+      "regex": "^(?!\\/_next)\\/music(?:\\/)?$"
+    },
+    {
+      "source": "/music/:path*",
+      "destination": "http://localhost:3003/:path*",
+      "permanent": true,
+      "regex": "^(?!\\/_next)\\/music(?:\\/((?:[^\\/]+?)(?:\\/(?:[^\\/]+?))*))?(?:\\/)?$"
+    },
+    {
+      "source": "/flying",
+      "destination": "http://localhost:3004/",
+      "permanent": true,
+      "regex": "^(?!\\/_next)\\/flying(?:\\/)?$"
+    },
+    {
+      "source": "/flying/:path*",
+      "destination": "http://localhost:3004/:path*",
+      "permanent": true,
+      "regex": "^(?!\\/_next)\\/flying(?:\\/((?:[^\\/]+?)(?:\\/(?:[^\\/]+?))*))?(?:\\/)?$"
+    },
+    {
+      "source": "/api/rss",
+      "destination": "/writing/rss.xml",
+      "permanent": true,
+      "regex": "^(?!\\/_next)\\/api\\/rss(?:\\/)?$"
+    }
+  ],
+  "headers": [],
+  "onMatchHeaders": []
+}

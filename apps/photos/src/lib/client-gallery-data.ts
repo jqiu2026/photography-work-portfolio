@@ -57,6 +57,7 @@ export type ClientGalleryData = {
     id: string;
     name: string;
     albumId: string | null;
+    preset: string;
     maxPx: number | null;
     perVisitor: number | null;
     hasPin: boolean;
@@ -127,6 +128,7 @@ export async function loadClientGallery(db: Database, a: GalleryAccess): Promise
       id: r.id,
       name: r.name,
       albumId: r.albumId,
+      preset: r.preset,
       maxPx: r.maxPx,
       perVisitor: r.perVisitor,
       hasPin: Boolean(r.pinHash),

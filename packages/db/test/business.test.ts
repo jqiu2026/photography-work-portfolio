@@ -167,14 +167,12 @@ describe("usage rights", () => {
         licenseExpiresAt: new Date("2027-06-20T00:00:00Z"),
       })
       .returning();
-    await db
-      .insert(schema.studioContracts)
-      .values({
-        jobId: job,
-        title: "Unsigned",
-        body: "x",
-        usageRights: { personal: true, commercial: false, termMonths: null },
-      });
+    await db.insert(schema.studioContracts).values({
+      jobId: job,
+      title: "Unsigned",
+      body: "x",
+      usageRights: { personal: true, commercial: false, termMonths: null },
+    });
     await db
       .insert(schema.studioContracts)
       .values({ jobId: job, title: "No rights", body: "x", status: "signed", signedAt: now });
@@ -194,10 +192,7 @@ describe("specs", () => {
   it("formats shutter and reads exif", () => {
     expect(formatShutter(0.004)).toBe("1/250 s");
     expect(formatShutter(2)).toBe("2 s");
-    expect(specsFromExif({ Make: "Nikon", Model: "Z 6", FNumber: 4 })).toMatchObject({
-      camera: "Nikon Z 6",
-      aperture: 4,
-    });
+    expect(specsFromExif({ Make: "Nikon", Model: "Z 6", FNumber: 4 })).toEqual({ aperture: 4 });
     expect(specLines(undefined).length).toBe(0);
   });
 });
@@ -229,5 +224,34 @@ describe("newsletter", () => {
     const news = await import("../src/newsletter");
     await expect(news.subscribe(db, { email: "nope" })).rejects.toThrow("email address");
     await expect(news.subscribe(db, { email: "a@b" })).rejects.toThrow("email address");
+  });
+});
+
+describe("privacy requests", () => {
+  it("are checked, stored, listed open first, and resolved with a note", async () => {
+    await expect(
+      biz.addPrivacyRequest(db, { name: "A", email: "a@gmail.com", details: "x".repeat(30) }),
+    ).rejects.toThrow("name");
+    await expect(
+      biz.addPrivacyRequest(db, { name: "Pat", email: "a@mailinator.com", details: "x".repeat(30) }),
+    ).rejects.toThrow("temporary");
+    await expect(
+      biz.addPrivacyRequest(db, { name: "Pat", email: "pat@gmail.com", details: "too short" }),
+    ).rejects.toThrow("find it");
+    const r = await biz.addPrivacyRequest(db, {
+      name: "Pat",
+      email: " Pat@Gmail.com ",
+      details: "The open house gallery, third row, me in a blue coat.",
+    });
+    expect(r).toMatchObject({ email: "pat@gmail.com", status: "open" });
+    expect((await biz.listPrivacyRequests(db))[0]?.id).toBe(r.id);
+    await expect(biz.resolvePrivacyRequest(db, r.id, "done", " ")).rejects.toThrow("record");
+    await biz.resolvePrivacyRequest(db, r.id, "done", "Hid it in the open house gallery.");
+    expect((await biz.listPrivacyRequests(db)).find((x) => x.id === r.id)).toMatchObject({ status: "done" });
+    await biz.reopenPrivacyRequest(db, r.id);
+    expect((await biz.listPrivacyRequests(db)).find((x) => x.id === r.id)).toMatchObject({
+      status: "open",
+      resolution: null,
+    });
   });
 });

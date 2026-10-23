@@ -8,7 +8,9 @@ import { createHmac, timingSafeEqual } from "node:crypto";
  * is the labelled stand-in: a fixed SAMPLE catalog and a deterministic order book, no network, off in production unless
  * mocks are enabled. Every base URL, id and price in the mock is a PLACEHOLDER.
  */
-export type ProductKind = "print" | "canvas" | "album" | "card";
+export type ProductKind = "print" | "mounted" | "framed" | "canvas" | "metal" | "card" | "album";
+/** Every kind that goes to the lab (the others a shop sells are downloads). */
+export const PRINT_KINDS: readonly ProductKind[] = ["print", "mounted", "framed", "canvas", "metal", "card", "album"];
 export type CatalogProduct = {
   sku: string;
   kind: ProductKind;
@@ -120,61 +122,49 @@ export function verifyFileLink(
 }
 
 /* ---------- the labelled mock ---------- */
+/**
+ * The labelled sample catalog, shaped like WHCC's lines: lustre photo prints, mounted prints, framed prints, canvas
+ * gallery wraps, metal prints, cards and albums. Every size, name and wholesale price is a PLACEHOLDER until WHCC's
+ * real catalog and price list replace it (TODO(owner): needs WHCC_BASE_URL, WHCC_CONSUMER_KEY, WHCC_CONSUMER_SECRET).
+ */
+const entry = (
+  kind: ProductKind,
+  sku: string,
+  name: string,
+  widthIn: number,
+  heightIn: number,
+  wholesaleCents: number,
+): CatalogProduct => ({
+  sku: `MOCK-${sku}`,
+  kind,
+  name: `${name} (SAMPLE)`,
+  widthIn,
+  heightIn,
+  wholesaleCents,
+  minLongSidePx: Math.max(widthIn, heightIn) * PPI_FLOOR,
+});
 export const MOCK_CATALOG: CatalogProduct[] = [
-  {
-    sku: "MOCK-PRINT-4X6",
-    kind: "print",
-    name: "Print 4 x 6 in (SAMPLE)",
-    widthIn: 6,
-    heightIn: 4,
-    wholesaleCents: 40,
-    minLongSidePx: 6 * PPI_FLOOR,
-  },
-  {
-    sku: "MOCK-PRINT-8X10",
-    kind: "print",
-    name: "Print 8 x 10 in (SAMPLE)",
-    widthIn: 10,
-    heightIn: 8,
-    wholesaleCents: 250,
-    minLongSidePx: 10 * PPI_FLOOR,
-  },
-  {
-    sku: "MOCK-PRINT-11X14",
-    kind: "print",
-    name: "Print 11 x 14 in (SAMPLE)",
-    widthIn: 14,
-    heightIn: 11,
-    wholesaleCents: 650,
-    minLongSidePx: 14 * PPI_FLOOR,
-  },
-  {
-    sku: "MOCK-CANVAS-16X20",
-    kind: "canvas",
-    name: "Canvas 16 x 20 in (SAMPLE)",
-    widthIn: 20,
-    heightIn: 16,
-    wholesaleCents: 4200,
-    minLongSidePx: 20 * PPI_FLOOR,
-  },
-  {
-    sku: "MOCK-CARD-5X7",
-    kind: "card",
-    name: "Flat card 5 x 7 in (SAMPLE)",
-    widthIn: 7,
-    heightIn: 5,
-    wholesaleCents: 120,
-    minLongSidePx: 7 * PPI_FLOOR,
-  },
-  {
-    sku: "MOCK-ALBUM-8X8",
-    kind: "album",
-    name: "Album 8 x 8 in, 20 pages (SAMPLE)",
-    widthIn: 8,
-    heightIn: 8,
-    wholesaleCents: 9500,
-    minLongSidePx: 8 * PPI_FLOOR,
-  },
+  entry("print", "PRINT-4X6", "Print 4 x 6 in", 6, 4, 40),
+  entry("print", "PRINT-5X7", "Print 5 x 7 in", 7, 5, 90),
+  entry("print", "PRINT-8X10", "Print 8 x 10 in", 10, 8, 250),
+  entry("print", "PRINT-11X14", "Print 11 x 14 in", 14, 11, 650),
+  entry("print", "PRINT-16X20", "Print 16 x 20 in", 20, 16, 1400),
+  entry("print", "PRINT-20X30", "Print 20 x 30 in", 30, 20, 2400),
+  entry("mounted", "MOUNTED-8X10", "Foam-mounted print 8 x 10 in", 10, 8, 900),
+  entry("mounted", "MOUNTED-16X20", "Foam-mounted print 16 x 20 in", 20, 16, 2800),
+  entry("framed", "FRAMED-8X10", "Framed print 8 x 10 in", 10, 8, 3500),
+  entry("framed", "FRAMED-16X20", "Framed print 16 x 20 in", 20, 16, 7500),
+  entry("canvas", "CANVAS-12X18", "Canvas gallery wrap 12 x 18 in", 18, 12, 3200),
+  entry("canvas", "CANVAS-16X20", "Canvas 16 x 20 in", 20, 16, 4200),
+  entry("canvas", "CANVAS-20X30", "Canvas gallery wrap 20 x 30 in", 30, 20, 6500),
+  entry("canvas", "CANVAS-24X36", "Canvas gallery wrap 24 x 36 in", 36, 24, 8800),
+  entry("metal", "METAL-8X10", "Metal print 8 x 10 in", 10, 8, 3800),
+  entry("metal", "METAL-12X18", "Metal print 12 x 18 in", 18, 12, 6200),
+  entry("metal", "METAL-16X24", "Metal print 16 x 24 in", 24, 16, 9500),
+  entry("card", "CARD-5X7", "Flat card 5 x 7 in", 7, 5, 120),
+  entry("card", "CARD-FOLDED-5X7", "Folded card 5 x 7 in", 7, 5, 190),
+  entry("album", "ALBUM-8X8", "Album 8 x 8 in, 20 pages", 8, 8, 9500),
+  entry("album", "ALBUM-10X10", "Album 10 x 10 in, 20 pages", 10, 10, 13500),
 ];
 
 export function createMockPrintProvider(

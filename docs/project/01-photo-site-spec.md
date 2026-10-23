@@ -114,7 +114,7 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | F-25 | Payment plans and installments | P1 | done | payment_plans | Stripe / mock | unit | M8 |
 | F-26 | Multi-currency display | P3 | partial (display-only estimate helper, SAMPLE rates; charges stay USD) | price formatter | n/a | unit | M6 |
 | F-27 | Upsells at checkout | P2 | done (on the quote page, re-priced server-side) | quote page | n/a | e2e | M6 |
-| F-28 | Print and product store (prints, albums, canvases, cards) and digital download sales | P2 | done (each gallery has its own shop at `/g/<link>`; prints go to the lab only after payment, only when the photograph is sharp enough; WHCC adapter plus a labelled mock lab) | `/g/[slug]`, `/shop`, `/studio/orders` | WHCC / mock | e2e | M13 |
+| F-28 | Print and product store (prints, albums, canvases, cards) and digital download sales | P2 | partial (the portfolio print store at /g/prints and the catalog at /prints on a WHCC-shaped sample lab with 21 products in 7 lines; each client gallery has its own shop; the real lab replaces the sample when WHCC credentials exist) | `/g/[slug]`, `/shop`, `/studio/orders` | WHCC / mock | e2e | M13 |
 | F-29 | Digital download sales | P2 | missing | digital_products | Stripe / mock | e2e | M13 |
 | F-30 | Gallery extension and reactivation sales | P1 | done | expiry flow | Stripe / mock | e2e | M10 |
 | F-31 | Tips | P3 | done | invoice pay | Stripe / mock | unit | M8 |
@@ -132,7 +132,7 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | F-45 | Gallery expiry and reactivation policy in the contract | P1 | done (policy merge field) | template clause | n/a | unit | M7 |
 | F-46 | Privacy, terms, licensing, accessibility, cookie statement | P1 | done (draft pages for lawyer review; no non-essential cookies) | public pages | n/a | e2e | M11 |
 | F-47 | Data export and delete-my-data tools | P1 | partial (admin export, contact erase) | studio | n/a | e2e | M14 |
-| F-48 | Event privacy opt-outs (hide specific people) | P2 | missing | gallery_items.hidden_for | n/a | unit | M14 |
+| F-48 | Event privacy opt-outs (hide specific people) | P2 | partial (a public "Remove a photo of me" request form, a studio queue with a record of what was done; the photographs are hidden by hand with the gallery's Hide) | gallery_items.hidden_for | n/a | unit | M14 |
 
 ### Payments
 
@@ -188,7 +188,7 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | F-95 | Email templates and threads in studio | P1 | partial (templates and a studio inbox of every email; threads with replies in M9) | `/studio/inbox` | Resend / outbox | e2e | M4 |
 | F-96 | Automations: trigger, condition, action on Vercel Cron | P2 | done (7 rules, tunable, deduped, hourly cron) | automations | cron | unit | M12 |
 | F-97 | Shot lists and call sheets | P3 | done (one per job: call time, place, notes, shot list, people) | call_sheets | n/a | e2e | M15 |
-| F-98 | Roles: second shooter, assistant; job assignment | P3 | missing | team_members | n/a | unit | M15 |
+| F-98 | Roles: second shooter, assistant; job assignment | P3 | done (invite a helper by Google address as Photographer or Bookkeeper; pages and actions are limited by role; a helper can remove only what they added in the last 5 minutes) | team_members | n/a | unit | M15 |
 | F-99 | Gear inventory, double-booking warnings | P3 | done (gear on jobs by day, a clash is flagged) | gear | n/a | unit | M15 |
 | F-100 | Drone job checklist (Part 107, weather go/no-go) | P3 | missing | drone_checklists | weather: mock | unit | M15 |
 | F-101 | Mileage and expense tracking with receipts | P2 | partial (expenses, mileage at the rate on the day, CSV; receipt uploads need file storage, a note says where the paper one is) | `/studio/expenses` | Blob | e2e | M14 |

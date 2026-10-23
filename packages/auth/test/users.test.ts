@@ -76,3 +76,25 @@ describe("authorizeSignIn (domain policy + allow-list)", () => {
     expect(r.ok && r.user.role).toBe("client");
   });
 });
+
+describe("invited team members may use any verified Google account", () => {
+  const gmail = (email: string, extra = {}) => ({ email, email_verified: true, name: "Helper", ...extra });
+  it("an invited external photographer signs in from a personal Gmail", async () => {
+    await db
+      .insert(schema.users)
+      .values({ email: "helper@gmail.com", role: "photographer", external: true, addedBy: "owner@jerryqiu.com" });
+    const r = await authorizeSignIn(db, gmail("Helper@Gmail.com"), opts);
+    expect(r.ok && r.user.role).toBe("photographer");
+  });
+  it("an unverified address, a stranger, an inactive helper and a non-external user are all refused", async () => {
+    expect(await authorizeSignIn(db, gmail("helper@gmail.com", { email_verified: false }), opts)).toEqual({
+      ok: false,
+      reason: "unverified",
+    });
+    expect(await authorizeSignIn(db, gmail("stranger@gmail.com"), opts)).toEqual({ ok: false, reason: "wrong_domain" });
+    await db.insert(schema.users).values({ email: "internal@gmail.com", role: "bookkeeper", external: false });
+    expect(await authorizeSignIn(db, gmail("internal@gmail.com"), opts)).toEqual({ ok: false, reason: "wrong_domain" });
+    await db.update(schema.users).set({ active: false }).where(eq(schema.users.email, "helper@gmail.com"));
+    expect(await authorizeSignIn(db, gmail("helper@gmail.com"), opts)).toEqual({ ok: false, reason: "wrong_domain" });
+  });
+});

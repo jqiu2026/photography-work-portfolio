@@ -37,7 +37,8 @@ export default async function Book({ searchParams }: { searchParams: Promise<{ t
             </Button>
           </div>
           <Text size="sm" tone="muted" style={{ marginTop: "var(--hm-space-4)" }}>
-            Prefer email? <a href={`mailto:${person.bookingEmail}`}>{person.bookingEmail}</a>
+            Prefer email or a call? <a href={`mailto:${person.bookingEmail}`}>{person.bookingEmail}</a>, or{" "}
+            <a href={person.phoneHref}>{person.phone}</a>
           </Text>
         </Container>
       </Section>

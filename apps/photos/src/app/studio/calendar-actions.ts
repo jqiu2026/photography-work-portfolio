@@ -3,7 +3,7 @@
 import * as cal from "@jerryqiu/db/calendar";
 import { StudioError } from "@jerryqiu/db/studio";
 import { z } from "zod";
-import { studio } from "@/lib/studio-run";
+import { created, mayRemove, studio, studioOwner } from "@/lib/studio-run";
 
 const id = z.string().uuid();
 const date = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Pick a date.");
@@ -21,7 +21,8 @@ export async function addAppointmentAction(input: {
   travelMin?: string;
   jobId?: string;
 }) {
-  return studio(async ({ db }) => {
+  return studio(async (ctx) => {
+    const { db } = ctx;
     const p = z.object({ title: z.string().min(2, "Give it a title."), date, start: time, end: time }).safeParse(input);
     if (!p.success) throw new StudioError(p.error.issues[0].message);
     const c = await cal.getCalendarSettings(db);
@@ -41,6 +42,7 @@ export async function addAppointmentAction(input: {
       location: input.location,
       jobId: input.jobId && id.safeParse(input.jobId).success ? input.jobId : null,
     });
+    await created(ctx, "appointment", a.id);
     return {
       message: "Added to the calendar",
       audit: {
@@ -54,7 +56,9 @@ export async function addAppointmentAction(input: {
 }
 
 export async function cancelAppointmentAction(appointmentId: string) {
-  return studio(async ({ db }) => {
+  return studio(async (ctx) => {
+    const { db } = ctx;
+    await mayRemove(ctx, "appointment", appointmentId);
     const p = id.safeParse(appointmentId);
     if (!p.success) throw new StudioError("Unknown appointment.");
     const a = await cal.cancelAppointment(db, p.data);
@@ -87,7 +91,7 @@ export async function addRuleAction(input: { weekday: string; start: string; end
 }
 
 export async function removeRuleAction(ruleId: string) {
-  return studio(async ({ db }) => {
+  return studioOwner(async ({ db }) => {
     const p = id.safeParse(ruleId);
     if (!p.success) throw new StudioError("Unknown rule.");
     await cal.removeRule(db, p.data);
@@ -108,7 +112,7 @@ export async function addBlackoutAction(input: { date: string; reason?: string }
 }
 
 export async function removeBlackoutAction(blackoutId: string) {
-  return studio(async ({ db }) => {
+  return studioOwner(async ({ db }) => {
     const p = id.safeParse(blackoutId);
     if (!p.success) throw new StudioError("Unknown day.");
     await cal.removeBlackout(db, p.data);
@@ -155,7 +159,7 @@ export async function saveCalendarSettingsAction(input: {
   maxAdvanceDays: string;
   depositDollars: string;
 }) {
-  return studio(async ({ db }) => {
+  return studioOwner(async ({ db }) => {
     const dollars = Number(input.depositDollars);
     if (!Number.isFinite(dollars) || dollars < 0) throw new StudioError("Enter the deposit as a number of dollars.");
     try {

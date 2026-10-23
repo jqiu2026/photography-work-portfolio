@@ -30,6 +30,7 @@ export const studioSections = [
   { id: "callsheets", label: "Call sheets" },
   { id: "rights", label: "Rights" },
   { id: "subscribers", label: "Subscribers" },
+  { id: "privacy", label: "Privacy" },
 ] as const;
 
 /**
@@ -51,7 +52,7 @@ export const studioGroups = [
   {
     id: "reports",
     label: "Reports",
-    sections: ["reports", "expenses", "subscribers", "pipeline", "activity"],
+    sections: ["reports", "expenses", "subscribers", "privacy", "pipeline", "activity"],
     hue: 38,
   },
   {
@@ -94,7 +95,52 @@ export const sectionInfo: Record<string, string> = {
   callsheets: "Call time, place, people and the shot list for each shoot.",
   rights: "Who may use your photographs, for what, and until when.",
   subscribers: "People who asked for your newsletter. Only confirmed addresses count.",
+  privacy: "People who asked to be taken out of a photograph.",
 };
 
 export const groupOf = (section: string) =>
   studioGroups.find((g) => (g.sections as readonly string[]).includes(section)) ?? studioGroups[0];
+
+/**
+ * Which pages each role sees. The owner sees everything. A photographer sees shoots, galleries, the calendar, clients
+ * and gear (no money, no settings). A bookkeeper sees the money side (sales, payments, expenses, reports) and the
+ * client list (no galleries, no settings). A page a role cannot see is a 404 for them, and the sidebar leaves it out.
+ */
+const PHOTOGRAPHER = new Set([
+  "overview",
+  "tasks",
+  "galleries",
+  "visitors",
+  "watermarks",
+  "music",
+  "calendar",
+  "shoots",
+  "callsheets",
+  "gear",
+  "clients",
+  "bookings",
+]);
+const BOOKKEEPER = new Set([
+  "overview",
+  "orders",
+  "quotes",
+  "invoices",
+  "billing",
+  "expenses",
+  "reports",
+  "pipeline",
+  "activity",
+  "clients",
+]);
+export function canSeeSection(role: string | undefined, section: string): boolean {
+  if (role === "owner") return true;
+  if (role === "photographer") return PHOTOGRAPHER.has(section);
+  if (role === "bookkeeper") return BOOKKEEPER.has(section);
+  return false;
+}
+/** The groups and pages a role sees (empty groups are dropped). */
+export function groupsFor(role: string | undefined) {
+  return studioGroups
+    .map((g) => ({ ...g, sections: g.sections.filter((id) => canSeeSection(role, id)) }))
+    .filter((g) => g.sections.length > 0);
+}

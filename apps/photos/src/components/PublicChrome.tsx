@@ -1,4 +1,4 @@
-import { NewsletterForm } from "@/components/NewsletterForm";
+import { SchemeSwitch } from "@/components/SchemeProvider";
 import { getSite } from "@jerryqiu/sites";
 import {
   AppShell,
@@ -22,7 +22,7 @@ const FOOTER = [
       ["Packages", "/packages"],
       ["How it works", "/how-it-works"],
       ["Features", "/features"],
-      ["About prints", "/prints"],
+      ["Prints", "/prints"],
       ["FAQ", "/faq"],
       ["Contact", "/contact"],
       ["Dashboard (owner)", "/studio"],
@@ -41,6 +41,7 @@ const FOOTER = [
     links: [
       ["Terms", "/terms"],
       ["Privacy", "/privacy"],
+      ["Remove a photo of me", "/privacy-request"],
       ["Licensing", "/licensing"],
       ["Accessibility", "/accessibility"],
     ],
@@ -116,9 +117,9 @@ export function PublicChrome({
               ))}
             </div>
           )}
-          <NewsletterForm />
           <div className="pub-foot__base">
             <p>© {year} Jerry Qiu. All photographs and writing are © Jerry Qiu unless stated.</p>
+            <SchemeSwitch className="pub-scheme" />
             <a className="pub-return" href={hub.url} data-return-to-hub>
               jerryqiu.com
             </a>

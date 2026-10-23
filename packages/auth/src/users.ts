@@ -32,7 +32,18 @@ export async function authorizeSignIn(
   profile: SignInInput,
   opts: { domain: string; bootstrapEmails?: string[] },
 ): Promise<SignInVerdict> {
-  const verdict = checkGoogleProfile(profile, opts.domain);
+  let verdict = checkGoogleProfile(profile, opts.domain);
+  if (
+    !verdict.ok &&
+    verdict.reason === "wrong_domain" &&
+    profile.email_verified === true &&
+    typeof profile.email === "string"
+  ) {
+    // a team member the owner invited by address may use any verified Google account (a personal Gmail, say)
+    const invited = normalizeEmail(profile.email);
+    const [row] = await db.select().from(schema.users).where(eq(schema.users.email, invited)).limit(1);
+    if (row?.external && row.active) verdict = { ok: true, email: invited };
+  }
   if (!verdict.ok) return verdict;
   const email = verdict.email;
   const name = typeof profile.name === "string" ? profile.name : null;

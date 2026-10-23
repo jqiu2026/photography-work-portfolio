@@ -5,7 +5,7 @@ import { StudioError } from "@jerryqiu/db/studio";
 import { sendTemplate } from "@jerryqiu/email";
 import { getSite } from "@jerryqiu/sites";
 import { z } from "zod";
-import { studio } from "@/lib/studio-run";
+import { studioOwner } from "@/lib/studio-run";
 
 const id = z.string().uuid();
 
@@ -18,7 +18,7 @@ export async function saveTemplateAction(input: {
   commercial?: boolean;
   termMonths?: string;
 }) {
-  return studio(async ({ db }) => {
+  return studioOwner(async ({ db }) => {
     const months = input.termMonths?.trim() ? Number(input.termMonths) : null;
     if (months !== null && (!Number.isInteger(months) || months < 1 || months > 600))
       throw new StudioError("The license term is a whole number of months.");
@@ -52,7 +52,7 @@ export async function createFromTemplateAction(input: {
   guardian?: string;
   signerEmail?: string;
 }) {
-  return studio(async ({ db }) => {
+  return studioOwner(async ({ db }) => {
     const j = id.safeParse(input.jobId);
     const t = id.safeParse(input.templateId);
     if (!j.success) throw new StudioError("Pick a job.");
@@ -86,7 +86,7 @@ export async function savePoliciesAction(input: {
   extensionFee: string;
   cancellationDays: string;
 }) {
-  return studio(async ({ db }) => {
+  return studioOwner(async ({ db }) => {
     const fee = Number(input.extensionFee.replace(/[$,\s]/g, ""));
     if (!Number.isFinite(fee) || fee < 0) throw new StudioError("Enter the extension fee as a number of dollars.");
     await forms.savePolicies(db, {
@@ -115,7 +115,7 @@ export async function saveQuestionnaireAction(input: {
   description?: string;
   fields: string;
 }) {
-  return studio(async ({ db }) => {
+  return studioOwner(async ({ db }) => {
     let parsed: unknown;
     try {
       parsed = JSON.parse(input.fields);
@@ -156,7 +156,7 @@ export async function saveQuestionnaireAction(input: {
 }
 
 export async function sendQuestionnaireAction(input: { questionnaireId: string; clientId: string; jobId?: string }) {
-  return studio(async ({ db }) => {
+  return studioOwner(async ({ db }) => {
     const q = id.safeParse(input.questionnaireId);
     const c = id.safeParse(input.clientId);
     if (!q.success || !c.success) throw new StudioError("Pick a questionnaire and a client.");

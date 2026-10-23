@@ -49,7 +49,7 @@ export const navGroups: NavGroup[] = [
   },
 ];
 
-export function itemsFor(site: AdminSite, role: "owner" | "editor" | "client"): NavGroup[] {
+export function itemsFor(site: AdminSite, role: string): NavGroup[] {
   return navGroups
     .map((g) => ({
       ...g,

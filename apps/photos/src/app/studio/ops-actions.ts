@@ -4,7 +4,7 @@ import * as auto from "@jerryqiu/db/automation";
 import { StudioError } from "@jerryqiu/db/studio";
 import { z } from "zod";
 import { runScheduled } from "@/lib/automations";
-import { studio } from "@/lib/studio-run";
+import { created, mayRemove, studio, studioOwner } from "@/lib/studio-run";
 
 const id = z.string().uuid();
 
@@ -23,7 +23,9 @@ export async function toggleTaskAction(input: { taskId: string; done: boolean })
   });
 }
 export async function deleteTaskAction(taskId: string) {
-  return studio(async ({ db }) => {
+  return studio(async (ctx) => {
+    const { db } = ctx;
+    await mayRemove(ctx, "task", taskId);
     const p = id.safeParse(taskId);
     if (!p.success) throw new StudioError("Unknown task.");
     await auto.deleteTask(db, p.data);
@@ -31,7 +33,7 @@ export async function deleteTaskAction(taskId: string) {
   });
 }
 export async function saveRuleAction(input: { key: string; enabled: boolean; days: string; message: string }) {
-  return studio(async ({ db }) => {
+  return studioOwner(async ({ db }) => {
     if (!(input.key in auto.RULES)) throw new StudioError("Unknown rule.");
     await auto.saveRule(db, input.key as auto.RuleKey, {
       enabled: input.enabled,
@@ -50,7 +52,7 @@ export async function saveRuleAction(input: { key: string; enabled: boolean; day
   });
 }
 export async function runAutomationsNowAction() {
-  return studio(async ({ db }) => {
+  return studioOwner(async ({ db }) => {
     const r = await runScheduled(db);
     return {
       message: `Ran now: ${r.automations.sent} reminder(s) sent, ${r.billing.recurring} recurring and ${r.billing.installments} instalment invoice(s).`,

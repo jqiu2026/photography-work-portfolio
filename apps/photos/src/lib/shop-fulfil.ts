@@ -3,6 +3,7 @@ import { type Database, schema } from "@jerryqiu/db";
 import { notify } from "@jerryqiu/db/automation";
 import * as gal from "@jerryqiu/db/galleries";
 import * as shop from "@jerryqiu/db/gallery-shop";
+import { PRINT_KINDS } from "@jerryqiu/db/gallery-shop";
 import { sendTemplate } from "@jerryqiu/email";
 import { tokenSecrets } from "@jerryqiu/protect";
 import { MOCK_CATALOG, fitsProduct, printProviderFromEnv, signFileLink } from "@jerryqiu/prints";
@@ -15,7 +16,7 @@ const usd = (c: number) => new Intl.NumberFormat("en-US", { style: "currency", c
 /** The print items of an order in a stable order; the lab's file links address them by position in this list. */
 export const printItems = (items: (typeof schema.studioOrderItems.$inferSelect)[]) =>
   items
-    .filter((i) => i.sku && ["print", "canvas", "album", "card"].includes(i.kind))
+    .filter((i) => i.sku && (PRINT_KINDS as readonly string[]).includes(i.kind))
     .sort((a, b) => a.id.localeCompare(b.id));
 
 /**

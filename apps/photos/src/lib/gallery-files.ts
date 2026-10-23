@@ -1,4 +1,6 @@
 import "server-only";
+import { DEFAULT_PREVIEW_TEXT, ruleTargetSize } from "@jerryqiu/db/download-presets";
+import { previewLayer } from "@/lib/preview-mark";
 import type * as gal from "@jerryqiu/db/galleries";
 import type * as schema from "@jerryqiu/db/schema";
 import { embedViewerCode, viewerCode } from "@jerryqiu/media";
@@ -76,7 +78,7 @@ async function watermarkLayer(w: schema.StudioWatermark, width: number, height: 
 export async function ruleFile(
   contents: Contents,
   mediaId: string,
-  rule: Pick<schema.StudioDownloadRule, "maxPx">,
+  rule: Pick<schema.StudioDownloadRule, "maxPx" | "preset" | "previewText">,
   watermark: schema.StudioWatermark | null,
   viewer: string,
 ) {
@@ -84,15 +86,28 @@ export async function ruleFile(
   const obj = c ? await originalsStore().get(c.media.originalKey) : null;
   if (!c || !obj) return null;
   let img = sharp(Buffer.from(obj.body), { failOn: "none" }).rotate();
-  if (rule.maxPx) img = img.resize({ width: rule.maxPx, height: rule.maxPx, fit: "inside", withoutEnlargement: true });
+  const meta0 = await sharp(await img.clone().toBuffer()).metadata();
+  const target = ruleTargetSize(rule, meta0.width ?? 1, meta0.height ?? 1);
+  if (target) img = img.resize({ width: target.width, height: target.height, fit: "fill" });
   const flat = await img.jpeg({ quality: 90 }).toBuffer();
   let out = flat;
-  if (watermark) {
-    const meta = await sharp(flat).metadata();
-    const layers = await watermarkLayer(watermark, meta.width ?? 1000, meta.height ?? 700);
-    if (layers.length) out = await sharp(flat).composite(layers).jpeg({ quality: 90 }).toBuffer();
-  }
+  const layers: OverlayOptions[] = [];
+  const meta = await sharp(flat).metadata();
+  if (rule.preset === "preview")
+    layers.push(await previewLayer(rule.previewText || DEFAULT_PREVIEW_TEXT, meta.width ?? 1000, meta.height ?? 700));
+  if (watermark) layers.push(...(await watermarkLayer(watermark, meta.width ?? 1000, meta.height ?? 700)));
+  if (layers.length) out = await sharp(flat).composite(layers).jpeg({ quality: 90 }).toBuffer();
   const base = c.media.filename.replace(/\.[^.]+$/, "");
-  const tag = rule.maxPx ? `${rule.maxPx}px` : "original";
+  const tag =
+    rule.preset === "custom" ? (rule.maxPx ? `${rule.maxPx}px` : "original") : (sizeTag[rule.preset] ?? "original");
   return { name: `${base}-${tag}.jpg`, bytes: await embedViewerCode(new Uint8Array(out), viewerCode(viewer), "jpeg") };
 }
+
+/** File-name tags for the presets ("photo-high-res.jpg"). */
+export const sizeTag: Record<string, string> = {
+  original: "original",
+  high: "high-res",
+  low: "low-res",
+  social: "social-1920",
+  preview: "preview",
+};

@@ -1,6 +1,8 @@
 import { Button, Container, Grid, Section, Text } from "@/components/ui";
 import { getDb } from "@jerryqiu/db";
-import { publicTestimonials } from "@jerryqiu/db/business";
+import { publicTestimonials, seedSamples } from "@jerryqiu/db/business";
+import { mocksEnabled } from "@jerryqiu/mocks";
+import { NewsletterForm } from "@/components/NewsletterForm";
 import { PageHeader } from "@/components/PageHeader";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -15,6 +17,7 @@ export const revalidate = 60;
 async function quotes() {
   try {
     const db = getDb();
+    if (db && mocksEnabled()) await seedSamples(db);
     return db ? await publicTestimonials(db) : [];
   } catch {
     return [];
@@ -55,7 +58,7 @@ export default async function About() {
                   <blockquote>“{q.quote}”</blockquote>
                   <p>
                     {q.displayName}
-                    {q.role ? `, ${q.role}` : ""}
+                    {q.role === "SAMPLE" ? " · sample, not a real client" : q.role ? `, ${q.role}` : ""}
                   </p>
                 </li>
               ))}
@@ -63,6 +66,16 @@ export default async function About() {
           </Container>
         </Section>
       ) : null}
+      <Section style={{ paddingTop: 0 }}>
+        <Container size="md">
+          <div className="about-news">
+            <Text tone="muted" size="sm">
+              Now and then I send a short note about new work. No schedule, no spam, one click to stop.
+            </Text>
+            <NewsletterForm />
+          </div>
+        </Container>
+      </Section>
     </Shell>
   );
 }

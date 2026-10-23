@@ -2,6 +2,7 @@ import { type Database, getDb, hitRateLimit, schema } from "@jerryqiu/db";
 import { sendTemplate } from "@jerryqiu/email";
 import { clientIpHash } from "@jerryqiu/protect";
 import { notify } from "@jerryqiu/db/automation";
+import { checkEmail } from "@jerryqiu/db/email-check";
 import * as st from "@jerryqiu/db/studio";
 import { sql } from "drizzle-orm";
 import { z } from "zod";
@@ -16,7 +17,10 @@ export const contactSchema = z.object({
     .string()
     .trim()
     .max(200)
-    .regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "That doesn't look like an email address."),
+    .superRefine((v, ctx) => {
+      const c = checkEmail(v);
+      if (!c.ok) ctx.addIssue({ code: "custom", message: c.message });
+    }),
   topic: z.string().trim().max(60).default("General"),
   message: z.string().trim().min(5, "Say a little more so I know how to help.").max(5000),
   /** Honeypot: real visitors never see or fill this. */
@@ -175,7 +179,10 @@ export const inquirySchema = z.object({
     .string()
     .trim()
     .max(200)
-    .regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "That doesn't look like an email address."),
+    .superRefine((v, ctx) => {
+      const c = checkEmail(v);
+      if (!c.ok) ctx.addIssue({ code: "custom", message: c.message });
+    }),
   phone: opt(40),
   shootType: opt(40),
   eventDate: z
@@ -187,7 +194,7 @@ export const inquirySchema = z.object({
   location: opt(200),
   budget: opt(60),
   guests: z.coerce.number().int().min(0).max(100000).optional(),
-  message: z.string().trim().min(5, "Tell me a little about the shoot.").max(5000),
+  message: z.string().trim().min(20, "Tell me a little more about the shoot.").max(5000),
   source: opt(80),
   referrer: opt(300),
   utm: z.record(z.string().max(40), z.string().max(120)).optional(),

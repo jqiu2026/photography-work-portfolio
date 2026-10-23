@@ -14,7 +14,7 @@ import { assertPlan } from "@jerryqiu/db/plan";
 import { z } from "zod";
 import { emailGalleryLink, publishAndNotify } from "@/lib/gallery-publish";
 import { htmlToText } from "@/lib/html-text";
-import { studio } from "@/lib/studio-run";
+import { created, mayRemove, studio, studioMoney } from "@/lib/studio-run";
 
 const id = z.string().uuid();
 const gid = (v: string) => {
@@ -125,8 +125,16 @@ export async function setDownloadPinAction(input: { galleryId: string; pin: stri
 }
 
 export async function createAlbumAction(input: { galleryId: string; name: string; parentId?: string }) {
-  return studio(async ({ db }) => {
-    await gal.createAlbum(db, gid(input.galleryId), input.name, input.parentId ? mid(input.parentId) : null);
+  return studio(async (ctx) => {
+    const { db } = ctx;
+    const album = await gal.createAlbum(
+      db,
+      gid(input.galleryId),
+      input.name,
+      input.parentId ? mid(input.parentId) : null,
+    );
+    if (album && typeof album === "object" && "id" in album)
+      await created(ctx, "album", String((album as { id: string }).id));
     return { message: input.parentId ? "Sub-album added" : "Album added" };
   });
 }
@@ -217,7 +225,7 @@ export async function saveProductAction(input: {
   price?: string;
   active?: boolean;
 }) {
-  return studio(async ({ db }) => {
+  return studioMoney(async ({ db }) => {
     const cents = input.price === undefined ? undefined : Math.round(Number(input.price.replace(/[$,\s]/g, "")) * 100);
     if (cents !== undefined && !Number.isFinite(cents)) throw new StudioError("Enter a price like 12.50.");
     await shop.saveProduct(db, mid(input.id), {
@@ -230,13 +238,15 @@ export async function saveProductAction(input: {
   });
 }
 export async function cancelOrderAction(orderId: string) {
-  return studio(async ({ db }) => {
+  return studioMoney(async ({ db }) => {
     await shop.cancelOrder(db, mid(orderId));
     return { message: "Order cancelled" };
   });
 }
 export async function deleteAlbumAction(input: { galleryId: string; albumId: string }) {
-  return studio(async ({ db }) => {
+  return studio(async (ctx) => {
+    const { db } = ctx;
+    await mayRemove(ctx, "album", input.albumId);
     await gal.deleteAlbum(db, gid(input.galleryId), mid(input.albumId));
     return { message: "Album removed (its photographs stay in the gallery)" };
   });
@@ -248,7 +258,9 @@ export async function moveToAlbumAction(input: { galleryId: string; mediaId: str
   });
 }
 export async function removeItemAction(input: { galleryId: string; mediaId: string }) {
-  return studio(async ({ db }) => {
+  return studio(async (ctx) => {
+    const { db } = ctx;
+    await mayRemove(ctx, "photo", `${input.galleryId}:${input.mediaId}`);
     await gal.removeItem(db, gid(input.galleryId), mid(input.mediaId));
     return {
       message: "Removed from the gallery",
@@ -321,7 +333,7 @@ export async function extendGalleryFreeAction(input: { galleryId: string; months
 
 /** Creates (or reuses) the open extension invoice, emails the pay link to the client, and shows the link here too. */
 export async function sendExtensionInvoiceAction(galleryId: string) {
-  return studio(async ({ db }) => {
+  return studioMoney(async ({ db }) => {
     const r = await gal.createExtensionInvoice(db, gid(galleryId));
     const [row] = await db
       .select({ client: schema.studioClients, gallery: schema.studioGalleries })
@@ -360,7 +372,8 @@ export async function sendExtensionInvoiceAction(galleryId: string) {
 
 /** A new empty gallery for a job. Photographs and every setting come after, inside the gallery page. */
 export async function newGalleryAction(input: { jobId: string; title: string }) {
-  return studio(async ({ db, user }) => {
+  return studio(async (ctx) => {
+    const { db, user } = ctx;
     const job = id.safeParse(input.jobId);
     if (!job.success) throw new StudioError("Pick a job.");
     await assertPlan(db, "galleries");
@@ -370,6 +383,7 @@ export async function newGalleryAction(input: { jobId: string; title: string }) 
       { jobId: job.data, title: input.title.trim() || undefined, passcode },
       user.email ?? undefined,
     );
+    await created(ctx, "gallery", g.id);
     return {
       message: "Gallery created as a draft",
       extra: { galleryId: g.id, passcode },
@@ -468,7 +482,9 @@ export async function duplicateGalleryAction(galleryId: string) {
 }
 
 export async function deleteGalleryAction(galleryId: string) {
-  return studio(async ({ db, user }) => {
+  return studio(async (ctx) => {
+    const { db, user } = ctx;
+    await mayRemove(ctx, "gallery", galleryId);
     await gal.deleteGallery(db, gid(galleryId), user.email ?? undefined);
     return {
       message: "Gallery deleted (the photographs stay in your library)",
@@ -498,13 +514,16 @@ export async function bulkPhotosAction(input: {
   op: "hide" | "show" | "remove" | "album" | "front";
   albumId?: string;
 }) {
-  return studio(async ({ db }) => {
+  return studio(async (ctx) => {
+    const { db } = ctx;
     const g = gid(input.galleryId);
     const ids = z.array(id).max(2000).parse(input.mediaIds);
     if (!ids.length) throw new StudioError("Select some photographs first.");
     if (input.op === "hide" || input.op === "show") await gal.setHiddenMany(db, g, ids, input.op === "hide");
-    else if (input.op === "remove") await gal.removeMany(db, g, ids);
-    else if (input.op === "front") await gal.moveToFront(db, g, ids);
+    else if (input.op === "remove") {
+      for (const m of ids) await mayRemove(ctx, "photo", `${input.galleryId}:${m}`);
+      await gal.removeMany(db, g, ids);
+    } else if (input.op === "front") await gal.moveToFront(db, g, ids);
     else await gal.moveToAlbum(db, g, ids, input.albumId ? gid(input.albumId) : null);
     const verb = { hide: "Hid", show: "Showed", remove: "Removed", album: "Moved", front: "Moved to the front:" }[
       input.op
@@ -599,6 +618,8 @@ export async function saveRuleAction(input: {
   id?: string;
   albumId?: string;
   name: string;
+  preset?: string;
+  previewText?: string;
   maxPx: string;
   perVisitor: string;
   watermarkId?: string;
@@ -612,6 +633,8 @@ export async function saveRuleAction(input: {
       galleryId: gid(input.galleryId),
       albumId: input.albumId ? mid(input.albumId) : null,
       name: input.name,
+      preset: input.preset,
+      previewText: input.previewText,
       maxPx: input.maxPx.trim() ? Number(input.maxPx) : null,
       perVisitor: input.perVisitor.trim() ? Number(input.perVisitor) : null,
       watermarkId: input.watermarkId ? mid(input.watermarkId) : null,
@@ -623,7 +646,9 @@ export async function saveRuleAction(input: {
   });
 }
 export async function deleteRuleAction(input: { galleryId: string; id: string }) {
-  return studio(async ({ db }) => {
+  return studio(async (ctx) => {
+    const { db } = ctx;
+    await mayRemove(ctx, "rule", input.id);
     await extras.deleteRule(db, gid(input.galleryId), mid(input.id));
     return { message: "Rule removed" };
   });
@@ -637,37 +662,41 @@ export async function setDefaultWatermarkAction(id: string) {
   });
 }
 export async function deleteWatermarkAction(id: string) {
-  return studio(async ({ db }) => {
+  return studio(async (ctx) => {
+    const { db } = ctx;
+    await mayRemove(ctx, "watermark", id);
     await extras.deleteWatermark(db, mid(id));
     return { message: "Watermark deleted" };
   });
 }
 export async function deleteTrackAction(id: string) {
-  return studio(async ({ db }) => {
+  return studio(async (ctx) => {
+    const { db } = ctx;
+    await mayRemove(ctx, "track", id);
     await extras.deleteTrack(db, mid(id));
     return { message: "Track removed" };
   });
 }
 export async function createSheetAction(input: { name: string; copyFrom?: string }) {
-  return studio(async ({ db }) => {
+  return studioMoney(async ({ db }) => {
     await shop.createSheet(db, input.name, input.copyFrom ? mid(input.copyFrom) : undefined);
     return { message: "Price sheet created" };
   });
 }
 export async function renameSheetAction(input: { id: string; name: string }) {
-  return studio(async ({ db }) => {
+  return studioMoney(async ({ db }) => {
     await shop.renameSheet(db, mid(input.id), input.name);
     return { message: "Price sheet renamed" };
   });
 }
 export async function makeDefaultSheetAction(id: string) {
-  return studio(async ({ db }) => {
+  return studioMoney(async ({ db }) => {
     await shop.makeDefaultSheet(db, mid(id));
     return { message: "Default price sheet changed" };
   });
 }
 export async function deleteSheetAction(id: string) {
-  return studio(async ({ db }) => {
+  return studioMoney(async ({ db }) => {
     await shop.deleteSheet(db, mid(id));
     return { message: "Price sheet deleted" };
   });

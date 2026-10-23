@@ -14,7 +14,7 @@ import {
   ToastProvider,
 } from "@holominimal/ui";
 import { type ReactNode, ViewTransition } from "react";
-import { groupOf, studioGroups, studioSections } from "./sections";
+import { groupOf, groupsFor, studioSections } from "./sections";
 import { StudioPalette } from "./StudioPalette";
 import "./studio.css";
 import "./studio-chrome.css";
@@ -33,7 +33,7 @@ export function activeSection(pathname: string): string {
  * Studio chrome on Holominimal: the atmosphere, the proximity dock (the current group is largest; its pages are tabs
  * in the page header), the jump palette top right, and a page column that fades between routes. Entries are real links.
  */
-export function StudioChrome({ children }: { children: ReactNode }) {
+export function StudioChrome({ children, role }: { children: ReactNode; role?: string }) {
   const pathname = usePathname();
   const section = activeSection(pathname);
   const active = groupOf(section).id;
@@ -52,13 +52,13 @@ export function StudioChrome({ children }: { children: ReactNode }) {
                 </DockBrand>
               }
             >
-              {studioGroups.map((g) => (
+              {groupsFor(role).map((g) => (
                 <DockItem
                   key={g.id}
                   asChild
                   current={g.id === active}
                   subnav={
-                    g.id === active && g.sections.length > 1 ? (
+                    g.sections.length > 1 ? (
                       <DockSubnav aria-label={`${g.label} pages`}>
                         {g.sections.map((id) => (
                           <DockSubItem key={id} asChild current={id === section}>
@@ -75,7 +75,7 @@ export function StudioChrome({ children }: { children: ReactNode }) {
             </Dock>
           }
         >
-          <StudioPalette />
+          <StudioPalette role={role} />
           <ViewTransition key={pathname} name="st-page" enter="st-in" exit="st-out" default="none">
             <div className="st-page">{children}</div>
           </ViewTransition>

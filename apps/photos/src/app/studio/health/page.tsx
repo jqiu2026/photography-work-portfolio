@@ -20,7 +20,7 @@ type Check = { name: string; ok: boolean | "warn"; detail: string };
 
 /** What is configured, by name only (never a value). Owner only. */
 export default async function Health() {
-  await requirePageUser("studio.access", "/studio/health");
+  await requirePageUser("settings.write", "/studio/health");
   const env = (k: string) => Boolean(process.env[k]?.trim());
   const db = getDb();
   let dbOk: Check = { name: "Database", ok: false, detail: "DATABASE_URL is not set" };

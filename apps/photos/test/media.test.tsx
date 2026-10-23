@@ -80,7 +80,7 @@ describe("ProtectedImage", () => {
 });
 
 describe("photo specs", () => {
-  it("reads display facts from the kept EXIF fields and nothing else", () => {
+  it("keeps only exposure settings: no camera, lens, GPS or resolution ever leaves the metadata", () => {
     const s = specsFromExif({
       Make: "Canon",
       Model: "Canon EOS R6",
@@ -92,24 +92,15 @@ describe("photo specs", () => {
       DateTimeOriginal: "2026-02-14T19:30:00.000Z",
       GPSLatitude: 40.7,
     });
-    expect(s).toEqual({
-      camera: "Canon EOS R6",
-      lens: "RF70-200mm F2.8",
-      focal: 135,
-      aperture: 2.8,
-      shutter: 0.004,
-      iso: 3200,
-      taken: "2026-02-14",
-    });
+    expect(s).toEqual({ focal: 135, aperture: 2.8, shutter: 0.004, iso: 3200, taken: "2026-02-14" });
+    expect(JSON.stringify(s)).not.toMatch(/Canon|EOS|RF70|40\.7/);
     expect(specSummary(s)).toBe("135 mm · f/2.8 · 1/250 s · ISO 3200");
+    expect(specLines(s).map((l) => l.label)).toEqual(["Focal length", "Aperture", "Shutter", "ISO", "Taken"]);
   });
-  it("no metadata: undefined, and the size lines still say something true", () => {
+  it("no metadata: nothing is shown, and nothing about the image size", () => {
     expect(specsFromExif({})).toBeUndefined();
+    expect(specsFromExif({ Make: "Nikon", Model: "Z 6" })).toBeUndefined();
     expect(specsFromExif(null)).toBeUndefined();
-    const lines = specLines(undefined, { width: 6000, height: 4000 });
-    expect(lines).toEqual([
-      { label: "Size", value: "6000 × 4000 px · 24.0 MP" },
-      { label: "Shape", value: "3:2" },
-    ]);
+    expect(specLines(undefined)).toEqual([]);
   });
 });

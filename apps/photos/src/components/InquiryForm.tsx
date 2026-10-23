@@ -1,5 +1,6 @@
 "use client";
 
+import { checkEmail } from "@jerryqiu/db/email-check";
 import { DateField } from "@/components/DateField";
 import { Alert, Button, Checkbox, Field, FormMessage, Input, ResultCard, Select, Textarea } from "@/components/ui";
 import NextLink from "next/link";
@@ -47,8 +48,9 @@ export function InquiryForm({
     const get = (k: string) => String(f.get(k) ?? "").trim();
     const next: Record<string, string> = {};
     if (get("name").length < 2) next.name = "Please tell me your name.";
-    if (!/^\S+@\S+\.\S+$/.test(get("email"))) next.email = "That doesn't look like an email address.";
-    if (get("message").length < 5) next.message = "Tell me a little about the shoot.";
+    const mail = checkEmail(get("email"));
+    if (!mail.ok) next.email = mail.message;
+    if (get("message").length < 30) next.message = "Tell me a little more about the shoot.";
     if (!f.get("consent")) next.consent = "Please tick the box so I can store your message.";
     setErrors(next);
     if (Object.keys(next).length) return;

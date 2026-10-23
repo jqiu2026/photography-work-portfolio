@@ -53,6 +53,7 @@ export const routes: { site: string; path: string; base: string }[] = [
     "/video",
     "/about",
     "/book",
+    "/privacy-request",
     "/privacy",
     "/nope",
   ].map((path) => ({

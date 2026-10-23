@@ -27,7 +27,8 @@ export function checkGoogleProfile(profile: GoogleProfile, domain: string): Verd
   return { ok: true, email };
 }
 
-export type Role = "owner" | "editor" | "client";
+export type Role = "owner" | "editor" | "client" | "bookkeeper" | "photographer";
+export const TEAM_ROLES = ["bookkeeper", "photographer"] as const;
 
 export const actions = [
   "content.write",
@@ -41,6 +42,8 @@ export const actions = [
   "users.manage",
   "audit.read",
   "studio.access",
+  /** Invoices, payments, orders, expenses and reports. */
+  "studio.money",
 ] as const;
 export type Action = (typeof actions)[number];
 
@@ -48,6 +51,10 @@ const matrix: Record<Role, readonly Action[]> = {
   owner: actions,
   editor: ["content.write", "content.publish", "media.write", "inbox.read", "trash.restore", "audit.read"],
   client: [],
+  // helps with the business side: money pages only, and may take back what they added in the last few minutes
+  bookkeeper: ["studio.access", "studio.money"],
+  // runs the shoots and galleries: adds freely, removes only what they added in the last few minutes
+  photographer: ["studio.access"],
 };
 
 export function can(role: Role | undefined, action: Action): boolean {

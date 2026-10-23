@@ -416,6 +416,13 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
             {data.publishAt && !live ? ` · publishes ${data.publishAt.replace("T", " ")}` : ""}
           </PageDescription>
           <PageActions>
+            {data.slug ? (
+              <Button asChild variant="secondary">
+                <a href={`/g/${data.slug}`} target="_blank" rel="noreferrer">
+                  View gallery
+                </a>
+              </Button>
+            ) : null}
             <Button variant="secondary" disabled={pending} onClick={() => run(() => sendGalleryLinkAction(gid))}>
               <MailIcon /> Email the client
             </Button>

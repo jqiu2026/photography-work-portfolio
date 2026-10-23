@@ -6,11 +6,11 @@ import { StudioError } from "@jerryqiu/db/studio";
 import { mocksEnabled } from "@jerryqiu/mocks";
 import { createSubscriptionSession, stripeConfigured } from "@jerryqiu/payments";
 import { getSite } from "@jerryqiu/sites";
-import { studio } from "@/lib/studio-run";
+import { studioOwner } from "@/lib/studio-run";
 
 /** The brand and contact details shown in galleries and emails. */
 export async function saveBrandAction(input: Partial<Brand>) {
-  return studio(async ({ db }) => {
+  return studioOwner(async ({ db }) => {
     await saveBrand(db, input);
     return { message: "Brand details saved" };
   });
@@ -22,7 +22,7 @@ export async function saveBrandAction(input: Partial<Brand>) {
  * charge as a labelled mock.
  */
 export async function upgradePlanAction() {
-  return studio(async ({ db }) => {
+  return studioOwner(async ({ db }) => {
     // a fully discounted account (the owner's) goes back to Full Frame with no checkout: there is nothing to pay
     if ((await getPlanState(db)).discountPct === 100) {
       await setPlan(db, "fullframe");
@@ -59,7 +59,7 @@ export async function upgradePlanAction() {
 
 /** Back to Free. Existing galleries stay; the limits apply to what can be added. */
 export async function downgradePlanAction() {
-  return studio(async ({ db }) => {
+  return studioOwner(async ({ db }) => {
     await setPlan(db, "free");
     return { message: "Switched to Free. Nothing was deleted; the Free limits apply to new galleries and uploads." };
   });
@@ -67,7 +67,7 @@ export async function downgradePlanAction() {
 
 /** Bills this month if it has not been (a $0 line while the discount is 100%). */
 export async function billMonthAction() {
-  return studio(async ({ db }) => {
+  return studioOwner(async ({ db }) => {
     const c = await billThisMonth(db);
     return { message: c ? `Recorded: ${c.description}` : "This month is already recorded." };
   });

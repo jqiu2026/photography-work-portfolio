@@ -6,7 +6,8 @@ import { zipStream } from "@jerryqiu/media";
 import { clientIpHash } from "@jerryqiu/protect";
 import { downloadsUnlocked, galleryAccess, lockedMediaIds } from "@/lib/client-gallery";
 import { baseName, zipPlan } from "@/lib/downloads";
-import { fullFile, webFile } from "@/lib/gallery-files";
+import { DEFAULT_PREVIEW_TEXT } from "@jerryqiu/db/download-presets";
+import { fullFile, ruleFile, sizeTag, webFile } from "@/lib/gallery-files";
 import { ruleDownload } from "@/lib/rule-download";
 
 export const dynamic = "force-dynamic";
@@ -25,7 +26,12 @@ const deny = (status: number, error: string) =>
  */
 export async function GET(request: Request) {
   const u = new URL(request.url);
-  const size = u.searchParams.get("size") === "full" ? "full" : "web";
+  // size: full (the original), high (80%), low (50%), social (1920 px), preview (watermarked) or web (the legacy web size).
+  // Original and high resolution need the "full" download policy; the smaller ones need only "web".
+  const asked = u.searchParams.get("size") ?? "web";
+  const preset = (["high", "low", "social", "preview"] as const).find((p) => p === asked) ?? null;
+  const size = asked === "full" || asked === "high" ? "full" : "web";
+  const tag = preset ? (sizeTag[preset] ?? preset) : size === "full" ? "original" : "web";
   const db = getDb();
   const a = await galleryAccess(u.searchParams.get("g") ?? undefined);
   if (!db || !a) return deny(401, "Open your gallery again to download.");
@@ -60,8 +66,16 @@ export async function GET(request: Request) {
 
   if (viaRule) return ruleDownload({ db, a, url: u, contents, ip, headers });
 
-  const web = (mediaId: string) => webFile(contents, mediaId, a.viewer);
-  const full = (mediaId: string) => fullFile(contents, mediaId);
+  const sized = (mediaId: string) =>
+    ruleFile(
+      contents,
+      mediaId,
+      { preset: preset as string, maxPx: null, previewText: DEFAULT_PREVIEW_TEXT },
+      null,
+      a.viewer,
+    );
+  const web = (mediaId: string) => (preset ? sized(mediaId) : webFile(contents, mediaId, a.viewer));
+  const full = (mediaId: string) => (preset ? sized(mediaId) : fullFile(contents, mediaId));
 
   if (!zip) {
     const mediaId = u.searchParams.get("m") ?? "";
@@ -70,7 +84,7 @@ export async function GET(request: Request) {
     await gal.logDownload(db, {
       galleryId: g.id,
       mediaId,
-      kind: size,
+      kind: preset ?? size,
       viewer: a.viewer,
       ipHash: ip,
       bytes: f.bytes.length,
@@ -94,14 +108,14 @@ export async function GET(request: Request) {
   const mine = parts[part - 1];
   await gal.logDownload(db, {
     galleryId: g.id,
-    kind: size === "full" ? "zip-full" : "zip-web",
+    kind: preset ? `zip-${preset}` : size === "full" ? "zip-full" : "zip-web",
     part,
     viewer: a.viewer,
     ipHash: ip,
   });
   const stream = zipStream(
     mine.map((it) => ({
-      name: size === "full" ? it.filename : `${baseName(it.filename)}-web.jpg`,
+      name: size === "full" && !preset ? it.filename : `${baseName(it.filename)}-${tag}.jpg`,
       read: async () => {
         const f = size === "full" ? await full(it.mediaId) : await web(it.mediaId);
         return f ? new Uint8Array(f.bytes) : new Uint8Array();
@@ -117,7 +131,7 @@ export async function GET(request: Request) {
     headers: {
       ...headers,
       "Content-Type": "application/zip",
-      "Content-Disposition": `attachment; filename="${safeTitle}-${size}-part-${part}-of-${parts.length}.zip"`,
+      "Content-Disposition": `attachment; filename="${safeTitle}-${tag}-part-${part}-of-${parts.length}.zip"`,
       "X-Zip-Parts": String(parts.length),
     },
   });

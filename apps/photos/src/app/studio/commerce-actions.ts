@@ -6,7 +6,7 @@ import { sendTemplate } from "@jerryqiu/email";
 import { taxProviderFromEnv } from "@jerryqiu/payments/tax";
 import { getSite } from "@jerryqiu/sites";
 import { z } from "zod";
-import { studio } from "@/lib/studio-run";
+import { studioMoney } from "@/lib/studio-run";
 
 const id = z.string().uuid();
 const dollars = (v: string | undefined, what: string) => {
@@ -37,7 +37,7 @@ export async function savePackageAction(input: {
   isSample?: boolean;
   visible?: boolean;
 }) {
-  return studio(async ({ db }) => {
+  return studioMoney(async ({ db }) => {
     const fees = (input.fees ?? "")
       .split("\n")
       .map((l) => l.trim())
@@ -75,7 +75,7 @@ export async function savePackageAction(input: {
 }
 
 export async function deletePackageAction(packageId: string) {
-  return studio(async ({ db }) => {
+  return studioMoney(async ({ db }) => {
     const p = id.safeParse(packageId);
     if (!p.success) throw new StudioError("Unknown package.");
     await com.deletePackage(db, p.data);
@@ -94,7 +94,7 @@ export async function saveAddOnAction(input: {
   upsell?: boolean;
   isSample?: boolean;
 }) {
-  return studio(async ({ db }) => {
+  return studioMoney(async ({ db }) => {
     const a = await com.saveAddOn(db, {
       id: input.id && id.safeParse(input.id).success ? input.id : undefined,
       name: input.name,
@@ -119,7 +119,7 @@ export async function saveAddOnAction(input: {
 }
 
 export async function deleteAddOnAction(addOnId: string) {
-  return studio(async ({ db }) => {
+  return studioMoney(async ({ db }) => {
     const p = id.safeParse(addOnId);
     if (!p.success) throw new StudioError("Unknown add-on.");
     await com.deleteAddOn(db, p.data);
@@ -134,7 +134,7 @@ export async function createPromoAction(input: {
   maxUses?: string;
   minSubtotal?: string;
 }) {
-  return studio(async ({ db }) => {
+  return studioMoney(async ({ db }) => {
     const kind = input.kind === "amount" ? "amount" : "percent";
     const p = await com.createPromo(db, {
       code: input.code,
@@ -157,7 +157,7 @@ export async function createPromoAction(input: {
 }
 
 export async function togglePromoAction(promoId: string, active: boolean) {
-  return studio(async ({ db }) => {
+  return studioMoney(async ({ db }) => {
     const p = id.safeParse(promoId);
     if (!p.success) throw new StudioError("Unknown code.");
     await com.setPromoActive(db, p.data, active);
@@ -166,7 +166,7 @@ export async function togglePromoAction(promoId: string, active: boolean) {
 }
 
 export async function createReferralAction(clientId: string) {
-  return studio(async ({ db }) => {
+  return studioMoney(async ({ db }) => {
     const p = id.safeParse(clientId);
     if (!p.success) throw new StudioError("Pick a client.");
     const r = await com.createReferralCode(db, p.data, 10);
@@ -183,7 +183,7 @@ export async function createReferralAction(clientId: string) {
 }
 
 export async function createGiftCardAction(input: { amount: string; email?: string; recipient?: string }) {
-  return studio(async ({ db }) => {
+  return studioMoney(async ({ db }) => {
     const g = await com.createGiftCard(db, {
       cents: dollars(input.amount, "the amount"),
       purchaserEmail: input.email,
@@ -214,7 +214,7 @@ export async function createQuoteAction(input: {
   state?: string;
   postalCode?: string;
 }) {
-  return studio(async ({ db }) => {
+  return studioMoney(async ({ db }) => {
     const cid = id.safeParse(input.clientId);
     if (!cid.success) throw new StudioError("Pick a client.");
     const settings = await com.getPaymentsSettings(db);
@@ -256,7 +256,7 @@ export async function createQuoteAction(input: {
 }
 
 export async function sendQuoteAction(quoteId: string) {
-  return studio(async ({ db }) => {
+  return studioMoney(async ({ db }) => {
     const p = id.safeParse(quoteId);
     if (!p.success) throw new StudioError("Unknown quote.");
     const { token } = await com.sendQuote(db, p.data);
@@ -292,7 +292,7 @@ export async function saveCommerceSettingsAction(input: {
   taxRate: string;
   taxLabel: string;
 }) {
-  return studio(async ({ db }) => {
+  return studioMoney(async ({ db }) => {
     const rate = Number(input.taxRate);
     if (!Number.isFinite(rate) || rate < 0 || rate > 50)
       throw new StudioError("Enter the tax rate as a percentage, for example 8.875.");

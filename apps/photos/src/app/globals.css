@@ -381,3 +381,37 @@
 .cat-book {
   margin: var(--hm-space-8) 0 0;
 }
+
+/* the print store catalog */
+.pr-line {
+  margin-top: var(--hm-space-8);
+}
+.pr-line h2 {
+  margin: 0 0 var(--hm-space-1);
+}
+.pr-line > p {
+  margin: 0 0 var(--hm-space-4);
+  color: var(--hm-muted);
+}
+.pr-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: var(--hm-space-3);
+}
+.pr-grid li {
+  display: grid;
+  gap: 0.2rem;
+  padding: var(--hm-space-4);
+  border: 1px solid var(--hm-line-strong);
+  border-radius: var(--hm-radius-md);
+}
+.pr-price {
+  font-size: var(--hm-text-lg);
+  font-variant-numeric: tabular-nums;
+}
+.pr-grid small {
+  color: var(--hm-muted);
+}

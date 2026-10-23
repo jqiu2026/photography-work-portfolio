@@ -44,7 +44,10 @@ const KIND: Record<string, string> = {
   "digital-full": "Download",
   "digital-all": "Download",
   print: "Print",
+  mounted: "Mounted print",
+  framed: "Framed print",
   canvas: "Canvas",
+  metal: "Metal print",
   card: "Card",
   album: "Album",
 };

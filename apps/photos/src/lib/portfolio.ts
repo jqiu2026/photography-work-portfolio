@@ -3,7 +3,7 @@ import * as repo from "@/content/portfolio";
 import { getGalleries } from "@/lib/content-db";
 
 export type Category = { slug: string; name: string };
-export type Photo = BareAsset & { alt: string; category: string };
+export type Photo = BareAsset & { alt: string; category: string; slug?: string };
 export type Portfolio = {
   categories: Category[];
   photos: Photo[];
@@ -61,6 +61,7 @@ export async function getPortfolio(): Promise<Portfolio> {
     g.items.map(
       (it, i): Photo => ({
         ...bare(it.asset),
+        slug: it.asset.slug,
         category: g.slug,
         alt: it.asset.alt || `${g.title} photograph ${i + 1}`,
       }),

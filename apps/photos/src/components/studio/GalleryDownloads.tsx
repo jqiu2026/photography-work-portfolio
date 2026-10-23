@@ -2,6 +2,7 @@
 
 import { Button, Checkbox, Field, Input, Select, SettingsSection, Text, Textarea } from "@holominimal/ui";
 
+import { DOWNLOAD_PRESETS, ruleSizeLabel } from "@jerryqiu/db/download-presets";
 import { useState } from "react";
 import { useConfirm } from "./StudioFrame";
 import { deleteRuleAction, saveRuleAction } from "@/app/studio/gallery-actions";
@@ -11,6 +12,8 @@ export type DownloadRuleRow = {
   id: string;
   albumId: string | null;
   name: string;
+  preset: string;
+  previewText: string;
   maxPx: number | null;
   perVisitor: number | null;
   watermarkId: string | null;
@@ -23,7 +26,9 @@ const blank = {
   id: "",
   albumId: "",
   name: "",
-  maxPx: "720",
+  preset: "high",
+  previewText: "",
+  maxPx: "1600",
   perVisitor: "",
   watermarkId: "",
   pin: "",
@@ -58,7 +63,9 @@ export function GalleryDownloads({
       id: r.id,
       albumId: r.albumId ?? "",
       name: r.name,
-      maxPx: r.maxPx ? String(r.maxPx) : "",
+      preset: r.preset,
+      previewText: r.previewText,
+      maxPx: r.maxPx ? String(r.maxPx) : "1600",
       perVisitor: r.perVisitor ? String(r.perVisitor) : "",
       watermarkId: r.watermarkId ?? "",
       pin: "",
@@ -81,7 +88,7 @@ export function GalleryDownloads({
                 {r.name}
                 <small>
                   {r.albumId ? `Album: ${albums.find((a) => a.id === r.albumId)?.name ?? "?"}` : "Whole gallery"} ·{" "}
-                  {r.maxPx ? `${r.maxPx} px` : "original"} · {r.perVisitor ? `${r.perVisitor} each` : "unlimited"}
+                  {ruleSizeLabel(r)} · {r.perVisitor ? `${r.perVisitor} each` : "unlimited"}
                   {wm(r.watermarkId) ? ` · ${wm(r.watermarkId)}` : ""}
                   {r.hasPin ? " · PIN" : ""}
                 </small>
@@ -124,7 +131,9 @@ export function GalleryDownloads({
                 id: f.id || undefined,
                 albumId: f.albumId || undefined,
                 name: f.name,
-                maxPx: f.maxPx,
+                preset: f.preset,
+                previewText: f.previewText,
+                maxPx: f.preset === "custom" ? f.maxPx : "",
                 perVisitor: f.perVisitor,
                 watermarkId: f.watermarkId || undefined,
                 pin: f.pin || (f.id ? undefined : ""),
@@ -148,9 +157,33 @@ export function GalleryDownloads({
             ))}
           </Select>
         </Field>
-        <Field label="Longest side in pixels (blank = the original file)">
-          <Input inputMode="numeric" value={f.maxPx} onChange={(e) => set("maxPx", e.target.value)} />
+        <Field label="Size">
+          <Select value={f.preset} onValueChange={(v) => set("preset", v)}>
+            {DOWNLOAD_PRESETS.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.label}
+              </option>
+            ))}
+          </Select>
         </Field>
+        {f.preset === "custom" ? (
+          <Field label="Longest side in pixels (blank = the original file)">
+            <Input inputMode="numeric" value={f.maxPx} onChange={(e) => set("maxPx", e.target.value)} />
+          </Field>
+        ) : null}
+        {f.preset === "preview" ? (
+          <Field
+            label="Words across the photograph"
+            hint="Big, centered and tilted. For example PREVIEW ONLY or PROOF ONLY."
+          >
+            <Input
+              value={f.previewText}
+              maxLength={40}
+              placeholder="PREVIEW ONLY"
+              onChange={(e) => set("previewText", e.target.value)}
+            />
+          </Field>
+        ) : null}
         <Field label="Downloads per visitor (blank = unlimited)">
           <Input inputMode="numeric" value={f.perVisitor} onChange={(e) => set("perVisitor", e.target.value)} />
         </Field>

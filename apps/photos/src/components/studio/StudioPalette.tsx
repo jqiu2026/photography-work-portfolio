@@ -4,7 +4,9 @@ import { Button, type CommandItem, CommandPalette, Kbd, PlusIcon, SearchIcon } f
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { groupOf, sectionInfo, studioSections } from "./sections";
+import { createPortal } from "react-dom";
+import { SchemeSwitch } from "@/components/SchemeProvider";
+import { canSeeSection, groupOf, sectionInfo, studioSections } from "./sections";
 
 type Entry = { label: string; hint: string; href: string; keys: string };
 
@@ -39,13 +41,13 @@ const PAGES: Entry[] = studioSections.map((s) => ({
   keys: `${groupOf(s.id).label} ${s.id}`,
 }));
 
-const ALL = [...ACTIONS.map((e) => ({ ...e, group: "Start" })), ...PAGES.map((e) => ({ ...e, group: "Go to" }))];
-const ITEMS: CommandItem[] = ALL.map((e) => ({
-  id: e.href + e.label,
-  label: e.label,
-  group: e.group,
-  keywords: `${e.hint} ${e.keys}`,
-}));
+const everything = [...ACTIONS.map((e) => ({ ...e, group: "Start" })), ...PAGES.map((e) => ({ ...e, group: "Go to" }))];
+/** What a role may open: an entry points at a studio page that role can see, or at the public site. */
+const visible = (role: string | undefined) =>
+  everything.filter((e) => {
+    const m = /^\/studio\/([a-z]+)/.exec(e.href);
+    return m ? canSeeSection(role, m[1] as string) : true;
+  });
 
 /**
  * "Jump to": one box that finds any studio page or common action by name (Ctrl or Command K, or the button), on the
@@ -61,15 +63,51 @@ const KIND: Record<string, string> = {
   expense: "Expense",
 };
 
-export function StudioPalette() {
+export function StudioPalette({ role }: { role?: string }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [hits, setHits] = useState<Hit[]>([]);
+  const [searching, setSearching] = useState(false);
+  // the palette is Holominimal's: its options get a data-kind (for their color) and a loading skeleton is placed
+  // inside it while the studio's records are being searched
+  const [host, setHost] = useState<Element | null>(null);
+  useEffect(() => {
+    if (!open) {
+      setHost(null);
+      return;
+    }
+    let raf = 0;
+    let obs: MutationObserver | undefined;
+    const tag = (root: Element) => {
+      for (const o of root.querySelectorAll<HTMLElement>(".hm-palette-option")) {
+        const g = o.querySelector("small")?.textContent?.toLowerCase() ?? "";
+        const kind = g.startsWith("found: ") ? g.slice(7) : g === "start" ? "start" : "page";
+        if (o.dataset.kind !== kind) o.dataset.kind = kind;
+      }
+    };
+    const find = () => {
+      const el = document.querySelector(".hm-palette");
+      if (!el) {
+        raf = requestAnimationFrame(find);
+        return;
+      }
+      setHost(el);
+      tag(el);
+      obs = new MutationObserver(() => tag(el));
+      obs.observe(el, { childList: true, subtree: true, characterData: true });
+    };
+    find();
+    return () => {
+      cancelAnimationFrame(raf);
+      obs?.disconnect();
+    };
+  }, [open]);
   // The palette owns its input, so the typed text is read from the field's own input events while it is open, and the
   // studio's records are searched (after a short pause) alongside the pages and actions.
   useEffect(() => {
     if (!open) {
       setHits([]);
+      setSearching(false);
       return;
     }
     let timer: ReturnType<typeof setTimeout> | undefined;
@@ -79,14 +117,22 @@ export function StudioPalette() {
       if (!(t instanceof HTMLInputElement) || t.getAttribute("role") !== "combobox") return;
       const q = t.value.trim();
       clearTimeout(timer);
-      if (q.length < 2) return setHits([]);
+      if (q.length < 2) {
+        seq++;
+        setSearching(false);
+        return setHits([]);
+      }
       const mine = ++seq;
+      setSearching(true);
       timer = setTimeout(async () => {
         try {
           const r = await fetch(`/api/studio/search?q=${encodeURIComponent(q)}`, { credentials: "same-origin" });
           if (!r.ok || mine !== seq) return;
           setHits(((await r.json()) as { hits: Hit[] }).hits);
-        } catch {}
+        } catch {
+        } finally {
+          if (mine === seq) setSearching(false);
+        }
       }, 180);
     };
     document.addEventListener("input", onInput);
@@ -95,9 +141,15 @@ export function StudioPalette() {
       clearTimeout(timer);
     };
   }, [open]);
+  const allowed = useMemo(() => visible(role), [role]);
   const items = useMemo<CommandItem[]>(
     () => [
-      ...ITEMS,
+      ...allowed.map((e) => ({
+        id: e.href + e.label,
+        label: e.label,
+        group: e.group,
+        keywords: `${e.hint} ${e.keys}`,
+      })),
       ...hits.map((h) => ({
         id: `hit:${h.kind}:${h.id}`,
         label: h.label,
@@ -105,20 +157,33 @@ export function StudioPalette() {
         keywords: h.detail,
       })),
     ],
-    [hits],
+    [hits, allowed],
   );
   return (
     <>
       <div className="st-util">
+        <SchemeSwitch />
         <Button variant="secondary" size="sm" shape="pill" onClick={() => setOpen(true)} aria-haspopup="dialog">
           <SearchIcon /> Jump to <Kbd>⌘K</Kbd>
         </Button>
-        <Button asChild size="sm" shape="pill">
-          <Link href="/studio/galleries?new=1">
-            <PlusIcon /> New gallery
-          </Link>
-        </Button>
+        {canSeeSection(role, "galleries") ? (
+          <Button asChild size="sm" shape="pill">
+            <Link href="/studio/galleries?new=1">
+              <PlusIcon /> New gallery
+            </Link>
+          </Button>
+        ) : null}
       </div>
+      {host && searching
+        ? createPortal(
+            <div className="st-pal-skel" role="status" aria-label="Searching the studio">
+              <i />
+              <i />
+              <i />
+            </div>,
+            host,
+          )
+        : null}
       <CommandPalette
         open={open}
         onOpenChange={setOpen}
@@ -135,7 +200,7 @@ export function StudioPalette() {
           setOpen(false);
           const hit = item.id.startsWith("hit:") ? hits.find((h) => `hit:${h.kind}:${h.id}` === item.id) : undefined;
           if (hit) return router.push(hit.href);
-          const e = ALL.find((x) => x.href + x.label === item.id);
+          const e = allowed.find((x) => x.href + x.label === item.id);
           if (e) router.push(e.href);
         }}
       />

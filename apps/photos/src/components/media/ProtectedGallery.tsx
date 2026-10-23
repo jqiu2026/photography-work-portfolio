@@ -93,7 +93,7 @@ export function ProtectedGallery({
 
 /** A slide-up strip on a tile: the caption and the exposure in one line. Reads as part of the button's label too. */
 function TileDetails({ item }: { item: ProtectedGalleryItem }) {
-  const line = specSummary(item.asset.specs) || specLines(undefined, item.asset)[0]?.value;
+  const line = specSummary(item.asset.specs);
   return (
     <div className="pm-tile-info" aria-hidden="true">
       <strong>{item.asset.caption ?? item.alt}</strong>
@@ -104,7 +104,7 @@ function TileDetails({ item }: { item: ProtectedGalleryItem }) {
 
 /** Everything the file's metadata says, as a quiet definition list under the caption. */
 function SpecList({ asset }: { asset: ProtectedAsset }) {
-  const lines = specLines(asset.specs, asset);
+  const lines = specLines(asset.specs);
   if (!lines.length) return null;
   return (
     <dl className="pm-specs" aria-label="Photograph details">

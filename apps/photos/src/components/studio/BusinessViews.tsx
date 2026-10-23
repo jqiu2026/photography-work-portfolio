@@ -8,6 +8,8 @@ import {
   addGearAction,
   addTestimonialAction,
   deleteSubscriberAction,
+  reopenPrivacyAction,
+  resolvePrivacyAction,
   assignGearAction,
   consentAction,
   deleteExpenseAction,
@@ -813,6 +815,104 @@ export function SubscribersView({ user, data }: { user: string; data: Subscriber
         ) : (
           <Text size="sm" tone="muted">
             No one has signed up yet.
+          </Text>
+        )}
+      </Card>
+    </Frame>
+  );
+}
+
+/* ---------------------------------------------------------------- privacy requests */
+
+export type PrivacyData = {
+  items: {
+    id: string;
+    name: string;
+    email: string;
+    details: string;
+    status: string;
+    resolution: string | null;
+    at: string;
+  }[];
+};
+
+export function PrivacyView({ user, data }: { user: string; data: PrivacyData }) {
+  const { pending, note, act, submit } = useAct();
+  const [text, setText] = useState<Record<string, string>>({});
+  const open = data.items.filter((i) => i.status === "open").length;
+  return (
+    <Frame section="privacy" user={user} note={note}>
+      <Card title={open ? `${open} waiting` : "Requests"} id="pv-list">
+        <Text size="sm" tone="muted">
+          Visitors ask for a photograph to come down from the page “Remove a photo of me” (linked in the footer). Find
+          the photograph, hide it in its gallery (Photos, select it, Hide), then write what you did and mark it done.
+          Reply to them by email; nothing is sent from here.
+        </Text>
+        {data.items.length ? (
+          <ul className="hm-data-list st-list st-list--tall">
+            {data.items.map((r) => (
+              <li className="hm-data-list-item st-stack" key={r.id} data-privacy-id={r.id}>
+                <p>
+                  <b>{r.name}</b> <a href={`mailto:${r.email}`}>{r.email}</a>{" "}
+                  <Badge tone={r.status === "open" ? "warning" : r.status === "done" ? "success" : "neutral"}>
+                    {r.status === "open" ? "Waiting" : r.status === "done" ? "Done" : "Declined"}
+                  </Badge>{" "}
+                  <small>{r.at.slice(0, 10)}</small>
+                </p>
+                <p className="st-quote">{r.details}</p>
+                {r.status === "open" ? (
+                  <form
+                    noValidate
+                    className="st-inline"
+                    aria-label={`Resolve the request from ${r.name}`}
+                    onSubmit={submit(() =>
+                      resolvePrivacyAction({ requestId: r.id, status: "done", resolution: text[r.id] ?? "" }),
+                    )}
+                  >
+                    <Input
+                      aria-label={`What you did for ${r.name}`}
+                      placeholder="What you did, for the record"
+                      value={text[r.id] ?? ""}
+                      onChange={(e) => setText({ ...text, [r.id]: e.target.value })}
+                    />
+                    <Button type="submit" size="sm" disabled={pending}>
+                      Mark done
+                    </Button>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="secondary"
+                      disabled={pending}
+                      onClick={() =>
+                        act(() =>
+                          resolvePrivacyAction({ requestId: r.id, status: "declined", resolution: text[r.id] ?? "" }),
+                        )
+                      }
+                    >
+                      Decline
+                    </Button>
+                  </form>
+                ) : (
+                  <>
+                    <small>{r.resolution}</small>
+                    <div className="st-actions">
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        disabled={pending}
+                        onClick={() => act(() => reopenPrivacyAction(r.id))}
+                      >
+                        Reopen
+                      </Button>
+                    </div>
+                  </>
+                )}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <Text size="sm" tone="muted">
+            No requests.
           </Text>
         )}
       </Card>

@@ -19,6 +19,8 @@ export type PublicAsset = {
   alt?: string;
   caption?: string;
   specs?: PhotoSpecs;
+  /** The file name as a slug ("_JRY0022-Enhanced-NR.jpg" is "jry0022-enhanced-nr"), so a page can ask for a specific photograph. */
+  slug?: string;
   /** Responsive sources served by `/api/img/[id]`; `v` busts caches when an image is replaced in place. */
   files: { width: number; src: string }[];
   protectedLevel?: "off" | "light" | "strict";
@@ -42,6 +44,11 @@ export function toAsset(m: MediaRow, over?: { alt?: string | null; caption?: str
     alt: over?.alt ?? m.alt ?? undefined,
     caption: over?.caption ?? m.caption ?? undefined,
     specs: specsFromExif(m.exif),
+    slug: m.filename
+      .replace(/\.[^.]+$/, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, ""),
     files: widths.map((w) => ({ width: w, src: mediaSrc(m.id, w, version) })),
   };
 }

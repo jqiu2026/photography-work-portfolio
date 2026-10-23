@@ -11,6 +11,9 @@ export const person = {
   location: "New York",
   email: "hello@jerryqiu.com",
   bookingEmail: "bookings@jerryqiu.com",
+  /** Shown on the booking and contact pages; `phoneHref` is the tel: link. */
+  phone: "(424) 800-3757",
+  phoneHref: "tel:+14248003757",
   languages: ["English", "Mandarin Chinese", "French"],
   // TODO(owner): rewrite headline in your voice
   headline: "I take photographs, build things with code, and fly drones.",

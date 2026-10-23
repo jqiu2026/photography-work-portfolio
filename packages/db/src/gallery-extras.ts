@@ -101,11 +101,24 @@ export async function deleteWatermark(db: Database, id: string) {
     .where(eq(s.studioWatermarks.id, id));
 }
 
+export {
+  DEFAULT_PREVIEW_TEXT,
+  DOWNLOAD_PRESETS,
+  type DownloadPreset,
+  PREVIEW_MAX_PX,
+  SOCIAL_MAX_PX,
+  ruleSizeLabel,
+  ruleTargetSize,
+} from "./download-presets";
+import { DOWNLOAD_PRESETS, DEFAULT_PREVIEW_TEXT } from "./download-presets";
+
 export type RuleInput = {
   id?: string;
   galleryId: string;
   albumId?: string | null;
   name: string;
+  preset?: string;
+  previewText?: string;
   maxPx?: number | null;
   perVisitor?: number | null;
   watermarkId?: string | null;
@@ -124,7 +137,9 @@ export async function listRules(db: Database, galleryId: string) {
 export async function saveRule(db: Database, input: RuleInput) {
   const name = input.name.trim().slice(0, 80);
   if (name.length < 2) throw new StudioError("Name the rule: visitors see this name.");
-  const maxPx = input.maxPx ?? null;
+  const preset = input.preset ?? "custom";
+  if (!DOWNLOAD_PRESETS.some((p) => p.id === preset)) throw new StudioError("Pick a size for the download.");
+  const maxPx = preset === "custom" ? (input.maxPx ?? null) : null;
   if (maxPx !== null && (!Number.isInteger(maxPx) || maxPx < 200 || maxPx > 12000))
     throw new StudioError("A size is 200 to 12000 pixels on the longest side.");
   const per = input.perVisitor ?? null;
@@ -147,7 +162,9 @@ export async function saveRule(db: Database, input: RuleInput) {
     galleryId: input.galleryId,
     albumId: input.albumId ?? null,
     name,
+    preset,
     maxPx,
+    previewText: preset === "preview" ? input.previewText?.trim().slice(0, 40) || DEFAULT_PREVIEW_TEXT : null,
     perVisitor: per,
     watermarkId: input.watermarkId ?? null,
     printRelease: input.printRelease?.trim().slice(0, 7500) || null,

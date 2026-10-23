@@ -81,6 +81,8 @@ test("owner sets brand, a watermark, a track, rules and the branding of a galler
   await page.getByRole("tab", { name: "Downloads" }).click();
   const rule = page.getByRole("form", { name: "Download rule" });
   await rule.getByLabel("Rule name (visitors see it)").fill("Free (720 px)");
+  await choose(rule.getByLabel("Size"), "Custom size (pixels)");
+  await rule.getByLabel(/Longest side in pixels/).fill("720");
   await choose(rule.getByLabel("Watermark"), `Mark ${uid}`);
   await rule.getByRole("button", { name: "Add rule" }).click();
   await slow(note(page).filter({ hasText: "Download rule saved" }).first()).toBeVisible();

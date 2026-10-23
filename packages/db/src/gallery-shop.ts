@@ -93,7 +93,7 @@ export async function saveShop(db: Database, galleryId: string, patch: Record<st
 
 /* ---------- price list ---------- */
 export const DIGITAL_KINDS = ["digital-web", "digital-full", "digital-all"] as const;
-export const PRINT_KINDS = ["print", "canvas", "album", "card"] as const;
+export const PRINT_KINDS = ["print", "mounted", "framed", "canvas", "metal", "card", "album"] as const;
 /** The starting price list. Every price is a SAMPLE until the owner sets a real one. Print SKUs match @jerryqiu/prints' mock lab. */
 const STARTER: Omit<typeof s.studioProducts.$inferInsert, "id">[] = [
   {

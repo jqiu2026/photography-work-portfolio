@@ -147,6 +147,21 @@ export function ZoomStage({
       }}
     >
       <div className="pm-zoom-inner">{children}</div>
+      <p className="pm-zoom-hint" aria-label="Zoom controls">
+        <span>
+          <kbd>Scroll</kbd> or pinch to zoom
+        </span>
+        <span>
+          <kbd>Double-click</kbd> toggles
+        </span>
+        <span>
+          <kbd>+</kbd> <kbd>−</kbd> zoom
+        </span>
+        <span>
+          <kbd>0</kbd> reset
+        </span>
+        <span>Drag to move</span>
+      </p>
       <div className="pm-zoom-bar" role="group" aria-label="Zoom">
         <button
           type="button"

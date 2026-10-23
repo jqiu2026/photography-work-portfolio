@@ -21,7 +21,7 @@ import {
  * `studio_id` is nullable and unused: multi-tenancy could be added later, but is not built (non-goal).
  */
 export const siteEnum = pgEnum("site", ["hub", "photos", "music", "flying", "all"]);
-export const roleEnum = pgEnum("role", ["owner", "editor", "client"]);
+export const roleEnum = pgEnum("role", ["owner", "editor", "client", "bookkeeper", "photographer"]);
 export const statusEnum = pgEnum("status", ["draft", "scheduled", "published"]);
 export const timelineCategoryEnum = pgEnum("timeline_category", [
   "work",
@@ -60,6 +60,8 @@ export const users = pgTable(
     image: text("image"),
     role: roleEnum("role").notNull().default("editor"),
     active: boolean("active").notNull().default(true),
+    /** A team member invited by the owner who signs in with any verified Google account (not only the Workspace domain). */
+    external: boolean("external").notNull().default(false),
     addedBy: text("added_by"),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
     lastSignInAt: timestamp("last_sign_in_at", { withTimezone: true }),
@@ -1417,8 +1419,12 @@ export const studioDownloadRules = pgTable(
       .references(() => studioGalleries.id, { onDelete: "cascade" }),
     albumId: uuid("album_id"),
     name: text("name").notNull(),
-    /** Longest side in pixels; null = the original file. */
+    /** original | high (80% of full size) | low (50%) | social (longest side 1920 px) | preview (watermarked) | custom (maxPx). */
+    preset: text("preset").notNull().default("custom"),
+    /** Longest side in pixels for the custom size; null = the original file. */
     maxPx: integer("max_px"),
+    /** The big centered words on a preview download. */
+    previewText: text("preview_text"),
     /** Most downloads per visitor under this rule; null = unlimited. */
     perVisitor: integer("per_visitor"),
     watermarkId: uuid("watermark_id"),
@@ -1563,3 +1569,37 @@ export const studioSubscribers = pgTable(
   ],
 );
 export type StudioSubscriber = typeof studioSubscribers.$inferSelect;
+
+/**
+ * Who added what, and when, for the things a team member may take back within a few minutes. A photographer can remove
+ * what they added in the last 5 minutes (a slip) and nothing else; the owner can remove anything.
+ */
+export const studioCreated = pgTable(
+  "studio_created",
+  {
+    entity: text("entity").notNull(),
+    entityId: text("entity_id").notNull(),
+    byEmail: text("by_email").notNull(),
+    at: timestamp("at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [primaryKey({ columns: [t.entity, t.entityId] })],
+);
+
+/**
+ * "Please remove me from a photograph": someone who appears in a published photograph asks for it to come down. The
+ * studio tracks each request until the photographs are hidden and the person is told.
+ */
+export const studioPrivacyRequests = pgTable("studio_privacy_requests", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  /** Where they saw it (a page address) and which photograph or event, in their words. */
+  details: text("details").notNull(),
+  /** open | done | declined */
+  status: text("status").notNull().default("open"),
+  /** What the studio did or why it said no (kept for the record, never shown publicly). */
+  resolution: text("resolution"),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  handledAt: timestamp("handled_at", { withTimezone: true }),
+});
+export type StudioPrivacyRequest = typeof studioPrivacyRequests.$inferSelect;

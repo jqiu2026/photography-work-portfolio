@@ -589,6 +589,8 @@ export async function duplicateGallery(db: Database, id: string, by?: string) {
         galleryId: copy.id,
         albumId: r.albumId ? (map.get(r.albumId) ?? null) : null,
         name: r.name,
+        preset: r.preset,
+        previewText: r.previewText,
         maxPx: r.maxPx,
         perVisitor: r.perVisitor,
         watermarkId: r.watermarkId,

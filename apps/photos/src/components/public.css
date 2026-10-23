@@ -514,12 +514,12 @@
   }
 }
 
-/* footer newsletter signup */
+/* newsletter signup (on the About page) */
 .pub-news {
   display: grid;
   gap: var(--hm-space-2);
   max-width: 26rem;
-  margin-block: var(--hm-space-6) 0;
+  margin-block: 0;
 }
 .pub-news__label {
   font-size: var(--hm-text-sm);
@@ -541,4 +541,11 @@
 .pub-news__error {
   margin-top: 0;
   color: var(--hm-danger, #ff6b6b);
+}
+
+.about-news {
+  display: grid;
+  gap: var(--hm-space-3);
+  padding-top: var(--hm-space-6);
+  border-top: 1px solid var(--hm-line);
 }
