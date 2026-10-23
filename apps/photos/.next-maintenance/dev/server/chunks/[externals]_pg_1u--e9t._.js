@@ -1,11 +1,15 @@
 module.exports = [
-"[externals]/pg [external] (pg, esm_import, [project]/node_modules/.pnpm/pg@8.23.1/node_modules/pg)", ((__turbopack_context__) => {
-"use strict";
+  "[externals]/pg [external] (pg, esm_import, [project]/node_modules/.pnpm/pg@8.23.1/node_modules/pg)",
+  (__turbopack_context__) => {
+    return __turbopack_context__.a(async (__turbopack_handle_async_dependencies__, __turbopack_async_result__) => {
+      try {
+        var mod = await __turbopack_context__.y("pg-ad45e98bb7b7a165");
 
-return __turbopack_context__.a(async (__turbopack_handle_async_dependencies__, __turbopack_async_result__) => { try {
-var mod = await __turbopack_context__.y("pg-ad45e98bb7b7a165");
-
-__turbopack_context__.n(mod);
-__turbopack_async_result__();
-} catch(e) { __turbopack_async_result__(e); } }, true);}),
+        __turbopack_context__.n(mod);
+        __turbopack_async_result__();
+      } catch (e) {
+        __turbopack_async_result__(e);
+      }
+    }, true);
+  },
 ];

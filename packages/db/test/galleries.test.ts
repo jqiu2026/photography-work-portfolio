@@ -302,7 +302,9 @@ describe("studio gallery tools", () => {
       downloads: 0,
       views: 0,
       viewers: 0,
+      bytes: 0,
     });
+    expect(stats.get(gid)?.bytes).toBeGreaterThanOrEqual(0);
     expect((await gal.galleryStats(db, [])).size).toBe(0);
     await db.insert(schema.studioViewEvents).values([
       { mediaId: media[1], viewer: "client:a", code: "c1" },

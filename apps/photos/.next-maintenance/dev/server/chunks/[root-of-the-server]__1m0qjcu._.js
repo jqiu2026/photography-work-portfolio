@@ -1,1715 +1,4913 @@
 module.exports = [
-"[externals]/crypto [external] (crypto, cjs)", ((__turbopack_context__, module, exports) => {
+  "[externals]/crypto [external] (crypto, cjs)",
+  (__turbopack_context__, module, exports) => {
+    var mod = __turbopack_context__.x("crypto", () => require("crypto"));
 
-var mod = __turbopack_context__.x("crypto", () => require("crypto"));
+    module.exports = mod;
+  },
+  "[externals]/next/dist/compiled/next-server/app-page-turbo.runtime.dev.js [external] (next/dist/compiled/next-server/app-page-turbo.runtime.dev.js, cjs)",
+  (__turbopack_context__, module, exports) => {
+    var mod = __turbopack_context__.x("next/dist/compiled/next-server/app-page-turbo.runtime.dev.js", () =>
+      require("next/dist/compiled/next-server/app-page-turbo.runtime.dev.js"),
+    );
 
-module.exports = mod;
-}),
-"[externals]/next/dist/compiled/next-server/app-page-turbo.runtime.dev.js [external] (next/dist/compiled/next-server/app-page-turbo.runtime.dev.js, cjs)", ((__turbopack_context__, module, exports) => {
+    module.exports = mod;
+  },
+  "[externals]/next/dist/compiled/next-server/app-route-turbo.runtime.dev.js [external] (next/dist/compiled/next-server/app-route-turbo.runtime.dev.js, cjs)",
+  (__turbopack_context__, module, exports) => {
+    var mod = __turbopack_context__.x("next/dist/compiled/next-server/app-route-turbo.runtime.dev.js", () =>
+      require("next/dist/compiled/next-server/app-route-turbo.runtime.dev.js"),
+    );
 
-var mod = __turbopack_context__.x("next/dist/compiled/next-server/app-page-turbo.runtime.dev.js", () => require("next/dist/compiled/next-server/app-page-turbo.runtime.dev.js"));
+    module.exports = mod;
+  },
+  "[externals]/next/dist/server/app-render/work-async-storage.external.js [external] (next/dist/server/app-render/work-async-storage.external.js, cjs)",
+  (__turbopack_context__, module, exports) => {
+    var mod = __turbopack_context__.x("next/dist/server/app-render/work-async-storage.external.js", () =>
+      require("next/dist/server/app-render/work-async-storage.external.js"),
+    );
 
-module.exports = mod;
-}),
-"[externals]/next/dist/compiled/next-server/app-route-turbo.runtime.dev.js [external] (next/dist/compiled/next-server/app-route-turbo.runtime.dev.js, cjs)", ((__turbopack_context__, module, exports) => {
+    module.exports = mod;
+  },
+  "[externals]/next/dist/server/app-render/work-unit-async-storage.external.js [external] (next/dist/server/app-render/work-unit-async-storage.external.js, cjs)",
+  (__turbopack_context__, module, exports) => {
+    var mod = __turbopack_context__.x("next/dist/server/app-render/work-unit-async-storage.external.js", () =>
+      require("next/dist/server/app-render/work-unit-async-storage.external.js"),
+    );
 
-var mod = __turbopack_context__.x("next/dist/compiled/next-server/app-route-turbo.runtime.dev.js", () => require("next/dist/compiled/next-server/app-route-turbo.runtime.dev.js"));
+    module.exports = mod;
+  },
+  "[externals]/next/dist/server/runtime-reacts.external.js [external] (next/dist/server/runtime-reacts.external.js, cjs)",
+  (__turbopack_context__, module, exports) => {
+    var mod = __turbopack_context__.x("next/dist/server/runtime-reacts.external.js", () =>
+      require("next/dist/server/runtime-reacts.external.js"),
+    );
 
-module.exports = mod;
-}),
-"[externals]/next/dist/server/app-render/work-async-storage.external.js [external] (next/dist/server/app-render/work-async-storage.external.js, cjs)", ((__turbopack_context__, module, exports) => {
+    module.exports = mod;
+  },
+  "[externals]/next/dist/shared/lib/no-fallback-error.external.js [external] (next/dist/shared/lib/no-fallback-error.external.js, cjs)",
+  (__turbopack_context__, module, exports) => {
+    var mod = __turbopack_context__.x("next/dist/shared/lib/no-fallback-error.external.js", () =>
+      require("next/dist/shared/lib/no-fallback-error.external.js"),
+    );
 
-var mod = __turbopack_context__.x("next/dist/server/app-render/work-async-storage.external.js", () => require("next/dist/server/app-render/work-async-storage.external.js"));
+    module.exports = mod;
+  },
+  "[externals]/node:stream [external] (node:stream, cjs)",
+  (__turbopack_context__, module, exports) => {
+    var mod = __turbopack_context__.x("node:stream", () => require("node:stream"));
 
-module.exports = mod;
-}),
-"[externals]/next/dist/server/app-render/work-unit-async-storage.external.js [external] (next/dist/server/app-render/work-unit-async-storage.external.js, cjs)", ((__turbopack_context__, module, exports) => {
+    module.exports = mod;
+  },
+  "[externals]/path [external] (path, cjs)",
+  (__turbopack_context__, module, exports) => {
+    var mod = __turbopack_context__.x("path", () => require("path"));
 
-var mod = __turbopack_context__.x("next/dist/server/app-render/work-unit-async-storage.external.js", () => require("next/dist/server/app-render/work-unit-async-storage.external.js"));
-
-module.exports = mod;
-}),
-"[externals]/next/dist/server/runtime-reacts.external.js [external] (next/dist/server/runtime-reacts.external.js, cjs)", ((__turbopack_context__, module, exports) => {
-
-var mod = __turbopack_context__.x("next/dist/server/runtime-reacts.external.js", () => require("next/dist/server/runtime-reacts.external.js"));
-
-module.exports = mod;
-}),
-"[externals]/next/dist/shared/lib/no-fallback-error.external.js [external] (next/dist/shared/lib/no-fallback-error.external.js, cjs)", ((__turbopack_context__, module, exports) => {
-
-var mod = __turbopack_context__.x("next/dist/shared/lib/no-fallback-error.external.js", () => require("next/dist/shared/lib/no-fallback-error.external.js"));
-
-module.exports = mod;
-}),
-"[externals]/node:stream [external] (node:stream, cjs)", ((__turbopack_context__, module, exports) => {
-
-var mod = __turbopack_context__.x("node:stream", () => require("node:stream"));
-
-module.exports = mod;
-}),
-"[externals]/path [external] (path, cjs)", ((__turbopack_context__, module, exports) => {
-
-var mod = __turbopack_context__.x("path", () => require("path"));
-
-module.exports = mod;
-}),
-"[project]/apps/photos/src/app/api/health/route.ts [app-route] (ecmascript)", ((__turbopack_context__) => {
-"use strict";
-
-return __turbopack_context__.a(async (__turbopack_handle_async_dependencies__, __turbopack_async_result__) => { try {
-__turbopack_context__.s([
-    "GET",
-    ()=>GET,
-    "dynamic",
-    ()=>dynamic
-]);
-var __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$db$2f$src$2f$index$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/packages/db/src/index.ts [app-route] (ecmascript) <locals>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$db$2f$src$2f$client$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/packages/db/src/client.ts [app-route] (ecmascript) <locals>");
-var __turbopack_async_dependencies__ = __turbopack_handle_async_dependencies__([
-    __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$db$2f$src$2f$index$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__,
-    __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$db$2f$src$2f$client$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__
-]);
-[__TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$db$2f$src$2f$index$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__, __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$db$2f$src$2f$client$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__] = __turbopack_async_dependencies__.then ? (await __turbopack_async_dependencies__)() : __turbopack_async_dependencies__;
-;
-const dynamic = "force-dynamic";
-async function GET() {
-    const db = (0, __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$db$2f$src$2f$client$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__["getDb"])();
-    let dbOk = false;
-    if (db) dbOk = await db.execute("select 1").then(()=>true, ()=>false);
-    return Response.json({
-        ok: true,
-        database: db ? dbOk : null
-    }, {
-        status: dbOk || !db ? 200 : 503,
-        headers: {
-            "Cache-Control": "no-store"
+    module.exports = mod;
+  },
+  "[project]/apps/photos/src/app/api/health/route.ts [app-route] (ecmascript)",
+  (__turbopack_context__) => {
+    return __turbopack_context__.a(async (__turbopack_handle_async_dependencies__, __turbopack_async_result__) => {
+      try {
+        __turbopack_context__.s(["GET", () => GET, "dynamic", () => dynamic]);
+        var __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$db$2f$src$2f$index$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__ =
+          __turbopack_context__.i("[project]/packages/db/src/index.ts [app-route] (ecmascript) <locals>");
+        var __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$db$2f$src$2f$client$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__ =
+          __turbopack_context__.i("[project]/packages/db/src/client.ts [app-route] (ecmascript) <locals>");
+        var __turbopack_async_dependencies__ = __turbopack_handle_async_dependencies__([
+          __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$db$2f$src$2f$index$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__,
+          __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$db$2f$src$2f$client$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__,
+        ]);
+        [
+          __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$db$2f$src$2f$index$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__,
+          __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$db$2f$src$2f$client$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__,
+        ] = __turbopack_async_dependencies__.then
+          ? (await __turbopack_async_dependencies__)()
+          : __turbopack_async_dependencies__;
+        const dynamic = "force-dynamic";
+        async function GET() {
+          const db = (0,
+          __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$db$2f$src$2f$client$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__[
+            "getDb"
+          ])();
+          let dbOk = false;
+          if (db)
+            dbOk = await db.execute("select 1").then(
+              () => true,
+              () => false,
+            );
+          return Response.json(
+            {
+              ok: true,
+              database: db ? dbOk : null,
+            },
+            {
+              status: dbOk || !db ? 200 : 503,
+              headers: {
+                "Cache-Control": "no-store",
+              },
+            },
+          );
         }
-    });
-}
-__turbopack_async_result__();
-} catch(e) { __turbopack_async_result__(e); } }, false);}),
-"[project]/packages/db/src/audit.ts [app-route] (ecmascript)", ((__turbopack_context__) => {
-"use strict";
-
-__turbopack_context__.s([
-    "writeAudit",
-    ()=>writeAudit
-]);
-var __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$db$2f$src$2f$schema$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/packages/db/src/schema.ts [app-route] (ecmascript)");
-;
-async function writeAudit(db, entry) {
-    try {
-        await db.insert(__TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$db$2f$src$2f$schema$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["auditLog"]).values({
+        __turbopack_async_result__();
+      } catch (e) {
+        __turbopack_async_result__(e);
+      }
+    }, false);
+  },
+  "[project]/packages/db/src/audit.ts [app-route] (ecmascript)",
+  (__turbopack_context__) => {
+    __turbopack_context__.s(["writeAudit", () => writeAudit]);
+    var __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$db$2f$src$2f$schema$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__ =
+      __turbopack_context__.i("[project]/packages/db/src/schema.ts [app-route] (ecmascript)");
+    async function writeAudit(db, entry) {
+      try {
+        await db
+          .insert(
+            __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$db$2f$src$2f$schema$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+              "auditLog"
+            ],
+          )
+          .values({
             ...entry,
             entityId: entry.entityId ?? null,
             summary: entry.summary ?? null,
             diff: entry.diff ?? null,
-            site: entry.site ?? null
-        });
-    } catch (error) {
+            site: entry.site ?? null,
+          });
+      } catch (error) {
         console.error("[audit] failed to write entry", entry.action, error);
+      }
     }
-}
-}),
-"[project]/packages/db/src/client.ts [app-route] (ecmascript) <locals>", ((__turbopack_context__) => {
-"use strict";
-
-return __turbopack_context__.a(async (__turbopack_handle_async_dependencies__, __turbopack_async_result__) => { try {
-__turbopack_context__.s([
-    "databaseUrl",
-    ()=>databaseUrl,
-    "getDb",
-    ()=>getDb,
-    "hasDatabase",
-    ()=>hasDatabase
-]);
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f40$neondatabase$2b$serverless$40$1$2e$2$2e$0$2f$node_modules$2f40$neondatabase$2f$serverless$2f$index$2e$mjs__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/@neondatabase+serverless@1.2.0/node_modules/@neondatabase/serverless/index.mjs [app-route] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$neon$2d$http$2f$driver$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/drizzle-orm@0.45.4_@electric-sql+pglite@0.5.8_@neondatabase+serverless@1.2.0_@opentelem_381d55860e958cbda20b5460eb9a4528/node_modules/drizzle-orm/neon-http/driver.js [app-route] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$node$2d$postgres$2f$driver$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/drizzle-orm@0.45.4_@electric-sql+pglite@0.5.8_@neondatabase+serverless@1.2.0_@opentelem_381d55860e958cbda20b5460eb9a4528/node_modules/drizzle-orm/node-postgres/driver.js [app-route] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$externals$5d2f$pg__$5b$external$5d$__$28$pg$2c$__esm_import$2c$__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$pg$40$8$2e$23$2e$1$2f$node_modules$2f$pg$29$__ = __turbopack_context__.i("[externals]/pg [external] (pg, esm_import, [project]/node_modules/.pnpm/pg@8.23.1/node_modules/pg)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$db$2f$src$2f$schema$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/packages/db/src/schema.ts [app-route] (ecmascript)");
-var __turbopack_async_dependencies__ = __turbopack_handle_async_dependencies__([
-    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$node$2d$postgres$2f$driver$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__,
-    __TURBOPACK__imported__module__$5b$externals$5d2f$pg__$5b$external$5d$__$28$pg$2c$__esm_import$2c$__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$pg$40$8$2e$23$2e$1$2f$node_modules$2f$pg$29$__
-]);
-[__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$node$2d$postgres$2f$driver$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__, __TURBOPACK__imported__module__$5b$externals$5d2f$pg__$5b$external$5d$__$28$pg$2c$__esm_import$2c$__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$pg$40$8$2e$23$2e$1$2f$node_modules$2f$pg$29$__] = __turbopack_async_dependencies__.then ? (await __turbopack_async_dependencies__)() : __turbopack_async_dependencies__;
-;
-;
-;
-;
-;
-function databaseUrl() {
-    return process.env.DATABASE_URL || process.env.POSTGRES_URL || undefined;
-}
-function hasDatabase() {
-    return Boolean(databaseUrl());
-}
-const g = globalThis;
-function getDb() {
-    const url = databaseUrl();
-    if (!url) return undefined;
-    if (g.__jqDb?.url === url) return g.__jqDb.db;
-    const isNeon = /neon\.tech|neon\.build/.test(url);
-    const db = isNeon ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$neon$2d$http$2f$driver$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["drizzle"])({
-        client: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f40$neondatabase$2b$serverless$40$1$2e$2$2e$0$2f$node_modules$2f40$neondatabase$2f$serverless$2f$index$2e$mjs__$5b$app$2d$route$5d$__$28$ecmascript$29$__["neon"])(url),
-        schema: __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$db$2f$src$2f$schema$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__,
-        casing: "snake_case"
-    }) : (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$node$2d$postgres$2f$driver$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["drizzle"])({
-        client: new __TURBOPACK__imported__module__$5b$externals$5d2f$pg__$5b$external$5d$__$28$pg$2c$__esm_import$2c$__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$pg$40$8$2e$23$2e$1$2f$node_modules$2f$pg$29$__["default"].Pool({
-            connectionString: url,
-            max: 4,
-            ssl: false
-        }),
-        schema: __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$db$2f$src$2f$schema$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__,
-        casing: "snake_case"
-    });
-    g.__jqDb = {
-        url,
-        db
-    };
-    return db;
-}
-;
-__turbopack_async_result__();
-} catch(e) { __turbopack_async_result__(e); } }, false);}),
-"[project]/packages/db/src/index.ts [app-route] (ecmascript) <locals>", ((__turbopack_context__) => {
-"use strict";
-
-return __turbopack_context__.a(async (__turbopack_handle_async_dependencies__, __turbopack_async_result__) => { try {
-__turbopack_context__.s([]);
-var __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$db$2f$src$2f$client$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/packages/db/src/client.ts [app-route] (ecmascript) <locals>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$db$2f$src$2f$schema$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/packages/db/src/schema.ts [app-route] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$db$2f$src$2f$rate$2d$limit$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/packages/db/src/rate-limit.ts [app-route] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$db$2f$src$2f$audit$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/packages/db/src/audit.ts [app-route] (ecmascript)");
-var __turbopack_async_dependencies__ = __turbopack_handle_async_dependencies__([
-    __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$db$2f$src$2f$client$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__
-]);
-[__TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$db$2f$src$2f$client$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__] = __turbopack_async_dependencies__.then ? (await __turbopack_async_dependencies__)() : __turbopack_async_dependencies__;
-;
-;
-;
-;
-__turbopack_async_result__();
-} catch(e) { __turbopack_async_result__(e); } }, false);}),
-"[project]/packages/db/src/rate-limit.ts [app-route] (ecmascript)", ((__turbopack_context__) => {
-"use strict";
-
-__turbopack_context__.s([
-    "hitRateLimit",
-    ()=>hitRateLimit
-]);
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$sql$2f$sql$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/drizzle-orm@0.45.4_@electric-sql+pglite@0.5.8_@neondatabase+serverless@1.2.0_@opentelem_381d55860e958cbda20b5460eb9a4528/node_modules/drizzle-orm/sql/sql.js [app-route] (ecmascript)");
-;
-async function hitRateLimit(db, key, limit, windowSeconds) {
-    const window = `${windowSeconds} seconds`;
-    const result = await db.execute(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$sql$2f$sql$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["sql"]`
+  },
+  "[project]/packages/db/src/client.ts [app-route] (ecmascript) <locals>",
+  (__turbopack_context__) => {
+    return __turbopack_context__.a(async (__turbopack_handle_async_dependencies__, __turbopack_async_result__) => {
+      try {
+        __turbopack_context__.s([
+          "databaseUrl",
+          () => databaseUrl,
+          "getDb",
+          () => getDb,
+          "hasDatabase",
+          () => hasDatabase,
+        ]);
+        var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f40$neondatabase$2b$serverless$40$1$2e$2$2e$0$2f$node_modules$2f40$neondatabase$2f$serverless$2f$index$2e$mjs__$5b$app$2d$route$5d$__$28$ecmascript$29$__ =
+          __turbopack_context__.i(
+            "[project]/node_modules/.pnpm/@neondatabase+serverless@1.2.0/node_modules/@neondatabase/serverless/index.mjs [app-route] (ecmascript)",
+          );
+        var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$neon$2d$http$2f$driver$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ =
+          __turbopack_context__.i(
+            "[project]/node_modules/.pnpm/drizzle-orm@0.45.4_@electric-sql+pglite@0.5.8_@neondatabase+serverless@1.2.0_@opentelem_381d55860e958cbda20b5460eb9a4528/node_modules/drizzle-orm/neon-http/driver.js [app-route] (ecmascript)",
+          );
+        var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$node$2d$postgres$2f$driver$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ =
+          __turbopack_context__.i(
+            "[project]/node_modules/.pnpm/drizzle-orm@0.45.4_@electric-sql+pglite@0.5.8_@neondatabase+serverless@1.2.0_@opentelem_381d55860e958cbda20b5460eb9a4528/node_modules/drizzle-orm/node-postgres/driver.js [app-route] (ecmascript)",
+          );
+        var __TURBOPACK__imported__module__$5b$externals$5d2f$pg__$5b$external$5d$__$28$pg$2c$__esm_import$2c$__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$pg$40$8$2e$23$2e$1$2f$node_modules$2f$pg$29$__ =
+          __turbopack_context__.i(
+            "[externals]/pg [external] (pg, esm_import, [project]/node_modules/.pnpm/pg@8.23.1/node_modules/pg)",
+          );
+        var __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$db$2f$src$2f$schema$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__ =
+          __turbopack_context__.i("[project]/packages/db/src/schema.ts [app-route] (ecmascript)");
+        var __turbopack_async_dependencies__ = __turbopack_handle_async_dependencies__([
+          __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$node$2d$postgres$2f$driver$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__,
+          __TURBOPACK__imported__module__$5b$externals$5d2f$pg__$5b$external$5d$__$28$pg$2c$__esm_import$2c$__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$pg$40$8$2e$23$2e$1$2f$node_modules$2f$pg$29$__,
+        ]);
+        [
+          __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$node$2d$postgres$2f$driver$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__,
+          __TURBOPACK__imported__module__$5b$externals$5d2f$pg__$5b$external$5d$__$28$pg$2c$__esm_import$2c$__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$pg$40$8$2e$23$2e$1$2f$node_modules$2f$pg$29$__,
+        ] = __turbopack_async_dependencies__.then
+          ? (await __turbopack_async_dependencies__)()
+          : __turbopack_async_dependencies__;
+        function databaseUrl() {
+          return process.env.DATABASE_URL || process.env.POSTGRES_URL || undefined;
+        }
+        function hasDatabase() {
+          return Boolean(databaseUrl());
+        }
+        const g = globalThis;
+        function getDb() {
+          const url = databaseUrl();
+          if (!url) return undefined;
+          if (g.__jqDb?.url === url) return g.__jqDb.db;
+          const isNeon = /neon\.tech|neon\.build/.test(url);
+          const db = isNeon
+            ? (0,
+              __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$neon$2d$http$2f$driver$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+                "drizzle"
+              ])({
+                client: (0,
+                __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f40$neondatabase$2b$serverless$40$1$2e$2$2e$0$2f$node_modules$2f40$neondatabase$2f$serverless$2f$index$2e$mjs__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+                  "neon"
+                ])(url),
+                schema:
+                  __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$db$2f$src$2f$schema$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__,
+                casing: "snake_case",
+              })
+            : (0,
+              __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$node$2d$postgres$2f$driver$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+                "drizzle"
+              ])({
+                client:
+                  new __TURBOPACK__imported__module__$5b$externals$5d2f$pg__$5b$external$5d$__$28$pg$2c$__esm_import$2c$__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$pg$40$8$2e$23$2e$1$2f$node_modules$2f$pg$29$__[
+                    "default"
+                  ].Pool({
+                    connectionString: url,
+                    max: 4,
+                    ssl: false,
+                  }),
+                schema:
+                  __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$db$2f$src$2f$schema$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__,
+                casing: "snake_case",
+              });
+          g.__jqDb = {
+            url,
+            db,
+          };
+          return db;
+        }
+        __turbopack_async_result__();
+      } catch (e) {
+        __turbopack_async_result__(e);
+      }
+    }, false);
+  },
+  "[project]/packages/db/src/index.ts [app-route] (ecmascript) <locals>",
+  (__turbopack_context__) => {
+    return __turbopack_context__.a(async (__turbopack_handle_async_dependencies__, __turbopack_async_result__) => {
+      try {
+        __turbopack_context__.s([]);
+        var __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$db$2f$src$2f$client$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__ =
+          __turbopack_context__.i("[project]/packages/db/src/client.ts [app-route] (ecmascript) <locals>");
+        var __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$db$2f$src$2f$schema$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__ =
+          __turbopack_context__.i("[project]/packages/db/src/schema.ts [app-route] (ecmascript)");
+        var __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$db$2f$src$2f$rate$2d$limit$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__ =
+          __turbopack_context__.i("[project]/packages/db/src/rate-limit.ts [app-route] (ecmascript)");
+        var __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$db$2f$src$2f$audit$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__ =
+          __turbopack_context__.i("[project]/packages/db/src/audit.ts [app-route] (ecmascript)");
+        var __turbopack_async_dependencies__ = __turbopack_handle_async_dependencies__([
+          __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$db$2f$src$2f$client$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__,
+        ]);
+        [
+          __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$db$2f$src$2f$client$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__,
+        ] = __turbopack_async_dependencies__.then
+          ? (await __turbopack_async_dependencies__)()
+          : __turbopack_async_dependencies__;
+        __turbopack_async_result__();
+      } catch (e) {
+        __turbopack_async_result__(e);
+      }
+    }, false);
+  },
+  "[project]/packages/db/src/rate-limit.ts [app-route] (ecmascript)",
+  (__turbopack_context__) => {
+    __turbopack_context__.s(["hitRateLimit", () => hitRateLimit]);
+    var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$sql$2f$sql$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ =
+      __turbopack_context__.i(
+        "[project]/node_modules/.pnpm/drizzle-orm@0.45.4_@electric-sql+pglite@0.5.8_@neondatabase+serverless@1.2.0_@opentelem_381d55860e958cbda20b5460eb9a4528/node_modules/drizzle-orm/sql/sql.js [app-route] (ecmascript)",
+      );
+    async function hitRateLimit(db, key, limit, windowSeconds) {
+      const window = `${windowSeconds} seconds`;
+      const result =
+        await db.execute(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$sql$2f$sql$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "sql"
+        ]`
     insert into rate_limits (key, count, window_start) values (${key}, 1, now())
     on conflict (key) do update set
       count = case when rate_limits.window_start < now() - ${window}::interval then 1 else rate_limits.count + 1 end,
       window_start = case when rate_limits.window_start < now() - ${window}::interval then now() else rate_limits.window_start end
     returning count
   `);
-    const rows = Array.isArray(result) ? result : result.rows;
-    const count = Number(rows[0]?.count ?? limit + 1);
-    return {
+      const rows = Array.isArray(result) ? result : result.rows;
+      const count = Number(rows[0]?.count ?? limit + 1);
+      return {
         allowed: count <= limit,
-        count
+        count,
+      };
+    }
+  },
+  "[project]/packages/db/src/schema.ts [app-route] (ecmascript)",
+  (__turbopack_context__) => {
+    __turbopack_context__.s([
+      "accessModeEnum",
+      () => accessModeEnum,
+      "aircraft",
+      () => aircraft,
+      "appointmentKindEnum",
+      () => appointmentKindEnum,
+      "appointmentStatusEnum",
+      () => appointmentStatusEnum,
+      "appointments",
+      () => appointments,
+      "auditLog",
+      () => auditLog,
+      "availabilityRules",
+      () => availabilityRules,
+      "blackoutDates",
+      () => blackoutDates,
+      "bookingStatusEnum",
+      () => bookingStatusEnum,
+      "clientAccounts",
+      () => clientAccounts,
+      "clientGalleryStatusEnum",
+      () => clientGalleryStatusEnum,
+      "clientLoginTokens",
+      () => clientLoginTokens,
+      "contractStatusEnum",
+      () => contractStatusEnum,
+      "downloadPolicyEnum",
+      () => downloadPolicyEnum,
+      "emailLog",
+      () => emailLog,
+      "flightEntries",
+      () => flightEntries,
+      "flightKindEnum",
+      () => flightKindEnum,
+      "galleries",
+      () => galleries,
+      "galleryItems",
+      () => galleryItems,
+      "inboxMessages",
+      () => inboxMessages,
+      "inboxStatusEnum",
+      () => inboxStatusEnum,
+      "invoiceStatusEnum",
+      () => invoiceStatusEnum,
+      "jobStatusEnum",
+      () => jobStatusEnum,
+      "licenseEnum",
+      () => licenseEnum,
+      "media",
+      () => media,
+      "mediaKindEnum",
+      () => mediaKindEnum,
+      "musicItems",
+      () => musicItems,
+      "musicKindEnum",
+      () => musicKindEnum,
+      "pages",
+      () => pages,
+      "paymentStatusEnum",
+      () => paymentStatusEnum,
+      "postVersions",
+      () => postVersions,
+      "posts",
+      () => posts,
+      "projectTypeEnum",
+      () => projectTypeEnum,
+      "projectVersions",
+      () => projectVersions,
+      "projects",
+      () => projects,
+      "quoteStatusEnum",
+      () => quoteStatusEnum,
+      "rateLimits",
+      () => rateLimits,
+      "redirects",
+      () => redirects,
+      "reviewEnum",
+      () => reviewEnum,
+      "rightsEnum",
+      () => rightsEnum,
+      "roleEnum",
+      () => roleEnum,
+      "settings",
+      () => settings,
+      "siteEnum",
+      () => siteEnum,
+      "socialLinks",
+      () => socialLinks,
+      "statusEnum",
+      () => statusEnum,
+      "studioAddOns",
+      () => studioAddOns,
+      "studioAlbums",
+      () => studioAlbums,
+      "studioAutomationRuns",
+      () => studioAutomationRuns,
+      "studioBookings",
+      () => studioBookings,
+      "studioClients",
+      () => studioClients,
+      "studioContractTemplates",
+      () => studioContractTemplates,
+      "studioContracts",
+      () => studioContracts,
+      "studioDownloadEvents",
+      () => studioDownloadEvents,
+      "studioDownloadRules",
+      () => studioDownloadRules,
+      "studioFavorites",
+      () => studioFavorites,
+      "studioGalleries",
+      () => studioGalleries,
+      "studioGalleryItems",
+      () => studioGalleryItems,
+      "studioGiftCards",
+      () => studioGiftCards,
+      "studioGiftLedger",
+      () => studioGiftLedger,
+      "studioInvoices",
+      () => studioInvoices,
+      "studioJobs",
+      () => studioJobs,
+      "studioMessages",
+      () => studioMessages,
+      "studioNotifications",
+      () => studioNotifications,
+      "studioOrderItems",
+      () => studioOrderItems,
+      "studioOrders",
+      () => studioOrders,
+      "studioPackages",
+      () => studioPackages,
+      "studioPaymentPlans",
+      () => studioPaymentPlans,
+      "studioPayments",
+      () => studioPayments,
+      "studioPlanCharges",
+      () => studioPlanCharges,
+      "studioPriceSheets",
+      () => studioPriceSheets,
+      "studioProducts",
+      () => studioProducts,
+      "studioPromoCodes",
+      () => studioPromoCodes,
+      "studioProofs",
+      () => studioProofs,
+      "studioQuestionnaireSends",
+      () => studioQuestionnaireSends,
+      "studioQuestionnaires",
+      () => studioQuestionnaires,
+      "studioQuotes",
+      () => studioQuotes,
+      "studioRecurring",
+      () => studioRecurring,
+      "studioRefunds",
+      () => studioRefunds,
+      "studioSecurityEvents",
+      () => studioSecurityEvents,
+      "studioSettings",
+      () => studioSettings,
+      "studioTasks",
+      () => studioTasks,
+      "studioTracks",
+      () => studioTracks,
+      "studioViewEvents",
+      () => studioViewEvents,
+      "studioVisitors",
+      () => studioVisitors,
+      "studioWatermarks",
+      () => studioWatermarks,
+      "timelineCategoryEnum",
+      () => timelineCategoryEnum,
+      "timelineEntries",
+      () => timelineEntries,
+      "users",
+      () => users,
+      "waitlist",
+      () => waitlist,
+      "webhookEvents",
+      () => webhookEvents,
+    ]);
+    var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$sql$2f$sql$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ =
+      __turbopack_context__.i(
+        "[project]/node_modules/.pnpm/drizzle-orm@0.45.4_@electric-sql+pglite@0.5.8_@neondatabase+serverless@1.2.0_@opentelem_381d55860e958cbda20b5460eb9a4528/node_modules/drizzle-orm/sql/sql.js [app-route] (ecmascript)",
+      );
+    var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$bigserial$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ =
+      __turbopack_context__.i(
+        "[project]/node_modules/.pnpm/drizzle-orm@0.45.4_@electric-sql+pglite@0.5.8_@neondatabase+serverless@1.2.0_@opentelem_381d55860e958cbda20b5460eb9a4528/node_modules/drizzle-orm/pg-core/columns/bigserial.js [app-route] (ecmascript)",
+      );
+    var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ =
+      __turbopack_context__.i(
+        "[project]/node_modules/.pnpm/drizzle-orm@0.45.4_@electric-sql+pglite@0.5.8_@neondatabase+serverless@1.2.0_@opentelem_381d55860e958cbda20b5460eb9a4528/node_modules/drizzle-orm/pg-core/columns/boolean.js [app-route] (ecmascript)",
+      );
+    var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$date$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ =
+      __turbopack_context__.i(
+        "[project]/node_modules/.pnpm/drizzle-orm@0.45.4_@electric-sql+pglite@0.5.8_@neondatabase+serverless@1.2.0_@opentelem_381d55860e958cbda20b5460eb9a4528/node_modules/drizzle-orm/pg-core/columns/date.js [app-route] (ecmascript)",
+      );
+    var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ =
+      __turbopack_context__.i(
+        "[project]/node_modules/.pnpm/drizzle-orm@0.45.4_@electric-sql+pglite@0.5.8_@neondatabase+serverless@1.2.0_@opentelem_381d55860e958cbda20b5460eb9a4528/node_modules/drizzle-orm/pg-core/indexes.js [app-route] (ecmascript)",
+      );
+    var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ =
+      __turbopack_context__.i(
+        "[project]/node_modules/.pnpm/drizzle-orm@0.45.4_@electric-sql+pglite@0.5.8_@neondatabase+serverless@1.2.0_@opentelem_381d55860e958cbda20b5460eb9a4528/node_modules/drizzle-orm/pg-core/columns/integer.js [app-route] (ecmascript)",
+      );
+    var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ =
+      __turbopack_context__.i(
+        "[project]/node_modules/.pnpm/drizzle-orm@0.45.4_@electric-sql+pglite@0.5.8_@neondatabase+serverless@1.2.0_@opentelem_381d55860e958cbda20b5460eb9a4528/node_modules/drizzle-orm/pg-core/columns/jsonb.js [app-route] (ecmascript)",
+      );
+    var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ =
+      __turbopack_context__.i(
+        "[project]/node_modules/.pnpm/drizzle-orm@0.45.4_@electric-sql+pglite@0.5.8_@neondatabase+serverless@1.2.0_@opentelem_381d55860e958cbda20b5460eb9a4528/node_modules/drizzle-orm/pg-core/columns/enum.js [app-route] (ecmascript)",
+      );
+    var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ =
+      __turbopack_context__.i(
+        "[project]/node_modules/.pnpm/drizzle-orm@0.45.4_@electric-sql+pglite@0.5.8_@neondatabase+serverless@1.2.0_@opentelem_381d55860e958cbda20b5460eb9a4528/node_modules/drizzle-orm/pg-core/table.js [app-route] (ecmascript)",
+      );
+    var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$primary$2d$keys$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ =
+      __turbopack_context__.i(
+        "[project]/node_modules/.pnpm/drizzle-orm@0.45.4_@electric-sql+pglite@0.5.8_@neondatabase+serverless@1.2.0_@opentelem_381d55860e958cbda20b5460eb9a4528/node_modules/drizzle-orm/pg-core/primary-keys.js [app-route] (ecmascript)",
+      );
+    var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ =
+      __turbopack_context__.i(
+        "[project]/node_modules/.pnpm/drizzle-orm@0.45.4_@electric-sql+pglite@0.5.8_@neondatabase+serverless@1.2.0_@opentelem_381d55860e958cbda20b5460eb9a4528/node_modules/drizzle-orm/pg-core/columns/text.js [app-route] (ecmascript)",
+      );
+    var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ =
+      __turbopack_context__.i(
+        "[project]/node_modules/.pnpm/drizzle-orm@0.45.4_@electric-sql+pglite@0.5.8_@neondatabase+serverless@1.2.0_@opentelem_381d55860e958cbda20b5460eb9a4528/node_modules/drizzle-orm/pg-core/columns/timestamp.js [app-route] (ecmascript)",
+      );
+    var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ =
+      __turbopack_context__.i(
+        "[project]/node_modules/.pnpm/drizzle-orm@0.45.4_@electric-sql+pglite@0.5.8_@neondatabase+serverless@1.2.0_@opentelem_381d55860e958cbda20b5460eb9a4528/node_modules/drizzle-orm/pg-core/columns/uuid.js [app-route] (ecmascript)",
+      );
+    const siteEnum = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgEnum"
+    ])("site", ["hub", "photos", "music", "flying", "all"]);
+    const roleEnum = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgEnum"
+    ])("role", ["owner", "editor", "client"]);
+    const statusEnum = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgEnum"
+    ])("status", ["draft", "scheduled", "published"]);
+    const timelineCategoryEnum = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgEnum"
+    ])("timeline_category", [
+      "work",
+      "education",
+      "leadership",
+      "volunteering",
+      "flying",
+      "music",
+      "photography",
+      "other",
+    ]);
+    const projectTypeEnum = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgEnum"
+    ])("project_type", ["photography", "software", "design", "writing", "other"]);
+    const mediaKindEnum = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgEnum"
+    ])("media_kind", ["image", "audio", "video", "file"]);
+    const licenseEnum = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgEnum"
+    ])("license", ["all-rights-reserved", "cc-by", "cc-by-nc", "cc-by-sa", "cc0"]);
+    const reviewEnum = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgEnum"
+    ])("review_status", ["ok", "needs_review"]);
+    const rightsEnum = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgEnum"
+    ])("music_rights", ["original", "cover", "licensed", "third-party-embed"]);
+    const musicKindEnum = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgEnum"
+    ])("music_kind", ["recording", "performance"]);
+    const flightKindEnum = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgEnum"
+    ])("flight_kind", ["milestone", "flight"]);
+    const inboxStatusEnum = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgEnum"
+    ])("inbox_status", ["new", "read", "replied", "archived", "spam"]);
+    const stamps = {
+      createdAt: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "timestamp"
+      ])("created_at", {
+        withTimezone: true,
+      })
+        .notNull()
+        .defaultNow(),
+      updatedAt: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "timestamp"
+      ])("updated_at", {
+        withTimezone: true,
+      })
+        .notNull()
+        .defaultNow(),
+      updatedBy: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("updated_by"),
+      deletedAt: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "timestamp"
+      ])("deleted_at", {
+        withTimezone: true,
+      }),
+      studioId: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "uuid"
+      ])("studio_id"),
     };
-}
-}),
-"[project]/packages/db/src/schema.ts [app-route] (ecmascript)", ((__turbopack_context__) => {
-"use strict";
-
-__turbopack_context__.s([
-    "accessModeEnum",
-    ()=>accessModeEnum,
-    "aircraft",
-    ()=>aircraft,
-    "appointmentKindEnum",
-    ()=>appointmentKindEnum,
-    "appointmentStatusEnum",
-    ()=>appointmentStatusEnum,
-    "appointments",
-    ()=>appointments,
-    "auditLog",
-    ()=>auditLog,
-    "availabilityRules",
-    ()=>availabilityRules,
-    "blackoutDates",
-    ()=>blackoutDates,
-    "bookingStatusEnum",
-    ()=>bookingStatusEnum,
-    "clientAccounts",
-    ()=>clientAccounts,
-    "clientGalleryStatusEnum",
-    ()=>clientGalleryStatusEnum,
-    "clientLoginTokens",
-    ()=>clientLoginTokens,
-    "contractStatusEnum",
-    ()=>contractStatusEnum,
-    "downloadPolicyEnum",
-    ()=>downloadPolicyEnum,
-    "emailLog",
-    ()=>emailLog,
-    "flightEntries",
-    ()=>flightEntries,
-    "flightKindEnum",
-    ()=>flightKindEnum,
-    "galleries",
-    ()=>galleries,
-    "galleryItems",
-    ()=>galleryItems,
-    "inboxMessages",
-    ()=>inboxMessages,
-    "inboxStatusEnum",
-    ()=>inboxStatusEnum,
-    "invoiceStatusEnum",
-    ()=>invoiceStatusEnum,
-    "jobStatusEnum",
-    ()=>jobStatusEnum,
-    "licenseEnum",
-    ()=>licenseEnum,
-    "media",
-    ()=>media,
-    "mediaKindEnum",
-    ()=>mediaKindEnum,
-    "musicItems",
-    ()=>musicItems,
-    "musicKindEnum",
-    ()=>musicKindEnum,
-    "pages",
-    ()=>pages,
-    "paymentStatusEnum",
-    ()=>paymentStatusEnum,
-    "postVersions",
-    ()=>postVersions,
-    "posts",
-    ()=>posts,
-    "projectTypeEnum",
-    ()=>projectTypeEnum,
-    "projectVersions",
-    ()=>projectVersions,
-    "projects",
-    ()=>projects,
-    "quoteStatusEnum",
-    ()=>quoteStatusEnum,
-    "rateLimits",
-    ()=>rateLimits,
-    "redirects",
-    ()=>redirects,
-    "reviewEnum",
-    ()=>reviewEnum,
-    "rightsEnum",
-    ()=>rightsEnum,
-    "roleEnum",
-    ()=>roleEnum,
-    "settings",
-    ()=>settings,
-    "siteEnum",
-    ()=>siteEnum,
-    "socialLinks",
-    ()=>socialLinks,
-    "statusEnum",
-    ()=>statusEnum,
-    "studioAddOns",
-    ()=>studioAddOns,
-    "studioAlbums",
-    ()=>studioAlbums,
-    "studioAutomationRuns",
-    ()=>studioAutomationRuns,
-    "studioBookings",
-    ()=>studioBookings,
-    "studioClients",
-    ()=>studioClients,
-    "studioContractTemplates",
-    ()=>studioContractTemplates,
-    "studioContracts",
-    ()=>studioContracts,
-    "studioDownloadEvents",
-    ()=>studioDownloadEvents,
-    "studioDownloadRules",
-    ()=>studioDownloadRules,
-    "studioFavorites",
-    ()=>studioFavorites,
-    "studioGalleries",
-    ()=>studioGalleries,
-    "studioGalleryItems",
-    ()=>studioGalleryItems,
-    "studioGiftCards",
-    ()=>studioGiftCards,
-    "studioGiftLedger",
-    ()=>studioGiftLedger,
-    "studioInvoices",
-    ()=>studioInvoices,
-    "studioJobs",
-    ()=>studioJobs,
-    "studioMessages",
-    ()=>studioMessages,
-    "studioNotifications",
-    ()=>studioNotifications,
-    "studioOrderItems",
-    ()=>studioOrderItems,
-    "studioOrders",
-    ()=>studioOrders,
-    "studioPackages",
-    ()=>studioPackages,
-    "studioPaymentPlans",
-    ()=>studioPaymentPlans,
-    "studioPayments",
-    ()=>studioPayments,
-    "studioPlanCharges",
-    ()=>studioPlanCharges,
-    "studioPriceSheets",
-    ()=>studioPriceSheets,
-    "studioProducts",
-    ()=>studioProducts,
-    "studioPromoCodes",
-    ()=>studioPromoCodes,
-    "studioProofs",
-    ()=>studioProofs,
-    "studioQuestionnaireSends",
-    ()=>studioQuestionnaireSends,
-    "studioQuestionnaires",
-    ()=>studioQuestionnaires,
-    "studioQuotes",
-    ()=>studioQuotes,
-    "studioRecurring",
-    ()=>studioRecurring,
-    "studioRefunds",
-    ()=>studioRefunds,
-    "studioSecurityEvents",
-    ()=>studioSecurityEvents,
-    "studioSettings",
-    ()=>studioSettings,
-    "studioTasks",
-    ()=>studioTasks,
-    "studioTracks",
-    ()=>studioTracks,
-    "studioViewEvents",
-    ()=>studioViewEvents,
-    "studioVisitors",
-    ()=>studioVisitors,
-    "studioWatermarks",
-    ()=>studioWatermarks,
-    "timelineCategoryEnum",
-    ()=>timelineCategoryEnum,
-    "timelineEntries",
-    ()=>timelineEntries,
-    "users",
-    ()=>users,
-    "waitlist",
-    ()=>waitlist,
-    "webhookEvents",
-    ()=>webhookEvents
-]);
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$sql$2f$sql$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/drizzle-orm@0.45.4_@electric-sql+pglite@0.5.8_@neondatabase+serverless@1.2.0_@opentelem_381d55860e958cbda20b5460eb9a4528/node_modules/drizzle-orm/sql/sql.js [app-route] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$bigserial$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/drizzle-orm@0.45.4_@electric-sql+pglite@0.5.8_@neondatabase+serverless@1.2.0_@opentelem_381d55860e958cbda20b5460eb9a4528/node_modules/drizzle-orm/pg-core/columns/bigserial.js [app-route] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/drizzle-orm@0.45.4_@electric-sql+pglite@0.5.8_@neondatabase+serverless@1.2.0_@opentelem_381d55860e958cbda20b5460eb9a4528/node_modules/drizzle-orm/pg-core/columns/boolean.js [app-route] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$date$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/drizzle-orm@0.45.4_@electric-sql+pglite@0.5.8_@neondatabase+serverless@1.2.0_@opentelem_381d55860e958cbda20b5460eb9a4528/node_modules/drizzle-orm/pg-core/columns/date.js [app-route] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/drizzle-orm@0.45.4_@electric-sql+pglite@0.5.8_@neondatabase+serverless@1.2.0_@opentelem_381d55860e958cbda20b5460eb9a4528/node_modules/drizzle-orm/pg-core/indexes.js [app-route] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/drizzle-orm@0.45.4_@electric-sql+pglite@0.5.8_@neondatabase+serverless@1.2.0_@opentelem_381d55860e958cbda20b5460eb9a4528/node_modules/drizzle-orm/pg-core/columns/integer.js [app-route] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/drizzle-orm@0.45.4_@electric-sql+pglite@0.5.8_@neondatabase+serverless@1.2.0_@opentelem_381d55860e958cbda20b5460eb9a4528/node_modules/drizzle-orm/pg-core/columns/jsonb.js [app-route] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/drizzle-orm@0.45.4_@electric-sql+pglite@0.5.8_@neondatabase+serverless@1.2.0_@opentelem_381d55860e958cbda20b5460eb9a4528/node_modules/drizzle-orm/pg-core/columns/enum.js [app-route] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/drizzle-orm@0.45.4_@electric-sql+pglite@0.5.8_@neondatabase+serverless@1.2.0_@opentelem_381d55860e958cbda20b5460eb9a4528/node_modules/drizzle-orm/pg-core/table.js [app-route] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$primary$2d$keys$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/drizzle-orm@0.45.4_@electric-sql+pglite@0.5.8_@neondatabase+serverless@1.2.0_@opentelem_381d55860e958cbda20b5460eb9a4528/node_modules/drizzle-orm/pg-core/primary-keys.js [app-route] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/drizzle-orm@0.45.4_@electric-sql+pglite@0.5.8_@neondatabase+serverless@1.2.0_@opentelem_381d55860e958cbda20b5460eb9a4528/node_modules/drizzle-orm/pg-core/columns/text.js [app-route] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/drizzle-orm@0.45.4_@electric-sql+pglite@0.5.8_@neondatabase+serverless@1.2.0_@opentelem_381d55860e958cbda20b5460eb9a4528/node_modules/drizzle-orm/pg-core/columns/timestamp.js [app-route] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/drizzle-orm@0.45.4_@electric-sql+pglite@0.5.8_@neondatabase+serverless@1.2.0_@opentelem_381d55860e958cbda20b5460eb9a4528/node_modules/drizzle-orm/pg-core/columns/uuid.js [app-route] (ecmascript)");
-;
-;
-const siteEnum = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgEnum"])("site", [
-    "hub",
-    "photos",
-    "music",
-    "flying",
-    "all"
-]);
-const roleEnum = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgEnum"])("role", [
-    "owner",
-    "editor",
-    "client"
-]);
-const statusEnum = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgEnum"])("status", [
-    "draft",
-    "scheduled",
-    "published"
-]);
-const timelineCategoryEnum = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgEnum"])("timeline_category", [
-    "work",
-    "education",
-    "leadership",
-    "volunteering",
-    "flying",
-    "music",
-    "photography",
-    "other"
-]);
-const projectTypeEnum = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgEnum"])("project_type", [
-    "photography",
-    "software",
-    "design",
-    "writing",
-    "other"
-]);
-const mediaKindEnum = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgEnum"])("media_kind", [
-    "image",
-    "audio",
-    "video",
-    "file"
-]);
-const licenseEnum = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgEnum"])("license", [
-    "all-rights-reserved",
-    "cc-by",
-    "cc-by-nc",
-    "cc-by-sa",
-    "cc0"
-]);
-const reviewEnum = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgEnum"])("review_status", [
-    "ok",
-    "needs_review"
-]);
-const rightsEnum = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgEnum"])("music_rights", [
-    "original",
-    "cover",
-    "licensed",
-    "third-party-embed"
-]);
-const musicKindEnum = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgEnum"])("music_kind", [
-    "recording",
-    "performance"
-]);
-const flightKindEnum = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgEnum"])("flight_kind", [
-    "milestone",
-    "flight"
-]);
-const inboxStatusEnum = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgEnum"])("inbox_status", [
-    "new",
-    "read",
-    "replied",
-    "archived",
-    "spam"
-]);
-const stamps = {
-    createdAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("created_at", {
-        withTimezone: true
-    }).notNull().defaultNow(),
-    updatedAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("updated_at", {
-        withTimezone: true
-    }).notNull().defaultNow(),
-    updatedBy: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("updated_by"),
-    deletedAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("deleted_at", {
-        withTimezone: true
-    }),
-    studioId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("studio_id")
-};
-const users = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("users", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    email: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("email").notNull(),
-    name: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("name"),
-    image: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("image"),
-    role: roleEnum("role").notNull().default("editor"),
-    active: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("active").notNull().default(true),
-    addedBy: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("added_by"),
-    createdAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("created_at", {
-        withTimezone: true
-    }).notNull().defaultNow(),
-    lastSignInAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("last_sign_in_at", {
-        withTimezone: true
-    })
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uniqueIndex"])("users_email_idx").on(t.email)
-    ]);
-const settings = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("settings", {
-    site: siteEnum("site").notNull(),
-    key: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("key").notNull(),
-    value: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["jsonb"])("value").notNull().$type(),
-    updatedAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("updated_at", {
-        withTimezone: true
-    }).notNull().defaultNow(),
-    updatedBy: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("updated_by")
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$primary$2d$keys$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["primaryKey"])({
-            columns: [
-                t.site,
-                t.key
-            ]
+    const users = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "users",
+      {
+        id: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("id")
+          .primaryKey()
+          .defaultRandom(),
+        email: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("email").notNull(),
+        name: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("name"),
+        image: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("image"),
+        role: roleEnum("role").notNull().default("editor"),
+        active: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "boolean"
+        ])("active")
+          .notNull()
+          .default(true),
+        addedBy: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("added_by"),
+        createdAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("created_at", {
+          withTimezone: true,
         })
-    ]);
-const socialLinks = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("social_links", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    site: siteEnum("site").notNull().default("all"),
-    label: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("label").notNull(),
-    href: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("href").notNull(),
-    icon: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("icon").notNull().default("web"),
-    sort: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("sort").notNull().default(0),
-    showHeader: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("show_header").notNull().default(false),
-    showFooter: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("show_footer").notNull().default(true),
-    visible: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("visible").notNull().default(true),
-    ...stamps
-});
-const timelineEntries = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("timeline_entries", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    category: timelineCategoryEnum("category").notNull().default("other"),
-    title: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("title").notNull(),
-    org: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("org"),
-    startDate: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$date$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["date"])("start_date"),
-    endDate: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$date$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["date"])("end_date"),
-    current: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("current").notNull().default(false),
-    summary: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("summary"),
-    link: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("link"),
-    visible: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("visible").notNull().default(true),
-    sort: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("sort").notNull().default(0),
-    ...stamps
-});
-const media = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("media", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    kind: mediaKindEnum("kind").notNull().default("image"),
-    filename: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("filename").notNull(),
-    mime: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("mime").notNull(),
-    bytes: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("bytes").notNull().default(0),
-    width: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("width"),
-    height: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("height"),
-    color: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("color"),
-    blur: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("blur"),
-    phash: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("phash"),
-    /** SHA-256 of the original file (hex): exact-duplicate detection on upload. */ sha256: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("sha256"),
-    /** Private storage key of the original (never exposed). */ originalKey: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("original_key").notNull(),
-    /** Public-safe derivatives: [{ width, format, key }] with GPS/personal EXIF stripped. */ derivatives: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["jsonb"])("derivatives").notNull().$type().default(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$sql$2f$sql$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["sql"]`'[]'::jsonb`),
-    alt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("alt"),
-    caption: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("caption"),
-    license: licenseEnum("license").notNull().default("all-rights-reserved"),
-    containsPeople: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("contains_people").notNull().default(false),
-    releaseOnFile: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("release_on_file").notNull().default(false),
-    minors: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("minors").notNull().default(false),
-    reviewStatus: reviewEnum("review_status").notNull().default("ok"),
-    exif: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["jsonb"])("exif").$type(),
-    createdBy: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("created_by"),
-    ...stamps
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["index"])("media_phash_idx").on(t.phash),
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["index"])("media_review_idx").on(t.reviewStatus)
-    ]);
-const posts = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("posts", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    site: siteEnum("site").notNull().default("hub"),
-    slug: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("slug").notNull(),
-    title: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("title").notNull(),
-    subtitle: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("subtitle"),
-    summary: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("summary"),
-    body: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("body").notNull().default(""),
-    coverMediaId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("cover_media_id").references(()=>media.id),
-    tags: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("tags").array().notNull().default(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$sql$2f$sql$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["sql"]`'{}'::text[]`),
-    status: statusEnum("status").notNull().default("draft"),
-    publishAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("publish_at", {
-        withTimezone: true
-    }),
-    featured: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("featured").notNull().default(false),
-    seo: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["jsonb"])("seo").$type(),
-    readingMinutes: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("reading_minutes").notNull().default(1),
-    ...stamps
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uniqueIndex"])("posts_site_slug_idx").on(t.site, t.slug),
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["index"])("posts_status_idx").on(t.status)
-    ]);
-const postVersions = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("post_versions", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    postId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("post_id").notNull().references(()=>posts.id, {
-        onDelete: "cascade"
-    }),
-    version: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("version").notNull(),
-    snapshot: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["jsonb"])("snapshot").notNull().$type(),
-    createdAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("created_at", {
-        withTimezone: true
-    }).notNull().defaultNow(),
-    createdBy: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("created_by")
-});
-const projects = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("projects", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    site: siteEnum("site").notNull().default("hub"),
-    slug: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("slug").notNull(),
-    type: projectTypeEnum("type").notNull().default("photography"),
-    title: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("title").notNull(),
-    summary: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("summary"),
-    date: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$date$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["date"])("date"),
-    client: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("client"),
-    role: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("role"),
-    category: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("category"),
-    coverMediaId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("cover_media_id").references(()=>media.id),
-    blocks: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["jsonb"])("blocks").notNull().$type().default(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$sql$2f$sql$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["sql"]`'[]'::jsonb`),
-    credits: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["jsonb"])("credits").notNull().$type().default(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$sql$2f$sql$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["sql"]`'[]'::jsonb`),
-    related: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("related").array().notNull().default(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$sql$2f$sql$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["sql"]`'{}'::text[]`),
-    status: statusEnum("status").notNull().default("draft"),
-    featured: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("featured").notNull().default(false),
-    protectedPage: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("protected_page").notNull().default(false),
-    sort: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("sort").notNull().default(0),
-    ...stamps
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uniqueIndex"])("projects_site_slug_idx").on(t.site, t.slug)
-    ]);
-const projectVersions = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("project_versions", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    projectId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("project_id").notNull().references(()=>projects.id, {
-        onDelete: "cascade"
-    }),
-    version: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("version").notNull(),
-    snapshot: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["jsonb"])("snapshot").notNull().$type(),
-    createdAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("created_at", {
-        withTimezone: true
-    }).notNull().defaultNow(),
-    createdBy: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("created_by")
-});
-const galleries = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("galleries", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    site: siteEnum("site").notNull().default("photos"),
-    slug: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("slug").notNull(),
-    title: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("title").notNull(),
-    description: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("description"),
-    category: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("category"),
-    coverMediaId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("cover_media_id").references(()=>media.id),
-    visible: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("visible").notNull().default(true),
-    /** none | light | strict: image protection policy for this gallery. */ protection: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("protection").notNull().default("light"),
-    sort: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("sort").notNull().default(0),
-    ...stamps
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uniqueIndex"])("galleries_site_slug_idx").on(t.site, t.slug)
-    ]);
-const galleryItems = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("gallery_items", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    galleryId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("gallery_id").notNull().references(()=>galleries.id, {
-        onDelete: "cascade"
-    }),
-    mediaId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("media_id").notNull().references(()=>media.id),
-    caption: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("caption"),
-    alt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("alt"),
-    hidden: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("hidden").notNull().default(false),
-    sort: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("sort").notNull().default(0)
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["index"])("gallery_items_gallery_idx").on(t.galleryId, t.sort)
-    ]);
-const musicItems = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("music_items", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    kind: musicKindEnum("kind").notNull().default("recording"),
-    title: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("title").notNull(),
-    date: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$date$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["date"])("date"),
-    venue: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("venue"),
-    ensemble: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("ensemble"),
-    note: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("note"),
-    provider: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("provider"),
-    embedId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("embed_id"),
-    audioMediaId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("audio_media_id").references(()=>media.id),
-    coverMediaId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("cover_media_id").references(()=>media.id),
-    rights: rightsEnum("rights").notNull().default("original"),
-    needsReview: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("needs_review").notNull().default(false),
-    featured: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("featured").notNull().default(false),
-    visible: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("visible").notNull().default(true),
-    sort: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("sort").notNull().default(0),
-    ...stamps
-});
-const flightEntries = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("flight_entries", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    kind: flightKindEnum("kind").notNull().default("milestone"),
-    title: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("title").notNull(),
-    date: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$date$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["date"])("date"),
-    story: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("story"),
-    aircraft: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("aircraft"),
-    photoMediaId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("photo_media_id").references(()=>media.id),
-    /** "Safe to publish" checklist: no real-time location, no tail numbers unless the owner opts in. */ safeToPublish: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("safe_to_publish").notNull().default(false),
-    visible: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("visible").notNull().default(true),
-    sort: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("sort").notNull().default(0),
-    ...stamps
-});
-const aircraft = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("aircraft", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    name: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("name").notNull(),
-    note: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("note"),
-    flown: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("flown").notNull().default(true),
-    visible: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("visible").notNull().default(true),
-    sort: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("sort").notNull().default(0),
-    ...stamps
-});
-const pages = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("pages", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    site: siteEnum("site").notNull().default("hub"),
-    slug: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("slug").notNull(),
-    title: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("title").notNull(),
-    body: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("body").notNull().default(""),
-    kind: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("kind").notNull().default("page"),
-    status: statusEnum("status").notNull().default("draft"),
-    ...stamps
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uniqueIndex"])("pages_site_slug_idx").on(t.site, t.slug)
-    ]);
-const inboxMessages = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("inbox_messages", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    site: siteEnum("site").notNull().default("hub"),
-    name: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("name").notNull(),
-    email: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("email").notNull(),
-    topic: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("topic"),
-    message: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("message").notNull(),
-    status: inboxStatusEnum("status").notNull().default("new"),
-    notes: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("notes"),
-    ipHash: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("ip_hash"),
-    createdAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("created_at", {
-        withTimezone: true
-    }).notNull().defaultNow(),
-    deletedAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("deleted_at", {
-        withTimezone: true
-    })
-});
-const auditLog = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("audit_log", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$bigserial$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["bigserial"])("id", {
-        mode: "number"
-    }).primaryKey(),
-    at: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("at", {
-        withTimezone: true
-    }).notNull().defaultNow(),
-    actor: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("actor").notNull(),
-    action: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("action").notNull(),
-    entity: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("entity").notNull(),
-    entityId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("entity_id"),
-    site: siteEnum("site"),
-    summary: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("summary"),
-    diff: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["jsonb"])("diff").$type()
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["index"])("audit_at_idx").on(t.at),
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["index"])("audit_entity_idx").on(t.entity, t.entityId)
-    ]);
-const redirects = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("redirects", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    site: siteEnum("site").notNull().default("hub"),
-    fromPath: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("from_path").notNull(),
-    toPath: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("to_path").notNull(),
-    permanent: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("permanent").notNull().default(true),
-    hits: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("hits").notNull().default(0),
-    createdAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("created_at", {
-        withTimezone: true
-    }).notNull().defaultNow()
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uniqueIndex"])("redirects_site_from_idx").on(t.site, t.fromPath)
-    ]);
-const rateLimits = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("rate_limits", {
-    key: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("key").primaryKey(),
-    count: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("count").notNull().default(0),
-    windowStart: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("window_start", {
-        withTimezone: true
-    }).notNull().defaultNow()
-});
-const jobStatusEnum = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgEnum"])("studio_job_status", [
-    "inquiry",
-    "booked",
-    "shot",
-    "editing",
-    "delivered",
-    "paid",
-    "cancelled"
-]);
-const clientGalleryStatusEnum = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgEnum"])("studio_gallery_status", [
-    "draft",
-    "published",
-    "archived"
-]);
-const accessModeEnum = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgEnum"])("studio_access_mode", [
-    "passcode",
-    "magic-link",
-    "both"
-]);
-const downloadPolicyEnum = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgEnum"])("studio_download_policy", [
-    "none",
-    "preview",
-    "web",
-    "full"
-]);
-const contractStatusEnum = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgEnum"])("studio_contract_status", [
-    "draft",
-    "sent",
-    "viewed",
-    "signed",
-    "declined",
-    "void"
-]);
-const invoiceStatusEnum = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgEnum"])("studio_invoice_status", [
-    "draft",
-    "sent",
-    "viewed",
-    "partial",
-    "paid",
-    "void",
-    "refunded"
-]);
-const paymentStatusEnum = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgEnum"])("studio_payment_status", [
-    "pending",
-    "succeeded",
-    "failed",
-    "refunded"
-]);
-const bookingStatusEnum = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgEnum"])("studio_booking_status", [
-    "new",
-    "converted",
-    "archived"
-]);
-const studioClients = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("studio_clients", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    name: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("name").notNull(),
-    /** Stored lower-cased; unique among live clients. */ email: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("email").notNull(),
-    phone: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("phone"),
-    notes: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("notes"),
-    tags: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["jsonb"])("tags").notNull().$type().default(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$sql$2f$sql$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["sql"]`'[]'::jsonb`),
-    ...stamps
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uniqueIndex"])("studio_clients_email_idx").on(t.email).where(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$sql$2f$sql$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["sql"]`${t.deletedAt} is null`)
-    ]);
-const studioJobs = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("studio_jobs", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    clientId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("client_id").notNull().references(()=>studioClients.id),
-    title: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("title").notNull(),
-    type: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("type").notNull().default("event"),
-    date: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$date$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["date"])("date"),
-    location: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("location"),
-    status: jobStatusEnum("status").notNull().default("inquiry"),
-    feeCents: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("fee_cents").notNull().default(0),
-    notes: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("notes"),
-    /** Estimated delivery date shown to the client on the delivery status page. */ deliveryEta: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$date$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["date"])("delivery_eta"),
-    ...stamps
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["index"])("studio_jobs_client_idx").on(t.clientId),
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["index"])("studio_jobs_status_idx").on(t.status)
-    ]);
-const studioGalleries = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("studio_galleries", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    jobId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("job_id").notNull().references(()=>studioJobs.id),
-    title: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("title").notNull(),
-    status: clientGalleryStatusEnum("status").notNull().default("draft"),
-    accessMode: accessModeEnum("access_mode").notNull().default("passcode"),
-    /** scrypt hash "salt:hash" of the passcode. Never the passcode itself. */ passcodeHash: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("passcode_hash"),
-    downloadPolicy: downloadPolicyEnum("download_policy").notNull().default("preview"),
-    watermark: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("watermark").notNull().default(true),
-    coverMediaId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("cover_media_id").references(()=>media.id),
-    expiresAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("expires_at", {
-        withTimezone: true
-    }),
-    /** Shown above the photographs (a thank-you, instructions). Per-gallery branding: accent color too. */ welcome: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("welcome"),
-    accent: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("accent"),
-    /** scrypt hash of a PIN that must be entered before any download (optional). */ downloadPinHash: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("download_pin_hash"),
-    /** Most photographs a client may pick (album picks); null = no limit. */ selectionLimit: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("selection_limit"),
-    selectionSentAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("selection_sent_at", {
-        withTimezone: true
-    }),
-    allowComments: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("allow_comments").notNull().default(true),
-    allowRatings: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("allow_ratings").notNull().default(true),
-    deliveredAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("delivered_at", {
-        withTimezone: true
-    }),
-    /** When the "your gallery expires soon" email last went out (once per expiry date). */ expiryReminderAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("expiry_reminder_at", {
-        withTimezone: true
-    }),
-    reactivatedAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("reactivated_at", {
-        withTimezone: true
-    }),
-    /** How the client sees the photographs: grid, masonry or rows; dark or light; thumbnail size. */ layout: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("layout").notNull().default("grid"),
-    theme: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("theme").notNull().default("dark"),
-    density: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("density").notNull().default("medium"),
-    /** Publishes itself (and emails the client) when this time passes. */ publishAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("publish_at", {
-        withTimezone: true
-    }),
-    /** Private notes for the studio, never shown to the client. */ notes: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("notes"),
-    /** Protection settings and look (validated in galleries.ts; empty = defaults). */ security: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["jsonb"])("security").$type().notNull().default({}),
-    style: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["jsonb"])("style").$type().notNull().default({}),
-    /** The gallery's own web address: /g/<slug>. Unique, set by the studio. */ slug: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("slug"),
-    /** The date of the shoot or event, and the date client orders are due (both optional). */ shootDate: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$date$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["date"])("shoot_date"),
-    orderDueDate: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$date$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["date"])("order_due_date"),
-    /** Visitors give their email address before they can view the gallery. */ emailRequired: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("email_required").notNull().default(false),
-    /** Archive the gallery by itself when its expiry date passes. */ autoArchive: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("auto_archive").notNull().default(false),
-    /** passcode: only the client's passcode (/client) | link: anyone with the link can view and shop (proofing stays with the passcode). */ visibility: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("visibility").notNull().default("passcode"),
-    /** Shop and proofing settings (validated in gallery-shop.ts; empty = defaults). */ shop: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["jsonb"])("shop").$type().notNull().default({}),
-    ...stamps
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["index"])("studio_galleries_job_idx").on(t.jobId),
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uniqueIndex"])("studio_galleries_slug_idx").on(t.slug)
-    ]);
-const studioGalleryItems = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("studio_gallery_items", {
-    galleryId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("gallery_id").notNull().references(()=>studioGalleries.id, {
-        onDelete: "cascade"
-    }),
-    mediaId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("media_id").notNull().references(()=>media.id),
-    sort: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("sort").notNull().default(0),
-    hidden: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("hidden").notNull().default(false),
-    albumId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("album_id")
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$primary$2d$keys$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["primaryKey"])({
-            columns: [
-                t.galleryId,
-                t.mediaId
-            ]
+          .notNull()
+          .defaultNow(),
+        lastSignInAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("last_sign_in_at", {
+          withTimezone: true,
+        }),
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uniqueIndex"
+        ])("users_email_idx").on(t.email),
+      ],
+    );
+    const settings = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "settings",
+      {
+        site: siteEnum("site").notNull(),
+        key: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("key").notNull(),
+        value: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "jsonb"
+        ])("value")
+          .notNull()
+          .$type(),
+        updatedAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("updated_at", {
+          withTimezone: true,
         })
-    ]);
-const studioFavorites = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("studio_favorites", {
-    galleryId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("gallery_id").notNull().references(()=>studioGalleries.id, {
-        onDelete: "cascade"
-    }),
-    mediaId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("media_id").notNull().references(()=>media.id),
-    note: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("note"),
-    createdAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("created_at", {
-        withTimezone: true
-    }).notNull().defaultNow()
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$primary$2d$keys$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["primaryKey"])({
-            columns: [
-                t.galleryId,
-                t.mediaId
-            ]
+          .notNull()
+          .defaultNow(),
+        updatedBy: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("updated_by"),
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$primary$2d$keys$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "primaryKey"
+        ])({
+          columns: [t.site, t.key],
+        }),
+      ],
+    );
+    const socialLinks = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])("social_links", {
+      id: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "uuid"
+      ])("id")
+        .primaryKey()
+        .defaultRandom(),
+      site: siteEnum("site").notNull().default("all"),
+      label: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("label").notNull(),
+      href: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("href").notNull(),
+      icon: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("icon")
+        .notNull()
+        .default("web"),
+      sort: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "integer"
+      ])("sort")
+        .notNull()
+        .default(0),
+      showHeader: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "boolean"
+      ])("show_header")
+        .notNull()
+        .default(false),
+      showFooter: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "boolean"
+      ])("show_footer")
+        .notNull()
+        .default(true),
+      visible: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "boolean"
+      ])("visible")
+        .notNull()
+        .default(true),
+      ...stamps,
+    });
+    const timelineEntries = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])("timeline_entries", {
+      id: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "uuid"
+      ])("id")
+        .primaryKey()
+        .defaultRandom(),
+      category: timelineCategoryEnum("category").notNull().default("other"),
+      title: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("title").notNull(),
+      org: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("org"),
+      startDate: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$date$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "date"
+      ])("start_date"),
+      endDate: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$date$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "date"
+      ])("end_date"),
+      current: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "boolean"
+      ])("current")
+        .notNull()
+        .default(false),
+      summary: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("summary"),
+      link: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("link"),
+      visible: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "boolean"
+      ])("visible")
+        .notNull()
+        .default(true),
+      sort: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "integer"
+      ])("sort")
+        .notNull()
+        .default(0),
+      ...stamps,
+    });
+    const media = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "media",
+      {
+        id: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("id")
+          .primaryKey()
+          .defaultRandom(),
+        kind: mediaKindEnum("kind").notNull().default("image"),
+        filename: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("filename").notNull(),
+        mime: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("mime").notNull(),
+        bytes: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("bytes")
+          .notNull()
+          .default(0),
+        width: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("width"),
+        height: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("height"),
+        color: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("color"),
+        blur: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("blur"),
+        phash: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("phash"),
+        /** SHA-256 of the original file (hex): exact-duplicate detection on upload. */ sha256: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("sha256"),
+        /** Private storage key of the original (never exposed). */ originalKey: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("original_key").notNull(),
+        /** Public-safe derivatives: [{ width, format, key }] with GPS/personal EXIF stripped. */ derivatives: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "jsonb"
+        ])("derivatives")
+          .notNull()
+          .$type()
+          .default(
+            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$sql$2f$sql$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+              "sql"
+            ]`'[]'::jsonb`,
+          ),
+        alt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("alt"),
+        caption: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("caption"),
+        license: licenseEnum("license").notNull().default("all-rights-reserved"),
+        containsPeople: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "boolean"
+        ])("contains_people")
+          .notNull()
+          .default(false),
+        releaseOnFile: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "boolean"
+        ])("release_on_file")
+          .notNull()
+          .default(false),
+        minors: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "boolean"
+        ])("minors")
+          .notNull()
+          .default(false),
+        reviewStatus: reviewEnum("review_status").notNull().default("ok"),
+        exif: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "jsonb"
+        ])("exif").$type(),
+        createdBy: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("created_by"),
+        ...stamps,
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "index"
+        ])("media_phash_idx").on(t.phash),
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "index"
+        ])("media_review_idx").on(t.reviewStatus),
+      ],
+    );
+    const posts = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "posts",
+      {
+        id: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("id")
+          .primaryKey()
+          .defaultRandom(),
+        site: siteEnum("site").notNull().default("hub"),
+        slug: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("slug").notNull(),
+        title: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("title").notNull(),
+        subtitle: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("subtitle"),
+        summary: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("summary"),
+        body: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("body")
+          .notNull()
+          .default(""),
+        coverMediaId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("cover_media_id").references(() => media.id),
+        tags: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("tags")
+          .array()
+          .notNull()
+          .default(
+            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$sql$2f$sql$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+              "sql"
+            ]`'{}'::text[]`,
+          ),
+        status: statusEnum("status").notNull().default("draft"),
+        publishAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("publish_at", {
+          withTimezone: true,
+        }),
+        featured: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "boolean"
+        ])("featured")
+          .notNull()
+          .default(false),
+        seo: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "jsonb"
+        ])("seo").$type(),
+        readingMinutes: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("reading_minutes")
+          .notNull()
+          .default(1),
+        ...stamps,
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uniqueIndex"
+        ])("posts_site_slug_idx").on(t.site, t.slug),
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "index"
+        ])("posts_status_idx").on(t.status),
+      ],
+    );
+    const postVersions = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])("post_versions", {
+      id: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "uuid"
+      ])("id")
+        .primaryKey()
+        .defaultRandom(),
+      postId: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "uuid"
+      ])("post_id")
+        .notNull()
+        .references(() => posts.id, {
+          onDelete: "cascade",
+        }),
+      version: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "integer"
+      ])("version").notNull(),
+      snapshot: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "jsonb"
+      ])("snapshot")
+        .notNull()
+        .$type(),
+      createdAt: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "timestamp"
+      ])("created_at", {
+        withTimezone: true,
+      })
+        .notNull()
+        .defaultNow(),
+      createdBy: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("created_by"),
+    });
+    const projects = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "projects",
+      {
+        id: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("id")
+          .primaryKey()
+          .defaultRandom(),
+        site: siteEnum("site").notNull().default("hub"),
+        slug: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("slug").notNull(),
+        type: projectTypeEnum("type").notNull().default("photography"),
+        title: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("title").notNull(),
+        summary: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("summary"),
+        date: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$date$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "date"
+        ])("date"),
+        client: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("client"),
+        role: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("role"),
+        category: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("category"),
+        coverMediaId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("cover_media_id").references(() => media.id),
+        blocks: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "jsonb"
+        ])("blocks")
+          .notNull()
+          .$type()
+          .default(
+            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$sql$2f$sql$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+              "sql"
+            ]`'[]'::jsonb`,
+          ),
+        credits: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "jsonb"
+        ])("credits")
+          .notNull()
+          .$type()
+          .default(
+            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$sql$2f$sql$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+              "sql"
+            ]`'[]'::jsonb`,
+          ),
+        related: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("related")
+          .array()
+          .notNull()
+          .default(
+            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$sql$2f$sql$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+              "sql"
+            ]`'{}'::text[]`,
+          ),
+        status: statusEnum("status").notNull().default("draft"),
+        featured: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "boolean"
+        ])("featured")
+          .notNull()
+          .default(false),
+        protectedPage: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "boolean"
+        ])("protected_page")
+          .notNull()
+          .default(false),
+        sort: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("sort")
+          .notNull()
+          .default(0),
+        ...stamps,
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uniqueIndex"
+        ])("projects_site_slug_idx").on(t.site, t.slug),
+      ],
+    );
+    const projectVersions = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])("project_versions", {
+      id: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "uuid"
+      ])("id")
+        .primaryKey()
+        .defaultRandom(),
+      projectId: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "uuid"
+      ])("project_id")
+        .notNull()
+        .references(() => projects.id, {
+          onDelete: "cascade",
+        }),
+      version: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "integer"
+      ])("version").notNull(),
+      snapshot: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "jsonb"
+      ])("snapshot")
+        .notNull()
+        .$type(),
+      createdAt: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "timestamp"
+      ])("created_at", {
+        withTimezone: true,
+      })
+        .notNull()
+        .defaultNow(),
+      createdBy: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("created_by"),
+    });
+    const galleries = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "galleries",
+      {
+        id: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("id")
+          .primaryKey()
+          .defaultRandom(),
+        site: siteEnum("site").notNull().default("photos"),
+        slug: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("slug").notNull(),
+        title: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("title").notNull(),
+        description: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("description"),
+        category: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("category"),
+        coverMediaId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("cover_media_id").references(() => media.id),
+        visible: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "boolean"
+        ])("visible")
+          .notNull()
+          .default(true),
+        /** none | light | strict: image protection policy for this gallery. */ protection: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("protection")
+          .notNull()
+          .default("light"),
+        sort: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("sort")
+          .notNull()
+          .default(0),
+        ...stamps,
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uniqueIndex"
+        ])("galleries_site_slug_idx").on(t.site, t.slug),
+      ],
+    );
+    const galleryItems = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "gallery_items",
+      {
+        id: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("id")
+          .primaryKey()
+          .defaultRandom(),
+        galleryId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("gallery_id")
+          .notNull()
+          .references(() => galleries.id, {
+            onDelete: "cascade",
+          }),
+        mediaId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("media_id")
+          .notNull()
+          .references(() => media.id),
+        caption: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("caption"),
+        alt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("alt"),
+        hidden: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "boolean"
+        ])("hidden")
+          .notNull()
+          .default(false),
+        sort: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("sort")
+          .notNull()
+          .default(0),
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "index"
+        ])("gallery_items_gallery_idx").on(t.galleryId, t.sort),
+      ],
+    );
+    const musicItems = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])("music_items", {
+      id: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "uuid"
+      ])("id")
+        .primaryKey()
+        .defaultRandom(),
+      kind: musicKindEnum("kind").notNull().default("recording"),
+      title: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("title").notNull(),
+      date: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$date$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "date"
+      ])("date"),
+      venue: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("venue"),
+      ensemble: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("ensemble"),
+      note: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("note"),
+      provider: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("provider"),
+      embedId: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("embed_id"),
+      audioMediaId: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "uuid"
+      ])("audio_media_id").references(() => media.id),
+      coverMediaId: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "uuid"
+      ])("cover_media_id").references(() => media.id),
+      rights: rightsEnum("rights").notNull().default("original"),
+      needsReview: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "boolean"
+      ])("needs_review")
+        .notNull()
+        .default(false),
+      featured: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "boolean"
+      ])("featured")
+        .notNull()
+        .default(false),
+      visible: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "boolean"
+      ])("visible")
+        .notNull()
+        .default(true),
+      sort: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "integer"
+      ])("sort")
+        .notNull()
+        .default(0),
+      ...stamps,
+    });
+    const flightEntries = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])("flight_entries", {
+      id: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "uuid"
+      ])("id")
+        .primaryKey()
+        .defaultRandom(),
+      kind: flightKindEnum("kind").notNull().default("milestone"),
+      title: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("title").notNull(),
+      date: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$date$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "date"
+      ])("date"),
+      story: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("story"),
+      aircraft: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("aircraft"),
+      photoMediaId: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "uuid"
+      ])("photo_media_id").references(() => media.id),
+      /** "Safe to publish" checklist: no real-time location, no tail numbers unless the owner opts in. */ safeToPublish:
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "boolean"
+        ])("safe_to_publish")
+          .notNull()
+          .default(false),
+      visible: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "boolean"
+      ])("visible")
+        .notNull()
+        .default(true),
+      sort: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "integer"
+      ])("sort")
+        .notNull()
+        .default(0),
+      ...stamps,
+    });
+    const aircraft = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])("aircraft", {
+      id: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "uuid"
+      ])("id")
+        .primaryKey()
+        .defaultRandom(),
+      name: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("name").notNull(),
+      note: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("note"),
+      flown: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "boolean"
+      ])("flown")
+        .notNull()
+        .default(true),
+      visible: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "boolean"
+      ])("visible")
+        .notNull()
+        .default(true),
+      sort: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "integer"
+      ])("sort")
+        .notNull()
+        .default(0),
+      ...stamps,
+    });
+    const pages = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "pages",
+      {
+        id: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("id")
+          .primaryKey()
+          .defaultRandom(),
+        site: siteEnum("site").notNull().default("hub"),
+        slug: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("slug").notNull(),
+        title: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("title").notNull(),
+        body: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("body")
+          .notNull()
+          .default(""),
+        kind: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("kind")
+          .notNull()
+          .default("page"),
+        status: statusEnum("status").notNull().default("draft"),
+        ...stamps,
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uniqueIndex"
+        ])("pages_site_slug_idx").on(t.site, t.slug),
+      ],
+    );
+    const inboxMessages = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])("inbox_messages", {
+      id: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "uuid"
+      ])("id")
+        .primaryKey()
+        .defaultRandom(),
+      site: siteEnum("site").notNull().default("hub"),
+      name: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("name").notNull(),
+      email: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("email").notNull(),
+      topic: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("topic"),
+      message: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("message").notNull(),
+      status: inboxStatusEnum("status").notNull().default("new"),
+      notes: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("notes"),
+      ipHash: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("ip_hash"),
+      createdAt: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "timestamp"
+      ])("created_at", {
+        withTimezone: true,
+      })
+        .notNull()
+        .defaultNow(),
+      deletedAt: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "timestamp"
+      ])("deleted_at", {
+        withTimezone: true,
+      }),
+    });
+    const auditLog = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "audit_log",
+      {
+        id: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$bigserial$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "bigserial"
+        ])("id", {
+          mode: "number",
+        }).primaryKey(),
+        at: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("at", {
+          withTimezone: true,
         })
-    ]);
-const studioContracts = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("studio_contracts", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    jobId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("job_id").notNull().references(()=>studioJobs.id),
-    title: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("title").notNull(),
-    body: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("body").notNull(),
-    status: contractStatusEnum("status").notNull().default("draft"),
-    /** sha256 of the signing link token. */ tokenHash: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("token_hash"),
-    sentAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("sent_at", {
-        withTimezone: true
-    }),
-    viewedAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("viewed_at", {
-        withTimezone: true
-    }),
-    signedAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("signed_at", {
-        withTimezone: true
-    }),
-    signerName: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("signer_name"),
-    /** one-way hashes only (privacy): sha256(ip + AUTH_SECRET-derived salt) */ signerIpHash: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("signer_ip_hash"),
-    signerUserAgent: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("signer_user_agent"),
-    /** sha256 of the exact text that was signed */ documentSha256: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("document_sha256"),
-    /** contract | model-release | property-release | parental-consent | license */ kind: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("kind").notNull().default("contract"),
-    templateId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("template_id"),
-    /** Who or what a release covers (a person, a property). */ subject: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("subject"),
-    minor: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("minor").notNull().default(false),
-    guardianName: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("guardian_name"),
-    signerEmail: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("signer_email"),
-    /** ESIGN/UETA: the signer agreed to sign and keep records electronically (captured with the signature). */ consentElectronic: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("consent_electronic").notNull().default(false),
-    /** License terms granted (personal, commercial, term in months; null = no end). Feeds the usage-rights tracker. */ usageRights: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["jsonb"])("usage_rights").$type(),
-    licenseExpiresAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("license_expires_at", {
-        withTimezone: true
-    }),
-    ...stamps
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uniqueIndex"])("studio_contracts_token_idx").on(t.tokenHash),
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["index"])("studio_contracts_job_idx").on(t.jobId)
-    ]);
-const studioInvoices = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("studio_invoices", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    /** Human number, e.g. "2026-0001" (unique). */ number: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("number").notNull(),
-    jobId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("job_id").notNull().references(()=>studioJobs.id),
-    lines: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["jsonb"])("lines").notNull().$type().default(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$sql$2f$sql$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["sql"]`'[]'::jsonb`),
-    currency: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("currency").notNull().default("usd"),
-    totalCents: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("total_cents").notNull().default(0),
-    status: invoiceStatusEnum("status").notNull().default("draft"),
-    dueDate: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$date$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["date"])("due_date"),
-    /** standard | deposit | balance | installment | recurring | retainer */ kind: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("kind").notNull().default("standard"),
-    planId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("plan_id"),
-    installmentNo: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("installment_no"),
-    installmentOf: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("installment_of"),
-    recurringId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("recurring_id"),
-    /** Set on a gallery extension or reactivation invoice: paying it extends that gallery. */ galleryId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("gallery_id"),
-    /** sha256 of the payment link token. */ tokenHash: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("token_hash"),
-    sentAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("sent_at", {
-        withTimezone: true
-    }),
-    paidAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("paid_at", {
-        withTimezone: true
-    }),
-    ...stamps
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uniqueIndex"])("studio_invoices_number_idx").on(t.number),
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uniqueIndex"])("studio_invoices_token_idx").on(t.tokenHash),
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["index"])("studio_invoices_job_idx").on(t.jobId)
-    ]);
-const studioPayments = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("studio_payments", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    invoiceId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("invoice_id").notNull().references(()=>studioInvoices.id),
-    /** "stripe" | "manual" | "mock" */ provider: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("provider").notNull(),
-    /** Provider's id (payment_intent id). Unique per provider: makes webhooks and retries idempotent. */ providerRef: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("provider_ref").notNull(),
-    amountCents: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("amount_cents").notNull(),
-    status: paymentStatusEnum("status").notNull().default("pending"),
-    receiptRef: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("receipt_ref"),
-    raw: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["jsonb"])("raw").$type(),
-    /** Part of `amount_cents` that is a tip or a card surcharge (not credited to the invoice). */ tipCents: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("tip_cents").notNull().default(0),
-    surchargeCents: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("surcharge_cents").notNull().default(0),
-    /** card | ach | manual | mock */ method: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("method"),
-    refundedCents: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("refunded_cents").notNull().default(0),
-    paidAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("paid_at", {
-        withTimezone: true
-    }),
-    createdAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("created_at", {
-        withTimezone: true
-    }).notNull().defaultNow()
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uniqueIndex"])("studio_payments_provider_ref_idx").on(t.provider, t.providerRef),
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["index"])("studio_payments_invoice_idx").on(t.invoiceId)
-    ]);
-const studioBookings = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("studio_bookings", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    name: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("name").notNull(),
-    email: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("email").notNull(),
-    topic: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("topic").notNull().default("General"),
-    message: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("message").notNull(),
-    status: bookingStatusEnum("status").notNull().default("new"),
-    clientId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("client_id").references(()=>studioClients.id),
-    phone: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("phone"),
-    shootType: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("shoot_type"),
-    eventDate: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$date$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["date"])("event_date"),
-    location: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("location"),
-    budget: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("budget"),
-    guests: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("guests"),
-    source: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("source"),
-    referrer: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("referrer"),
-    utm: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["jsonb"])("utm").$type(),
-    details: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["jsonb"])("details").$type(),
-    score: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("score").notNull().default(0),
-    createdAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("created_at", {
-        withTimezone: true
-    }).notNull().defaultNow()
-});
-const emailLog = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("email_log", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    kind: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("kind").notNull(),
-    toEmail: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("to_email").notNull(),
-    fromEmail: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("from_email").notNull(),
-    replyTo: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("reply_to"),
-    subject: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("subject").notNull(),
-    bodyText: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("body_text").notNull(),
-    bodyHtml: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("body_html"),
-    provider: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("provider").notNull(),
-    status: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("status").notNull(),
-    providerId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("provider_id"),
-    error: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("error"),
-    relatedType: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("related_type"),
-    relatedId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("related_id"),
-    createdAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("created_at", {
-        withTimezone: true
-    }).notNull().defaultNow()
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["index"])("email_log_to_idx").on(t.toEmail),
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["index"])("email_log_related_idx").on(t.relatedType, t.relatedId)
-    ]);
-const webhookEvents = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("webhook_events", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("id").primaryKey(),
-    provider: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("provider").notNull(),
-    type: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("type").notNull(),
-    receivedAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("received_at", {
-        withTimezone: true
-    }).notNull().defaultNow()
-});
-const studioViewEvents = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("studio_view_events", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    mediaId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("media_id").notNull(),
-    viewer: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("viewer").notNull(),
-    code: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("code").notNull(),
-    ipHash: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("ip_hash"),
-    at: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("at", {
-        withTimezone: true
-    }).notNull().defaultNow()
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["index"])("studio_view_events_code_idx").on(t.code),
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["index"])("studio_view_events_media_idx").on(t.mediaId)
-    ]);
-const appointmentKindEnum = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgEnum"])("appointment_kind", [
-    "shoot",
-    "consult",
-    "minislot",
-    "block"
-]);
-const appointmentStatusEnum = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgEnum"])("appointment_status", [
-    "open",
-    "hold",
-    "confirmed",
-    "cancelled"
-]);
-const studioSettings = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("studio_settings", {
-    key: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("key").primaryKey(),
-    value: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["jsonb"])("value").notNull().$type(),
-    updatedAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("updated_at", {
-        withTimezone: true
-    }).notNull().defaultNow()
-});
-const availabilityRules = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("availability_rules", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    weekday: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("weekday").notNull(),
-    startMinute: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("start_minute").notNull(),
-    endMinute: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("end_minute").notNull(),
-    createdAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("created_at", {
-        withTimezone: true
-    }).notNull().defaultNow()
-});
-const blackoutDates = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("blackout_dates", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    date: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$date$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["date"])("date").notNull().unique(),
-    reason: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("reason")
-});
-const appointments = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("appointments", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    kind: appointmentKindEnum("kind").notNull().default("shoot"),
-    status: appointmentStatusEnum("status").notNull().default("confirmed"),
-    title: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("title").notNull(),
-    startsAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("starts_at", {
-        withTimezone: true
-    }).notNull(),
-    endsAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("ends_at", {
-        withTimezone: true
-    }).notNull(),
-    bufferBeforeMin: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("buffer_before_min").notNull().default(0),
-    bufferAfterMin: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("buffer_after_min").notNull().default(0),
-    travelMin: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("travel_min").notNull().default(0),
-    blockedStart: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("blocked_start", {
-        withTimezone: true
-    }).notNull(),
-    blockedEnd: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("blocked_end", {
-        withTimezone: true
-    }).notNull(),
-    location: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("location"),
-    notes: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("notes"),
-    jobId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("job_id").references(()=>studioJobs.id),
-    clientId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("client_id").references(()=>studioClients.id),
-    bookingId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("booking_id").references(()=>studioBookings.id),
-    invoiceId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("invoice_id").references(()=>studioInvoices.id),
-    /** Mini-session group: slots created together share a label ("Fall minis, Oct 25"). */ groupLabel: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("group_label"),
-    /** A hold lapses at this time unless the deposit is paid. */ holdUntil: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("hold_until", {
-        withTimezone: true
-    }),
-    createdAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("created_at", {
-        withTimezone: true
-    }).notNull().defaultNow(),
-    updatedAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("updated_at", {
-        withTimezone: true
-    }).notNull().defaultNow()
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["index"])("appointments_start_idx").on(t.startsAt),
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["index"])("appointments_job_idx").on(t.jobId)
-    ]);
-const waitlist = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("waitlist", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    name: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("name").notNull(),
-    email: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("email").notNull(),
-    /** A date (YYYY-MM-DD) or a mini-session group label the person is waiting for. */ wanted: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("wanted").notNull(),
-    shootType: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("shoot_type"),
-    notifiedAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("notified_at", {
-        withTimezone: true
-    }),
-    createdAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("created_at", {
-        withTimezone: true
-    }).notNull().defaultNow()
-});
-const quoteStatusEnum = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgEnum"])("studio_quote_status", [
-    "draft",
-    "sent",
-    "viewed",
-    "accepted",
-    "declined",
-    "expired",
-    "void"
-]);
-const studioPackages = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("studio_packages", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    slug: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("slug").notNull(),
-    name: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("name").notNull(),
-    tagline: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("tagline"),
-    /** What the client gets: coverage hours, edited images, gallery time. Deliverables, never editing hours. */ deliverables: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["jsonb"])("deliverables").notNull().$type().default(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$sql$2f$sql$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["sql"]`'[]'::jsonb`),
-    priceCents: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("price_cents").notNull().default(0),
-    /** Mandatory fees included in the headline price (travel inside a radius, booking fee). Shown, never hidden. */ mandatoryFees: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["jsonb"])("mandatory_fees").notNull().$type().default(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$sql$2f$sql$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["sql"]`'[]'::jsonb`),
-    /** Add-on slugs bundled into this package (their standalone price is shown beside the bundle). */ includedAddOns: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["jsonb"])("included_add_ons").notNull().$type().default(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$sql$2f$sql$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["sql"]`'[]'::jsonb`),
-    tier: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("tier").notNull().default(1),
-    featured: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("featured").notNull().default(false),
-    visible: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("visible").notNull().default(true),
-    isSample: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("is_sample").notNull().default(true),
-    sort: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("sort").notNull().default(0),
-    ...stamps
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uniqueIndex"])("studio_packages_slug_idx").on(t.slug)
-    ]);
-const studioAddOns = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("studio_add_ons", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    slug: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("slug").notNull(),
-    name: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("name").notNull(),
-    description: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("description"),
-    /** The real standalone price, always shown next to bundles. */ priceCents: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("price_cents").notNull().default(0),
-    unit: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("unit").notNull().default("each"),
-    maxQty: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("max_qty").notNull().default(1),
-    /** An optional fee (travel, rush) rather than a product: listed separately from the headline price. */ isFee: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("is_fee").notNull().default(false),
-    /** Offered as an upsell on the quote page. */ upsell: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("upsell").notNull().default(true),
-    visible: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("visible").notNull().default(true),
-    isSample: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("is_sample").notNull().default(true),
-    sort: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("sort").notNull().default(0),
-    ...stamps
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uniqueIndex"])("studio_add_ons_slug_idx").on(t.slug)
-    ]);
-const studioPromoCodes = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("studio_promo_codes", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    code: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("code").notNull(),
-    /** percent | amount | referral (a percent code owned by a referring client). */ kind: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("kind").notNull().default("percent"),
-    percentOff: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("percent_off"),
-    amountOffCents: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("amount_off_cents"),
-    minSubtotalCents: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("min_subtotal_cents").notNull().default(0),
-    maxUses: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("max_uses"),
-    uses: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("uses").notNull().default(0),
-    expiresAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("expires_at", {
-        withTimezone: true
-    }),
-    active: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("active").notNull().default(true),
-    referrerClientId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("referrer_client_id").references(()=>studioClients.id),
-    note: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("note"),
-    createdAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("created_at", {
-        withTimezone: true
-    }).notNull().defaultNow()
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uniqueIndex"])("studio_promo_codes_code_idx").on(t.code)
-    ]);
-const studioGiftCards = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("studio_gift_cards", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    /** Stored hashed-comparable lowercase code; shown to the buyer once. */ code: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("code").notNull(),
-    initialCents: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("initial_cents").notNull(),
-    balanceCents: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("balance_cents").notNull(),
-    purchaserEmail: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("purchaser_email"),
-    recipientName: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("recipient_name"),
-    expiresAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("expires_at", {
-        withTimezone: true
-    }),
-    status: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("status").notNull().default("active"),
-    createdAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("created_at", {
-        withTimezone: true
-    }).notNull().defaultNow()
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uniqueIndex"])("studio_gift_cards_code_idx").on(t.code)
-    ]);
-const studioGiftLedger = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("studio_gift_ledger", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    cardId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("card_id").notNull().references(()=>studioGiftCards.id),
-    deltaCents: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("delta_cents").notNull(),
-    quoteId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("quote_id"),
-    note: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("note"),
-    at: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("at", {
-        withTimezone: true
-    }).notNull().defaultNow()
-});
-const studioQuotes = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("studio_quotes", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    number: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("number").notNull(),
-    clientId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("client_id").notNull().references(()=>studioClients.id),
-    jobId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("job_id").references(()=>studioJobs.id),
-    title: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("title").notNull(),
-    intro: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("intro"),
-    terms: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("terms"),
-    status: quoteStatusEnum("status").notNull().default("draft"),
-    packageId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("package_id").references(()=>studioPackages.id),
-    lines: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["jsonb"])("lines").notNull().$type().default(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$sql$2f$sql$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["sql"]`'[]'::jsonb`),
-    subtotalCents: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("subtotal_cents").notNull().default(0),
-    discountCents: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("discount_cents").notNull().default(0),
-    taxRateBp: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("tax_rate_bp").notNull().default(0),
-    taxCents: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("tax_cents").notNull().default(0),
-    taxLabel: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("tax_label"),
-    totalCents: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("total_cents").notNull().default(0),
-    giftCents: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("gift_cents").notNull().default(0),
-    depositCents: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("deposit_cents").notNull().default(0),
-    currency: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("currency").notNull().default("usd"),
-    promoCode: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("promo_code"),
-    giftCode: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("gift_code"),
-    validUntil: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("valid_until", {
-        withTimezone: true
-    }),
-    tokenHash: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("token_hash"),
-    sentAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("sent_at", {
-        withTimezone: true
-    }),
-    viewedAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("viewed_at", {
-        withTimezone: true
-    }),
-    acceptedAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("accepted_at", {
-        withTimezone: true
-    }),
-    acceptedBy: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("accepted_by"),
-    acceptedIpHash: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("accepted_ip_hash"),
-    /** SHA-256 of the quote content at acceptance, so later edits cannot change what was agreed. */ acceptedHash: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("accepted_hash"),
-    invoiceId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("invoice_id").references(()=>studioInvoices.id),
-    isSample: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("is_sample").notNull().default(false),
-    ...stamps
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["index"])("studio_quotes_client_idx").on(t.clientId),
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uniqueIndex"])("studio_quotes_number_idx").on(t.number)
-    ]);
-const studioContractTemplates = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("studio_contract_templates", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    slug: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("slug").notNull(),
-    name: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("name").notNull(),
-    /** contract | model-release | property-release | parental-consent | license */ kind: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("kind").notNull().default("contract"),
-    body: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("body").notNull(),
-    usageRights: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["jsonb"])("usage_rights").$type(),
-    isSample: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("is_sample").notNull().default(true),
-    ...stamps
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uniqueIndex"])("studio_contract_templates_slug_idx").on(t.slug)
-    ]);
-const studioQuestionnaires = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("studio_questionnaires", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    slug: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("slug").notNull(),
-    name: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("name").notNull(),
-    description: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("description"),
-    fields: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["jsonb"])("fields").notNull().$type().default(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$sql$2f$sql$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["sql"]`'[]'::jsonb`),
-    isSample: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("is_sample").notNull().default(true),
-    ...stamps
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uniqueIndex"])("studio_questionnaires_slug_idx").on(t.slug)
-    ]);
-const studioQuestionnaireSends = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("studio_questionnaire_sends", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    questionnaireId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("questionnaire_id").notNull().references(()=>studioQuestionnaires.id),
-    clientId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("client_id").notNull().references(()=>studioClients.id),
-    jobId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("job_id").references(()=>studioJobs.id),
-    /** A snapshot of the fields at send time, so later edits do not change what was asked. */ fields: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["jsonb"])("fields").notNull().$type(),
-    title: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("title").notNull(),
-    tokenHash: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("token_hash").notNull(),
-    sentAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("sent_at", {
-        withTimezone: true
-    }).notNull().defaultNow(),
-    completedAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("completed_at", {
-        withTimezone: true
-    }),
-    answers: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["jsonb"])("answers").$type()
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uniqueIndex"])("studio_questionnaire_sends_token_idx").on(t.tokenHash)
-    ]);
-const studioRefunds = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("studio_refunds", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    paymentId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("payment_id").notNull().references(()=>studioPayments.id),
-    amountCents: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("amount_cents").notNull(),
-    reason: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("reason"),
-    /** Provider refund id (re_...), or "manual". */ providerRef: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("provider_ref"),
-    by: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("by"),
-    createdAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("created_at", {
-        withTimezone: true
-    }).notNull().defaultNow()
-});
-const studioPaymentPlans = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("studio_payment_plans", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    jobId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("job_id").notNull().references(()=>studioJobs.id),
-    name: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("name").notNull(),
-    totalCents: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("total_cents").notNull(),
-    count: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("count").notNull(),
-    status: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("status").notNull().default("active"),
-    createdAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("created_at", {
-        withTimezone: true
-    }).notNull().defaultNow()
-});
-const studioRecurring = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("studio_recurring", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    jobId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("job_id").notNull().references(()=>studioJobs.id),
-    description: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("description").notNull(),
-    amountCents: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("amount_cents").notNull(),
-    intervalMonths: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("interval_months").notNull().default(1),
-    nextRunOn: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$date$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["date"])("next_run_on").notNull(),
-    endsOn: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$date$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["date"])("ends_on"),
-    active: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("active").notNull().default(true),
-    createdAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("created_at", {
-        withTimezone: true
-    }).notNull().defaultNow()
-});
-const clientAccounts = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("client_accounts", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    clientId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("client_id").notNull().references(()=>studioClients.id),
-    email: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("email").notNull(),
-    /** scrypt "salt:hash"; null until the client sets a password (a magic link always works). */ passwordHash: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("password_hash"),
-    prefs: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["jsonb"])("prefs").notNull().$type().default(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$sql$2f$sql$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["sql"]`'{"galleryReady":true,"reminders":true,"news":false}'::jsonb`),
-    failedAttempts: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("failed_attempts").notNull().default(0),
-    lockedUntil: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("locked_until", {
-        withTimezone: true
-    }),
-    lastLoginAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("last_login_at", {
-        withTimezone: true
-    }),
-    createdAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("created_at", {
-        withTimezone: true
-    }).notNull().defaultNow()
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uniqueIndex"])("client_accounts_client_idx").on(t.clientId),
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uniqueIndex"])("client_accounts_email_idx").on(t.email)
-    ]);
-const clientLoginTokens = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("client_login_tokens", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    accountId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("account_id").notNull().references(()=>clientAccounts.id),
-    /** magic | reset | invite */ kind: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("kind").notNull(),
-    tokenHash: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("token_hash").notNull(),
-    expiresAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("expires_at", {
-        withTimezone: true
-    }).notNull(),
-    usedAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("used_at", {
-        withTimezone: true
-    }),
-    createdAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("created_at", {
-        withTimezone: true
-    }).notNull().defaultNow()
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uniqueIndex"])("client_login_tokens_hash_idx").on(t.tokenHash)
-    ]);
-const studioMessages = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("studio_messages", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    clientId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("client_id").notNull().references(()=>studioClients.id),
-    jobId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("job_id").references(()=>studioJobs.id),
-    /** in = from the client, out = from the studio */ direction: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("direction").notNull(),
-    body: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("body").notNull(),
-    readAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("read_at", {
-        withTimezone: true
-    }),
-    createdAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("created_at", {
-        withTimezone: true
-    }).notNull().defaultNow()
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["index"])("studio_messages_client_idx").on(t.clientId)
-    ]);
-const studioAlbums = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("studio_albums", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    galleryId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("gallery_id").notNull().references(()=>studioGalleries.id, {
-        onDelete: "cascade"
-    }),
-    name: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("name").notNull(),
-    sort: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("sort").notNull().default(0),
-    /** A sub-album sits under another album of the same gallery (one level of nesting in the studio, any in the schema). */ parentId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("parent_id"),
-    description: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("description"),
-    coverMediaId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("cover_media_id"),
-    /** scrypt hash of a passcode that unlocks this album; null = open. A locked album's photographs stay hidden until then. */ passcodeHash: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("passcode_hash"),
-    /** Hidden albums are not listed; their photographs still show under "All photos" unless also hidden. */ hidden: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("hidden").notNull().default(false)
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["index"])("studio_albums_gallery_idx").on(t.galleryId)
-    ]);
-const studioProofs = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("studio_proofs", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    galleryId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("gallery_id").notNull().references(()=>studioGalleries.id, {
-        onDelete: "cascade"
-    }),
-    mediaId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("media_id").notNull().references(()=>media.id),
-    /** rating | approval | comment */ kind: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("kind").notNull(),
-    rating: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("rating"),
-    /** approved | rejected */ decision: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("decision"),
-    body: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("body"),
-    /** client | studio */ author: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("author").notNull().default("client"),
-    createdAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("created_at", {
-        withTimezone: true
-    }).notNull().defaultNow()
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["index"])("studio_proofs_gallery_idx").on(t.galleryId, t.mediaId)
-    ]);
-const studioDownloadEvents = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("studio_download_events", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    galleryId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("gallery_id").notNull().references(()=>studioGalleries.id, {
-        onDelete: "cascade"
-    }),
-    mediaId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("media_id"),
-    /** web | full | zip-web | zip-full */ kind: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("kind").notNull(),
-    /** Which ZIP part (1-based) for zip kinds. */ part: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("part"),
-    viewer: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("viewer"),
-    ipHash: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("ip_hash"),
-    bytes: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("bytes"),
-    at: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("at", {
-        withTimezone: true
-    }).notNull().defaultNow()
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["index"])("studio_download_events_gallery_idx").on(t.galleryId)
-    ]);
-const studioTasks = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("studio_tasks", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    title: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("title").notNull(),
-    dueOn: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$date$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["date"])("due_on"),
-    notes: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("notes"),
-    jobId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("job_id").references(()=>studioJobs.id),
-    clientId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("client_id").references(()=>studioClients.id),
-    doneAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("done_at", {
-        withTimezone: true
-    }),
-    /** Set when an automation or the system made the task. */ source: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("source"),
-    createdAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("created_at", {
-        withTimezone: true
-    }).notNull().defaultNow()
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["index"])("studio_tasks_due_idx").on(t.dueOn)
-    ]);
-const studioAutomationRuns = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("studio_automation_runs", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    /** e.g. `invoice-due:<invoiceId>:2027-03-01`. Unique: a rule never acts twice on the same thing and date. */ dedupeKey: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("dedupe_key").notNull(),
-    rule: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("rule").notNull(),
-    entityType: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("entity_type"),
-    entityId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("entity_id"),
-    status: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("status").notNull().default("done"),
-    detail: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("detail"),
-    at: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("at", {
-        withTimezone: true
-    }).notNull().defaultNow()
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uniqueIndex"])("studio_automation_runs_key_idx").on(t.dedupeKey),
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["index"])("studio_automation_runs_rule_idx").on(t.rule)
-    ]);
-const studioNotifications = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("studio_notifications", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    /** inquiry | payment | contract | quote | message | selection | gallery | booking | system */ kind: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("kind").notNull(),
-    title: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("title").notNull(),
-    body: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("body"),
-    link: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("link"),
-    readAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("read_at", {
-        withTimezone: true
-    }),
-    createdAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("created_at", {
-        withTimezone: true
-    }).notNull().defaultNow()
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["index"])("studio_notifications_created_idx").on(t.createdAt)
-    ]);
-const studioSecurityEvents = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("studio_security_events", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    galleryId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("gallery_id").notNull().references(()=>studioGalleries.id, {
-        onDelete: "cascade"
-    }),
-    viewer: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("viewer").notNull(),
-    /** screenshot | save | print | source | devtools | capture | devtools-open | lock | idle */ kind: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("kind").notNull(),
-    combo: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("combo"),
-    /** What the studio did about it: logged | warned | locked */ action: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("action").notNull().default("logged"),
-    ipHash: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("ip_hash"),
-    /** Only on a lock: the gallery is closed to this viewer (and address) until then. */ until: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("until", {
-        withTimezone: true
-    }),
-    at: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("at", {
-        withTimezone: true
-    }).notNull().defaultNow()
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["index"])("studio_security_events_gallery_idx").on(t.galleryId, t.at)
-    ]);
-const studioProducts = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("studio_products", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    /** digital-web | digital-full | digital-all | print | canvas | album | card */ kind: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("kind").notNull(),
-    /** For prints: the print lab's product code (see @jerryqiu/prints). */ sku: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("sku"),
-    name: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("name").notNull(),
-    description: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("description"),
-    priceCents: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("price_cents").notNull().default(0),
-    /** True until the owner has set a real price: the shop shows it as SAMPLE. */ sample: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("sample").notNull().default(true),
-    active: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("active").notNull().default(true),
-    sort: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("sort").notNull().default(0),
-    /** The price sheet this product belongs to (null = the default sheet). */ sheetId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("sheet_id"),
-    ...stamps
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["index"])("studio_products_kind_idx").on(t.kind)
-    ]);
-const studioPriceSheets = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("studio_price_sheets", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    name: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("name").notNull(),
-    isDefault: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("is_default").notNull().default(false),
-    ...stamps
-});
-const studioOrders = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("studio_orders", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    number: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("number").notNull(),
-    galleryId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("gallery_id").notNull().references(()=>studioGalleries.id),
-    invoiceId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("invoice_id").references(()=>studioInvoices.id),
-    /** pending (awaiting payment) | paid | fulfilled | cancelled | refunded */ status: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("status").notNull().default("pending"),
-    buyerName: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("buyer_name").notNull(),
-    buyerEmail: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("buyer_email").notNull(),
-    ship: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["jsonb"])("ship").$type(),
-    subtotalCents: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("subtotal_cents").notNull().default(0),
-    shippingCents: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("shipping_cents").notNull().default(0),
-    totalCents: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("total_cents").notNull().default(0),
-    /** sha256 of the link that opens the buyer's downloads. */ tokenHash: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("token_hash").notNull(),
-    /** Print lab order id once submitted (after payment only). */ labOrderId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("lab_order_id"),
-    reminderAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("reminder_at", {
-        withTimezone: true
-    }),
-    paidAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("paid_at", {
-        withTimezone: true
-    }),
-    createdAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("created_at", {
-        withTimezone: true
-    }).notNull().defaultNow()
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uniqueIndex"])("studio_orders_number_idx").on(t.number),
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uniqueIndex"])("studio_orders_token_idx").on(t.tokenHash),
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["index"])("studio_orders_gallery_idx").on(t.galleryId)
-    ]);
-const studioOrderItems = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("studio_order_items", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    orderId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("order_id").notNull().references(()=>studioOrders.id, {
-        onDelete: "cascade"
-    }),
-    productId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("product_id").references(()=>studioProducts.id),
-    /** Kept so the order still reads right if the price list changes later. */ kind: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("kind").notNull(),
-    name: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("name").notNull(),
-    sku: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("sku"),
-    mediaId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("media_id"),
-    qty: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("qty").notNull().default(1),
-    unitCents: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("unit_cents").notNull()
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["index"])("studio_order_items_order_idx").on(t.orderId)
-    ]);
-const studioVisitors = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("studio_visitors", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    galleryId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("gallery_id").notNull().references(()=>studioGalleries.id, {
-        onDelete: "cascade"
-    }),
-    email: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("email").notNull(),
-    name: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("name"),
-    visits: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("visits").notNull().default(1),
-    firstAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("first_at", {
-        withTimezone: true
-    }).notNull().defaultNow(),
-    lastAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("last_at", {
-        withTimezone: true
-    }).notNull().defaultNow()
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uniqueIndex"])("studio_visitors_gallery_email_idx").on(t.galleryId, t.email)
-    ]);
-const studioWatermarks = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("studio_watermarks", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    name: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("name").notNull(),
-    /** text | image */ kind: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("kind").notNull().default("text"),
-    text: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("text"),
-    /** Storage key of an uploaded PNG (kind image). */ imageKey: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("image_key"),
-    /** center | bottom-right | bottom-left | top-right | top-left | tile */ position: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("position").notNull().default("bottom-right"),
-    opacity: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("opacity").notNull().default(45),
-    /** Width of the mark as a percent of the picture's width. */ sizePct: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("size_pct").notNull().default(22),
-    isDefault: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("is_default").notNull().default(false),
-    ...stamps
-});
-const studioDownloadRules = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("studio_download_rules", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    galleryId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("gallery_id").notNull().references(()=>studioGalleries.id, {
-        onDelete: "cascade"
-    }),
-    albumId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("album_id"),
-    name: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("name").notNull(),
-    /** Longest side in pixels; null = the original file. */ maxPx: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("max_px"),
-    /** Most downloads per visitor under this rule; null = unlimited. */ perVisitor: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("per_visitor"),
-    watermarkId: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("watermark_id"),
-    pinHash: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("pin_hash"),
-    /** A license the visitor must accept before downloading. */ printRelease: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("print_release"),
-    showAll: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["boolean"])("show_all").notNull().default(true),
-    sort: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("sort").notNull().default(0),
-    createdAt: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("created_at", {
-        withTimezone: true
-    }).notNull().defaultNow()
-}, (t)=>[
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["index"])("studio_download_rules_gallery_idx").on(t.galleryId)
-    ]);
-const studioTracks = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("studio_tracks", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    title: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("title").notNull(),
-    artist: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("artist"),
-    storageKey: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("storage_key").notNull(),
-    mime: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("mime").notNull().default("audio/mpeg"),
-    bytes: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("bytes").notNull().default(0),
-    ...stamps
-});
-const studioPlanCharges = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["pgTable"])("studio_plan_charges", {
-    id: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["uuid"])("id").primaryKey().defaultRandom(),
-    description: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("description").notNull(),
-    amountCents: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["integer"])("amount_cents").notNull().default(0),
-    /** paid | free | failed */ status: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["text"])("status").notNull().default("paid"),
-    at: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["timestamp"])("at", {
-        withTimezone: true
-    }).notNull().defaultNow()
-});
-}),
+          .notNull()
+          .defaultNow(),
+        actor: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("actor").notNull(),
+        action: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("action").notNull(),
+        entity: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("entity").notNull(),
+        entityId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("entity_id"),
+        site: siteEnum("site"),
+        summary: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("summary"),
+        diff: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "jsonb"
+        ])("diff").$type(),
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "index"
+        ])("audit_at_idx").on(t.at),
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "index"
+        ])("audit_entity_idx").on(t.entity, t.entityId),
+      ],
+    );
+    const redirects = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "redirects",
+      {
+        id: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("id")
+          .primaryKey()
+          .defaultRandom(),
+        site: siteEnum("site").notNull().default("hub"),
+        fromPath: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("from_path").notNull(),
+        toPath: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("to_path").notNull(),
+        permanent: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "boolean"
+        ])("permanent")
+          .notNull()
+          .default(true),
+        hits: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("hits")
+          .notNull()
+          .default(0),
+        createdAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("created_at", {
+          withTimezone: true,
+        })
+          .notNull()
+          .defaultNow(),
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uniqueIndex"
+        ])("redirects_site_from_idx").on(t.site, t.fromPath),
+      ],
+    );
+    const rateLimits = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])("rate_limits", {
+      key: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("key").primaryKey(),
+      count: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "integer"
+      ])("count")
+        .notNull()
+        .default(0),
+      windowStart: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "timestamp"
+      ])("window_start", {
+        withTimezone: true,
+      })
+        .notNull()
+        .defaultNow(),
+    });
+    const jobStatusEnum = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgEnum"
+    ])("studio_job_status", ["inquiry", "booked", "shot", "editing", "delivered", "paid", "cancelled"]);
+    const clientGalleryStatusEnum = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgEnum"
+    ])("studio_gallery_status", ["draft", "published", "archived"]);
+    const accessModeEnum = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgEnum"
+    ])("studio_access_mode", ["passcode", "magic-link", "both"]);
+    const downloadPolicyEnum = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgEnum"
+    ])("studio_download_policy", ["none", "preview", "web", "full"]);
+    const contractStatusEnum = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgEnum"
+    ])("studio_contract_status", ["draft", "sent", "viewed", "signed", "declined", "void"]);
+    const invoiceStatusEnum = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgEnum"
+    ])("studio_invoice_status", ["draft", "sent", "viewed", "partial", "paid", "void", "refunded"]);
+    const paymentStatusEnum = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgEnum"
+    ])("studio_payment_status", ["pending", "succeeded", "failed", "refunded"]);
+    const bookingStatusEnum = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgEnum"
+    ])("studio_booking_status", ["new", "converted", "archived"]);
+    const studioClients = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "studio_clients",
+      {
+        id: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("id")
+          .primaryKey()
+          .defaultRandom(),
+        name: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("name").notNull(),
+        /** Stored lower-cased; unique among live clients. */ email: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("email").notNull(),
+        phone: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("phone"),
+        notes: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("notes"),
+        tags: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "jsonb"
+        ])("tags")
+          .notNull()
+          .$type()
+          .default(
+            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$sql$2f$sql$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+              "sql"
+            ]`'[]'::jsonb`,
+          ),
+        ...stamps,
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uniqueIndex"
+        ])("studio_clients_email_idx")
+          .on(t.email)
+          .where(
+            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$sql$2f$sql$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+              "sql"
+            ]`${t.deletedAt} is null`,
+          ),
+      ],
+    );
+    const studioJobs = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "studio_jobs",
+      {
+        id: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("id")
+          .primaryKey()
+          .defaultRandom(),
+        clientId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("client_id")
+          .notNull()
+          .references(() => studioClients.id),
+        title: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("title").notNull(),
+        type: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("type")
+          .notNull()
+          .default("event"),
+        date: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$date$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "date"
+        ])("date"),
+        location: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("location"),
+        status: jobStatusEnum("status").notNull().default("inquiry"),
+        feeCents: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("fee_cents")
+          .notNull()
+          .default(0),
+        notes: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("notes"),
+        /** Estimated delivery date shown to the client on the delivery status page. */ deliveryEta: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$date$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "date"
+        ])("delivery_eta"),
+        ...stamps,
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "index"
+        ])("studio_jobs_client_idx").on(t.clientId),
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "index"
+        ])("studio_jobs_status_idx").on(t.status),
+      ],
+    );
+    const studioGalleries = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "studio_galleries",
+      {
+        id: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("id")
+          .primaryKey()
+          .defaultRandom(),
+        jobId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("job_id")
+          .notNull()
+          .references(() => studioJobs.id),
+        title: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("title").notNull(),
+        status: clientGalleryStatusEnum("status").notNull().default("draft"),
+        accessMode: accessModeEnum("access_mode").notNull().default("passcode"),
+        /** scrypt hash "salt:hash" of the passcode. Never the passcode itself. */ passcodeHash: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("passcode_hash"),
+        downloadPolicy: downloadPolicyEnum("download_policy").notNull().default("preview"),
+        watermark: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "boolean"
+        ])("watermark")
+          .notNull()
+          .default(true),
+        coverMediaId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("cover_media_id").references(() => media.id),
+        expiresAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("expires_at", {
+          withTimezone: true,
+        }),
+        /** Shown above the photographs (a thank-you, instructions). Per-gallery branding: accent color too. */ welcome:
+          (0,
+          __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+            "text"
+          ])("welcome"),
+        accent: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("accent"),
+        /** scrypt hash of a PIN that must be entered before any download (optional). */ downloadPinHash: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("download_pin_hash"),
+        /** Most photographs a client may pick (album picks); null = no limit. */ selectionLimit: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("selection_limit"),
+        selectionSentAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("selection_sent_at", {
+          withTimezone: true,
+        }),
+        allowComments: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "boolean"
+        ])("allow_comments")
+          .notNull()
+          .default(true),
+        allowRatings: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "boolean"
+        ])("allow_ratings")
+          .notNull()
+          .default(true),
+        deliveredAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("delivered_at", {
+          withTimezone: true,
+        }),
+        /** When the "your gallery expires soon" email last went out (once per expiry date). */ expiryReminderAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("expiry_reminder_at", {
+          withTimezone: true,
+        }),
+        reactivatedAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("reactivated_at", {
+          withTimezone: true,
+        }),
+        /** How the client sees the photographs: grid, masonry or rows; dark or light; thumbnail size. */ layout: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("layout")
+          .notNull()
+          .default("grid"),
+        theme: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("theme")
+          .notNull()
+          .default("dark"),
+        density: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("density")
+          .notNull()
+          .default("medium"),
+        /** Publishes itself (and emails the client) when this time passes. */ publishAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("publish_at", {
+          withTimezone: true,
+        }),
+        /** Private notes for the studio, never shown to the client. */ notes: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("notes"),
+        /** Protection settings and look (validated in galleries.ts; empty = defaults). */ security: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "jsonb"
+        ])("security")
+          .$type()
+          .notNull()
+          .default({}),
+        style: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "jsonb"
+        ])("style")
+          .$type()
+          .notNull()
+          .default({}),
+        /** The gallery's own web address: /g/<slug>. Unique, set by the studio. */ slug: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("slug"),
+        /** The date of the shoot or event, and the date client orders are due (both optional). */ shootDate: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$date$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "date"
+        ])("shoot_date"),
+        orderDueDate: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$date$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "date"
+        ])("order_due_date"),
+        /** Visitors give their email address before they can view the gallery. */ emailRequired: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "boolean"
+        ])("email_required")
+          .notNull()
+          .default(false),
+        /** Archive the gallery by itself when its expiry date passes. */ autoArchive: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "boolean"
+        ])("auto_archive")
+          .notNull()
+          .default(false),
+        /** passcode: only the client's passcode (/client) | link: anyone with the link can view and shop (proofing stays with the passcode). */ visibility:
+          (0,
+          __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+            "text"
+          ])("visibility")
+            .notNull()
+            .default("passcode"),
+        /** Shop and proofing settings (validated in gallery-shop.ts; empty = defaults). */ shop: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "jsonb"
+        ])("shop")
+          .$type()
+          .notNull()
+          .default({}),
+        ...stamps,
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "index"
+        ])("studio_galleries_job_idx").on(t.jobId),
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uniqueIndex"
+        ])("studio_galleries_slug_idx").on(t.slug),
+      ],
+    );
+    const studioGalleryItems = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "studio_gallery_items",
+      {
+        galleryId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("gallery_id")
+          .notNull()
+          .references(() => studioGalleries.id, {
+            onDelete: "cascade",
+          }),
+        mediaId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("media_id")
+          .notNull()
+          .references(() => media.id),
+        sort: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("sort")
+          .notNull()
+          .default(0),
+        hidden: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "boolean"
+        ])("hidden")
+          .notNull()
+          .default(false),
+        albumId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("album_id"),
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$primary$2d$keys$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "primaryKey"
+        ])({
+          columns: [t.galleryId, t.mediaId],
+        }),
+      ],
+    );
+    const studioFavorites = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "studio_favorites",
+      {
+        galleryId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("gallery_id")
+          .notNull()
+          .references(() => studioGalleries.id, {
+            onDelete: "cascade",
+          }),
+        mediaId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("media_id")
+          .notNull()
+          .references(() => media.id),
+        note: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("note"),
+        createdAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("created_at", {
+          withTimezone: true,
+        })
+          .notNull()
+          .defaultNow(),
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$primary$2d$keys$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "primaryKey"
+        ])({
+          columns: [t.galleryId, t.mediaId],
+        }),
+      ],
+    );
+    const studioContracts = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "studio_contracts",
+      {
+        id: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("id")
+          .primaryKey()
+          .defaultRandom(),
+        jobId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("job_id")
+          .notNull()
+          .references(() => studioJobs.id),
+        title: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("title").notNull(),
+        body: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("body").notNull(),
+        status: contractStatusEnum("status").notNull().default("draft"),
+        /** sha256 of the signing link token. */ tokenHash: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("token_hash"),
+        sentAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("sent_at", {
+          withTimezone: true,
+        }),
+        viewedAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("viewed_at", {
+          withTimezone: true,
+        }),
+        signedAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("signed_at", {
+          withTimezone: true,
+        }),
+        signerName: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("signer_name"),
+        /** one-way hashes only (privacy): sha256(ip + AUTH_SECRET-derived salt) */ signerIpHash: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("signer_ip_hash"),
+        signerUserAgent: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("signer_user_agent"),
+        /** sha256 of the exact text that was signed */ documentSha256: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("document_sha256"),
+        /** contract | model-release | property-release | parental-consent | license */ kind: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("kind")
+          .notNull()
+          .default("contract"),
+        templateId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("template_id"),
+        /** Who or what a release covers (a person, a property). */ subject: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("subject"),
+        minor: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "boolean"
+        ])("minor")
+          .notNull()
+          .default(false),
+        guardianName: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("guardian_name"),
+        signerEmail: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("signer_email"),
+        /** ESIGN/UETA: the signer agreed to sign and keep records electronically (captured with the signature). */ consentElectronic:
+          (0,
+          __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+            "boolean"
+          ])("consent_electronic")
+            .notNull()
+            .default(false),
+        /** License terms granted (personal, commercial, term in months; null = no end). Feeds the usage-rights tracker. */ usageRights:
+          (0,
+          __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+            "jsonb"
+          ])("usage_rights").$type(),
+        licenseExpiresAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("license_expires_at", {
+          withTimezone: true,
+        }),
+        ...stamps,
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uniqueIndex"
+        ])("studio_contracts_token_idx").on(t.tokenHash),
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "index"
+        ])("studio_contracts_job_idx").on(t.jobId),
+      ],
+    );
+    const studioInvoices = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "studio_invoices",
+      {
+        id: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("id")
+          .primaryKey()
+          .defaultRandom(),
+        /** Human number, e.g. "2026-0001" (unique). */ number: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("number").notNull(),
+        jobId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("job_id")
+          .notNull()
+          .references(() => studioJobs.id),
+        lines: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "jsonb"
+        ])("lines")
+          .notNull()
+          .$type()
+          .default(
+            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$sql$2f$sql$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+              "sql"
+            ]`'[]'::jsonb`,
+          ),
+        currency: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("currency")
+          .notNull()
+          .default("usd"),
+        totalCents: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("total_cents")
+          .notNull()
+          .default(0),
+        status: invoiceStatusEnum("status").notNull().default("draft"),
+        dueDate: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$date$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "date"
+        ])("due_date"),
+        /** standard | deposit | balance | installment | recurring | retainer */ kind: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("kind")
+          .notNull()
+          .default("standard"),
+        planId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("plan_id"),
+        installmentNo: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("installment_no"),
+        installmentOf: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("installment_of"),
+        recurringId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("recurring_id"),
+        /** Set on a gallery extension or reactivation invoice: paying it extends that gallery. */ galleryId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("gallery_id"),
+        /** sha256 of the payment link token. */ tokenHash: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("token_hash"),
+        sentAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("sent_at", {
+          withTimezone: true,
+        }),
+        paidAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("paid_at", {
+          withTimezone: true,
+        }),
+        ...stamps,
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uniqueIndex"
+        ])("studio_invoices_number_idx").on(t.number),
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uniqueIndex"
+        ])("studio_invoices_token_idx").on(t.tokenHash),
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "index"
+        ])("studio_invoices_job_idx").on(t.jobId),
+      ],
+    );
+    const studioPayments = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "studio_payments",
+      {
+        id: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("id")
+          .primaryKey()
+          .defaultRandom(),
+        invoiceId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("invoice_id")
+          .notNull()
+          .references(() => studioInvoices.id),
+        /** "stripe" | "manual" | "mock" */ provider: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("provider").notNull(),
+        /** Provider's id (payment_intent id). Unique per provider: makes webhooks and retries idempotent. */ providerRef:
+          (0,
+          __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+            "text"
+          ])("provider_ref").notNull(),
+        amountCents: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("amount_cents").notNull(),
+        status: paymentStatusEnum("status").notNull().default("pending"),
+        receiptRef: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("receipt_ref"),
+        raw: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "jsonb"
+        ])("raw").$type(),
+        /** Part of `amount_cents` that is a tip or a card surcharge (not credited to the invoice). */ tipCents: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("tip_cents")
+          .notNull()
+          .default(0),
+        surchargeCents: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("surcharge_cents")
+          .notNull()
+          .default(0),
+        /** card | ach | manual | mock */ method: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("method"),
+        refundedCents: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("refunded_cents")
+          .notNull()
+          .default(0),
+        paidAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("paid_at", {
+          withTimezone: true,
+        }),
+        createdAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("created_at", {
+          withTimezone: true,
+        })
+          .notNull()
+          .defaultNow(),
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uniqueIndex"
+        ])("studio_payments_provider_ref_idx").on(t.provider, t.providerRef),
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "index"
+        ])("studio_payments_invoice_idx").on(t.invoiceId),
+      ],
+    );
+    const studioBookings = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])("studio_bookings", {
+      id: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "uuid"
+      ])("id")
+        .primaryKey()
+        .defaultRandom(),
+      name: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("name").notNull(),
+      email: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("email").notNull(),
+      topic: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("topic")
+        .notNull()
+        .default("General"),
+      message: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("message").notNull(),
+      status: bookingStatusEnum("status").notNull().default("new"),
+      clientId: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "uuid"
+      ])("client_id").references(() => studioClients.id),
+      phone: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("phone"),
+      shootType: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("shoot_type"),
+      eventDate: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$date$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "date"
+      ])("event_date"),
+      location: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("location"),
+      budget: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("budget"),
+      guests: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "integer"
+      ])("guests"),
+      source: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("source"),
+      referrer: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("referrer"),
+      utm: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "jsonb"
+      ])("utm").$type(),
+      details: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "jsonb"
+      ])("details").$type(),
+      score: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "integer"
+      ])("score")
+        .notNull()
+        .default(0),
+      createdAt: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "timestamp"
+      ])("created_at", {
+        withTimezone: true,
+      })
+        .notNull()
+        .defaultNow(),
+    });
+    const emailLog = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "email_log",
+      {
+        id: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("id")
+          .primaryKey()
+          .defaultRandom(),
+        kind: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("kind").notNull(),
+        toEmail: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("to_email").notNull(),
+        fromEmail: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("from_email").notNull(),
+        replyTo: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("reply_to"),
+        subject: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("subject").notNull(),
+        bodyText: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("body_text").notNull(),
+        bodyHtml: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("body_html"),
+        provider: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("provider").notNull(),
+        status: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("status").notNull(),
+        providerId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("provider_id"),
+        error: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("error"),
+        relatedType: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("related_type"),
+        relatedId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("related_id"),
+        createdAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("created_at", {
+          withTimezone: true,
+        })
+          .notNull()
+          .defaultNow(),
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "index"
+        ])("email_log_to_idx").on(t.toEmail),
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "index"
+        ])("email_log_related_idx").on(t.relatedType, t.relatedId),
+      ],
+    );
+    const webhookEvents = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])("webhook_events", {
+      id: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("id").primaryKey(),
+      provider: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("provider").notNull(),
+      type: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("type").notNull(),
+      receivedAt: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "timestamp"
+      ])("received_at", {
+        withTimezone: true,
+      })
+        .notNull()
+        .defaultNow(),
+    });
+    const studioViewEvents = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "studio_view_events",
+      {
+        id: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("id")
+          .primaryKey()
+          .defaultRandom(),
+        mediaId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("media_id").notNull(),
+        viewer: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("viewer").notNull(),
+        code: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("code").notNull(),
+        ipHash: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("ip_hash"),
+        at: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("at", {
+          withTimezone: true,
+        })
+          .notNull()
+          .defaultNow(),
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "index"
+        ])("studio_view_events_code_idx").on(t.code),
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "index"
+        ])("studio_view_events_media_idx").on(t.mediaId),
+      ],
+    );
+    const appointmentKindEnum = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgEnum"
+    ])("appointment_kind", ["shoot", "consult", "minislot", "block"]);
+    const appointmentStatusEnum = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgEnum"
+    ])("appointment_status", ["open", "hold", "confirmed", "cancelled"]);
+    const studioSettings = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])("studio_settings", {
+      key: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("key").primaryKey(),
+      value: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "jsonb"
+      ])("value")
+        .notNull()
+        .$type(),
+      updatedAt: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "timestamp"
+      ])("updated_at", {
+        withTimezone: true,
+      })
+        .notNull()
+        .defaultNow(),
+    });
+    const availabilityRules = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])("availability_rules", {
+      id: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "uuid"
+      ])("id")
+        .primaryKey()
+        .defaultRandom(),
+      weekday: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "integer"
+      ])("weekday").notNull(),
+      startMinute: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "integer"
+      ])("start_minute").notNull(),
+      endMinute: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "integer"
+      ])("end_minute").notNull(),
+      createdAt: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "timestamp"
+      ])("created_at", {
+        withTimezone: true,
+      })
+        .notNull()
+        .defaultNow(),
+    });
+    const blackoutDates = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])("blackout_dates", {
+      id: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "uuid"
+      ])("id")
+        .primaryKey()
+        .defaultRandom(),
+      date: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$date$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "date"
+      ])("date")
+        .notNull()
+        .unique(),
+      reason: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("reason"),
+    });
+    const appointments = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "appointments",
+      {
+        id: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("id")
+          .primaryKey()
+          .defaultRandom(),
+        kind: appointmentKindEnum("kind").notNull().default("shoot"),
+        status: appointmentStatusEnum("status").notNull().default("confirmed"),
+        title: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("title").notNull(),
+        startsAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("starts_at", {
+          withTimezone: true,
+        }).notNull(),
+        endsAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("ends_at", {
+          withTimezone: true,
+        }).notNull(),
+        bufferBeforeMin: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("buffer_before_min")
+          .notNull()
+          .default(0),
+        bufferAfterMin: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("buffer_after_min")
+          .notNull()
+          .default(0),
+        travelMin: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("travel_min")
+          .notNull()
+          .default(0),
+        blockedStart: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("blocked_start", {
+          withTimezone: true,
+        }).notNull(),
+        blockedEnd: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("blocked_end", {
+          withTimezone: true,
+        }).notNull(),
+        location: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("location"),
+        notes: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("notes"),
+        jobId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("job_id").references(() => studioJobs.id),
+        clientId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("client_id").references(() => studioClients.id),
+        bookingId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("booking_id").references(() => studioBookings.id),
+        invoiceId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("invoice_id").references(() => studioInvoices.id),
+        /** Mini-session group: slots created together share a label ("Fall minis, Oct 25"). */ groupLabel: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("group_label"),
+        /** A hold lapses at this time unless the deposit is paid. */ holdUntil: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("hold_until", {
+          withTimezone: true,
+        }),
+        createdAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("created_at", {
+          withTimezone: true,
+        })
+          .notNull()
+          .defaultNow(),
+        updatedAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("updated_at", {
+          withTimezone: true,
+        })
+          .notNull()
+          .defaultNow(),
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "index"
+        ])("appointments_start_idx").on(t.startsAt),
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "index"
+        ])("appointments_job_idx").on(t.jobId),
+      ],
+    );
+    const waitlist = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])("waitlist", {
+      id: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "uuid"
+      ])("id")
+        .primaryKey()
+        .defaultRandom(),
+      name: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("name").notNull(),
+      email: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("email").notNull(),
+      /** A date (YYYY-MM-DD) or a mini-session group label the person is waiting for. */ wanted: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("wanted").notNull(),
+      shootType: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("shoot_type"),
+      notifiedAt: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "timestamp"
+      ])("notified_at", {
+        withTimezone: true,
+      }),
+      createdAt: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "timestamp"
+      ])("created_at", {
+        withTimezone: true,
+      })
+        .notNull()
+        .defaultNow(),
+    });
+    const quoteStatusEnum = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$enum$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgEnum"
+    ])("studio_quote_status", ["draft", "sent", "viewed", "accepted", "declined", "expired", "void"]);
+    const studioPackages = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "studio_packages",
+      {
+        id: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("id")
+          .primaryKey()
+          .defaultRandom(),
+        slug: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("slug").notNull(),
+        name: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("name").notNull(),
+        tagline: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("tagline"),
+        /** What the client gets: coverage hours, edited images, gallery time. Deliverables, never editing hours. */ deliverables:
+          (0,
+          __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+            "jsonb"
+          ])("deliverables")
+            .notNull()
+            .$type()
+            .default(
+              __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$sql$2f$sql$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+                "sql"
+              ]`'[]'::jsonb`,
+            ),
+        priceCents: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("price_cents")
+          .notNull()
+          .default(0),
+        /** Mandatory fees included in the headline price (travel inside a radius, booking fee). Shown, never hidden. */ mandatoryFees:
+          (0,
+          __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+            "jsonb"
+          ])("mandatory_fees")
+            .notNull()
+            .$type()
+            .default(
+              __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$sql$2f$sql$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+                "sql"
+              ]`'[]'::jsonb`,
+            ),
+        /** Add-on slugs bundled into this package (their standalone price is shown beside the bundle). */ includedAddOns:
+          (0,
+          __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+            "jsonb"
+          ])("included_add_ons")
+            .notNull()
+            .$type()
+            .default(
+              __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$sql$2f$sql$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+                "sql"
+              ]`'[]'::jsonb`,
+            ),
+        tier: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("tier")
+          .notNull()
+          .default(1),
+        featured: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "boolean"
+        ])("featured")
+          .notNull()
+          .default(false),
+        visible: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "boolean"
+        ])("visible")
+          .notNull()
+          .default(true),
+        isSample: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "boolean"
+        ])("is_sample")
+          .notNull()
+          .default(true),
+        sort: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("sort")
+          .notNull()
+          .default(0),
+        ...stamps,
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uniqueIndex"
+        ])("studio_packages_slug_idx").on(t.slug),
+      ],
+    );
+    const studioAddOns = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "studio_add_ons",
+      {
+        id: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("id")
+          .primaryKey()
+          .defaultRandom(),
+        slug: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("slug").notNull(),
+        name: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("name").notNull(),
+        description: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("description"),
+        /** The real standalone price, always shown next to bundles. */ priceCents: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("price_cents")
+          .notNull()
+          .default(0),
+        unit: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("unit")
+          .notNull()
+          .default("each"),
+        maxQty: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("max_qty")
+          .notNull()
+          .default(1),
+        /** An optional fee (travel, rush) rather than a product: listed separately from the headline price. */ isFee:
+          (0,
+          __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+            "boolean"
+          ])("is_fee")
+            .notNull()
+            .default(false),
+        /** Offered as an upsell on the quote page. */ upsell: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "boolean"
+        ])("upsell")
+          .notNull()
+          .default(true),
+        visible: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "boolean"
+        ])("visible")
+          .notNull()
+          .default(true),
+        isSample: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "boolean"
+        ])("is_sample")
+          .notNull()
+          .default(true),
+        sort: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("sort")
+          .notNull()
+          .default(0),
+        ...stamps,
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uniqueIndex"
+        ])("studio_add_ons_slug_idx").on(t.slug),
+      ],
+    );
+    const studioPromoCodes = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "studio_promo_codes",
+      {
+        id: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("id")
+          .primaryKey()
+          .defaultRandom(),
+        code: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("code").notNull(),
+        /** percent | amount | referral (a percent code owned by a referring client). */ kind: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("kind")
+          .notNull()
+          .default("percent"),
+        percentOff: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("percent_off"),
+        amountOffCents: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("amount_off_cents"),
+        minSubtotalCents: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("min_subtotal_cents")
+          .notNull()
+          .default(0),
+        maxUses: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("max_uses"),
+        uses: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("uses")
+          .notNull()
+          .default(0),
+        expiresAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("expires_at", {
+          withTimezone: true,
+        }),
+        active: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "boolean"
+        ])("active")
+          .notNull()
+          .default(true),
+        referrerClientId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("referrer_client_id").references(() => studioClients.id),
+        note: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("note"),
+        createdAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("created_at", {
+          withTimezone: true,
+        })
+          .notNull()
+          .defaultNow(),
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uniqueIndex"
+        ])("studio_promo_codes_code_idx").on(t.code),
+      ],
+    );
+    const studioGiftCards = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "studio_gift_cards",
+      {
+        id: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("id")
+          .primaryKey()
+          .defaultRandom(),
+        /** Stored hashed-comparable lowercase code; shown to the buyer once. */ code: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("code").notNull(),
+        initialCents: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("initial_cents").notNull(),
+        balanceCents: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("balance_cents").notNull(),
+        purchaserEmail: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("purchaser_email"),
+        recipientName: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("recipient_name"),
+        expiresAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("expires_at", {
+          withTimezone: true,
+        }),
+        status: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("status")
+          .notNull()
+          .default("active"),
+        createdAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("created_at", {
+          withTimezone: true,
+        })
+          .notNull()
+          .defaultNow(),
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uniqueIndex"
+        ])("studio_gift_cards_code_idx").on(t.code),
+      ],
+    );
+    const studioGiftLedger = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])("studio_gift_ledger", {
+      id: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "uuid"
+      ])("id")
+        .primaryKey()
+        .defaultRandom(),
+      cardId: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "uuid"
+      ])("card_id")
+        .notNull()
+        .references(() => studioGiftCards.id),
+      deltaCents: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "integer"
+      ])("delta_cents").notNull(),
+      quoteId: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "uuid"
+      ])("quote_id"),
+      note: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("note"),
+      at: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "timestamp"
+      ])("at", {
+        withTimezone: true,
+      })
+        .notNull()
+        .defaultNow(),
+    });
+    const studioQuotes = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "studio_quotes",
+      {
+        id: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("id")
+          .primaryKey()
+          .defaultRandom(),
+        number: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("number").notNull(),
+        clientId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("client_id")
+          .notNull()
+          .references(() => studioClients.id),
+        jobId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("job_id").references(() => studioJobs.id),
+        title: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("title").notNull(),
+        intro: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("intro"),
+        terms: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("terms"),
+        status: quoteStatusEnum("status").notNull().default("draft"),
+        packageId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("package_id").references(() => studioPackages.id),
+        lines: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "jsonb"
+        ])("lines")
+          .notNull()
+          .$type()
+          .default(
+            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$sql$2f$sql$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+              "sql"
+            ]`'[]'::jsonb`,
+          ),
+        subtotalCents: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("subtotal_cents")
+          .notNull()
+          .default(0),
+        discountCents: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("discount_cents")
+          .notNull()
+          .default(0),
+        taxRateBp: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("tax_rate_bp")
+          .notNull()
+          .default(0),
+        taxCents: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("tax_cents")
+          .notNull()
+          .default(0),
+        taxLabel: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("tax_label"),
+        totalCents: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("total_cents")
+          .notNull()
+          .default(0),
+        giftCents: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("gift_cents")
+          .notNull()
+          .default(0),
+        depositCents: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("deposit_cents")
+          .notNull()
+          .default(0),
+        currency: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("currency")
+          .notNull()
+          .default("usd"),
+        promoCode: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("promo_code"),
+        giftCode: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("gift_code"),
+        validUntil: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("valid_until", {
+          withTimezone: true,
+        }),
+        tokenHash: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("token_hash"),
+        sentAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("sent_at", {
+          withTimezone: true,
+        }),
+        viewedAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("viewed_at", {
+          withTimezone: true,
+        }),
+        acceptedAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("accepted_at", {
+          withTimezone: true,
+        }),
+        acceptedBy: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("accepted_by"),
+        acceptedIpHash: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("accepted_ip_hash"),
+        /** SHA-256 of the quote content at acceptance, so later edits cannot change what was agreed. */ acceptedHash:
+          (0,
+          __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+            "text"
+          ])("accepted_hash"),
+        invoiceId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("invoice_id").references(() => studioInvoices.id),
+        isSample: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "boolean"
+        ])("is_sample")
+          .notNull()
+          .default(false),
+        ...stamps,
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "index"
+        ])("studio_quotes_client_idx").on(t.clientId),
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uniqueIndex"
+        ])("studio_quotes_number_idx").on(t.number),
+      ],
+    );
+    const studioContractTemplates = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "studio_contract_templates",
+      {
+        id: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("id")
+          .primaryKey()
+          .defaultRandom(),
+        slug: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("slug").notNull(),
+        name: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("name").notNull(),
+        /** contract | model-release | property-release | parental-consent | license */ kind: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("kind")
+          .notNull()
+          .default("contract"),
+        body: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("body").notNull(),
+        usageRights: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "jsonb"
+        ])("usage_rights").$type(),
+        isSample: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "boolean"
+        ])("is_sample")
+          .notNull()
+          .default(true),
+        ...stamps,
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uniqueIndex"
+        ])("studio_contract_templates_slug_idx").on(t.slug),
+      ],
+    );
+    const studioQuestionnaires = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "studio_questionnaires",
+      {
+        id: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("id")
+          .primaryKey()
+          .defaultRandom(),
+        slug: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("slug").notNull(),
+        name: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("name").notNull(),
+        description: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("description"),
+        fields: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "jsonb"
+        ])("fields")
+          .notNull()
+          .$type()
+          .default(
+            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$sql$2f$sql$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+              "sql"
+            ]`'[]'::jsonb`,
+          ),
+        isSample: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "boolean"
+        ])("is_sample")
+          .notNull()
+          .default(true),
+        ...stamps,
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uniqueIndex"
+        ])("studio_questionnaires_slug_idx").on(t.slug),
+      ],
+    );
+    const studioQuestionnaireSends = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "studio_questionnaire_sends",
+      {
+        id: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("id")
+          .primaryKey()
+          .defaultRandom(),
+        questionnaireId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("questionnaire_id")
+          .notNull()
+          .references(() => studioQuestionnaires.id),
+        clientId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("client_id")
+          .notNull()
+          .references(() => studioClients.id),
+        jobId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("job_id").references(() => studioJobs.id),
+        /** A snapshot of the fields at send time, so later edits do not change what was asked. */ fields: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "jsonb"
+        ])("fields")
+          .notNull()
+          .$type(),
+        title: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("title").notNull(),
+        tokenHash: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("token_hash").notNull(),
+        sentAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("sent_at", {
+          withTimezone: true,
+        })
+          .notNull()
+          .defaultNow(),
+        completedAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("completed_at", {
+          withTimezone: true,
+        }),
+        answers: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "jsonb"
+        ])("answers").$type(),
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uniqueIndex"
+        ])("studio_questionnaire_sends_token_idx").on(t.tokenHash),
+      ],
+    );
+    const studioRefunds = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])("studio_refunds", {
+      id: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "uuid"
+      ])("id")
+        .primaryKey()
+        .defaultRandom(),
+      paymentId: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "uuid"
+      ])("payment_id")
+        .notNull()
+        .references(() => studioPayments.id),
+      amountCents: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "integer"
+      ])("amount_cents").notNull(),
+      reason: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("reason"),
+      /** Provider refund id (re_...), or "manual". */ providerRef: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("provider_ref"),
+      by: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("by"),
+      createdAt: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "timestamp"
+      ])("created_at", {
+        withTimezone: true,
+      })
+        .notNull()
+        .defaultNow(),
+    });
+    const studioPaymentPlans = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])("studio_payment_plans", {
+      id: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "uuid"
+      ])("id")
+        .primaryKey()
+        .defaultRandom(),
+      jobId: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "uuid"
+      ])("job_id")
+        .notNull()
+        .references(() => studioJobs.id),
+      name: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("name").notNull(),
+      totalCents: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "integer"
+      ])("total_cents").notNull(),
+      count: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "integer"
+      ])("count").notNull(),
+      status: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("status")
+        .notNull()
+        .default("active"),
+      createdAt: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "timestamp"
+      ])("created_at", {
+        withTimezone: true,
+      })
+        .notNull()
+        .defaultNow(),
+    });
+    const studioRecurring = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])("studio_recurring", {
+      id: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "uuid"
+      ])("id")
+        .primaryKey()
+        .defaultRandom(),
+      jobId: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "uuid"
+      ])("job_id")
+        .notNull()
+        .references(() => studioJobs.id),
+      description: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("description").notNull(),
+      amountCents: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "integer"
+      ])("amount_cents").notNull(),
+      intervalMonths: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "integer"
+      ])("interval_months")
+        .notNull()
+        .default(1),
+      nextRunOn: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$date$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "date"
+      ])("next_run_on").notNull(),
+      endsOn: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$date$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "date"
+      ])("ends_on"),
+      active: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "boolean"
+      ])("active")
+        .notNull()
+        .default(true),
+      createdAt: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "timestamp"
+      ])("created_at", {
+        withTimezone: true,
+      })
+        .notNull()
+        .defaultNow(),
+    });
+    const clientAccounts = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "client_accounts",
+      {
+        id: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("id")
+          .primaryKey()
+          .defaultRandom(),
+        clientId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("client_id")
+          .notNull()
+          .references(() => studioClients.id),
+        email: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("email").notNull(),
+        /** scrypt "salt:hash"; null until the client sets a password (a magic link always works). */ passwordHash: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("password_hash"),
+        prefs: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "jsonb"
+        ])("prefs")
+          .notNull()
+          .$type()
+          .default(
+            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$sql$2f$sql$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+              "sql"
+            ]`'{"galleryReady":true,"reminders":true,"news":false}'::jsonb`,
+          ),
+        failedAttempts: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("failed_attempts")
+          .notNull()
+          .default(0),
+        lockedUntil: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("locked_until", {
+          withTimezone: true,
+        }),
+        lastLoginAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("last_login_at", {
+          withTimezone: true,
+        }),
+        createdAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("created_at", {
+          withTimezone: true,
+        })
+          .notNull()
+          .defaultNow(),
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uniqueIndex"
+        ])("client_accounts_client_idx").on(t.clientId),
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uniqueIndex"
+        ])("client_accounts_email_idx").on(t.email),
+      ],
+    );
+    const clientLoginTokens = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "client_login_tokens",
+      {
+        id: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("id")
+          .primaryKey()
+          .defaultRandom(),
+        accountId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("account_id")
+          .notNull()
+          .references(() => clientAccounts.id),
+        /** magic | reset | invite */ kind: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("kind").notNull(),
+        tokenHash: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("token_hash").notNull(),
+        expiresAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("expires_at", {
+          withTimezone: true,
+        }).notNull(),
+        usedAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("used_at", {
+          withTimezone: true,
+        }),
+        createdAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("created_at", {
+          withTimezone: true,
+        })
+          .notNull()
+          .defaultNow(),
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uniqueIndex"
+        ])("client_login_tokens_hash_idx").on(t.tokenHash),
+      ],
+    );
+    const studioMessages = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "studio_messages",
+      {
+        id: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("id")
+          .primaryKey()
+          .defaultRandom(),
+        clientId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("client_id")
+          .notNull()
+          .references(() => studioClients.id),
+        jobId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("job_id").references(() => studioJobs.id),
+        /** in = from the client, out = from the studio */ direction: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("direction").notNull(),
+        body: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("body").notNull(),
+        readAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("read_at", {
+          withTimezone: true,
+        }),
+        createdAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("created_at", {
+          withTimezone: true,
+        })
+          .notNull()
+          .defaultNow(),
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "index"
+        ])("studio_messages_client_idx").on(t.clientId),
+      ],
+    );
+    const studioAlbums = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "studio_albums",
+      {
+        id: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("id")
+          .primaryKey()
+          .defaultRandom(),
+        galleryId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("gallery_id")
+          .notNull()
+          .references(() => studioGalleries.id, {
+            onDelete: "cascade",
+          }),
+        name: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("name").notNull(),
+        sort: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("sort")
+          .notNull()
+          .default(0),
+        /** A sub-album sits under another album of the same gallery (one level of nesting in the studio, any in the schema). */ parentId:
+          (0,
+          __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+            "uuid"
+          ])("parent_id"),
+        description: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("description"),
+        coverMediaId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("cover_media_id"),
+        /** scrypt hash of a passcode that unlocks this album; null = open. A locked album's photographs stay hidden until then. */ passcodeHash:
+          (0,
+          __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+            "text"
+          ])("passcode_hash"),
+        /** Hidden albums are not listed; their photographs still show under "All photos" unless also hidden. */ hidden:
+          (0,
+          __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+            "boolean"
+          ])("hidden")
+            .notNull()
+            .default(false),
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "index"
+        ])("studio_albums_gallery_idx").on(t.galleryId),
+      ],
+    );
+    const studioProofs = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "studio_proofs",
+      {
+        id: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("id")
+          .primaryKey()
+          .defaultRandom(),
+        galleryId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("gallery_id")
+          .notNull()
+          .references(() => studioGalleries.id, {
+            onDelete: "cascade",
+          }),
+        mediaId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("media_id")
+          .notNull()
+          .references(() => media.id),
+        /** rating | approval | comment */ kind: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("kind").notNull(),
+        rating: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("rating"),
+        /** approved | rejected */ decision: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("decision"),
+        body: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("body"),
+        /** client | studio */ author: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("author")
+          .notNull()
+          .default("client"),
+        createdAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("created_at", {
+          withTimezone: true,
+        })
+          .notNull()
+          .defaultNow(),
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "index"
+        ])("studio_proofs_gallery_idx").on(t.galleryId, t.mediaId),
+      ],
+    );
+    const studioDownloadEvents = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "studio_download_events",
+      {
+        id: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("id")
+          .primaryKey()
+          .defaultRandom(),
+        galleryId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("gallery_id")
+          .notNull()
+          .references(() => studioGalleries.id, {
+            onDelete: "cascade",
+          }),
+        mediaId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("media_id"),
+        /** web | full | zip-web | zip-full */ kind: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("kind").notNull(),
+        /** Which ZIP part (1-based) for zip kinds. */ part: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("part"),
+        viewer: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("viewer"),
+        ipHash: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("ip_hash"),
+        bytes: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("bytes"),
+        at: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("at", {
+          withTimezone: true,
+        })
+          .notNull()
+          .defaultNow(),
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "index"
+        ])("studio_download_events_gallery_idx").on(t.galleryId),
+      ],
+    );
+    const studioTasks = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "studio_tasks",
+      {
+        id: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("id")
+          .primaryKey()
+          .defaultRandom(),
+        title: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("title").notNull(),
+        dueOn: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$date$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "date"
+        ])("due_on"),
+        notes: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("notes"),
+        jobId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("job_id").references(() => studioJobs.id),
+        clientId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("client_id").references(() => studioClients.id),
+        doneAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("done_at", {
+          withTimezone: true,
+        }),
+        /** Set when an automation or the system made the task. */ source: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("source"),
+        createdAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("created_at", {
+          withTimezone: true,
+        })
+          .notNull()
+          .defaultNow(),
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "index"
+        ])("studio_tasks_due_idx").on(t.dueOn),
+      ],
+    );
+    const studioAutomationRuns = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "studio_automation_runs",
+      {
+        id: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("id")
+          .primaryKey()
+          .defaultRandom(),
+        /** e.g. `invoice-due:<invoiceId>:2027-03-01`. Unique: a rule never acts twice on the same thing and date. */ dedupeKey:
+          (0,
+          __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+            "text"
+          ])("dedupe_key").notNull(),
+        rule: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("rule").notNull(),
+        entityType: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("entity_type"),
+        entityId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("entity_id"),
+        status: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("status")
+          .notNull()
+          .default("done"),
+        detail: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("detail"),
+        at: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("at", {
+          withTimezone: true,
+        })
+          .notNull()
+          .defaultNow(),
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uniqueIndex"
+        ])("studio_automation_runs_key_idx").on(t.dedupeKey),
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "index"
+        ])("studio_automation_runs_rule_idx").on(t.rule),
+      ],
+    );
+    const studioNotifications = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "studio_notifications",
+      {
+        id: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("id")
+          .primaryKey()
+          .defaultRandom(),
+        /** inquiry | payment | contract | quote | message | selection | gallery | booking | system */ kind: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("kind").notNull(),
+        title: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("title").notNull(),
+        body: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("body"),
+        link: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("link"),
+        readAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("read_at", {
+          withTimezone: true,
+        }),
+        createdAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("created_at", {
+          withTimezone: true,
+        })
+          .notNull()
+          .defaultNow(),
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "index"
+        ])("studio_notifications_created_idx").on(t.createdAt),
+      ],
+    );
+    const studioSecurityEvents = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "studio_security_events",
+      {
+        id: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("id")
+          .primaryKey()
+          .defaultRandom(),
+        galleryId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("gallery_id")
+          .notNull()
+          .references(() => studioGalleries.id, {
+            onDelete: "cascade",
+          }),
+        viewer: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("viewer").notNull(),
+        /** screenshot | save | print | source | devtools | capture | devtools-open | lock | idle */ kind: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("kind").notNull(),
+        combo: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("combo"),
+        /** What the studio did about it: logged | warned | locked */ action: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("action")
+          .notNull()
+          .default("logged"),
+        ipHash: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("ip_hash"),
+        /** Only on a lock: the gallery is closed to this viewer (and address) until then. */ until: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("until", {
+          withTimezone: true,
+        }),
+        at: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("at", {
+          withTimezone: true,
+        })
+          .notNull()
+          .defaultNow(),
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "index"
+        ])("studio_security_events_gallery_idx").on(t.galleryId, t.at),
+      ],
+    );
+    const studioProducts = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "studio_products",
+      {
+        id: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("id")
+          .primaryKey()
+          .defaultRandom(),
+        /** digital-web | digital-full | digital-all | print | canvas | album | card */ kind: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("kind").notNull(),
+        /** For prints: the print lab's product code (see @jerryqiu/prints). */ sku: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("sku"),
+        name: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("name").notNull(),
+        description: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("description"),
+        priceCents: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("price_cents")
+          .notNull()
+          .default(0),
+        /** True until the owner has set a real price: the shop shows it as SAMPLE. */ sample: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "boolean"
+        ])("sample")
+          .notNull()
+          .default(true),
+        active: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "boolean"
+        ])("active")
+          .notNull()
+          .default(true),
+        sort: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("sort")
+          .notNull()
+          .default(0),
+        /** The price sheet this product belongs to (null = the default sheet). */ sheetId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("sheet_id"),
+        ...stamps,
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "index"
+        ])("studio_products_kind_idx").on(t.kind),
+      ],
+    );
+    const studioPriceSheets = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])("studio_price_sheets", {
+      id: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "uuid"
+      ])("id")
+        .primaryKey()
+        .defaultRandom(),
+      name: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("name").notNull(),
+      isDefault: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "boolean"
+      ])("is_default")
+        .notNull()
+        .default(false),
+      ...stamps,
+    });
+    const studioOrders = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "studio_orders",
+      {
+        id: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("id")
+          .primaryKey()
+          .defaultRandom(),
+        number: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("number").notNull(),
+        galleryId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("gallery_id")
+          .notNull()
+          .references(() => studioGalleries.id),
+        invoiceId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("invoice_id").references(() => studioInvoices.id),
+        /** pending (awaiting payment) | paid | fulfilled | cancelled | refunded */ status: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("status")
+          .notNull()
+          .default("pending"),
+        buyerName: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("buyer_name").notNull(),
+        buyerEmail: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("buyer_email").notNull(),
+        ship: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$jsonb$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "jsonb"
+        ])("ship").$type(),
+        subtotalCents: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("subtotal_cents")
+          .notNull()
+          .default(0),
+        shippingCents: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("shipping_cents")
+          .notNull()
+          .default(0),
+        totalCents: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("total_cents")
+          .notNull()
+          .default(0),
+        /** sha256 of the link that opens the buyer's downloads. */ tokenHash: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("token_hash").notNull(),
+        /** Print lab order id once submitted (after payment only). */ labOrderId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("lab_order_id"),
+        reminderAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("reminder_at", {
+          withTimezone: true,
+        }),
+        paidAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("paid_at", {
+          withTimezone: true,
+        }),
+        createdAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("created_at", {
+          withTimezone: true,
+        })
+          .notNull()
+          .defaultNow(),
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uniqueIndex"
+        ])("studio_orders_number_idx").on(t.number),
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uniqueIndex"
+        ])("studio_orders_token_idx").on(t.tokenHash),
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "index"
+        ])("studio_orders_gallery_idx").on(t.galleryId),
+      ],
+    );
+    const studioOrderItems = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "studio_order_items",
+      {
+        id: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("id")
+          .primaryKey()
+          .defaultRandom(),
+        orderId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("order_id")
+          .notNull()
+          .references(() => studioOrders.id, {
+            onDelete: "cascade",
+          }),
+        productId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("product_id").references(() => studioProducts.id),
+        /** Kept so the order still reads right if the price list changes later. */ kind: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("kind").notNull(),
+        name: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("name").notNull(),
+        sku: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("sku"),
+        mediaId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("media_id"),
+        qty: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("qty")
+          .notNull()
+          .default(1),
+        unitCents: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("unit_cents").notNull(),
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "index"
+        ])("studio_order_items_order_idx").on(t.orderId),
+      ],
+    );
+    const studioVisitors = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "studio_visitors",
+      {
+        id: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("id")
+          .primaryKey()
+          .defaultRandom(),
+        galleryId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("gallery_id")
+          .notNull()
+          .references(() => studioGalleries.id, {
+            onDelete: "cascade",
+          }),
+        email: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("email").notNull(),
+        name: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("name"),
+        visits: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("visits")
+          .notNull()
+          .default(1),
+        firstAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("first_at", {
+          withTimezone: true,
+        })
+          .notNull()
+          .defaultNow(),
+        lastAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("last_at", {
+          withTimezone: true,
+        })
+          .notNull()
+          .defaultNow(),
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uniqueIndex"
+        ])("studio_visitors_gallery_email_idx").on(t.galleryId, t.email),
+      ],
+    );
+    const studioWatermarks = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])("studio_watermarks", {
+      id: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "uuid"
+      ])("id")
+        .primaryKey()
+        .defaultRandom(),
+      name: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("name").notNull(),
+      /** text | image */ kind: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("kind")
+        .notNull()
+        .default("text"),
+      text: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("text"),
+      /** Storage key of an uploaded PNG (kind image). */ imageKey: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("image_key"),
+      /** center | bottom-right | bottom-left | top-right | top-left | tile */ position: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("position")
+        .notNull()
+        .default("bottom-right"),
+      opacity: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "integer"
+      ])("opacity")
+        .notNull()
+        .default(45),
+      /** Width of the mark as a percent of the picture's width. */ sizePct: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "integer"
+      ])("size_pct")
+        .notNull()
+        .default(22),
+      isDefault: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "boolean"
+      ])("is_default")
+        .notNull()
+        .default(false),
+      ...stamps,
+    });
+    const studioDownloadRules = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])(
+      "studio_download_rules",
+      {
+        id: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("id")
+          .primaryKey()
+          .defaultRandom(),
+        galleryId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("gallery_id")
+          .notNull()
+          .references(() => studioGalleries.id, {
+            onDelete: "cascade",
+          }),
+        albumId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("album_id"),
+        name: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("name").notNull(),
+        /** Longest side in pixels; null = the original file. */ maxPx: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("max_px"),
+        /** Most downloads per visitor under this rule; null = unlimited. */ perVisitor: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("per_visitor"),
+        watermarkId: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "uuid"
+        ])("watermark_id"),
+        pinHash: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("pin_hash"),
+        /** A license the visitor must accept before downloading. */ printRelease: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "text"
+        ])("print_release"),
+        showAll: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$boolean$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "boolean"
+        ])("show_all")
+          .notNull()
+          .default(true),
+        sort: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "integer"
+        ])("sort")
+          .notNull()
+          .default(0),
+        createdAt: (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "timestamp"
+        ])("created_at", {
+          withTimezone: true,
+        })
+          .notNull()
+          .defaultNow(),
+      },
+      (t) => [
+        (0,
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$indexes$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+          "index"
+        ])("studio_download_rules_gallery_idx").on(t.galleryId),
+      ],
+    );
+    const studioTracks = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])("studio_tracks", {
+      id: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "uuid"
+      ])("id")
+        .primaryKey()
+        .defaultRandom(),
+      title: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("title").notNull(),
+      artist: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("artist"),
+      storageKey: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("storage_key").notNull(),
+      mime: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("mime")
+        .notNull()
+        .default("audio/mpeg"),
+      bytes: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "integer"
+      ])("bytes")
+        .notNull()
+        .default(0),
+      ...stamps,
+    });
+    const studioPlanCharges = (0,
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$table$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+      "pgTable"
+    ])("studio_plan_charges", {
+      id: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$uuid$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "uuid"
+      ])("id")
+        .primaryKey()
+        .defaultRandom(),
+      description: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("description").notNull(),
+      amountCents: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$integer$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "integer"
+      ])("amount_cents")
+        .notNull()
+        .default(0),
+      /** paid | free | failed */ status: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$text$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "text"
+      ])("status")
+        .notNull()
+        .default("paid"),
+      at: (0,
+      __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$drizzle$2d$orm$40$0$2e$45$2e$4_$40$electric$2d$sql$2b$pglite$40$0$2e$5$2e$8_$40$neondatabase$2b$serverless$40$1$2e$2$2e$0_$40$opentelem_381d55860e958cbda20b5460eb9a4528$2f$node_modules$2f$drizzle$2d$orm$2f$pg$2d$core$2f$columns$2f$timestamp$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__[
+        "timestamp"
+      ])("at", {
+        withTimezone: true,
+      })
+        .notNull()
+        .defaultNow(),
+    });
+  },
 ];
 
 //# sourceMappingURL=%5Broot-of-the-server%5D__1m0qjcu._.js.map

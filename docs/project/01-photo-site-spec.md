@@ -165,7 +165,7 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | F-72 | Culling helpers: duplicates, blur, closed eyes | P3 | missing | studio uploader | cull mock | unit | M16 |
 | F-73 | Face search (consent-gated, off by default) | OPT | missing | gallery settings | `FaceSearchProvider` / mock | unit | M16 |
 | F-74 | Video delivery | P3 | missing | gallery video items | Blob | e2e | M16 |
-| F-75 | Storage cost per gallery, auto-archive | P2 | missing | studio meter | n/a | unit | M14 |
+| F-75 | Storage cost per gallery, auto-archive | P2 | partial (each gallery card shows what its originals take to keep; auto-archive on the expiry date; a cost estimate in money is not built) | studio meter | n/a | unit | M14 |
 | F-76 | Publish to portfolio with recorded consent | P2 | missing | gallery to portfolio | n/a | e2e | M14 |
 
 ### Client portal

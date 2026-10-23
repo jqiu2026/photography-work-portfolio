@@ -64,6 +64,7 @@ import {
   Tabs,
   Text,
   Textarea,
+  useToast,
 } from "@holominimal/ui";
 import { GalleryAlbums } from "./GalleryAlbums";
 import { GalleryBranding } from "./GalleryBranding";
@@ -214,16 +215,15 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
     history.replaceState(null, "", `#${t}`);
   };
   const [secret, setSecret] = useState<string | null>(null);
-  const [copied, setCopied] = useState("");
+  const { toast } = useToast();
   const [origin, setOrigin] = useState("");
   useEffect(() => setOrigin(location.origin), []);
   const copy = async (text: string, what: string) => {
     try {
       await navigator.clipboard.writeText(text);
-      setCopied(what);
-      setTimeout(() => setCopied(""), 1800);
+      toast({ title: what, tone: "success", duration: 2500 });
     } catch {
-      setCopied("Copy failed: select and copy it by hand");
+      toast({ title: "Copy failed", description: "Select it and copy it by hand.", tone: "danger" });
     }
   };
   const run = (fn: () => Promise<{ ok: boolean; [k: string]: unknown }>, after?: () => void) =>
@@ -789,7 +789,6 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
               run={run}
               pending={pending}
               copy={copy}
-              copied={copied}
             />
             <SettingsSection title="Passcode" className="gm-block">
               <Text size="sm" tone="muted">

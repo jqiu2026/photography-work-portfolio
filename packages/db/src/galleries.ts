@@ -671,11 +671,19 @@ export async function removeMany(db: Database, galleryId: string, mediaIds: stri
 /** The studio previewing its own photographs is not a client view. */
 const notStaff = sql`${s.studioViewEvents.viewer} not like 'staff.%'`;
 
-export type GalleryStats = { photos: number; favorites: number; downloads: number; views: number; viewers: number };
+export type GalleryStats = {
+  photos: number;
+  favorites: number;
+  downloads: number;
+  views: number;
+  viewers: number;
+  /** Bytes of the original files in the gallery (what it costs to keep). */
+  bytes: number;
+};
 /** Counts per gallery for the list: photographs, favorites, downloads, and views of its photographs (and distinct viewers). */
 export async function galleryStats(db: Database, ids: string[]): Promise<Map<string, GalleryStats>> {
   const out = new Map<string, GalleryStats>(
-    ids.map((i) => [i, { photos: 0, favorites: 0, downloads: 0, views: 0, viewers: 0 }]),
+    ids.map((i) => [i, { photos: 0, favorites: 0, downloads: 0, views: 0, viewers: 0, bytes: 0 }]),
   );
   if (!ids.length) return out;
   const photos = await db
@@ -684,6 +692,13 @@ export async function galleryStats(db: Database, ids: string[]): Promise<Map<str
     .where(inArray(s.studioGalleryItems.galleryId, ids))
     .groupBy(s.studioGalleryItems.galleryId);
   for (const r of photos) out.get(r.id)!.photos = r.n;
+  const sizes = await db
+    .select({ id: s.studioGalleryItems.galleryId, b: sql<number>`coalesce(sum(${s.media.bytes}), 0)::bigint` })
+    .from(s.studioGalleryItems)
+    .innerJoin(s.media, eq(s.media.id, s.studioGalleryItems.mediaId))
+    .where(inArray(s.studioGalleryItems.galleryId, ids))
+    .groupBy(s.studioGalleryItems.galleryId);
+  for (const r of sizes) out.get(r.id)!.bytes = Number(r.b);
   const favs = await db
     .select({ id: s.studioFavorites.galleryId, n: sql<number>`count(*)::int` })
     .from(s.studioFavorites)

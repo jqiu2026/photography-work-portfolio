@@ -131,6 +131,7 @@ export default async function StudioSection({
               photos: sx?.photos ?? 0,
               favorites: sx?.favorites ?? 0,
               downloads: sx?.downloads ?? 0,
+              bytes: sx?.bytes ?? 0,
               views: sx?.views ?? 0,
               cover: m
                 ? { id: m.id, width: m.width ?? 1200, height: m.height ?? 800, color: m.color, blur: m.blur }

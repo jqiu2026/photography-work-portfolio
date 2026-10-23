@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
-import { choose, pickDate, note } from "./ui";
+import { newGallery } from "./gallery-helpers";
+import { choose, note, pickDate } from "./ui";
 
 /** Expenses and mileage, testimonials that need consent, gear double-booking warnings, call sheets, the toast. */
 const PHOTOS = "http://localhost:3302";
@@ -156,4 +157,21 @@ test("the rights page, and an old per-type booking link opens the questionnaire 
   await page.goto(`${PHOTOS}/book/aviation`, { waitUntil: "networkidle" });
   await expect(page).toHaveURL(/\/book\?type=aviation$/);
   await expect(page.getByRole("heading", { name: /A few details about the aviation/ })).toBeVisible();
+});
+
+test("a gallery link has a QR code and copying it raises a toast, and each card shows what it takes to keep", async ({
+  page,
+}) => {
+  await page.context().grantPermissions(["clipboard-read", "clipboard-write"], { origin: PHOTOS });
+  await newGallery(page, PHOTOS, `Gear job A ${uid}`, `QR gallery ${uid}`);
+  await page.getByRole("tab", { name: "Share" }).click();
+  await page.getByRole("button", { name: "Copy link" }).click();
+  await slow(note(page).filter({ hasText: "Link copied" }).first()).toBeVisible();
+  await page.getByRole("button", { name: "QR code" }).click();
+  const dialog = page.getByRole("dialog");
+  await expect(dialog.getByRole("img", { name: /QR code for/ }).locator("svg")).toBeVisible();
+  await expect(dialog.getByText(/The passcode is not in it/)).toBeVisible();
+  await page.keyboard.press("Escape");
+  await page.goto(`${PHOTOS}/studio/galleries`, { waitUntil: "networkidle" });
+  await expect(page.getByText(`QR gallery ${uid}`).first()).toBeVisible();
 });

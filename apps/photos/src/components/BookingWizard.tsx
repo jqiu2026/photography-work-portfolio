@@ -204,6 +204,7 @@ export function BookingWizard({ fallbackEmail, initialType }: { fallbackEmail: s
                 type="button"
                 disabled={i > step}
                 onClick={() => go(i)}
+                aria-label={`Step ${i + 1}: ${label}`}
                 aria-current={i === step ? "step" : undefined}
               >
                 <span aria-hidden="true">{i < step ? "✓" : i + 1}</span>

@@ -75,7 +75,7 @@ export const features: Feature[] = [
   { id: "F-72", group: "Deliver", title: "Culling helpers: duplicates, blur, closed eyes", priority: "P3", status: "soon" },
   { id: "F-73", group: "Deliver", title: "Face search (consent-gated, off by default)", priority: "OPT", status: "soon" },
   { id: "F-74", group: "Deliver", title: "Video delivery", priority: "P3", status: "soon" },
-  { id: "F-75", group: "Deliver", title: "Storage cost per gallery, auto-archive", priority: "P2", status: "soon" },
+  { id: "F-75", group: "Deliver", title: "Storage cost per gallery, auto-archive", priority: "P2", status: "preview" },
   { id: "F-76", group: "Deliver", title: "Publish to portfolio with recorded consent", priority: "P2", status: "soon" },
   { id: "F-80", group: "Client portal", title: "One login: password, magic link, passcode", priority: "P1", status: "live" },
   { id: "F-84", group: "Client portal", title: "Notification preferences", priority: "P2", status: "live" },

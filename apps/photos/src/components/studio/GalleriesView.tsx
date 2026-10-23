@@ -45,6 +45,7 @@ export type GalleryCard = {
   photos: number;
   favorites: number;
   downloads: number;
+  bytes: number;
   views: number;
   cover: { id: string; width: number; height: number; color: string | null; blur: string | null } | null;
 };
@@ -64,6 +65,8 @@ const LABEL: Record<string, string> = {
   archived: "Archived",
 };
 
+/** 1.2 GB, 340 MB: what a gallery takes to keep. */
+const size = (b: number) => (b >= 1e9 ? `${(b / 1e9).toFixed(1)} GB` : `${Math.max(1, Math.round(b / 1e6))} MB`);
 const TONE: Record<string, "success" | "warning" | "neutral" | "muted"> = {
   live: "success",
   expiring: "warning",
@@ -267,7 +270,7 @@ export function GalleriesView({
                   <GalleryTitle>{g.title}</GalleryTitle>
                   <GalleryMeta>{g.jobTitle}</GalleryMeta>
                   <GalleryMeta>
-                    {g.photos} photos
+                    {g.photos} photos{g.bytes ? ` · ${size(g.bytes)}` : ""}
                     {g.favorites ? ` · ${g.favorites} favorites` : ""}
                     {g.views ? ` · ${g.views} views` : ""}
                     {g.downloads ? ` · ${g.downloads} downloads` : ""}

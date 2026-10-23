@@ -382,3 +382,17 @@
     margin-left: var(--hm-space-4);
   }
 }
+
+/* the QR code dialog */
+.gm-qr {
+  width: min(100%, 18rem);
+  margin-inline: auto;
+  padding: var(--hm-space-3);
+  border-radius: var(--hm-radius-md);
+  background: #fff;
+}
+.gm-qr svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
