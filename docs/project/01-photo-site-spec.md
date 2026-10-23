@@ -100,7 +100,7 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | F-10 | Discount and promo codes | P2 | done | promo_codes | n/a | unit | M6 |
 | F-11 | Testimonials and reviews with consent | P2 | partial (testimonials with recorded consent, published on About, withdrawn consent takes it down; review-site import not built) | publish-to-portfolio | n/a | e2e | M14 |
 | F-12 | SEO pages and structured data | P1 | done (sitemap, robots, JSON-LD on home, work and FAQ, text-card link previews) | all public pages | n/a | e2e | M11 |
-| F-13 | Newsletter signup (own stream, unsubscribe) | OPT | missing | footer form | Resend / outbox | e2e | M12 |
+| F-13 | Newsletter signup (own stream, unsubscribe) | OPT | partial (footer signup, double opt-in, one-click unsubscribe, owner list and CSV; sending newsletters needs a verified sending domain and is not built) | footer form | Resend / outbox | e2e | M12 |
 
 ### Sell
 
@@ -126,7 +126,7 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 |---|---|---|---|---|---|---|---|
 | F-40 | Contracts: send, view, typed e-signature, one-time link, audit (timestamp, IP, hash) | P1 | done | `/client/sign/[token]`, studio | n/a | e2e studio | done |
 | F-41 | Contract templates with merge fields; sample set marked for review | P1 | done (7 SAMPLE templates) | contract_templates | n/a | unit | M7 |
-| F-42 | Usage-rights and licence terms in contracts, licence tracker with expiry reminders | P1/P2 | partial (rights and licence end date recorded per contract; tracker and reminders in M14) | usage_rights | email | unit | M7, M14 |
+| F-42 | Usage-rights and licence terms in contracts, licence tracker with expiry reminders | P1/P2 | done (signed licenses and usage rights listed with In force, Ends soon, Ended; the owner is told once when one ends within 30 days and once when it ends) | usage_rights | email | unit | M7, M14 |
 | F-43 | Model and property releases, minors and parental consent | P2 | done (guardian must sign for a minor) | releases | n/a | e2e | M7 |
 | F-44 | Questionnaires and intake forms (builder, send, respond) | P1 | done | questionnaires | email | e2e | M7 |
 | F-45 | Gallery expiry and reactivation policy in the contract | P1 | done (policy merge field) | template clause | n/a | unit | M7 |
@@ -204,7 +204,7 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | F-110 | Roles and sessions, rate limits | P1 | done (owner/editor, per-IP limits) | auth, db | unit | done |
 | F-111 | Webhooks in (Stripe) and out (owner endpoints), owner API | P3 | partial (in only) | `/api/v1/*` | unit | M15 |
 | F-112 | Notifications centre and activity feed | P3 | partial (owner activity feed with unread; client notification centre is the portal home) | studio | e2e | M15 |
-| F-113 | Mobile-friendly photographer side, installable PWA | P1 | partial (responsive board and forms; PWA manifest in M18) | studio CSS, manifest | e2e 390px | M5, M18 |
+| F-113 | Mobile-friendly photographer side, installable PWA | P1 | partial (responsive board and forms, installable manifest and icon; offline mode and push are not built) | studio CSS, manifest | e2e 390px | M5, M18 |
 | F-114 | Dark and light themes | P1 | done | `@halation/ui` | e2e | done |
 | F-115 | WCAG 2.2 AA, performance budgets (Lighthouse mobile 80+, CLS under 0.02) | P1 | partial | all | axe, lighthouse | M18 |
 | F-116 | Error and health pages, seed and demo data | P1 | partial (health API and owner health page done; demo data in M18) | `/api/health`, seed | e2e | M11 |

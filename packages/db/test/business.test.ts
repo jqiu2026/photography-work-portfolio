@@ -142,6 +142,54 @@ describe("search", () => {
   });
 });
 
+describe("usage rights", () => {
+  it("states: perpetual, active, expiring in the last 60 days, expired", () => {
+    const now = new Date("2027-06-01T00:00:00Z");
+    expect(biz.licenseState(null, now)).toBe("perpetual");
+    expect(biz.licenseState(new Date("2028-06-01T00:00:00Z"), now)).toBe("active");
+    expect(biz.licenseState(new Date("2027-07-15T00:00:00Z"), now)).toBe("expiring");
+    expect(biz.licenseState(new Date("2027-05-31T00:00:00Z"), now)).toBe("expired");
+  });
+  it("lists only signed contracts that grant rights, and tells the owner once", async () => {
+    const [c] = await db.select().from(schema.studioClients).limit(1);
+    const job = (await st.createJob(db, { clientId: (c as { id: string }).id, title: "Licensed job" })).id;
+    const now = new Date("2027-06-01T00:00:00Z");
+    const [signed] = await db
+      .insert(schema.studioContracts)
+      .values({
+        jobId: job,
+        title: "Usage license",
+        body: "terms",
+        status: "signed",
+        signedAt: now,
+        kind: "license",
+        usageRights: { personal: true, commercial: true, termMonths: 12 },
+        licenseExpiresAt: new Date("2027-06-20T00:00:00Z"),
+      })
+      .returning();
+    await db
+      .insert(schema.studioContracts)
+      .values({
+        jobId: job,
+        title: "Unsigned",
+        body: "x",
+        usageRights: { personal: true, commercial: false, termMonths: null },
+      });
+    await db
+      .insert(schema.studioContracts)
+      .values({ jobId: job, title: "No rights", body: "x", status: "signed", signedAt: now });
+    const list = await biz.listLicenses(db, now);
+    const mine = list.filter((l) => l.jobTitle === "Licensed job");
+    expect(mine).toHaveLength(1);
+    expect(mine[0]).toMatchObject({ commercial: true, personal: true, termMonths: 12, state: "expiring" });
+    expect(await biz.remindLicenses(db, now)).toBe(1);
+    expect(await biz.remindLicenses(db, now)).toBe(0);
+    // once it has ended, one more reminder
+    expect(await biz.remindLicenses(db, new Date("2027-07-01T00:00:00Z"))).toBe(1);
+    void signed;
+  });
+});
+
 describe("specs", () => {
   it("formats shutter and reads exif", () => {
     expect(formatShutter(0.004)).toBe("1/250 s");
@@ -151,5 +199,35 @@ describe("specs", () => {
       aperture: 4,
     });
     expect(specLines(undefined).length).toBe(0);
+  });
+});
+
+describe("newsletter", () => {
+  it("double opt-in: pending until confirmed, one token, unsubscribe in one step, re-subscribe needs a new confirm", async () => {
+    const news = await import("../src/newsletter");
+    const a = await news.subscribe(db, { email: "  Reader@Example.COM ", source: "footer" });
+    expect(a.status).toBe("pending");
+    expect(await news.activeSubscribers(db)).toEqual([]);
+    expect(await news.confirmSubscriber(db, "wrong-token")).toBe(false);
+    expect(await news.confirmSubscriber(db, a.token as string)).toBe(true);
+    const active = await news.activeSubscribers(db);
+    expect(active.map((x) => x.email)).toEqual(["reader@example.com"]);
+    // asking again when already confirmed changes nothing and sends nothing
+    expect(await news.subscribe(db, { email: "reader@example.com" })).toEqual({ status: "already" });
+    expect(await news.unsubscribe(db, a.token as string)).toBe(true);
+    expect(await news.activeSubscribers(db)).toEqual([]);
+    const again = await news.subscribe(db, { email: "reader@example.com" });
+    expect(again.status).toBe("pending");
+    // the old token no longer works
+    expect(await news.confirmSubscriber(db, a.token as string)).toBe(false);
+    expect(await news.activeSubscribers(db)).toEqual([]);
+    expect(await news.confirmSubscriber(db, again.token as string)).toBe(true);
+    const row = (await news.listSubscribers(db)).find((r) => r.email === "reader@example.com");
+    expect(row && news.subscriberState(row)).toBe("active");
+  });
+  it("refuses bad addresses", async () => {
+    const news = await import("../src/newsletter");
+    await expect(news.subscribe(db, { email: "nope" })).rejects.toThrow("email address");
+    await expect(news.subscribe(db, { email: "a@b" })).rejects.toThrow("email address");
   });
 });

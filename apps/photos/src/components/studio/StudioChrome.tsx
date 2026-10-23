@@ -61,11 +61,9 @@ export function StudioChrome({ children }: { children: ReactNode }) {
                     g.id === active && g.sections.length > 1 ? (
                       <DockSubnav aria-label={`${g.label} pages`}>
                         {g.sections.map((id) => (
-                          <li key={id}>
-                            <DockSubItem asChild current={id === section}>
-                              <Link href={`/studio/${id}`}>{studioSections.find((x) => x.id === id)?.label}</Link>
-                            </DockSubItem>
-                          </li>
+                          <DockSubItem key={id} asChild current={id === section}>
+                            <Link href={`/studio/${id}`}>{studioSections.find((x) => x.id === id)?.label}</Link>
+                          </DockSubItem>
                         ))}
                       </DockSubnav>
                     ) : undefined

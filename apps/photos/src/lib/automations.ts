@@ -2,6 +2,7 @@ import { publishScheduled } from "@/lib/gallery-publish";
 import "server-only";
 import { type Database, schema } from "@jerryqiu/db";
 import * as auto from "@jerryqiu/db/automation";
+import * as biz from "@jerryqiu/db/business";
 import * as cal from "@jerryqiu/db/calendar";
 import * as gal from "@jerryqiu/db/galleries";
 import * as shop from "@jerryqiu/db/gallery-shop";
@@ -109,12 +110,14 @@ export async function runScheduled(db: Database, now = new Date()) {
   const carts = await remindAbandonedOrders(db, now);
   const archived = await archiveExpired(db, now);
   const automations = await runAutomations(db, now);
+  const licenses = await biz.remindLicenses(db, now);
   return {
     billing,
     automations,
     galleriesPublished: published,
     cartReminders: carts,
     galleriesArchived: archived,
+    licenseReminders: licenses,
     at: now.toISOString(),
   };
 }

@@ -28,6 +28,8 @@ export const studioSections = [
   { id: "testimonials", label: "Testimonials" },
   { id: "gear", label: "Gear" },
   { id: "callsheets", label: "Call sheets" },
+  { id: "rights", label: "Rights" },
+  { id: "subscribers", label: "Subscribers" },
 ] as const;
 
 /**
@@ -41,12 +43,17 @@ export const studioGroups = [
   {
     id: "clients",
     label: "Clients",
-    sections: ["clients", "bookings", "contracts", "inbox", "testimonials"],
+    sections: ["clients", "bookings", "contracts", "inbox", "testimonials", "rights"],
     hue: 265,
   },
   { id: "calendar", label: "Calendar", sections: ["calendar", "shoots", "callsheets", "gear"], hue: 285 },
   { id: "store", label: "Sales", sections: ["orders", "quotes", "invoices", "billing"], hue: 150 },
-  { id: "reports", label: "Reports", sections: ["reports", "expenses", "pipeline", "activity"], hue: 38 },
+  {
+    id: "reports",
+    label: "Reports",
+    sections: ["reports", "expenses", "subscribers", "pipeline", "activity"],
+    hue: 38,
+  },
   {
     id: "settings",
     label: "Settings",
@@ -85,6 +92,8 @@ export const sectionInfo: Record<string, string> = {
   testimonials: "What clients said. Nothing is public until they agree.",
   gear: "Cameras, lenses and lights, and which job each is on.",
   callsheets: "Call time, place, people and the shot list for each shoot.",
+  rights: "Who may use your photographs, for what, and until when.",
+  subscribers: "People who asked for your newsletter. Only confirmed addresses count.",
 };
 
 export const groupOf = (section: string) =>

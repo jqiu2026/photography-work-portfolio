@@ -1,6 +1,7 @@
 "use server";
 
 import * as biz from "@jerryqiu/db/business";
+import * as news from "@jerryqiu/db/newsletter";
 import { StudioError } from "@jerryqiu/db/studio";
 import { z } from "zod";
 import { studio } from "@/lib/studio-run";
@@ -164,5 +165,14 @@ export async function saveCallSheetAction(input: {
     if (!p.success) throw new StudioError("Pick a job.");
     await biz.saveCallSheet(db, p.data, input);
     return { message: "Call sheet saved" };
+  });
+}
+
+export async function deleteSubscriberAction(subscriberId: string) {
+  return studio(async ({ db }) => {
+    const p = id.safeParse(subscriberId);
+    if (!p.success) throw new StudioError("Unknown subscriber.");
+    await news.deleteSubscriber(db, p.data);
+    return { message: "Removed from the list" };
   });
 }

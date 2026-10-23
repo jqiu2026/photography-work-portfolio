@@ -30,7 +30,8 @@
     "./gallery-expiry": "./src/gallery-expiry.ts",
     "./automation": "./src/automation.ts",
     "./specs": "./src/specs.ts",
-    "./business": "./src/business.ts"
+    "./business": "./src/business.ts",
+    "./newsletter": "./src/newsletter.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

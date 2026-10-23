@@ -7,6 +7,7 @@ import {
   addExpenseAction,
   addGearAction,
   addTestimonialAction,
+  deleteSubscriberAction,
   assignGearAction,
   consentAction,
   deleteExpenseAction,
@@ -677,6 +678,144 @@ export function CallSheetsView({ user, data }: { user: string; data: CallSheetsD
           </Card>
         </div>
       </div>
+    </Frame>
+  );
+}
+
+/* ---------------------------------------------------------------- usage rights */
+
+export type RightsData = {
+  items: {
+    id: string;
+    title: string;
+    kind: string;
+    jobTitle: string;
+    clientName: string;
+    personal: boolean;
+    commercial: boolean;
+    termMonths: number | null;
+    signedAt: string;
+    expiresAt: string | null;
+    state: "perpetual" | "active" | "expiring" | "expired";
+  }[];
+};
+
+const RIGHTS_TONE = { perpetual: "info", active: "success", expiring: "warning", expired: "danger" } as const;
+const RIGHTS_LABEL = { perpetual: "No end date", active: "In force", expiring: "Ends soon", expired: "Ended" } as const;
+
+export function RightsView({ user, data }: { user: string; data: RightsData }) {
+  const { note } = useAct();
+  const order = { expired: 0, expiring: 1, active: 2, perpetual: 3 } as const;
+  const items = [...data.items].sort((a, b) => order[a.state] - order[b.state]);
+  return (
+    <Frame section="rights" user={user} note={note}>
+      <Card title="Licenses in force" id="r-list">
+        {items.length ? (
+          <ul className="hm-data-list st-list st-list--tall">
+            {items.map((r) => (
+              <li className="hm-data-list-item" key={r.id} data-license-id={r.id}>
+                <span>
+                  {r.clientName}: {r.jobTitle}
+                  <small>
+                    {[r.personal && "personal use", r.commercial && "commercial use"].filter(Boolean).join(" and ") ||
+                      "no use granted"}
+                    {r.termMonths ? ` · ${r.termMonths} months` : ""} · signed {r.signedAt.slice(0, 10)}
+                  </small>
+                </span>
+                <span>
+                  <Badge tone={RIGHTS_TONE[r.state]}>{RIGHTS_LABEL[r.state]}</Badge>
+                  {r.expiresAt ? (
+                    <small>
+                      {r.state === "expired" ? "ended" : "ends"} {r.expiresAt.slice(0, 10)}
+                    </small>
+                  ) : null}
+                </span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <Text size="sm" tone="muted">
+            Nothing yet. A signed contract or license that grants personal or commercial use shows up here, and you get
+            a note in Activity when one is about to end.
+          </Text>
+        )}
+      </Card>
+    </Frame>
+  );
+}
+
+/* ---------------------------------------------------------------- newsletter subscribers */
+
+export type SubscribersData = {
+  csv: string;
+  items: {
+    id: string;
+    email: string;
+    state: "active" | "pending" | "unsubscribed";
+    source: string | null;
+    at: string;
+  }[];
+};
+
+export function SubscribersView({ user, data }: { user: string; data: SubscribersData }) {
+  const { pending, note, act } = useAct();
+  const [ask, confirmEl] = useConfirm();
+  const active = data.items.filter((i) => i.state === "active").length;
+  const download = () => {
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([data.csv], { type: "text/csv" }));
+    a.download = "subscribers.csv";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  };
+  return (
+    <Frame section="subscribers" user={user} note={note}>
+      {confirmEl}
+      <Card title={`${active} confirmed`} id="s-list">
+        <Text size="sm" tone="muted">
+          People sign up in the footer of every page and confirm by email. Pending addresses never count, and anyone can
+          unsubscribe with one click. Sending newsletters is not built yet (it needs a verified sending domain), so this
+          is the list, ready for when it is.
+        </Text>
+        <div className="st-actions">
+          <Button variant="secondary" onClick={download} disabled={!active}>
+            <DownloadIcon /> Download confirmed addresses (CSV)
+          </Button>
+        </div>
+        {data.items.length ? (
+          <ul className="hm-data-list st-list st-list--tall">
+            {data.items.map((i) => (
+              <li className="hm-data-list-item" key={i.id}>
+                <span>
+                  {i.email}
+                  <small>
+                    {i.source ?? "footer"} · {i.at.slice(0, 10)}
+                  </small>
+                </span>
+                <Badge tone={i.state === "active" ? "success" : i.state === "pending" ? "warning" : "neutral"}>
+                  {i.state === "active" ? "Confirmed" : i.state === "pending" ? "Not confirmed" : "Unsubscribed"}
+                </Badge>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  disabled={pending}
+                  aria-label={`Delete ${i.email}`}
+                  onClick={async () =>
+                    (await ask({ title: `Delete ${i.email}?`, body: "They can sign up again.", action: "Delete" })) &&
+                    act(() => deleteSubscriberAction(i.id))
+                  }
+                >
+                  Delete
+                </Button>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <Text size="sm" tone="muted">
+            No one has signed up yet.
+          </Text>
+        )}
+      </Card>
     </Frame>
   );
 }

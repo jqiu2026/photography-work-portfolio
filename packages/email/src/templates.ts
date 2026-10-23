@@ -21,6 +21,7 @@ export type TemplateKind =
   | "reminder"
   | "order-ready"
   | "order-reminder"
+  | "newsletter-confirm"
   | "reply";
 
 export type TemplateData = {
@@ -184,6 +185,14 @@ const specs: Record<TemplateKind, Spec> = {
     heading: d.title || "A reminder",
     lines: [`Hi ${d.name || "there"},`, d.summary ?? "", d.detail ?? ""],
     cta: d.linkLabel,
+  }),
+  "newsletter-confirm": () => ({
+    subject: "Please confirm your email",
+    heading: "One click to confirm",
+    lines: [
+      "Someone (hopefully you) asked to get occasional news from Jerry Qiu's photography. Confirm to be on the list. If it wasn't you, ignore this email and nothing happens.",
+    ],
+    cta: "Confirm my email",
   }),
   reply: (d) => ({
     subject: d.title || "Re: your message",

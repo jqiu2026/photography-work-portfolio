@@ -377,3 +377,7 @@
   color: var(--hm-muted);
   font-size: var(--hm-text-sm);
 }
+
+.cat-book {
+  margin: var(--hm-space-8) 0 0;
+}

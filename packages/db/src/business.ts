@@ -1,5 +1,6 @@
 import { and, asc, desc, eq, gte, ilike, isNotNull, isNull, lte, or, sql } from "drizzle-orm";
 import type { Database } from "./client";
+import { claimRun, notify } from "./automation";
 import { StudioError } from "./errors";
 import * as s from "./schema";
 
@@ -487,4 +488,80 @@ export async function searchStudio(db: Database, query: string): Promise<SearchH
       }),
     ),
   ];
+}
+
+/* ---- usage-rights tracker ---- */
+
+export type LicenseState = "perpetual" | "active" | "expiring" | "expired";
+/** `expiring` is the last 60 days of a term. A signed license with no end date is perpetual. */
+export function licenseState(expiresAt: Date | null, now = new Date(), soonDays = 60): LicenseState {
+  if (!expiresAt) return "perpetual";
+  if (expiresAt.getTime() < now.getTime()) return "expired";
+  return expiresAt.getTime() - now.getTime() <= soonDays * 86_400_000 ? "expiring" : "active";
+}
+
+/** Signed contracts and licenses that grant usage rights (personal or commercial), with where they stand today. */
+export async function listLicenses(db: Database, now = new Date()) {
+  const rows = await db
+    .select({ contract: s.studioContracts, job: s.studioJobs, client: s.studioClients })
+    .from(s.studioContracts)
+    .innerJoin(s.studioJobs, eq(s.studioContracts.jobId, s.studioJobs.id))
+    .innerJoin(s.studioClients, eq(s.studioJobs.clientId, s.studioClients.id))
+    .where(
+      and(
+        isNotNull(s.studioContracts.signedAt),
+        isNotNull(s.studioContracts.usageRights),
+        isNull(s.studioContracts.deletedAt),
+      ),
+    )
+    .orderBy(asc(s.studioContracts.licenseExpiresAt));
+  return rows.map((r) => ({
+    id: r.contract.id,
+    title: r.contract.title,
+    kind: r.contract.kind,
+    jobTitle: r.job.title,
+    clientName: r.client.name,
+    clientEmail: r.client.email,
+    personal: Boolean(r.contract.usageRights?.personal),
+    commercial: Boolean(r.contract.usageRights?.commercial),
+    termMonths: r.contract.usageRights?.termMonths ?? null,
+    signedAt: r.contract.signedAt as Date,
+    expiresAt: r.contract.licenseExpiresAt,
+    state: licenseState(r.contract.licenseExpiresAt, now),
+  }));
+}
+
+/**
+ * Tells the owner (once per license, in the activity feed) when a license is in its last 30 days or has just ended.
+ * Each license is claimed by a unique key, so the hourly job never repeats itself.
+ */
+export async function remindLicenses(db: Database, now = new Date()) {
+  let told = 0;
+  for (const l of await listLicenses(db, now)) {
+    if (!l.expiresAt) continue;
+    const soon = l.expiresAt.getTime() - now.getTime();
+    const phase = soon < 0 ? "ended" : soon <= 30 * 86_400_000 ? "soon" : null;
+    if (!phase) continue;
+    const ok = await claimRun(db, {
+      key: `license-${phase}:${l.id}`,
+      rule: "license-expiring",
+      entityType: "contract",
+      entityId: l.id,
+    });
+    if (!ok) continue;
+    await notify(db, {
+      kind: "license",
+      title:
+        phase === "ended"
+          ? `License ended: ${l.clientName}, ${l.jobTitle}`
+          : `License ends ${l.expiresAt.toISOString().slice(0, 10)}: ${l.clientName}, ${l.jobTitle}`,
+      body:
+        phase === "ended"
+          ? "The client's use of these photographs is no longer covered."
+          : "Ask whether they want to renew.",
+      link: "/studio/rights",
+    });
+    told++;
+  }
+  return told;
 }

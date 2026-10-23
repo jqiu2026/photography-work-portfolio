@@ -25,7 +25,15 @@ import {
   WatermarksView,
 } from "@/components/studio/AdminViews";
 import { ReportsView } from "@/components/studio/ReportsView";
-import { CallSheetsView, ExpensesView, GearView, TestimonialsView } from "@/components/studio/BusinessViews";
+import {
+  CallSheetsView,
+  ExpensesView,
+  GearView,
+  RightsView,
+  SubscribersView,
+  TestimonialsView,
+} from "@/components/studio/BusinessViews";
+import * as newsDb from "@jerryqiu/db/newsletter";
 import * as bizDb from "@jerryqiu/db/business";
 import * as brandDb from "@jerryqiu/db/brand";
 import * as extras from "@jerryqiu/db/gallery-extras";
@@ -230,6 +238,51 @@ export default async function StudioSection({
               amountCents: e.amountCents,
               miles: e.tenthMiles != null ? e.tenthMiles / 10 : null,
               jobTitle,
+            })),
+          }}
+        />
+      </Shell>
+    );
+  }
+  if (section === "rights") {
+    const licenses = await bizDb.listLicenses(db);
+    return (
+      <Shell>
+        <RightsView
+          user={user.name ?? user.email ?? "owner"}
+          data={{
+            items: licenses.map((l) => ({
+              id: l.id,
+              title: l.title,
+              kind: l.kind,
+              jobTitle: l.jobTitle,
+              clientName: l.clientName,
+              personal: l.personal,
+              commercial: l.commercial,
+              termMonths: l.termMonths,
+              signedAt: l.signedAt.toISOString(),
+              expiresAt: l.expiresAt?.toISOString() ?? null,
+              state: l.state,
+            })),
+          }}
+        />
+      </Shell>
+    );
+  }
+  if (section === "subscribers") {
+    const [all, active] = await Promise.all([newsDb.listSubscribers(db), newsDb.activeSubscribers(db)]);
+    return (
+      <Shell>
+        <SubscribersView
+          user={user.name ?? user.email ?? "owner"}
+          data={{
+            csv: `Email,Confirmed,Source\r\n${active.map((a) => `${a.email},${a.confirmedAt?.toISOString().slice(0, 10) ?? ""},${a.source ?? ""}`).join("\r\n")}\r\n`,
+            items: all.map((r) => ({
+              id: r.id,
+              email: r.email,
+              state: newsDb.subscriberState(r),
+              source: r.source,
+              at: r.createdAt.toISOString(),
             })),
           }}
         />

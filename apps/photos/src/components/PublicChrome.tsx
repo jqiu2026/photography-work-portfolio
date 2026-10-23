@@ -1,3 +1,4 @@
+import { NewsletterForm } from "@/components/NewsletterForm";
 import { getSite } from "@jerryqiu/sites";
 import {
   AppShell,
@@ -115,6 +116,7 @@ export function PublicChrome({
               ))}
             </div>
           )}
+          <NewsletterForm />
           <div className="pub-foot__base">
             <p>© {year} Jerry Qiu. All photographs and writing are © Jerry Qiu unless stated.</p>
             <a className="pub-return" href={hub.url} data-return-to-hub>

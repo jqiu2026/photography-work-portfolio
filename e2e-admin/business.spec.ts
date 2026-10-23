@@ -118,3 +118,42 @@ test("the sidebar lists the current group's pages as sub-items", async ({ page }
   const sub = page.getByRole("list", { name: "Galleries pages" });
   for (const name of ["Visitors", "Watermarks", "Music"]) await expect(sub.getByRole("link", { name })).toBeVisible();
 });
+
+test("newsletter: the footer signup needs the emailed confirmation, and unsubscribing is one click", async ({
+  page,
+}) => {
+  const address = `reader-${uid}@example.test`;
+  await page.goto(`${PHOTOS}/about`, { waitUntil: "networkidle" });
+  const form = page.getByRole("form", { name: "Newsletter signup" });
+  await form.getByLabel("Occasional news, no spam").fill(address);
+  await form.getByRole("button", { name: "Sign up" }).click();
+  await slow(page.getByText("Check your inbox for a confirmation link.")).toBeVisible();
+  // not on the list yet
+  await page.goto(`${PHOTOS}/studio/subscribers`, { waitUntil: "networkidle" });
+  await expect(page.locator("li", { hasText: address }).getByText("Not confirmed")).toBeVisible();
+  // the confirmation email carries the link
+  await page.goto(`${PHOTOS}/studio/inbox`, { waitUntil: "networkidle" });
+  const mail = page.locator("li").filter({ hasText: address }).filter({ hasText: "Please confirm your email" }).first();
+  await expect(mail).toBeVisible();
+  const text = (await mail.textContent()) ?? "";
+  const token = /newsletter\/confirm\?t=([A-Za-z0-9_%-]+)/.exec(text)?.[1];
+  expect(token).toBeTruthy();
+  await page.goto(`${PHOTOS}/newsletter/confirm?t=${token}`, { waitUntil: "networkidle" });
+  await expect(page.getByRole("heading", { name: "You're on the list" })).toBeVisible();
+  await page.goto(`${PHOTOS}/studio/subscribers`, { waitUntil: "networkidle" });
+  await expect(page.locator("li", { hasText: address }).getByText("Confirmed")).toBeVisible();
+  await page.goto(`${PHOTOS}/newsletter/unsubscribe?t=${token}`, { waitUntil: "networkidle" });
+  await expect(page.getByRole("heading", { name: "You're unsubscribed" })).toBeVisible();
+  await page.goto(`${PHOTOS}/newsletter/confirm?t=bogus`, { waitUntil: "networkidle" });
+  await expect(page.getByRole("heading", { name: "That link didn't work" })).toBeVisible();
+});
+
+test("the rights page, and an old per-type booking link opens the questionnaire with that kind chosen", async ({
+  page,
+}) => {
+  await page.goto(`${PHOTOS}/studio/rights`, { waitUntil: "networkidle" });
+  await expect(page.getByRole("heading", { name: "Rights" })).toBeVisible();
+  await page.goto(`${PHOTOS}/book/aviation`, { waitUntil: "networkidle" });
+  await expect(page).toHaveURL(/\/book\?type=aviation$/);
+  await expect(page.getByRole("heading", { name: /A few details about the aviation/ })).toBeVisible();
+});

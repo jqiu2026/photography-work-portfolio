@@ -1,4 +1,4 @@
-import { PageTab, PageTabs } from "@holominimal/ui";
+import { Button, PageTab, PageTabs } from "@holominimal/ui";
 import { Container, Section, Text } from "@/components/ui";
 import { PageHeader } from "@/components/PageHeader";
 import { ProtectedGallery } from "@/components/media";
@@ -15,6 +15,16 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const c = categories.find((x) => x.slug === slug);
   return c ? { title: c.name, description: `${c.name} photography by Jerry Qiu.` } : {};
 }
+
+/** Which kind of shoot a portfolio subject points to, so "Book" opens the questionnaire with it chosen. */
+const SHOOT_FOR: Record<string, string> = {
+  theater: "performance",
+  dance: "performance",
+  "low-light": "performance",
+  event: "event",
+  portrait: "portrait",
+  aviation: "aviation",
+};
 
 export default async function Category({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -49,6 +59,11 @@ export default async function Category({ params }: { params: Promise<{ slug: str
             lightbox
             details
           />
+          <p className="cat-book">
+            <Button asChild variant="secondary">
+              <Link href={`/book?type=${SHOOT_FOR[slug] ?? "other"}`}>Book a shoot like this</Link>
+            </Button>
+          </p>
         </Container>
       </Section>
     </Shell>

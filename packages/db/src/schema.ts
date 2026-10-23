@@ -1542,3 +1542,24 @@ export type StudioExpense = typeof studioExpenses.$inferSelect;
 export type StudioTestimonial = typeof studioTestimonials.$inferSelect;
 export type StudioGearRow = typeof studioGear.$inferSelect;
 export type StudioCallSheet = typeof studioCallSheets.$inferSelect;
+
+/** Newsletter list with double opt-in. Tokens are stored as hashes; an address counts only once it is confirmed. */
+export const studioSubscribers = pgTable(
+  "studio_subscribers",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    /** Stored lower-cased. */
+    email: text("email").notNull(),
+    /** sha256 of the one token used for both the confirm and the unsubscribe links. */
+    tokenHash: text("token_hash").notNull(),
+    source: text("source"),
+    confirmedAt: timestamp("confirmed_at", { withTimezone: true }),
+    unsubscribedAt: timestamp("unsubscribed_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    uniqueIndex("studio_subscribers_email_idx").on(t.email),
+    uniqueIndex("studio_subscribers_token_idx").on(t.tokenHash),
+  ],
+);
+export type StudioSubscriber = typeof studioSubscribers.$inferSelect;
