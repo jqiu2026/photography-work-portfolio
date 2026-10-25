@@ -22,7 +22,12 @@ import {
 
 import Link from "next/link";
 import { useRef, useState } from "react";
-import { deleteTrackAction, deleteWatermarkAction, setDefaultWatermarkAction } from "@/app/studio/gallery-actions";
+import {
+  addTrackLinkAction,
+  deleteTrackAction,
+  deleteWatermarkAction,
+  setDefaultWatermarkAction,
+} from "@/app/studio/gallery-actions";
 import {
   changeMemberRoleAction,
   inviteMemberAction,
@@ -37,6 +42,7 @@ import {
 } from "@/app/studio/settings-actions";
 import { FormMessage } from "@/components/ui";
 import { Card, FormDialog, Frame, statusTone, useAct, useConfirm, useNotify } from "./StudioFrame";
+import "./records.css";
 import "./galleries.css";
 
 const usd = (c: number) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(c / 100);
@@ -110,7 +116,21 @@ export function MusicView({
   const [err, setErr] = useState("");
   const [busy, setBusy] = useState(false);
   const [adding, setAdding] = useState(false);
+  const [mode, setMode] = useState<"file" | "link">("file");
+  const [link, setLink] = useState("");
   async function upload() {
+    if (mode === "link") {
+      setBusy(true);
+      setErr("");
+      const r = (await addTrackLinkAction({ url: link, title, artist })) as { ok: boolean; error?: string };
+      setBusy(false);
+      if (!r.ok) {
+        setErr(r.error ?? "Could not add that link.");
+        return false;
+      }
+      location.reload();
+      return true;
+    }
     const f = file.current?.files?.[0];
     if (!f) {
       setErr("Choose an audio file.");
@@ -199,9 +219,24 @@ export function MusicView({
         pending={busy}
         onSubmit={upload}
       >
-        <Field label="Audio file" hint="MP3, M4A, AAC, OGG or WAV, up to 40 MB.">
-          <input ref={file} type="file" accept="audio/*" className="pm-file" />
+        <Field label="Add from">
+          <Select value={mode} onValueChange={(v) => setMode(v as "file" | "link")}>
+            <option value="file">A file from this computer</option>
+            <option value="link">A link to an audio file</option>
+          </Select>
         </Field>
+        {mode === "file" ? (
+          <Field label="Audio file" hint="MP3, M4A, AAC, OGG or WAV, up to 40 MB.">
+            <input ref={file} type="file" accept="audio/*" className="pm-file" />
+          </Field>
+        ) : (
+          <Field
+            label="Link"
+            hint="A direct link to an audio file (ending in .mp3, .m4a, .ogg or .wav). Streaming pages like YouTube or Spotify cannot be played here. Only use music you have the right to play."
+          >
+            <Input value={link} onChange={(e) => setLink(e.target.value)} placeholder="https://example.com/song.mp3" />
+          </Field>
+        )}
         <Field label="Title (blank = the file name)">
           <Input value={title} onChange={(e) => setTitle(e.target.value)} maxLength={100} />
         </Field>
@@ -226,15 +261,74 @@ type Mark = {
   isDefault: boolean;
 };
 const POS = ["bottom-right", "bottom-left", "top-right", "top-left", "center", "tile"];
+/** A sample photograph area with the mark drawn on it, so the owner sees what a delivered copy will look like. */
+function MarkPreview({
+  kind,
+  text,
+  position,
+  opacity,
+  sizePct,
+  imageSrc,
+}: { kind: string; text: string; position: string; opacity: number; sizePct: number; imageSrc?: string | null }) {
+  const [v, h] = position === "center" || position === "tile" ? ["center", "center"] : position.split("-");
+  const place = {
+    top: v === "top" ? "6%" : v === "bottom" ? "auto" : "50%",
+    bottom: v === "bottom" ? "6%" : "auto",
+    left: h === "left" ? "5%" : h === "right" ? "auto" : "50%",
+    right: h === "right" ? "5%" : "auto",
+    transform: `translate(${h === "center" ? "-50%" : "0"}, ${v === "center" ? "-50%" : "0"})`,
+  } as const;
+  const mark =
+    kind === "image" ? (
+      imageSrc ? (
+        <img src={imageSrc} alt="" style={{ width: "100%", display: "block" }} />
+      ) : (
+        <span>Your PNG</span>
+      )
+    ) : (
+      <span style={{ fontSize: "clamp(0.6rem, 2.4cqw, 1.4rem)", fontWeight: 600, whiteSpace: "nowrap" }}>
+        {text || "Your words"}
+      </span>
+    );
+  return (
+    <div className="wm-preview" role="img" aria-label="Preview of the watermark on a sample photograph">
+      {position === "tile" ? (
+        <div className="wm-tile" style={{ opacity: opacity / 100 }}>
+          {Array.from({ length: 12 }, (_, i) => (
+            <div key={i} style={{ width: `${sizePct}%` }}>
+              {mark}
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div
+          className="wm-mark"
+          style={{ ...place, width: kind === "image" ? `${sizePct}%` : "auto", opacity: opacity / 100 }}
+        >
+          {mark}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function WatermarksView({ marks }: { marks: Mark[] }) {
   const { pending, note, act } = useAct();
+  const notify = useNotify();
   const [ask, confirmEl] = useConfirm();
   const blank = { id: "", name: "", kind: "text", text: "", position: "bottom-right", opacity: 45, sizePct: 22 };
-  const [f, setF] = useState(blank);
+  const [f, setF] = useState<typeof blank | null>(null);
+  const [local, setLocal] = useState<string | null>(null);
   const png = useRef<HTMLInputElement>(null);
   const [err, setErr] = useState("");
   const [busy, setBusy] = useState(false);
+  const close = () => {
+    setF(null);
+    setLocal(null);
+    setErr("");
+  };
   async function save() {
+    if (!f) return false;
     setBusy(true);
     setErr("");
     const fd = new FormData();
@@ -244,140 +338,186 @@ export function WatermarksView({ marks }: { marks: Mark[] }) {
     const r = await fetch("/api/studio/watermark", { method: "POST", body: fd });
     const j = (await r.json().catch(() => ({}))) as { error?: string };
     setBusy(false);
-    if (!r.ok) return setErr(j.error ?? "Could not save the watermark.");
+    if (!r.ok) {
+      setErr(j.error ?? "Could not save the watermark.");
+      return false;
+    }
+    notify("Watermark saved", "success");
     location.reload();
+    return true;
   }
+  const preview = f && f.kind === "image" ? (local ?? (f.id ? `/api/studio/watermark/${f.id}` : null)) : null;
   return (
     <Frame section="watermarks" note={note}>
       {confirmEl}
-      <Card title="Watermarks" id="wm-h">
+      <Card
+        title="Watermarks"
+        id="wm-h"
+        actions={
+          <Button size="sm" onClick={() => setF({ ...blank })}>
+            Add a watermark
+          </Button>
+        }
+      >
         <Text size="sm" tone="muted">
-          A watermark is a visible mark put on the copies a rule delivers (Gallery, Downloads). Every delivered
-          photograph also carries an invisible mark that traces it to the visitor.
+          A watermark is a visible mark put on the copies a download rule delivers. Every delivered photograph also
+          carries an invisible mark that traces it to the visitor. You can use words or upload a PNG (a logo, say).
         </Text>
         {marks.length ? (
-          <ul className="hm-data-list st-list" aria-label="Watermarks">
+          <ul className="rc-cards" aria-label="Watermarks">
             {marks.map((m) => (
-              <li className="hm-data-list-item" key={m.id}>
-                <span>
-                  {m.name} {m.isDefault ? <Badge tone="accent">default</Badge> : null}
-                  <small>
-                    {m.kind === "text" ? `"${m.text}"` : "PNG image"} · {m.position} · {m.opacity}% · {m.sizePct}% wide
-                  </small>
+              <li className="rc-card" key={m.id}>
+                <MarkPreview
+                  kind={m.kind}
+                  text={m.text}
+                  position={m.position}
+                  opacity={m.opacity}
+                  sizePct={m.sizePct}
+                  imageSrc={m.kind === "image" ? `/api/studio/watermark/${m.id}` : null}
+                />
+                <div className="rc-card__head">
+                  <strong>{m.name}</strong>
+                  {m.isDefault ? <Badge tone="accent">default</Badge> : null}
+                </div>
+                <span className="rc-muted">
+                  {m.kind === "text" ? `"${m.text}"` : "PNG image"} · {m.position} · {m.opacity}% · {m.sizePct}% wide
                 </span>
-                <Button
-                  variant="secondary"
-                  onClick={() =>
-                    setF({
-                      id: m.id,
-                      name: m.name,
-                      kind: m.kind,
-                      text: m.text,
-                      position: m.position,
-                      opacity: m.opacity,
-                      sizePct: m.sizePct,
-                    })
-                  }
-                >
-                  Edit
-                </Button>
-                {!m.isDefault ? (
+                <div className="rc-card__foot">
                   <Button
                     variant="secondary"
-                    disabled={pending}
-                    onClick={() => act(() => setDefaultWatermarkAction(m.id))}
+                    size="sm"
+                    onClick={() => {
+                      setF({
+                        id: m.id,
+                        name: m.name,
+                        kind: m.kind,
+                        text: m.text,
+                        position: m.position,
+                        opacity: m.opacity,
+                        sizePct: m.sizePct,
+                      });
+                      notify(`Loaded ${m.name}`);
+                    }}
                   >
-                    Set as default
+                    Edit
                   </Button>
-                ) : null}
-                <Button
-                  variant="secondary"
-                  disabled={pending}
-                  onClick={async () =>
-                    (await ask({
-                      title: `Delete the watermark ${m.name}?`,
-                      body: "Download rules that use it stop marking copies. Copies already downloaded keep their mark.",
-                      action: "Delete watermark",
-                    })) && act(() => deleteWatermarkAction(m.id))
-                  }
-                >
-                  Delete
-                </Button>
+                  <span className="rc-actions">
+                    {!m.isDefault ? (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        disabled={pending}
+                        onClick={() => act(() => setDefaultWatermarkAction(m.id))}
+                      >
+                        Make default
+                      </Button>
+                    ) : null}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      disabled={pending}
+                      onClick={async () =>
+                        (await ask({
+                          title: `Delete the watermark ${m.name}?`,
+                          body: "Download rules that use it stop marking copies. Copies already downloaded keep their mark.",
+                          action: "Delete watermark",
+                        })) && act(() => deleteWatermarkAction(m.id))
+                      }
+                    >
+                      Delete
+                    </Button>
+                  </span>
+                </div>
               </li>
             ))}
           </ul>
         ) : (
           <Text size="sm" tone="muted">
-            No watermarks yet.
+            No watermarks yet. Use Add a watermark.
           </Text>
         )}
-        <h3>{f.id ? "Edit watermark" : "New watermark"}</h3>
-        <form
-          className="st-form"
-          aria-label="Watermark"
-          onSubmit={(e) => {
-            e.preventDefault();
-            void save();
-          }}
-        >
-          <Field label="Name">
-            <Input value={f.name} onChange={(e) => setF({ ...f, name: e.target.value })} maxLength={60} />
-          </Field>
-          <Field label="Kind">
-            <Select value={f.kind} onValueChange={(v) => setF({ ...f, kind: v })}>
-              <option value="text">Words</option>
-              <option value="image">PNG image</option>
-            </Select>
-          </Field>
-          {f.kind === "text" ? (
-            <Field label="Words">
-              <Input value={f.text} onChange={(e) => setF({ ...f, text: e.target.value })} maxLength={80} />
-            </Field>
-          ) : (
-            <Field label="PNG" hint="Transparent works best, up to 4 MB.">
-              <input ref={png} type="file" accept="image/png" className="pm-file" />
-            </Field>
-          )}
-          <Field label="Position">
-            <Select value={f.position} onValueChange={(v) => setF({ ...f, position: v })}>
-              {POS.map((p) => (
-                <option key={p} value={p}>
-                  {p}
-                </option>
-              ))}
-            </Select>
-          </Field>
-          <Field label="Opacity (5 to 100)">
-            <Input
-              type="number"
-              min={5}
-              max={100}
-              value={f.opacity}
-              onChange={(e) => setF({ ...f, opacity: Number(e.target.value) })}
-            />
-          </Field>
-          <Field label="Width, percent of the photograph (5 to 80)">
-            <Input
-              type="number"
-              min={5}
-              max={80}
-              value={f.sizePct}
-              onChange={(e) => setF({ ...f, sizePct: Number(e.target.value) })}
-            />
-          </Field>
-          {err ? <FormMessage className="st-error">{err}</FormMessage> : null}
-          <div className="gm-row">
-            <Button type="submit" disabled={busy}>
-              {busy ? "Saving…" : f.id ? "Save watermark" : "Add watermark"}
-            </Button>
-            {f.id ? (
-              <Button variant="secondary" onClick={() => setF(blank)}>
-                Cancel
-              </Button>
-            ) : null}
-          </div>
-        </form>
       </Card>
+      <FormDialog
+        open={f !== null}
+        onOpenChange={(o) => !o && close()}
+        title={f?.id ? "Edit watermark" : "Add a watermark"}
+        size="lg"
+        submitLabel={busy ? "Saving…" : f?.id ? "Save watermark" : "Add watermark"}
+        pending={busy}
+        onSubmit={save}
+      >
+        {f ? (
+          <>
+            <div className="st-wide">
+              <MarkPreview
+                kind={f.kind}
+                text={f.text}
+                position={f.position}
+                opacity={f.opacity}
+                sizePct={f.sizePct}
+                imageSrc={preview}
+              />
+            </div>
+            <Field label="Name">
+              <Input value={f.name} onChange={(e) => setF({ ...f, name: e.target.value })} maxLength={60} />
+            </Field>
+            <Field label="Kind">
+              <Select value={f.kind} onValueChange={(v) => setF({ ...f, kind: v })}>
+                <option value="text">Words</option>
+                <option value="image">PNG image</option>
+              </Select>
+            </Field>
+            {f.kind === "text" ? (
+              <Field label="Words">
+                <Input value={f.text} onChange={(e) => setF({ ...f, text: e.target.value })} maxLength={80} />
+              </Field>
+            ) : (
+              <Field label="PNG" hint="Transparent works best, up to 4 MB.">
+                <input
+                  ref={png}
+                  type="file"
+                  accept="image/png"
+                  className="pm-file"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    setLocal(file ? URL.createObjectURL(file) : null);
+                  }}
+                />
+              </Field>
+            )}
+            <Field label="Position">
+              <Select value={f.position} onValueChange={(v) => setF({ ...f, position: v })}>
+                {POS.map((p) => (
+                  <option key={p} value={p}>
+                    {p}
+                  </option>
+                ))}
+              </Select>
+            </Field>
+            <Field label={`Opacity: ${f.opacity}%`}>
+              <input
+                type="range"
+                min={5}
+                max={100}
+                value={f.opacity}
+                aria-label="Opacity"
+                onChange={(e) => setF({ ...f, opacity: Number(e.target.value) })}
+              />
+            </Field>
+            <Field label={`Width: ${f.sizePct}% of the photograph`}>
+              <input
+                type="range"
+                min={5}
+                max={80}
+                value={f.sizePct}
+                aria-label="Width"
+                onChange={(e) => setF({ ...f, sizePct: Number(e.target.value) })}
+              />
+            </Field>
+            {err ? <FormMessage className="st-error">{err}</FormMessage> : null}
+          </>
+        ) : null}
+      </FormDialog>
     </Frame>
   );
 }

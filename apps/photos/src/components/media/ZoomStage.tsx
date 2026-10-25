@@ -148,7 +148,15 @@ export function ZoomStage({
       }}
     >
       <div className="pm-zoom-inner">{children}</div>
-      <div className="pm-zoom-bar" role="group" aria-label="Zoom">
+      <div
+        className="pm-zoom-bar"
+        role="group"
+        aria-label="Zoom"
+        onPointerDown={(e) => {
+          // a short tick on phones that support it (browsers without vibration ignore this)
+          if ((e.target as HTMLElement).closest("button:not(:disabled)")) navigator.vibrate?.(8);
+        }}
+      >
         <button
           type="button"
           aria-label="Zoom out"
@@ -159,14 +167,6 @@ export function ZoomStage({
         </button>
         <button type="button" aria-label="Reset zoom" disabled={!zoomed} onClick={() => apply({ k: 1, x: 0, y: 0 })}>
           {Math.round(k * 100)}%
-        </button>
-        <button
-          type="button"
-          aria-label="Zoom in"
-          disabled={k >= MAX}
-          onClick={() => zoomAt(view.current.k * 1.6, 0, 0)}
-        >
-          +
         </button>
         <Tooltip
           side="top"
@@ -213,6 +213,14 @@ export function ZoomStage({
             <HelpIcon />
           </button>
         </Tooltip>
+        <button
+          type="button"
+          aria-label="Zoom in"
+          disabled={k >= MAX}
+          onClick={() => zoomAt(view.current.k * 1.6, 0, 0)}
+        >
+          +
+        </button>
       </div>
     </div>
   );

@@ -50,13 +50,19 @@
   gap: var(--hm-space-4) var(--hm-space-4);
   align-items: end;
 }
-.st-form > :is(.hm-check, .hm-text, p, fieldset, .hm-alert, .st-wide, .st-actions, .hm-radio-group),
+.st-form > :is(h2, h3, .hm-check, .hm-text, p, fieldset, .hm-alert, .st-wide, .st-actions, .hm-radio-group),
 .st-form > .hm-field:has(textarea, .hm-checkbox, [role="radiogroup"]),
 .st-form > .hm-button {
   grid-column: 1 / -1;
 }
 .st-form > .hm-button {
   justify-self: start;
+}
+.st-form > :is(h2, h3) {
+  margin: 0;
+}
+.st-form > :is(h2, h3):not(:first-child) {
+  margin-top: var(--hm-space-4);
 }
 
 /* rows: Holominimal data-list rows; the tall variant stacks details under the name */
@@ -415,4 +421,18 @@ button.cal-cell:hover {
     height: 0.4rem;
     padding: 0;
   }
+}
+
+/* a long select list scrolls inside its box (it spilled out of the box, and out of dialogs) */
+.hm-select-list {
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+}
+
+/* dialog forms: fields line up at the top, a hint under one never pushes its neighbor */
+.st-modal-form {
+  align-items: start;
+}
+.st-modal-form > .hm-field:has(.hm-field-hint) {
+  grid-column: 1 / -1;
 }

@@ -39,12 +39,12 @@ function build(categories: Category[], all: Photo[], featured?: Photo[]): Portfo
 }
 
 /**
- * The portfolio from the CMS galleries (one gallery per subject), or the shipped static set without a database or
- * while the CMS has no photographs yet (so the site never opens empty).
+ * The portfolio from the CMS galleries (one gallery per subject), or the shipped static set only when there is no
+ * database at all (local development). With a database, a photograph that is not there is simply not listed.
  */
 export async function getPortfolio(): Promise<Portfolio> {
   const galleries = await getGalleries();
-  if (!galleries?.some((g) => g.items.length)) {
+  if (!galleries) {
     const byId = (slug: string) => repo.photos.find((p) => p.slug === slug) as unknown as Photo;
     return {
       ...build(

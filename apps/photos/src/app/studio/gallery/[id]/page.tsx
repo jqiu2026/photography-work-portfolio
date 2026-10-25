@@ -95,6 +95,8 @@ export default async function GalleryPage({ params }: { params: Promise<{ id: st
             combo: e.combo,
             action: e.action,
             viewer: e.viewer.slice(-8),
+            via: e.via ?? "",
+            device: e.device ?? "",
             at: when(e.at) ?? "",
           })),
           welcome: g.welcome ?? "",

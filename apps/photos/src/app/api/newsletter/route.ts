@@ -7,6 +7,8 @@ import { getSite } from "@jerryqiu/sites";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
+const SIGNUP_OPEN = false;
+
 export const dynamic = "force-dynamic";
 
 const body = z.object({
@@ -17,10 +19,14 @@ const body = z.object({
 });
 
 /**
+ * Signup is closed (owner decision 2026-10-23: no newsletters are sent). The confirm and unsubscribe links, and the
+ * studio list, stay for anyone already on the list. Delete the early return to open it again.
+ *
  * `POST /api/newsletter`: starts a double opt-in signup. The answer is the same whether the address is new, pending or
  * already confirmed, so the list cannot be probed. Limited per network address; a filled honeypot is dropped silently.
  */
 export async function POST(request: Request) {
+  if (!SIGNUP_OPEN) return NextResponse.json({ error: "Signup is closed." }, { status: 410 });
   const parsed = body.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ error: "Enter your email address." }, { status: 400 });
   if (parsed.data.website) return NextResponse.json({ ok: true });

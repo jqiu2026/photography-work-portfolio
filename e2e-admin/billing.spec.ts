@@ -21,11 +21,11 @@ test("setup: a client and a job; tips, bank transfer and a card surcharge are sw
   await page.getByRole("button", { name: "Add client" }).click();
   await slow(note(page).last()).toContainText("Client added");
   await page.goto(`${PHOTOS}/studio/shoots`, { waitUntil: "networkidle" });
-  await page.getByRole("button", { name: "Add a job" }).click();
+  await page.getByRole("button", { name: "Add a shoot" }).click();
   await choose(page.getByLabel("Client"), `Billing Client ${uid}`);
   await page.getByLabel("Title").fill(`Billing job ${uid}`);
   await page.getByLabel("Fee (dollars)").fill("900");
-  await page.getByRole("button", { name: "Add job" }).click();
+  await page.getByRole("button", { name: "Add shoot" }).click();
   await slow(page.getByRole("listitem").filter({ hasText: `Billing job ${uid}` })).toBeVisible();
 
   await page.goto(`${PHOTOS}/studio/billing`, { waitUntil: "networkidle" });
@@ -57,8 +57,8 @@ test("a three-part plan is created, the first invoice is emailed with a pay link
   await slow(note(page).last()).toContainText("3 instalments");
   await page.goto(`${PHOTOS}/studio/inbox`, { waitUntil: "networkidle" });
   const mail = page.locator("li").filter({ hasText: email }).filter({ hasText: "invoice-sent" }).first();
-  await mail.locator("summary").click();
-  const body = (await mail.locator("pre").textContent()) as string;
+  await mail.getByRole("button").click();
+  const body = (await page.getByRole("dialog").locator("pre").textContent()) as string;
   payLink = (/https?:\/\/[^\s]+\/client\/pay\/[A-Za-z0-9_-]+/.exec(body)?.[0] ?? "").replace(/^https?:\/\/[^/]+/, "");
   expect(payLink).toMatch(/^\/client\/pay\//);
   await page.goto(`${PHOTOS}/studio/invoices`, { waitUntil: "networkidle" });
@@ -97,27 +97,24 @@ test("billing shows the tip and surcharge; a partial refund then a full refund u
   const pay = page.locator("li[data-payment-id]").first();
   await expect(pay).toContainText("tip $45.00");
   await expect(pay).toContainText("surcharge $7.50");
-  const form = pay.getByRole("form", { name: /^Refund / });
-  await form.getByRole("textbox").fill("100");
+  await pay.getByRole("button", { name: /^Refund / }).click();
+  const form = page.getByRole("form", { name: /^Refund / });
+  await form.getByLabel("Amount (dollars)").fill("100");
   await form.getByRole("button", { name: "Refund" }).click();
-  await page.getByRole("alertdialog").getByRole("button", { name: "Refund $100" }).click();
   await slow(note(page).last()).toContainText("Invoice is now partial");
   await page.goto(`${PHOTOS}/studio/billing`, { waitUntil: "networkidle" });
-  const again = page
+  await page
     .locator("li[data-payment-id]")
     .first()
-    .getByRole("form", { name: /^Refund / });
+    .getByRole("button", { name: /^Refund / })
+    .click();
+  const again = page.getByRole("form", { name: /^Refund / });
   await again.getByRole("textbox").fill("999");
   await again.getByRole("button", { name: "Refund" }).click();
-  await page.getByRole("alertdialog").getByRole("button", { name: "Refund $999" }).click();
   await slow(note(page).last()).toContainText("At most");
   await again.getByRole("textbox").fill("");
   await again.getByRole("button", { name: "Refund" }).click();
-  // an empty amount refunds what is left, and the dialog says how much
-  await page
-    .getByRole("alertdialog")
-    .getByRole("button", { name: /^Refund \$/ })
-    .click();
+  // an empty amount refunds what is left (the dialog hint says how much)
   await slow(note(page).last()).toContainText("Invoice is now refunded");
 });
 

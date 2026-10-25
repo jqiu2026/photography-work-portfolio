@@ -418,6 +418,8 @@ export const studioClients = pgTable(
     /** Stored lower-cased; unique among live clients. */
     email: text("email").notNull(),
     phone: text("phone"),
+    /** Mailing address, free text. */
+    address: text("address"),
     notes: text("notes"),
     tags: jsonb("tags").notNull().$type<string[]>().default(sql`'[]'::jsonb`),
     ...stamps,
@@ -937,6 +939,8 @@ export const studioQuotes = pgTable(
     status: quoteStatusEnum("status").notNull().default("draft"),
     packageId: uuid("package_id").references(() => studioPackages.id),
     lines: jsonb("lines").notNull().$type<QuoteLine[]>().default(sql`'[]'::jsonb`),
+    /** Extra details the owner adds to a quote (venue, event date, headcount...), shown on the quote. */
+    fields: jsonb("fields").notNull().$type<{ label: string; value: string }[]>().default(sql`'[]'::jsonb`),
     subtotalCents: integer("subtotal_cents").notNull().default(0),
     discountCents: integer("discount_cents").notNull().default(0),
     taxRateBp: integer("tax_rate_bp").notNull().default(0),
@@ -1276,6 +1280,10 @@ export const studioSecurityEvents = pgTable(
     /** screenshot | save | print | source | devtools | capture | devtools-open | lock | idle */
     kind: text("kind").notNull(),
     combo: text("combo"),
+    /** How this viewer got into the gallery, in words (passcode, an email they typed, a portal sign-in). */
+    via: text("via"),
+    /** Browser and system, in a few words. */
+    device: text("device"),
     /** What the studio did about it: logged | warned | locked */
     action: text("action").notNull().default("logged"),
     ipHash: text("ip_hash"),
@@ -1631,3 +1639,16 @@ export const studioWebhookDeliveries = pgTable(
   (t) => [index("studio_webhook_deliveries_hook_idx").on(t.webhookId, t.at)],
 );
 export type StudioWebhook = typeof studioWebhooks.$inferSelect;
+
+/** Keys for the owner's read-only REST API (`/api/v1`). Only a hash is kept; the key itself is shown once when made. */
+export const studioApiKeys = pgTable("studio_api_keys", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  name: text("name").notNull(),
+  /** The first characters of the key, so the owner can tell keys apart. */
+  prefix: text("prefix").notNull(),
+  keyHash: text("key_hash").notNull().unique(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  lastUsedAt: timestamp("last_used_at", { withTimezone: true }),
+  revokedAt: timestamp("revoked_at", { withTimezone: true }),
+});
+export type StudioApiKey = typeof studioApiKeys.$inferSelect;

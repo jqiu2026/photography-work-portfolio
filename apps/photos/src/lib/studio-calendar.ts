@@ -27,6 +27,12 @@ export async function calendarData(db: Database): Promise<CalendarData> {
     month: "long",
     day: "numeric",
   });
+  const fmtHm = new Intl.DateTimeFormat("en-GB", {
+    timeZone: c.timezone,
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+  });
   const fmtTime = new Intl.DateTimeFormat("en-US", { timeZone: c.timezone, hour: "numeric", minute: "2-digit" });
   const waiting = await db.select().from(schema.waitlist).where(isNull(schema.waitlist.notifiedAt));
   const counts = new Map<string, number>();
@@ -47,6 +53,12 @@ export async function calendarData(db: Database): Promise<CalendarData> {
       day: cal.localDate(a.startsAt, c.timezone),
       dayLabel: fmtDay.format(a.startsAt),
       time: `${fmtTime.format(a.startsAt)} to ${fmtTime.format(a.endsAt)}`,
+      start: fmtHm.format(a.startsAt),
+      end: fmtHm.format(a.endsAt),
+      buffer: a.bufferBeforeMin,
+      travel: a.travelMin,
+      notes: a.notes ?? "",
+      jobId: a.jobId ?? "",
       location: a.location,
       client: a.clientId ? (clientName.get(a.clientId) ?? null) : null,
     })),

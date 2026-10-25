@@ -47,10 +47,10 @@ test("owner creates a client, a job and an empty gallery, then uploads photograp
   await page.getByRole("button", { name: "Add client" }).click();
   await slow(note(page).last()).toContainText("Client added");
   await page.goto(`${PHOTOS}/studio/shoots`, { waitUntil: "networkidle" });
-  await page.getByRole("button", { name: "Add a job" }).click();
+  await page.getByRole("button", { name: "Add a shoot" }).click();
   await choose(page.getByLabel("Client"), `Gal Client ${uid}`);
   await page.getByLabel("Title").fill(`Gal job ${uid}`);
-  await page.getByRole("button", { name: "Add job" }).click();
+  await page.getByRole("button", { name: "Add shoot" }).click();
   await slow(page.getByRole("listitem").filter({ hasText: `Gal job ${uid}` })).toBeVisible();
 
   const made = await newGallery(page, PHOTOS, `Gal job ${uid}`);
@@ -277,7 +277,8 @@ test("an archived gallery offers the client an extension; paying it brings the g
   await expect(c.getByText(/has been archived/)).toBeVisible({ timeout: 25_000 });
   await expect(c.locator("li[data-media-id]")).toHaveCount(0);
   await page.goto(`${PHOTOS}/studio/forms`, { waitUntil: "networkidle" });
-  const pol = inForm(page, "Policies");
+  await page.getByRole("button", { name: "Change" }).click();
+  const pol = inForm(page, "Gallery and cancellation policies");
   await pol.getByLabel(/Extension and reactivation fee/).fill("30");
   await pol.getByRole("button", { name: "Save" }).click();
   await slow(note(page).last()).toContainText("Policies saved");

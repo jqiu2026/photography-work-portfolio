@@ -198,7 +198,15 @@ export async function lockedUntil(
  */
 export async function recordSecurityEvent(
   db: Database,
-  e: { galleryId: string; viewer: string; kind: string; combo?: string | null; ipHash?: string | null },
+  e: {
+    galleryId: string;
+    viewer: string;
+    kind: string;
+    combo?: string | null;
+    ipHash?: string | null;
+    via?: string | null;
+    device?: string | null;
+  },
   now = new Date(),
 ): Promise<SecurityOutcome> {
   const kind = (TRIGGER_KINDS as readonly string[]).includes(e.kind) ? e.kind : "screenshot";
@@ -227,6 +235,8 @@ export async function recordSecurityEvent(
     viewer: e.viewer,
     kind,
     combo: e.combo?.slice(0, 40) ?? null,
+    via: e.via?.slice(0, 160) ?? null,
+    device: e.device?.slice(0, 80) ?? null,
     action,
     ipHash: e.ipHash ?? null,
     at: now,
@@ -249,7 +259,9 @@ export async function recordSecurityEvent(
         title: lock ? `Locked a viewer out of "${g.title}"` : `Capture attempt on "${g.title}"`,
         body: lock
           ? `${strikes} triggers (last: ${e.combo ?? kind}). Closed for ${sec.lockMinutes} minutes.`
-          : `${e.combo ?? kind}. Action: ${action}.`,
+          : [`${e.combo ?? kind}. Action: ${action}.`, e.via && `Access: ${e.via}.`, e.device && `Device: ${e.device}.`]
+              .filter(Boolean)
+              .join(" "),
         link: `/studio/gallery/${g.id}#activity`,
       })
       .catch(() => {});

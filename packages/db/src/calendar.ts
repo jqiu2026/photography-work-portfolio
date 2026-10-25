@@ -202,6 +202,43 @@ export async function addAppointment(db: Database, input: AppointmentInput, now 
   }
 }
 
+/** Moves or edits an appointment; the same clash rules apply, ignoring the appointment itself. */
+export async function updateAppointment(db: Database, id: string, input: AppointmentInput, now = new Date()) {
+  if (input.title.trim().length < 2) throw new StudioError("Give the appointment a title.");
+  if (!(input.endsAt > input.startsAt)) throw new StudioError("The end must be after the start.");
+  const b = blockedRange(input);
+  await releaseExpiredHolds(db, now);
+  const clash = await findConflicts(db, b, id);
+  if (clash.length)
+    throw new StudioError(`That time conflicts with "${clash[0].title}" (buffers and travel time included).`);
+  try {
+    const rows = await db
+      .update(s.appointments)
+      .set({
+        kind: input.kind ?? "shoot",
+        title: input.title.trim().slice(0, 160),
+        startsAt: input.startsAt,
+        endsAt: input.endsAt,
+        bufferBeforeMin: input.bufferBeforeMin ?? 0,
+        bufferAfterMin: input.bufferAfterMin ?? 0,
+        travelMin: input.travelMin ?? 0,
+        blockedStart: b.start,
+        blockedEnd: b.end,
+        location: input.location?.trim() || null,
+        notes: input.notes?.trim().slice(0, 2000) || null,
+        jobId: input.jobId ?? null,
+        updatedAt: now,
+      })
+      .where(eq(s.appointments.id, id))
+      .returning();
+    if (!rows.length) throw new StudioError("Unknown appointment.");
+    return rows[0];
+  } catch (error) {
+    if (isExclusion(error)) throw new StudioError("That time was just taken. Pick another.");
+    throw error;
+  }
+}
+
 export async function cancelAppointment(db: Database, id: string, now = new Date()) {
   const [row] = await db
     .update(s.appointments)
@@ -258,12 +295,20 @@ export async function removeRule(db: Database, id: string) {
 export async function listBlackouts(db: Database) {
   return db.select().from(s.blackoutDates).orderBy(asc(s.blackoutDates.date));
 }
-export async function addBlackout(db: Database, date: string, reason?: string) {
+export async function addBlackout(db: Database, date: string, reason?: string, to?: string) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) throw new StudioError("Pick a date.");
+  const end = to && /^\d{4}-\d{2}-\d{2}$/.test(to) ? to : date;
+  if (end < date) throw new StudioError("The last day cannot be before the first.");
+  const days: string[] = [];
+  for (let d = new Date(`${date}T12:00:00Z`); d.toISOString().slice(0, 10) <= end; d.setUTCDate(d.getUTCDate() + 1)) {
+    days.push(d.toISOString().slice(0, 10));
+    if (days.length > 366) throw new StudioError("Block at most a year at a time.");
+  }
   await db
     .insert(s.blackoutDates)
-    .values({ date, reason: reason?.trim() || null })
+    .values(days.map((day) => ({ date: day, reason: reason?.trim() || null })))
     .onConflictDoNothing();
+  return days.length;
 }
 export async function removeBlackout(db: Database, id: string) {
   await db.delete(s.blackoutDates).where(eq(s.blackoutDates.id, id));

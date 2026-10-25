@@ -23,7 +23,13 @@ const done = (message: string, extra: Record<string, unknown> = {}) => ({ ok: tr
 const fail = (e: unknown) => (e instanceof st.StudioError ? actionError(e.message) : null);
 const back = () => revalidatePath("/studio", "layout");
 
-export async function addClientAction(input: { name: string; email: string; phone?: string }) {
+export async function addClientAction(input: {
+  name: string;
+  email: string;
+  phone?: string;
+  address?: string;
+  notes?: string;
+}) {
   return guarded("studio.access", async ({ db, audit }) => {
     try {
       const c = await st.createClient(db, input);
@@ -121,7 +127,7 @@ export async function publishGalleryAction(galleryId: string) {
   });
 }
 
-export async function createContractAction(jobId: string) {
+export async function createContractAction(jobId: string, templateId?: string) {
   return guarded("studio.access", async ({ db, audit }) => {
     const p = id.safeParse(jobId);
     if (!p.success) return actionError("Unknown job.");
@@ -129,7 +135,10 @@ export async function createContractAction(jobId: string) {
       // The default is the SAMPLE event template (merged with the job, client and policies); pick another on the Forms page.
       await forms.seedSampleTemplates(db);
       const templates = await forms.listTemplates(db);
-      const tpl = templates.find((t) => t.slug === "event") ?? templates.find((t) => t.kind === "contract");
+      const tpl =
+        templates.find((t) => t.id === templateId) ??
+        templates.find((t) => t.slug === "event") ??
+        templates.find((t) => t.kind === "contract");
       if (!tpl) return actionError("There is no contract template yet. Add one on the Forms page.");
       const { contract: k } = await forms.createContractFromTemplate(db, { jobId: p.data, templateId: tpl.id });
       await audit({
@@ -174,7 +183,43 @@ export async function sendContractAction(contractId: string) {
   });
 }
 
-export async function createInvoiceAction(input: { jobId: string; description: string; amountDollars: string }) {
+export async function updateClientAction(input: {
+  clientId: string;
+  name: string;
+  email: string;
+  phone?: string;
+  address?: string;
+  notes?: string;
+}) {
+  return guarded("studio.access", async ({ db, audit }) => {
+    const p = id.safeParse(input.clientId);
+    if (!p.success) return actionError("Unknown client.");
+    try {
+      await st.updateClient(db, p.data, input);
+      await audit({
+        action: "studio.client.update",
+        entity: "studio_client",
+        entityId: p.data,
+        site: "photos",
+        summary: `Edited client ${input.name.trim()}`,
+      });
+      back();
+      return done("Client saved");
+    } catch (e) {
+      const f = fail(e);
+      if (f) return f;
+      throw e;
+    }
+  });
+}
+
+export async function createInvoiceAction(input: {
+  jobId: string;
+  description: string;
+  amountDollars: string;
+  more?: { description: string; amountDollars: string }[];
+  dueDate?: string;
+}) {
   return guarded("studio.money", async ({ db, audit }) => {
     const p = id.safeParse(input.jobId);
     const dollars = Number(input.amountDollars);
@@ -183,7 +228,13 @@ export async function createInvoiceAction(input: { jobId: string; description: s
     try {
       const inv = await st.createInvoice(db, {
         jobId: p.data,
-        lines: [{ description: input.description || "Photography services", amountCents: Math.round(dollars * 100) }],
+        lines: [
+          { description: input.description || "Photography services", amountCents: Math.round(dollars * 100) },
+          ...(input.more ?? [])
+            .filter((m) => m.description.trim() && Number(m.amountDollars) > 0)
+            .map((m) => ({ description: m.description, amountCents: Math.round(Number(m.amountDollars) * 100) })),
+        ],
+        dueDate: input.dueDate?.trim() || null,
       });
       await audit({
         action: "studio.invoice.create",
@@ -271,6 +322,29 @@ export async function convertBookingAction(bookingId: string) {
       });
       back();
       return done("Converted to a client");
+    } catch (e) {
+      const f = fail(e);
+      if (f) return f;
+      throw e;
+    }
+  });
+}
+
+export async function updateContractAction(input: { contractId: string; title: string; body: string }) {
+  return guarded("studio.access", async ({ db, audit }) => {
+    const p = id.safeParse(input.contractId);
+    if (!p.success) return actionError("Unknown contract.");
+    try {
+      await st.updateContract(db, p.data, input);
+      await audit({
+        action: "studio.contract.update",
+        entity: "studio_contract",
+        entityId: p.data,
+        site: "photos",
+        summary: "Edited a contract",
+      });
+      back();
+      return done("Contract saved");
     } catch (e) {
       const f = fail(e);
       if (f) return f;

@@ -48,18 +48,21 @@ test("owner creates a client, a job, a gallery with photographs, a contract and 
   ).toBeVisible();
 
   await page.goto(`${PHOTOS}/studio/shoots`, { waitUntil: "networkidle" });
-  await page.getByRole("button", { name: "Add a job" }).click();
+  await page.getByRole("button", { name: "Add a shoot" }).click();
   await choose(page.getByLabel("Client"), `E2E Client ${uid}`);
   await page.getByLabel("Title").fill(`E2E job ${uid}`);
   await page.getByLabel("Fee (dollars)").fill("350");
-  await page.getByRole("button", { name: "Add job" }).click();
+  await page.getByRole("button", { name: "Add shoot" }).click();
   const row = page.getByRole("listitem").filter({ hasText: `E2E job ${uid}` });
   await expectSlow(row).toBeVisible();
-  await row.getByRole("button", { name: "Advance" }).click();
+  await row.getByRole("button", { name: /^Advance / }).click();
   await expectSlow(row.getByRole("progressbar", { name: "Progress: booked" })).toBeVisible();
-  await row.getByRole("button", { name: "New contract" }).click();
+  await row.getByRole("button", { name: /^More for/ }).click();
+  await page.getByRole("menuitem", { name: "New contract" }).click();
   await expectSlow(note(page).last()).toContainText("Contract created");
-  await row.getByRole("button", { name: "New invoice" }).click();
+  await row.getByRole("button", { name: /^More for/ }).click();
+  await page.getByRole("menuitem", { name: "New invoice" }).click();
+  await page.getByRole("form", { name: "New invoice" }).getByRole("button", { name: "Create invoice" }).click();
   await expectSlow(note(page).last()).toContainText(/Invoice \d{4}-\d{4} created/);
 
   const buffer = await sharp({ create: { width: 1600, height: 1000, channels: 3, background: "#7a3ea5" } })
@@ -162,7 +165,9 @@ test("the Stripe webhook: bad signatures refused, a signed event pays the invoic
 
   await page.goto(`${PHOTOS}/studio/shoots`, { waitUntil: "networkidle" });
   const job = page.getByRole("listitem").filter({ hasText: `E2E job ${uid}` });
-  await job.getByRole("button", { name: "New invoice" }).click();
+  await job.getByRole("button", { name: /^More for/ }).click();
+  await page.getByRole("menuitem", { name: "New invoice" }).click();
+  await page.getByRole("form", { name: "New invoice" }).getByRole("button", { name: "Create invoice" }).click();
   await expectSlow(note(page).last()).toContainText(/Invoice \d{4}-\d{4} created/);
   await page.goto(`${PHOTOS}/studio/invoices`, { waitUntil: "networkidle" });
   const open = page.locator("li[data-invoice-id]").filter({ hasText: /draft/ }).first();

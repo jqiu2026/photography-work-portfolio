@@ -12,6 +12,11 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
   const none = new Response("Not found", { status: 404, headers: { "Cache-Control": "no-store" } });
   if (!db || !/^[0-9a-f-]{36}$/i.test(id) || !(await portalSession())) return none;
   const [track] = await tracksByIds(db, [id]);
+  if (track?.storageKey.startsWith("url:"))
+    return new Response(null, {
+      status: 302,
+      headers: { Location: track.storageKey.slice(4), "Cache-Control": "private, max-age=600" },
+    });
   const obj = track ? await originalsStore().get(track.storageKey) : null;
   if (!track || !obj) return none;
   const total = obj.body.byteLength;

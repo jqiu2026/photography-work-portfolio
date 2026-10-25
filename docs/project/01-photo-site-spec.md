@@ -50,7 +50,7 @@ Rules: apps never import from other apps; `packages/*` never import from an app.
 | 0008 `portal` | client_accounts (password hash, magic tokens), notifications, messages, email_log, outbox |
 | 0009 `galleries_v2` | albums, photo comments and ratings, download_events, view_events, selections, gallery expiry and reactivation fields, upload sessions |
 | 0010 `store` | print_products, print_orders, digital_products, orders, order_items |
-| 0011 `ops` | tasks, automations, automation_runs, expenses, mileage, gear, gear_bookings, team_members, call_sheets, drone_checklists, api_keys, webhook_endpoints |
+| 0011 `ops` | tasks, automations, automation_runs, expenses, mileage, gear, gear_bookings, team_members, call_sheets, api_keys, webhook_endpoints |
 
 **Routes today:** `/` `/about` `/book` `/portfolio` `/portfolio/[slug]` `/work` `/work/[slug]` `/video` `/privacy` `/sign-in` `/client` `/client/gallery` `/client/pay/[token]` `/client/sign/[token]` `/studio` `/studio/[section]`, `/api/{img/[id],img/token,contact,revalidate,webhooks/stripe,auth/*,authenticate}`, catch-all redirect page.
 
@@ -100,7 +100,7 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | F-10 | Discount and promo codes | P2 | done | promo_codes | n/a | unit | M6 |
 | F-11 | Testimonials and reviews with consent | P2 | partial (testimonials with recorded consent, published on About, withdrawn consent takes it down; review-site import not built) | publish-to-portfolio | n/a | e2e | M14 |
 | F-12 | SEO pages and structured data | P1 | done (sitemap, robots, JSON-LD on home, work and FAQ, text-card link previews) | all public pages | n/a | e2e | M11 |
-| F-13 | Newsletter signup (own stream, unsubscribe) | OPT | partial (footer signup, double opt-in, one-click unsubscribe, owner list and CSV; sending newsletters needs a verified sending domain and is not built) | footer form | Resend / outbox | e2e | M12 |
+| F-13 | Newsletter signup (own stream, unsubscribe) | OPT | partial (signup closed by the owner 2026-10-23, no newsletters are sent; double opt-in, one-click unsubscribe and the owner list with CSV stay for existing subscribers) | none | Resend / outbox | e2e | M12 |
 
 ### Sell
 
@@ -114,7 +114,7 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | F-25 | Payment plans and installments | P1 | done | payment_plans | Stripe / mock | unit | M8 |
 | F-26 | Multi-currency display | P3 | partial (display-only estimate helper, SAMPLE rates; charges stay USD) | price formatter | n/a | unit | M6 |
 | F-27 | Upsells at checkout | P2 | done (on the quote page, re-priced server-side) | quote page | n/a | e2e | M6 |
-| F-28 | Print and product store (prints, albums, canvases, cards) and digital download sales | P2 | partial (the portfolio print store at /g/prints and the catalog at /prints on a WHCC-shaped sample lab with 21 products in 7 lines; each client gallery has its own shop; the real lab replaces the sample when WHCC credentials exist) | `/g/[slug]`, `/shop`, `/studio/orders` | WHCC / mock | e2e | M13 |
+| F-28 | Print and product store (prints, albums, canvases, cards) and digital download sales | P2 | partial (prints are sold inside every gallery shop, grouped by kind, and the catalog is explained at /prints on a WHCC-shaped sample lab with 21 products in 7 lines; each client gallery has its own shop; the real lab replaces the sample when WHCC credentials exist) | `/g/[slug]`, `/shop`, `/studio/orders` | WHCC / mock | e2e | M13 |
 | F-29 | Digital download sales | P2 | missing | digital_products | Stripe / mock | e2e | M13 |
 | F-30 | Gallery extension and reactivation sales | P1 | done | expiry flow | Stripe / mock | e2e | M10 |
 | F-31 | Tips | P3 | done | invoice pay | Stripe / mock | unit | M8 |
@@ -131,7 +131,7 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | F-44 | Questionnaires and intake forms (builder, send, respond) | P1 | done | questionnaires | email | e2e | M7 |
 | F-45 | Gallery expiry and reactivation policy in the contract | P1 | done (policy merge field) | template clause | n/a | unit | M7 |
 | F-46 | Privacy, terms, licensing, accessibility, cookie statement | P1 | done (draft pages for lawyer review; no non-essential cookies) | public pages | n/a | e2e | M11 |
-| F-47 | Data export and delete-my-data tools | P1 | partial (admin export, contact erase) | studio | n/a | e2e | M14 |
+| F-47 | Data export and delete-my-data tools | P1 | done (zip export of the whole studio; per client: export everything held as JSON, and erase contact details, messages and the portal account while invoices, payments and contracts stay without a name; owner only) | studio | n/a | e2e | M14 |
 | F-48 | Event privacy opt-outs (hide specific people) | P2 | partial (a public "Remove a photo of me" request form, a studio queue with a record of what was done; the photographs are hidden by hand with the gallery's Hide) | gallery_items.hidden_for | n/a | unit | M14 |
 
 ### Payments
@@ -165,7 +165,7 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | F-72 | Culling helpers: duplicates, blur, closed eyes | P3 | missing | studio uploader | cull mock | unit | M16 |
 | F-73 | Face search (consent-gated, off by default) | OPT | missing | gallery settings | `FaceSearchProvider` / mock | unit | M16 |
 | F-74 | Video delivery | P3 | missing | gallery video items | Blob | e2e | M16 |
-| F-75 | Storage cost per gallery, auto-archive | P2 | partial (each gallery card shows what its originals take to keep; auto-archive on the expiry date; a cost estimate in money is not built) | studio meter | n/a | unit | M14 |
+| F-75 | Storage cost per gallery, auto-archive | P2 | partial (each gallery card shows what its originals take to keep; auto-archive on the expiry date; a monthly cost estimate in money on the Reports, Storage tab at 2.3 cents per GB, to check against the Vercel Blob price) | studio meter | n/a | unit | M14 |
 | F-76 | Publish to portfolio with recorded consent | P2 | done (owner selects photographs in a client gallery and publishes them to a portfolio subject; how people agreed is written down and kept as the release on file and in the audit log) | gallery to portfolio | n/a | e2e | M14 |
 
 ### Client portal
@@ -187,12 +187,12 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | F-94 | Tasks and reminders | P2 | done | tasks | n/a | e2e | M12 |
 | F-95 | Email templates and threads in studio | P1 | partial (templates and a studio inbox of every email; threads with replies in M9) | `/studio/inbox` | Resend / outbox | e2e | M4 |
 | F-96 | Automations: trigger, condition, action on Vercel Cron | P2 | done (7 rules, tunable, deduped, hourly cron) | automations | cron | unit | M12 |
-| F-97 | Shot lists and call sheets | P3 | done (one per job: call time, place, notes, shot list, people) | call_sheets | n/a | e2e | M15 |
+| F-97 | Shot lists and call sheets | P3 | dropped from the studio UI at the owner's request (the table and actions remain) | call_sheets | n/a | n/a | M15 |
 | F-98 | Roles: second shooter, assistant; job assignment | P3 | done (invite a helper by Google address as Photographer or Bookkeeper; pages and actions are limited by role; a helper can remove only what they added in the last 5 minutes) | team_members | n/a | unit | M15 |
 | F-99 | Gear inventory, double-booking warnings | P3 | done (gear on jobs by day, a clash is flagged) | gear | n/a | unit | M15 |
 | F-100 | Drone job checklist (Part 107, weather go/no-go) | P3 | dropped (the owner removed it; the table stays so migrations stay additive) | drone_checklists | n/a | n/a | M15 |
 | F-101 | Mileage and expense tracking with receipts | P2 | partial (expenses, mileage at the rate on the day, CSV; receipt uploads need file storage, a note says where the paper one is) | `/studio/expenses` | Blob | e2e | M14 |
-| F-102 | True hourly rate, revenue and storage-cost reports, dashboards | P2/P3 | missing | `/studio/reports` | n/a | unit | M14 |
+| F-102 | True hourly rate, revenue and storage-cost reports, dashboards | P2/P3 | done (Reports: Hourly rate = kept money minus job costs over calendar-blocked shoot hours, editing time not tracked; Storage = size and estimated monthly cost per gallery) | `/studio/reports` | n/a | unit | M14 |
 | F-103 | Audit log | P1 | done | studio actions | n/a | e2e | done |
 | F-104 | Backups, restore, full data export | P1 | partial (`db:backup`, zip export) | studio data page | n/a | unit | M14 |
 | F-105 | Search across everything | P3 | partial (Jump-to finds pages plus clients, jobs, galleries, invoices, testimonials and expenses; not full text of emails or contracts) | studio search | n/a | e2e | M15 |
@@ -202,7 +202,7 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | Id | Feature | Pri | Status | Where | Test | Milestone |
 |---|---|---|---|---|---|---|
 | F-110 | Roles and sessions, rate limits | P1 | done (owner/editor, per-IP limits) | auth, db | unit | done |
-| F-111 | Webhooks in (Stripe) and out (owner endpoints), owner API | P3 | partial (outgoing signed webhooks for inquiries, payments, gallery publishes and shop orders; Stripe webhooks in; the owner REST API with keys is not built) | `/api/v1/*` | unit | M15 |
+| F-111 | Webhooks in (Stripe) and out (owner endpoints), owner API | P3 | partial (outgoing signed webhooks for inquiries, payments, gallery publishes and shop orders; Stripe webhooks in; a read-only owner REST API `/api/v1/clients|jobs|invoices|galleries` with revocable keys made in Automations) | `/api/v1/*` | unit | M15 |
 | F-112 | Notifications centre and activity feed | P3 | partial (owner activity feed with unread; client notification centre is the portal home) | studio | e2e | M15 |
 | F-113 | Mobile-friendly photographer side, installable PWA | P1 | partial (responsive board and forms, installable manifest and icon; offline mode and push are not built) | studio CSS, manifest | e2e 390px | M5, M18 |
 | F-114 | Dark and light themes | P1 | done | `@halation/ui` | e2e | done |

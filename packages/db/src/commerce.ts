@@ -407,6 +407,7 @@ export type QuoteInput = {
   giftCode?: string;
   intro?: string;
   terms?: string;
+  fields?: { label: string; value: string }[];
   taxRateBp?: number;
   taxLabel?: string;
   validDays?: number;
@@ -456,6 +457,36 @@ async function nextQuoteNumber(db: Database, now: Date) {
   return `Q${year}-${String(max + 1).padStart(4, "0")}`;
 }
 
+/** Owner-added details on a quote (label and value pairs); blanks are dropped. */
+export const cleanFields = (f?: { label: string; value: string }[]) =>
+  (f ?? [])
+    .map((x) => ({ label: x.label.trim().slice(0, 60), value: x.value.trim().slice(0, 400) }))
+    .filter((x) => x.label && x.value)
+    .slice(0, 20);
+
+/** Edits what a quote says (title, introduction, terms, extra details). Not once it is accepted: that text was signed. */
+export async function updateQuoteText(
+  db: Database,
+  id: string,
+  p: { title: string; intro?: string; terms?: string; fields?: { label: string; value: string }[] },
+) {
+  const [q] = await db.select().from(s.studioQuotes).where(eq(s.studioQuotes.id, id));
+  if (!q) throw new StudioError("That quote is gone.");
+  if (q.status === "accepted")
+    throw new StudioError("An accepted quote cannot change: the client agreed to that text.");
+  if (p.title.trim().length < 2) throw new StudioError("Give the quote a title.");
+  await db
+    .update(s.studioQuotes)
+    .set({
+      title: p.title.trim().slice(0, 160),
+      intro: p.intro?.trim().slice(0, 2000) || null,
+      terms: p.terms?.trim().slice(0, 6000) || null,
+      fields: cleanFields(p.fields),
+    })
+    .where(eq(s.studioQuotes.id, id));
+  return q.number;
+}
+
 export async function createQuote(db: Database, input: QuoteInput, by?: string, now = new Date()) {
   const [client] = await db
     .select()
@@ -475,6 +506,7 @@ export async function createQuote(db: Database, input: QuoteInput, by?: string, 
       title: input.title.trim().slice(0, 160),
       intro: input.intro?.trim().slice(0, 2000) || null,
       terms: input.terms?.trim().slice(0, 6000) || null,
+      fields: cleanFields(input.fields),
       packageId: pkg?.id ?? null,
       lines: result.lines,
       subtotalCents: result.subtotalCents,

@@ -1,5 +1,6 @@
 "use client";
 
+import { DateField } from "@/components/DateField";
 import { Badge, Button, Field, Input, Select, Text } from "@holominimal/ui";
 import { useState } from "react";
 import {
@@ -314,7 +315,7 @@ export function CodesView({ user, data }: { user: string; data: CodesData }) {
           <Input inputMode="decimal" value={f.cmin ?? ""} onChange={set("cmin")} />
         </Field>
         <Field label="Last day (optional)">
-          <Input type="date" value={f.cexp ?? ""} onChange={set("cexp")} />
+          <DateField value={f.cexp ?? ""} onChange={set("cexp")} />
         </Field>
         {f.cid ? (
           <Field label="Note">
@@ -375,7 +376,7 @@ export function CodesView({ user, data }: { user: string; data: CodesData }) {
         </Field>
         {f.gid ? (
           <Field label="Expires (optional)">
-            <Input type="date" value={f.gexp ?? ""} onChange={set("gexp")} />
+            <DateField value={f.gexp ?? ""} onChange={set("gexp")} />
           </Field>
         ) : null}
       </FormDialog>

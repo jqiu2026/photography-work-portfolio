@@ -8,7 +8,7 @@ describe("who sees which studio page", () => {
     for (const id of ids) expect(canSeeSection("owner", id)).toBe(true);
   });
   it("a photographer sees shoots and galleries but no money, settings or team", () => {
-    for (const id of ["galleries", "calendar", "shoots", "callsheets", "gear", "clients", "tasks", "visitors"])
+    for (const id of ["galleries", "calendar", "shoots", "gear", "clients", "tasks", "visitors"])
       expect(canSeeSection("photographer", id)).toBe(true);
     for (const id of [
       "billing",

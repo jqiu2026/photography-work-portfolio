@@ -669,6 +669,15 @@ export async function deleteWatermarkAction(id: string) {
     return { message: "Watermark deleted" };
   });
 }
+export async function addTrackLinkAction(input: { url: string; title?: string; artist?: string }) {
+  return studio(async (ctx) => {
+    const { db } = ctx;
+    await assertPlan(db, "music");
+    const t = await extras.addTrackLink(db, { url: input.url, title: input.title ?? "", artist: input.artist });
+    await created(ctx, "track", t.id);
+    return { message: `${t.title} added from a link` };
+  });
+}
 export async function deleteTrackAction(id: string) {
   return studio(async (ctx) => {
     const { db } = ctx;

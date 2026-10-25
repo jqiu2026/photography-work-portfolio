@@ -4,6 +4,7 @@ import { clientIpHash } from "@jerryqiu/protect";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { galleryAccess } from "@/lib/client-gallery";
+import { accessWords, deviceWords } from "@/lib/who";
 
 export const dynamic = "force-dynamic";
 
@@ -41,6 +42,8 @@ export async function POST(request: Request) {
     kind: parsed.data.kind,
     combo: parsed.data.combo,
     ipHash: ip,
+    via: await accessWords(db, a),
+    device: deviceWords(request.headers.get("user-agent")),
   });
   return NextResponse.json(
     { ok: true, action: r.action, locked: r.locked, strikes: r.strikes, until: r.until?.toISOString() ?? null },

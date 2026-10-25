@@ -35,7 +35,7 @@ export async function listClients(db: Database) {
 }
 export async function createClient(
   db: Database,
-  input: { name: string; email: string; phone?: string; notes?: string },
+  input: { name: string; email: string; phone?: string; address?: string; notes?: string },
   by?: string,
 ) {
   if (input.name.trim().length < 2) throw new StudioError("Enter the client's name.");
@@ -51,11 +51,39 @@ export async function createClient(
       name: input.name.trim(),
       email: email(input.email),
       phone: input.phone?.trim() || null,
+      address: input.address?.trim().slice(0, 400) || null,
       notes: input.notes?.trim() || null,
       updatedBy: by,
     })
     .returning();
   return row;
+}
+export async function updateClient(
+  db: Database,
+  id: string,
+  input: { name: string; email: string; phone?: string; address?: string; notes?: string },
+  by?: string,
+) {
+  if (input.name.trim().length < 2) throw new StudioError("Enter the client's name.");
+  if (!isEmail(input.email)) throw new StudioError("Enter a valid email address.");
+  const dup = await db
+    .select({ id: s.studioClients.id })
+    .from(s.studioClients)
+    .where(and(eq(s.studioClients.email, email(input.email)), live(s.studioClients)));
+  if (dup.some((d) => d.id !== id)) throw new StudioError("A client with that email already exists.");
+  const rows = await db
+    .update(s.studioClients)
+    .set({
+      name: input.name.trim(),
+      email: email(input.email),
+      phone: input.phone?.trim() || null,
+      address: input.address?.trim().slice(0, 400) || null,
+      notes: input.notes?.trim().slice(0, 4000) || null,
+      updatedBy: by,
+    })
+    .where(and(eq(s.studioClients.id, id), live(s.studioClients)))
+    .returning({ id: s.studioClients.id });
+  if (!rows.length) throw new StudioError("That client is gone.");
 }
 
 /* ---- jobs ---- */
@@ -244,6 +272,17 @@ export async function createContract(db: Database, input: { jobId: string; title
     .values({ jobId: j.id, title: input.title.trim() || "Agreement", body: input.body, updatedBy: by })
     .returning();
   return row;
+}
+/** Edits the wording of a contract that nobody has signed yet. */
+export async function updateContract(db: Database, id: string, input: { title: string; body: string }) {
+  const [c] = await db.select().from(s.studioContracts).where(eq(s.studioContracts.id, id));
+  if (!c) throw new StudioError("Unknown contract.");
+  if (c.status === "signed") throw new StudioError("A signed contract cannot change: the client agreed to that text.");
+  if (!input.body.trim()) throw new StudioError("The contract text is empty.");
+  await db
+    .update(s.studioContracts)
+    .set({ title: input.title.trim() || c.title, body: input.body, updatedAt: new Date() })
+    .where(eq(s.studioContracts.id, id));
 }
 /** Marks sent and returns the one-time link token (only its hash is stored). */
 export async function sendContract(db: Database, id: string, now = new Date()) {

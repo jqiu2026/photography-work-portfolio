@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 export default {
+  poweredByHeader: false,
   distDir: process.env.NEXT_DIST_DIR || ".next",
   transpilePackages: [
     "@jerryqiu/sites",

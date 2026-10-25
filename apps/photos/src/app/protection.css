@@ -82,6 +82,9 @@
   outline-offset: calc(var(--hm-focus-width) * -1);
 }
 
+.pm-pgallery li:has(.pm-img[data-state="failed"]) {
+  display: none;
+}
 .pm-pgallery li:hover .pm-img img {
   transform: scale(1.03);
 }
@@ -265,6 +268,27 @@ html.pm-guard-half:not(.pm-guard-half-off) [data-protected]::after {
   color: var(--hm-fg);
   font-size: var(--hm-text-sm);
   cursor: pointer;
+}
+.pm-zoom-bar > button:first-child {
+  margin-right: auto;
+}
+.pm-zoom-bar > button:last-child {
+  margin-left: auto;
+}
+.pm-zoom-bar {
+  min-width: 11.5rem;
+  justify-content: space-between;
+}
+.pm-zoom-bar button {
+  transition: background 0.15s var(--hm-ease-out), scale 0.12s var(--hm-ease-out), color 0.15s var(--hm-ease-out);
+}
+.pm-zoom-bar button:not(:disabled):hover {
+  background: color-mix(in srgb, var(--hm-fg) 14%, transparent);
+  scale: 1.12;
+}
+.pm-zoom-bar button:not(:disabled):active {
+  background: color-mix(in srgb, var(--hm-fg) 24%, transparent);
+  scale: 0.9;
 }
 .pm-zoom-bar button:disabled {
   opacity: 0.35;

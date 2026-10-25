@@ -74,6 +74,16 @@ export default async function QuotePage({ params }: { params: Promise<{ token: s
               </PageDescription>
             </PageHeader>
             {q.intro ? <Prose>{q.intro}</Prose> : null}
+            {q.fields?.length ? (
+              <dl aria-label="Details">
+                {q.fields.map((f) => (
+                  <div key={f.label} style={{ display: "flex", gap: "0.8rem" }}>
+                    <dt style={{ minWidth: "8rem", opacity: 0.7 }}>{f.label}</dt>
+                    <dd style={{ margin: 0 }}>{f.value}</dd>
+                  </div>
+                ))}
+              </dl>
+            ) : null}
             <Table aria-label="Quote lines">
               <TableBody>
                 {q.lines.map((l, i) => (

@@ -1,4 +1,4 @@
-import { and, desc, eq, gte, inArray, isNull, lt, sql } from "drizzle-orm";
+import { and, desc, eq, gte, inArray, isNull, lt, lte, sql } from "drizzle-orm";
 import type { Database } from "./client";
 import * as s from "./schema";
 
@@ -129,6 +129,111 @@ export async function invoicesReport(db: Database, r: Range) {
     totals.set(i.status, t);
   }
   return { rows, totals: [...totals.values()] };
+}
+
+/**
+ * Estimated cost of keeping files in Vercel Blob, in cents per gigabyte per month.
+ * TODO(owner): check the current Blob price (Q56); this is an estimate, not a bill.
+ */
+export const STORAGE_CENTS_PER_GB_MONTH = 2.3;
+const GB = 1024 ** 3;
+
+/** What it costs per month to keep this many bytes, in cents (rounded up to a whole cent, 0 for nothing). */
+export const storageCostCents = (bytes: number) =>
+  bytes > 0 ? Math.ceil((bytes / GB) * STORAGE_CENTS_PER_GB_MONTH) : 0;
+
+/** Net money per hour. `null` when no hours were spent (nothing to divide by). */
+export const hourlyRateCents = (netCents: number, hours: number) => (hours > 0 ? Math.round(netCents / hours) : null);
+
+/**
+ * True hourly rate per job: money kept (paid, less refunds, less tips and card surcharges) minus the expenses and mileage
+ * logged against the job, divided by the hours the calendar blocked for its shoots (shoot, buffers and travel).
+ * Editing time is not tracked, so the rate reads high for jobs with a lot of editing.
+ */
+export async function profitReport(db: Database, r: Range) {
+  const pays = await db
+    .select({ p: s.studioPayments, jobId: s.studioInvoices.jobId })
+    .from(s.studioPayments)
+    .innerJoin(s.studioInvoices, eq(s.studioInvoices.id, s.studioPayments.invoiceId))
+    .where(and(eq(s.studioPayments.status, "succeeded"), gte(paidAt, r.from), lt(paidAt, r.to)));
+  const appts = await db
+    .select()
+    .from(s.appointments)
+    .where(
+      and(
+        eq(s.appointments.kind, "shoot"),
+        eq(s.appointments.status, "confirmed"),
+        gte(s.appointments.startsAt, r.from),
+        lt(s.appointments.startsAt, r.to),
+      ),
+    );
+  const exps = await db
+    .select()
+    .from(s.studioExpenses)
+    .where(
+      and(
+        gte(s.studioExpenses.spentOn, r.from.toISOString().slice(0, 10)),
+        lte(s.studioExpenses.spentOn, r.to.toISOString().slice(0, 10)),
+      ),
+    );
+  const jobs = await db.select({ id: s.studioJobs.id, title: s.studioJobs.title }).from(s.studioJobs);
+  const title = new Map(jobs.map((j) => [j.id, j.title]));
+  type Row = { jobId: string; title: string; netCents: number; expenseCents: number; hours: number };
+  const by = new Map<string, Row>();
+  const row = (id: string): Row => {
+    const have = by.get(id);
+    if (have) return have;
+    const fresh: Row = { jobId: id, title: title.get(id) ?? "Job", netCents: 0, expenseCents: 0, hours: 0 };
+    by.set(id, fresh);
+    return fresh;
+  };
+  for (const { p, jobId } of pays)
+    row(jobId).netCents += p.amountCents - p.tipCents - p.surchargeCents - p.refundedCents;
+  for (const a of appts)
+    if (a.jobId) row(a.jobId).hours += (a.blockedEnd.getTime() - a.blockedStart.getTime()) / 3_600_000;
+  let overheadCents = 0;
+  for (const e of exps) {
+    if (e.jobId) row(e.jobId).expenseCents += e.amountCents;
+    else overheadCents += e.amountCents;
+  }
+  const rows = [...by.values()]
+    .map((x) => ({
+      ...x,
+      keptCents: x.netCents - x.expenseCents,
+      rateCents: hourlyRateCents(x.netCents - x.expenseCents, x.hours),
+    }))
+    .sort((a, b) => b.keptCents - a.keptCents);
+  const kept = rows.reduce((n, x) => n + x.keptCents, 0);
+  const hours = rows.reduce((n, x) => n + x.hours, 0);
+  return {
+    rows,
+    keptCents: kept,
+    hours,
+    overheadCents,
+    /** After the expenses that belong to no job. */
+    afterOverheadCents: kept - overheadCents,
+    rateCents: hourlyRateCents(kept - overheadCents, hours),
+  };
+}
+
+/** Storage per gallery with the monthly cost of keeping it, largest first. */
+export async function storageReport(db: Database) {
+  const rows = await db
+    .select({
+      id: s.studioGalleries.id,
+      title: s.studioGalleries.title,
+      status: s.studioGalleries.status,
+      photos: sql<number>`count(${s.media.id})::int`,
+      bytes: sql<number>`coalesce(sum(${s.media.bytes}), 0)::bigint`,
+    })
+    .from(s.studioGalleries)
+    .leftJoin(s.studioGalleryItems, eq(s.studioGalleryItems.galleryId, s.studioGalleries.id))
+    .leftJoin(s.media, eq(s.media.id, s.studioGalleryItems.mediaId))
+    .groupBy(s.studioGalleries.id)
+    .orderBy(desc(sql`coalesce(sum(${s.media.bytes}), 0)`));
+  const out = rows.map((x) => ({ ...x, bytes: Number(x.bytes), monthlyCents: storageCostCents(Number(x.bytes)) }));
+  const bytes = out.reduce((n, x) => n + x.bytes, 0);
+  return { rows: out, bytes, monthlyCents: storageCostCents(bytes) };
 }
 
 export const csv = (rows: (string | number)[][]) =>

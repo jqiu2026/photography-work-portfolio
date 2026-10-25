@@ -1,0 +1,263 @@
+/* cards and rows for clients, shoots, invoices, contracts, inquiries and the email log */
+.rc-cards {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+  gap: var(--hm-space-3);
+}
+.rc-cards--wide {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 24rem), 1fr));
+}
+.rc-card {
+  display: grid;
+  align-content: start;
+  gap: 0.45rem;
+  padding: var(--hm-space-4);
+  border: 1px solid var(--hm-line);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--hm-fg) 3%, transparent);
+  transition: border-color 0.15s var(--hm-ease-out), background 0.15s var(--hm-ease-out);
+  min-width: 0;
+}
+.rc-card:hover {
+  border-color: var(--hm-line-strong, var(--hm-line));
+  background: color-mix(in srgb, var(--hm-fg) 5%, transparent);
+}
+.rc-card[data-tone="success"] {
+  border-left: 3px solid var(--hm-success, #3ddc84);
+}
+.rc-card[data-tone="warning"] {
+  border-left: 3px solid var(--hm-warning, #f5a524);
+}
+.rc-card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+.rc-card__head strong {
+  overflow-wrap: anywhere;
+}
+.rc-card__foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.3rem;
+}
+.rc-card a {
+  overflow-wrap: anywhere;
+}
+.rc-muted {
+  color: var(--hm-muted);
+  font-size: var(--hm-text-sm);
+}
+.rc-pre {
+  white-space: pre-line;
+}
+.rc-note {
+  padding: 0.4rem 0.6rem;
+  border-radius: 8px;
+  background: color-mix(in srgb, #f5a524 12%, transparent);
+  font-size: var(--hm-text-sm);
+  white-space: pre-line;
+}
+.rc-actions,
+.rc-doclinks,
+.rc-badges,
+.rc-links {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+}
+.rc-links {
+  gap: 0.9rem;
+}
+.rc-amount {
+  font-size: 1.3rem;
+}
+.rc-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+.rc-chip {
+  padding: 0.12rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  background: color-mix(in srgb, var(--hm-fg) 10%, transparent);
+}
+.rc-quote {
+  margin: 0.2rem 0;
+  padding: 0.2rem 0 0.2rem 0.8rem;
+  border-left: 3px solid color-mix(in srgb, var(--hm-fg) 25%, transparent);
+  color: var(--hm-fg);
+  white-space: pre-line;
+}
+.rc-details {
+  margin: 0;
+  display: grid;
+  gap: 0.15rem;
+  font-size: var(--hm-text-sm);
+}
+.rc-details div {
+  display: flex;
+  gap: 0.6rem;
+}
+.rc-details dt {
+  color: var(--hm-muted);
+  min-width: 7rem;
+}
+.rc-details dd {
+  margin: 0;
+}
+.rc-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.35rem;
+}
+.rc-row {
+  all: unset;
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--hm-line);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.15s var(--hm-ease-out);
+}
+.rc-row:hover,
+.rc-row:focus-visible {
+  background: color-mix(in srgb, var(--hm-fg) 7%, transparent);
+}
+.rc-row__main {
+  display: grid;
+  flex: 1;
+  min-width: 12rem;
+}
+.rc-row__main small {
+  color: var(--hm-muted);
+}
+.rc-lineedit {
+  display: grid;
+  grid-template-columns: 1fr 8rem auto;
+  gap: 0.5rem;
+  align-items: center;
+}
+.rc-err {
+  color: var(--hm-danger, #ff6b6b);
+}
+@media (max-width: 560px) {
+  .rc-lineedit {
+    grid-template-columns: 1fr 6rem;
+  }
+  .rc-lineedit button {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+}
+.rc-row--static {
+  cursor: default;
+}
+.rc-row--static:hover {
+  background: none;
+}
+
+/* report tables never scroll sideways: on a narrow screen each row becomes a small card */
+.rp-table {
+  overflow-x: visible;
+}
+.rp-table table {
+  width: 100%;
+  table-layout: auto;
+}
+.rp-table :is(td, th) {
+  overflow-wrap: anywhere;
+}
+@media (max-width: 720px) {
+  .rp-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .rp-table :is(table, tbody, tr, td) {
+    display: block;
+    width: 100%;
+  }
+  .rp-table tr {
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--hm-line);
+  }
+  .rp-table td {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    border: 0;
+    padding: 0.15rem 0;
+    text-align: right;
+  }
+  .rp-table td::before {
+    content: attr(data-label);
+    color: var(--hm-muted);
+    text-align: left;
+  }
+}
+
+.rc-tm {
+  display: grid;
+  gap: 0.6rem;
+  align-content: start;
+  min-width: 0;
+}
+.rc-tm > small {
+  color: var(--hm-muted);
+}
+.rc-tm .st-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+/* watermark preview: a sample frame with the mark placed on it */
+.wm-preview {
+  position: relative;
+  container-type: inline-size;
+  aspect-ratio: 3 / 2;
+  border-radius: 10px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #4a5a70 0%, #8a7a66 55%, #2b3340 100%);
+  color: #fff;
+}
+.wm-preview::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(60% 50% at 30% 35%, rgb(255 255 255 / 0.25), transparent 70%);
+}
+.wm-mark {
+  position: absolute;
+  text-shadow: 0 1px 4px rgb(0 0 0 / 0.4);
+}
+.wm-tile {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: space-around;
+  justify-content: space-around;
+  gap: 1rem;
+  transform: rotate(-18deg) scale(1.3);
+}

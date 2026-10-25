@@ -217,6 +217,8 @@ export function ScreenshotGuard({ level = "light", children }: { level?: GuardLe
     // devtools, docked (the window shrinks) or floating (Chrome reads a logged object's properties only while the console
     // is open): the photos hide once each time it opens. On unless the gallery turned it off.
     let devtoolsOpen = false;
+    let docked = 0;
+    let reads = 0;
     const probe = new Image();
     let probed = false;
     Object.defineProperty(probe, "id", {
@@ -226,12 +228,21 @@ export function ScreenshotGuard({ level = "light", children }: { level?: GuardLe
       },
     });
     const devtoolsTimer =
-      o.detectDevtools !== false
+      // not while building the site (devtools and embedded previews are always open then) nor inside someone's frame
+      o.detectDevtools !== false && process.env.NODE_ENV === "production" && window.self === window.top
         ? setInterval(() => {
             probed = false;
             console.debug(probe);
             console.clear();
-            const open = devtoolsDocked(window) || probed;
+            // a window much narrower or shorter than its frame, twice in a row (a browser sidebar or a toolbar is no
+            // reason to raise the alarm), or the console reading the probe, which only happens while it is open
+            // phones and tablets resize the viewport as the address bar slides away while scrolling, so the window
+            // size says nothing there; and a few steady readings are needed on desktop
+            const touch = matchMedia("(pointer: coarse)").matches;
+            docked = !touch && devtoolsDocked(window, 360) ? docked + 1 : 0;
+            // a single read of the probe can come from an extension or the dev overlay: it must repeat to count
+            reads = probed ? reads + 1 : 0;
+            const open = docked >= 3 || reads >= 3;
             if (open && !devtoolsOpen) trigger("DevTools open", "devtools-open");
             devtoolsOpen = open;
           }, 1000)

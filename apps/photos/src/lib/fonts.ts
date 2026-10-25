@@ -39,7 +39,8 @@ export const voice = Newsreader({
   variable: "--font-voice",
   display: "optional",
 });
-export const mono = Martian_Mono({ subsets: ["latin"], variable: "--font-mono", display: "swap" });
+// Not preloaded: the data face is used in the studio and gallery details, never in the first screen of a public page.
+export const mono = Martian_Mono({ subsets: ["latin"], variable: "--font-mono", display: "swap", preload: false });
 // Gallery type options (a gallery chooses one in the studio). `preload: false`: only a gallery that uses one downloads it.
 export const gxEditorial = Playfair_Display({
   subsets: ["latin"],

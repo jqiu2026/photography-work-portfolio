@@ -19,13 +19,14 @@ import {
 
 import Link from "next/link";
 import { Card, Frame, useAct } from "./StudioFrame";
+import "./records.css";
 import "./galleries.css";
 
 const usd = (c: number) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(c / 100);
 const mb = (b: number) => `${(b / 1_048_576).toFixed(1)} MB`;
 type ReportTable = { head: string[]; rows: string[][] };
 export type ReportData = {
-  tab: "sales" | "orders" | "files" | "products" | "invoices";
+  tab: "sales" | "orders" | "files" | "products" | "invoices" | "rate" | "storage";
   days: number;
   allowed: boolean;
   summary: { label: string; value: string }[];
@@ -34,12 +35,14 @@ export type ReportData = {
 const TABS: [ReportData["tab"], string][] = [
   ["sales", "Sales"],
   ["orders", "Orders"],
-  ["files", "Order files"],
+  ["files", "Downloads"],
   ["products", "Products"],
   ["invoices", "Invoices"],
+  ["rate", "Hourly rate"],
+  ["storage", "Storage"],
 ];
 
-/** One report at a time: sales, shop orders, files delivered, products sold, invoices. Pick a period; download the table as CSV. */
+/** One report at a time: sales, shop orders, files delivered, products sold, invoices, true hourly rate, storage cost. Pick a period; download the table as CSV. */
 export function ReportsView({ data }: { data: ReportData }) {
   const { note } = useAct();
   const csv = () => {
@@ -61,7 +64,8 @@ export function ReportsView({ data }: { data: ReportData }) {
       {!data.allowed ? (
         <Card title="Reports are part of Full Frame" id="rp-locked">
           <Text size="sm" tone="muted">
-            See sales, orders, files delivered, products and invoices for any period.
+            See sales, orders, files delivered, products, invoices, your true hourly rate and storage cost for any
+            period.
           </Text>
           <div>
             <Button asChild>
@@ -97,9 +101,21 @@ export function ReportsView({ data }: { data: ReportData }) {
               <Stat key={s.label} label={s.label} value={s.value} />
             ))}
           </StatGroup>
+          {data.tab === "rate" ? (
+            <Text size="sm" tone="muted">
+              Hours are what the calendar blocked for each shoot, with buffers and travel. Editing time is not tracked,
+              so the rate reads high for jobs with a lot of editing.
+            </Text>
+          ) : null}
+          {data.tab === "storage" ? (
+            <Text size="sm" tone="muted">
+              An estimate at 2.3 cents per gigabyte per month for the originals; check the current Vercel Blob price. It
+              does not depend on the period.
+            </Text>
+          ) : null}
           {data.table.rows.length ? (
             <>
-              <Table containerLabel="Report table" stickyHeader>
+              <Table containerLabel="Report table" containerClassName="rp-table">
                 <TableHeader>
                   <TableRow>
                     {data.table.head.map((h) => (
@@ -113,7 +129,7 @@ export function ReportsView({ data }: { data: ReportData }) {
                   {data.table.rows.map((r, i) => (
                     <TableRow key={i}>
                       {r.map((c, j) => (
-                        <TableCell key={j} numeric={numericCol[j]}>
+                        <TableCell key={j} numeric={numericCol[j]} data-label={data.table.head[j]}>
                           {c}
                         </TableCell>
                       ))}

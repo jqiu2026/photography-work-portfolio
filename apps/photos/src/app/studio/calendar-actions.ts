@@ -20,6 +20,7 @@ export async function addAppointmentAction(input: {
   bufferMin?: string;
   travelMin?: string;
   jobId?: string;
+  notes?: string;
 }) {
   return studio(async (ctx) => {
     const { db } = ctx;
@@ -40,6 +41,7 @@ export async function addAppointmentAction(input: {
       bufferAfterMin: buffer,
       travelMin: travel,
       location: input.location,
+      notes: input.notes,
       jobId: input.jobId && id.safeParse(input.jobId).success ? input.jobId : null,
     });
     await created(ctx, "appointment", a.id);
@@ -50,6 +52,55 @@ export async function addAppointmentAction(input: {
         entity: "appointment",
         entityId: a.id,
         summary: `Added ${a.title}`,
+      },
+    };
+  });
+}
+
+export async function updateAppointmentAction(input: {
+  appointmentId: string;
+  title: string;
+  date: string;
+  start: string;
+  end: string;
+  kind?: string;
+  location?: string;
+  bufferMin?: string;
+  travelMin?: string;
+  jobId?: string;
+  notes?: string;
+}) {
+  return studio(async (ctx) => {
+    const { db } = ctx;
+    const aid = id.safeParse(input.appointmentId);
+    if (!aid.success) throw new StudioError("Unknown appointment.");
+    const p = z.object({ title: z.string().min(2, "Give it a title."), date, start: time, end: time }).safeParse(input);
+    if (!p.success) throw new StudioError(p.error.issues[0].message);
+    const c = await cal.getCalendarSettings(db);
+    const buffer = input.bufferMin?.trim() ? Number(input.bufferMin) : c.defaultBufferMin;
+    const travel = input.travelMin?.trim() ? Number(input.travelMin) : 0;
+    if (![buffer, travel].every((n) => Number.isInteger(n) && n >= 0 && n <= 600))
+      throw new StudioError("Buffer and travel are whole minutes.");
+    const kind = (["shoot", "consult", "block"] as const).find((k) => k === input.kind) ?? "shoot";
+    const a = await cal.updateAppointment(db, aid.data, {
+      kind,
+      title: p.data.title,
+      startsAt: cal.zonedToUtc(p.data.date, minutes(p.data.start), c.timezone),
+      endsAt: cal.zonedToUtc(p.data.date, minutes(p.data.end), c.timezone),
+      bufferBeforeMin: buffer,
+      bufferAfterMin: buffer,
+      travelMin: travel,
+      location: input.location,
+      notes: input.notes,
+      jobId: input.jobId && id.safeParse(input.jobId).success ? input.jobId : null,
+    });
+    return {
+      message: "Calendar entry saved",
+      audit: {
+        action: "studio.appointment.update",
+        entity: "appointment",
+        entityId: a.id,
+        summary: `Edited ${a.title}`,
       },
     };
   });
@@ -99,13 +150,13 @@ export async function removeRuleAction(ruleId: string) {
   });
 }
 
-export async function addBlackoutAction(input: { date: string; reason?: string }) {
+export async function addBlackoutAction(input: { date: string; to?: string; reason?: string }) {
   return studio(async ({ db }) => {
     const p = date.safeParse(input.date);
     if (!p.success) throw new StudioError(p.error.issues[0].message);
-    await cal.addBlackout(db, p.data, input.reason);
+    const n = await cal.addBlackout(db, p.data, input.reason, input.to);
     return {
-      message: "Day blocked",
+      message: n > 1 ? `${n} days blocked` : "Day blocked",
       audit: { action: "studio.blackout.add", entity: "blackout_date", summary: `Blocked ${p.data}` },
     };
   });

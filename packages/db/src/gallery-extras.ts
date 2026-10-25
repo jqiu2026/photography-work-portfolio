@@ -232,6 +232,38 @@ export async function addTrack(
     .returning();
   return row;
 }
+/** A track that plays from a link to an audio file (https://.../song.mp3) instead of an upload. */
+export async function addTrackLink(db: Database, input: { title: string; artist?: string; url: string }) {
+  let u: URL;
+  try {
+    u = new URL(input.url.trim());
+  } catch {
+    throw new StudioError("Paste the full link to an audio file, starting with https://");
+  }
+  if (u.protocol !== "https:") throw new StudioError("The link must start with https://");
+  if (!/\.(mp3|m4a|aac|ogg|oga|wav|webm)$/i.test(u.pathname))
+    throw new StudioError(
+      "That link is not a direct audio file (it should end in .mp3, .m4a, .ogg or .wav). Streaming pages such as YouTube or Spotify cannot be played here.",
+    );
+  const ext = u.pathname.split(".").pop()?.toLowerCase();
+  const mime =
+    ext === "m4a" || ext === "aac"
+      ? "audio/mp4"
+      : ext === "ogg" || ext === "oga"
+        ? "audio/ogg"
+        : ext === "wav"
+          ? "audio/wav"
+          : ext === "webm"
+            ? "audio/webm"
+            : "audio/mpeg";
+  return addTrack(db, {
+    title: input.title || decodeURIComponent(u.pathname.split("/").pop() ?? "Track").replace(/\.[^.]+$/, ""),
+    artist: input.artist,
+    storageKey: `url:${u.toString()}`,
+    mime,
+    bytes: 0,
+  });
+}
 export async function deleteTrack(db: Database, id: string) {
   await db.update(s.studioTracks).set({ deletedAt: new Date() }).where(eq(s.studioTracks.id, id));
 }

@@ -16,6 +16,14 @@ import * as bill from "@jerryqiu/db/billing";
 import { AutomationsView, NotificationsView, TasksView } from "@/components/studio/OpsViews";
 import * as autoDb from "@jerryqiu/db/automation";
 import { CodesView } from "@/components/studio/CodesView";
+import {
+  ClientsView,
+  ContractsView,
+  EmailLogView,
+  InquiriesView,
+  InvoicesView,
+  ShootsView,
+} from "@/components/studio/RecordsViews";
 import { OrdersView } from "@/components/studio/OrdersView";
 import { syncPrintCatalog } from "@/lib/print-catalog";
 import {
@@ -28,7 +36,6 @@ import {
 } from "@/components/studio/AdminViews";
 import { ReportsView } from "@/components/studio/ReportsView";
 import {
-  CallSheetsView,
   ExpensesView,
   GearView,
   PrivacyView,
@@ -38,8 +45,9 @@ import {
 } from "@/components/studio/BusinessViews";
 import * as newsDb from "@jerryqiu/db/newsletter";
 import * as teamDb from "@jerryqiu/db/team";
+import * as apiKeyDb from "@jerryqiu/db/api-keys";
 import * as hookDb from "@jerryqiu/db/webhooks";
-import { WebhooksCard } from "@/components/studio/IntegrationViews";
+import { ApiKeysCard, WebhooksCard } from "@/components/studio/IntegrationViews";
 import * as bizDb from "@jerryqiu/db/business";
 import * as brandDb from "@jerryqiu/db/brand";
 import * as extras from "@jerryqiu/db/gallery-extras";
@@ -430,39 +438,6 @@ export default async function StudioSection({
       </Shell>
     );
   }
-  if (section === "callsheets") {
-    const jobRows = await st.listJobs(db);
-    const sheets = await bizDb.listCallSheets(db);
-    const selected = q.job && jobRows.some((r) => r.job.id === q.job) ? q.job : (jobRows[0]?.job.id ?? null);
-    const sheet = selected ? await bizDb.getCallSheet(db, selected) : null;
-    return (
-      <Shell>
-        <CallSheetsView
-          key={selected ?? "none"}
-          user={user.name ?? user.email ?? "owner"}
-          data={{
-            jobs: jobRows.map((r) => ({
-              id: r.job.id,
-              title: r.job.title,
-              date: r.job.date ?? null,
-              client: r.client.name,
-            })),
-            selected,
-            have: sheets.map((x) => x.job.id),
-            sheet: sheet
-              ? {
-                  callTime: sheet.callTime ?? "",
-                  location: sheet.location ?? "",
-                  notes: sheet.notes ?? "",
-                  shots: sheet.shots,
-                  contacts: sheet.contacts,
-                }
-              : null,
-          }}
-        />
-      </Shell>
-    );
-  }
   if (section === "tasks") {
     const today = new Date().toISOString().slice(0, 10);
     const tasks = await autoDb.listTasks(db);
@@ -513,6 +488,18 @@ export default async function StudioSection({
               error: d.error,
               at: d.at.toISOString(),
               host: new URL(d.url).host,
+            })),
+          }}
+        />
+        <ApiKeysCard
+          data={{
+            keys: (await apiKeyDb.listApiKeys(db)).map((k) => ({
+              id: k.id,
+              name: k.name,
+              prefix: k.prefix,
+              created: k.createdAt.toISOString().slice(0, 10),
+              lastUsed: k.lastUsedAt ? k.lastUsedAt.toISOString().slice(0, 16).replace("T", " ") : "",
+              revoked: Boolean(k.revokedAt),
             })),
           }}
         />
@@ -832,7 +819,9 @@ export default async function StudioSection({
   }
   if (section === "reports") {
     const o = await planDb.planOverview(db);
-    const tab = (["sales", "orders", "files", "products", "invoices"] as const).find((t) => t === q.tab) ?? "sales";
+    const tab =
+      (["sales", "orders", "files", "products", "invoices", "rate", "storage"] as const).find((t) => t === q.tab) ??
+      "sales";
     const days = [7, 30, 90, 365].includes(Number(q.days)) ? Number(q.days) : 30;
     const range = reportsDb.lastDays(days);
     const usd = (c: number) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(c / 100);
@@ -871,6 +860,39 @@ export default async function StudioSection({
             String(x.items.length),
             usd(x.order.totalCents),
             x.order.status,
+          ]),
+        };
+      } else if (tab === "rate") {
+        const r = await reportsDb.profitReport(db, range);
+        summary = [
+          { label: "Kept from jobs", value: usd(r.keptCents) },
+          { label: "Costs not tied to a job", value: usd(r.overheadCents) },
+          { label: "Shoot hours", value: r.hours.toFixed(1) },
+          { label: "True hourly rate", value: r.rateCents === null ? "No hours" : usd(r.rateCents) },
+        ];
+        table = {
+          head: ["Job", "Kept", "Costs", "Hours", "Per hour"],
+          rows: r.rows.map((x) => [
+            x.title,
+            usd(x.netCents),
+            usd(x.expenseCents),
+            x.hours.toFixed(1),
+            x.rateCents === null ? "No hours" : usd(x.rateCents),
+          ]),
+        };
+      } else if (tab === "storage") {
+        const r = await reportsDb.storageReport(db);
+        summary = [
+          { label: "Stored", value: `${(r.bytes / 1_073_741_824).toFixed(2)} GB` },
+          { label: "Estimated per month", value: usd(r.monthlyCents) },
+        ];
+        table = {
+          head: ["Gallery", "Photographs", "Size", "Per month"],
+          rows: r.rows.map((x) => [
+            x.title,
+            String(x.photos),
+            `${(x.bytes / 1_048_576).toFixed(1)} MB`,
+            usd(x.monthlyCents),
           ]),
         };
       } else if (tab === "files") {
@@ -936,6 +958,9 @@ export default async function StudioSection({
               totalCents: r.quote.totalCents,
               isSample: r.quote.isSample,
               validUntil: r.quote.validUntil?.toISOString().slice(0, 10) ?? null,
+              intro: r.quote.intro ?? "",
+              terms: r.quote.terms ?? "",
+              fields: r.quote.fields,
             })),
             clients: clients.map((c) => ({ id: c.id, name: c.name })),
             packages: packages.map((p) => ({ id: p.id, name: p.name, priceCents: p.priceCents })),
@@ -1054,6 +1079,104 @@ export default async function StudioSection({
     media: media.map((m) => ({ id: m.id, filename: m.filename })),
   };
   void eq;
+  const who = user.name ?? user.email ?? "owner";
+  const jobDay = (d: Date | string | null) => (d ? new Date(d).toISOString().slice(0, 10) : "");
+  if (section === "clients")
+    return (
+      <Shell>
+        <ClientsView
+          user={who}
+          data={{
+            clients: clients.map((c) => ({
+              id: c.id,
+              name: c.name,
+              email: c.email,
+              phone: c.phone ?? "",
+              address: c.address ?? "",
+              notes: c.notes ?? "",
+              jobs: jobs.filter((j) => j.client.id === c.id).length,
+              since: c.createdAt.toISOString().slice(0, 10),
+            })),
+          }}
+        />
+      </Shell>
+    );
+  if (section === "shoots")
+    return (
+      <Shell>
+        <ShootsView
+          user={who}
+          data={{
+            clients: data.clients.map((c) => ({ id: c.id, name: c.name })),
+            jobs: data.jobs.map((j) => ({
+              id: j.id,
+              title: j.title,
+              client: j.clientName,
+              clientId: j.clientId,
+              status: j.status,
+              date: jobDay(j.date),
+              feeCents: j.feeCents,
+            })),
+          }}
+        />
+      </Shell>
+    );
+  if (section === "bookings")
+    return (
+      <Shell>
+        <InquiriesView user={who} data={{ bookings: data.bookings }} />
+      </Shell>
+    );
+  if (section === "inbox")
+    return (
+      <Shell>
+        <EmailLogView user={who} data={{ emails: data.emails }} />
+      </Shell>
+    );
+  if (section === "invoices")
+    return (
+      <Shell>
+        <InvoicesView
+          user={who}
+          data={{
+            invoices: invoices.map((r) => ({
+              id: r.invoice.id,
+              number: r.invoice.number,
+              jobId: r.job.id,
+              jobTitle: r.job.title,
+              status: r.invoice.status,
+              totalCents: r.invoice.totalCents,
+              lines: r.invoice.lines.map((l) => l.description).join(" + "),
+            })),
+            jobs: data.jobs.map((j) => ({ id: j.id, title: `${j.title} (${j.clientName})` })),
+          }}
+        />
+      </Shell>
+    );
+  if (section === "contracts") {
+    await forms.seedSampleTemplates(db);
+    const templates = await forms.listTemplates(db);
+    return (
+      <Shell>
+        <ContractsView
+          user={who}
+          data={{
+            contracts: contracts.map((r) => ({
+              id: r.contract.id,
+              jobTitle: r.job.title,
+              title: r.contract.title,
+              kind: r.contract.kind,
+              status: r.contract.status,
+              signedBy: r.contract.signerName,
+              body: r.contract.body,
+            })),
+            jobs: data.jobs.map((j) => ({ id: j.id, title: `${j.title} (${j.clientName})` })),
+            templates: templates.map((t) => ({ id: t.id, name: t.name, kind: t.kind })),
+          }}
+        />
+      </Shell>
+    );
+  }
   return (
     <Shell>
       <StudioApp section={section} user={user.name ?? user.email ?? "owner"} data={data} />

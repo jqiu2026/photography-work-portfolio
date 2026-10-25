@@ -338,6 +338,7 @@ export async function createQuoteAction(input: {
   giftCode?: string;
   intro?: string;
   terms?: string;
+  fields?: { label: string; value: string }[];
   country?: string;
   state?: string;
   postalCode?: string;
@@ -368,6 +369,7 @@ export async function createQuoteAction(input: {
       title: input.title,
       intro: input.intro,
       terms: input.terms,
+      fields: input.fields,
       taxRateBp: tax.rateBp,
       taxLabel: tax.label,
     });
@@ -438,6 +440,29 @@ export async function saveCommerceSettingsAction(input: {
         entity: "studio_setting",
         entityId: "payments",
         summary: "Updated deposit, quote and tax settings",
+      },
+    };
+  });
+}
+
+export async function updateQuoteTextAction(input: {
+  quoteId: string;
+  title: string;
+  intro?: string;
+  terms?: string;
+  fields?: { label: string; value: string }[];
+}) {
+  return studioMoney(async ({ db }) => {
+    const p = id.safeParse(input.quoteId);
+    if (!p.success) throw new StudioError("Unknown quote.");
+    const number = await com.updateQuoteText(db, p.data, input);
+    return {
+      message: `Quote ${number} saved`,
+      audit: {
+        action: "studio.quote.update",
+        entity: "studio_quote",
+        entityId: p.data,
+        summary: `Edited quote ${number}`,
       },
     };
   });

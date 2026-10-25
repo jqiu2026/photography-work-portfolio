@@ -1,0 +1,57 @@
+/* a client's quote in a card */
+.qc-fig {
+  position: relative;
+  display: grid;
+  gap: var(--hm-space-3);
+  margin: 0;
+}
+.qc-mark {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 3.4rem;
+  line-height: 0.7;
+  height: 1.4rem;
+  color: var(--hm-accent, currentColor);
+  opacity: 0.8;
+}
+.qc .qc-text,
+.qc-text {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: var(--hm-text-lg);
+  line-height: 1.5;
+}
+.qc-by {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--hm-space-3);
+  font-size: var(--hm-text-sm);
+}
+.qc-who {
+  display: grid;
+  line-height: 1.25;
+}
+.qc .qc-fig blockquote.qc-text {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.qc-by small {
+  color: var(--hm-muted);
+}
+.qc-meta {
+  margin-left: auto;
+}
+
+.qc-by .hm-avatar {
+  flex: none;
+}
+.qc-fig {
+  margin: 0;
+}
+.qc .hm-card-footer,
+.qc-fig .hm-card-footer {
+  padding: 0;
+  border: 0;
+}

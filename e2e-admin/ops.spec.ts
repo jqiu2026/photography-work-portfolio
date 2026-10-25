@@ -31,11 +31,11 @@ test("setup: a client with a job and an invoice due in two days (sent)", async (
   await page.getByRole("button", { name: "Add client" }).click();
   await slow(note(page).last()).toContainText("Client added");
   await page.goto(`${PHOTOS}/studio/shoots`, { waitUntil: "networkidle" });
-  await page.getByRole("button", { name: "Add a job" }).click();
+  await page.getByRole("button", { name: "Add a shoot" }).click();
   await choose(page.getByLabel("Client"), `Ops Client ${uid}`);
   await page.getByLabel("Title").fill(`Ops job ${uid}`);
   await page.getByLabel("Fee (dollars)").fill("200");
-  await page.getByRole("button", { name: "Add job" }).click();
+  await page.getByRole("button", { name: "Add shoot" }).click();
   await slow(page.getByRole("listitem").filter({ hasText: `Ops job ${uid}` })).toBeVisible();
   // one-line payment plan whose only due date is two days away gives an invoice with a due date
   await page.goto(`${PHOTOS}/studio/billing`, { waitUntil: "networkidle" });

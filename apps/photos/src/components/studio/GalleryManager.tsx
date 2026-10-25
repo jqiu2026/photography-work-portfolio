@@ -121,7 +121,16 @@ export type GalleryManagerData = {
   security: GallerySecurity;
   style: GalleryStyle;
   lockedNow: boolean;
-  securityEvents: { id: string; kind: string; combo: string | null; action: string; viewer: string; at: string }[];
+  securityEvents: {
+    id: string;
+    kind: string;
+    combo: string | null;
+    action: string;
+    viewer: string;
+    via: string;
+    device: string;
+    at: string;
+  }[];
   layout: string;
   theme: string;
   density: string;
@@ -1343,8 +1352,10 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
                           ? "Closed after idle time"
                           : `${e.kind}${e.combo ? ` · ${e.combo}` : ""}`}
                       <small>
-                        viewer …{e.viewer} · {e.action} · {e.at}
+                        {e.at} · {e.action}
                       </small>
+                      <small>{e.via || `Session …${e.viewer} (recorded before access details were kept)`}</small>
+                      {e.device ? <small>{e.device}</small> : null}
                     </span>
                   </li>
                 ))}

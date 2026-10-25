@@ -46,10 +46,10 @@ test("owner builds a gallery with nested and locked albums, a public link and an
   await page.getByRole("button", { name: "Add client" }).click();
   await slow(note(page).last()).toContainText("Client added");
   await page.goto(`${PHOTOS}/studio/shoots`, { waitUntil: "networkidle" });
-  await page.getByRole("button", { name: "Add a job" }).click();
+  await page.getByRole("button", { name: "Add a shoot" }).click();
   await choose(page.getByLabel("Client"), `Shop Client ${uid}`);
   await page.getByLabel("Title").fill(`Shop job ${uid}`);
-  await page.getByRole("button", { name: "Add job" }).click();
+  await page.getByRole("button", { name: "Add shoot" }).click();
   await slow(page.getByRole("listitem").filter({ hasText: `Shop job ${uid}` })).toBeVisible();
 
   const made = await newGallery(page, PHOTOS, `Shop job ${uid}`, `Shop gallery ${uid}`);

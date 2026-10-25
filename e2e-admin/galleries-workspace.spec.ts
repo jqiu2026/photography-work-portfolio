@@ -30,10 +30,10 @@ test("create a gallery from a job, upload inside it, and find it in the list", a
   await page.getByRole("button", { name: "Add client" }).click();
   await slow(note(page).last()).toContainText("Client added");
   await page.goto(`${PHOTOS}/studio/shoots`, { waitUntil: "networkidle" });
-  await page.getByRole("button", { name: "Add a job" }).click();
+  await page.getByRole("button", { name: "Add a shoot" }).click();
   await choose(page.getByLabel("Client"), `WS Client ${uid}`);
   await page.getByLabel("Title").fill(`WS job ${uid}`);
-  await page.getByRole("button", { name: "Add job" }).click();
+  await page.getByRole("button", { name: "Add shoot" }).click();
   await slow(page.getByRole("listitem").filter({ hasText: `WS job ${uid}` })).toBeVisible();
 
   // no media-library step: a job and a title are all it takes

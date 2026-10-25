@@ -23,12 +23,16 @@ for (const dir of ["apps/photos/src", ...readdirSync(path.join(root, "packages")
     const src = readFileSync(f, "utf8");
     for (const m of src.matchAll(/from\s+["']([^"']+)["']|import\(["']([^"']+)["']\)/g)) {
       const spec = m[1] ?? m[2] ?? "";
-      if (apps.some((a) => spec.includes(`apps/${a}`) || spec === `@jerryqiu/${a}` || spec.startsWith(`@jerryqiu/${a}/`)))
+      if (
+        apps.some((a) => spec.includes(`apps/${a}`) || spec === `@jerryqiu/${a}` || spec.startsWith(`@jerryqiu/${a}/`))
+      )
         bad.push(`${path.relative(root, f)} imports ${spec}`);
     }
   }
 }
-const example = existsSync(path.join(root, ".env.example")) ? readFileSync(path.join(root, ".env.example"), "utf8") : "";
+const example = existsSync(path.join(root, ".env.example"))
+  ? readFileSync(path.join(root, ".env.example"), "utf8")
+  : "";
 const used = new Set();
 for (const f of walk(path.join(root, "apps/photos/src"))) {
   for (const m of readFileSync(f, "utf8").matchAll(/process\.env\.([A-Z][A-Z0-9_]+)/g)) used.add(m[1]);

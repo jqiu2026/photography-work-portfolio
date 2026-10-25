@@ -162,63 +162,33 @@
   color: var(--hm-fg);
   font-weight: 600;
 }
-/* a group's pages open as a small menu beside the entry (on hover, focus or tap), so the list itself never moves */
-.st-root .hm-dock-entry {
-  position: relative;
-}
+/* the current group's pages sit under its entry; clicking the entry folds or unfolds them */
 .st-root .hm-dock-sub {
   animation: none;
-  position: absolute;
-  top: 50%;
-  left: 100%;
-  z-index: 5;
-  min-width: 11rem;
-  margin: 0;
-  padding: 0.4rem;
-  border: 1px solid var(--hm-line-overlay, var(--hm-line));
-  border-radius: 12px;
-  background: var(--hm-surface-overlay, var(--hm-bg));
-  box-shadow: 0 12px 32px rgb(0 0 0 / 0.35);
-  opacity: 0;
-  visibility: hidden;
-  translate: -0.4rem -50%;
-  pointer-events: none;
-  transition: opacity 0.14s var(--hm-ease-out), translate 0.18s var(--hm-ease-glide), visibility 0s 0.14s;
+  margin: 0.1rem 0 0.5rem 0.1rem;
 }
-.st-root .hm-dock-entry:is(:hover, :focus-within) > .hm-dock-sub {
-  opacity: 1;
-  visibility: visible;
-  translate: 0 -50%;
-  pointer-events: auto;
-  transition-delay: 0s;
+.st-root .hm-dock-entry:has(> .hm-dock-item[aria-expanded="false"]) > .hm-dock-sub {
+  display: none;
 }
 .st-root .hm-dock-sub-item {
   animation: none;
-  padding: 0.45rem 0.7rem;
-  border-radius: 8px;
-  font-size: 0.88rem;
-  white-space: nowrap;
-  transition: color var(--hm-dur-fast) var(--hm-ease-out), background var(--hm-dur-fast) var(--hm-ease-out);
+  padding: 0.25rem 0;
+  font-size: 0.85rem;
+  transition: color var(--hm-dur-fast) var(--hm-ease-out);
 }
 .st-root .hm-dock-sub-item:hover {
   color: var(--hm-fg);
-  background: color-mix(in srgb, var(--hm-fg) 9%, transparent);
 }
 .st-root .hm-dock-sub-item[aria-current="page"] {
   color: var(--hm-fg);
   font-weight: 600;
-  background: color-mix(in srgb, var(--hm-fg) 13%, transparent);
+}
+/* pages of the groups you are not in stay out of the list */
+.st-root .hm-dock-entry:not(:has(> .hm-dock-item[aria-current="page"])) > .hm-dock-sub {
+  display: none;
 }
 @media (max-width: 860px) {
   .st-root .hm-dock {
     padding-top: 0;
-  }
-  .st-root .hm-dock-sub {
-    top: 100%;
-    left: 0;
-    translate: 0 0;
-  }
-  .st-root .hm-dock-entry:is(:hover, :focus-within) > .hm-dock-sub {
-    translate: 0 0;
   }
 }

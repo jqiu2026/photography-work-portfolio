@@ -37,14 +37,16 @@ export function StudioChrome({ children, role }: { children: ReactNode; role?: s
   const pathname = usePathname();
   const section = activeSection(pathname);
   const active = groupOf(section).id;
-  // the first page rides in on the shell's own curtain; the page fade is only for moving between studio pages
+  // clicking the current group folds or unfolds its pages; clicking another group opens its first page
+  const [folded, setFolded] = useState(false);
+  // the first page arrives with the shell's own fade; the page fade is only for moving between studio pages
   const [moved, setMoved] = useState(false);
   useEffect(() => setMoved(true), []);
   return (
     <ToastProvider position="bottom-right" label="Studio notifications">
       <LightField className="st-root">
         <AppShell
-          entrance="curtain"
+          entrance="fade"
           backdrop={<Atmosphere />}
           sidebar={
             <Dock
@@ -73,7 +75,17 @@ export function StudioChrome({ children, role }: { children: ReactNode; role?: s
                     ) : undefined
                   }
                 >
-                  <Link href={`/studio/${g.sections[0]}`}>{g.label}</Link>
+                  <Link
+                    href={`/studio/${g.sections[0]}`}
+                    aria-expanded={g.sections.length > 1 && g.id === active ? !folded : undefined}
+                    onClick={(e) => {
+                      if (g.id !== active || g.sections.length < 2) return;
+                      e.preventDefault();
+                      setFolded((f) => !f);
+                    }}
+                  >
+                    {g.label}
+                  </Link>
                 </DockItem>
               ))}
             </Dock>

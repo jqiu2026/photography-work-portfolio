@@ -46,9 +46,11 @@ test("owner sets brand, a watermark, a track, rules and the branding of a galler
 
   // a watermark
   await page.goto(`${PHOTOS}/studio/watermarks`, { waitUntil: "networkidle" });
-  await page.getByLabel("Name", { exact: true }).fill(`Mark ${uid}`);
-  await page.getByLabel("Words", { exact: true }).fill(`© Set ${uid}`);
-  await page.getByRole("button", { name: "Add watermark" }).click();
+  await page.getByRole("button", { name: "Add a watermark" }).click();
+  const wm = page.getByRole("form", { name: "Add a watermark" });
+  await wm.getByLabel("Name", { exact: true }).fill(`Mark ${uid}`);
+  await wm.getByLabel("Words", { exact: true }).fill(`© Set ${uid}`);
+  await wm.getByRole("button", { name: "Add watermark" }).click();
   await slow(page.getByRole("list", { name: "Watermarks" })).toContainText(`Mark ${uid}`);
 
   // a track
@@ -67,10 +69,10 @@ test("owner sets brand, a watermark, a track, rules and the branding of a galler
   await page.getByRole("button", { name: "Add client" }).click();
   await slow(note(page).last()).toContainText("Client added");
   await page.goto(`${PHOTOS}/studio/shoots`, { waitUntil: "networkidle" });
-  await page.getByRole("button", { name: "Add a job" }).click();
+  await page.getByRole("button", { name: "Add a shoot" }).click();
   await choose(page.getByLabel("Client"), `Set Client ${uid}`);
   await page.getByLabel("Title").fill(`Set job ${uid}`);
-  await page.getByRole("button", { name: "Add job" }).click();
+  await page.getByRole("button", { name: "Add shoot" }).click();
   await slow(page.getByRole("listitem").filter({ hasText: `Set job ${uid}` })).toBeVisible();
   const made = await newGallery(page, PHOTOS, `Set job ${uid}`, `Set gallery ${uid}`);
   slug = made.slug;
@@ -258,9 +260,9 @@ test("price sheets, reports, and the Free plan's limits (then back to Full Frame
 
   // reports
   await page.goto(`${PHOTOS}/studio/reports`, { waitUntil: "networkidle" });
-  for (const t of ["Sales", "Orders", "Order files", "Products", "Invoices"])
+  for (const t of ["Sales", "Orders", "Downloads", "Products", "Invoices"])
     await expect(page.getByRole("navigation", { name: "Reports" }).getByRole("link", { name: t })).toBeVisible();
-  await page.getByRole("navigation", { name: "Reports" }).getByRole("link", { name: "Order files" }).click();
+  await page.getByRole("navigation", { name: "Reports" }).getByRole("link", { name: "Downloads" }).click();
   await expect(page.getByRole("table")).toContainText("free rule");
 
   // plan: Full Frame at 100% off bills $0; Free blocks the store and music with a message that names the upgrade

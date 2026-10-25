@@ -95,4 +95,45 @@ describe("reports", () => {
     const old = rep.lastDays(1, new Date(Date.now() - 30 * 86_400_000));
     expect((await rep.salesReport(db, old)).payments).toBe(0);
   });
+
+  it("works out the true hourly rate and the storage cost", async () => {
+    expect(rep.hourlyRateCents(30_000, 3)).toBe(10_000);
+    expect(rep.hourlyRateCents(30_000, 0)).toBeNull();
+    expect(rep.storageCostCents(0)).toBe(0);
+    expect(rep.storageCostCents(1024 ** 3)).toBe(3); // 2.3 cents rounds up
+    const c = await st.createClient(db, { name: "Rate Client", email: "rate@example.com" });
+    const job = await st.createJob(db, { clientId: c.id, title: "Rate job" });
+    const inv = await st.createInvoice(db, { jobId: job.id, lines: [{ description: "Day", amountCents: 50_000 }] });
+    await st.sendInvoice(db, inv.id);
+    await st.recordPayment(db, {
+      invoiceId: inv.id,
+      provider: "mock",
+      providerRef: "rate-1",
+      amountCents: 50_000,
+      status: "succeeded",
+      method: "mock",
+    });
+    const start = new Date(Date.now() - 3_600_000 * 5);
+    await db.insert(schema.appointments).values({
+      title: "Rate shoot",
+      startsAt: start,
+      endsAt: new Date(start.getTime() + 3_600_000 * 4),
+      blockedStart: start,
+      blockedEnd: new Date(start.getTime() + 3_600_000 * 5),
+      jobId: job.id,
+    });
+    await db.insert(schema.studioExpenses).values({
+      spentOn: new Date().toISOString().slice(0, 10),
+      amountCents: 5_000,
+      description: "Parking",
+      jobId: job.id,
+    });
+    const rate = await rep.profitReport(db, rep.lastDays(7));
+    const mine = rate.rows.find((x) => x.jobId === job.id)!;
+    expect(mine.keptCents).toBe(45_000);
+    expect(mine.hours).toBe(5);
+    expect(mine.rateCents).toBe(9_000);
+    const store = await rep.storageReport(db);
+    expect(store.rows.every((x) => x.monthlyCents >= 0)).toBe(true);
+  });
 });

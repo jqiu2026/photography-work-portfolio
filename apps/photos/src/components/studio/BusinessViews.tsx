@@ -17,11 +17,11 @@ import {
   deleteTestimonialAction,
   publishTestimonialAction,
   retireGearAction,
-  saveCallSheetAction,
   unassignGearAction,
   withdrawConsentAction,
 } from "@/app/studio/business-actions";
 import { Card, FormDialog, Frame, useAct, useConfirm, useNotify } from "./StudioFrame";
+import "./records.css";
 
 const money = (c: number) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(c / 100);
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
@@ -258,9 +258,9 @@ export function TestimonialsView({ user, data }: { user: string; data: Testimoni
           }
         >
           {data.items.length ? (
-            <ul className="hm-data-list st-list st-list--tall">
+            <ul className="rc-cards rc-cards--wide" aria-label="Testimonials">
               {data.items.map((t) => (
-                <li className="hm-data-list-item st-stack" key={t.id} data-testimonial-id={t.id}>
+                <li className="rc-tm" key={t.id} data-testimonial-id={t.id}>
                   <QuoteCard
                     quote={t.quote}
                     name={t.displayName}
@@ -540,169 +540,6 @@ export function GearView({ user, data }: { user: string; data: GearData }) {
           <DateField value={a.date ?? ""} onChange={(e) => setA({ ...a, date: e.target.value })} />
         </Field>
       </FormDialog>
-    </Frame>
-  );
-}
-
-/* ---------------------------------------------------------------- call sheets */
-
-export type CallSheetsData = {
-  jobs: { id: string; title: string; date: string | null; client: string }[];
-  selected: string | null;
-  sheet: {
-    callTime: string;
-    location: string;
-    notes: string;
-    shots: { text: string; done: boolean }[];
-    contacts: { name: string; role: string; phone: string }[];
-  } | null;
-  have: string[];
-};
-
-export function CallSheetsView({ user, data }: { user: string; data: CallSheetsData }) {
-  const { pending, note, act, submit } = useAct();
-  const [jobId, setJobId] = useState(data.selected ?? "");
-  const [callTime, setCallTime] = useState(data.sheet?.callTime ?? "");
-  const [location, setLocation] = useState(data.sheet?.location ?? "");
-  const [notes, setNotes] = useState(data.sheet?.notes ?? "");
-  const [shots, setShots] = useState(data.sheet?.shots ?? []);
-  const [contacts, setContacts] = useState(data.sheet?.contacts ?? []);
-  const [shot, setShot] = useState("");
-  const [c, setC] = useState({ name: "", role: "", phone: "" });
-  return (
-    <Frame section="callsheets" user={user} note={note}>
-      <div className="st-grid">
-        <Card title="Call sheet" id="cs-form">
-          <form
-            noValidate
-            className="st-form"
-            aria-label="Call sheet"
-            onSubmit={submit(() => saveCallSheetAction({ jobId, callTime, location, notes, shots, contacts }))}
-          >
-            <Field label="Job">
-              <Select
-                value={jobId}
-                onValueChange={(v) => {
-                  setJobId(v);
-                  // the page loads the chosen job's sheet
-                  window.location.assign(`/studio/callsheets?job=${v}`);
-                }}
-              >
-                <option value="">Choose a job</option>
-                {data.jobs.map((j) => (
-                  <option key={j.id} value={j.id}>
-                    {j.title}
-                    {j.date ? ` (${j.date})` : ""}
-                    {data.have.includes(j.id) ? " ✓" : ""}
-                  </option>
-                ))}
-              </Select>
-            </Field>
-            <Field label="Call time">
-              <Input value={callTime} onChange={(e) => setCallTime(e.target.value)} placeholder="6:30 pm" />
-            </Field>
-            <Field label="Place">
-              <Input value={location} onChange={(e) => setLocation(e.target.value)} />
-            </Field>
-            <Field label="Notes (parking, power, who to find)">
-              <Textarea rows={3} value={notes} onChange={(e) => setNotes(e.target.value)} />
-            </Field>
-            <Button type="submit" disabled={pending || !jobId}>
-              Save call sheet
-            </Button>
-          </form>
-        </Card>
-        <div className="st-stack">
-          <Card title="Shot list" id="cs-shots">
-            <ul className="hm-data-list st-list">
-              {shots.map((s, i) => (
-                <li className="hm-data-list-item" key={`${s.text}${i}`}>
-                  <Checkbox
-                    checked={s.done}
-                    onChange={(e) => setShots(shots.map((x, j) => (j === i ? { ...x, done: e.target.checked } : x)))}
-                    label={<span style={{ textDecoration: s.done ? "line-through" : undefined }}>{s.text}</span>}
-                  />
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setShots(shots.filter((_, j) => j !== i))}
-                    aria-label={`Remove ${s.text}`}
-                  >
-                    Remove
-                  </Button>
-                </li>
-              ))}
-            </ul>
-            <div className="st-inline">
-              <Input
-                aria-label="New shot"
-                placeholder="A shot you must get"
-                value={shot}
-                onChange={(e) => setShot(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && shot.trim()) {
-                    e.preventDefault();
-                    setShots([...shots, { text: shot.trim(), done: false }]);
-                    setShot("");
-                  }
-                }}
-              />
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={() => {
-                  if (!shot.trim()) return;
-                  setShots([...shots, { text: shot.trim(), done: false }]);
-                  setShot("");
-                }}
-              >
-                Add shot
-              </Button>
-            </div>
-          </Card>
-          <Card title="People on the day" id="cs-people">
-            <ul className="hm-data-list st-list">
-              {contacts.map((p, i) => (
-                <li className="hm-data-list-item" key={`${p.name}${i}`}>
-                  <span>
-                    {p.name}
-                    <small>{[p.role, p.phone].filter(Boolean).join(" · ")}</small>
-                  </span>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setContacts(contacts.filter((_, j) => j !== i))}
-                    aria-label={`Remove ${p.name}`}
-                  >
-                    Remove
-                  </Button>
-                </li>
-              ))}
-            </ul>
-            <div className="st-form">
-              <Field label="Name">
-                <Input value={c.name} onChange={(e) => setC({ ...c, name: e.target.value })} />
-              </Field>
-              <Field label="Role">
-                <Input value={c.role} onChange={(e) => setC({ ...c, role: e.target.value })} />
-              </Field>
-              <Field label="Phone">
-                <Input value={c.phone} onChange={(e) => setC({ ...c, phone: e.target.value })} />
-              </Field>
-              <Button
-                variant="secondary"
-                onClick={() => {
-                  if (!c.name.trim()) return;
-                  setContacts([...contacts, c]);
-                  setC({ name: "", role: "", phone: "" });
-                }}
-              >
-                Add person
-              </Button>
-            </div>
-          </Card>
-        </div>
-      </div>
     </Frame>
   );
 }

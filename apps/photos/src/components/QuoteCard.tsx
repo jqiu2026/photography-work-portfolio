@@ -1,5 +1,6 @@
 import { Avatar, Card, CardContent, CardFooter } from "@holominimal/ui";
 import type { ReactNode } from "react";
+import "./QuoteCard.css";
 
 /**
  * A client's words in a card: a large quote mark, the quote, then who said it. Holominimal has no quote component, so
@@ -23,7 +24,7 @@ export function QuoteCard({
           <CardFooter>
             <figcaption className="qc-by">
               <Avatar name={name} size="sm" />
-              <span>
+              <span className="qc-who">
                 <b>{name}</b>
                 {role ? <small>{role}</small> : null}
               </span>

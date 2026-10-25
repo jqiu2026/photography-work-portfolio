@@ -19,23 +19,28 @@ test("owner adds a client and a job, saves policies, and creates a contract from
   await page.getByRole("button", { name: "Add client" }).click();
   await slow(note(page).last()).toContainText("Client added");
   await page.goto(`${PHOTOS}/studio/shoots`, { waitUntil: "networkidle" });
-  await page.getByRole("button", { name: "Add a job" }).click();
+  await page.getByRole("button", { name: "Add a shoot" }).click();
   await choose(page.getByLabel("Client"), `Forms Client ${uid}`);
   await page.getByLabel("Title").fill(`Forms job ${uid}`);
   await page.getByLabel("Fee (dollars)").fill("500");
-  await page.getByRole("button", { name: "Add job" }).click();
+  await page.getByRole("button", { name: "Add shoot" }).click();
   await slow(page.getByRole("listitem").filter({ hasText: `Forms job ${uid}` })).toBeVisible();
 
   await page.goto(`${PHOTOS}/studio/forms`, { waitUntil: "networkidle" });
-  const pol = page.getByRole("form", { name: "Policies" });
+  await page.getByRole("button", { name: "Change" }).click();
+  const pol = page.getByRole("form", { name: "Gallery and cancellation policies" });
   await pol.getByLabel("Gallery access included (months)").fill("6");
   await pol.getByLabel(/Extension and reactivation fee/).fill("30");
   await pol.getByRole("button", { name: "Save" }).click();
   await slow(note(page).last()).toContainText("Policies saved");
 
-  const make = page.getByRole("form", { name: "Create from template" });
-  await choose(select(make, /^Job/), `Forms job ${uid}`);
-  await choose(select(make, /^Template/), "Event photography agreement");
+  await page
+    .getByRole("listitem")
+    .filter({ hasText: "Event photography agreement" })
+    .getByRole("button", { name: "Use for a shoot" })
+    .click();
+  const make = page.getByRole("form", { name: "Make a contract from this template" });
+  await choose(make.getByLabel("Shoot"), `Forms job ${uid}`);
   await make.getByRole("button", { name: "Create draft" }).click();
   await slow(note(page).last()).toContainText("Created (draft)");
 
@@ -69,9 +74,14 @@ test("owner adds a client and a job, saves policies, and creates a contract from
 
 test("a release for a minor needs the guardian's name", async ({ page }) => {
   await page.goto(`${PHOTOS}/studio/forms`, { waitUntil: "networkidle" });
-  const make = page.getByRole("form", { name: "Create from template" });
-  await choose(select(make, /^Job/), `Forms job ${uid}`);
-  await choose(select(make, /^Template/), "Model release");
+  await page
+    .getByRole("listitem")
+    .filter({ hasText: "Model release" })
+    .getByRole("button", { name: "Use for a shoot" })
+    .first()
+    .click();
+  const make = page.getByRole("form", { name: "Make a contract from this template" });
+  await choose(select(make, /^Shoot/), `Forms job ${uid}`);
   await make.getByRole("button", { name: "Create draft" }).click();
   await slow(note(page).last()).toContainText("who or what");
   await make.getByLabel("Who or what it covers").fill("Sam Student");
@@ -105,8 +115,13 @@ test("a questionnaire is sent by email, answered once through its link, and the 
   page,
 }) => {
   await page.goto(`${PHOTOS}/studio/forms`, { waitUntil: "networkidle" });
-  const send = page.getByRole("form", { name: "Send questionnaire" });
-  await choose(select(send, /^Questionnaire/), "Event details");
+  await page
+    .getByRole("listitem")
+    .filter({ hasText: "Event details" })
+    .getByRole("button", { name: "Send to a client" })
+    .first()
+    .click();
+  const send = page.getByRole("form", { name: "Send a questionnaire" });
   await choose(select(send, /^Client/), `Forms Client ${uid}`);
   await send.getByRole("button", { name: "Send" }).click();
   await slow(page.locator(".hm-toast-description").last()).toContainText("/client/questionnaire/");
@@ -136,8 +151,9 @@ test("a questionnaire is sent by email, answered once through its link, and the 
 
   await page.goto(`${PHOTOS}/studio/forms`, { waitUntil: "networkidle" });
   const ans = page.locator("li[data-send-id]").filter({ hasText: `Forms Client ${uid}` });
-  await ans.locator("summary").click();
-  await expect(ans).toContainText("3pm to 6pm");
-  await expect(ans).toContainText("The cake");
+  await ans.getByRole("button").click();
+  const read = page.getByRole("dialog");
+  await expect(read).toContainText("3pm to 6pm");
+  await expect(read).toContainText("The cake");
   expect((await page.request.get(`${PHOTOS}/client/questionnaire/not-a-token`)).status()).toBe(404);
 });

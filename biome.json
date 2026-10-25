@@ -9,7 +9,7 @@
     "ignoreUnknown": true,
     "ignore": [
       "**/.next",
-      "**/.next-e2e*",
+      "**/.next-*",
       "**/dist",
       "**/node_modules",
       "DRAFTS",

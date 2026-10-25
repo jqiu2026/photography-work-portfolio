@@ -14,8 +14,11 @@ import {
   Input,
   Select,
   Text,
+  Textarea,
 } from "@holominimal/ui";
+import { DateRangePicker } from "@holominimal/ui";
 import { useMemo, useState } from "react";
+import { DateField, TimeField } from "@/components/DateField";
 import {
   addAppointmentAction,
   addBlackoutAction,
@@ -26,11 +29,18 @@ import {
   removeBlackoutAction,
   removeRuleAction,
   saveCalendarSettingsAction,
+  updateAppointmentAction,
 } from "@/app/studio/calendar-actions";
 import { Card, FormDialog, Frame, useAct, useConfirm, useNotify } from "./StudioFrame";
 
 const WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const hhmm = (m: number) => `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`;
+const parseDay = (v?: string) => {
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(v ?? "");
+  return m ? new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3])) : undefined;
+};
+const dayIso = (d: Date) =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 const pad = (n: number) => String(n).padStart(2, "0");
 const iso = (y: number, m: number, d: number) => `${y}-${pad(m + 1)}-${pad(d)}`;
 
@@ -47,6 +57,12 @@ export type CalendarData = {
     time: string;
     location: string | null;
     client: string | null;
+    start: string;
+    end: string;
+    buffer: number;
+    travel: number;
+    notes: string;
+    jobId: string;
   }[];
   rules: { id: string; weekday: number; startMinute: number; endMinute: number }[];
   blackouts: { id: string; date: string; reason: string | null }[];
@@ -243,7 +259,32 @@ export function CalendarView({ user, data, month }: { user: string; data: Calend
                   <span>
                     <strong>{a.title}</strong>
                     <small>{[a.time, a.kind, a.status, a.client, a.location].filter(Boolean).join(" · ")}</small>
+                    {a.notes ? <small className="rc-note">{a.notes}</small> : null}
                   </span>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    aria-label={`Edit ${a.title}`}
+                    onClick={() => {
+                      setDay(null);
+                      open("add", {
+                        aid: a.id,
+                        title: a.title,
+                        date: a.day,
+                        start: a.start,
+                        end: a.end,
+                        kind: a.kind === "shoot" || a.kind === "consult" || a.kind === "block" ? a.kind : "shoot",
+                        location: a.location ?? "",
+                        buffer: String(a.buffer),
+                        travel: String(a.travel),
+                        job: a.jobId,
+                        notes: a.notes,
+                      });
+                      notify(`Loaded ${a.title}`);
+                    }}
+                  >
+                    Edit
+                  </Button>
                   <Button
                     variant="secondary"
                     size="sm"
@@ -307,37 +348,39 @@ export function CalendarView({ user, data, month }: { user: string; data: Calend
       <FormDialog
         open={dlg === "add"}
         onOpenChange={(o) => !o && setDlg((d) => (d === "add" ? null : d))}
-        title="Add to the calendar"
+        title={f.aid ? "Edit calendar entry" : "Add to the calendar"}
         size="lg"
-        submitLabel="Add"
+        submitLabel={f.aid ? "Save" : "Add"}
         pending={pending}
-        onSubmit={() =>
-          go(() =>
-            addAppointmentAction({
-              title: f.title ?? "",
-              date: f.date ?? "",
-              start: f.start ?? "",
-              end: f.end ?? "",
-              kind: f.kind,
-              location: f.location,
-              bufferMin: f.buffer,
-              travelMin: f.travel,
-              jobId: f.job,
-            }),
-          )
-        }
+        onSubmit={() => {
+          const body = {
+            title: f.title ?? "",
+            date: f.date ?? "",
+            start: f.start ?? "",
+            end: f.end ?? "",
+            kind: f.kind,
+            location: f.location,
+            bufferMin: f.buffer,
+            travelMin: f.travel,
+            jobId: f.job,
+            notes: f.notes,
+          };
+          return go(() =>
+            f.aid ? updateAppointmentAction({ appointmentId: f.aid, ...body }) : addAppointmentAction(body),
+          );
+        }}
       >
         <Field label="Title">
           <Input value={f.title ?? ""} onChange={set("title")} />
         </Field>
         <Field label="Date">
-          <Input type="date" value={f.date ?? ""} onChange={set("date")} />
+          <DateField value={f.date ?? ""} onChange={set("date")} />
         </Field>
         <Field label="Start">
-          <Input type="time" value={f.start ?? ""} onChange={set("start")} />
+          <TimeField aria-label="Start time" value={f.start ?? ""} onChange={set("start")} />
         </Field>
         <Field label="End">
-          <Input type="time" value={f.end ?? ""} onChange={set("end")} />
+          <TimeField aria-label="End time" value={f.end ?? ""} onChange={set("end")} />
         </Field>
         <Field label="Kind">
           <Select value={f.kind ?? "shoot"} onValueChange={(v) => set("kind")({ target: { value: v } })}>
@@ -369,6 +412,9 @@ export function CalendarView({ user, data, month }: { user: string; data: Calend
               </option>
             ))}
           </Select>
+        </Field>
+        <Field label="Notes" hint="Parking, who to find, what to bring. Only you see this.">
+          <Textarea rows={3} value={f.notes ?? ""} onChange={set("notes")} />
         </Field>
       </FormDialog>
 
@@ -411,10 +457,10 @@ export function CalendarView({ user, data, month }: { user: string; data: Calend
           </Select>
         </Field>
         <Field label="From">
-          <Input type="time" value={f.rs ?? ""} onChange={set("rs")} />
+          <TimeField aria-label="From" value={f.rs ?? ""} onChange={set("rs")} />
         </Field>
         <Field label="To">
-          <Input type="time" value={f.re ?? ""} onChange={set("re")} />
+          <TimeField aria-label="To" value={f.re ?? ""} onChange={set("re")} />
         </Field>
       </FormDialog>
 
@@ -424,7 +470,7 @@ export function CalendarView({ user, data, month }: { user: string; data: Calend
         title="Blocked days"
         submitLabel="Block day"
         pending={pending}
-        onSubmit={() => go(() => addBlackoutAction({ date: f.bd ?? "", reason: f.br }))}
+        onSubmit={() => go(() => addBlackoutAction({ date: f.bd ?? "", to: f.bt, reason: f.br }))}
       >
         {data.blackouts.length ? (
           <ul className="hm-data-list st-list" aria-label="Blocked days">
@@ -447,8 +493,21 @@ export function CalendarView({ user, data, month }: { user: string; data: Calend
             ))}
           </ul>
         ) : null}
-        <Field label="Day">
-          <Input type="date" value={f.bd ?? ""} onChange={set("bd")} />
+        <Field
+          label="Day or range"
+          hint="Press a first day, then a last day to block several at once. Press one day twice for a single day."
+        >
+          <DateRangePicker
+            aria-label="Days to block"
+            value={{ from: parseDay(f.bd), to: parseDay(f.bt) }}
+            onValueChange={(r) =>
+              setF((x) => ({
+                ...x,
+                bd: r.from ? dayIso(r.from) : "",
+                bt: r.to ? dayIso(r.to) : r.from ? dayIso(r.from) : "",
+              }))
+            }
+          />
         </Field>
         <Field label="Reason (private)">
           <Input value={f.br ?? ""} onChange={set("br")} />
@@ -480,10 +539,10 @@ export function CalendarView({ user, data, month }: { user: string; data: Calend
           <Input value={f.ml ?? ""} onChange={set("ml")} placeholder="Fall minis" />
         </Field>
         <Field label="Day">
-          <Input type="date" value={f.md ?? ""} onChange={set("md")} />
+          <DateField value={f.md ?? ""} onChange={set("md")} />
         </Field>
         <Field label="First slot">
-          <Input type="time" value={f.ms ?? ""} onChange={set("ms")} />
+          <TimeField aria-label="First slot" value={f.ms ?? ""} onChange={set("ms")} />
         </Field>
         <Field label="Slots">
           <Input inputMode="numeric" value={f.mc ?? "6"} onChange={set("mc")} />

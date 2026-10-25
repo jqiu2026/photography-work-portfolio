@@ -73,10 +73,10 @@ test("setup: a client with two jobs on the same day", async ({ page }) => {
   await slow(note(page).filter({ hasText: "Client added" }).first()).toBeVisible();
   for (const t of ["A", "B"]) {
     await page.goto(`${PHOTOS}/studio/shoots`, { waitUntil: "networkidle" });
-    await page.getByRole("button", { name: "Add a job" }).click();
+    await page.getByRole("button", { name: "Add a shoot" }).click();
     await choose(page.getByLabel("Client"), `Gear Client ${uid}`);
     await page.getByLabel("Title").fill(`Gear job ${t} ${uid}`);
-    await page.getByRole("button", { name: "Add job" }).click();
+    await page.getByRole("button", { name: "Add shoot" }).click();
     await slow(page.getByRole("listitem").filter({ hasText: `Gear job ${t} ${uid}` })).toBeVisible();
   }
 });
@@ -106,54 +106,22 @@ test("gear on two jobs the same day shows a clash", async ({ page }) => {
   await expect(page.getByText(/is on .* and .* on /)).toContainText(`Body ${uid}`);
 });
 
-test("a call sheet keeps its shot list and people", async ({ page }) => {
-  await page.goto(`${PHOTOS}/studio/callsheets`, { waitUntil: "networkidle" });
-  await choose(page.getByLabel("Job"), `Gear job A ${uid}`);
-  await page.waitForURL(/job=/);
-  const sheet = inForm(page, "Call sheet");
-  await sheet.getByLabel("Call time").fill("6:30 pm");
-  await page.getByLabel("New shot").fill("Cast walk-in");
-  await page.getByRole("button", { name: "Add shot" }).click();
-  await page.getByRole("button", { name: "Save call sheet" }).click();
-  await slow(note(page).filter({ hasText: "Call sheet saved" }).first()).toBeVisible();
-  await page.reload({ waitUntil: "networkidle" });
-  await expect(page.getByText("Cast walk-in")).toBeVisible();
-  await expect(sheet.getByLabel("Call time")).toHaveValue("6:30 pm");
-});
-
-test("the sidebar opens a group's pages as a menu beside it", async ({ page }) => {
+test("the sidebar lists the current group's pages and folds them on click", async ({ page }) => {
   await page.goto(`${PHOTOS}/studio/galleries`, { waitUntil: "networkidle" });
   const sub = page.getByRole("list", { name: "Galleries pages" });
-  await expect(sub).toBeHidden();
-  await page.getByRole("navigation", { name: "Studio sections" }).getByRole("link", { name: "Galleries" }).hover();
   for (const name of ["Visitors", "Watermarks", "Music"]) await expect(sub.getByRole("link", { name })).toBeVisible();
+  await page
+    .getByRole("navigation", { name: "Studio sections" })
+    .getByRole("link", { name: "Galleries", exact: true })
+    .click();
+  await expect(sub).toBeHidden();
 });
 
-test("newsletter: the footer signup needs the emailed confirmation, and unsubscribing is one click", async ({
-  page,
-}) => {
-  const address = `reader-${uid}@example.test`;
+test("newsletter: signup is closed, and a bad confirmation link says so", async ({ page, request }) => {
   await page.goto(`${PHOTOS}/about`, { waitUntil: "networkidle" });
-  const form = page.getByRole("form", { name: "Newsletter signup" });
-  await form.getByLabel("Occasional news, no spam").fill(address);
-  await form.getByRole("button", { name: "Sign up" }).click();
-  await slow(page.getByText("Check your inbox for a confirmation link.")).toBeVisible();
-  // not on the list yet
-  await page.goto(`${PHOTOS}/studio/subscribers`, { waitUntil: "networkidle" });
-  await expect(page.locator("li", { hasText: address }).getByText("Not confirmed")).toBeVisible();
-  // the confirmation email carries the link
-  await page.goto(`${PHOTOS}/studio/inbox`, { waitUntil: "networkidle" });
-  const mail = page.locator("li").filter({ hasText: address }).filter({ hasText: "Please confirm your email" }).first();
-  await expect(mail).toBeVisible();
-  const text = (await mail.textContent()) ?? "";
-  const token = /newsletter\/confirm\?t=([A-Za-z0-9_%-]+)/.exec(text)?.[1];
-  expect(token).toBeTruthy();
-  await page.goto(`${PHOTOS}/newsletter/confirm?t=${token}`, { waitUntil: "networkidle" });
-  await expect(page.getByRole("heading", { name: "You're on the list" })).toBeVisible();
-  await page.goto(`${PHOTOS}/studio/subscribers`, { waitUntil: "networkidle" });
-  await expect(page.locator("li", { hasText: address }).getByText("Confirmed")).toBeVisible();
-  await page.goto(`${PHOTOS}/newsletter/unsubscribe?t=${token}`, { waitUntil: "networkidle" });
-  await expect(page.getByRole("heading", { name: "You're unsubscribed" })).toBeVisible();
+  await expect(page.getByRole("form", { name: "Newsletter signup" })).toHaveCount(0);
+  const res = await request.post(`${PHOTOS}/api/newsletter`, { data: { email: `reader-${uid}@example.test` } });
+  expect(res.status()).toBe(410);
   await page.goto(`${PHOTOS}/newsletter/confirm?t=bogus`, { waitUntil: "networkidle" });
   await expect(page.getByRole("heading", { name: "That link didn't work" })).toBeVisible();
 });

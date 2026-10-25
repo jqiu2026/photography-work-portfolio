@@ -3,7 +3,6 @@ import { Button, Container, Grid, Section, Text } from "@/components/ui";
 import { getDb } from "@jerryqiu/db";
 import { publicTestimonials, seedSamples } from "@jerryqiu/db/business";
 import { mocksEnabled } from "@jerryqiu/mocks";
-import { NewsletterForm } from "@/components/NewsletterForm";
 import { PageHeader } from "@/components/PageHeader";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -67,16 +66,6 @@ export default async function About() {
           </Container>
         </Section>
       ) : null}
-      <Section style={{ paddingTop: 0 }}>
-        <Container size="md">
-          <div className="about-news">
-            <Text tone="muted" size="sm">
-              Now and then I send a short note about new work. No schedule, no spam, one click to stop.
-            </Text>
-            <NewsletterForm />
-          </div>
-        </Container>
-      </Section>
     </Shell>
   );
 }

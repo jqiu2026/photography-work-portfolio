@@ -2,6 +2,7 @@
 
 import * as biz from "@jerryqiu/db/business";
 import * as news from "@jerryqiu/db/newsletter";
+import * as privacy from "@jerryqiu/db/privacy";
 import { StudioError } from "@jerryqiu/db/studio";
 import { z } from "zod";
 import { created, mayRemove, studio, studioMoney, studioOwner } from "@/lib/studio-run";
@@ -228,6 +229,38 @@ export async function publishToPortfolioAction(input: { mediaIds: string[]; subj
         entity: "gallery",
         entityId: subject.data,
         summary: `Published ${r.added} photograph(s) to the portfolio (${r.subject}). Consent: ${input.consentNote.trim().slice(0, 200)} (by ${user.email})`,
+      },
+    };
+  });
+}
+
+/** Owner only: everything held about one client, as JSON text the page offers as a download. */
+export async function exportClientDataAction(clientId: string) {
+  return studioOwner(async ({ db }) => {
+    const p = id.safeParse(clientId);
+    if (!p.success) throw new StudioError("Unknown client.");
+    const data = await privacy.exportClientData(db, p.data);
+    return {
+      message: "Data export ready",
+      extra: { json: JSON.stringify(data, null, 2) },
+      audit: { action: "client.export", entity: "client", entityId: p.data, summary: "Exported a client's data" },
+    };
+  });
+}
+
+/** Owner only: erases a client's contact details; invoices, payments and contracts stay without a name. */
+export async function eraseClientAction(clientId: string) {
+  return studioOwner(async ({ db }) => {
+    const p = id.safeParse(clientId);
+    if (!p.success) throw new StudioError("Unknown client.");
+    await privacy.eraseClient(db, p.data);
+    return {
+      message: "Client erased",
+      audit: {
+        action: "client.erase",
+        entity: "client",
+        entityId: p.data,
+        summary: "Erased a client's contact details",
       },
     };
   });

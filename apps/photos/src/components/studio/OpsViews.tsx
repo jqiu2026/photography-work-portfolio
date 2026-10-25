@@ -1,7 +1,20 @@
 "use client";
 
 import { DateField } from "@/components/DateField";
-import { Button, Checkbox, Field, Input, Status, Text } from "@holominimal/ui";
+import {
+  Badge,
+  Button,
+  Checkbox,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogTitle,
+  Field,
+  Input,
+  Status,
+  Text,
+} from "@holominimal/ui";
 
 import Link from "next/link";
 import { useState } from "react";
@@ -14,6 +27,7 @@ import {
   toggleTaskAction,
 } from "@/app/studio/ops-actions";
 import { Card, FormDialog, Frame, useAct, useConfirm } from "./StudioFrame";
+import "./records.css";
 
 export type TasksData = {
   tasks: { id: string; title: string; dueOn: string | null; notes: string | null; done: boolean; overdue: boolean }[];
@@ -197,41 +211,90 @@ export type NotificationsData = {
   }[];
 };
 
+const KIND_TONE: Record<string, "danger" | "warning" | "success" | "info" | "accent"> = {
+  security: "danger",
+  payment: "success",
+  inquiry: "accent",
+  booking: "accent",
+  reminder: "warning",
+};
+
 export function NotificationsView({ user, data }: { user: string; data: NotificationsData }) {
   const { pending, note, act } = useAct();
+  const [pick, setPick] = useState<NotificationsData["items"][number] | null>(null);
   return (
     <Frame section="activity" user={user} note={note}>
-      <Card title="Activity" id="n-list">
-        <Button
-          variant="secondary"
-          disabled={pending || !data.items.some((i) => !i.read)}
-          onClick={() => act(() => markNotificationsReadAction())}
-        >
-          Mark all read
-        </Button>
-        <ul className="hm-data-list st-list st-list--tall" aria-label="Activity">
+      <Card
+        title="Activity"
+        id="n-list"
+        actions={
+          <Button
+            variant="secondary"
+            size="sm"
+            disabled={pending || !data.items.some((i) => !i.read)}
+            onClick={() => act(() => markNotificationsReadAction())}
+          >
+            Mark all read
+          </Button>
+        }
+      >
+        <Text size="sm" tone="muted">
+          What happened in the studio, newest first. Open an entry for the details.
+        </Text>
+        <ul className="rc-rows" aria-label="Activity">
           {data.items.map((n) => (
-            <li className="hm-data-list-item" key={n.id} data-unread={!n.read || undefined}>
-              <span>
-                <strong>
-                  {n.read ? null : <Status tone="accent" aria-label="Unread" />}
-                  {n.title}
-                </strong>
-                <small>
-                  {n.kind} · {n.at}
-                  {n.body ? ` · ${n.body}` : ""}
-                </small>
-              </span>
-              {n.link ? (
-                <Button asChild variant="secondary" size="sm">
-                  <Link href={n.link}>Open</Link>
-                </Button>
-              ) : null}
+            <li key={n.id} data-unread={!n.read || undefined}>
+              <button
+                type="button"
+                className="rc-row"
+                aria-label={`Open: ${n.title}`}
+                onClick={() => {
+                  setPick(n);
+                  if (!n.read) act(() => markNotificationsReadAction());
+                }}
+              >
+                <span className="rc-row__main">
+                  <strong>
+                    {n.read ? null : <Status tone="accent" aria-label="Unread" />} {n.title}
+                  </strong>
+                  <small>{n.body ?? ""}</small>
+                </span>
+                <Badge tone={KIND_TONE[n.kind] ?? "info"}>{n.kind}</Badge>
+                <small className="rc-muted">{n.at}</small>
+              </button>
             </li>
           ))}
           {!data.items.length ? <li className="hm-empty">Nothing yet.</li> : null}
         </ul>
       </Card>
+      <Dialog open={pick !== null} onOpenChange={(o) => !o && setPick(null)}>
+        <DialogContent size="md">
+          <DialogTitle>{pick?.title}</DialogTitle>
+          <DialogDescription>
+            {pick?.kind} · {pick?.at}
+          </DialogDescription>
+          <dl className="rc-details">
+            {(pick?.body ?? "")
+              .split(/\. (?=[A-Z])/)
+              .filter(Boolean)
+              .map((part) => (
+                <div key={part}>
+                  <dd>{part.replace(/\.$/, "")}.</dd>
+                </div>
+              ))}
+          </dl>
+          <DialogFooter>
+            <Button variant="secondary" onClick={() => setPick(null)}>
+              Close
+            </Button>
+            {pick?.link ? (
+              <Button asChild>
+                <Link href={pick.link}>Go to it</Link>
+              </Button>
+            ) : null}
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </Frame>
   );
 }

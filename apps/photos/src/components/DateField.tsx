@@ -92,3 +92,27 @@ export function DateTimeField({
     </div>
   );
 }
+
+const QUARTERS = Array.from(
+  { length: 96 },
+  (_, i) => `${String(Math.floor(i / 4)).padStart(2, "0")}:${String((i % 4) * 15).padStart(2, "0")}`,
+);
+
+/** A time of day ("HH:MM", every 15 minutes) in a Holominimal select, for `<input type="time">`. */
+export function TimeField({
+  value,
+  onChange,
+  disabled,
+  ...rest
+}: Pick<Common, "aria-label" | "disabled" | "id"> & { value?: string; onChange?: Change }) {
+  const list = value && !QUARTERS.includes(value) ? [...QUARTERS, value].sort() : QUARTERS;
+  return (
+    <Select
+      {...rest}
+      disabled={disabled}
+      value={value ?? ""}
+      onValueChange={(t) => onChange?.({ target: { value: t } })}
+      options={[{ value: "", label: "Pick a time" }, ...list.map((t) => ({ value: t, label: label(t) }))]}
+    />
+  );
+}

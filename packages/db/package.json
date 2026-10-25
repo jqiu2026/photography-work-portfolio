@@ -26,6 +26,8 @@
     "./brand": "./src/brand.ts",
     "./gallery-extras": "./src/gallery-extras.ts",
     "./plan": "./src/plan.ts",
+    "./privacy": "./src/privacy.ts",
+    "./api-keys": "./src/api-keys.ts",
     "./reports": "./src/reports.ts",
     "./gallery-expiry": "./src/gallery-expiry.ts",
     "./automation": "./src/automation.ts",

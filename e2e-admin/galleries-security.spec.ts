@@ -33,10 +33,10 @@ test("owner makes a gallery and sets its security and look", async ({ page }) =>
   await page.getByRole("button", { name: "Add client" }).click();
   await slow(note(page).last()).toContainText("Client added");
   await page.goto(`${PHOTOS}/studio/shoots`, { waitUntil: "networkidle" });
-  await page.getByRole("button", { name: "Add a job" }).click();
+  await page.getByRole("button", { name: "Add a shoot" }).click();
   await choose(page.getByLabel("Client"), `Sec Client ${uid}`);
   await page.getByLabel("Title").fill(`Sec job ${uid}`);
-  await page.getByRole("button", { name: "Add job" }).click();
+  await page.getByRole("button", { name: "Add shoot" }).click();
   await slow(page.getByRole("listitem").filter({ hasText: `Sec job ${uid}` })).toBeVisible();
 
   const made = await newGallery(page, PHOTOS, `Sec job ${uid}`, `Secure ${uid}`);

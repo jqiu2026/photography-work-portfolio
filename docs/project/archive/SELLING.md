@@ -1,10 +1,10 @@
 # Selling the UI package: checklist (owner steps; Claude only prepares)
 
-Nothing here has been done. Status: **prepared, not published, not for sale.** Name default: Halation UI (Q33). Licence: undecided (Q32). See [redesign-brief.md](redesign-brief.md) section 7 and [PUBLISHING.md](PUBLISHING.md).
+Nothing here has been done. Status: **prepared, not published, not for sale.** Name default: Halation UI (Q33). Licence: commercial / source-available (owner decision 2026-10-23, Q32); open core is the fallback. See [redesign-brief.md](redesign-brief.md) section 7 and [PUBLISHING.md](PUBLISHING.md).
 
 ## 1. Decide
 - [ ] Name confirmed (Halation UI by default). Search: npm (`halation-ui`, `@halation/ui` were free on 2026-10-12; unscoped `halation` is an unrelated project), GitHub org/repo, a domain, USPTO/WIPO trademark search in software and photography classes. Claude has not done trademark checks.
-- [ ] Licence model: A commercial for everything, **B open core (core MIT, Stage commercial; the prepared default)**, or C source-available. Pick, then replace the draft in `packages/ui` (`LICENSE`, `LICENSE-COMMERCIAL.draft.md` when R7 adds it).
+- [x] Licence model chosen 2026-10-23: **C source-available / commercial** (A and B dropped). Pick, then replace the draft in `packages/ui` (`LICENSE`, `LICENSE-COMMERCIAL.draft.md` when R7 adds it).
 - [ ] Copyright holder and legal entity (individual or company) written into `LICENSE`, `package.json` (`author`, `repository`, `homepage`, `bugs`), the docs footer.
 - [ ] Price points and tiers (single developer, team, agency; updates for 12 months). Not decided by Claude.
 

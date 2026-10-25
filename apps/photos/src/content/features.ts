@@ -152,7 +152,7 @@ export const features: Feature[] = [
     group: "Contract and comply",
     title: "Data export and delete-my-data tools",
     priority: "P1",
-    status: "preview",
+    status: "live",
   },
   {
     id: "F-48",
@@ -311,7 +311,7 @@ export const features: Feature[] = [
     priority: "P2",
     status: "live",
   },
-  { id: "F-97", group: "Run the business", title: "Shot lists and call sheets", priority: "P3", status: "live" },
+  { id: "F-97", group: "Run the business", title: "Shot lists and call sheets", priority: "P3", status: "soon" },
   {
     id: "F-98",
     group: "Run the business",
@@ -345,7 +345,7 @@ export const features: Feature[] = [
     group: "Run the business",
     title: "True hourly rate, revenue and storage-cost reports, dashboards",
     priority: "P2/P3",
-    status: "soon",
+    status: "live",
   },
   { id: "F-103", group: "Run the business", title: "Audit log", priority: "P1", status: "live" },
   {

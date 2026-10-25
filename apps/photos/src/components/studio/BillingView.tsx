@@ -1,7 +1,7 @@
 "use client";
 
 import { DateField } from "@/components/DateField";
-import { Button, Checkbox, Field, Input, Select, Status, Text } from "@holominimal/ui";
+import { Badge, Button, Checkbox, Field, Input, Select, Stat, StatGroup, Text } from "@holominimal/ui";
 
 import { useState } from "react";
 import {
@@ -50,6 +50,11 @@ export function BillingView({ user, data }: { user: string; data: BillingData })
     surcharge: data.settings.surcharge,
   });
   const set = (k: string) => (e: { target: { value: string } }) => setF((x) => ({ ...x, [k]: e.target.value }));
+  const [refund, setRefund] = useState<{ p: BillingData["payments"][number]; amount: string } | null>(null);
+  const paidRows = data.payments.filter((p) => p.status === "succeeded" || p.status === "refunded");
+  const received = paidRows.reduce((n, p) => n + p.amountCents - p.tipCents - p.surchargeCents - p.refundedCents, 0);
+  const tips = paidRows.reduce((n, p) => n + p.tipCents, 0);
+  const refunded = paidRows.reduce((n, p) => n + p.refundedCents, 0);
   const jobField = (key: string) => (
     <Field label="Job">
       <Select value={f[key] ?? ""} onValueChange={(v) => set(key)({ target: { value: v } })}>
@@ -65,76 +70,63 @@ export function BillingView({ user, data }: { user: string; data: BillingData })
   return (
     <Frame section="billing" user={user} note={note}>
       {confirmEl}
-      <div className="st-grid">
-        <Card title="Payments and refunds" id="b-pay">
-          {data.payments.length ? (
-            <ul className="hm-data-list st-list st-list--tall">
-              {data.payments.map((p) => (
-                <li className="hm-data-list-item" key={p.id} data-payment-id={p.id}>
-                  <span>
-                    <strong>{p.invoice}</strong> · {usd(p.amountCents)} · {p.method ?? p.provider}{" "}
-                    <Status tone={statusTone(p.status)}>{p.status}</Status>
-                    <small>
-                      {p.at}
-                      {p.tipCents ? ` · tip ${usd(p.tipCents)}` : ""}
-                      {p.surchargeCents ? ` · surcharge ${usd(p.surchargeCents)}` : ""}
-                      {p.refundedCents ? ` · refunded ${usd(p.refundedCents)}` : ""}
-                    </small>
-                  </span>
-                  {p.status === "succeeded" && p.refundedCents < p.amountCents ? (
-                    <form
-                      noValidate
-                      className="st-actions"
-                      aria-label={`Refund ${p.invoice}`}
-                      onSubmit={async (e) => {
-                        e.preventDefault();
-                        const typed = (f[`r-${p.id}`] ?? "").trim();
-                        const amount = typed ? `$${typed.replace(/^\$/, "")}` : usd(p.amountCents - p.refundedCents);
-                        if (
-                          await ask({
-                            title: `Refund ${amount} on ${p.invoice}?`,
-                            body: data.stripe
-                              ? "The money goes back to the client's card through Stripe. A refund cannot be undone."
-                              : "This records the refund. Stripe is not set up, so send the money back yourself. A refund cannot be undone.",
-                            action: `Refund ${amount}`,
-                          })
-                        )
-                          act(
-                            () => refundAction({ paymentId: p.id, amount: typed, reason: "Refund" }),
-                            () => setF({}),
-                          );
-                      }}
-                    >
-                      <Input
-                        inputMode="decimal"
-                        aria-label={`Refund amount for ${p.invoice} in dollars`}
-                        placeholder={((p.amountCents - p.refundedCents) / 100).toFixed(2)}
-                        value={f[`r-${p.id}`] ?? ""}
-                        onChange={set(`r-${p.id}`)}
-                        style={{ width: "6.5rem" }}
-                      />
-                      <Button type="submit" variant="secondary" disabled={pending}>
-                        Refund
-                      </Button>
-                    </form>
-                  ) : null}
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <Text size="sm" tone="muted">
-              No payments yet.
-            </Text>
-          )}
+      <Card title="Money received" id="b-pay">
+        <StatGroup>
+          <Stat
+            label="Received"
+            value={usd(received)}
+            detail={`${paidRows.length} payment${paidRows.length === 1 ? "" : "s"}`}
+          />
+          <Stat label="Tips" value={usd(tips)} />
+          <Stat label="Refunded" value={usd(refunded)} />
+        </StatGroup>
+        <Text size="sm" tone="muted">
+          Each row is one payment a client made against an invoice (a card, or a cash or Zelle payment you marked). Use
+          Refund to give money back.
+        </Text>
+        {data.payments.length ? (
+          <ul className="rc-rows" aria-label="Payments">
+            {data.payments.map((p) => (
+              <li className="rc-row rc-row--static" key={p.id} data-payment-id={p.id}>
+                <span className="rc-row__main">
+                  <strong>
+                    {p.invoice} · {usd(p.amountCents)}
+                  </strong>
+                  <small>
+                    {p.at} · {p.method ?? p.provider}
+                    {p.tipCents ? ` · tip ${usd(p.tipCents)}` : ""}
+                    {p.surchargeCents ? ` · surcharge ${usd(p.surchargeCents)}` : ""}
+                    {p.refundedCents ? ` · refunded ${usd(p.refundedCents)}` : ""}
+                  </small>
+                </span>
+                <Badge tone={statusTone(p.status)}>{p.status}</Badge>
+                {p.status === "succeeded" && p.refundedCents < p.amountCents ? (
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    aria-label={`Refund ${p.invoice}`}
+                    onClick={() => setRefund({ p, amount: "" })}
+                  >
+                    Refund
+                  </Button>
+                ) : null}
+              </li>
+            ))}
+          </ul>
+        ) : (
           <Text size="sm" tone="muted">
-            {data.stripe
-              ? "Refunds on Stripe payments are sent to Stripe, then recorded here."
-              : "Stripe is not configured (TODO(owner): needs STRIPE_SECRET_KEY): refunds here are recorded only; send the money back yourself."}
+            No payments yet. They appear here when a client pays an invoice.
           </Text>
-        </Card>
-
+        )}
+        <Text size="sm" tone="muted">
+          {data.stripe
+            ? "Refunds on Stripe payments are sent to Stripe, then recorded here."
+            : "Stripe is not configured (TODO(owner): needs STRIPE_SECRET_KEY): refunds here are recorded only; send the money back yourself."}
+        </Text>
+      </Card>
+      <div className="st-grid">
         <Card
-          title="Payment plan"
+          title="Instalment plans"
           actions={
             <Button size="sm" onClick={() => setPlanOpen(true)}>
               New plan
@@ -155,7 +147,7 @@ export function BillingView({ user, data }: { user: string; data: BillingData })
         </Card>
 
         <Card
-          title="Recurring billing"
+          title="Recurring invoices"
           actions={
             <Button size="sm" onClick={() => setRecOpen(true)}>
               New recurring invoice
@@ -342,6 +334,37 @@ export function BillingView({ user, data }: { user: string; data: BillingData })
           lower of 3% or your actual cost, needs advance notice to the card networks, and is banned in some states.
           Check the rules where you work before turning it on. Not legal advice.
         </Text>
+      </FormDialog>
+      <FormDialog
+        open={refund !== null}
+        onOpenChange={(o) => !o && setRefund(null)}
+        title={refund ? `Refund ${refund.p.invoice}` : "Refund"}
+        description={
+          data.stripe
+            ? "The money goes back to the client's card through Stripe. A refund cannot be undone."
+            : "This records the refund. Stripe is not set up, so send the money back yourself. A refund cannot be undone."
+        }
+        submitLabel="Refund"
+        danger
+        pending={pending}
+        onSubmit={() =>
+          refund && go(() => refundAction({ paymentId: refund.p.id, amount: refund.amount, reason: "Refund" }))
+        }
+      >
+        <Field
+          label="Amount (dollars)"
+          hint={
+            refund
+              ? `Leave empty to refund all ${usd(refund.p.amountCents - refund.p.refundedCents)} that is left.`
+              : undefined
+          }
+        >
+          <Input
+            inputMode="decimal"
+            value={refund?.amount ?? ""}
+            onChange={(e) => refund && setRefund({ ...refund, amount: e.target.value })}
+          />
+        </Field>
       </FormDialog>
     </Frame>
   );
