@@ -8,7 +8,7 @@ export const metadata: Metadata = { title: "Performances", description: "Where J
 export default async function Performances() {
   const { performances } = await getMusicContent();
   return (
-    <main id="main">
+    <div>
       <PageHeader eyebrow="Music" title="Performances" />
       <div className="mu-wrap mu-section">
         {performances.length ? (
@@ -27,6 +27,6 @@ export default async function Performances() {
           <EmptyState>Performances will be listed here.</EmptyState>
         )}
       </div>
-    </main>
+    </div>
   );
 }

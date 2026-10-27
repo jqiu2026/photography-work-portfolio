@@ -14,7 +14,7 @@ export default async function Confirm({ searchParams }: { searchParams: Promise<
   }
   const sp = await searchParams;
   return (
-    <main id="main">
+    <div>
       <PageHeader
         eyebrow="Newsletter"
         title={
@@ -39,6 +39,6 @@ export default async function Confirm({ searchParams }: { searchParams: Promise<
           </form>
         )}
       </div>
-    </main>
+    </div>
   );
 }

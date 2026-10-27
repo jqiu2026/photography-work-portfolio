@@ -16,7 +16,7 @@ export default async function MockPay({ searchParams }: { searchParams: Promise<
   const found = db ? await m.orderByAccessToken(db, token) : null;
   if (!found) notFound();
   return (
-    <main id="main">
+    <div>
       <PageHeader eyebrow="MOCK" title="Mock payment" />
       <div className="mu-wrap mu-section mu-stack">
         <Alert>
@@ -34,6 +34,6 @@ export default async function MockPay({ searchParams }: { searchParams: Promise<
           <Button type="submit">Pay (mock)</Button>
         </form>
       </div>
-    </main>
+    </div>
   );
 }

@@ -7,7 +7,7 @@ export const metadata: Metadata = { title: "About", description: "About Jerry Qi
 export default async function About() {
   const music = await getMusicContent();
   return (
-    <main id="main">
+    <div>
       <PageHeader eyebrow="Music" title="About" />
       <div className="mu-wrap mu-section">
         <div className="hm-prose mu-voice">
@@ -16,6 +16,6 @@ export default async function About() {
           {music.repertoire.length ? <p>Repertoire: {music.repertoire.join(", ")}.</p> : null}
         </div>
       </div>
-    </main>
+    </div>
   );
 }

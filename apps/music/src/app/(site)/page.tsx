@@ -14,7 +14,7 @@ export default async function MusicHome() {
     .concat(catalog.filter((c) => !c.featured))
     .slice(0, 4);
   return (
-    <main id="main">
+    <div>
       <div className="mu-wrap">
         <section className="mu-hero" aria-labelledby="h">
           <div>
@@ -86,6 +86,6 @@ export default async function MusicHome() {
           <NewsletterForm />
         </section>
       </div>
-    </main>
+    </div>
   );
 }

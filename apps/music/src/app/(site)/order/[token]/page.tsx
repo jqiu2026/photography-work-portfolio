@@ -21,7 +21,7 @@ export default async function Order({ params }: { params: Promise<{ token: strin
     await Promise.all(licenses.map(async (l) => [l.id, await m.licenseFilesFor(db, l.id)] as const)),
   );
   return (
-    <main id="main">
+    <div>
       <PageHeader
         eyebrow={`Order ${number}`}
         title={
@@ -98,6 +98,6 @@ export default async function Order({ params }: { params: Promise<{ token: strin
           with {order.email} to get these any time.
         </p>
       </div>
-    </main>
+    </div>
   );
 }

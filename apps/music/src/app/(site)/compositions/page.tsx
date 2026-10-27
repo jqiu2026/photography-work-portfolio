@@ -39,7 +39,7 @@ export default async function Compositions({
     ),
   ]);
   return (
-    <main id="main">
+    <div>
       <PageHeader
         eyebrow="Music"
         title="Compositions"
@@ -62,6 +62,6 @@ export default async function Compositions({
           </EmptyState>
         )}
       </div>
-    </main>
+    </div>
   );
 }

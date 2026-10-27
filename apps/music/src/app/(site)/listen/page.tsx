@@ -9,7 +9,7 @@ export const metadata: Metadata = { title: "Listen", description: "Recordings by
 export default async function Listen() {
   const { recordings } = await getMusicContent();
   return (
-    <main id="main">
+    <div>
       <PageHeader eyebrow="Music" title="Listen" intro="Recordings load only when you press play." />
       <div className="mu-wrap mu-section mu-stack">
         {recordings.length ? null : <EmptyState>Recordings will be added here.</EmptyState>}
@@ -23,6 +23,6 @@ export default async function Listen() {
           />
         ))}
       </div>
-    </main>
+    </div>
   );
 }

@@ -14,7 +14,7 @@ const homes = [
     h1: /Pictures of people at work/i,
     texts: [/Working with me/i, /Let.s make something worth keeping/i],
   },
-  { name: "music", url: `${music}/`, h1: /Music/, texts: [/New pieces, in your inbox/i] },
+  { name: "music", url: `${music}/`, h1: /Music/, texts: [/New pieces, in your inbox/i], halation: false },
   { name: "flying", url: `${flying}/`, h1: /Flying/, texts: [/Say hello/i, /The log/i] },
 ];
 
@@ -45,7 +45,8 @@ for (const h of homes) {
     await page.goto(h.url, { waitUntil: "networkidle" });
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(h.h1);
     for (const t of h.texts) await expect(page.getByText(t).first()).toBeVisible();
-    await expect(page.locator("html")).toHaveAttribute("data-hl-tier", "static");
+    // the music site is on Holominimal, which has no stage tiers: only the Halation sites carry the attribute
+    if (h.halation !== false) await expect(page.locator("html")).toHaveAttribute("data-hl-tier", "static");
     expect(await page.locator("canvas.hl-stage__canvas").count()).toBe(0);
     await ctx.close();
   });

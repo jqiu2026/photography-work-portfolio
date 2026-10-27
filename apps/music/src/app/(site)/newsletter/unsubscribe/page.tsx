@@ -14,7 +14,7 @@ export default async function Unsubscribe({
     redirect((await unsubscribeAction(form)) ? "/newsletter/unsubscribe?done=1" : "/newsletter/unsubscribe?done=0");
   }
   return (
-    <main id="main">
+    <div>
       <PageHeader
         eyebrow="Newsletter"
         title={sp.done === "1" ? "You're unsubscribed" : sp.done === "0" ? "That link did not work" : "Unsubscribe"}
@@ -27,6 +27,6 @@ export default async function Unsubscribe({
           </form>
         )}
       </div>
-    </main>
+    </div>
   );
 }

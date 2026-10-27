@@ -8,7 +8,7 @@ export const metadata = { title: "Sign in", robots: { index: false } };
 export default async function Verify({ searchParams }: { searchParams: Promise<{ token?: string; failed?: string }> }) {
   const sp = await searchParams;
   return (
-    <main id="main">
+    <div>
       <PageHeader
         eyebrow="Scores"
         title={sp.failed ? "That link did not work" : "Open your library"}
@@ -26,6 +26,6 @@ export default async function Verify({ searchParams }: { searchParams: Promise<{
           </form>
         )}
       </div>
-    </main>
+    </div>
   );
 }

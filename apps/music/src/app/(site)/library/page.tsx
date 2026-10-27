@@ -18,7 +18,7 @@ export default async function Library() {
   const buyer = id && db ? await m.getBuyer(db, id) : null;
   if (!db || !buyer) {
     return (
-      <main id="main">
+      <div>
         <PageHeader
           eyebrow="Scores"
           title="Your library"
@@ -27,7 +27,7 @@ export default async function Library() {
         <div className="mu-wrap mu-section">
           <SignInForm />
         </div>
-      </main>
+      </div>
     );
   }
   const items = await m.libraryFor(db, buyer.id);
@@ -35,7 +35,7 @@ export default async function Library() {
     await Promise.all(items.map(async (i) => [i.license.id, await m.licenseFilesFor(db, i.license.id)] as const)),
   );
   return (
-    <main id="main">
+    <div>
       <PageHeader eyebrow="Scores" title="Your library" intro={`Signed in as ${buyer.email}.`} />
       <div className="mu-wrap mu-section mu-stack">
         {items.length ? (
@@ -80,6 +80,6 @@ export default async function Library() {
           </Button>
         </form>
       </div>
-    </main>
+    </div>
   );
 }

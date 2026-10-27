@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 export default async function Scores() {
   const [pieces, bundles] = await Promise.all([getCatalog(JSON.stringify({ forSale: true })), getBundles()]);
   return (
-    <main id="main">
+    <div>
       <PageHeader
         eyebrow="Music"
         title="Scores"
@@ -67,6 +67,6 @@ export default async function Scores() {
           )}
         </section>
       </div>
-    </main>
+    </div>
   );
 }

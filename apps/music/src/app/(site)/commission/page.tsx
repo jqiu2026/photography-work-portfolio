@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function Commission() {
   return (
-    <main id="main">
+    <div>
       <PageHeader
         eyebrow="Music"
         title="Commission a piece"
@@ -18,6 +18,6 @@ export default function Commission() {
       <div className="mu-wrap mu-section">
         <CommissionForm />
       </div>
-    </main>
+    </div>
   );
 }

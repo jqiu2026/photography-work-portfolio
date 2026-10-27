@@ -36,7 +36,7 @@ export default async function Piece({ params }: Props) {
     ...(work.year ? { dateCreated: String(work.year) } : {}),
   };
   return (
-    <main id="main">
+    <div>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(ld).replace(/</g, "\\u003c") }}
@@ -183,6 +183,6 @@ export default async function Piece({ params }: Props) {
           </section>
         </aside>
       </div>
-    </main>
+    </div>
   );
 }

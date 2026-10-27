@@ -17,7 +17,7 @@ export default async function Checkout() {
   const cart = await m.previewCart(db, ids);
   if (cart.error || !cart.lines.length) redirect("/cart");
   return (
-    <main id="main">
+    <div>
       <PageHeader
         eyebrow="Scores"
         title="Checkout"
@@ -53,6 +53,6 @@ export default async function Checkout() {
           </p>
         </aside>
       </div>
-    </main>
+    </div>
   );
 }

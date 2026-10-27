@@ -5,7 +5,7 @@ export const metadata: Metadata = { title: "Privacy" };
 
 export default function Privacy() {
   return (
-    <main id="main">
+    <div>
       <PageHeader eyebrow="Legal" title="Privacy" intro="What this site keeps, and why." />
       <div className="mu-wrap mu-section">
         {/* TODO(owner): draft text; lawyer review (Q13). */}
@@ -30,6 +30,6 @@ export default function Privacy() {
           <p>Write to ask what is kept about you, or to have it deleted.</p>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

@@ -1,12 +1,17 @@
 # Other sites: music, flying, make
 
-Merged 2026-10-15 from the old docs 15, 16 and 17 (archived). **Not in the current scope**: do not build these until the owner says so. Rules that still hold are listed here so nothing is lost.
+Merged 2026-10-15 from the old docs 15, 16 and 17 (archived). Music was built on the owner's request (Q125); flying and make are **not in the current scope**: do not build them until the owner says so. Rules that still hold are listed here so nothing is lost.
 
 ## Music (music.jerryqiu.com, `apps/music`, port 3003)
 
-- Catalogue of compositions; **listen** only when a performance recording exists; **score preview and purchase** are separate from listening. Mock score store exists in `@jerryqiu/mocks` (labelled, off in production, Q47).
-- Planned (P1): piece pages, filters, player, PDF score store with watermark and licence, buyer account, rights type per piece (store button disabled for arrangements of copyrighted works until a licence is on file), admin. P2: more file types, bundles, ensemble licences, commissions, newsletter. Prices are placeholders (Q61); Stripe fees passed to buyers (Q56).
-- Claim no instrument or repertoire until the owner supplies facts (Q42). Own Vercel project; Blob for files; Neon free tier.
+**Built 2026-10-27 (branch `claude/music-site`, Q125 to Q135).** What exists: [PROGRESS.md](PROGRESS.md) "Music site".
+
+- Catalog of compositions with filters (instrument, style, difficulty, for sale, has a recording) and search; **listen** only when a recording exists (click-to-play embeds: YouTube, Spotify, SoundCloud, Bandcamp; nothing loads from the provider until play is pressed); **score preview and purchase** are separate from listening.
+- Store: score files (PDF, MIDI, MusicXML, audio, ZIP) kept private; free preview of the first pages (marked PREVIEW, the rest never leaves the server); products are a score at a license tier (personal, ensemble, institution) at a price; bundles; cart; checkout with Stripe (labeled MOCK page in development and previews); receipt email with an order link; buyer library with a one-time sign-in link (no password); every downloaded PDF is stamped per buyer (name and license number on each page, license page at the end), a download cap per license (default 10), refunds end the license.
+- Rights type per piece: original, arrangement of a public-domain work, arrangement of a copyrighted work. A copyrighted arrangement is not for sale until "license on file" is ticked (`@jerryqiu/scores` `canSell`, checked in the catalog, on the piece page and when the order is made).
+- Commissions (inquiry form, studio list with statuses), newsletter with double opt-in and a send form in the studio, studio at `/studio` (pieces, files, products, bundles, recordings and performances, orders with refunds, commissions, newsletter, reports on the overview).
+- Prices are placeholders (Q61); Stripe's fee is passed to the buyer as its own line (Q56); license wording is a draft for a lawyer (Q129). Claim no instrument or repertoire until the owner supplies facts (Q42). Own Vercel project; Blob for files; Neon free tier.
+- Not built: uploaded audio files played on the site (recordings are embeds), site search across pages, buyer-set passwords, multi-currency, tax. Each is a documented default in QUESTIONS.md.
 
 ## Flying (flying.jerryqiu.com, `apps/flying`, port 3004)
 

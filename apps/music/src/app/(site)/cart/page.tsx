@@ -15,7 +15,7 @@ export default async function Cart() {
   const db = getDb();
   const cart = db && ids.length ? await m.previewCart(db, ids) : { lines: [], totals: null, error: null };
   return (
-    <main id="main">
+    <div>
       <PageHeader eyebrow="Scores" title="Your cart" />
       <div className="mu-wrap mu-section mu-stack">
         {cart.error ? <FormMessage>{cart.error}</FormMessage> : null}
@@ -95,6 +95,6 @@ export default async function Cart() {
           </>
         )}
       </div>
-    </main>
+    </div>
   );
 }

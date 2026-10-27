@@ -6,7 +6,7 @@ export const metadata: Metadata = { title: "Newsletter" };
 
 export default function Newsletter() {
   return (
-    <main id="main">
+    <div>
       <PageHeader
         eyebrow="Music"
         title="Newsletter"
@@ -15,6 +15,6 @@ export default function Newsletter() {
       <div className="mu-wrap mu-section">
         <NewsletterForm />
       </div>
-    </main>
+    </div>
   );
 }

@@ -6,7 +6,7 @@ export const metadata: Metadata = { title: "Score licenses", description: "What 
 
 export default function Licensing() {
   return (
-    <main id="main">
+    <div>
       <PageHeader
         eyebrow="Legal"
         title="Score licenses"
@@ -45,6 +45,6 @@ export default function Licensing() {
           </p>
         </div>
       </div>
-    </main>
+    </div>
   );
 }
