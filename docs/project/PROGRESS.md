@@ -36,18 +36,22 @@ Known flaky (pre-existing, not caused by a milestone): `e2e-admin/public.spec.ts
 | PHOTO-M17 | Deployment prep: vercel.json, isolated production build, env example, checklist | `apps/photos/vercel.json` | isolated build passes |
 | PHOTO-M18 | Polish: WCAG 2.2 AA, Lighthouse mobile 80+, CLS under 0.02, 390 and 1440 screenshots light and dark | all | axe clean; Lighthouse recorded |
 
-## Music site (branch `claude/music-site`, owner request 2026-10-27, Q125)
+## Music site (branch `claude/music-site`, owner request 2026-10-27, Q125 to Q135)
 
-Spec: [other-sites.md](other-sites.md) (P1 and P2), data model in Q126 to Q130. Gates: `pnpm lint`, `pnpm typecheck`, `pnpm test`, plus the music e2e.
+Spec: [other-sites.md](other-sites.md). Gates run on 2026-10-27: `pnpm typecheck` clean; unit tests green except one pre-existing failure in `packages/ui` (`test/protection.test.tsx`, "ProtectedImage on the photo site": the photo app dropped Halation protection; not touched here); `pnpm lint` clean except two pre-existing format errors in `packages/sites` (maintenance page files); production e2e for music (axe at 390 and 1440, light and dark, 12 routes, no JS, reduced motion, cross-site rule, mocks absent in production) 107 passed in the first run, then 50 of 50 after the fixes; music maintenance e2e 7 passed; `e2e-admin/music.spec.ts` 5 passed (dev servers, throwaway database). Screenshots: `screenshots/music/`.
 
 | Id | Scope | Status |
 |---|---|---|
-| MUSIC-M1 | `@jerryqiu/scores` (rights, fee pass-through, license text, per-buyer PDF stamp) and `packages/db/src/music.ts` with migration 0018 (works, files, products, bundles, buyers, orders, licenses, downloads, commissions, newsletter); 30 tests | done |
-| MUSIC-M2 | Music app on Holominimal: layout, chrome, maintenance, home, catalog with filters, piece page, listen, performances, about | todo |
-| MUSIC-M3 | Score store: preview, cart, checkout (Stripe adapter or labelled mock), webhook, receipt email, buyer library with sign-in link, watermarked downloads | todo |
-| MUSIC-M4 | Studio (`/studio`): pieces, files and previews, products, bundles, rights, recordings and performances, orders, commissions, subscribers, reports | todo |
-| MUSIC-M5 | P2: commissions page, newsletter with double opt-in, ensemble and institution licenses, bundles in the store | todo |
-| MUSIC-M6 | Tests (unit, e2e, axe), screenshots, deployment notes, docs | todo |
+| MUSIC-M1 | `@jerryqiu/scores` (rights, fee pass-through, license text, per-buyer PDF stamp, preview, page count) and `packages/db/src/music.ts` with migration 0018; 32 unit tests | done |
+| MUSIC-M2 | Music app on Holominimal: layout, dock, maintenance, home, catalog with filters, piece page with click-to-play recordings and score preview, listen, performances, about, licensing, privacy | done |
+| MUSIC-M3 | Store: scores and bundles, cart (cookie), checkout (Stripe Checkout or labeled MOCK in development), webhook, receipt email, order page, buyer library with one-time sign-in link, per-buyer stamped downloads with a cap | done |
+| MUSIC-M4 | Studio `/studio`: pieces and rights, direct score uploads (signed PUT locally, Vercel Blob in production), products, bundles, recordings and performances, orders with refunds and download limits, commissions, newsletter send and CSV export, overview reports | done |
+| MUSIC-M5 | P2: commissions page, newsletter with double opt-in, ensemble and institution licenses, bundles in the store | done |
+| MUSIC-M6 | Tests, screenshots, docs | done; see "Not built" below |
+
+Not built (decisions in QUESTIONS.md): playing uploaded audio on the site (recordings are embeds, Q134); passwords for buyers (Q133); tax and multi-currency; scheduled newsletter sends (Q135). Nothing was pushed: the sandbox could not reach GitHub with write access (403), so the work is in local commits on `claude/music-site`.
+
+Owner to-do for music (also in [02-sites-and-deployment.md](02-sites-and-deployment.md)): create the `jq-music` Vercel project (Root Directory `apps/music`), set `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` (a separate endpoint on the music host), `MUSIC_EMAIL_FROM` or `EMAIL_FROM` with `RESEND_API_KEY`, `DATABASE_URL`, `AUTH_SECRET` (same as the hub), `STORAGE_DRIVER=blob` with `BLOB_READ_WRITE_TOKEN`; run `pnpm db:migrate`; enter the real pieces, files and prices in the studio; have a lawyer review the license wording (Q129).
 
 ## Owner to-do (keys and accounts)
 

@@ -44,3 +44,13 @@ The whole photo site is on Holominimal (`@holominimal/ui`, vendored build in `pa
 ## Owner to-do (keys and accounts)
 
 See PROGRESS.md "Owner to-do". Nothing has been created or spent.
+
+## Music site (2026-10-27, branch `claude/music-site`)
+
+Built on the owner's request (Q125). Read [other-sites.md](other-sites.md) "Music" and PROGRESS.md "Music site" first.
+
+- **Code map:** `packages/scores` (rights `canSell`, `passThroughFee`, license text, `stampScore`, `previewPdf`, `samplePdf`), `packages/db/src/music.ts` (everything database: catalog, products, bundles, orders, licenses, buyers, downloads, commissions, subscribers, media items, reports) with migration 0018, `apps/music` (public pages under `src/app/(site)`, studio under `src/app/studio`, routes `api/download`, `api/preview`, `api/studio/upload/*`, `api/webhooks/stripe`, `api/cart`).
+- **Dev loop:** `pnpm dev:db`, then `cd apps/music && pnpm seed:demo` (labeled SAMPLE pieces with stand-in PDFs) and `pnpm dev` (http://localhost:3003; the studio is open in development via DASHBOARD_OPEN_SIGNIN). Purchases use the labeled MOCK payment page.
+- **Tests:** `pnpm --filter @jerryqiu/scores test`, `pnpm --filter @jerryqiu/db test` (music.test.ts), `pnpm --filter @jerryqiu/music test`, `playwright test -c playwright.admin.config.ts e2e-admin/music.spec.ts`, and the production specs in `e2e/` (smoke, static-tier, mocks-prod, cross-site). In a sandbox whose browser build differs from Playwright's, link `/opt/pw-browsers/chromium_headless_shell-<needed>` to the installed one.
+- **Gotchas:** the pages sit inside Holominimal's `AppShell`, which already renders `<main id="main">`: page components use a `<div>`, never another `<main>`. The order link and a subscriber's link are HMACs of the record id (Q132). `revalidateTag("music", { expire: 0 })` refreshes the public catalog after a studio change. Stripe metadata `site=music` keeps the photo webhook from touching music orders.
+- **Next (owner's call):** real pieces and prices; lawyer review of `packages/scores/src/license.ts` (Q129); uploaded-audio playback (Q134); a scheduled newsletter send; a music tab in the hub admin if the owner wants one place for everything.

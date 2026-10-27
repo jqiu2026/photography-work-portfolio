@@ -45,9 +45,20 @@ Prepared in the repo:
 
 Placeholders in use are listed in [PROGRESS.md](PROGRESS.md) under "Owner to-do (keys and accounts)".
 
+## Owner checklist (music project)
+
+1. Vercel: project `jq-music`, Root Directory `apps/music`, "include source files outside of the Root Directory" enabled (as for photo). Domain `music.jerryqiu.com`.
+2. Env: `DATABASE_URL` (same Neon database as the hub; run `pnpm db:migrate` once, migration 0018 adds the music tables), `AUTH_SECRET` (same value as the hub and photo), `AUTH_COOKIE_DOMAIN=.jerryqiu.com`, `ADMIN_EMAILS`, `NEXT_PUBLIC_HUB_URL`, `NEXT_PUBLIC_MUSIC_URL=https://music.jerryqiu.com`, `REVALIDATE_SECRET` (same as the hub).
+3. Score files: a Blob store on this project, `STORAGE_DRIVER=blob`, `BLOB_READ_WRITE_TOKEN`. Files live under a `private/` prefix and are only ever read by the server (the download route stamps each PDF). That is capability-URL privacy, not access control (Q51).
+4. Payments: Stripe test mode first. `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`; add a webhook endpoint `https://music.jerryqiu.com/api/webhooks/stripe` for `checkout.session.completed` and `charge.refunded`. Without the key a production build refuses orders; development shows a labeled MOCK payment page.
+5. Email: `RESEND_API_KEY`, `MUSIC_EMAIL_FROM` (or `EMAIL_FROM`), `EMAIL_REPLY_TO`, `CONTACT_TO_EMAIL` (commission inquiries are sent there).
+6. Studio: sign in on the hub, then open `https://music.jerryqiu.com/studio`. Enter the real pieces, upload score PDFs, set prices, tick "license on file" only for arrangements you hold a license for, then publish.
+7. Maintenance mode: the site is in maintenance mode by default in a production build (see MAINTENANCE.md); the studio stays reachable, the store does not.
+8. Firewall: rate-limit `/api/download/*`, `/api/preview/*`, `/api/cart` and the form posts.
+
 ## Environment names (full list; values only in Vercel or untracked env files)
 
-`DATABASE_URL`, `AUTH_SECRET`, `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET`, `ALLOWED_EMAIL_DOMAIN`, `ADMIN_EMAILS`, `AUTH_COOKIE_DOMAIN`, `STORAGE_DRIVER`, `STORAGE_DIR`, `BLOB_READ_WRITE_TOKEN`, `IMAGE_TOKEN_SECRET` (+ `_PREVIOUS`), `RESEND_API_KEY`, `EMAIL_FROM`, `EMAIL_REPLY_TO`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL`, `TURNSTILE_SECRET_KEY`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `WHCC_BASE_URL`, `WHCC_CONSUMER_KEY`, `WHCC_CONSUMER_SECRET`, `FACESEARCH_PROVIDER`, `CRON_SECRET`, `REVALIDATE_SECRET`, `NEXT_PUBLIC_HUB_URL`, `NEXT_PUBLIC_PHOTOS_URL`, `NEXT_PUBLIC_MUSIC_URL`, `NEXT_PUBLIC_FLYING_URL`, `PAGE_ACCESS_PASSWORD`, `ENABLE_MOCKS`, `DASHBOARD_OPEN_SIGNIN` (local only).
+`DATABASE_URL`, `AUTH_SECRET`, `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET`, `ALLOWED_EMAIL_DOMAIN`, `ADMIN_EMAILS`, `AUTH_COOKIE_DOMAIN`, `STORAGE_DRIVER`, `STORAGE_DIR`, `BLOB_READ_WRITE_TOKEN`, `IMAGE_TOKEN_SECRET` (+ `_PREVIOUS`), `RESEND_API_KEY`, `EMAIL_FROM`, `EMAIL_REPLY_TO`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL`, `TURNSTILE_SECRET_KEY`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `WHCC_BASE_URL`, `WHCC_CONSUMER_KEY`, `WHCC_CONSUMER_SECRET`, `FACESEARCH_PROVIDER`, `CRON_SECRET`, `REVALIDATE_SECRET`, `NEXT_PUBLIC_HUB_URL`, `NEXT_PUBLIC_PHOTOS_URL`, `NEXT_PUBLIC_MUSIC_URL`, `NEXT_PUBLIC_FLYING_URL`, `PAGE_ACCESS_PASSWORD`, `MUSIC_EMAIL_FROM`, `ENABLE_MOCKS`, `DASHBOARD_OPEN_SIGNIN` (local only).
 
 ## Mocks in production
 
