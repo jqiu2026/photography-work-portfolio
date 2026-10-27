@@ -31,6 +31,8 @@ export type HubState = {
   previews: HTMLCanvasElement[];
   /** the Nexus's light, easing toward the front gate's colour */
   tint?: RGB;
+  /** a gate named by the pointer over its button in the console (it lights up) */
+  hover?: number;
   /** seconds since the ring last turned to a new gate (a ripple of light crosses the platform) */
   shift?: number;
   /** pointer, -1..1, eased: far layers drift against it */
@@ -145,7 +147,15 @@ function drawGate(c: CanvasRenderingContext2D, g: Gate, s: HubState, t: number, 
     const pulse = 0.5 + 0.5 * Math.sin(t * 3);
     fill(c, g.x, g.y - 1, g.w, 1, rgba(trim, 0.4 + pulse * 0.4));
   }
-  if (fog > 0.02) fill(c, g.x, g.y, g.w, g.h, rgba(VOID, fog));
+  if (fog > 0.02) fill(c, g.x, g.y, g.w, g.h, rgba(VOID, fog * (g.i === s.hover ? 0.3 : 1)));
+  // named from the console: an outline that breathes
+  if (g.i === s.hover && !front) {
+    const a = 0.55 + 0.35 * Math.sin(t * 6);
+    fill(c, g.x - 2, g.y - 2, g.w + 4, 1, rgba(look.accent, a));
+    fill(c, g.x - 2, g.y + g.h + 1, g.w + 4, 1, rgba(look.accent, a));
+    fill(c, g.x - 2, g.y - 2, 1, g.h + 4, rgba(look.accent, a));
+    fill(c, g.x + g.w + 1, g.y - 2, 1, g.h + 4, rgba(look.accent, a));
+  }
 }
 
 /** The Nexus: a stone platform in a void under moving aurora, the core's beam, and four gates on a ring. */

@@ -490,15 +490,41 @@ function cloudSea(
 
 export const paintAltitude: Painter = (c, w, h, t) => {
   const T = Math.max(2, Math.round(h / 30));
-  bands(c, 0, 0, w, h, [hex("#123a94"), hex("#3b80d6"), hex("#9fd3f3"), hex("#f2e6c8")], 2);
-  // a low sun with a stepped halo
+  // the sky drifts from noon to sunset and back
+  const dusk = 0.5 + 0.5 * Math.sin(t * 0.04 + 2);
+  bands(
+    c,
+    0,
+    0,
+    w,
+    h,
+    [
+      mix(hex("#123a94"), hex("#2a1f6e"), dusk * 0.7),
+      mix(hex("#3b80d6"), hex("#8a4f9e"), dusk * 0.6),
+      mix(hex("#9fd3f3"), hex("#ff9f6b"), dusk * 0.7),
+      mix(hex("#f2e6c8"), hex("#ffd08a"), dusk),
+    ],
+    2,
+  );
+  // a low sun with a stepped halo, lower at dusk
   const s = Math.max(3, Math.round(h * 0.07));
   const sx = Math.round(w * 0.22);
-  const sy = Math.round(h * 0.5);
+  const sy = Math.round(h * (0.42 + dusk * 0.14));
   glow(c, sx, sy, s * 3, hex("#ffe9b8"), 0.4, 5);
   fill(c, sx - s / 2, sy - s / 2, s, s, "#fff6dc");
   // the far sea
-  cloudSea(c, w, h, h * 0.63, h * 0.08, Math.max(1, Math.round(T * 0.6)), t * 3, 5, hex("#eef4ff"), hex("#b9cde6"));
+  cloudSea(
+    c,
+    w,
+    h,
+    h * 0.63,
+    h * 0.08,
+    Math.max(1, Math.round(T * 0.6)),
+    t * 3,
+    5,
+    mix(hex("#eef4ff"), hex("#ffd2b8"), dusk * 0.6),
+    mix(hex("#b9cde6"), hex("#8a6fa8"), dusk * 0.6),
+  );
   // floating islands with waterfalls
   for (let i = 0; i < 3; i++) {
     const span = w + 80;
@@ -532,8 +558,30 @@ export const paintAltitude: Painter = (c, w, h, t) => {
     fill(c, px, py + 1, 1, 1, "#2a3a55");
   }
   // the middle and near seas, each faster
-  cloudSea(c, w, h, h * 0.76, h * 0.12, T, t * 8, 11, hex("#f6f9ff"), hex("#a9c1df"));
-  cloudSea(c, w, h, h * 0.93, h * 0.14, T + 2, t * 16, 23, hex("#ffffff"), hex("#9db5d6"));
+  cloudSea(
+    c,
+    w,
+    h,
+    h * 0.76,
+    h * 0.12,
+    T,
+    t * 8,
+    11,
+    mix(hex("#f6f9ff"), hex("#ffd2b8"), dusk * 0.6),
+    mix(hex("#a9c1df"), hex("#8a6fa8"), dusk * 0.6),
+  );
+  cloudSea(
+    c,
+    w,
+    h,
+    h * 0.93,
+    h * 0.14,
+    T + 2,
+    t * 16,
+    23,
+    mix(hex("#ffffff"), hex("#ffd2b8"), dusk * 0.6),
+    mix(hex("#9db5d6"), hex("#8a6fa8"), dusk * 0.6),
+  );
   // wind
   for (let i = 0; i < 18; i++) {
     const len = 6 + hash(i) * 18;

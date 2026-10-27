@@ -486,6 +486,18 @@ export function Nexus({ realms, children }: { realms: RealmLink[]; children: Rea
                 aria-pressed={sel === i}
                 style={{ "--nx-accent": `rgb(${l.accent.join(",")})` } as React.CSSProperties}
                 onClick={() => (sel === i ? enter() : select(i))}
+                onPointerEnter={() => {
+                  st.current.hub.hover = i;
+                }}
+                onPointerLeave={() => {
+                  st.current.hub.hover = -1;
+                }}
+                onFocus={() => {
+                  st.current.hub.hover = i;
+                }}
+                onBlur={() => {
+                  st.current.hub.hover = -1;
+                }}
               >
                 <span className="nx-gate__name">{l.name}</span>
                 <span className="nx-gate__site">{r?.site}</span>
