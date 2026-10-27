@@ -171,7 +171,7 @@ export function Nexus({ realms, children }: { realms: RealmLink[]; children: Rea
       H = innerHeight;
       cv.width = W;
       cv.height = H;
-      s.scale = W >= 1200 ? 4 : W >= 700 ? 3.5 : 3;
+      s.scale = W >= 2200 ? 5 : W >= 1200 ? 4 : W >= 700 ? 3.5 : 3;
       buf.width = Math.max(120, Math.round(W / s.scale));
       buf.height = Math.max(120, Math.round(H / s.scale));
       view.imageSmoothingEnabled = false;
