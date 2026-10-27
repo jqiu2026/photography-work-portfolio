@@ -45,7 +45,15 @@ export default async function About() {
           </div>
         </div>
         <figure className="hb-portrait">
-          <img src={portrait.files[0].src} srcSet={srcSet(portrait)} sizes="(min-width: 860px) 16rem, 60vw" width={portrait.width} height={portrait.height} alt={`Portrait of ${person.name}`} style={{ backgroundColor: portrait.color }} />
+          <img
+            src={portrait.files[0].src}
+            srcSet={srcSet(portrait)}
+            sizes="(min-width: 860px) 16rem, 60vw"
+            width={portrait.width}
+            height={portrait.height}
+            alt={`Portrait of ${person.name}`}
+            style={{ backgroundColor: portrait.color }}
+          />
         </figure>
       </div>
 

@@ -23,7 +23,7 @@ export const COPY = {
     "I am rebuilding this site from the ground up.",
     "The new one is on the way, and I will have it up as soon as it is ready.",
   ],
-  // TODO(owner): the one way to reach you 
+  // TODO(owner): the one way to reach you
   email: "info@jerryqiu.com",
   emailLabel: "Inquiries",
   // TODO(owner): the copyright line; %YEAR% is filled in when the page is served

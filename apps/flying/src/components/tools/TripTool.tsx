@@ -103,7 +103,6 @@ export function TripTool() {
           </thead>
           <tbody>
             {legs.map((l, i) => (
-              // biome-ignore lint/suspicious/noArrayIndexKey: rows are positional
               <tr key={i}>
                 <td>
                   <Input
@@ -232,7 +231,6 @@ export function TripTool() {
               </thead>
               <tbody>
                 {result.legs.map((l, i) => (
-                  // biome-ignore lint/suspicious/noArrayIndexKey: rows are positional
                   <tr key={i}>
                     <td>{l.name}</td>
                     <td className="num">{String(l.trueHeading).padStart(3, "0")}° true</td>

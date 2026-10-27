@@ -15,11 +15,23 @@ const fmt = (d: string) => new Date(d).toLocaleDateString("en-US", { month: "sho
 
 // Real photographs from the portfolio. Captions use only what the file names state (event and month).
 const proof = [
-  { id: "10-19-2025-maker-faire-coney-island-2025-129-1", caption: "Maker Faire, Coney Island · Oct 2025", alt: "A scene from Maker Faire at Coney Island." },
+  {
+    id: "10-19-2025-maker-faire-coney-island-2025-129-1",
+    caption: "Maker Faire, Coney Island · Oct 2025",
+    alt: "A scene from Maker Faire at Coney Island.",
+  },
   { id: "2026-01-17-snow-7", caption: "Snow · Jan 2026", alt: "A snowy New York street." },
   { id: "jetblue-a220-300-1", caption: "A220-300 on approach", alt: "A JetBlue Airbus A220-300 in flight." },
-  { id: "2026-03-25-stuyopenhouse-20", caption: "Open House · Mar 2026", alt: "A moment from the Stuyvesant Open House." },
-  { id: "jry0126-enhanced-nr", caption: "Behind the camera", alt: "A person standing next to a video camera on a tripod." },
+  {
+    id: "2026-03-25-stuyopenhouse-20",
+    caption: "Open House · Mar 2026",
+    alt: "A moment from the Stuyvesant Open House.",
+  },
+  {
+    id: "jry0126-enhanced-nr",
+    caption: "Behind the camera",
+    alt: "A person standing next to a video camera on a tripod.",
+  },
 ] as const;
 
 const roles = ["photographer", "builder", "drone pilot", "musician"];
@@ -39,14 +51,32 @@ export default async function Home() {
   };
   const rooms = [
     // TODO(owner): rewrite these in your voice.
-    { title: "Photography", href: getSite("photos").url, text: "Pictures of people at work.", img: getImage("gallery", "jry0022-enhanced-nr") },
-    { title: "Music", href: getSite("music").url, text: "Things I wrote, and sometimes played.", img: getImage("gallery", "jry0473") },
-    { title: "Flying", href: getSite("flying").url, text: "Where I've been, from above.", img: getImage("blogs", "day-one-cover") },
+    {
+      title: "Photography",
+      href: getSite("photos").url,
+      text: "Pictures of people at work.",
+      img: getImage("gallery", "jry0022-enhanced-nr"),
+    },
+    {
+      title: "Music",
+      href: getSite("music").url,
+      text: "Things I wrote, and sometimes played.",
+      img: getImage("gallery", "jry0473"),
+    },
+    {
+      title: "Flying",
+      href: getSite("flying").url,
+      text: "Where I've been, from above.",
+      img: getImage("blogs", "day-one-cover"),
+    },
     { title: "Make", href: getMakeUrl(), text: "Things I build, and what I learned.", img: null },
   ];
   return (
     <div>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
+      />
       <div className="hb-wrap">
         <section className="hb-hero" aria-labelledby="h">
           <p className="hm-eyebrow">{person.location}</p>
@@ -84,7 +114,16 @@ export default async function Home() {
               return (
                 <li key={p.id}>
                   <figure>
-                    <img src={img.files[1]?.src ?? img.files[0].src} srcSet={srcSet(img)} sizes="(min-width: 900px) 20vw, 60vw" width={img.width} height={img.height} alt={p.alt} loading="lazy" style={{ backgroundColor: img.color }} />
+                    <img
+                      src={img.files[1]?.src ?? img.files[0].src}
+                      srcSet={srcSet(img)}
+                      sizes="(min-width: 900px) 20vw, 60vw"
+                      width={img.width}
+                      height={img.height}
+                      alt={p.alt}
+                      loading="lazy"
+                      style={{ backgroundColor: img.color }}
+                    />
                     <figcaption>{p.caption}</figcaption>
                   </figure>
                 </li>
@@ -114,7 +153,16 @@ export default async function Home() {
             {rooms.map((r) => (
               <a key={r.title} href={r.href} className="hb-room" aria-label={`Enter ${r.title.toLowerCase()}`}>
                 {r.img ? (
-                  <img src={r.img.files[0].src} srcSet={srcSet(r.img)} sizes="(min-width: 900px) 22vw, 80vw" width={r.img.width} height={r.img.height} alt="" loading="lazy" style={{ backgroundColor: r.img.color }} />
+                  <img
+                    src={r.img.files[0].src}
+                    srcSet={srcSet(r.img)}
+                    sizes="(min-width: 900px) 22vw, 80vw"
+                    width={r.img.width}
+                    height={r.img.height}
+                    alt=""
+                    loading="lazy"
+                    style={{ backgroundColor: r.img.color }}
+                  />
                 ) : null}
                 <h3>{r.title}</h3>
                 <p>{r.text}</p>
@@ -130,7 +178,16 @@ export default async function Home() {
           {featured ? (
             <NextLink href={`/writing/${featured.slug}`} className="hb-featured">
               {featured.cover ? (
-                <img src={featured.cover.files[1]?.src ?? featured.cover.files[0].src} srcSet={srcSet(featured.cover)} sizes="(min-width: 900px) 40vw, 100vw" width={featured.cover.width} height={featured.cover.height} alt="" loading="lazy" style={{ backgroundColor: featured.cover.color }} />
+                <img
+                  src={featured.cover.files[1]?.src ?? featured.cover.files[0].src}
+                  srcSet={srcSet(featured.cover)}
+                  sizes="(min-width: 900px) 40vw, 100vw"
+                  width={featured.cover.width}
+                  height={featured.cover.height}
+                  alt=""
+                  loading="lazy"
+                  style={{ backgroundColor: featured.cover.color }}
+                />
               ) : null}
               <span className="hb-stack">
                 <time dateTime={featured.date} className="hb-mono">

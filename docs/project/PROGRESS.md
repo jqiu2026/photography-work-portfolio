@@ -53,6 +53,20 @@ Not built (decisions in QUESTIONS.md): playing uploaded audio on the site (recor
 
 Owner to-do for music (also in [02-sites-and-deployment.md](02-sites-and-deployment.md)): create the `jq-music` Vercel project (Root Directory `apps/music`), set `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` (a separate endpoint on the music host), `MUSIC_EMAIL_FROM` or `EMAIL_FROM` with `RESEND_API_KEY`, `DATABASE_URL`, `AUTH_SECRET` (same as the hub), `STORAGE_DRIVER=blob` with `BLOB_READ_WRITE_TOKEN`; run `pnpm db:migrate`; enter the real pieces, files and prices in the studio; have a lawyer review the license wording (Q129).
 
+## Other sites: flying, make, hub (branch `claude/other-sites`, stacked on `claude/music-site`; owner request 2026-10-27, Q136 to Q147)
+
+Gates and screenshots: see the log below; `screenshots/phase-1/<site>/` holds the smoke screenshots (390 and 1440, light and dark).
+
+| Id | Scope | Status |
+|---|---|---|
+| OTHER-M1 | `@jerryqiu/aviation` (wind, density altitude, wind triangle, trip, weight and balance, METAR and TAF decoding, flight publishing rules): 47 tests | done |
+| OTHER-M2 | Make: data layer (migration 0019, 8 tests), Holominimal site (home, projects by place, project pages, tool wall, now, about), checked screenshots, studio, `/api/img` public route; hub sign-in accepts the make origin | done |
+| OTHER-M3 | Flying: data layer (migration 0020, 6 tests), Holominimal site, five tools, weather decoder with lookup, database-backed map, studio for airports and flights | done |
+| OTHER-M4 | Hub public site on Holominimal (home, about, connect, writing, legal, 404); admin untouched | done |
+| OTHER-M5 | Tests: `e2e-admin/make.spec.ts`, `e2e-admin/flying.spec.ts`, production specs updated (routes, static tier, keyboard, cross-site, mocks), music spec still green | done, see log |
+
+Not built (documented defaults): a bundled airport database, airspace, terrain, NOTAMs; a CFI booking flow; make project import from GitHub; the hub admin on Holominimal.
+
 ## Owner to-do (keys and accounts)
 
 Nothing below has been created or spent. Placeholders marked `TODO(owner): needs <KEY>` in code.

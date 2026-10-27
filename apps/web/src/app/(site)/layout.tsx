@@ -41,7 +41,11 @@ export default async function SiteLayout({ children }: { children: ReactNode }) 
       </head>
       <body>
         <Theme theme={{ accent: "blue" }}>
-          {general.maintenance ? <Maintenance message={general.maintenanceMessage} /> : <HubChrome>{children}</HubChrome>}
+          {general.maintenance ? (
+            <Maintenance message={general.maintenanceMessage} />
+          ) : (
+            <HubChrome>{children}</HubChrome>
+          )}
         </Theme>
         <Analytics />
         <SpeedInsights />

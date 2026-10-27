@@ -39,6 +39,9 @@
   gap: var(--hm-space-3);
 }
 .hb-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   color: var(--hm-fg-soft);
   text-underline-offset: 3px;
 }
@@ -71,7 +74,6 @@
   color: var(--hm-fg-soft);
   margin: 0 0 1.4rem;
 }
-
 
 .hb-grid {
   display: grid;

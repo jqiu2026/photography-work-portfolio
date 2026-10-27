@@ -36,7 +36,11 @@ export function ContactForm({ to, endpoint }: { to: string; endpoint: string }) 
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, topic, message, website: "" }),
       });
-      const j = (await res.json().catch(() => ({}))) as { error?: string; fieldErrors?: Record<string, string>; fallback?: string };
+      const j = (await res.json().catch(() => ({}))) as {
+        error?: string;
+        fieldErrors?: Record<string, string>;
+        fallback?: string;
+      };
       if (res.ok) return setState("sent");
       if (j.fieldErrors) setErrors(j.fieldErrors);
       setProblem(j.error ?? "Something went wrong.");
@@ -75,7 +79,10 @@ export function ContactForm({ to, endpoint }: { to: string; endpoint: string }) 
         <Select
           name="topic"
           defaultValue="General"
-          options={["General", "Photography", "Music", "Flying", "Licensing a photograph"].map((t) => ({ value: t, label: t }))}
+          options={["General", "Photography", "Music", "Flying", "Licensing a photograph"].map((t) => ({
+            value: t,
+            label: t,
+          }))}
         />
       </Field>
       <Field label="Message" error={errors.message}>

@@ -7,7 +7,13 @@ import { flying, hub, make, music, photos } from "./routes";
  * no canvas.
  */
 const homes = [
-  { name: "hub", url: `${hub}/`, h1: /Jerry Qiu/, texts: [/Three rooms/i, /Say hello/i, /photographer/i] },
+  {
+    name: "hub",
+    url: `${hub}/`,
+    h1: /Jerry Qiu/,
+    texts: [/Four rooms/i, /Say hello/i, /photographer/i],
+    halation: false,
+  },
   {
     name: "photos",
     url: `${photos}/`,
@@ -52,16 +58,3 @@ for (const h of homes) {
     await ctx.close();
   });
 }
-
-test("Calm choice from the index control switches to the static tier and is remembered", async ({ browser }) => {
-  const ctx = await browser.newContext();
-  const page = await ctx.newPage();
-  await page.goto(`${hub}/`, { waitUntil: "networkidle" });
-  await page.getByRole("button", { name: /open index/i }).click();
-  await page.getByRole("button", { name: "Calm" }).click();
-  await expect(page.locator("html")).toHaveAttribute("data-hl-tier", "static");
-  await page.reload({ waitUntil: "networkidle" });
-  await expect(page.locator("html")).toHaveAttribute("data-hl-tier", "static");
-  expect(await page.locator("canvas.hl-stage__canvas").count()).toBe(0);
-  await ctx.close();
-});

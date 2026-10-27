@@ -27,9 +27,12 @@ export function rooms() {
 /** The hub's frame on Holominimal: night sky, dock (navigation from the CMS when set), a footer with the rooms and the legal pages. */
 export async function HubChrome({ children }: { children: ReactNode }) {
   const { nav: custom } = await siteSettings("hub");
-  const links = [{ label: "Home", href: "/" }, ...(custom.items.length ? custom.items : defaultNav), { label: "Connect", href: "/connect" }];
-  const seen = new Set<string>();
-  const unique = links.filter((l) => (seen.has(l.href) ? false : (seen.add(l.href), true)));
+  const links = [
+    { label: "Home", href: "/" },
+    ...(custom.items.length ? custom.items : defaultNav),
+    { label: "Connect", href: "/connect" },
+  ];
+  const unique = links.filter((l, i) => links.findIndex((x) => x.href === l.href) === i);
   return (
     <LightField className="hb">
       <AppShell backdrop={<Atmosphere />} sidebar={<HubDock links={unique} rooms={rooms()} />}>

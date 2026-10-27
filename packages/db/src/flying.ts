@@ -70,7 +70,8 @@ export const flightSchema = z.object({
 export async function saveFlight(db: Database, input: z.input<typeof flightSchema>, id?: string) {
   const v = flightSchema.parse(input);
   const d = new Date(`${v.landedOn}T00:00:00Z`);
-  if (Number.isNaN(d.getTime()) || d.toISOString().slice(0, 10) !== v.landedOn) throw new StudioError("That date is not valid.");
+  if (Number.isNaN(d.getTime()) || d.toISOString().slice(0, 10) !== v.landedOn)
+    throw new StudioError("That date is not valid.");
   for (const text of [v.aircraftType, v.note])
     if (text && looksLikeTailNumber(text))
       throw new StudioError(

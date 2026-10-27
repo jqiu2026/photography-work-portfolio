@@ -105,7 +105,6 @@ export function WeightBalanceTool() {
           </thead>
           <tbody>
             {rows.map((r, i) => (
-              // biome-ignore lint/suspicious/noArrayIndexKey: rows are positional
               <tr key={i}>
                 <td>
                   <Input

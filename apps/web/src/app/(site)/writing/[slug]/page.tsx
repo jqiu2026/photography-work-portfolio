@@ -32,11 +32,26 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
       {cover ? (
         <div className="hb-wrap" style={{ marginBottom: "2rem" }}>
           <figure className="hb-shot" style={{ margin: 0 }}>
-            <img src={cover.files[cover.files.length - 1].src} srcSet={srcSet(cover)} sizes="(min-width: 900px) 70vw, 100vw" width={cover.width} height={cover.height} alt="" style={{ backgroundColor: cover.color, width: "100%", height: "auto", borderRadius: "var(--hm-radius-lg)" }} />
+            <img
+              src={cover.files[cover.files.length - 1].src}
+              srcSet={srcSet(cover)}
+              sizes="(min-width: 900px) 70vw, 100vw"
+              width={cover.width}
+              height={cover.height}
+              alt=""
+              style={{
+                backgroundColor: cover.color,
+                width: "100%",
+                height: "auto",
+                borderRadius: "var(--hm-radius-lg)",
+              }}
+            />
           </figure>
         </div>
       ) : null}
-      <div className="hb-wrap">{p.body.kind === "mdx" ? <Mdx source={p.body.source} /> : <Markdown source={p.body.source} />}</div>
+      <div className="hb-wrap">
+        {p.body.kind === "mdx" ? <Mdx source={p.body.source} /> : <Markdown source={p.body.source} />}
+      </div>
       <div className="hb-wrap">
         <nav className="hb-nextprev" aria-label="More writing">
           {prev ? (

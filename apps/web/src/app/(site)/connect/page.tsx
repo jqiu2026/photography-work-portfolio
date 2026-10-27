@@ -12,7 +12,11 @@ export default async function Connect() {
   const { person, socials } = await getPerson();
   return (
     <div>
-      <PageHeader eyebrow="Connect" title="Let's talk" intro="The easiest way is email. I'm also on the accounts below." />
+      <PageHeader
+        eyebrow="Connect"
+        title="Let's talk"
+        intro="The easiest way is email. I'm also on the accounts below."
+      />
       <div className="hb-wrap hb-section hb-two">
         <div className="hb-stack">
           <h2 className="hb-h2" style={{ margin: 0 }}>

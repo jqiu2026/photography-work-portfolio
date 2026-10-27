@@ -108,7 +108,6 @@ export function WeatherTool() {
               </h2>
               <ul className="fl-says">
                 {taf.periods.map((p, i) => (
-                  // biome-ignore lint/suspicious/noArrayIndexKey: periods are positional
                   <li key={i}>
                     {describePeriod(p)} <Cat c={p.conditions.category} />
                   </li>

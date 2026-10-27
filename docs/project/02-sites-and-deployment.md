@@ -56,9 +56,15 @@ Placeholders in use are listed in [PROGRESS.md](PROGRESS.md) under "Owner to-do 
 7. Maintenance mode: the site is in maintenance mode by default in a production build (see MAINTENANCE.md); the studio stays reachable, the store does not.
 8. Firewall: rate-limit `/api/download/*`, `/api/preview/*`, `/api/cart` and the form posts.
 
+## Owner checklist (flying and make projects)
+
+- **Flying** (`jq-flying`, Root Directory `apps/flying`): `DATABASE_URL` (same Neon database; migration 0020 adds `flying_airports` and `flying_flights`), `AUTH_SECRET` and `AUTH_COOKIE_DOMAIN` as for the others, `REVALIDATE_SECRET`, `NEXT_PUBLIC_FLYING_URL`, `NEXT_PUBLIC_HUB_URL`. The weather decoder needs nothing else in production (it reads NOAA's public service); `FLYING_WEATHER=off` turns the lookup off. Sign in on the hub, open `/studio`, add your airports and flights.
+- **Make** (`jq-make`, Root Directory `apps/make`): `DATABASE_URL` (migration 0019), `AUTH_SECRET`, `AUTH_COOKIE_DOMAIN`, `REVALIDATE_SECRET`, `NEXT_PUBLIC_MAKE_URL=https://make.jerryqiu.com` (also set it on the **hub** project so its sign-in accepts the make address), `STORAGE_DRIVER=blob` and `BLOB_READ_WRITE_TOKEN` for screenshot uploads (a public Blob store for the re-encoded images, a private prefix for the short-lived originals). Sign in on the hub, open `/studio`, add 3 to 5 projects.
+- **Hub**: set `NEXT_PUBLIC_MAKE_URL` so the footer and dock link to Make.
+
 ## Environment names (full list; values only in Vercel or untracked env files)
 
-`DATABASE_URL`, `AUTH_SECRET`, `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET`, `ALLOWED_EMAIL_DOMAIN`, `ADMIN_EMAILS`, `AUTH_COOKIE_DOMAIN`, `STORAGE_DRIVER`, `STORAGE_DIR`, `BLOB_READ_WRITE_TOKEN`, `IMAGE_TOKEN_SECRET` (+ `_PREVIOUS`), `RESEND_API_KEY`, `EMAIL_FROM`, `EMAIL_REPLY_TO`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL`, `TURNSTILE_SECRET_KEY`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `WHCC_BASE_URL`, `WHCC_CONSUMER_KEY`, `WHCC_CONSUMER_SECRET`, `FACESEARCH_PROVIDER`, `CRON_SECRET`, `REVALIDATE_SECRET`, `NEXT_PUBLIC_HUB_URL`, `NEXT_PUBLIC_PHOTOS_URL`, `NEXT_PUBLIC_MUSIC_URL`, `NEXT_PUBLIC_FLYING_URL`, `PAGE_ACCESS_PASSWORD`, `MUSIC_EMAIL_FROM`, `ENABLE_MOCKS`, `DASHBOARD_OPEN_SIGNIN` (local only).
+`DATABASE_URL`, `AUTH_SECRET`, `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET`, `ALLOWED_EMAIL_DOMAIN`, `ADMIN_EMAILS`, `AUTH_COOKIE_DOMAIN`, `STORAGE_DRIVER`, `STORAGE_DIR`, `BLOB_READ_WRITE_TOKEN`, `IMAGE_TOKEN_SECRET` (+ `_PREVIOUS`), `RESEND_API_KEY`, `EMAIL_FROM`, `EMAIL_REPLY_TO`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL`, `TURNSTILE_SECRET_KEY`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `WHCC_BASE_URL`, `WHCC_CONSUMER_KEY`, `WHCC_CONSUMER_SECRET`, `FACESEARCH_PROVIDER`, `CRON_SECRET`, `REVALIDATE_SECRET`, `NEXT_PUBLIC_HUB_URL`, `NEXT_PUBLIC_PHOTOS_URL`, `NEXT_PUBLIC_MUSIC_URL`, `NEXT_PUBLIC_FLYING_URL`, `PAGE_ACCESS_PASSWORD`, `MUSIC_EMAIL_FROM`, `NEXT_PUBLIC_MAKE_URL`, `FLYING_WEATHER`, `FLYING_INSTRUCTION`, `ENABLE_MOCKS`, `DASHBOARD_OPEN_SIGNIN` (local only).
 
 ## Mocks in production
 

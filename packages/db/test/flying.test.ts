@@ -31,15 +31,29 @@ describe("airports", () => {
 
 describe("flights", () => {
   it("need known airports and a valid day", async () => {
-    await expect(fl.saveFlight(db, { fromCode: "KBOS", toCode: "KZZZ", landedOn: "2026-09-01" })).rejects.toThrow(/Add airport KZZZ/);
-    await expect(fl.saveFlight(db, { fromCode: "KBOS", toCode: "KJFK", landedOn: "2026-02-31" })).rejects.toThrow(/not valid/);
+    await expect(fl.saveFlight(db, { fromCode: "KBOS", toCode: "KZZZ", landedOn: "2026-09-01" })).rejects.toThrow(
+      /Add airport KZZZ/,
+    );
+    await expect(fl.saveFlight(db, { fromCode: "KBOS", toCode: "KJFK", landedOn: "2026-02-31" })).rejects.toThrow(
+      /not valid/,
+    );
   });
   it("never store a registration", async () => {
-    await expect(fl.saveFlight(db, { fromCode: "KBOS", toCode: "KJFK", landedOn: "2026-09-01", aircraftType: "N123AB" })).rejects.toThrow(/registration/);
-    await expect(fl.saveFlight(db, { fromCode: "KBOS", toCode: "KJFK", landedOn: "2026-09-01", note: "flew G-ABCD today" })).rejects.toThrow(/registration/);
+    await expect(
+      fl.saveFlight(db, { fromCode: "KBOS", toCode: "KJFK", landedOn: "2026-09-01", aircraftType: "N123AB" }),
+    ).rejects.toThrow(/registration/);
+    await expect(
+      fl.saveFlight(db, { fromCode: "KBOS", toCode: "KJFK", landedOn: "2026-09-01", note: "flew G-ABCD today" }),
+    ).rejects.toThrow(/registration/);
   });
   it("the public list holds back recent flights, rounds to the month and carries no day or registration", async () => {
-    await fl.saveFlight(db, { fromCode: "KBOS", toCode: "KJFK", landedOn: "2026-09-12", aircraftType: "Cessna 172", note: "Bumpy" });
+    await fl.saveFlight(db, {
+      fromCode: "KBOS",
+      toCode: "KJFK",
+      landedOn: "2026-09-12",
+      aircraftType: "Cessna 172",
+      note: "Bumpy",
+    });
     await fl.saveFlight(db, { fromCode: "KJFK", toCode: "KBOS", landedOn: "2026-10-24" });
     const { flights, airports } = await fl.publicFlights(db, now);
     expect(flights).toHaveLength(1);

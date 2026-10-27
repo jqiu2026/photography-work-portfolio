@@ -16,13 +16,17 @@ const MEDIA_SRC = /^media:([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a
 
 function remarkShortcodes() {
   return (tree: unknown) => {
-    visit(tree as never, "paragraph", (node: { children: { type: string; value?: string }[]; data?: unknown; type: string }) => {
-      if (node.children.length !== 1 || node.children[0].type !== "text") return;
-      const m = SHORTCODE.exec((node.children[0].value ?? "").trim());
-      if (!m) return;
-      node.data = { hName: "div", hProperties: { "data-embed": "youtube", "data-ids": m[1].split(/\s+/).join(",") } };
-      node.children = [];
-    });
+    visit(
+      tree as never,
+      "paragraph",
+      (node: { children: { type: string; value?: string }[]; data?: unknown; type: string }) => {
+        if (node.children.length !== 1 || node.children[0].type !== "text") return;
+        const m = SHORTCODE.exec((node.children[0].value ?? "").trim());
+        if (!m) return;
+        node.data = { hName: "div", hProperties: { "data-embed": "youtube", "data-ids": m[1].split(/\s+/).join(",") } };
+        node.children = [];
+      },
+    );
   };
 }
 
@@ -68,7 +72,12 @@ const components: Components = {
 export function Markdown({ source }: { source: string }) {
   return (
     <div className="hm-prose hb-prose">
-      <ReactMarkdown remarkPlugins={[remarkGfm, remarkShortcodes]} components={components} urlTransform={transformUrl} skipHtml>
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm, remarkShortcodes]}
+        components={components}
+        urlTransform={transformUrl}
+        skipHtml
+      >
         {source}
       </ReactMarkdown>
     </div>
