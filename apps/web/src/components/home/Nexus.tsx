@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactNode, useCallback, useEffect, useRef, useState } from "react";
+import { type ReactNode, useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { type Gate, type HubState, paintNexus } from "./nexus/hub";
 import { PAINTERS, clamp, mix, vortex } from "./nexus/paint";
 import { LOOKS, type RealmLink } from "./nexus/realms";
@@ -11,6 +11,12 @@ type Phase = "hub" | "dive" | "realm" | "return";
 const DIVE = 1.5;
 const BACK = 1.2;
 const mod = (n: number, m: number) => ((n % m) + m) % m;
+const REDUCE = "(prefers-reduced-motion: reduce)";
+const onReduce = (cb: () => void) => {
+  const q = matchMedia(REDUCE);
+  q.addEventListener("change", cb);
+  return () => q.removeEventListener("change", cb);
+};
 
 /**
  * The hub's front door: the Nexus, a stone platform in a void with four portals, one per site. Arrow keys, the gate
@@ -19,6 +25,14 @@ const mod = (n: number, m: number) => ((n % m) + m) % m;
  */
 export function Nexus({ realms, children }: { realms: RealmLink[]; children: ReactNode }) {
   const canvas = useRef<HTMLCanvasElement>(null);
+  const still = useRef<HTMLDivElement>(null);
+  // with reduced motion there is no canvas on the page: the Nexus is a still picture, redrawn only when something changes
+  const reduce = useSyncExternalStore(
+    onReduce,
+    () => matchMedia(REDUCE).matches,
+    () => false,
+  );
+  const lastPhase = useRef<Phase>("hub");
   const section = useRef<HTMLElement>(null);
   const gateButtons = useRef<(HTMLButtonElement | null)[]>([]);
   const enterLink = useRef<HTMLAnchorElement>(null);
@@ -84,14 +98,15 @@ export function Nexus({ realms, children }: { realms: RealmLink[]; children: Rea
 
   // the render loop
   useEffect(() => {
-    const cv = canvas.current;
-    if (!cv) return;
+    const el = reduce ? still.current : canvas.current;
+    if (!el) return;
     const s = st.current;
+    const cv = reduce ? document.createElement("canvas") : (el as HTMLCanvasElement);
     const view = cv.getContext("2d");
     const buf = document.createElement("canvas");
     const b = buf.getContext("2d");
     if (!view || !b) return;
-    s.reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    s.reduce = reduce;
     s.hub.previews = LOOKS.map(() => {
       const p = document.createElement("canvas");
       p.width = 32;
@@ -198,9 +213,10 @@ export function Nexus({ realms, children }: { realms: RealmLink[]; children: Rea
             Math.sin(y * 0.5 + t * 9) * shimmer * (y / bh) * s.scale;
           view.drawImage(buf, 0, y, bw, 2, Math.round(dx), Math.round(y * sy), W, Math.ceil(2 * sy));
         }
-      } else view.drawImage(buf, 0, 0, bw, bh, 0, 0, W, H);
+      } else if (s.reduce) el.style.backgroundImage = `url(${buf.toDataURL()})`;
+      else view.drawImage(buf, 0, 0, bw, bh, 0, 0, W, H);
 
-      cv.style.opacity = String(s.phase === "hub" ? 1 - 0.72 * clamp(scrollY / innerHeight) : 1);
+      el.style.opacity = String(s.phase === "hub" ? 1 - 0.72 * clamp(scrollY / innerHeight) : 1);
       if (!s.reduce && !document.hidden) {
         if (away && s.phase === "hub") setTimeout(() => s.kick(), 120);
         else s.kick();
@@ -219,7 +235,7 @@ export function Nexus({ realms, children }: { realms: RealmLink[]; children: Rea
       removeEventListener("resize", resize);
       document.removeEventListener("visibilitychange", vis);
     };
-  }, [setPhase]);
+  }, [setPhase, reduce]);
 
   // pointer: hover a gate to turn the ring to it, click the front gate to step through
   useEffect(() => {
@@ -291,8 +307,10 @@ export function Nexus({ realms, children }: { realms: RealmLink[]; children: Rea
     if (phase === "dive" || phase === "realm" || phase === "return") root.style.overflow = "hidden";
     else root.style.overflow = "";
     if (phase === "realm") enterLink.current?.focus({ preventScroll: true });
-    if (phase === "hub" && document.activeElement === document.body)
+    // back from a world: focus returns to its gate (never on first load, where the skip link comes first)
+    if (phase === "hub" && lastPhase.current !== "hub" && document.activeElement === document.body)
       gateButtons.current[st.current.hub.sel]?.focus({ preventScroll: true });
+    lastPhase.current = phase;
     audio.current?.go(phase === "realm" || phase === "dive" ? LOOKS[st.current.hub.sel].key : "nexus");
     return () => {
       root.style.overflow = "";
@@ -326,7 +344,11 @@ export function Nexus({ realms, children }: { realms: RealmLink[]; children: Rea
   const host = link ? link.href.replace(/^https?:\/\//, "").replace(/\/$/, "") : "";
   return (
     <section ref={section} className="nx" data-phase={phase} aria-labelledby="h">
-      <canvas ref={canvas} className="nx-canvas" aria-hidden />
+      {reduce ? (
+        <div ref={still} className="nx-canvas nx-still" aria-hidden />
+      ) : (
+        <canvas ref={canvas} className="nx-canvas" aria-hidden />
+      )}
       <div className="nx-scrim" aria-hidden />
       <div className="nx-hero">{children}</div>
 

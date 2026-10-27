@@ -23,7 +23,7 @@ export const LOOKS: RealmLook[] = [
     dimension: 1,
     accent: hex("#ffd36b"),
     frame: [hex("#8d927c"), hex("#5d6352"), hex("#6fcf4a")],
-    mood: "daylight · terraced hills · noon into golden hour",
+    mood: "daylight · the valley · noon into golden hour",
   },
   {
     key: "resonance",

@@ -68,6 +68,26 @@ export function bands(
   }
 }
 
+/** A round glow in hard steps: concentric pixel discs, faint outside, brighter in. */
+export function glow(
+  c: CanvasRenderingContext2D,
+  cx: number,
+  cy: number,
+  r: number,
+  col: RGB,
+  alpha: number,
+  steps = 4,
+) {
+  for (let k = steps; k >= 1; k--) {
+    const rr = (r * k) / steps;
+    c.fillStyle = rgba(col, (alpha / steps) * 1.2);
+    for (let dy = -rr; dy <= rr; dy += 1) {
+      const half = Math.round(Math.sqrt(Math.max(0, rr * rr - dy * dy)));
+      c.fillRect(Math.round(cx - half), Math.round(cy + dy), half * 2, 1);
+    }
+  }
+}
+
 /** A block with a light top-left edge and a dark bottom-right edge. */
 export function block(
   c: CanvasRenderingContext2D,
@@ -153,24 +173,30 @@ export const paintExposure: Painter = (c, w, h, t) => {
   const T = Math.max(2, Math.round(h / 30));
   const top = mix(hex("#3d7de3"), hex("#4b4f9e"), golden * 0.55);
   const horizon = mix(hex("#c4e8ff"), hex("#ffcf8f"), golden);
-  bands(c, 0, 0, w, Math.ceil(h * 0.8), [top, mix(top, horizon, 0.6), horizon], 2);
-  // a square sun with a stepped halo
-  const s = Math.max(3, Math.round(h * 0.085));
+  bands(c, 0, 0, w, h, [top, mix(top, horizon, 0.6), horizon, horizon], 2);
+  // the sun, its glow, and a few clouds
+  const s = Math.max(3, Math.round(h * 0.075));
   const sx = Math.round(w * 0.74);
-  const sy = Math.round(h * (0.16 + golden * 0.14));
+  const sy = Math.round(h * (0.16 + golden * 0.16));
   const sun = mix(hex("#fffbe0"), hex("#ffe1a0"), golden);
-  fill(c, sx - s * 1.6, sy - s * 1.6, s * 3.2, s * 3.2, rgba(sun, 0.12));
-  fill(c, sx - s, sy - s, s * 2, s * 2, rgba(sun, 0.28));
+  glow(c, sx, sy, s * 2.8, sun, 0.55, 4);
   fill(c, sx - s / 2, sy - s / 2, s, s, rgba(sun));
-  cloudBand(c, w, h * 0.06, 3, T, t * 1.6, 3, [255, 255, 255], mix(horizon, [200, 210, 230], 0.5), 0.9, 0.7);
-  cloudBand(c, w, h * 0.22, 2, Math.max(1, T - 1), t * 0.9, 9, [255, 255, 255], horizon, 0.55, 0.72);
-  // far ridge in haze
-  const haze = mix(horizon, hex("#5b7fae"), 0.45);
-  for (let x = 0; x < w; x += T) {
-    const k = fbm1((x + t * 1.2) * 0.011 + 5);
-    const top2 = Math.round((h * 0.5 + (1 - k) * h * 0.2) / T) * T;
-    fill(c, x, top2, T, h - top2, rgba(haze));
-  }
+  cloudBand(c, w, h * 0.06, 3, T, t * 1.6, 3, [255, 255, 255], mix(horizon, [200, 210, 230], 0.5), 0.85, 0.7);
+  // two ranges of mountains in haze, lit on the sun's side, snow on the peaks
+  const range = (y0: number, amp: number, f: number, seed: number, near: number, speed: number) => {
+    const col = mix(mix(horizon, hex("#4d6b9a"), near), hex("#7a5a7a"), golden * 0.25);
+    const off = t * speed;
+    for (let x = 0; x < w; x += 2) {
+      const wx = x + off;
+      const ridge = 1 - Math.abs(noise1(wx * f + seed) * 2 - 1);
+      const y = Math.round((y0 - ridge * ridge * amp - fbm1(wx * f * 3 + seed) * amp * 0.25) / 2) * 2;
+      const slope = noise1((wx + 2) * f + seed) - noise1(wx * f + seed);
+      fill(c, x, y, 2, h - y, rgba(mix(col, slope > 0 ? hex("#fff3dc") : hex("#2e3a5a"), 0.12)));
+      if (ridge > 0.82) fill(c, x, y, 2, 2 + Math.round((ridge - 0.82) * 40), rgba(mix(hex("#ffffff"), horizon, 0.25)));
+    }
+  };
+  range(h * 0.58, h * 0.3, 0.012, 5, 0.25, 1);
+  range(h * 0.66, h * 0.2, 0.02, 41, 0.45, 2.5);
   // birds
   for (let i = 0; i < 4; i++) {
     const bx = (((t * (6 + i * 2) + hash(i) * w * 2) % (w + 40)) + w + 40) % (w + 40);
@@ -180,37 +206,72 @@ export const paintExposure: Painter = (c, w, h, t) => {
     fill(c, w - bx + 1, by, 1, 1, "rgba(30,30,50,.8)");
     fill(c, w - bx + 2, by + flap, 1, 1, "rgba(30,30,50,.8)");
   }
-  // terraced hills of grass, dirt and stone, with trees
-  const off = t * 3;
-  const shift = off % T;
-  const base = Math.floor(off / T);
-  const grass = mix(hex("#5fb23c"), hex("#8fae3c"), golden * 0.5);
-  for (let i = -1; i <= w / T + 1; i++) {
-    const wx = i + base;
-    const hh = Math.round((h * 0.62 + (1 - fbm1(wx * 0.06)) * h * 0.18) / T) * T;
-    const x = i * T - shift;
-    block(c, x, hh, T, grass, 0.3, 0.2);
-    for (let y = hh + T; y < h; y += T) {
-      const deep = (y - hh) / T;
-      const col = deep < 3 ? hex("#7b5434") : hash(wx * 3.3 + deep) > 0.9 ? hex("#9a9a9a") : hex("#6f6f74");
-      block(c, x, y, T, mix(col, [0, 0, 0], Math.min(0.5, deep * 0.05)), 0.12, 0.25);
+  // rolling hills in steps, with round trees
+  const hills = (y0: number, amp: number, f: number, seed: number, col: RGB, speed: number, trees: boolean) => {
+    const off = t * speed;
+    for (let x = 0; x < w; x += 2) {
+      const wx = x + off;
+      const y = Math.round((y0 - fbm1(wx * f + seed) * amp) / 2) * 2;
+      fill(c, x, y, 2, h - y, rgba(col));
+      fill(c, x, y, 2, 1, rgba(mix(col, [255, 255, 200], 0.35)));
+      const cell = Math.floor(wx / (T * 2));
+      if (trees && Math.floor((wx - 2) / (T * 2)) !== cell && hash(cell * 7.7 + seed) > 0.72) {
+        const r = T * (0.9 + hash(cell) * 0.6);
+        const tx = x + T;
+        fill(c, tx - 1, y - r, 2, r, "#5a3d26");
+        glow(c, tx, y - r * 1.4, r, mix(col, hex("#1f5a2a"), 0.55), 3.2, 2);
+        glow(c, tx - r * 0.25, y - r * 1.6, r * 0.55, mix(col, hex("#9fe07a"), 0.35), 1.6, 1);
+      }
     }
-    if (hash(wx * 13.37) > 0.84 && T >= 2) {
-      for (let k = 1; k <= 3; k++) block(c, x, hh - k * T, T, hex("#6b4a2b"), 0.1, 0.2);
-      for (let dx = -1; dx <= 1; dx++)
-        for (let dy = 0; dy < 3; dy++)
-          if (!(Math.abs(dx) === 1 && dy === 0)) block(c, x + dx * T, hh - (4 + dy) * T, T, hex("#3f8f2e"), 0.2, 0.25);
-    } else if (hash(wx * 7.1) > 0.7) {
-      const sway = Math.sin(t * 2 + wx) > 0.3 ? 1 : 0;
-      fill(c, x + T / 2 + sway, hh - 2, 1, 2, rgba(mix(grass, [255, 255, 255], 0.2)));
-      if (hash(wx * 2.9) > 0.6) fill(c, x + T / 2 + sway, hh - 3, 1, 1, hash(wx) > 0.5 ? "#ff6b8a" : "#ffe36b");
-    }
+  };
+  hills(h * 0.78, h * 0.12, 0.012, 7, mix(hex("#6fb85a"), hex("#a3a85a"), golden * 0.5), 4, true);
+  hills(h * 0.92, h * 0.1, 0.02, 19, mix(hex("#4f9e43"), hex("#8a8f3c"), golden * 0.5), 8, true);
+  // the meadow in front: tufts that sway and flowers
+  for (let x = 0; x < w; x += 2) {
+    const wx = x + t * 14;
+    const tall = 2 + Math.round(hash(Math.floor(wx / 2) * 1.3) * 5);
+    const sway = Math.round(Math.sin(t * 2 + wx * 0.05));
+    fill(c, x + sway, h - tall - 2, 1, tall, rgba(mix(hex("#3f8a35"), hex("#9cc75a"), hash(Math.floor(wx / 2)))));
+    if (hash(Math.floor(wx / 2) * 9.1) > 0.94)
+      fill(c, x + sway, h - tall - 3, 2, 2, hash(Math.floor(wx)) > 0.5 ? "#ff6b8a" : "#fff2a8");
   }
+  fill(c, 0, h - 2, w, 2, "#2f6e2b");
   // pollen in the light
   for (let i = 0; i < 26; i++) {
     const px = (hash(i * 1.7) * w + t * (2 + hash(i) * 3)) % w;
     const py = h * 0.35 + hash(i * 3.9) * h * 0.5 + Math.sin(t + i) * 3;
     fill(c, px, py, 1, 1, rgba([255, 244, 200], 0.5 + 0.5 * Math.sin(t * 3 + i)));
+  }
+  // a lens flare across the frame, away from the sun
+  for (let k = 1; k <= 4; k++) {
+    const fx = sx + (w / 2 - sx) * k * 0.55;
+    const fy = sy + (h / 2 - sy) * k * 0.55;
+    glow(c, fx, fy, s * (0.4 + (k % 3) * 0.35), k % 2 ? hex("#ffd6a0") : hex("#a0e0ff"), 0.22, 2);
+  }
+  // the viewfinder: corner marks and a focus box that roams, then locks
+  const ink = "rgba(255,255,255,.55)";
+  const m = Math.round(Math.min(w, h) * 0.05);
+  const L = Math.round(m * 0.8);
+  for (const [cx, cy, dx, dy] of [
+    [m, m, 1, 1],
+    [w - m, m, -1, 1],
+    [m, h - m, 1, -1],
+    [w - m, h - m, -1, -1],
+  ] as const) {
+    fill(c, Math.min(cx, cx + dx * L), cy, L, 1, ink);
+    fill(c, cx, Math.min(cy, cy + dy * L), 1, L, ink);
+  }
+  const cyc = t % 6;
+  const fxp = w * (0.35 + 0.3 * noise1(Math.floor(t / 6) * 3.3));
+  const fyp = h * (0.45 + 0.2 * noise1(Math.floor(t / 6) * 5.1));
+  const locked = cyc > 4;
+  const bs = Math.round(m * (locked ? 1.1 : 1.4 - cyc * 0.06));
+  const fc = locked ? "rgba(140,255,150,.9)" : "rgba(255,255,255,.7)";
+  if (!locked || Math.floor(t * 6) % 2 === 0) {
+    fill(c, fxp - bs, fyp - bs, bs * 2, 1, fc);
+    fill(c, fxp - bs, fyp + bs, bs * 2 + 1, 1, fc);
+    fill(c, fxp - bs, fyp - bs, 1, bs * 2, fc);
+    fill(c, fxp + bs, fyp - bs, 1, bs * 2, fc);
   }
   // warm grade at golden hour
   if (golden > 0.5) fill(c, 0, 0, w, h, rgba(hex("#ff9a3c"), (golden - 0.5) * 0.16));
@@ -354,34 +415,66 @@ export const paintResonance: Painter = (c, w, h, t) => {
 /* ------------------------------------------------------------------------------------------------------------------
  * Altitude (flying): above a sea of cloud, floating islands with waterfalls, wind, and a plane now and then.
  * ---------------------------------------------------------------------------------------------------------------- */
+/** A sea of cloud: a bumpy top (a height per column of tiles), lit on its crest, shading into its depths. */
+function cloudSea(
+  c: CanvasRenderingContext2D,
+  w: number,
+  h: number,
+  y0: number,
+  amp: number,
+  T: number,
+  off: number,
+  seed: number,
+  lit: RGB,
+  deep: RGB,
+) {
+  const shift = off % T;
+  const base = Math.floor(off / T);
+  for (let i = -1; i <= w / T + 1; i++) {
+    const wx = i + base;
+    const top = Math.round((y0 - fbm1(wx * 0.23 + seed) * amp) / T) * T;
+    const left = Math.round((y0 - fbm1((wx - 1) * 0.23 + seed) * amp) / T) * T;
+    const x = i * T - shift;
+    for (let y = top; y < h; y += T) {
+      const k = Math.min(1, (y - top) / (T * 3));
+      fill(c, x, y, T, T, rgba(mix(lit, deep, k)));
+    }
+    fill(c, x, top, T, Math.max(1, T / 3), rgba(mix(lit, [255, 255, 255], 0.7)));
+    if (left > top) fill(c, x, top, 1, left - top, rgba(mix(lit, [255, 255, 255], 0.5)));
+    if (left < top) fill(c, x - 1, left, 1, top - left, rgba(mix(lit, deep, 0.5)));
+  }
+}
+
 export const paintAltitude: Painter = (c, w, h, t) => {
   const T = Math.max(2, Math.round(h / 30));
-  bands(c, 0, 0, w, Math.ceil(h * 0.7), [hex("#163f9c"), hex("#3f86d8"), hex("#9fd6f5"), hex("#e7f7ff")], 2);
-  // low sun
+  bands(c, 0, 0, w, h, [hex("#123a94"), hex("#3b80d6"), hex("#9fd3f3"), hex("#f2e6c8")], 2);
+  // a low sun with a stepped halo
   const s = Math.max(3, Math.round(h * 0.07));
-  const sx = Math.round(w * 0.2);
-  const sy = Math.round(h * 0.48);
-  fill(c, sx - s * 2, sy - s * 0.6, s * 4, s * 1.2, "rgba(255,240,200,.25)");
+  const sx = Math.round(w * 0.22);
+  const sy = Math.round(h * 0.5);
+  glow(c, sx, sy, s * 3, hex("#ffe9b8"), 0.4, 5);
   fill(c, sx - s / 2, sy - s / 2, s, s, "#fff6dc");
-  // the far cloud sea
-  cloudBand(c, w, h * 0.56, 4, T, t * 4, 21, [244, 250, 255], [170, 196, 226], 1, 0.6);
-  fill(c, 0, h * 0.56 + T * 3, w, h, "#d6e6f6");
+  // the far sea
+  cloudSea(c, w, h, h * 0.63, h * 0.08, Math.max(1, Math.round(T * 0.6)), t * 3, 5, hex("#eef4ff"), hex("#b9cde6"));
   // floating islands with waterfalls
   for (let i = 0; i < 3; i++) {
     const span = w + 80;
     const ix = ((((hash(i * 9.9) * span - t * (2.5 + i)) % span) + span) % span) - 40;
-    const iy = h * (0.3 + i * 0.09) + Math.sin(t * 0.7 + i) * 2;
+    const iy = h * (0.28 + i * 0.09) + Math.sin(t * 0.7 + i) * 2;
     const tw = 3 + i;
     for (let k = 0; k < tw; k++) block(c, ix + k * T, iy, T, hex("#62b345"), 0.3, 0.2);
     for (let r = 1; r < 4; r++)
       for (let k = r; k < tw - r + 1; k++)
         block(c, ix + k * T, iy + r * T, T, mix(hex("#7b5434"), hex("#4a3a50"), r / 4), 0.1, 0.3);
     block(c, ix + T, iy - T, T, hex("#3f8f2e"), 0.2, 0.25);
+    if (tw > 3) block(c, ix + T, iy - 2 * T, T, hex("#3f8f2e"), 0.2, 0.25);
+    fill(c, ix + 2 * T + T / 2, iy - 2, 1, 2, i % 2 ? "#ff6b8a" : "#ffe36b");
     const fx = ix + (tw - 1) * T;
-    for (let y = iy + T; y < h * 0.6; y += 2) {
+    for (let y = iy + T; y < h * 0.66; y += 2) {
       const on = Math.floor(y / 2 + t * 14) % 3;
       fill(c, fx + T / 3, y, Math.max(1, T / 3), 2, on ? "rgba(140,200,255,.8)" : "rgba(255,255,255,.9)");
     }
+    fill(c, fx - 1, h * 0.64, T, 2, "rgba(255,255,255,.7)");
   }
   // a plane every so often, with a contrail
   const cycle = 16;
@@ -395,9 +488,9 @@ export const paintAltitude: Painter = (c, w, h, t) => {
     fill(c, px + 6, py - 2, 1, 2, "#dfe5ee");
     fill(c, px, py + 1, 1, 1, "#2a3a55");
   }
-  // the near cloud sea, faster
-  cloudBand(c, w, h * 0.74, 5, T + 1, t * 11, 4, [255, 255, 255], [150, 180, 214], 1, 0.58);
-  fill(c, 0, h * 0.74 + (T + 1) * 4, w, h, "#e9f2fb");
+  // the middle and near seas, each faster
+  cloudSea(c, w, h, h * 0.76, h * 0.12, T, t * 8, 11, hex("#f6f9ff"), hex("#a9c1df"));
+  cloudSea(c, w, h, h * 0.93, h * 0.14, T + 2, t * 16, 23, hex("#ffffff"), hex("#9db5d6"));
   // wind
   for (let i = 0; i < 18; i++) {
     const len = 6 + hash(i) * 18;

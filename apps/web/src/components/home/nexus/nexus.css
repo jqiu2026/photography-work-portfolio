@@ -22,6 +22,10 @@
   background: #05030c;
   transition: opacity 0.2s linear;
 }
+.nx-still {
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
 .nx-scrim {
   position: fixed;
   inset: 0;
