@@ -55,7 +55,15 @@ export async function dashboardData(db: Database, now = new Date()): Promise<Das
     else if (at.getTime() < start.getTime() && at.getTime() >= start.getTime() - 30 * DAY) previousCents += net;
   }
 
-  const unpaid = invoices.filter((i) => i.invoice.status !== "paid" && i.invoice.status !== "void");
+  // what clients owe: sent invoices only (drafts were never sent), less what part-paid ones already received
+  const unpaid = invoices.filter((i) => ["sent", "viewed", "partial"].includes(i.invoice.status));
+  const owed = await Promise.all(
+    unpaid.map(async (i) =>
+      i.invoice.status === "partial"
+        ? i.invoice.totalCents - (await st.invoiceNetCents(db, i.invoice.id))
+        : i.invoice.totalCents,
+    ),
+  );
   const openJobs = jobs.filter((j) => j.job.status !== "paid" && j.job.status !== "cancelled");
   return {
     revenue: {
@@ -68,7 +76,7 @@ export async function dashboardData(db: Database, now = new Date()): Promise<Das
       activeClients: new Set(openJobs.map((j) => j.client.id)).size,
       deliveries: galleries.filter((g) => g.gallery.status === "published" && !g.gallery.deliveredAt).length,
       newInquiries: bookings.filter((b) => b.status === "new").length,
-      unpaidCents: unpaid.reduce((a, i) => a + i.invoice.totalCents, 0),
+      unpaidCents: owed.reduce((a, c) => a + c, 0),
       unpaidCount: unpaid.length,
     },
     upcoming: appts.slice(0, 5).map((a) => ({

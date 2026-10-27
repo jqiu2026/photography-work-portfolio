@@ -81,6 +81,13 @@
 .rc-amount {
   font-size: 1.3rem;
 }
+.rc-amount small {
+  font-size: var(--hm-text-sm);
+  font-weight: 400;
+}
+.rc-late {
+  color: var(--hm-danger);
+}
 .rc-chips {
   display: flex;
   flex-wrap: wrap;

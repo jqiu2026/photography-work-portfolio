@@ -26,9 +26,12 @@ import {
   createInvoiceAction,
   markInvoicePaidAction,
   sendContractAction,
+  archiveBookingAction,
   sendInvoiceAction,
   updateClientAction,
   updateContractAction,
+  updateJobAction,
+  voidInvoiceAction,
 } from "@/app/studio/actions";
 import { Card, FormDialog, Frame, statusTone, useAct, useConfirm, useNotify } from "./StudioFrame";
 import "./records.css";
@@ -291,20 +294,35 @@ export type ShootsData = {
     clientId: string;
     status: string;
     date: string;
+    location: string;
     feeCents: number;
   }[];
 };
 
+const STAGE_LABEL: Record<string, string> = {
+  inquiry: "Inquiry",
+  booked: "Booked",
+  shot: "Shot",
+  editing: "Editing",
+  delivered: "Delivered",
+  paid: "Paid",
+  cancelled: "Cancelled",
+};
+
 export function ShootsView({ user, data }: { user: string; data: ShootsData }) {
   const { pending, note, act, go } = useAct();
+  const notify = useNotify();
+  // "job" adds a shoot, or edits one when f.job is set (one dialog, so its fields are never on the page twice)
   const [dlg, setDlg] = useState<"job" | "invoice" | null>(null);
   const [f, setF] = useState<Record<string, string>>({});
   const [more, setMore] = useState<{ description: string; amountDollars: string }[]>([]);
   const set = (k: string) => (e: { target: { value: string } }) => setF((x) => ({ ...x, [k]: e.target.value }));
-  const open = data.jobs.filter((j) => j.status !== "paid");
+  const open = data.jobs.filter((j) => j.status !== "paid" && j.status !== "cancelled");
   const done = data.jobs.filter((j) => j.status === "paid");
+  const cancelled = data.jobs.filter((j) => j.status === "cancelled");
   const card = (j: ShootsData["jobs"][number]) => {
     const step = STEPS.indexOf(j.status as (typeof STEPS)[number]);
+    const live = step >= 0;
     return (
       <li className="rc-card" key={j.id} data-job-id={j.id}>
         <div className="rc-card__head">
@@ -316,13 +334,11 @@ export function ShootsView({ user, data }: { user: string; data: ShootsData }) {
           {j.date ? ` · ${j.date}` : " · no date yet"}
           {j.feeCents ? ` · ${usd(j.feeCents)}` : ""}
         </span>
-        <Progress size="sm" value={step + 1} max={STEPS.length} aria-label={`Progress: ${j.status}`} />
+        {live ? <Progress size="sm" value={step + 1} max={STEPS.length} aria-label={`Progress: ${j.status}`} /> : null}
         <div className="rc-card__foot">
-          <small className="rc-muted">
-            Step {step + 1} of {STEPS.length}
-          </small>
+          <small className="rc-muted">{live ? `Step ${step + 1} of ${STEPS.length}` : "Cancelled"}</small>
           <span className="rc-actions">
-            {j.status !== "paid" ? (
+            {live && j.status !== "paid" ? (
               <Button
                 variant="secondary"
                 size="sm"
@@ -340,6 +356,22 @@ export function ShootsView({ user, data }: { user: string; data: ShootsData }) {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
+                <DropdownMenuItem
+                  onSelect={() => {
+                    setF({
+                      job: j.id,
+                      title: j.title,
+                      date: j.date,
+                      place: j.location,
+                      fee: j.feeCents ? String(j.feeCents / 100) : "",
+                      stage: j.status,
+                    });
+                    setDlg("job");
+                    notify(`Loaded ${j.title}`);
+                  }}
+                >
+                  Edit shoot
+                </DropdownMenuItem>
                 <DropdownMenuItem onSelect={() => act(() => createContractAction(j.id))}>New contract</DropdownMenuItem>
                 <DropdownMenuItem
                   onSelect={() => {
@@ -399,34 +431,64 @@ export function ShootsView({ user, data }: { user: string; data: ShootsData }) {
             </ul>
           </>
         ) : null}
+        {cancelled.length ? (
+          <>
+            <h3>Cancelled</h3>
+            <ul className="rc-cards" aria-label="Cancelled shoots">
+              {cancelled.map(card)}
+            </ul>
+          </>
+        ) : null}
       </Card>
       <FormDialog
         open={dlg === "job"}
         onOpenChange={(o) => !o && setDlg((d) => (d === "job" ? null : d))}
-        title="Add a shoot"
-        submitLabel="Add shoot"
+        title={f.job ? "Edit shoot" : "Add a shoot"}
+        description={f.job ? "Change the stage to move a shoot back a step or to cancel it." : undefined}
+        submitLabel={f.job ? "Save shoot" : "Add shoot"}
         pending={pending}
         onSubmit={() =>
           go(() =>
-            addJobAction({
-              clientId: f.client ?? "",
-              title: f.title ?? "",
-              date: f.date,
-              feeDollars: f.fee,
-              location: f.place,
-            }),
+            f.job
+              ? updateJobAction({
+                  jobId: f.job,
+                  title: f.title ?? "",
+                  date: f.date,
+                  location: f.place,
+                  feeDollars: f.fee,
+                  status: f.stage ?? "",
+                })
+              : addJobAction({
+                  clientId: f.client ?? "",
+                  title: f.title ?? "",
+                  date: f.date,
+                  feeDollars: f.fee,
+                  location: f.place,
+                }),
           )
         }
       >
-        <Field label="Client">
-          <Select value={f.client ?? ""} onValueChange={(v) => set("client")({ target: { value: v } })}>
-            {data.clients.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.name}
-              </option>
-            ))}
-          </Select>
-        </Field>
+        {f.job ? (
+          <Field label="Stage">
+            <Select value={f.stage ?? ""} onValueChange={(v) => set("stage")({ target: { value: v } })}>
+              {Object.entries(STAGE_LABEL).map(([v, label]) => (
+                <option key={v} value={v}>
+                  {label}
+                </option>
+              ))}
+            </Select>
+          </Field>
+        ) : (
+          <Field label="Client">
+            <Select value={f.client ?? ""} onValueChange={(v) => set("client")({ target: { value: v } })}>
+              {data.clients.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
+              ))}
+            </Select>
+          </Field>
+        )}
         <Field label="Title">
           <Input value={f.title ?? ""} onChange={set("title")} />
         </Field>
@@ -558,23 +620,38 @@ export type InvoicesData = {
     number: string;
     jobId: string;
     jobTitle: string;
+    client: string;
     status: string;
     totalCents: number;
+    /** What is still owed (the total less what has been paid). */
+    balanceCents: number;
+    dueDate: string | null;
     lines: string;
   }[];
   jobs: { id: string; title: string }[];
+  /** "YYYY-MM-DD", from the server, so overdue does not depend on the browser's clock. */
+  today: string;
 };
+
+/** Sent and waiting: these are what the client owes. Drafts have not been sent yet. */
+const AWAITING = new Set(["sent", "viewed", "partial"]);
 
 export function InvoicesView({ user, data }: { user: string; data: InvoicesData }) {
   const { pending, note, act, go } = useAct();
+  const [ask, confirmEl] = useConfirm();
   const [dlg, setDlg] = useState(false);
   const [f, setF] = useState<Record<string, string>>({});
   const [more, setMore] = useState<{ description: string; amountDollars: string }[]>([]);
   const set = (k: string) => (e: { target: { value: string } }) => setF((x) => ({ ...x, [k]: e.target.value }));
-  const isOpen = (s: string) => s !== "paid" && s !== "void";
-  const owed = data.invoices.filter((i) => isOpen(i.status)).reduce((n, i) => n + i.totalCents, 0);
+  const isOpen = (s: string) => s === "draft" || AWAITING.has(s);
+  const overdue = (i: InvoicesData["invoices"][number]) =>
+    AWAITING.has(i.status) && !!i.dueDate && i.dueDate < data.today;
+  const owed = data.invoices.filter((i) => AWAITING.has(i.status)).reduce((n, i) => n + i.balanceCents, 0);
+  const late = data.invoices.filter(overdue);
+  const drafts = data.invoices.filter((i) => i.status === "draft").length;
   return (
     <Frame section="invoices" user={user} note={note}>
+      {confirmEl}
       <Card
         title="Invoices"
         id="st-i"
@@ -595,7 +672,10 @@ export function InvoicesView({ user, data }: { user: string; data: InvoicesData 
         <Text size="sm" tone="muted">
           An invoice belongs to a shoot. Create it as a draft, send it to give the client a payment link, and it turns
           paid when they pay (or when you mark a cash or Zelle payment).{" "}
-          {owed ? `${usd(owed)} is waiting to be paid.` : ""}
+          {owed ? `${usd(owed)} is waiting to be paid` : ""}
+          {owed && late.length ? `, ${late.length} overdue` : ""}
+          {owed ? ". " : ""}
+          {drafts ? `${drafts} draft${drafts === 1 ? " is" : "s are"} not sent yet.` : ""}
         </Text>
         {data.invoices.length ? (
           <ul className="rc-cards rc-cards--wide" aria-label="Invoices">
@@ -603,11 +683,25 @@ export function InvoicesView({ user, data }: { user: string; data: InvoicesData 
               <li className="rc-card" key={i.id} data-invoice-id={i.id}>
                 <div className="rc-card__head">
                   <strong>{i.number}</strong>
-                  <Badge tone={statusTone(i.status)}>{i.status}</Badge>
+                  <span className="rc-badges">
+                    {overdue(i) ? <Badge tone={statusTone("overdue")}>overdue</Badge> : null}
+                    <Badge tone={statusTone(i.status)}>{i.status}</Badge>
+                  </span>
                 </div>
-                <span className="rc-muted">{i.jobTitle}</span>
+                <span className="rc-muted">
+                  {i.client ? `${i.client} · ` : ""}
+                  {i.jobTitle}
+                </span>
                 <span className="rc-muted">{i.lines}</span>
-                <strong className="rc-amount">{usd(i.totalCents)}</strong>
+                <strong className="rc-amount">
+                  {usd(i.totalCents)}
+                  {i.status === "partial" ? (
+                    <small className="rc-muted"> · {usd(i.balanceCents)} left to pay</small>
+                  ) : null}
+                </strong>
+                {i.dueDate && isOpen(i.status) ? (
+                  <small className={overdue(i) ? "rc-late" : "rc-muted"}>Due {i.dueDate}</small>
+                ) : null}
                 <div className="rc-card__foot">
                   <DocLinks kind="invoice" id={i.id} label={`invoice ${i.number}`} />
                   <span className="rc-actions">
@@ -626,9 +720,32 @@ export function InvoicesView({ user, data }: { user: string; data: InvoicesData 
                         variant="ghost"
                         size="sm"
                         disabled={pending}
-                        onClick={() => act(() => markInvoicePaidAction(i.id))}
+                        onClick={async () =>
+                          (await ask({
+                            title: `Mark ${i.number} paid?`,
+                            body: `This records ${usd(i.balanceCents)} received in cash, Zelle or check, and sends ${i.client || "the client"} a receipt.`,
+                            action: "Mark paid",
+                          })) && act(() => markInvoicePaidAction(i.id))
+                        }
                       >
                         Mark paid (cash, Zelle)
+                      </Button>
+                    ) : null}
+                    {isOpen(i.status) && i.status !== "partial" ? (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        disabled={pending}
+                        aria-label={`Void invoice ${i.number}`}
+                        onClick={async () =>
+                          (await ask({
+                            title: `Void ${i.number}?`,
+                            body: "Use this for an invoice made by mistake. Its payment link stops working and no more reminders are sent. The invoice stays on record as void.",
+                            action: "Void invoice",
+                          })) && act(() => voidInvoiceAction(i.id))
+                        }
+                      >
+                        Void
                       </Button>
                     ) : null}
                   </span>
@@ -856,6 +973,7 @@ export function InquiriesView({ user, data }: { user: string; data: InquiriesDat
       >
         <Text size="sm" tone="muted">
           Best leads first. The score rises with a date, a budget, a place and a phone number: green is a strong lead.
+          Archive the ones you will not take; they stay under All.
         </Text>
         {sorted.length ? (
           <ul className="rc-cards rc-cards--wide" aria-label="Inquiries">
@@ -901,11 +1019,35 @@ export function InquiriesView({ user, data }: { user: string; data: InquiriesDat
                 <div className="rc-card__foot">
                   <small className="rc-muted">{b.createdAt.slice(0, 10)}</small>
                   {b.status === "new" ? (
-                    <Button size="sm" disabled={pending} onClick={() => act(() => convertBookingAction(b.id))}>
-                      Convert to client
-                    </Button>
+                    <span className="rc-actions">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        disabled={pending}
+                        aria-label={`Archive the inquiry from ${b.name}`}
+                        onClick={() => act(() => archiveBookingAction(b.id, true))}
+                      >
+                        Archive
+                      </Button>
+                      <Button size="sm" disabled={pending} onClick={() => act(() => convertBookingAction(b.id))}>
+                        Convert to client
+                      </Button>
+                    </span>
                   ) : (
-                    <Badge tone={statusTone(b.status)}>{b.status}</Badge>
+                    <span className="rc-actions">
+                      <Badge tone={statusTone(b.status)}>{b.status}</Badge>
+                      {b.status === "archived" ? (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          disabled={pending}
+                          aria-label={`Restore the inquiry from ${b.name}`}
+                          onClick={() => act(() => archiveBookingAction(b.id, false))}
+                        >
+                          Restore
+                        </Button>
+                      ) : null}
+                    </span>
                   )}
                 </div>
               </li>

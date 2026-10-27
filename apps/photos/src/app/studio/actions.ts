@@ -13,6 +13,8 @@ import { eq } from "drizzle-orm";
 import { guarded } from "@/auth";
 import { afterPayment } from "@/lib/after-payment";
 import { publishAndNotify } from "@/lib/gallery-publish";
+import { studio, studioMoney } from "@/lib/studio-run";
+import { formatMoney } from "@jerryqiu/db/pricing";
 
 /**
  * Owner-side studio actions (Phase 3). Every action re-checks the session and role (`studio.access`), rate limits, and
@@ -78,7 +80,7 @@ export async function addJobAction(input: {
         summary: `Added job ${j.title}`,
       });
       back();
-      return done("Job added");
+      return done("Shoot added");
     } catch (e) {
       const f = fail(e);
       if (f) return f;
@@ -90,7 +92,7 @@ export async function addJobAction(input: {
 export async function advanceJobAction(jobId: string) {
   return guarded("studio.access", async ({ db, audit }) => {
     const p = id.safeParse(jobId);
-    if (!p.success) return actionError("Unknown job.");
+    if (!p.success) return actionError("Unknown shoot.");
     try {
       const j = await st.advanceJob(db, p.data);
       await audit({
@@ -101,7 +103,7 @@ export async function advanceJobAction(jobId: string) {
         summary: `Job moved to ${j.status}`,
       });
       back();
-      return done(`Job is now ${j.status}`);
+      return done(`Shoot is now ${j.status}`);
     } catch (e) {
       const f = fail(e);
       if (f) return f;
@@ -130,7 +132,7 @@ export async function publishGalleryAction(galleryId: string) {
 export async function createContractAction(jobId: string, templateId?: string) {
   return guarded("studio.access", async ({ db, audit }) => {
     const p = id.safeParse(jobId);
-    if (!p.success) return actionError("Unknown job.");
+    if (!p.success) return actionError("Unknown shoot.");
     try {
       // The default is the SAMPLE event template (merged with the job, client and policies); pick another on the Forms page.
       await forms.seedSampleTemplates(db);
@@ -223,7 +225,7 @@ export async function createInvoiceAction(input: {
   return guarded("studio.money", async ({ db, audit }) => {
     const p = id.safeParse(input.jobId);
     const dollars = Number(input.amountDollars);
-    if (!p.success) return actionError("Unknown job.");
+    if (!p.success) return actionError("Unknown shoot.");
     if (!Number.isFinite(dollars) || dollars <= 0) return actionError("Enter the amount in dollars.");
     try {
       const inv = await st.createInvoice(db, {
@@ -282,28 +284,96 @@ export async function markInvoicePaidAction(invoiceId: string) {
   return guarded("studio.money", async ({ db, audit, user }) => {
     const p = id.safeParse(invoiceId);
     if (!p.success) return actionError("Unknown invoice.");
-    const rows = await st.listInvoices(db);
-    const inv = rows.find((r) => r.invoice.id === p.data)?.invoice;
-    if (!inv) return actionError("Unknown invoice.");
-    // Manual payments (cash, Zelle, cheque): one record per invoice, idempotent by reference.
-    const rec = await st.recordPayment(db, {
-      invoiceId: inv.id,
-      provider: "manual",
-      providerRef: `manual:${inv.id}`,
-      amountCents: inv.totalCents,
-      status: "succeeded",
-      receiptRef: `by ${user.email}`,
-    });
-    if (!rec.duplicate) await afterPayment(db, inv.id).catch((e) => console.error("[after-payment]", String(e)));
-    await audit({
-      action: "studio.invoice.paid-manual",
-      entity: "studio_invoice",
-      entityId: inv.id,
-      site: "photos",
-      summary: `Marked ${inv.number} paid manually`,
-    });
-    back();
-    return done("Marked paid");
+    try {
+      // Manual payments (cash, Zelle, check): what is still owed, one record per invoice, idempotent by reference.
+      const rec = await st.markInvoicePaidManually(db, p.data, user.email ?? "owner");
+      if (rec.duplicate) return actionError("A cash payment is already recorded for this invoice.");
+      await afterPayment(db, rec.invoice.id).catch((e) => console.error("[after-payment]", String(e)));
+      await audit({
+        action: "studio.invoice.paid-manual",
+        entity: "studio_invoice",
+        entityId: rec.invoice.id,
+        site: "photos",
+        summary: `Marked ${rec.invoice.number} paid manually (${formatMoney(rec.amountCents)})`,
+      });
+      back();
+      return done(`Marked paid: ${formatMoney(rec.amountCents)} received`);
+    } catch (e) {
+      const f = fail(e);
+      if (f) return f;
+      throw e;
+    }
+  });
+}
+
+export async function voidInvoiceAction(invoiceId: string) {
+  return studioMoney(async ({ db, user }) => {
+    const p = id.safeParse(invoiceId);
+    if (!p.success) throw new st.StudioError("Unknown invoice.");
+    const inv = await st.voidInvoice(db, p.data, user.email ?? undefined);
+    return {
+      message: `Invoice ${inv.number} voided. Its payment link no longer works.`,
+      audit: {
+        action: "studio.invoice.void",
+        entity: "studio_invoice",
+        entityId: inv.id,
+        summary: `Voided invoice ${inv.number}`,
+      },
+    };
+  });
+}
+
+export async function updateJobAction(input: {
+  jobId: string;
+  title: string;
+  date?: string;
+  location?: string;
+  feeDollars?: string;
+  status: string;
+}) {
+  return studio(async ({ db, user }) => {
+    const p = id.safeParse(input.jobId);
+    if (!p.success) throw new st.StudioError("Unknown shoot.");
+    const dollars = input.feeDollars?.trim() ? Number(input.feeDollars) : 0;
+    if (!Number.isFinite(dollars) || dollars < 0) throw new st.StudioError("Enter the fee as a number of dollars.");
+    const j = await st.updateJob(
+      db,
+      p.data,
+      {
+        title: input.title,
+        date: input.date || null,
+        location: input.location,
+        feeCents: Math.round(dollars * 100),
+        status: input.status,
+      },
+      user.email ?? undefined,
+    );
+    return {
+      message: "Shoot saved",
+      audit: {
+        action: "studio.job.update",
+        entity: "studio_job",
+        entityId: j.id,
+        summary: `Edited shoot ${j.title} (${j.status})`,
+      },
+    };
+  });
+}
+
+export async function archiveBookingAction(bookingId: string, archived: boolean) {
+  return studio(async ({ db }) => {
+    const p = id.safeParse(bookingId);
+    if (!p.success) throw new st.StudioError("Unknown inquiry.");
+    const b = await st.setBookingArchived(db, p.data, archived);
+    return {
+      message: archived ? `Archived the inquiry from ${b.name}` : `${b.name} is back in New`,
+      audit: {
+        action: archived ? "studio.booking.archive" : "studio.booking.restore",
+        entity: "studio_booking",
+        entityId: b.id,
+        summary: `${archived ? "Archived" : "Restored"} the inquiry from ${b.name}`,
+      },
+    };
   });
 }
 

@@ -7,7 +7,6 @@ import { requirePageUser } from "@/auth";
 import { StudioShell as Shell } from "@/components/studio/StudioShell";
 import { CalendarView } from "@/components/studio/CalendarView";
 import { PipelineView } from "@/components/studio/PipelineView";
-import { StudioApp, type StudioData } from "@/components/studio/StudioApp";
 import { CatalogView } from "@/components/studio/CatalogView";
 import { QuotesView } from "@/components/studio/QuotesView";
 import { FormsView } from "@/components/studio/FormsView";
@@ -996,92 +995,13 @@ export default async function StudioSection({
       </Shell>
     );
   }
-  const [clients, jobs, galleries, bookings, contracts, invoices, media, emails] = await Promise.all([
-    st.listClients(db),
-    st.listJobs(db),
-    st.listGalleries(db),
-    st.listBookings(db),
-    st.listContracts(db),
-    st.listInvoices(db),
-    db
-      .select({ id: schema.media.id, filename: schema.media.filename })
-      .from(schema.media)
-      .where(isNull(schema.media.deletedAt))
-      .orderBy(desc(schema.media.createdAt))
-      .limit(80),
-    db.select().from(schema.emailLog).orderBy(desc(schema.emailLog.createdAt)).limit(60),
-  ]);
-  const counts = new Map<string, number>();
-  for (const g of galleries) counts.set(g.gallery.id, (await st.galleryItems(db, g.gallery.id)).length);
-  const data: StudioData = {
-    clients: clients.map((c) => ({ id: c.id, name: c.name, email: c.email })),
-    jobs: jobs.map((r) => ({
-      id: r.job.id,
-      clientId: r.client.id,
-      clientName: r.client.name,
-      title: r.job.title,
-      date: r.job.date,
-      status: r.job.status,
-      feeCents: r.job.feeCents,
-    })),
-    galleries: galleries.map((r) => ({
-      id: r.gallery.id,
-      jobTitle: r.job.title,
-      title: r.gallery.title,
-      status: r.gallery.status,
-      items: counts.get(r.gallery.id) ?? 0,
-    })),
-    bookings: bookings.map((b) => ({
-      id: b.id,
-      name: b.name,
-      email: b.email,
-      topic: b.topic,
-      message: b.message,
-      status: b.status,
-      phone: b.phone,
-      shootType: b.shootType,
-      eventDate: b.eventDate,
-      location: b.location,
-      budget: b.budget,
-      guests: b.guests,
-      source: b.source,
-      score: b.score,
-      details: b.details ?? {},
-      createdAt: b.createdAt.toISOString(),
-    })),
-    emails: emails.map((m) => ({
-      id: m.id,
-      kind: m.kind,
-      to: m.toEmail,
-      subject: m.subject,
-      text: m.bodyText,
-      status: m.status,
-      provider: m.provider,
-      error: m.error,
-      at: m.createdAt.toISOString(),
-    })),
-    contracts: contracts.map((r) => ({
-      id: r.contract.id,
-      jobTitle: r.job.title,
-      title: r.contract.title,
-      kind: r.contract.kind,
-      status: r.contract.status,
-      signedBy: r.contract.signerName,
-    })),
-    invoices: invoices.map((r) => ({
-      id: r.invoice.id,
-      number: r.invoice.number,
-      jobTitle: r.job.title,
-      status: r.invoice.status,
-      totalCents: r.invoice.totalCents,
-      lines: r.invoice.lines.map((l) => l.description).join(" + "),
-    })),
-    media: media.map((m) => ({ id: m.id, filename: m.filename })),
-  };
-  void eq;
+  // The record pages below load only their own lists.
   const who = user.name ?? user.email ?? "owner";
   const jobDay = (d: Date | string | null) => (d ? new Date(d).toISOString().slice(0, 10) : "");
-  if (section === "clients")
+  const jobOptions = (rows: Awaited<ReturnType<typeof st.listJobs>>) =>
+    rows.map((r) => ({ id: r.job.id, title: `${r.job.title} (${r.client.name})` }));
+  if (section === "clients") {
+    const [clients, jobs] = await Promise.all([st.listClients(db), st.listJobs(db)]);
     return (
       <Shell>
         <ClientsView
@@ -1101,61 +1021,125 @@ export default async function StudioSection({
         />
       </Shell>
     );
-  if (section === "shoots")
+  }
+  if (section === "shoots") {
+    const [clients, jobs] = await Promise.all([st.listClients(db), st.listJobs(db)]);
     return (
       <Shell>
         <ShootsView
           user={who}
           data={{
-            clients: data.clients.map((c) => ({ id: c.id, name: c.name })),
-            jobs: data.jobs.map((j) => ({
-              id: j.id,
-              title: j.title,
-              client: j.clientName,
-              clientId: j.clientId,
-              status: j.status,
-              date: jobDay(j.date),
-              feeCents: j.feeCents,
+            clients: clients.map((c) => ({ id: c.id, name: c.name })),
+            jobs: jobs.map((r) => ({
+              id: r.job.id,
+              title: r.job.title,
+              client: r.client.name,
+              clientId: r.client.id,
+              status: r.job.status,
+              date: jobDay(r.job.date),
+              location: r.job.location ?? "",
+              feeCents: r.job.feeCents,
             })),
           }}
         />
       </Shell>
     );
-  if (section === "bookings")
+  }
+  if (section === "bookings") {
+    const bookings = await st.listBookings(db);
     return (
       <Shell>
-        <InquiriesView user={who} data={{ bookings: data.bookings }} />
+        <InquiriesView
+          user={who}
+          data={{
+            bookings: bookings.map((b) => ({
+              id: b.id,
+              name: b.name,
+              email: b.email,
+              topic: b.topic,
+              message: b.message,
+              status: b.status,
+              phone: b.phone,
+              shootType: b.shootType,
+              eventDate: b.eventDate,
+              location: b.location,
+              budget: b.budget,
+              guests: b.guests,
+              source: b.source,
+              score: b.score,
+              details: b.details ?? {},
+              createdAt: b.createdAt.toISOString(),
+            })),
+          }}
+        />
       </Shell>
     );
-  if (section === "inbox")
+  }
+  if (section === "inbox") {
+    const emails = await db.select().from(schema.emailLog).orderBy(desc(schema.emailLog.createdAt)).limit(60);
     return (
       <Shell>
-        <EmailLogView user={who} data={{ emails: data.emails }} />
+        <EmailLogView
+          user={who}
+          data={{
+            emails: emails.map((m) => ({
+              id: m.id,
+              kind: m.kind,
+              to: m.toEmail,
+              subject: m.subject,
+              text: m.bodyText,
+              status: m.status,
+              provider: m.provider,
+              error: m.error,
+              at: m.createdAt.toISOString(),
+            })),
+          }}
+        />
       </Shell>
     );
-  if (section === "invoices")
+  }
+  if (section === "invoices") {
+    const [invoices, jobs] = await Promise.all([st.listInvoices(db), st.listJobs(db)]);
+    const clientOf = new Map(jobs.map((r) => [r.job.id, r.client.name]));
+    // only part-paid invoices need their payments summed
+    const paid = new Map(
+      await Promise.all(
+        invoices
+          .filter((r) => r.invoice.status === "partial")
+          .map(async (r) => [r.invoice.id, await st.invoiceNetCents(db, r.invoice.id)] as const),
+      ),
+    );
     return (
       <Shell>
         <InvoicesView
           user={who}
           data={{
+            today: new Date().toISOString().slice(0, 10),
             invoices: invoices.map((r) => ({
               id: r.invoice.id,
               number: r.invoice.number,
               jobId: r.job.id,
               jobTitle: r.job.title,
+              client: clientOf.get(r.job.id) ?? "",
               status: r.invoice.status,
               totalCents: r.invoice.totalCents,
+              balanceCents: r.invoice.totalCents - (paid.get(r.invoice.id) ?? 0),
+              dueDate: r.invoice.dueDate ?? null,
               lines: r.invoice.lines.map((l) => l.description).join(" + "),
             })),
-            jobs: data.jobs.map((j) => ({ id: j.id, title: `${j.title} (${j.clientName})` })),
+            jobs: jobOptions(jobs),
           }}
         />
       </Shell>
     );
+  }
   if (section === "contracts") {
     await forms.seedSampleTemplates(db);
-    const templates = await forms.listTemplates(db);
+    const [contracts, jobs, templates] = await Promise.all([
+      st.listContracts(db),
+      st.listJobs(db),
+      forms.listTemplates(db),
+    ]);
     return (
       <Shell>
         <ContractsView
@@ -1170,16 +1154,12 @@ export default async function StudioSection({
               signedBy: r.contract.signerName,
               body: r.contract.body,
             })),
-            jobs: data.jobs.map((j) => ({ id: j.id, title: `${j.title} (${j.clientName})` })),
+            jobs: jobOptions(jobs),
             templates: templates.map((t) => ({ id: t.id, name: t.name, kind: t.kind })),
           }}
         />
       </Shell>
     );
   }
-  return (
-    <Shell>
-      <StudioApp section={section} user={user.name ?? user.email ?? "owner"} data={data} />
-    </Shell>
-  );
+  notFound();
 }
