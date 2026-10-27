@@ -1,0 +1,806 @@
+<title>Hub Portal Previews</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Syne:wght@500;700;800&display=swap">
+<style>
+/* Layout: a single dark viewing room; four stacked previews, each a live stage with its notes beside it. Deliberately single-theme (dark) because every concept lives in a void. */
+:root {
+  --void: #05060a;
+  --panel: #0c0e16;
+  --line: #22263a;
+  --fg: #e9ecf6;
+  --soft: #a7adc4;
+  --muted: #6f7590;
+  --accent: #9fb4ff;
+  --exposure: #ff5a4f;
+  --resonance: #ffb340;
+  --altitude: #54d6ff;
+  --forge: #5ef0a0;
+  --font-display: "Syne", "Hanken Grotesk", system-ui, sans-serif;
+  --font-body: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  color-scheme: dark;
+}
+html { background: var(--void); }
+body {
+  background: var(--void);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.55;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 64px;
+}
+.wrap { max-width: 1180px; margin: 0 auto; }
+header.top { padding-block: 40px 28px; display: grid; gap: 12px; }
+.eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(34px, 6vw, 64px); line-height: .98; margin: 0; letter-spacing: -.02em; text-wrap: balance; }
+.lede { color: var(--soft); max-width: 64ch; margin: 0; }
+.how { display: flex; flex-wrap: wrap; gap: 8px 18px; font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+.how b { color: var(--soft); font-weight: 500; }
+
+nav.tabs { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: color-mix(in srgb, var(--void) 88%, transparent); backdrop-filter: blur(8px); display: flex; flex-wrap: wrap; gap: 8px; padding-block: 12px; border-bottom: 1px solid var(--line); margin-bottom: 28px; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--void); }
+nav.tabs button { font: 500 13px var(--font-body); color: var(--soft); background: transparent; border: 1px solid var(--line); border-radius: 999px; padding: 9px 16px; cursor: pointer; min-height: 40px; }
+nav.tabs button[aria-selected="true"] { color: var(--void); background: var(--fg); border-color: var(--fg); }
+nav.tabs button:focus-visible, .stage:focus-visible, .ctl:focus-visible, input[type=range]:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.rec { font-family: var(--font-mono); font-size: 10px; letter-spacing: .1em; padding: 2px 6px; border-radius: 4px; background: var(--forge); color: var(--void); margin-left: 6px; }
+
+section.concept { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+@media (max-width: 900px) { section.concept { grid-template-columns: 1fr; } }
+.stagebox { display: grid; gap: 10px; min-width: 0; }
+.stage { position: relative; width: 100%; max-width: 100%; aspect-ratio: 16 / 10; background: #000; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; touch-action: none; user-select: none; }
+.stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.hud { position: absolute; inset: 0; pointer-events: none; font-family: var(--font-mono); font-size: clamp(9px, 1.25vw, 12px); color: var(--soft); }
+.hud .tl { position: absolute; left: 14px; top: 12px; letter-spacing: .12em; text-transform: uppercase; }
+.hud .tr { position: absolute; right: 14px; top: 12px; text-align: right; letter-spacing: .1em; }
+.hud .bl { position: absolute; left: 14px; bottom: 12px; color: var(--muted); }
+.hud .center { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; gap: 6px; padding: 16px; }
+.hud .big { font-family: var(--font-display); font-weight: 800; font-size: clamp(22px, 5vw, 54px); color: var(--fg); letter-spacing: -.01em; line-height: 1; }
+.hud .boot { white-space: pre; text-align: left; color: var(--accent); line-height: 1.7; }
+.arrival { pointer-events: auto; }
+.arrival button { margin-top: 10px; pointer-events: auto; }
+.ctls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.ctl { font: 500 13px var(--font-body); color: var(--fg); background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; min-height: 40px; cursor: pointer; }
+.ctl:hover { border-color: var(--muted); }
+.hint { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+
+aside.notes { display: grid; gap: 16px; min-width: 0; }
+aside.notes h2 { font-family: var(--font-display); font-weight: 700; font-size: 28px; margin: 0; line-height: 1.05; }
+aside.notes p { margin: 0; color: var(--soft); }
+dl.beats { margin: 0; display: grid; gap: 10px; }
+dl.beats div { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 10px; padding-top: 10px; border-top: 1px solid var(--line); }
+dl.beats dt { font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); padding-top: 2px; }
+dl.beats dd { margin: 0; color: var(--fg); }
+.worlds { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font-family: var(--font-mono); font-size: 11px; padding: 4px 8px; border-radius: 999px; border: 1px solid currentColor; }
+.tradeoff { font-size: 13px; color: var(--muted); }
+.dial { display: grid; gap: 6px; }
+.dial label { font-family: var(--font-mono); font-size: 12px; color: var(--soft); display: flex; justify-content: space-between; }
+input[type=range] { width: 100%; accent-color: var(--accent); min-height: 32px; }
+footer.foot { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; display: grid; gap: 6px; }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <span class="eyebrow">jerryqiu.com · hub concepts · interactive previews</span>
+    <h1>Four ways into the worlds</h1>
+    <p class="lede">Each preview is a working sketch of one hub concept: what you see when you arrive, how you move between the four worlds, and the hand-off when you step into one. These are rough motion studies, not the final build. The real site would add the static and reduced-motion versions.</p>
+    <div class="how"><span><b>Drag</b> or <b>arrow keys</b> to move</span><span><b>Click</b> or <b>Enter</b> to step through</span><span><b>Replay entry</b> to see the arrival again</span></div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Concepts">
+    <button role="tab" id="tab-combo" aria-controls="p-combo" aria-selected="true">A+B · Nexus in prism light<span class="rec">RECOMMENDED</span></button>
+    <button role="tab" id="tab-nexus" aria-controls="p-nexus" aria-selected="false">A · The Nexus</button>
+    <button role="tab" id="tab-prism" aria-controls="p-prism" aria-selected="false">B · The Prism</button>
+    <button role="tab" id="tab-dial" aria-controls="p-dial" aria-selected="false">C · Frequency Dial</button>
+  </nav>
+
+  <!-- A+B -->
+  <section class="concept" id="p-combo" role="tabpanel" aria-labelledby="tab-combo">
+    <div class="stagebox">
+      <div class="stage" id="st-combo" tabindex="0" aria-label="Nexus in prism light preview. Arrow keys rotate the ring, Enter steps through the front gate."><canvas></canvas><div class="hud"></div></div>
+      <div class="ctls"><button class="ctl" data-act="replay">Replay entry</button><button class="ctl" data-act="prev">◀ Rotate</button><button class="ctl" data-act="next">Rotate ▶</button><button class="ctl" data-act="enter">Step through</button><span class="hint">front gate glows brighter</span></div>
+    </div>
+    <aside class="notes">
+      <span class="eyebrow">Concept A+B</span>
+      <h2>Nexus in prism light</h2>
+      <p>The Nexus structure (a ring of gates you drift around) drawn in the prism's light instead of game UI. Calm, iridescent, still clearly a place you travel through.</p>
+      <dl class="beats">
+        <div><dt>Arrive</dt><dd>One white thread of light draws across the dark, splits into four colours, and each colour curls into a gate.</dd></div>
+        <div><dt>The hub</dt><dd>Four light-rings in a slow orbit. Scroll, drag or arrow keys bring one to the front. Writing, About and Connect are quieter rooms below the ring.</dd></div>
+        <div><dt>Leave</dt><dd>The front gate widens until its colour fills the screen; the world fades up from that colour, so the jump between sites feels continuous.</dd></div>
+        <div><dt>Return</dt><dd>Every world keeps one small "back to the Nexus" light. The hub replays the gate closing behind you, with that world now facing you.</dd></div>
+      </dl>
+      <div class="worlds"><span class="chip" style="color:var(--exposure)">Exposure · photo</span><span class="chip" style="color:var(--resonance)">Resonance · music</span><span class="chip" style="color:var(--altitude)">Altitude · flying</span><span class="chip" style="color:var(--forge)">Forge · make</span></div>
+      <p class="tradeoff">Trade-off: less overtly "game" than A. The quest (hidden keys, sealed fifth gate) still fits on top.</p>
+    </aside>
+  </section>
+
+  <!-- A -->
+  <section class="concept" id="p-nexus" role="tabpanel" aria-labelledby="tab-nexus" hidden>
+    <div class="stagebox">
+      <div class="stage" id="st-nexus" tabindex="0" aria-label="The Nexus preview. Arrow keys rotate the ring, Enter steps through the front gate."><canvas></canvas><div class="hud"></div></div>
+      <div class="ctls"><button class="ctl" data-act="replay">Replay entry</button><button class="ctl" data-act="prev">◀ Rotate</button><button class="ctl" data-act="next">Rotate ▶</button><button class="ctl" data-act="enter">Step through</button><span class="hint">HUD shows the gate in front</span></div>
+    </div>
+    <aside class="notes">
+      <span class="eyebrow">Concept A</span>
+      <h2>The Nexus</h2>
+      <p>The most Ready Player One of the four: a boot sequence, a visitor pass, a HUD, and gates with their own physical motifs.</p>
+      <dl class="beats">
+        <div><dt>Arrive</dt><dd>Black screen, a cursor, a short boot log: link established, visitor pass issued, your local time read as "coordinates". Shown once per visit; skippable.</dd></div>
+        <div><dt>The hub</dt><dd>A ring of gates in a void with a horizon grid. Each gate animates its world: shutter blades, standing waves, drifting cloud lines, sparks on a blueprint.</dd></div>
+        <div><dt>Leave</dt><dd>A warp: the grid streaks, the gate rushes at you, a hard cut to the world's colour, then the world loads.</dd></div>
+        <div><dt>Quest</dt><dd>A key hidden in each world. All four open a sealed fifth gate. Progress lives only in the visitor's browser.</dd></div>
+      </dl>
+      <div class="worlds"><span class="chip" style="color:var(--exposure)">Exposure</span><span class="chip" style="color:var(--resonance)">Resonance</span><span class="chip" style="color:var(--altitude)">Altitude</span><span class="chip" style="color:var(--forge)">Forge</span></div>
+      <p class="tradeoff">Trade-off: strongest "experience", but the HUD and boot text can feel like a game menu and need careful restraint to stay in Holominimal's minimal register.</p>
+    </aside>
+  </section>
+
+  <!-- B -->
+  <section class="concept" id="p-prism" role="tabpanel" aria-labelledby="tab-prism" hidden>
+    <div class="stagebox">
+      <div class="stage" id="st-prism" tabindex="0" aria-label="The Prism preview. Arrow keys choose a beam, Enter follows it."><canvas></canvas><div class="hud"></div></div>
+      <div class="ctls"><button class="ctl" data-act="replay">Replay entry</button><button class="ctl" data-act="prev">▲ Beam</button><button class="ctl" data-act="next">Beam ▼</button><button class="ctl" data-act="enter">Follow beam</button><span class="hint">hover a beam to brighten it</span></div>
+    </div>
+    <aside class="notes">
+      <span class="eyebrow">Concept B</span>
+      <h2>The Prism</h2>
+      <p>No ring, no HUD. One beam of white light hits a slowly turning prism and splits into four. Each beam is a world.</p>
+      <dl class="beats">
+        <div><dt>Arrive</dt><dd>A single beam crosses the page, finds the prism, and the spectrum fans out with your name in the refracted light.</dd></div>
+        <div><dt>The hub</dt><dd>Four coloured beams run off the right edge. Hovering one makes it carry its world's texture: grain, a waveform, cloud, a grid.</dd></div>
+        <div><dt>Leave</dt><dd>The chosen beam widens until it is the whole screen. The world begins inside that colour.</dd></div>
+        <div><dt>Return</dt><dd>The world's colour narrows back into a beam and slides home into the prism.</dd></div>
+      </dl>
+      <div class="worlds"><span class="chip" style="color:var(--exposure)">Exposure</span><span class="chip" style="color:var(--resonance)">Resonance</span><span class="chip" style="color:var(--altitude)">Altitude</span><span class="chip" style="color:var(--forge)">Forge</span></div>
+      <p class="tradeoff">Trade-off: the most elegant and the most "Holominimal", but less of a place to explore; the portal feeling is lighter.</p>
+    </aside>
+  </section>
+
+  <!-- C -->
+  <section class="concept" id="p-dial" role="tabpanel" aria-labelledby="tab-dial" hidden>
+    <div class="stagebox">
+      <div class="stage" id="st-dial" tabindex="0" aria-label="Frequency dial preview. Arrow keys tune, Enter tunes in."><canvas></canvas><div class="hud"></div></div>
+      <div class="dial"><label for="dial-range"><span>Tune</span><span id="dial-read">88.0 MHz</span></label><input type="range" id="dial-range" min="880" max="1080" step="1" value="905"></div>
+      <div class="ctls"><button class="ctl" data-act="replay">Replay entry</button><button class="ctl" data-act="enter">Tune in</button><span class="hint">stations at 91.3 · 96.7 · 101.9 · 105.5</span></div>
+    </div>
+    <aside class="notes">
+      <span class="eyebrow">Concept C</span>
+      <h2>Frequency Dial</h2>
+      <p>The hub as a receiver caught between stations. You tune through static; each world is a station that locks in with a clean signal.</p>
+      <dl class="beats">
+        <div><dt>Arrive</dt><dd>The page opens on soft static and a needle. The first station drifts in by itself so the idea is clear.</dd></div>
+        <div><dt>The hub</dt><dd>Scroll or drag to tune. Between stations: noise. Near one: its colour and name resolve out of the static.</dd></div>
+        <div><dt>Leave</dt><dd>"Tune in" locks the signal; the static clears completely and the world takes over.</dd></div>
+        <div><dt>Return</dt><dd>Static rushes back in for a beat, then you are on the dial again, still on that world's station.</dd></div>
+      </dl>
+      <div class="worlds"><span class="chip" style="color:var(--exposure)">91.3 Exposure</span><span class="chip" style="color:var(--resonance)">96.7 Resonance</span><span class="chip" style="color:var(--altitude)">101.9 Altitude</span><span class="chip" style="color:var(--forge)">105.5 Forge</span></div>
+      <p class="tradeoff">Trade-off: the most distinctive interaction, but more "receiver" than "portal", and static is tiring if it is loud. Fits the music world best of all.</p>
+    </aside>
+  </section>
+
+  <footer class="foot">
+    <span>World names are working titles: Exposure (photography), Resonance (music), Altitude (flying), Forge (make).</span>
+    <span>Everything here is drawn live in the browser; with reduced motion turned on, each preview shows a still frame of its hub.</span>
+  </footer>
+</div>
+
+<script>
+(() => {
+const WORLDS = [
+  { key: "exposure", name: "Exposure", what: "Photography", color: "#ff5a4f", motif: "shutter", freq: 913 },
+  { key: "resonance", name: "Resonance", what: "Music", color: "#ffb340", motif: "waves", freq: 967 },
+  { key: "altitude", name: "Altitude", what: "Flying", color: "#54d6ff", motif: "horizon", freq: 1019 },
+  { key: "forge", name: "Forge", what: "Make", color: "#5ef0a0", motif: "grid", freq: 1055 },
+];
+const REDUCE = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const TAU = Math.PI * 2;
+const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const hexA = (hex, a) => {
+  const n = parseInt(hex.slice(1), 16);
+  return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${a})`;
+};
+function localCoords() {
+  const d = new Date();
+  return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")} LOCAL`;
+}
+
+/* ---------- world motifs (used on gates, beams and arrival screens) ---------- */
+function drawMotif(ctx, w, x, y, r, t, alpha) {
+  ctx.save();
+  ctx.globalAlpha = alpha;
+  ctx.strokeStyle = w.color;
+  ctx.fillStyle = w.color;
+  ctx.lineWidth = Math.max(1, r * 0.03);
+  if (w.motif === "shutter") {
+    const open = 0.55 + 0.35 * Math.sin(t * 1.4);
+    for (let i = 0; i < 6; i++) {
+      const a = (i / 6) * TAU + t * 0.25;
+      ctx.beginPath();
+      ctx.moveTo(x + Math.cos(a) * r * open, y + Math.sin(a) * r * open);
+      ctx.lineTo(x + Math.cos(a + 1.1) * r, y + Math.sin(a + 1.1) * r);
+      ctx.stroke();
+    }
+  } else if (w.motif === "waves") {
+    for (let k = 0; k < 3; k++) {
+      ctx.beginPath();
+      for (let i = 0; i <= 40; i++) {
+        const px = x - r + (i / 40) * 2 * r;
+        const env = Math.sin((i / 40) * Math.PI);
+        const py = y + Math.sin(i * 0.5 + t * 3 + k) * r * 0.35 * env * (1 - k * 0.25);
+        i ? ctx.lineTo(px, py) : ctx.moveTo(px, py);
+      }
+      ctx.stroke();
+    }
+  } else if (w.motif === "horizon") {
+    for (let k = 0; k < 5; k++) {
+      const py = y - r * 0.5 + k * r * 0.25;
+      const off = ((t * 18 * (k + 1)) % (r * 2)) - r;
+      ctx.globalAlpha = alpha * (0.3 + k * 0.15);
+      ctx.beginPath();
+      ctx.moveTo(x - r * 0.9, py);
+      ctx.lineTo(x + r * 0.9, py);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(x + off * 0.8, py - r * 0.06, r * 0.08, Math.PI, 0);
+      ctx.stroke();
+    }
+  } else {
+    const step = r / 3;
+    ctx.globalAlpha = alpha * 0.55;
+    for (let i = -3; i <= 3; i++) {
+      ctx.beginPath(); ctx.moveTo(x + i * step * 0.9, y - r * 0.8); ctx.lineTo(x + i * step * 0.9, y + r * 0.8); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(x - r * 0.8, y + i * step * 0.9); ctx.lineTo(x + r * 0.8, y + i * step * 0.9); ctx.stroke();
+    }
+    ctx.globalAlpha = alpha;
+    for (let s = 0; s < 6; s++) {
+      const a = s * 1.7 + t * 2;
+      const d = ((t * 0.8 + s * 0.17) % 1) * r * 0.9;
+      ctx.beginPath();
+      ctx.arc(x + Math.cos(a) * d, y + Math.sin(a) * d, Math.max(1, r * 0.03), 0, TAU);
+      ctx.fill();
+    }
+  }
+  ctx.restore();
+}
+
+/* ---------- shared stage plumbing ---------- */
+function makeStage(id, impl) {
+  const el = document.getElementById(id);
+  const canvas = el.querySelector("canvas");
+  const hud = el.querySelector(".hud");
+  const ctx = canvas.getContext("2d");
+  const s = { el, canvas, hud, ctx, W: 0, H: 0, t: 0, phase: "entry", phaseT: 0, sel: 0, rot: 0, visible: false, last: 0, data: {} };
+  function resize() {
+    const r = el.getBoundingClientRect();
+    const dpr = Math.min(2, devicePixelRatio || 1);
+    s.W = r.width; s.H = r.height;
+    canvas.width = Math.round(r.width * dpr); canvas.height = Math.round(r.height * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    if (REDUCE) frame(performance.now());
+  }
+  new ResizeObserver(resize).observe(el);
+  s.setPhase = (p) => { s.phase = p; s.phaseT = 0; impl.onPhase?.(s); };
+  s.replay = () => { s.setPhase(REDUCE ? "hub" : "entry"); if (REDUCE) frame(performance.now()); };
+  s.enter = () => { if (s.phase === "hub") s.setPhase(REDUCE ? "arrived" : "depart"); if (REDUCE) frame(performance.now()); };
+  s.back = () => { s.setPhase(REDUCE ? "hub" : "return"); if (REDUCE) frame(performance.now()); };
+  s.move = (d) => { if (s.phase !== "hub") return; s.sel = (s.sel + d + WORLDS.length) % WORLDS.length; impl.onMove?.(s, d); if (REDUCE) frame(performance.now()); };
+  function frame(now) {
+    const dt = Math.min(0.05, (now - (s.last || now)) / 1000);
+    s.last = now;
+    s.t += dt; s.phaseT += dt;
+    impl.update?.(s, dt);
+    impl.draw(s);
+    impl.hud(s);
+  }
+  function loop(now) {
+    if (s.visible && !document.hidden) frame(now);
+    requestAnimationFrame(loop);
+  }
+  new IntersectionObserver((es) => { s.visible = es[0].isIntersecting; s.last = 0; }).observe(el);
+  el.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight" || e.key === "ArrowDown") { s.move(1); e.preventDefault(); }
+    else if (e.key === "ArrowLeft" || e.key === "ArrowUp") { s.move(-1); e.preventDefault(); }
+    else if (e.key === "Enter" || e.key === " ") { s.phase === "arrived" ? s.back() : s.enter(); e.preventDefault(); }
+  });
+  let dragX = null, moved = 0;
+  el.addEventListener("pointerdown", (e) => { dragX = e.clientX; moved = 0; el.setPointerCapture(e.pointerId); });
+  el.addEventListener("pointermove", (e) => {
+    impl.hover?.(s, e);
+    if (dragX === null) return;
+    const dx = e.clientX - dragX;
+    if (Math.abs(dx) > 60) { s.move(dx < 0 ? 1 : -1); dragX = e.clientX; moved++; }
+  });
+  el.addEventListener("pointerup", (e) => {
+    if (dragX !== null && moved === 0) impl.click ? impl.click(s, e) : s.enter();
+    dragX = null;
+  });
+  const panel = el.closest("section");
+  panel.querySelectorAll(".ctl").forEach((b) => b.addEventListener("click", () => {
+    const a = b.dataset.act;
+    if (a === "replay") s.replay();
+    else if (a === "prev") s.move(-1);
+    else if (a === "next") s.move(1);
+    else if (a === "enter") s.phase === "arrived" ? s.back() : s.enter();
+  }));
+  hud.addEventListener("click", (e) => { if (e.target.closest("[data-back]")) { e.stopPropagation(); s.back(); } });
+  hud.addEventListener("pointerdown", (e) => { if (e.target.closest("[data-back]")) e.stopPropagation(); });
+  impl.init?.(s);
+  s.replay();
+  if (!REDUCE) requestAnimationFrame(loop);
+  return s;
+}
+
+function arrivalHud(w, from) {
+  return `<div class="center arrival" style="color:${w.color}">
+    <span>ARRIVED FROM ${from}</span>
+    <span class="big" style="color:${w.color}">${w.name}</span>
+    <span style="color:#a7adc4">${w.what.toUpperCase()} · the real site would load here</span>
+    <span><button class="ctl" data-back>Back to the hub</button></span>
+  </div>`;
+}
+function setHud(s, html) { if (s.data.hud !== html) { s.hud.innerHTML = html; s.data.hud = html; } }
+
+/* ---------- stars ---------- */
+function stars(n, seed) {
+  let x = seed;
+  const r = () => ((x = (x * 16807) % 2147483647) / 2147483647);
+  return Array.from({ length: n }, () => ({ x: r(), y: r(), z: r(), tw: r() * TAU }));
+}
+
+/* ---------- arrival scene, shared ---------- */
+function drawArrival(s, w, k) {
+  const { ctx, W, H } = s;
+  const g = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, Math.max(W, H) * 0.7);
+  g.addColorStop(0, hexA(w.color, 0.28 * k));
+  g.addColorStop(1, "rgba(0,0,0,1)");
+  ctx.fillStyle = "#000"; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  drawMotif(ctx, w, W / 2, H / 2, Math.min(W, H) * 0.38, s.t, 0.35 * k);
+}
+
+/* =========================================================
+   Ring renderer shared by Nexus (A) and Nexus+Prism (A+B)
+   ========================================================= */
+function ringImpl(style) {
+  const prism = style === "prism";
+  const field = stars(220, prism ? 7 : 11);
+  return {
+    onMove(s, d) { s.data.target = (s.data.target ?? 0) - d; },
+    update(s, dt) {
+      s.data.target ??= 0;
+      s.rot += (s.data.target - s.rot) * Math.min(1, dt * 6);
+      if (s.phase === "entry" && s.phaseT > (prism ? 3.2 : 4.2)) s.setPhase("hub");
+      if (s.phase === "depart" && s.phaseT > 1.4) s.setPhase("arrived");
+      if (s.phase === "return" && s.phaseT > 1.1) s.setPhase("hub");
+    },
+    draw(s) {
+      const { ctx, W, H, t } = s;
+      const cx = W / 2, cy = H * 0.52;
+      ctx.fillStyle = "#03040a"; ctx.fillRect(0, 0, W, H);
+      const w = WORLDS[s.sel];
+      if (s.phase === "arrived") { drawArrival(s, w, 1); return; }
+
+      // stars, streaking on departure
+      const warp = s.phase === "depart" ? ease(clamp(s.phaseT / 1.4, 0, 1)) : 0;
+      for (const st of field) {
+        const px = st.x * W, py = st.y * H;
+        const a = 0.25 + 0.5 * (0.5 + 0.5 * Math.sin(t * 1.3 + st.tw)) * st.z;
+        if (warp > 0) {
+          const dx = px - cx, dy = py - cy;
+          ctx.strokeStyle = `rgba(200,210,255,${a})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px + dx * warp * 0.6, py + dy * warp * 0.6); ctx.stroke();
+        } else {
+          ctx.fillStyle = `rgba(200,210,255,${a})`;
+          ctx.fillRect(px, py, st.z * 1.6, st.z * 1.6);
+        }
+      }
+
+      // Nexus: perspective horizon grid
+      if (!prism) {
+        ctx.save();
+        ctx.strokeStyle = "rgba(120,140,255,0.16)";
+        ctx.lineWidth = 1;
+        const hy = cy + H * 0.12;
+        for (let i = 1; i < 12; i++) {
+          const p = (i + ((t * 0.6) % 1)) / 12;
+          const y = hy + Math.pow(p, 2.2) * (H - hy);
+          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+        }
+        for (let i = -10; i <= 10; i++) {
+          ctx.beginPath(); ctx.moveTo(cx + i * W * 0.02, hy); ctx.lineTo(cx + i * W * 0.22, H); ctx.stroke();
+        }
+        ctx.restore();
+      }
+
+      // entry
+      let reveal = 1;
+      if (s.phase === "entry") {
+        if (prism) {
+          // a white thread draws in, splits into four colours
+          const p = clamp(s.phaseT / 1.3, 0, 1);
+          ctx.strokeStyle = "rgba(255,255,255,0.9)";
+          ctx.lineWidth = 2;
+          ctx.beginPath(); ctx.moveTo(0, cy); ctx.lineTo(ease(p) * cx, cy); ctx.stroke();
+          reveal = clamp((s.phaseT - 1.2) / 1.6, 0, 1);
+          if (reveal > 0) {
+            WORLDS.forEach((ww, i) => {
+              const a = (i / WORLDS.length) * TAU + s.rot * (TAU / WORLDS.length) + Math.PI / 2;
+              const tx = cx + Math.cos(a) * W * 0.3 * ease(reveal);
+              const ty = cy + Math.sin(a) * H * 0.1 * ease(reveal);
+              ctx.strokeStyle = hexA(ww.color, 0.8 * (1 - reveal * 0.6));
+              ctx.lineWidth = 2;
+              ctx.beginPath(); ctx.moveTo(cx, cy); ctx.quadraticCurveTo(cx + (tx - cx) * 0.4, cy - H * 0.15, tx, ty); ctx.stroke();
+            });
+          }
+        } else {
+          reveal = clamp((s.phaseT - 2.6) / 1.4, 0, 1);
+        }
+      }
+
+      // the ring of gates, back to front
+      const R = Math.min(W * 0.34, 340);
+      const gates = WORLDS.map((ww, i) => {
+        const a = ((i + s.rot) / WORLDS.length) * TAU + Math.PI / 2;
+        const depth = (Math.sin(a) + 1) / 2; // 1 = front
+        return { ww, i, x: cx + Math.cos(a) * R, y: cy + Math.sin(a) * R * 0.18 - (1 - depth) * H * 0.04, depth };
+      }).sort((p, q) => p.depth - q.depth);
+      for (const g of gates) {
+        let size = (0.45 + 0.55 * g.depth) * Math.min(W, H) * 0.17 * ease(reveal);
+        let x = g.x, y = g.y, alpha = (0.35 + 0.65 * g.depth) * reveal;
+        if (s.phase === "depart" && g.i === s.sel) {
+          const p = ease(clamp(s.phaseT / 1.2, 0, 1));
+          size *= 1 + p * 9; x += (cx - x) * p; y += (cy - y) * p; alpha = 1;
+        } else if (s.phase === "depart") alpha *= 1 - warp;
+        if (s.phase === "return" && g.i === s.sel) {
+          const p = 1 - ease(clamp(s.phaseT / 1.1, 0, 1));
+          size *= 1 + p * 9; x += (cx - x) * p; y += (cy - y) * p;
+        }
+        if (size <= 0.5) continue;
+        const front = g.i === s.sel && s.phase === "hub";
+        drawGate(ctx, g.ww, x, y, size, t, alpha, front, prism);
+      }
+
+      // departure colour flood
+      if (s.phase === "depart") {
+        const p = clamp((s.phaseT - 0.8) / 0.6, 0, 1);
+        ctx.fillStyle = hexA(w.color, p * 0.85);
+        ctx.fillRect(0, 0, W, H);
+      }
+      if (s.phase === "return") {
+        const p = 1 - clamp(s.phaseT / 0.5, 0, 1);
+        ctx.fillStyle = hexA(w.color, p * 0.6);
+        ctx.fillRect(0, 0, W, H);
+      }
+    },
+    hud(s) {
+      const w = WORLDS[s.sel];
+      if (s.phase === "arrived") return setHud(s, arrivalHud(w, prism ? "THE NEXUS" : "THE NEXUS · PASS #0427"));
+      if (s.phase === "entry" && !prism) {
+        const lines = ["> link established", "> reading coordinates . . . " + localCoords(), "> visitor pass issued  #0427", "> four gates online", "> welcome to the Nexus"];
+        const n = Math.min(lines.length, Math.floor(s.phaseT / 0.5));
+        const cursor = Math.floor(s.t * 2) % 2 ? "▌" : " ";
+        return setHud(s, `<div class="center"><span class="boot">${lines.slice(0, n).join("\n")}${n < lines.length ? "\n" + cursor : ""}</span></div>`);
+      }
+      if (s.phase === "entry" && prism) {
+        const k = clamp((s.phaseT - 1.8) / 1, 0, 1);
+        return setHud(s, `<div class="center" style="opacity:${k.toFixed(2)}"><span class="big">Jerry Qiu</span><span>FOUR WORLDS · PICK A LIGHT</span></div>`);
+      }
+      const label = prism
+        ? `<div class="bl">← → or drag · Enter steps through</div><div class="tr" style="color:${w.color}">${w.name.toUpperCase()}<br><span style="color:#6f7590">${w.what}</span></div><div class="tl">JERRY QIU · THE NEXUS</div>`
+        : `<div class="tl">NEXUS · PASS #0427 · ${localCoords()}</div><div class="tr" style="color:${w.color}">GATE ${s.sel + 1}/4 · ${w.name.toUpperCase()}<br><span style="color:#6f7590">${w.what} · keys found 0/4</span></div><div class="bl">◀ ▶ rotate · ENTER step through · rooms below: Archive · Player Card · Comms</div>`;
+      setHud(s, label);
+    },
+  };
+}
+
+function drawGate(ctx, w, x, y, size, t, alpha, front, prism) {
+  ctx.save();
+  ctx.globalAlpha = alpha;
+  if (prism) {
+    // iridescent light ring
+    const grad = ctx.createConicGradient ? ctx.createConicGradient(t * 0.6, x, y) : null;
+    if (grad) {
+      grad.addColorStop(0, w.color);
+      grad.addColorStop(0.33, "#ffffff");
+      grad.addColorStop(0.5, w.color);
+      grad.addColorStop(0.75, "#b9a6ff");
+      grad.addColorStop(1, w.color);
+    }
+    ctx.lineWidth = Math.max(1.5, size * (front ? 0.07 : 0.045));
+    ctx.strokeStyle = grad || w.color;
+    ctx.shadowColor = w.color;
+    ctx.shadowBlur = front ? size * 0.5 : size * 0.2;
+    ctx.beginPath(); ctx.ellipse(x, y, size, size * 1.18, 0, 0, TAU); ctx.stroke();
+    ctx.shadowBlur = 0;
+    const inner = ctx.createRadialGradient(x, y, 0, x, y, size);
+    inner.addColorStop(0, hexA(w.color, front ? 0.22 : 0.1));
+    inner.addColorStop(1, hexA(w.color, 0));
+    ctx.fillStyle = inner;
+    ctx.beginPath(); ctx.ellipse(x, y, size, size * 1.18, 0, 0, TAU); ctx.fill();
+  } else {
+    // hard-edged gate frame with corner ticks
+    ctx.strokeStyle = w.color;
+    ctx.lineWidth = Math.max(1, size * 0.03);
+    ctx.shadowColor = w.color;
+    ctx.shadowBlur = front ? size * 0.35 : 0;
+    const gw = size * 0.85, gh = size * 1.25;
+    ctx.strokeRect(x - gw, y - gh, gw * 2, gh * 2);
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = hexA(w.color, front ? 0.12 : 0.05);
+    ctx.fillRect(x - gw, y - gh, gw * 2, gh * 2);
+    const c = size * 0.18;
+    ctx.lineWidth = Math.max(1.5, size * 0.05);
+    for (const [sx, sy] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
+      ctx.beginPath();
+      ctx.moveTo(x + sx * (gw + c * 0.4), y + sy * (gh + c * 0.4) - sy * c);
+      ctx.lineTo(x + sx * (gw + c * 0.4), y + sy * (gh + c * 0.4));
+      ctx.lineTo(x + sx * (gw + c * 0.4) - sx * c, y + sy * (gh + c * 0.4));
+      ctx.stroke();
+    }
+  }
+  drawMotif(ctx, w, x, y, size * 0.7, t, front ? 0.95 : 0.55);
+  if (size > 14) {
+    ctx.globalAlpha = alpha * (front ? 1 : 0.6);
+    ctx.fillStyle = front ? "#ffffff" : w.color;
+    ctx.font = `600 ${Math.max(10, size * 0.16)}px Syne, sans-serif`;
+    ctx.textAlign = "center";
+    ctx.fillText(w.name.toUpperCase(), x, y + size * (prism ? 1.55 : 1.62));
+  }
+  ctx.restore();
+}
+
+/* =========================================================
+   B · The Prism
+   ========================================================= */
+const prismImpl = {
+  init(s) { s.data.hover = -1; },
+  update(s) {
+    if (s.phase === "entry" && s.phaseT > 3.2) s.setPhase("hub");
+    if (s.phase === "depart" && s.phaseT > 1.3) s.setPhase("arrived");
+    if (s.phase === "return" && s.phaseT > 1.1) s.setPhase("hub");
+  },
+  geom(s) {
+    const { W, H } = s;
+    const px = W * 0.38, py = H * 0.5, ps = Math.min(W, H) * 0.16;
+    return { px, py, ps, ends: WORLDS.map((_, i) => ({ x: W, y: H * (0.2 + i * 0.2) })) };
+  },
+  hover(s, e) {
+    if (s.phase !== "hub") return;
+    const r = s.el.getBoundingClientRect();
+    const y = (e.clientY - r.top) / r.height;
+    const x = (e.clientX - r.left) / r.width;
+    if (x < 0.42) { s.data.hover = -1; return; }
+    const i = clamp(Math.round((y - 0.2) / 0.2), 0, 3);
+    s.data.hover = i; s.sel = i;
+  },
+  draw(s) {
+    const { ctx, W, H, t } = s;
+    ctx.fillStyle = "#020205"; ctx.fillRect(0, 0, W, H);
+    const w = WORLDS[s.sel];
+    if (s.phase === "arrived") { drawArrival(s, w, 1); return; }
+    const { px, py, ps, ends } = prismImpl.geom(s);
+    const entry = s.phase === "entry";
+    const beamIn = entry ? ease(clamp(s.phaseT / 1.2, 0, 1)) : 1;
+    const fan = entry ? ease(clamp((s.phaseT - 1.1) / 1.4, 0, 1)) : 1;
+    // incoming white beam
+    ctx.save();
+    ctx.shadowColor = "#ffffff"; ctx.shadowBlur = 14;
+    ctx.strokeStyle = "rgba(255,255,255,0.95)"; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(0, H * 0.62); ctx.lineTo(px * beamIn, H * 0.62 - (H * 0.12) * beamIn); ctx.stroke();
+    ctx.restore();
+    // outgoing beams
+    WORLDS.forEach((ww, i) => {
+      const e = ends[i];
+      const sx = px + ps * 0.3, sy = py;
+      const ex = sx + (e.x - sx) * fan, ey = sy + (e.y - sy) * fan;
+      const on = s.phase === "hub" && i === s.sel;
+      let width = on ? 7 : 3;
+      if (s.phase === "depart" && i === s.sel) width = 7 + ease(clamp(s.phaseT / 1.2, 0, 1)) * Math.max(W, H) * 1.4;
+      if (s.phase === "return" && i === s.sel) width = 7 + (1 - ease(clamp(s.phaseT / 1.1, 0, 1))) * Math.max(W, H) * 1.4;
+      const dim = (s.phase === "depart" && i !== s.sel) ? 1 - clamp(s.phaseT / 0.6, 0, 1) : 1;
+      ctx.save();
+      ctx.globalAlpha = (on ? 1 : 0.55) * dim;
+      ctx.strokeStyle = ww.color;
+      ctx.shadowColor = ww.color; ctx.shadowBlur = on ? 22 : 8;
+      ctx.lineWidth = width; ctx.lineCap = "round";
+      ctx.beginPath(); ctx.moveTo(sx, sy); ctx.lineTo(ex, ey); ctx.stroke();
+      ctx.restore();
+      if (on && fan === 1) {
+        // the beam carries the world's texture
+        const mx = sx + (e.x - sx) * 0.72, my = sy + (e.y - sy) * 0.72;
+        drawMotif(ctx, ww, mx, my, Math.min(W, H) * 0.1, t, 0.9);
+      }
+      if (fan > 0.9 && s.phase !== "depart") {
+        ctx.save();
+        ctx.globalAlpha = (on ? 1 : 0.6) * clamp((fan - 0.9) * 10, 0, 1);
+        ctx.fillStyle = on ? "#fff" : ww.color;
+        ctx.font = `600 ${Math.max(11, W * 0.016)}px Syne, sans-serif`;
+        ctx.textAlign = "right";
+        ctx.fillText(ww.name.toUpperCase(), W - 14, e.y - 10);
+        ctx.restore();
+      }
+    });
+    // prism
+    ctx.save();
+    ctx.translate(px, py);
+    ctx.rotate(Math.sin(t * 0.4) * 0.12);
+    const g = ctx.createLinearGradient(-ps, -ps, ps, ps);
+    g.addColorStop(0, "rgba(255,255,255,0.18)");
+    g.addColorStop(0.5, "rgba(170,160,255,0.08)");
+    g.addColorStop(1, "rgba(255,255,255,0.22)");
+    ctx.fillStyle = g;
+    ctx.strokeStyle = "rgba(255,255,255,0.8)";
+    ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(0, -ps); ctx.lineTo(ps * 0.9, ps * 0.6); ctx.lineTo(-ps * 0.9, ps * 0.6); ctx.closePath();
+    ctx.fill(); ctx.stroke();
+    ctx.restore();
+    if (s.phase === "depart") {
+      const p = clamp((s.phaseT - 0.8) / 0.5, 0, 1);
+      ctx.fillStyle = hexA(w.color, p * 0.9); ctx.fillRect(0, 0, W, H);
+    }
+  },
+  hud(s) {
+    const w = WORLDS[s.sel];
+    if (s.phase === "arrived") return setHud(s, arrivalHud(w, "THE PRISM"));
+    if (s.phase === "entry") {
+      const k = clamp((s.phaseT - 2) / 1, 0, 1);
+      return setHud(s, `<div class="tl" style="opacity:${k.toFixed(2)}">JERRY QIU</div>`);
+    }
+    setHud(s, `<div class="tl">JERRY QIU</div><div class="bl">↑ ↓ or hover a beam · Enter follows it · <span style="color:${w.color}">${w.what}</span></div>`);
+  },
+  click(s) { s.enter(); },
+};
+
+/* =========================================================
+   C · Frequency Dial
+   ========================================================= */
+const dialImpl = {
+  init(s) {
+    const range = document.getElementById("dial-range");
+    const read = document.getElementById("dial-read");
+    s.data.f = Number(range.value);
+    s.data.range = range; s.data.read = read;
+    range.addEventListener("input", () => { s.data.f = Number(range.value); s.data.auto = false; if (REDUCE) s.el.dispatchEvent(new Event("redraw")); });
+    s.data.noise = document.createElement("canvas");
+    s.data.noise.width = 160; s.data.noise.height = 100;
+  },
+  onPhase(s) { if (s.phase === "entry") { s.data.auto = true; s.data.f = 885; } },
+  onMove(s, d) { s.data.auto = false; s.data.f = clamp(s.data.f + d * 6, 880, 1080); s.sel = dialImpl.nearest(s).i; },
+  nearest(s) {
+    let best = { i: 0, d: 1e9 };
+    WORLDS.forEach((w, i) => { const d = Math.abs(w.freq - s.data.f); if (d < best.d) best = { i, d }; });
+    return best;
+  },
+  update(s, dt) {
+    if (s.phase === "entry") {
+      s.data.f += dt * 18; // drift into the first station
+      if (s.data.f >= WORLDS[0].freq) { s.data.f = WORLDS[0].freq; s.setPhase("hub"); }
+    }
+    if (s.phase === "depart" && s.phaseT > 1.2) s.setPhase("arrived");
+    if (s.phase === "return" && s.phaseT > 0.9) s.setPhase("hub");
+    s.data.range.value = String(Math.round(s.data.f));
+    s.data.read.textContent = `${(s.data.f / 10).toFixed(1)} MHz`;
+    const n = dialImpl.nearest(s);
+    if (s.phase === "hub" || s.phase === "entry") s.sel = n.i;
+  },
+  draw(s) {
+    const { ctx, W, H, t } = s;
+    const w = WORLDS[s.sel];
+    if (s.phase === "arrived") { drawArrival(s, w, 1); return; }
+    const n = dialImpl.nearest(s);
+    let clarity = clamp(1 - n.d / 22, 0, 1);
+    if (s.phase === "depart") clarity = clamp(clarity + s.phaseT, 0, 1);
+    if (s.phase === "return") clarity = clamp(s.phaseT / 0.9, 0, 1) * clarity;
+    // static
+    const nc = s.data.noise, nctx = nc.getContext("2d");
+    const img = nctx.createImageData(nc.width, nc.height);
+    for (let i = 0; i < img.data.length; i += 4) {
+      const v = Math.random() * 255;
+      img.data[i] = img.data[i + 1] = img.data[i + 2] = v;
+      img.data[i + 3] = 255;
+    }
+    nctx.putImageData(img, 0, 0);
+    ctx.fillStyle = "#000"; ctx.fillRect(0, 0, W, H);
+    ctx.save();
+    ctx.globalAlpha = (1 - clarity) * 0.32 + (REDUCE ? 0 : 0.02);
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(nc, 0, 0, W, H);
+    ctx.restore();
+    // station glow
+    const g = ctx.createRadialGradient(W / 2, H * 0.42, 0, W / 2, H * 0.42, Math.max(W, H) * 0.55);
+    g.addColorStop(0, hexA(WORLDS[n.i].color, 0.32 * clarity));
+    g.addColorStop(1, "rgba(0,0,0,0)");
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    drawMotif(ctx, WORLDS[n.i], W / 2, H * 0.42, Math.min(W, H) * 0.24, t, clarity * 0.9);
+    // name resolving out of the static (jitter falls away with clarity)
+    ctx.save();
+    ctx.globalAlpha = clarity;
+    ctx.fillStyle = "#fff";
+    ctx.font = `800 ${Math.max(20, W * 0.06)}px Syne, sans-serif`;
+    ctx.textAlign = "center";
+    const jx = (1 - clarity) * (Math.random() - 0.5) * 24;
+    ctx.fillText(WORLDS[n.i].name.toUpperCase(), W / 2 + jx, H * 0.42 + Math.min(W, H) * 0.06);
+    ctx.restore();
+    // dial scale
+    const y = H * 0.82;
+    ctx.strokeStyle = "rgba(200,210,255,0.35)"; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(W * 0.08, y); ctx.lineTo(W * 0.92, y); ctx.stroke();
+    ctx.font = `500 ${Math.max(9, W * 0.012)}px "IBM Plex Mono", monospace`;
+    ctx.textAlign = "center";
+    for (let f = 880; f <= 1080; f += 10) {
+      const x = W * 0.08 + ((f - 880) / 200) * W * 0.84;
+      const major = f % 40 === 0;
+      ctx.strokeStyle = "rgba(200,210,255,0.35)";
+      ctx.beginPath(); ctx.moveTo(x, y - (major ? 10 : 5)); ctx.lineTo(x, y); ctx.stroke();
+      if (major) { ctx.fillStyle = "rgba(167,173,196,0.8)"; ctx.fillText((f / 10).toFixed(0), x, y + 16); }
+    }
+    WORLDS.forEach((ww) => {
+      const x = W * 0.08 + ((ww.freq - 880) / 200) * W * 0.84;
+      ctx.fillStyle = ww.color;
+      ctx.beginPath(); ctx.arc(x, y - 16, 3, 0, TAU); ctx.fill();
+    });
+    const nx = W * 0.08 + ((s.data.f - 880) / 200) * W * 0.84;
+    ctx.strokeStyle = "#ff5a4f"; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(nx, y - 26); ctx.lineTo(nx, y + 4); ctx.stroke();
+    if (s.phase === "depart") {
+      const p = clamp((s.phaseT - 0.7) / 0.5, 0, 1);
+      ctx.fillStyle = hexA(w.color, p * 0.85); ctx.fillRect(0, 0, W, H);
+    }
+  },
+  hud(s) {
+    const w = WORLDS[s.sel];
+    if (s.phase === "arrived") return setHud(s, arrivalHud(w, `${(w.freq / 10).toFixed(1)} MHz`));
+    const n = dialImpl.nearest(s);
+    const lock = n.d < 4 ? `LOCKED · ${WORLDS[n.i].what.toUpperCase()}` : n.d < 22 ? "SIGNAL…" : "STATIC";
+    setHud(s, `<div class="tl">JERRY QIU · ${(s.data.f / 10).toFixed(1)} MHz</div><div class="tr" style="color:${n.d < 22 ? WORLDS[n.i].color : "#6f7590"}">${lock}</div><div class="bl">← → or the slider to tune · Enter tunes in</div>`);
+  },
+  click(s) { s.enter(); },
+};
+
+/* ---------- boot ---------- */
+const stages = {
+  combo: makeStage("st-combo", ringImpl("prism")),
+  nexus: makeStage("st-nexus", ringImpl("nexus")),
+  prism: makeStage("st-prism", prismImpl),
+  dial: makeStage("st-dial", dialImpl),
+};
+// the dial's "Tune in" must snap to the nearest station first
+const dialStage = stages.dial;
+const origEnter = dialStage.enter;
+dialStage.enter = () => {
+  const n = dialImpl.nearest(dialStage);
+  if (dialStage.phase === "hub") { dialStage.data.f = WORLDS[n.i].freq; dialStage.sel = n.i; }
+  origEnter();
+};
+
+const tabs = [...document.querySelectorAll('[role="tab"]')];
+function show(id) {
+  tabs.forEach((t) => {
+    const on = t.getAttribute("aria-controls") === id;
+    t.setAttribute("aria-selected", String(on));
+    t.tabIndex = on ? 0 : -1;
+    document.getElementById(t.getAttribute("aria-controls")).hidden = !on;
+  });
+  const key = id.replace("p-", "");
+  stages[key]?.replay();
+  try { history.replaceState(null, "", "#" + key); } catch {}
+}
+tabs.forEach((t, i) => {
+  t.addEventListener("click", () => show(t.getAttribute("aria-controls")));
+  t.addEventListener("keydown", (e) => {
+    if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+    const n = tabs[(i + (e.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length];
+    n.focus(); n.click();
+  });
+});
+const start = location.hash.replace("#", "");
+if (start && stages[start]) show("p-" + start);
+})();
+</script>
