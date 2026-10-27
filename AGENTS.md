@@ -7,7 +7,7 @@ Rules for AI agents and contributors. Project plan, status and hard rules live i
 - Work on branch `feat/custom-ui-cms` only. No co-author trailers, no "Generated with" text in commits or PRs.
 - Never push, merge to `main`, deploy, publish, change DNS, create cloud resources, or spend money.
 - Never block on questions: use the documented default and log it in `docs/project/QUESTIONS.md`.
-- Current scope: the photo site, `apps/photos` (`docs/project/01-photo-site-spec.md`, `HANDOFF.md`). Do not start the hub, music, flying or make redesigns. The v3 design is paused.
+- Scope: the photo site, `apps/photos` (`docs/project/01-photo-site-spec.md`, `HANDOFF.md`) first; music, flying, make and the hub's public site were added on the owner's request on 2026-10-27 (Q125, `docs/project/other-sites.md`). The v3 design is paused.
 - Never invent facts about the owner. Use `todo("...")` (dev-only placeholder) or a `TODO(owner):` comment.
 
 ## Repo layout

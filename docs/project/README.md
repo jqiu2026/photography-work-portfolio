@@ -2,7 +2,7 @@
 
 Branch: `feat/custom-ui-cms`. Never push, merge to `main`, deploy, publish or spend money without the owner. **No co-author trailers or "Generated with" text in commits.**
 
-**Current scope:** build the complete photo.jerryqiu.com (portfolio, product tour, native photo-business platform). Music, flying, make and hub redesigns are out of scope.
+**Current scope:** the photo site (`PHOTO-M*`) was the first scope. On 2026-10-27 the owner widened it (Q125): music, flying, make and the hub's public site were built on Holominimal on the branches `claude/music-site` and `claude/other-sites` (see PROGRESS.md "Music site" and "Other sites"). Where an older line in these docs says those sites are out of scope, this line wins.
 
 | Doc | What it is |
 |---|---|

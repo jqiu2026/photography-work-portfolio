@@ -8,5 +8,5 @@ Hard rules (details in `docs/project/08-operating-rules.md`):
 - Never push, merge to `main`, deploy, publish, change DNS, create cloud accounts or resources, or spend money without the owner.
 - Never read or print `.env*` files or secrets.
 - Never block on questions: use the documented default and log it in `docs/project/QUESTIONS.md`.
-- Current scope: build the photo site, `apps/photos` (photo.jerryqiu.com): portfolio, product tour and the native photo-business platform. Spec: `docs/project/01-photo-site-spec.md`. Do not start the hub, music, flying or make redesigns. The v3 "colossal type" design is paused; keep the UI modern and plain.
+- Scope: the photo site (`apps/photos`, spec `docs/project/01-photo-site-spec.md`) first; on 2026-10-27 the owner also asked for music, flying, make and the hub's public site (Q125; they are built, on Holominimal, see `docs/project/other-sites.md`). The v3 "colossal type" design is paused; keep the UI modern and plain.
 - UI package rules live in `AGENTS.md`.

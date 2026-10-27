@@ -46,7 +46,7 @@ The owner intends to leave Claude running unattended until all tasks complete or
 
 ## Scope boundaries (updated 2026-10-15)
 
-- Phases 1, 2, 2.5 and the P3 studio base are done. The current scope is the **photo site** (see [01-photo-site-spec.md](01-photo-site-spec.md)). Do not start the hub, music, flying or make redesigns (shared-package changes are fine if every app still passes).
+- Phases 1, 2, 2.5 and the P3 studio base are done. The first scope was the **photo site** (see [01-photo-site-spec.md](01-photo-site-spec.md)). The owner widened it on 2026-10-27 (Q125): music, flying, make and the hub's public site are built (see [other-sites.md](other-sites.md)). Shared-package changes are fine if every app still passes. The rules on branches and pushing above were relaxed by the owner for those branches only: pushing the named new branch was requested; merging to `main`, deploys, DNS and spending still need the owner.
 - Missing keys: build the real adapter behind an interface plus a labelled mock, read the key from an env var, add the **name** to `.env.example`, mark `TODO(owner): needs <KEY>`, and list it in PROGRESS.md "Owner to-do". Never call live third-party services. Never read or print `.env*` files.
 - Mocks are labelled MOCK/SAMPLE, sit behind interfaces and are disabled in production builds (`mocksEnabled()`). All prices are placeholders (`$XX` or SAMPLE).
 - Migrations are additive and run only on throwaway or local databases.
