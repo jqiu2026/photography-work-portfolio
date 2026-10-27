@@ -245,6 +245,8 @@
   gap: var(--hm-space-2);
 }
 .gm-choice button {
+  /* an outlined Surface has no fill of its own; without this the browser's grey button face shows */
+  background: transparent;
   display: grid;
   gap: var(--hm-space-2);
   justify-items: center;

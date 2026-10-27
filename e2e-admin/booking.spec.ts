@@ -50,7 +50,7 @@ test("owner sets bookable hours and a blocked day; the calendar refuses a double
   await page.keyboard.press("Escape");
   // the day shows the wedding once
   await page.goto(`${PHOTOS}/studio/calendar?month=${monday(3).slice(0, 7)}`, { waitUntil: "networkidle" });
-  await page.getByRole("gridcell", { name: new RegExp(`^${monday(3)}`) }).click();
+  await page.getByRole("button", { name: new RegExp(`^${fullDay(monday(3))}:`) }).click();
   await expect(page.locator("li[data-appointment-id]").filter({ hasText: `Wedding ${uid}` })).toHaveCount(1);
   await page.keyboard.press("Escape");
 
@@ -133,7 +133,7 @@ test("a paid session is held until the deposit is paid (mock card), then confirm
   await slow(note(page).last()).toContainText("Receipt rcpt_mock_");
 
   await page.goto(`${PHOTOS}/studio/calendar?month=${monday(1).slice(0, 7)}`, { waitUntil: "networkidle" });
-  await page.getByRole("gridcell", { name: new RegExp(`^${monday(1)}`) }).click();
+  await page.getByRole("button", { name: new RegExp(`^${fullDay(monday(1))}:`) }).click();
   const row = page.locator("li[data-appointment-id]").filter({ hasText: `Deposit ${uid}` });
   await expect(row).toContainText("confirmed");
   await page.goto(`${PHOTOS}/studio/pipeline`, { waitUntil: "networkidle" });

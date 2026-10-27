@@ -43,6 +43,15 @@ const dayIso = (d: Date) =>
   `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 const pad = (n: number) => String(n).padStart(2, "0");
 const iso = (y: number, m: number, d: number) => `${y}-${pad(m + 1)}-${pad(d)}`;
+/** "2026-10-29" as "Thursday, October 29, 2026" for screen readers. */
+const spoken = (day: string) =>
+  new Intl.DateTimeFormat("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(`${day}T12:00:00Z`));
 
 export type CalendarData = {
   timezone: string;
@@ -156,17 +165,16 @@ export function CalendarView({ user, data, month }: { user: string; data: Calend
           All times in {data.timezone}. Buffers and travel time keep a slot clear on both sides. Open a day to see it or
           add to it.
         </Text>
-        <div className="cal" role="grid" aria-label={title}>
-          <div className="cal-head" role="row">
+        {/* a month of day buttons (each names its full date), not an ARIA grid: a grid promises arrow-key moves */}
+        <div className="cal" role="group" aria-label={title}>
+          <div className="cal-head" aria-hidden="true">
             {WEEKDAYS.map((w) => (
-              <span key={w} role="columnheader" aria-label={w}>
-                {w.slice(0, 3)}
-              </span>
+              <span key={w}>{w.slice(0, 3)}</span>
             ))}
           </div>
           <div className="cal-body">
             {cells.map((d, i) => {
-              if (d === null) return <span key={`e${i}`} className="cal-cell cal-cell--empty" role="gridcell" />;
+              if (d === null) return <span key={`e${i}`} className="cal-cell cal-cell--empty" aria-hidden="true" />;
               const key = iso(view.y, view.m, d);
               const items = byDay.get(key) ?? [];
               const shut = blocked.get(key);
@@ -174,11 +182,10 @@ export function CalendarView({ user, data, month }: { user: string; data: Calend
                 <button
                   type="button"
                   key={key}
-                  role="gridcell"
                   className="cal-cell"
                   data-today={key === today || undefined}
                   data-blocked={shut ? "" : undefined}
-                  aria-label={`${key}: ${items.length} appointment${items.length === 1 ? "" : "s"}${shut ? ", blocked" : ""}`}
+                  aria-label={`${spoken(key)}: ${items.length} appointment${items.length === 1 ? "" : "s"}${shut ? ", blocked" : ""}`}
                   onClick={() => setDay(key)}
                 >
                   <b>{d}</b>
