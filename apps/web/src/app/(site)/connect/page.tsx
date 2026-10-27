@@ -1,8 +1,6 @@
-import { Container, Eyebrow, Grid, Heading, Section, SocialLinks, Text } from "@halation/ui";
 import type { Metadata } from "next";
-import { ContactForm } from "@jerryqiu/sites/contact";
+import { ContactForm } from "@/components/site/ContactForm";
 import { PageHeader } from "@/components/site/PageHeader";
-import { SiteShell } from "@/components/site/SiteShell";
 import { getPerson } from "@/lib/profile";
 
 export const metadata: Metadata = {
@@ -13,42 +11,46 @@ export const metadata: Metadata = {
 export default async function Connect() {
   const { person, socials } = await getPerson();
   return (
-    <SiteShell>
-      <PageHeader
-        eyebrow="Connect"
-        title="Let's talk"
-        intro="The easiest way is email. I'm also on the accounts below."
-      />
-      <Section style={{ paddingTop: 0 }}>
-        <Container>
-          <Grid cols={2} gap={12}>
-            <div>
-              <Eyebrow style={{ marginBottom: "1rem" }}>Online</Eyebrow>
-              <SocialLinks links={socials} />
-              <Heading as="h2" size="xl" style={{ margin: "3rem 0 0.75rem" }}>
-                Email
-              </Heading>
-              <Text>
-                <a href={`mailto:${person.email}`} style={{ textDecoration: "underline" }}>
-                  {person.email}
+    <div>
+      <PageHeader eyebrow="Connect" title="Let's talk" intro="The easiest way is email. I'm also on the accounts below." />
+      <div className="hb-wrap hb-section hb-two">
+        <div className="hb-stack">
+          <h2 className="hb-h2" style={{ margin: 0 }}>
+            Online
+          </h2>
+          <ul className="hb-social">
+            {socials.map((s) => (
+              <li key={s.label}>
+                <a href={s.href} rel={s.href.startsWith("http") ? "noopener noreferrer" : undefined}>
+                  {s.label}
                 </a>
-              </Text>
-              <Heading as="h2" size="xl" style={{ margin: "2rem 0 0.75rem" }}>
-                Bookings
-              </Heading>
-              <Text>
-                <a href={`mailto:${person.bookingEmail}`} style={{ textDecoration: "underline" }}>
-                  {person.bookingEmail}
-                </a>
-              </Text>
-            </div>
-            <div>
-              <Eyebrow style={{ marginBottom: "1rem" }}>Send a message</Eyebrow>
-              <ContactForm to={person.email} endpoint="/api/contact" />
-            </div>
-          </Grid>
-        </Container>
-      </Section>
-    </SiteShell>
+              </li>
+            ))}
+          </ul>
+          <h2 className="hb-h2" style={{ margin: "1.5rem 0 0" }}>
+            Email
+          </h2>
+          <p style={{ margin: 0 }}>
+            <a className="hb-link" href={`mailto:${person.email}`}>
+              {person.email}
+            </a>
+          </p>
+          <h2 className="hb-h2" style={{ margin: "1.5rem 0 0" }}>
+            Bookings
+          </h2>
+          <p style={{ margin: 0 }}>
+            <a className="hb-link" href={`mailto:${person.bookingEmail}`}>
+              {person.bookingEmail}
+            </a>
+          </p>
+        </div>
+        <div className="hb-stack">
+          <h2 className="hb-h2" style={{ margin: 0 }}>
+            Send a message
+          </h2>
+          <ContactForm to={person.email} endpoint="/api/contact" />
+        </div>
+      </div>
+    </div>
   );
 }

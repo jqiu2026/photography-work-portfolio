@@ -1,24 +1,18 @@
-import { Breadcrumbs, Container, Eyebrow, Heading, Section, Text } from "@halation/ui";
-import { Image } from "@halation/ui/media";
-import { ScrollProgress } from "@halation/ui/motion";
 import type { Metadata } from "next";
 import NextLink from "next/link";
 import { notFound } from "next/navigation";
-import { MDX, RenderMarkdown } from "@jerryqiu/render";
-import { SiteShell } from "@/components/site/SiteShell";
+import { Markdown } from "@/components/site/Markdown";
+import { Mdx } from "@/components/site/Mdx";
+import { PageHeader } from "@/components/site/PageHeader";
 import { person } from "@/content/site";
 import { getWriting } from "@/lib/content";
-import "@/components/site/post.css";
+import { srcSet } from "@/lib/images";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const p = (await getWriting()).find((x) => x.slug === slug);
   if (!p) return {};
-  return {
-    title: p.title,
-    description: p.summary,
-    openGraph: { type: "article", publishedTime: p.date },
-  };
+  return { title: p.title, description: p.summary, openGraph: { type: "article", publishedTime: p.date } };
 }
 
 const fmt = (d: string) => new Date(d).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
@@ -33,34 +27,18 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
   const next = all[i - 1];
   const cover = p.cover;
   return (
-    <SiteShell>
-      <ScrollProgress />
-      <Container size="md" style={{ paddingTop: "clamp(2rem, 6vw, 4rem)" }}>
-        <Breadcrumbs items={[{ label: "Writing", href: "/writing" }, { label: p.title }]} />
-        <Eyebrow style={{ margin: "2.5rem 0 1rem" }}>
-          {fmt(p.date)} · {person.name}
-        </Eyebrow>
-        <Heading as="h1" size="4xl" display>
-          {p.title}
-        </Heading>
-        {p.subtitle ? (
-          <Text size="xl" tone="muted" style={{ marginTop: "1.25rem", fontStyle: "italic" }}>
-            {p.subtitle}
-          </Text>
-        ) : null}
-      </Container>
+    <article>
+      <PageHeader eyebrow={`${fmt(p.date)} · ${person.name}`} title={p.title} intro={p.subtitle} />
       {cover ? (
-        <div className="work-detail__hero" style={{ marginTop: "3rem" }}>
-          <Image asset={cover} alt="" sizes="100vw" priority />
+        <div className="hb-wrap" style={{ marginBottom: "2rem" }}>
+          <figure className="hb-shot" style={{ margin: 0 }}>
+            <img src={cover.files[cover.files.length - 1].src} srcSet={srcSet(cover)} sizes="(min-width: 900px) 70vw, 100vw" width={cover.width} height={cover.height} alt="" style={{ backgroundColor: cover.color, width: "100%", height: "auto", borderRadius: "var(--hm-radius-lg)" }} />
+          </figure>
         </div>
       ) : null}
-      <Section>
-        <Container size="sm">
-          {p.body.kind === "mdx" ? <MDX source={p.body.source} /> : <RenderMarkdown source={p.body.source} />}
-        </Container>
-      </Section>
-      <Container size="md">
-        <nav className="next-prev" aria-label="More writing">
+      <div className="hb-wrap">{p.body.kind === "mdx" ? <Mdx source={p.body.source} /> : <Markdown source={p.body.source} />}</div>
+      <div className="hb-wrap">
+        <nav className="hb-nextprev" aria-label="More writing">
           {prev ? (
             <NextLink href={`/writing/${prev.slug}`}>
               <span>← Older</span>
@@ -78,7 +56,7 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
             <span />
           )}
         </nav>
-      </Container>
-    </SiteShell>
+      </div>
+    </article>
   );
 }

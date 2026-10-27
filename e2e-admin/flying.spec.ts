@@ -19,7 +19,7 @@ test.describe("tools", () => {
 
   test("crosswind: a 30 degree wind of 20 knots is 10 across and 17 along", async ({ page }) => {
     await page.goto(`${FLYING}/tools/crosswind`, { waitUntil: "networkidle" });
-    await page.getByLabel("Runway").fill("27");
+    await page.getByRole("textbox", { name: "Runway" }).fill("27");
     await page.getByLabel("Wind from (degrees)").fill("300");
     await page.getByLabel("Wind speed (knots)").fill("20");
     const out = page.getByRole("region", { name: "Runway 27" });
@@ -61,7 +61,7 @@ test.describe("tools", () => {
   test("weight and balance: the sample load is inside, an overload is not", async ({ page }) => {
     await page.goto(`${FLYING}/tools/weight-balance`, { waitUntil: "networkidle" });
     await expect(page.getByText("Inside the envelope you entered.")).toBeVisible();
-    await page.getByLabel("Fuel (gallons)").fill("60");
+    await page.getByLabel("Fuel (gallons)").fill("90");
     await expect(page.getByText("Outside the envelope you entered")).toBeVisible();
     await expect(page.getByText("Over the maximum weight you entered.")).toBeVisible();
   });

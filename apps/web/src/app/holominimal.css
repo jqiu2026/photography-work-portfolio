@@ -1,0 +1,195 @@
+/*
+ * App-wide Holominimal setup for the photo site: the site's fonts handed to Holominimal, the page colors, long-form
+ * text, and a few shared form and document helpers (pm-*). Everything reads --hm-* tokens.
+ */
+/* Hanken Grotesk and Martian Mono come from next/font; hand them to Holominimal so both systems share one face. */
+:root {
+  --hm-font-sans: var(--font-sans), "Hanken Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --hm-font-mono: var(--font-mono), "Martian Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+html,
+body {
+  background: var(--hm-bg);
+  color: var(--hm-fg);
+}
+body {
+  margin: 0;
+}
+
+/* long-form text (legal pages, about) */
+.hm-prose {
+  max-width: 44rem;
+  color: var(--hm-fg-soft);
+  line-height: 1.7;
+}
+.hm-prose :where(h2, h3) {
+  color: var(--hm-fg);
+  margin: 2rem 0 0.6rem;
+}
+.hm-prose :where(p, ul, ol) {
+  margin: 0 0 1rem;
+}
+.hm-prose :where(a) {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* a form's confirmation (FormMessage ok): the hint style, in the success color */
+.pm-ok {
+  color: var(--hm-success-text);
+}
+
+/* small layout helpers shared by the client document pages (quote, sign, pay, questionnaire) */
+.pm-stack {
+  display: grid;
+  gap: var(--hm-space-4);
+}
+.pm-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--hm-space-3);
+}
+.pm-subhead {
+  margin: 0 0 var(--hm-space-3);
+  font-size: var(--hm-text-xs);
+  font-weight: var(--hm-weight-regular);
+  letter-spacing: var(--hm-tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--hm-muted);
+}
+.pm-quote-actions {
+  display: grid;
+  gap: var(--hm-space-7);
+  margin-top: var(--hm-space-7);
+  max-width: 36rem;
+}
+.pm-doc {
+  display: grid;
+  gap: var(--hm-space-5);
+}
+.pm-num {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.pm-doc-title,
+.pub .pm-doc-title {
+  margin: 0;
+  font-size: var(--hm-text-2xl);
+  font-weight: var(--hm-weight-medium);
+  letter-spacing: var(--hm-tracking-tight);
+  line-height: var(--hm-leading-tight);
+}
+.pm-result__msg {
+  margin: 0;
+  color: var(--hm-fg-soft);
+  line-height: 1.6;
+}
+.pm-result__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--hm-space-2);
+}
+.pm-row--fields > .hm-field {
+  flex: 1 1 9rem;
+}
+/* contract text: readable, scrolls in place, keyboard-focusable */
+.st-contract {
+  margin: 0;
+  max-height: 22rem;
+  overflow: auto;
+  padding: var(--hm-space-4);
+  border: 1px solid var(--hm-line-strong);
+  border-radius: var(--hm-radius-md);
+  background: var(--hm-control-bg);
+  color: var(--hm-fg-soft);
+  font-family: var(--hm-font-sans);
+  font-size: var(--hm-text-sm);
+  line-height: 1.65;
+  white-space: pre-wrap;
+}
+.st-contract:focus-visible {
+  outline: var(--hm-focus-width) solid var(--hm-focus-color);
+  outline-offset: var(--hm-focus-offset);
+}
+.pm-foot-link {
+  margin: var(--hm-space-5) 0 0;
+}
+/* a native file input, in the control style (kept native where a test or a ref reads it directly) */
+.pm-file {
+  font: inherit;
+  font-size: var(--hm-text-sm);
+  color: var(--hm-muted);
+}
+.pm-file::file-selector-button {
+  margin-right: var(--hm-space-3);
+  min-height: var(--hm-control-h);
+  padding: 0 0.9rem;
+  border: 1px solid var(--hm-line-strong);
+  border-radius: var(--hm-radius-md);
+  background: var(--hm-chrome-bg);
+  color: var(--hm-fg-soft);
+  font: inherit;
+  cursor: pointer;
+}
+.pm-file:hover::file-selector-button {
+  border-color: var(--hm-line-hover);
+  color: var(--hm-fg-strong);
+}
+.pm-file:focus-visible {
+  outline: var(--hm-focus-width) solid var(--hm-focus-color);
+  outline-offset: var(--hm-focus-offset);
+}
+.pm-fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+.pm-fieldset > legend {
+  margin-bottom: var(--hm-space-2);
+  padding: 0;
+}
+
+/* public forms (inquiry, booking): a reading-width column; short fields pair up on wide screens */
+.pm-form {
+  display: grid;
+  gap: var(--hm-space-5);
+  max-width: 38rem;
+}
+.pm-pair {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  gap: var(--hm-space-5) var(--hm-space-4);
+}
+.pm-honeypot {
+  position: absolute;
+  left: -9999px;
+}
+.pm-link {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+/* booking: time slots wrap, each a comfortable target */
+.pm-slots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--hm-space-2);
+}
+.pm-slots .hm-toggle {
+  min-width: 5.5rem;
+  min-height: var(--hm-target);
+}
+.pm-steps {
+  margin-bottom: var(--hm-space-2);
+}
+
+/* document cards keep a lighter frame on phones */
+@media (max-width: 520px) {
+  .hm-surface.pm-stack[data-padding="lg"] {
+    padding: var(--hm-space-5) var(--hm-space-4);
+  }
+}

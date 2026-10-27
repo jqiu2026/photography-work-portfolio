@@ -1,21 +1,14 @@
-import { Button, Container, Heading, Text } from "@halation/ui";
 import NextLink from "next/link";
-import { SiteShell } from "@/components/site/SiteShell";
+import { Button } from "@/components/site/ui";
 
 export default function NotFound() {
   return (
-    <SiteShell>
-      <Container size="sm" style={{ paddingBlock: "8rem" }}>
-        <Heading as="h1" size="display" display>
-          Not found
-        </Heading>
-        <Text size="lg" tone="muted" style={{ margin: "1.5rem 0 2rem" }}>
-          That page doesn't exist, or it moved.
-        </Text>
-        <Button as={NextLink} href="/">
-          Back home
-        </Button>
-      </Container>
-    </SiteShell>
+    <div className="hb-wrap" style={{ paddingBlock: "6rem" }}>
+      <h1 style={{ margin: "0 0 1rem", fontSize: "clamp(2.5rem, 7vw, 4.5rem)" }}>Not found</h1>
+      <p className="hb-lede">That page doesn't exist, or it moved.</p>
+      <Button asChild>
+        <NextLink href="/">Back home</NextLink>
+      </Button>
+    </div>
   );
 }
