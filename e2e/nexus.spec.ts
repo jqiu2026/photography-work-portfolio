@@ -69,3 +69,15 @@ test("inside a world, the arrows and the neighbour buttons hop straight to the n
     .click();
   await expect(page.getByRole("dialog", { name: "Resonance" })).toBeVisible({ timeout: 10_000 });
 });
+
+test("Look around hides the panel; a key brings it back", async ({ page }) => {
+  await page.goto(`${hub}/#forge`, { waitUntil: "networkidle" });
+  const world = page.getByRole("dialog", { name: "Forge" });
+  await world.getByRole("button", { name: "Look around" }).click();
+  const show = world.getByRole("button", { name: "Show the panel" });
+  await expect(show).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(show).toHaveCount(0);
+  await expect(world.getByRole("link", { name: /^Enter / })).toBeFocused();
+  await expect(world).toBeVisible();
+});

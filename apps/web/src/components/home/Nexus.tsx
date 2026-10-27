@@ -42,6 +42,18 @@ export function Nexus({ realms, children }: { realms: RealmLink[]; children: Rea
   const [sound, setSound] = useState(false);
   const [boot, setBoot] = useState<string | null>(null);
   const [hover, setHover] = useState(-1);
+  // "look around": the world without its panel, until a key, a click or the button brings it back
+  const [clean, setCleanState] = useState(false);
+  const showPanel = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    if (st.current.phase !== "realm") return;
+    if (clean) showPanel.current?.focus({ preventScroll: true });
+    else enterLink.current?.focus({ preventScroll: true });
+  }, [clean]);
+  const setClean = useCallback((v: boolean) => {
+    st.current.clean = v;
+    setCleanState(v);
+  }, []);
   const tag = useRef<HTMLDivElement>(null);
   const audio = useRef<Ambience | null>(null);
   const st = useRef({
@@ -54,6 +66,7 @@ export function Nexus({ realms, children }: { realms: RealmLink[]; children: Rea
     kick: () => {},
     scale: 4,
     hopTo: 0,
+    clean: false,
     mx: 0,
     my: 0,
   });
@@ -340,6 +353,10 @@ export function Nexus({ realms, children }: { realms: RealmLink[]; children: Rea
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const s = st.current;
+      if (s.phase === "realm" && s.clean) {
+        if (!["ArrowLeft", "ArrowRight", "Shift", "Meta", "Control", "Alt"].includes(e.key)) setClean(false);
+        if (e.key === "Escape") return;
+      }
       if (e.key === "Escape" && s.phase === "realm") return back();
       if (s.phase === "realm" && (e.key === "ArrowRight" || e.key === "ArrowLeft")) {
         e.preventDefault();
@@ -369,7 +386,7 @@ export function Nexus({ realms, children }: { realms: RealmLink[]; children: Rea
       removeEventListener("keydown", onKey);
       removeEventListener("popstate", onPop);
     };
-  }, [back, hop, move, select, setPhase]);
+  }, [back, hop, move, select, setPhase, setClean]);
 
   // a world takes the whole screen: no page scroll behind it; focus moves in and comes back out
   useEffect(() => {
@@ -382,13 +399,14 @@ export function Nexus({ realms, children }: { realms: RealmLink[]; children: Rea
       gateButtons.current[st.current.hub.sel]?.focus({ preventScroll: true });
     lastPhase.current = phase;
     const s = st.current;
+    if (phase !== "realm" && s.clean) setClean(false);
     audio.current?.go(
       phase === "hop" ? LOOKS[s.hopTo].key : phase === "realm" || phase === "dive" ? LOOKS[s.hub.sel].key : "nexus",
     );
     return () => {
       root.style.overflow = "";
     };
-  }, [phase]);
+  }, [phase, setClean]);
 
   useEffect(() => () => audio.current?.close(), []);
 
@@ -495,6 +513,7 @@ export function Nexus({ realms, children }: { realms: RealmLink[]; children: Rea
       {phase === "realm" && link ? (
         <div
           className="nx-world"
+          data-clean={clean ? "" : undefined}
           role="dialog"
           aria-modal="true"
           aria-labelledby="nx-world-name"
@@ -518,6 +537,9 @@ export function Nexus({ realms, children }: { realms: RealmLink[]; children: Rea
               </button>
             </div>
             <div className="nx-world__hop">
+              <button type="button" className="nx-hop" onClick={() => setClean(true)}>
+                Look around
+              </button>
               <button type="button" className="nx-hop" onClick={() => hop(-1)}>
                 <kbd aria-hidden>←</kbd> {LOOKS[mod(sel - 1, 4)].name}
               </button>
@@ -526,6 +548,11 @@ export function Nexus({ realms, children }: { realms: RealmLink[]; children: Rea
               </button>
             </div>
           </div>
+          {clean ? (
+            <button type="button" className="nx-show" ref={showPanel} onClick={() => setClean(false)}>
+              Show the panel
+            </button>
+          ) : null}
           <button type="button" className="nx-sound nx-sound--world" aria-pressed={sound} onClick={toggleSound}>
             {sound ? "Sound on" : "Sound off"}
           </button>

@@ -281,6 +281,35 @@
   flex-wrap: wrap;
   gap: 0.6rem;
 }
+.nx-world[data-clean] .nx-world__panel {
+  opacity: 0;
+  transform: translateY(14px);
+  pointer-events: none;
+}
+.nx-world__panel {
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.nx-show {
+  pointer-events: auto;
+  position: absolute;
+  left: 50%;
+  bottom: 1.4rem;
+  transform: translateX(-50%);
+  padding: 0.45rem 0.8rem;
+  font-family: var(--font-pixel), var(--hm-font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--nx-ink);
+  background: var(--nx-panel);
+  border: 2px solid var(--nx-accent);
+  border-radius: 0;
+  cursor: pointer;
+}
+.nx-show:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 2px;
+}
 .nx-world__hop {
   display: flex;
   justify-content: space-between;

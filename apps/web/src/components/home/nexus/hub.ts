@@ -1,4 +1,20 @@
-import { PAINTERS, type RGB, TAU, bands, block, clamp, ease, fill, hash, hex, mix, noise1, rgba, stars } from "./paint";
+import {
+  PAINTERS,
+  type RGB,
+  TAU,
+  bands,
+  meteors,
+  block,
+  clamp,
+  ease,
+  fill,
+  hash,
+  hex,
+  mix,
+  noise1,
+  rgba,
+  stars,
+} from "./paint";
 import { LOOKS } from "./realms";
 
 export type Gate = { i: number; x: number; y: number; w: number; h: number; depth: number };
@@ -145,6 +161,7 @@ export function paintNexus(c: CanvasRenderingContext2D, w: number, h: number, t:
   c.save();
   c.translate(...par(2));
   stars(c, w, h, t, Math.round((w * h) / 240), acc, 0.003);
+  meteors(c, w, h, t, acc, 7);
   c.restore();
   c.save();
   c.translate(...par(4));

@@ -107,6 +107,21 @@ export function block(
   fill(c, x + s - e, y, e, s, rgba(mix(base, [0, 0, 0], dark * 0.7)));
 }
 
+/** Now and then a star falls: a short bright streak with a fading tail. */
+export function meteors(c: CanvasRenderingContext2D, w: number, h: number, t: number, tint: RGB, every = 5) {
+  for (let k = 0; k < 2; k++) {
+    const slot = Math.floor((t + k * every * 0.5) / every);
+    const life = ((t + k * every * 0.5) % every) / 0.9;
+    if (life > 1) continue;
+    const x0 = w * (0.2 + hash(slot * 3.1 + k) * 0.7);
+    const y0 = h * (0.05 + hash(slot * 7.7 + k) * 0.3);
+    const x = x0 - life * w * 0.25;
+    const y = y0 + life * h * 0.12;
+    for (let i = 0; i < 14; i++)
+      fill(c, x + i * 2, y - i * 0.96, 1, 1, rgba(mix([255, 255, 255], tint, i / 14), (1 - i / 14) * (1 - life)));
+  }
+}
+
 export function stars(c: CanvasRenderingContext2D, w: number, h: number, t: number, n: number, tint: RGB, spin = 0) {
   const cx = w / 2;
   const cy = h * 0.4;
@@ -387,6 +402,13 @@ export const paintResonance: Painter = (c, w, h, t) => {
   const env = Math.exp(-phase * 4);
   bands(c, 0, 0, w, h, [hex("#030108"), hex("#0d0420"), hex("#1c0a36"), hex("#0a0414")], 2);
   stars(c, w, h, t, Math.round((w * h) / 140), hex("#c9a8ff"), 0.004);
+  meteors(c, w, h, t, hex("#c48cff"), 4);
+  // an oscilloscope ribbon across the void, keeping time
+  for (let x = 0; x < w; x += 1) {
+    const y =
+      h * 0.58 + Math.sin(x * 0.045 + t * 1.5) * h * 0.03 * (0.4 + env) + Math.sin(x * 0.13 - t * 3) * h * 0.012 * env;
+    fill(c, x, y, 1, 1, rgba(hex("#e2c8ff"), 0.25 + 0.5 * env * (0.5 + 0.5 * Math.sin(x * 0.02 + t))));
+  }
   // the waveform halo
   const cx = w / 2;
   const cy = h * 0.3;
