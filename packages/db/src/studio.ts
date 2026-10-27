@@ -105,7 +105,7 @@ export async function createJob(
     .from(s.studioClients)
     .where(and(eq(s.studioClients.id, input.clientId), live(s.studioClients)));
   if (!c) throw new StudioError("Pick a client.");
-  if (input.title.trim().length < 2) throw new StudioError("Give the job a title.");
+  if (input.title.trim().length < 2) throw new StudioError("Give the shoot a title.");
   if (input.feeCents !== undefined && (!Number.isInteger(input.feeCents) || input.feeCents < 0))
     throw new StudioError("The fee must be a whole number of cents.");
   const [row] = await db
@@ -127,7 +127,7 @@ export async function advanceJob(db: Database, id: string, by?: string) {
     .select()
     .from(s.studioJobs)
     .where(and(eq(s.studioJobs.id, id), live(s.studioJobs)));
-  if (!j) throw new StudioError("Unknown job.");
+  if (!j) throw new StudioError("Unknown shoot.");
   const i = JOB_STEPS.indexOf(j.status as JobStep);
   if (i < 0 || i >= JOB_STEPS.length - 1) return j;
   const [row] = await db
@@ -135,6 +135,37 @@ export async function advanceJob(db: Database, id: string, by?: string) {
     .set({ status: JOB_STEPS[i + 1], updatedAt: new Date(), updatedBy: by })
     .where(eq(s.studioJobs.id, id))
     .returning();
+  return row;
+}
+
+/** Every stage a shoot can be set to by hand: the steps in order, plus cancelled. */
+export const JOB_STAGES = [...JOB_STEPS, "cancelled"] as const;
+/** Edits a shoot: title, date, place, fee and stage (any stage, so a mis-click can be moved back or a shoot cancelled). */
+export async function updateJob(
+  db: Database,
+  id: string,
+  input: { title: string; date?: string | null; location?: string; feeCents: number; status: string },
+  by?: string,
+) {
+  if (input.title.trim().length < 2) throw new StudioError("Give the shoot a title.");
+  if (!Number.isInteger(input.feeCents) || input.feeCents < 0)
+    throw new StudioError("Enter the fee as a number of dollars.");
+  if (!(JOB_STAGES as readonly string[]).includes(input.status)) throw new StudioError("Pick a stage.");
+  if (input.date && !/^\d{4}-\d{2}-\d{2}$/.test(input.date)) throw new StudioError("Pick a date.");
+  const [row] = await db
+    .update(s.studioJobs)
+    .set({
+      title: input.title.trim(),
+      date: input.date || null,
+      location: input.location?.trim() || null,
+      feeCents: input.feeCents,
+      status: input.status as (typeof JOB_STAGES)[number],
+      updatedAt: new Date(),
+      updatedBy: by,
+    })
+    .where(and(eq(s.studioJobs.id, id), live(s.studioJobs)))
+    .returning();
+  if (!row) throw new StudioError("Unknown shoot.");
   return row;
 }
 
@@ -162,7 +193,7 @@ export async function createGallery(
     .select()
     .from(s.studioJobs)
     .where(and(eq(s.studioJobs.id, input.jobId), live(s.studioJobs)));
-  if (!j) throw new StudioError("Unknown job.");
+  if (!j) throw new StudioError("Unknown shoot.");
   const mode = input.accessMode ?? "passcode";
   if (mode !== "magic-link") {
     if (!input.passcode || input.passcode.trim().length < 6)
@@ -265,7 +296,7 @@ export async function favorites(db: Database, galleryId: string) {
 /* ---- contracts ---- */
 export async function createContract(db: Database, input: { jobId: string; title: string; body: string }, by?: string) {
   const [j] = await db.select().from(s.studioJobs).where(eq(s.studioJobs.id, input.jobId));
-  if (!j) throw new StudioError("Unknown job.");
+  if (!j) throw new StudioError("Unknown shoot.");
   if (!input.body.trim()) throw new StudioError("The contract text is empty.");
   const [row] = await db
     .insert(s.studioContracts)
@@ -381,7 +412,7 @@ export async function createInvoice(
   now = new Date(),
 ) {
   const [j] = await db.select().from(s.studioJobs).where(eq(s.studioJobs.id, input.jobId));
-  if (!j) throw new StudioError("Unknown job.");
+  if (!j) throw new StudioError("Unknown shoot.");
   const lines = input.lines
     .filter((l) => l.description.trim() && Number.isInteger(l.amountCents) && l.amountCents > 0)
     .map((l) => ({ description: l.description.trim(), amountCents: l.amountCents }));
@@ -402,7 +433,8 @@ export async function createInvoice(
 export async function sendInvoice(db: Database, id: string, now = new Date()) {
   const [i] = await db.select().from(s.studioInvoices).where(eq(s.studioInvoices.id, id));
   if (!i) throw new StudioError("Unknown invoice.");
-  if (i.status === "paid" || i.status === "void") throw new StudioError(`This invoice is ${i.status}.`);
+  if (i.status === "paid" || i.status === "void" || i.status === "refunded")
+    throw new StudioError(`This invoice is ${i.status}.`);
   const { token, hash } = newToken();
   await db
     .update(s.studioInvoices)
@@ -410,6 +442,62 @@ export async function sendInvoice(db: Database, id: string, now = new Date()) {
     .where(eq(s.studioInvoices.id, id));
   return { token };
 }
+/** Invoices that can still take money: not paid, void or refunded. */
+export const OPEN_INVOICE = ["draft", "sent", "viewed", "partial"] as const;
+const isOpenInvoice = (status: string) => (OPEN_INVOICE as readonly string[]).includes(status);
+
+/**
+ * A cash, Zelle or check payment for what is still owed (the total less what card payments already credited), once per
+ * invoice. Refuses an invoice that is paid, void or refunded.
+ */
+export async function markInvoicePaidManually(db: Database, id: string, by: string, now = new Date()) {
+  const [inv] = await db
+    .select()
+    .from(s.studioInvoices)
+    .where(and(eq(s.studioInvoices.id, id), live(s.studioInvoices)));
+  if (!inv) throw new StudioError("Unknown invoice.");
+  if (!isOpenInvoice(inv.status)) throw new StudioError(`This invoice is ${inv.status}.`);
+  const owed = inv.totalCents - (await invoiceNetCents(db, inv.id));
+  if (owed <= 0) throw new StudioError("Nothing is owed on this invoice.");
+  const rec = await recordPayment(
+    db,
+    {
+      invoiceId: inv.id,
+      provider: "manual",
+      providerRef: `manual:${inv.id}`,
+      amountCents: owed,
+      status: "succeeded",
+      receiptRef: `by ${by}`,
+    },
+    now,
+  );
+  return { invoice: inv, amountCents: owed, duplicate: rec.duplicate };
+}
+
+/**
+ * Voids an invoice made by mistake: its payment link stops working and reminders stop. Only while nothing has been paid
+ * on it (a paid invoice is refunded instead).
+ */
+export async function voidInvoice(db: Database, id: string, by?: string, now = new Date()) {
+  const [inv] = await db
+    .select()
+    .from(s.studioInvoices)
+    .where(and(eq(s.studioInvoices.id, id), live(s.studioInvoices)));
+  if (!inv) throw new StudioError("Unknown invoice.");
+  if (!isOpenInvoice(inv.status)) throw new StudioError(`This invoice is ${inv.status}.`);
+  const [paid] = await db
+    .select({ n: sql<number>`count(*)::int` })
+    .from(s.studioPayments)
+    .where(and(eq(s.studioPayments.invoiceId, id), sql`${s.studioPayments.status} in ('succeeded','refunded')`));
+  if ((paid?.n ?? 0) > 0) throw new StudioError("Part of this invoice is paid. Refund it instead of voiding it.");
+  const [row] = await db
+    .update(s.studioInvoices)
+    .set({ status: "void", tokenHash: null, updatedAt: now, updatedBy: by })
+    .where(eq(s.studioInvoices.id, id))
+    .returning();
+  return row;
+}
+
 export async function invoiceByToken(db: Database, token: string) {
   const [i] = await db
     .select()
@@ -582,6 +670,19 @@ export async function convertBooking(db: Database, id: string, by?: string) {
     .set({ status: "converted", clientId: client.id })
     .where(eq(s.studioBookings.id, id));
   return client;
+}
+
+/** Archives an inquiry you will not take (or restores it to new). A converted inquiry stays converted. */
+export async function setBookingArchived(db: Database, id: string, archived: boolean) {
+  const [b] = await db.select().from(s.studioBookings).where(eq(s.studioBookings.id, id));
+  if (!b) throw new StudioError("Unknown inquiry.");
+  if (b.status === "converted") throw new StudioError("This inquiry is already a client.");
+  const [row] = await db
+    .update(s.studioBookings)
+    .set({ status: archived ? "archived" : "new" })
+    .where(eq(s.studioBookings.id, id))
+    .returning();
+  return row;
 }
 
 /* ---- webhooks ---- */

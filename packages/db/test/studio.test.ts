@@ -64,6 +64,42 @@ describe("clients, jobs, bookings", () => {
     const { c } = await seedJob("fee");
     await expect(st.createJob(db, { clientId: c.id, title: "Bad fee", feeCents: 10.5 })).rejects.toThrow(/cents/);
   });
+  it("edits a shoot: any stage (back a step or cancelled), with validation", async () => {
+    const { j } = await seedJob("edit");
+    await st.advanceJob(db, j.id);
+    await st.advanceJob(db, j.id);
+    const back = await st.updateJob(db, j.id, {
+      title: "  Renamed shoot ",
+      date: "2026-12-01",
+      location: "Prospect Park",
+      feeCents: 65000,
+      status: "booked",
+    });
+    expect(back).toMatchObject({
+      title: "Renamed shoot",
+      status: "booked",
+      feeCents: 65000,
+      location: "Prospect Park",
+    });
+    expect(
+      (await st.updateJob(db, j.id, { title: "Renamed shoot", feeCents: 0, status: "cancelled" })).date,
+    ).toBeNull();
+    // a cancelled shoot is not advanced by Next step
+    expect((await st.advanceJob(db, j.id)).status).toBe("cancelled");
+    await expect(st.updateJob(db, j.id, { title: "x", feeCents: 0, status: "booked" })).rejects.toThrow(/title/);
+    await expect(st.updateJob(db, j.id, { title: "Okay", feeCents: 1.5, status: "booked" })).rejects.toThrow(/fee/);
+    await expect(st.updateJob(db, j.id, { title: "Okay", feeCents: 0, status: "lost" })).rejects.toThrow(/stage/);
+    await expect(
+      st.updateJob(db, "00000000-0000-0000-0000-000000000000", { title: "Okay", feeCents: 0, status: "booked" }),
+    ).rejects.toThrow(/Unknown shoot/);
+  });
+  it("archives an inquiry and restores it, but never a converted one", async () => {
+    const b = await st.addBooking(db, { name: "Spam Bot", email: "bot@example.test", message: "Buy followers" });
+    expect((await st.setBookingArchived(db, b.id, true)).status).toBe("archived");
+    expect((await st.setBookingArchived(db, b.id, false)).status).toBe("new");
+    await st.convertBooking(db, b.id);
+    await expect(st.setBookingArchived(db, b.id, true)).rejects.toThrow(/client/);
+  });
   it("converts a booking into a client once and reuses an existing client", async () => {
     const b = await st.addBooking(db, {
       name: "Visitor One",
@@ -217,6 +253,45 @@ describe("invoices and payments", () => {
       now,
     );
     expect(f.duplicate).toBe(false);
+  });
+  it("a manual payment records only what is still owed, once, and refuses closed invoices", async () => {
+    const { j } = await seedJob("manual");
+    const inv = await st.createInvoice(
+      db,
+      { jobId: j.id, lines: [{ description: "Coverage", amountCents: 30000 }] },
+      undefined,
+      now,
+    );
+    await st.sendInvoice(db, inv.id, now);
+    await st.recordPayment(
+      db,
+      { invoiceId: inv.id, provider: "mock", providerRef: "pi_m1", amountCents: 10000, status: "succeeded" },
+      now,
+    );
+    const r = await st.markInvoicePaidManually(db, inv.id, "owner@example.test", now);
+    expect(r.amountCents).toBe(20000);
+    expect(await st.invoiceNetCents(db, inv.id)).toBe(30000);
+    expect((await db.select().from(s.studioInvoices).where(eq(s.studioInvoices.id, inv.id)))[0].status).toBe("paid");
+    await expect(st.markInvoicePaidManually(db, inv.id, "owner@example.test", now)).rejects.toThrow(/paid/);
+    await expect(st.sendInvoice(db, inv.id, now)).rejects.toThrow(/paid/);
+  });
+  it("voids an unpaid invoice (its link stops working) but not one with a payment", async () => {
+    const { j } = await seedJob("void");
+    const a = await st.createInvoice(db, { jobId: j.id, lines: [{ description: "Oops", amountCents: 900 }] });
+    const { token } = await st.sendInvoice(db, a.id, now);
+    expect(await st.invoiceByToken(db, token)).not.toBeNull();
+    expect((await st.voidInvoice(db, a.id, "owner@example.test")).status).toBe("void");
+    expect(await st.invoiceByToken(db, token)).toBeNull();
+    await expect(st.voidInvoice(db, a.id)).rejects.toThrow(/void/);
+    await expect(st.markInvoicePaidManually(db, a.id, "owner@example.test")).rejects.toThrow(/void/);
+    const b = await st.createInvoice(db, { jobId: j.id, lines: [{ description: "Fee", amountCents: 900 }] });
+    await st.sendInvoice(db, b.id, now);
+    await st.recordPayment(
+      db,
+      { invoiceId: b.id, provider: "mock", providerRef: "pi_v1", amountCents: 100, status: "succeeded" },
+      now,
+    );
+    await expect(st.voidInvoice(db, b.id)).rejects.toThrow(/Refund/);
   });
   it("webhook events are claimed once", async () => {
     expect(await st.claimWebhookEvent(db, "evt_1", "stripe", "payment_intent.succeeded")).toBe(true);

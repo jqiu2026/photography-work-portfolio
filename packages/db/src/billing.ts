@@ -70,7 +70,7 @@ export async function createPaymentPlan(
     throw new StudioError("Each instalment must be at least one dollar.");
   if (!/^\d{4}-\d{2}-\d{2}$/.test(input.firstDueOn)) throw new StudioError("Pick the first due date.");
   const [job] = await db.select().from(s.studioJobs).where(eq(s.studioJobs.id, input.jobId));
-  if (!job) throw new StudioError("Unknown job.");
+  if (!job) throw new StudioError("Unknown shoot.");
   const name = input.name?.trim() || `${job.title}: payment plan`;
   const [plan] = await db
     .insert(s.studioPaymentPlans)
@@ -144,7 +144,7 @@ export async function createRecurring(
     throw new StudioError("Repeat every 1 to 24 months.");
   if (!/^\d{4}-\d{2}-\d{2}$/.test(input.startOn)) throw new StudioError("Pick the first date.");
   const [job] = await db.select().from(s.studioJobs).where(eq(s.studioJobs.id, input.jobId));
-  if (!job) throw new StudioError("Unknown job.");
+  if (!job) throw new StudioError("Unknown shoot.");
   const [row] = await db
     .insert(s.studioRecurring)
     .values({

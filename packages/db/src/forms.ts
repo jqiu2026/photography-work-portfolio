@@ -234,7 +234,7 @@ export async function createContractFromTemplate(
     .from(s.studioJobs)
     .innerJoin(s.studioClients, eq(s.studioClients.id, s.studioJobs.clientId))
     .where(eq(s.studioJobs.id, input.jobId));
-  if (!row) throw new StudioError("Unknown job.");
+  if (!row) throw new StudioError("Unknown shoot.");
   const p = await getPolicies(db);
   const isRelease = tpl.kind !== "contract" && tpl.kind !== "licence";
   if (isRelease && !input.subject?.trim()) throw new StudioError("Say who or what the release covers.");
