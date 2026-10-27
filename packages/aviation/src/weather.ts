@@ -99,46 +99,102 @@ export function flightCategory(ceilingFt: number | undefined, visibilitySm: numb
   return "VFR";
 }
 
+/** Runs the first rule whose pattern matches the token. Returns whether one did. */
+function applyRules(t: string, rules: [RegExp, (m: RegExpExecArray) => void][]): boolean {
+  for (const [re, fn] of rules) {
+    const m = re.exec(t);
+    if (m) {
+      fn(m);
+      return true;
+    }
+  }
+  return false;
+}
+
 /** Reads group tokens (wind, visibility, weather, sky) into conditions. Tokens it does not know are returned in `unknown`. */
 export function parseConditions(tokens: string[]): Conditions {
   const c: Conditions = { weather: [], sky: [], unknown: [] };
   let whole: number | undefined;
+  const rules: [RegExp, (m: RegExpExecArray) => void][] = [
+    [
+      WIND,
+      (m) => {
+        const speed = Number(m[2]);
+        c.wind = {
+          dir: m[1] === "VRB" ? "VRB" : Number(m[1]),
+          speed,
+          gust: m[3] ? Number(m[3]) : undefined,
+          calm: speed === 0,
+        };
+      },
+    ],
+    [
+      WIND_VAR,
+      (m) => {
+        if (c.wind) c.wind.variable = [Number(m[1]), Number(m[2])];
+      },
+    ],
+    [
+      /^00000KT$/,
+      () => {
+        c.wind = { dir: null, speed: 0, calm: true };
+      },
+    ],
+    [
+      /^(\d)$/,
+      (m) => {
+        if (c.visibilitySm === undefined) whole = Number(m[1]);
+        else c.unknown.push(m[0]);
+      },
+    ],
+    [
+      VIS_SM,
+      (m) => {
+        const frac = m[3] ? Number(m[2]) / Number(m[3]) : Number(m[2]);
+        c.visibilitySm = (whole ?? 0) + frac;
+        c.visibilityPlus = m[1] === "P";
+        whole = undefined;
+      },
+    ],
+    [
+      /^CAVOK$/,
+      () => {
+        c.visibilitySm = 10;
+        c.visibilityPlus = true;
+        c.clear = true;
+      },
+    ],
+    [
+      /^(\d{4})$/,
+      (m) => {
+        if (c.visibilitySm !== undefined) return void c.unknown.push(m[0]);
+        const meters = Number(m[1]);
+        c.visibilitySm = Math.round((meters / 1609.34) * 10) / 10;
+        c.visibilityPlus = meters >= 9999;
+      },
+    ],
+    [
+      SKY,
+      (m) =>
+        void c.sky.push({
+          cover: m[1] as SkyLayer["cover"],
+          baseFt: Number(m[2]) * 100,
+          type: m[3] as SkyLayer["type"],
+        }),
+    ],
+    [VV, (m) => void c.sky.push({ cover: "VV", baseFt: Number(m[1]) * 100 })],
+    [
+      /^(SKC|CLR|NSC|NCD)$/,
+      () => {
+        c.clear = true;
+      },
+    ],
+  ];
   for (const t of tokens) {
-    let m: RegExpExecArray | null;
-    if ((m = WIND.exec(t))) {
-      const speed = Number(m[2]);
-      c.wind = {
-        dir: m[1] === "VRB" ? "VRB" : Number(m[1]),
-        speed,
-        gust: m[3] ? Number(m[3]) : undefined,
-        calm: speed === 0,
-      };
-    } else if ((m = WIND_VAR.exec(t))) {
-      if (c.wind) c.wind.variable = [Number(m[1]), Number(m[2])];
-    } else if (t === "00000KT") c.wind = { dir: null, speed: 0, calm: true };
-    else if (/^\d$/.test(t) && !c.visibilitySm) whole = Number(t);
-    else if ((m = VIS_SM.exec(t))) {
-      const frac = m[3] ? Number(m[2]) / Number(m[3]) : Number(m[2]);
-      c.visibilitySm = (whole ?? 0) + frac;
-      c.visibilityPlus = m[1] === "P";
-      whole = undefined;
-    } else if (t === "CAVOK") {
-      c.visibilitySm = 10;
-      c.visibilityPlus = true;
-      c.clear = true;
-    } else if (/^\d{4}$/.test(t) && !c.visibilitySm) {
-      const meters = Number(t);
-      c.visibilitySm = Math.round((meters / 1609.34) * 10) / 10;
-      c.visibilityPlus = meters >= 9999;
-    } else if ((m = SKY.exec(t)))
-      c.sky.push({ cover: m[1] as SkyLayer["cover"], baseFt: Number(m[2]) * 100, type: m[3] as SkyLayer["type"] });
-    else if ((m = VV.exec(t))) c.sky.push({ cover: "VV", baseFt: Number(m[1]) * 100 });
-    else if (["SKC", "CLR", "NSC", "NCD"].includes(t)) c.clear = true;
-    else {
-      const w = describeWeatherToken(t);
-      if (w) c.weather.push(w);
-      else c.unknown.push(t);
-    }
+    if (applyRules(t, rules)) continue;
+    const w = describeWeatherToken(t);
+    if (w) c.weather.push(w);
+    else c.unknown.push(t);
   }
   const ceilings = c.sky.filter((s) => s.cover === "BKN" || s.cover === "OVC" || s.cover === "VV").map((s) => s.baseFt);
   if (ceilings.length) c.ceilingFt = Math.min(...ceilings);
@@ -210,25 +266,59 @@ export function parseMetar(rawIn: string): Metar {
     remarks,
   };
   const rest: string[] = [];
+  const rules: [RegExp, (m: RegExpExecArray) => void][] = [
+    [
+      /^(METAR|SPECI)$/,
+      (m) => {
+        r.type = m[1] as "METAR" | "SPECI";
+      },
+    ],
+    [
+      /^AUTO$/,
+      () => {
+        r.auto = true;
+      },
+    ],
+    [
+      /^COR$/,
+      () => {
+        r.corrected = true;
+      },
+    ],
+    [
+      /^(\d{2})(\d{2})(\d{2})Z$/,
+      (m) => {
+        [r.day, r.hour, r.minute] = [Number(m[1]), Number(m[2]), Number(m[3])];
+      },
+    ],
+    [
+      /^(M?\d{2})\/(M?\d{2})?$/,
+      (m) => {
+        r.temperatureC = temp(m[1]);
+        if (m[2]) {
+          r.dewpointC = temp(m[2]);
+          r.spreadC = r.temperatureC - r.dewpointC;
+        }
+      },
+    ],
+    [
+      /^A(\d{4})$/,
+      (m) => {
+        r.altimeterInHg = Number(m[1]) / 100;
+      },
+    ],
+    [
+      /^Q(\d{4})$/,
+      (m) => {
+        r.altimeterHpa = Number(m[1]);
+        r.altimeterInHg = Math.round(Number(m[1]) * 0.02953 * 100) / 100;
+      },
+    ],
+  ];
   for (const t of body) {
-    let m: RegExpExecArray | null;
-    if (t === "METAR" || t === "SPECI") r.type = t;
-    else if (t === "AUTO") r.auto = true;
-    else if (t === "COR") r.corrected = true;
-    else if (!r.station && /^[A-Z][A-Z0-9]{3}$/.test(t) && r.day === undefined) r.station = t;
-    else if ((m = /^(\d{2})(\d{2})(\d{2})Z$/.exec(t)))
-      [r.day, r.hour, r.minute] = [Number(m[1]), Number(m[2]), Number(m[3])];
-    else if ((m = /^(M?\d{2})\/(M?\d{2})?$/.exec(t))) {
-      r.temperatureC = temp(m[1]);
-      if (m[2]) {
-        r.dewpointC = temp(m[2]);
-        r.spreadC = r.temperatureC - r.dewpointC;
-      }
-    } else if ((m = /^A(\d{4})$/.exec(t))) r.altimeterInHg = Number(m[1]) / 100;
-    else if ((m = /^Q(\d{4})$/.exec(t))) {
-      r.altimeterHpa = Number(m[1]);
-      r.altimeterInHg = Math.round(Number(m[1]) * 0.02953 * 100) / 100;
-    } else rest.push(t);
+    // the station is the first four-character group before the time group
+    if (!r.station && r.day === undefined && /^[A-Z][A-Z0-9]{3}$/.test(t) && t !== "AUTO") r.station = t;
+    else if (!applyRules(t, rules)) rest.push(t);
   }
   if (r.altimeterInHg !== undefined && r.altimeterHpa === undefined)
     r.altimeterHpa = Math.round(r.altimeterInHg / 0.02953);
@@ -288,17 +378,18 @@ export function parseTaf(rawIn: string): Taf {
   };
   for (; i < tokens.length; i++) {
     const t = tokens[i];
-    let m: RegExpExecArray | null;
-    if ((m = /^FM(\d{6})$/.exec(t))) {
+    const fm = /^FM(\d{6})$/.exec(t);
+    const prob = /^PROB(\d{2})$/.exec(t);
+    if (fm) {
       flush();
-      cur = { kind: "FM", when: m[1], toks: [] };
+      cur = { kind: "FM", when: fm[1], toks: [] };
     } else if (t === "TEMPO" || t === "BECMG") {
       flush();
       cur = { kind: t, toks: [] };
       if (/^\d{4}\/\d{4}$/.test(tokens[i + 1] ?? "")) cur.when = tokens[++i];
-    } else if ((m = /^PROB(\d{2})$/.exec(t))) {
+    } else if (prob) {
       flush();
-      cur = { kind: "PROB", prob: Number(m[1]), toks: [] };
+      cur = { kind: "PROB", prob: Number(prob[1]), toks: [] };
       if (tokens[i + 1] === "TEMPO") i++;
       if (/^\d{4}\/\d{4}$/.test(tokens[i + 1] ?? "")) cur.when = tokens[++i];
     } else cur.toks.push(t);
