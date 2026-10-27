@@ -1,14 +1,14 @@
 "use client";
 
-import { useActionState } from "react";
+import { useServerForm } from "@/components/useServerForm";
 import { type CheckoutState, checkoutAction } from "@/app/(site)/checkout/actions";
 import { Button, Field, FormMessage, Input } from "@/components/ui";
 
 export function CheckoutForm({ needsOrganization }: { needsOrganization: boolean }) {
-  const [state, run, pending] = useActionState<CheckoutState, FormData>(checkoutAction, null);
+  const { state, pending, onSubmit } = useServerForm((fd) => checkoutAction(null, fd));
   const fe = state?.fieldErrors;
   return (
-    <form action={run} className="mu-form" aria-label="Checkout">
+    <form onSubmit={onSubmit} className="mu-form" aria-label="Checkout">
       <Field label="Your name" hint="Printed on every page of your copy." error={fe?.name}>
         <Input name="name" autoComplete="name" required />
       </Field>

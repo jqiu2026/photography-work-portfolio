@@ -1,13 +1,13 @@
 "use client";
 
-import { useActionState } from "react";
+import { useServerForm } from "@/components/useServerForm";
 import { type LinkState, requestLinkAction } from "@/app/(site)/library/actions";
 import { Button, Field, FormMessage, Input } from "@/components/ui";
 
 export function SignInForm() {
-  const [state, run, pending] = useActionState<LinkState, FormData>(requestLinkAction, null);
+  const { state, pending, onSubmit } = useServerForm((fd) => requestLinkAction(null, fd));
   return (
-    <form action={run} className="mu-form" aria-label="Sign in to your library">
+    <form onSubmit={onSubmit} className="mu-form" aria-label="Sign in to your library">
       <Field label="Email you used to buy" hint="We send a one-time link. No password.">
         <Input name="email" type="email" autoComplete="email" required />
       </Field>

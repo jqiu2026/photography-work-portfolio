@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { flying, music, photos } from "./routes";
+import { music, photos } from "./routes";
 
 /**
  * Mocks are disabled in production builds: the score store and the flight map are 404 and nothing in the navigation points
@@ -7,7 +7,6 @@ import { flying, music, photos } from "./routes";
  */
 const mockRoutes = [
   `${music}/checkout/mock?token=not-a-real-token`,
-  `${flying}/map`,
   `${photos}/studio/overview`,
   `${photos}/studio/shoots`,
   `${photos}/client/sign/not-a-real-token`,
@@ -29,12 +28,6 @@ test("the old client entry points send the visitor home", async ({ request }) =>
     expect([307, 308]).toContain(res.status());
     expect(new URL(res.headers().location ?? "", photos).pathname).toBe("/");
   }
-});
-
-test("the flying home links to no mock routes in production", async ({ page }) => {
-  await page.goto(`${flying}`, { waitUntil: "networkidle" });
-  const hrefs = await page.$$eval("a[href]", (as) => as.map((a) => (a as HTMLAnchorElement).pathname));
-  expect(hrefs.filter((h) => /\/map(\/|$)/.test(h))).toEqual([]);
 });
 
 test("the music store is real: no payment is possible without Stripe in a production build", async ({ request }) => {

@@ -1,13 +1,13 @@
 "use client";
 
-import { useActionState } from "react";
+import { useServerForm } from "@/components/useServerForm";
 import { subscribeAction } from "@/app/(site)/newsletter/actions";
 import { Button, Field, FormMessage, Input } from "@/components/ui";
 
 export function NewsletterForm() {
-  const [state, run, pending] = useActionState(subscribeAction, null);
+  const { state, pending, onSubmit } = useServerForm((fd) => subscribeAction(null, fd));
   return (
-    <form action={run} className="mu-form" aria-label="Newsletter">
+    <form onSubmit={onSubmit} className="mu-form" aria-label="Newsletter">
       <Field label="Email" error={state && !state.ok ? state.error : undefined}>
         <Input name="email" type="email" autoComplete="email" required />
       </Field>

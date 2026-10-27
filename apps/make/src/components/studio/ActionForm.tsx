@@ -1,14 +1,17 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { type ReactNode, useActionState } from "react";
+import { type FormEvent, type ReactNode, useState, useTransition } from "react";
 import { Button, FormMessage } from "@/components/ui";
 
 type Result = { ok: true; message: string; [k: string]: unknown } | { ok: false; error: string } | null;
 
 /**
  * A studio form. `action` is a server action taking FormData; the answer is shown under the button (an error as an alert,
- * a confirmation as a status). `confirm` asks first. `reset` clears the fields after success. `onDone` can redirect.
+ * a confirmation as a status). `confirm` asks first. `reset` clears the fields after a success.
+ *
+ * The form is submitted with onSubmit and a transition, NOT as a `<form action>`: React 19 resets the fields of an
+ * action-form after every submit, errors included, which would throw away what the person typed.
  */
 export function ActionForm({
   action,
@@ -32,20 +35,29 @@ export function ActionForm({
   refresh?: boolean;
 }) {
   const router = useRouter();
-  const [state, run, pending] = useActionState(async (_p: Result, form: FormData) => {
-    if (confirm && !window.confirm(confirm)) return null;
-    const r = await action(form);
-    if (r?.ok && refresh) router.refresh();
-    if (r?.ok && typeof r.redirect === "string") router.push(r.redirect);
-    return r;
-  }, null);
+  const [state, setState] = useState<Result>(null);
+  const [pending, start] = useTransition();
+
+  function onSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (confirm && !window.confirm(confirm)) return;
+    const form = e.currentTarget;
+    const data = new FormData(form);
+    start(async () => {
+      const r = await action(data);
+      setState(r);
+      if (r?.ok) {
+        if (reset) form.reset();
+        if (refresh) router.refresh();
+        if (typeof r.redirect === "string") router.push(r.redirect);
+      }
+    });
+  }
+
   return (
     <form
-      action={run}
+      onSubmit={onSubmit}
       className={className}
-      ref={(el) => {
-        if (el && reset && state?.ok) el.reset();
-      }}
       style={
         inline ? { display: "flex", flexWrap: "wrap", gap: "0.6rem", alignItems: "end", maxWidth: "none" } : undefined
       }

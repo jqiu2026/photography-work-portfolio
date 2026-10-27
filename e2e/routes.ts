@@ -43,7 +43,19 @@ export const routes: { site: string; path: string; base: string }[] = [
     path,
     base: make,
   })),
-  ...["/", "/log", "/aircraft", "/about"].map((path) => ({
+  ...[
+    "/",
+    "/log",
+    "/map",
+    "/aircraft",
+    "/about",
+    "/tools",
+    "/tools/crosswind",
+    "/tools/density-altitude",
+    "/tools/weather",
+    "/tools/trip",
+    "/tools/weight-balance",
+  ].map((path) => ({
     site: "flying",
     path,
     base: flying,

@@ -1,14 +1,14 @@
 "use client";
 
-import { useActionState } from "react";
+import { useServerForm } from "@/components/useServerForm";
 import { commissionAction } from "@/app/(site)/commission/actions";
 import { Button, Field, FormMessage, Input, Textarea } from "@/components/ui";
 
 export function CommissionForm() {
-  const [state, run, pending] = useActionState(commissionAction, null);
+  const { state, pending, onSubmit } = useServerForm((fd) => commissionAction(null, fd));
   const fe = state && !state.ok ? state.fieldErrors : undefined;
   return (
-    <form action={run} className="mu-form" aria-label="Commission inquiry">
+    <form onSubmit={onSubmit} className="mu-form" aria-label="Commission inquiry">
       <div aria-hidden="true" style={{ position: "absolute", left: "-9999px", height: 0, overflow: "hidden" }}>
         <label>
           Leave this empty

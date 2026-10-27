@@ -35,7 +35,7 @@ test("a screenshot stays hidden until it is described and marked checked", async
 
   await page.locator('input[type="file"]').setInputFiles({ name: "shot.png", mimeType: "image/png", buffer: PNG });
   await page.getByRole("button", { name: "Upload" }).click();
-  await expect(page.getByText(/stays hidden until/)).toBeVisible();
+  await expect(page.getByText(/^Added\. It stays hidden/)).toBeVisible();
   await page.goto(editUrl, { waitUntil: "networkidle" });
   const imgSrc = await page.locator('img[src^="/studio/preview/"]').first().getAttribute("src");
   expect(imgSrc).toBeTruthy();

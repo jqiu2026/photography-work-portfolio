@@ -16,7 +16,7 @@ const homes = [
   },
   { name: "music", url: `${music}/`, h1: /Music/, texts: [/New pieces, in your inbox/i], halation: false },
   { name: "make", url: `${make}/`, h1: /Make/, texts: [/small showcase/i], halation: false },
-  { name: "flying", url: `${flying}/`, h1: /Flying/, texts: [/Say hello/i, /The log/i] },
+  { name: "flying", url: `${flying}/`, h1: /Flying/, texts: [/Tools I built to learn/i, /The log/i], halation: false },
 ];
 
 for (const h of homes) {
