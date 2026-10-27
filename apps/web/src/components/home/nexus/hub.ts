@@ -13,6 +13,11 @@ export type HubState = {
   dive: number;
   /** each world rendered small, for the gate interiors */
   previews: HTMLCanvasElement[];
+  /** the Nexus's light, easing toward the front gate's colour */
+  tint?: RGB;
+  /** pointer, -1..1, eased: far layers drift against it */
+  mx?: number;
+  my?: number;
 };
 
 const VOID: RGB = hex("#05030c");
@@ -129,11 +134,18 @@ function drawGate(c: CanvasRenderingContext2D, g: Gate, s: HubState, t: number, 
 export function paintNexus(c: CanvasRenderingContext2D, w: number, h: number, t: number, s: HubState) {
   c.imageSmoothingEnabled = false;
   const look = LOOKS[s.sel];
+  const acc = s.tint ?? look.accent;
+  const par = (k: number) => [Math.round(-(s.mx ?? 0) * k), Math.round(-(s.my ?? 0) * k * 0.6)] as const;
   const next = LOOKS[(s.sel + 1) % LOOKS.length];
   const T = Math.max(2, Math.round(h / 60));
   const r = s.reveal;
-  bands(c, 0, 0, w, h, [hex("#020108"), mix(hex("#070418"), look.accent, 0.07), hex("#0b0716"), hex("#030207")], 2);
-  stars(c, w, h, t, Math.round((w * h) / 240), look.accent, 0.003);
+  bands(c, 0, 0, w, h, [hex("#020108"), mix(hex("#070418"), acc, 0.07), hex("#0b0716"), hex("#030207")], 2);
+  c.save();
+  c.translate(...par(2));
+  stars(c, w, h, t, Math.round((w * h) / 240), acc, 0.003);
+  c.restore();
+  c.save();
+  c.translate(...par(4));
 
   // aurora curtains in the front gate's colour
   const aur = clamp(r * 1.6 - 0.2);
@@ -142,7 +154,7 @@ export function paintNexus(c: CanvasRenderingContext2D, w: number, h: number, t:
     const len = h * (0.16 + 0.2 * noise1(x * 0.025 - t * 0.04 + 9));
     const glow = 0.45 + 0.55 * noise1(x * 0.06 + t * 0.25);
     const col = mix(
-      mix(look.accent, next.accent, noise1(x * 0.008 - t * 0.03 + 4) * 0.7),
+      mix(acc, next.accent, noise1(x * 0.008 - t * 0.03 + 4) * 0.7),
       [150, 255, 230],
       noise1(x * 0.02 + 7) * 0.25,
     );
@@ -157,7 +169,10 @@ export function paintNexus(c: CanvasRenderingContext2D, w: number, h: number, t:
       );
   }
 
+  c.restore();
   // debris islands drifting on far orbits
+  c.save();
+  c.translate(...par(7));
   for (let i = 0; i < 7; i++) {
     const a = t * (0.02 + hash(i) * 0.02) + i;
     const x = w / 2 + Math.cos(a) * w * (0.38 + hash(i * 3) * 0.12);
@@ -165,10 +180,11 @@ export function paintNexus(c: CanvasRenderingContext2D, w: number, h: number, t:
     const s2 = Math.max(1, Math.round(T * (0.5 + hash(i * 7))));
     const n = 2 + Math.floor(hash(i * 11) * 3);
     for (let k = 0; k < n; k++) fill(c, x + k * s2, y, s2, s2, rgba(mix(hex("#3a3550"), VOID, 0.4), r));
-    fill(c, x, y, n * s2, 1, rgba(look.accent, 0.35 * r));
+    fill(c, x, y, n * s2, 1, rgba(acc, 0.35 * r));
     fill(c, x + s2, y + s2, Math.max(1, (n - 2) * s2), s2, rgba(hex("#1a1626"), r));
   }
 
+  c.restore();
   // the platform: a stone disc with a lit rim, a rock face, and roots of rock hanging into the void
   const { cx, cy, rx: grx, ry: gry, unit } = layout(w, h);
   const rx = grx * 1.28;
@@ -200,11 +216,10 @@ export function paintNexus(c: CanvasRenderingContext2D, w: number, h: number, t:
       const gy = Math.round(dy / T);
       const v = hash(gx * 3.1 + gy * 7.3);
       const light = 0.5 + (0.5 * -dy) / ry;
-      const base = mix(mix(hex("#2e2a3e"), hex("#4a4562"), v * 0.5 + light * 0.3), look.accent, 0.04);
+      const base = mix(mix(hex("#2e2a3e"), hex("#4a4562"), v * 0.5 + light * 0.3), acc, 0.04);
       fill(c, x, cy + dy + rise, T, T, rgba(base));
       if ((gx + gy) % 2 === 0) fill(c, x, cy + dy + rise, T, 1, rgba(mix(base, [255, 255, 255], 0.08)));
-      if (Math.abs(x - cx) > half - T * 1.2 || dy > ry - T * 1.2)
-        fill(c, x, cy + dy + rise, T, 1, rgba(look.accent, 0.35 * r));
+      if (Math.abs(x - cx) > half - T * 1.2 || dy > ry - T * 1.2) fill(c, x, cy + dy + rise, T, 1, rgba(acc, 0.35 * r));
     }
   }
   // the rune ring: an even line with eight lit nodes
@@ -213,14 +228,7 @@ export function paintNexus(c: CanvasRenderingContext2D, w: number, h: number, t:
     const flow = 0.5 + 0.5 * Math.sin(a * 6 - t * 2.4);
     const x = cx + Math.cos(a) * rx * 0.62;
     const y = cy + Math.sin(a) * ry * 0.62 + rise;
-    fill(
-      c,
-      x,
-      y,
-      node ? 2 : 1,
-      node ? 2 : 1,
-      rgba(mix(look.accent, [255, 255, 255], node ? 0.5 : 0), (0.25 + 0.6 * flow) * r),
-    );
+    fill(c, x, y, node ? 2 : 1, node ? 2 : 1, rgba(mix(acc, [255, 255, 255], node ? 0.5 : 0), (0.25 + 0.6 * flow) * r));
   }
 
   const ring = gates(w, h, s).map((g) => ({ ...g, y: g.y + rise }));
@@ -230,8 +238,8 @@ export function paintNexus(c: CanvasRenderingContext2D, w: number, h: number, t:
   // the core: a column of light, a turning crystal, and a helix of motes
   const beat = 0.6 + 0.4 * Math.sin(t * 1.7);
   const coreY = Math.max(unit * 2.5, cy - unit * 19) + Math.sin(t * 1.1) * unit * 0.4 + rise * 0.3;
-  bands(c, cx - T * 3, 0, T * 6, coreY, [hex("#000000"), look.accent], 2, 0.12 * beat * r);
-  bands(c, cx - T, 0, T * 2, coreY, [hex("#000000"), mix(look.accent, [255, 255, 255], 0.5)], 2, 0.3 * beat * r);
+  bands(c, cx - T * 3, 0, T * 6, coreY, [hex("#000000"), acc], 2, 0.12 * beat * r);
+  bands(c, cx - T, 0, T * 2, coreY, [hex("#000000"), mix(acc, [255, 255, 255], 0.5)], 2, 0.3 * beat * r);
   fill(c, cx, 0, 1, coreY, rgba([255, 255, 255], 0.6 * beat * r));
   const cs = Math.max(1, Math.round(unit * 0.6));
   const turn = Math.floor(t * 4) % 4;
@@ -242,7 +250,7 @@ export function paintNexus(c: CanvasRenderingContext2D, w: number, h: number, t:
       coreY - cs * (3 + k * 1.5),
       cs * (6 + k * 3),
       cs * (6 + k * 3),
-      rgba(look.accent, 0.05 * beat * r),
+      rgba(acc, 0.05 * beat * r),
     );
   for (let row = -3; row <= 3; row++) {
     const wdt = 4 - Math.abs(row);
@@ -255,7 +263,7 @@ export function paintNexus(c: CanvasRenderingContext2D, w: number, h: number, t:
         coreY + row * cs,
         cs,
         cs,
-        rgba(mix(look.accent, [255, 255, 255], lit ? 0.75 : k * 0.4), r),
+        rgba(mix(acc, [255, 255, 255], lit ? 0.75 : k * 0.4), r),
       );
     }
   }
@@ -265,7 +273,7 @@ export function paintNexus(c: CanvasRenderingContext2D, w: number, h: number, t:
     coreY + cs * 4,
     T * 4,
     cy - coreY - cs * 4 + rise,
-    [mix(look.accent, [255, 255, 255], 0.3), look.accent],
+    [mix(acc, [255, 255, 255], 0.3), acc],
     2,
     0.22 * beat * r,
   );
@@ -279,7 +287,7 @@ export function paintNexus(c: CanvasRenderingContext2D, w: number, h: number, t:
       y,
       1,
       1,
-      rgba(mix(look.accent, [255, 255, 255], 0.4), 0.8 * r * (Math.sin(a) > 0 ? 1 : 0.4)),
+      rgba(mix(acc, [255, 255, 255], 0.4), 0.8 * r * (Math.sin(a) > 0 ? 1 : 0.4)),
     );
   }
 
@@ -296,12 +304,12 @@ export function paintNexus(c: CanvasRenderingContext2D, w: number, h: number, t:
         f.y + f.h - life * f.h * 1.6,
         1,
         1,
-        rgba(look.accent, (1 - life) * 0.8),
+        rgba(acc, (1 - life) * 0.8),
       );
     }
 
   // fog at the foot of the view
-  bands(c, 0, h * 0.82, w, h * 0.18, [VOID, mix(VOID, look.accent, 0.12)], 2, 0.6);
+  bands(c, 0, h * 0.82, w, h * 0.18, [VOID, mix(VOID, acc, 0.12)], 2, 0.6);
   if (r < 1) fill(c, 0, 0, w, h, rgba([0, 0, 0], 1 - clamp(r * 1.3)));
   return ring;
 }

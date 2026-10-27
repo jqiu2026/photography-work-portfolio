@@ -2,7 +2,7 @@
 
 import { type ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { type Gate, type HubState, paintNexus } from "./nexus/hub";
-import { PAINTERS, clamp, vortex } from "./nexus/paint";
+import { PAINTERS, clamp, mix, vortex } from "./nexus/paint";
 import { LOOKS, type RealmLink } from "./nexus/realms";
 import type { Ambience } from "./nexus/sound";
 import "./nexus/nexus.css";
@@ -25,6 +25,7 @@ export function Nexus({ realms, children }: { realms: RealmLink[]; children: Rea
   const [sel, setSel] = useState(0);
   const [phase, setPhaseState] = useState<Phase>("hub");
   const [sound, setSound] = useState(false);
+  const [boot, setBoot] = useState<string | null>(null);
   const audio = useRef<Ambience | null>(null);
   const st = useRef({
     target: 0,
@@ -35,6 +36,8 @@ export function Nexus({ realms, children }: { realms: RealmLink[]; children: Rea
     reduce: false,
     kick: () => {},
     scale: 4,
+    mx: 0,
+    my: 0,
   });
 
   const setPhase = useCallback((p: Phase) => {
@@ -137,6 +140,10 @@ export function Nexus({ realms, children }: { realms: RealmLink[]; children: Rea
       const hub = s.hub;
       hub.reveal = Math.min(1, hub.reveal + dt / 2.6);
       hub.rot += (s.target - hub.rot) * (s.reduce ? 1 : Math.min(1, dt * 5));
+      const ease = s.reduce ? 1 : Math.min(1, dt * 3);
+      hub.tint = mix(hub.tint ?? LOOKS[hub.sel].accent, LOOKS[hub.sel].accent, ease);
+      hub.mx = (hub.mx ?? 0) + (s.mx - (hub.mx ?? 0)) * Math.min(1, dt * 2);
+      hub.my = (hub.my ?? 0) + (s.my - (hub.my ?? 0)) * Math.min(1, dt * 2);
 
       if (s.phase === "dive" && s.phaseT >= DIVE) setPhase("realm");
       if (s.phase === "return" && s.phaseT >= BACK) setPhase("hub");
@@ -226,6 +233,10 @@ export function Nexus({ realms, children }: { realms: RealmLink[]; children: Rea
       return g ?? null;
     };
     const onMove = (e: PointerEvent) => {
+      if (!s.reduce && e.pointerType === "mouse") {
+        s.mx = (e.clientX / innerWidth) * 2 - 1;
+        s.my = (e.clientY / innerHeight) * 2 - 1;
+      }
       const g = hit(e);
       if (section.current) section.current.style.cursor = g ? "pointer" : "";
     };
@@ -290,6 +301,15 @@ export function Nexus({ realms, children }: { realms: RealmLink[]; children: Rea
 
   useEffect(() => () => audio.current?.close(), []);
 
+  // arrival: a short readout while the Nexus assembles (skipped with reduced motion or a link to a world)
+  useEffect(() => {
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches || location.hash) return;
+    const lines = ["> link established", "> reading coordinates", "> four gates online", "> welcome to the nexus"];
+    const ids = lines.map((l, i) => setTimeout(() => setBoot(l), 250 + i * 650));
+    ids.push(setTimeout(() => setBoot(null), 250 + lines.length * 650 + 500));
+    return () => ids.forEach(clearTimeout);
+  }, []);
+
   const toggleSound = async () => {
     try {
       if (!audio.current) audio.current = new (await import("./nexus/sound")).Ambience();
@@ -310,9 +330,18 @@ export function Nexus({ realms, children }: { realms: RealmLink[]; children: Rea
       <div className="nx-scrim" aria-hidden />
       <div className="nx-hero">{children}</div>
 
-      <div className="nx-console" role="group" aria-label="The Nexus: four portals">
+      <div
+        className="nx-console"
+        role="group"
+        aria-label="The Nexus: four portals"
+        style={{ "--nx-accent": `rgb(${look.accent.join(",")})` } as React.CSSProperties}
+      >
         <p className="nx-readout" aria-hidden>
-          <span>dimension 0</span> · the nexus · <span>{String(sel + 1).padStart(2, "0")}/04</span>
+          {boot ?? (
+            <>
+              <span>dimension 0</span> · the nexus · <span>{String(sel + 1).padStart(2, "0")}/04</span>
+            </>
+          )}
         </p>
         <div className="nx-gates">
           {LOOKS.map((l, i) => {

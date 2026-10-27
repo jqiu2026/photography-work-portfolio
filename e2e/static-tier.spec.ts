@@ -11,7 +11,7 @@ const homes = [
     name: "hub",
     url: `${hub}/`,
     h1: /Jerry Qiu/,
-    texts: [/Four rooms/i, /Say hello/i, /photographer/i],
+    texts: [/The Nexus/i, /Say hello/i, /photographer/i],
     halation: false,
   },
   {
