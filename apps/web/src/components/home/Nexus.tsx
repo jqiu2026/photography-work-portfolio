@@ -301,13 +301,33 @@ export function Nexus({ realms, children }: { realms: RealmLink[]; children: Rea
       if (g.i === s.hub.sel) enter();
       else select(g.i);
     };
+    // touch: a sideways swipe across the scene turns the ring, or hops to the next world
+    let start: { x: number; y: number } | null = null;
+    const onDown = (e: PointerEvent) => {
+      const busy = (e.target as HTMLElement).closest("a,button,input,textarea,select,.nx-world__panel,.hm-dock");
+      start = e.pointerType === "touch" && !busy ? { x: e.clientX, y: e.clientY } : null;
+    };
+    const onUp = (e: PointerEvent) => {
+      if (!start) return;
+      const dx = e.clientX - start.x;
+      const dy = e.clientY - start.y;
+      start = null;
+      if (Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+      const d = dx < 0 ? 1 : -1;
+      if (s.phase === "realm") hop(d);
+      else if (s.phase === "hub" && scrollY < innerHeight * 0.5) move(d);
+    };
     addEventListener("pointermove", onMove);
     addEventListener("click", onClick);
+    addEventListener("pointerdown", onDown);
+    addEventListener("pointerup", onUp);
     return () => {
       removeEventListener("pointermove", onMove);
       removeEventListener("click", onClick);
+      removeEventListener("pointerdown", onDown);
+      removeEventListener("pointerup", onUp);
     };
-  }, [enter, select]);
+  }, [enter, select, hop, move]);
 
   // keys: arrows turn the ring while the Nexus is in view; Escape leaves a world
   useEffect(() => {
