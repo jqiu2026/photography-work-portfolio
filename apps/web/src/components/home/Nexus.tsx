@@ -7,9 +7,10 @@ import { LOOKS, type RealmLink } from "./nexus/realms";
 import type { Ambience } from "./nexus/sound";
 import "./nexus/nexus.css";
 
-type Phase = "hub" | "dive" | "realm" | "return";
+type Phase = "hub" | "dive" | "realm" | "return" | "hop";
 const DIVE = 1.5;
 const BACK = 1.2;
+const HOP = 1.3;
 const mod = (n: number, m: number) => ((n % m) + m) % m;
 const REDUCE = "(prefers-reduced-motion: reduce)";
 const onReduce = (cb: () => void) => {
@@ -50,6 +51,7 @@ export function Nexus({ realms, children }: { realms: RealmLink[]; children: Rea
     reduce: false,
     kick: () => {},
     scale: 4,
+    hopTo: 0,
     mx: 0,
     my: 0,
   });
@@ -96,6 +98,26 @@ export function Nexus({ realms, children }: { realms: RealmLink[]; children: Rea
     }
     setPhase(s.reduce ? "hub" : "return");
   }, [setPhase]);
+
+  /** from one world straight to its neighbour, through a portal, without going back to the Nexus */
+  const hop = useCallback(
+    (d: number) => {
+      const s = st.current;
+      if (s.phase !== "realm") return;
+      s.hopTo = mod(s.hub.sel + d, LOOKS.length);
+      try {
+        history.replaceState({ nexus: LOOKS[s.hopTo].key }, "", `#${LOOKS[s.hopTo].key}`);
+      } catch {}
+      if (s.reduce) {
+        s.hub.sel = s.hopTo;
+        s.target += d;
+        s.hub.rot = s.target;
+        setSel(s.hopTo);
+        s.kick();
+      } else setPhase("hop");
+    },
+    [setPhase],
+  );
 
   // the render loop
   useEffect(() => {
@@ -193,6 +215,21 @@ export function Nexus({ realms, children }: { realms: RealmLink[]; children: Rea
       } else if (s.phase === "realm") {
         world();
         if (look.key === "forge") shimmer = 0.6;
+      } else if (s.phase === "hop") {
+        const p = s.phaseT;
+        wobble = Math.sin((Math.PI * p) / HOP);
+        if (p >= HOP / 2 && hub.sel !== s.hopTo) {
+          const d = mod(s.hopTo - hub.sel + 2, 4) - 2;
+          s.target += d;
+          hub.rot = s.target;
+          hub.sel = s.hopTo;
+          hub.tint = LOOKS[s.hopTo].accent;
+          setSel(s.hopTo);
+        }
+        const now = LOOKS[hub.sel];
+        PAINTERS[now.key](b, bw, bh, t);
+        vortex(b, bw, bh, t, now.accent, p < HOP / 2 ? p / (HOP / 2) : 1 - (p - HOP / 2) / (HOP / 2));
+        if (p >= HOP) setPhase("realm");
       } else {
         const p = s.phaseT;
         wobble = Math.sin((Math.PI * p) / BACK);
@@ -277,6 +314,10 @@ export function Nexus({ realms, children }: { realms: RealmLink[]; children: Rea
     const onKey = (e: KeyboardEvent) => {
       const s = st.current;
       if (e.key === "Escape" && s.phase === "realm") return back();
+      if (s.phase === "realm" && (e.key === "ArrowRight" || e.key === "ArrowLeft")) {
+        e.preventDefault();
+        return hop(e.key === "ArrowRight" ? 1 : -1);
+      }
       if (s.phase !== "hub" || scrollY > innerHeight * 0.5 || e.metaKey || e.ctrlKey || e.altKey) return;
       const el = document.activeElement as HTMLElement | null;
       if (el?.closest("input,textarea,select,[contenteditable=true]")) return;
@@ -301,19 +342,22 @@ export function Nexus({ realms, children }: { realms: RealmLink[]; children: Rea
       removeEventListener("keydown", onKey);
       removeEventListener("popstate", onPop);
     };
-  }, [back, move, select, setPhase]);
+  }, [back, hop, move, select, setPhase]);
 
   // a world takes the whole screen: no page scroll behind it; focus moves in and comes back out
   useEffect(() => {
     const root = document.documentElement;
-    if (phase === "dive" || phase === "realm" || phase === "return") root.style.overflow = "hidden";
+    if (phase !== "hub") root.style.overflow = "hidden";
     else root.style.overflow = "";
     if (phase === "realm") enterLink.current?.focus({ preventScroll: true });
     // back from a world: focus returns to its gate (never on first load, where the skip link comes first)
     if (phase === "hub" && lastPhase.current !== "hub" && document.activeElement === document.body)
       gateButtons.current[st.current.hub.sel]?.focus({ preventScroll: true });
     lastPhase.current = phase;
-    audio.current?.go(phase === "realm" || phase === "dive" ? LOOKS[st.current.hub.sel].key : "nexus");
+    const s = st.current;
+    audio.current?.go(
+      phase === "hop" ? LOOKS[s.hopTo].key : phase === "realm" || phase === "dive" ? LOOKS[s.hub.sel].key : "nexus",
+    );
     return () => {
       root.style.overflow = "";
     };
@@ -428,6 +472,14 @@ export function Nexus({ realms, children }: { realms: RealmLink[]; children: Rea
               </a>
               <button type="button" className="nx-back" onClick={back}>
                 Back to the Nexus <kbd aria-hidden>Esc</kbd>
+              </button>
+            </div>
+            <div className="nx-world__hop">
+              <button type="button" className="nx-hop" onClick={() => hop(-1)}>
+                <kbd aria-hidden>←</kbd> {LOOKS[mod(sel - 1, 4)].name}
+              </button>
+              <button type="button" className="nx-hop" onClick={() => hop(1)}>
+                {LOOKS[mod(sel + 1, 4)].name} <kbd aria-hidden>→</kbd>
               </button>
             </div>
           </div>

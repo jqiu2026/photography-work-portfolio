@@ -250,6 +250,36 @@
   flex-wrap: wrap;
   gap: 0.6rem;
 }
+.nx-world__hop {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.6rem;
+  margin-top: 0.9rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+.nx-hop {
+  padding: 0.3rem 0;
+  font-family: var(--font-pixel), var(--hm-font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(244, 239, 255, 0.75);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.nx-hop:hover {
+  color: var(--nx-accent);
+}
+.nx-hop:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 2px;
+}
+.nx-hop kbd {
+  font: inherit;
+  opacity: 0.7;
+}
 .nx-sound--world {
   pointer-events: auto;
 }

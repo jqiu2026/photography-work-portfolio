@@ -56,3 +56,16 @@ test("sound is off until asked for, and the toggle says so", async ({ page }) =>
   await sound.click();
   await expect(sound).toHaveAttribute("aria-pressed", "false");
 });
+
+test("inside a world, the arrows and the neighbour buttons hop straight to the next world", async ({ page }) => {
+  await page.goto(`${hub}/#resonance`, { waitUntil: "networkidle" });
+  await expect(page.getByRole("dialog", { name: "Resonance" })).toBeVisible();
+  await page.keyboard.press("ArrowRight");
+  await expect(page.getByRole("dialog", { name: "Altitude" })).toBeVisible({ timeout: 10_000 });
+  await expect(page).toHaveURL(/#altitude$/);
+  await page
+    .getByRole("dialog", { name: "Altitude" })
+    .getByRole("button", { name: /Resonance/ })
+    .click();
+  await expect(page.getByRole("dialog", { name: "Resonance" })).toBeVisible({ timeout: 10_000 });
+});
