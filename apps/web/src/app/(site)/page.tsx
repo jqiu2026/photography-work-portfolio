@@ -1,6 +1,8 @@
 import { getMakeUrl, getSite } from "@jerryqiu/sites";
 import type { Metadata } from "next";
 import NextLink from "next/link";
+import { Nexus } from "@/components/home/Nexus";
+import type { RealmLink } from "@/components/home/nexus/realms";
 import { Button } from "@/components/site/ui";
 import { getWriting } from "@/lib/content";
 import { getImage, srcSet } from "@/lib/images";
@@ -49,27 +51,12 @@ export default async function Home() {
     jobTitle: "Photographer",
     sameAs: socials.filter((s) => s.href.startsWith("http")).map((s) => s.href),
   };
-  const rooms = [
-    // TODO(owner): rewrite these in your voice.
-    {
-      title: "Photography",
-      href: getSite("photos").url,
-      text: "Pictures of people at work.",
-      img: getImage("gallery", "jry0022-enhanced-nr"),
-    },
-    {
-      title: "Music",
-      href: getSite("music").url,
-      text: "Things I wrote, and sometimes played.",
-      img: getImage("gallery", "jry0473"),
-    },
-    {
-      title: "Flying",
-      href: getSite("flying").url,
-      text: "Where I've been, from above.",
-      img: getImage("blogs", "day-one-cover"),
-    },
-    { title: "Make", href: getMakeUrl(), text: "Things I build, and what I learned.", img: null },
+  // TODO(owner): rewrite these lines in your voice.
+  const realms: RealmLink[] = [
+    { key: "exposure", site: "Photography", href: getSite("photos").url, line: "Pictures of people at work." },
+    { key: "resonance", site: "Music", href: getSite("music").url, line: "Things I wrote, and sometimes played." },
+    { key: "altitude", site: "Flying", href: getSite("flying").url, line: "Where I've been, from above." },
+    { key: "forge", site: "Make", href: getMakeUrl(), line: "Things I build, and what I learned." },
   ];
   return (
     <div>
@@ -78,31 +65,33 @@ export default async function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
       />
       <div className="hb-wrap">
-        <section className="hb-hero" aria-labelledby="h">
-          <p className="hm-eyebrow">{person.location}</p>
-          <h1 id="h" className="hm-iridescent-text">
-            {person.name}.
-          </h1>
-          <p className="hb-roles">
-            {roles.map((r, i) => (
-              <span key={r}>
-                {r}
-                {i < roles.length - 1 ? <i aria-hidden> · </i> : null}
-              </span>
-            ))}
-            <span className="hb-sr"> in {person.location}</span>
-          </p>
-          {/* TODO(owner): rewrite in your voice. */}
-          <p className="hb-lede">I take photographs, build websites, fly drones and make music. I'm in New York.</p>
-          <div className="hb-row">
-            <Button asChild>
-              <NextLink href="/writing">Read my writing</NextLink>
-            </Button>
-            <Button asChild variant="secondary">
-              <NextLink href="/connect">Get in touch</NextLink>
-            </Button>
-          </div>
-        </section>
+        <Nexus realms={realms}>
+          <section className="hb-hero" aria-labelledby="h">
+            <p className="hm-eyebrow">The Nexus · {person.location}</p>
+            <h1 id="h" className="hm-iridescent-text">
+              {person.name}.
+            </h1>
+            <p className="hb-roles">
+              {roles.map((r, i) => (
+                <span key={r}>
+                  {r}
+                  {i < roles.length - 1 ? <i aria-hidden> · </i> : null}
+                </span>
+              ))}
+              <span className="hb-sr"> in {person.location}</span>
+            </p>
+            {/* TODO(owner): rewrite in your voice. */}
+            <p className="hb-lede">I take photographs, build websites, fly drones and make music. I'm in New York.</p>
+            <div className="hb-row">
+              <Button asChild>
+                <NextLink href="/writing">Read my writing</NextLink>
+              </Button>
+              <Button asChild variant="secondary">
+                <NextLink href="/connect">Get in touch</NextLink>
+              </Button>
+            </div>
+          </section>
+        </Nexus>
 
         <section className="hb-section" aria-labelledby="proof">
           <h2 id="proof" className="hb-h2">
@@ -142,32 +131,6 @@ export default async function Home() {
             <p>I fly drones with a Part 107 certificate.</p>
             <p>I built this site.</p>
             <p>I run the StuyAviators Instagram.</p>
-          </div>
-        </section>
-
-        <section className="hb-section" aria-labelledby="rooms">
-          <h2 id="rooms" className="hb-h2">
-            Four rooms. Knock on any.
-          </h2>
-          <div className="hb-rooms">
-            {rooms.map((r) => (
-              <a key={r.title} href={r.href} className="hb-room" aria-label={`Enter ${r.title.toLowerCase()}`}>
-                {r.img ? (
-                  <img
-                    src={r.img.files[0].src}
-                    srcSet={srcSet(r.img)}
-                    sizes="(min-width: 900px) 22vw, 80vw"
-                    width={r.img.width}
-                    height={r.img.height}
-                    alt=""
-                    loading="lazy"
-                    style={{ backgroundColor: r.img.color }}
-                  />
-                ) : null}
-                <h3>{r.title}</h3>
-                <p>{r.text}</p>
-              </a>
-            ))}
           </div>
         </section>
 
