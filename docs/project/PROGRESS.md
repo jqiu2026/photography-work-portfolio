@@ -36,6 +36,19 @@ Known flaky (pre-existing, not caused by a milestone): `e2e-admin/public.spec.ts
 | PHOTO-M17 | Deployment prep: vercel.json, isolated production build, env example, checklist | `apps/photos/vercel.json` | isolated build passes |
 | PHOTO-M18 | Polish: WCAG 2.2 AA, Lighthouse mobile 80+, CLS under 0.02, 390 and 1440 screenshots light and dark | all | axe clean; Lighthouse recorded |
 
+## Music site (branch `claude/music-site`, owner request 2026-10-27, Q125)
+
+Spec: [other-sites.md](other-sites.md) (P1 and P2), data model in Q126 to Q130. Gates: `pnpm lint`, `pnpm typecheck`, `pnpm test`, plus the music e2e.
+
+| Id | Scope | Status |
+|---|---|---|
+| MUSIC-M1 | `@jerryqiu/scores` (rights, fee pass-through, license text, per-buyer PDF stamp) and `packages/db/src/music.ts` with migration 0018 (works, files, products, bundles, buyers, orders, licenses, downloads, commissions, newsletter); 30 tests | done |
+| MUSIC-M2 | Music app on Holominimal: layout, chrome, maintenance, home, catalog with filters, piece page, listen, performances, about | todo |
+| MUSIC-M3 | Score store: preview, cart, checkout (Stripe adapter or labelled mock), webhook, receipt email, buyer library with sign-in link, watermarked downloads | todo |
+| MUSIC-M4 | Studio (`/studio`): pieces, files and previews, products, bundles, rights, recordings and performances, orders, commissions, subscribers, reports | todo |
+| MUSIC-M5 | P2: commissions page, newsletter with double opt-in, ensemble and institution licenses, bundles in the store | todo |
+| MUSIC-M6 | Tests (unit, e2e, axe), screenshots, deployment notes, docs | todo |
+
 ## Owner to-do (keys and accounts)
 
 Nothing below has been created or spent. Placeholders marked `TODO(owner): needs <KEY>` in code.

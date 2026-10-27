@@ -28,7 +28,8 @@
     "./plan": "./src/plan.ts",
     "./reports": "./src/reports.ts",
     "./gallery-expiry": "./src/gallery-expiry.ts",
-    "./automation": "./src/automation.ts"
+    "./automation": "./src/automation.ts",
+    "./music": "./src/music.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
@@ -43,7 +44,8 @@
     "@neondatabase/serverless": "^1.2.0",
     "drizzle-orm": "^0.45.4",
     "pg": "^8.16.0",
-    "zod": "^4.6.5"
+    "zod": "^4.6.5",
+    "@jerryqiu/scores": "workspace:*"
   },
   "devDependencies": {
     "@electric-sql/pglite": "^0.5.8",
