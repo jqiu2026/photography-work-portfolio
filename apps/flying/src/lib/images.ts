@@ -1,7 +1,13 @@
 import fs from "node:fs";
 import path from "node:path";
-import type { ImageAsset } from "@halation/ui/media";
 
+export type ImageAsset = {
+  width: number;
+  height: number;
+  color: string;
+  blur: string;
+  files: { width: number; src: string }[];
+};
 type Manifest = Record<string, ImageAsset>;
 const cache = new Map<string, Manifest>();
 
@@ -17,12 +23,10 @@ function manifest(group: string): Manifest {
   return m;
 }
 
-export function getImage(group: "gallery" | "projects" | "blogs" | "site", id: string): ImageAsset {
+export function getImage(group: "gallery" | "blogs", id: string): ImageAsset {
   const a = manifest(group)[id];
   if (!a) throw new Error(`Image not found: ${group}/${id}`);
   return a;
 }
 
-export function allImages(group: "gallery" | "projects" | "blogs" | "site") {
-  return Object.entries(manifest(group)).map(([id, a]) => ({ id, ...a }));
-}
+export const srcSet = (a: ImageAsset) => a.files.map((f) => `${f.src} ${f.width}w`).join(", ");

@@ -1,15 +1,24 @@
+import { maintenance } from "@jerryqiu/sites/maintenance";
 import { type NextRequest, NextResponse } from "next/server";
 
 /**
- * Guards /admin: no session cookie means a redirect to /sign-in. This is only the FIRST gate (cheap, signed-cookie
+ * First, maintenance mode (packages/sites/src/maintenance.ts: on by default in a production build, off with
+ * MAINTENANCE_MODE=0): every public route answers with the shared "back soon" page. The admin, its sign-in and the
+ * routes the admin uses stay open (below), plus the defaults: cron, webhooks, auth, health, revalidate.
+ *
+ * Then it guards /admin: no session cookie means a redirect to /sign-in. This is only the FIRST gate (cheap, signed-cookie
  * presence); the admin layout and every Server Action re-check the session and role against the database.
- * Self-contained on purpose: proxy code should not depend on shared modules.
+ * The maintenance module is the only shared code here, and it needs no database.
  * (music., flying. and photo. are separate deployments now; /music and /flying here redirect, see next.config.mjs.)
  */
 const OPEN_SIGNIN = process.env.NODE_ENV === "development" && process.env.DASHBOARD_OPEN_SIGNIN === "true";
 const SESSION_COOKIES = ["authjs.session-token", "__Secure-authjs.session-token"];
 
+const MAINTENANCE_OPEN = ["/admin", "/sign-in", "/api/admin", "/api/storage", "/api/img"];
+
 export function proxy(request: NextRequest) {
+  const down = maintenance(request, MAINTENANCE_OPEN);
+  if (down) return down;
   const { pathname } = request.nextUrl;
 
   if (pathname === "/admin" || pathname.startsWith("/admin/")) {
@@ -30,6 +39,6 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // Skip Next internals, API routes and static asset folders.
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|images|opt|\\.well-known).*)"],
+  // Skip Next internals and static asset folders. API routes are included so maintenance mode can answer them.
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|images|opt).*)"],
 };

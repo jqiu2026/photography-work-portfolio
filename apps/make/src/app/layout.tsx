@@ -1,25 +1,33 @@
-import "@halation/ui/styles.css";
-import { ThemeProvider, ThemeScript } from "@halation/ui";
+import "@holominimal/ui/styles.css";
+import "./holominimal.css";
+import { Theme } from "@holominimal/ui";
+import { getMakeUrl } from "@jerryqiu/sites";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { Maintenance } from "@/components/Maintenance";
+import { fontVars } from "@/lib/fonts";
+import { siteSettings } from "@/lib/site-settings";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_MAKE_URL ?? "https://make.jerryqiu.com"),
-  title: { default: "Make", template: "%s · Make" },
-  description: "Projects I build, with the write-ups of how they work.",
+  metadataBase: new URL(getMakeUrl()),
+  title: { default: "Make · Jerry Qiu", template: "%s · Make · Jerry Qiu" },
+  description: "Projects I build, with write-ups of how they work and what I learned.",
+  other: { "ai-crawlers": "noai, noimageai" },
 };
 
-// Placeholder app (docs/project/17-make-site.md). It borrows the hub theme until Make gets its own preset.
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function MakeLayout({ children }: { children: ReactNode }) {
+  const { general } = await siteSettings("hub");
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className={fontVars}>
       <head>
-        <ThemeScript preset="hub" />
+        <meta name="robots" content="noai, noimageai" />
       </head>
-      <body className="hl-root">
-        <ThemeProvider preset="hub">{children}</ThemeProvider>
+      <body>
+        <Theme theme={{ accent: "green" }}>
+          {general.maintenance ? <Maintenance message={general.maintenanceMessage} /> : children}
+        </Theme>
         <Analytics />
         <SpeedInsights />
       </body>

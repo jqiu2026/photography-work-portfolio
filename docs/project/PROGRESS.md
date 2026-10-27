@@ -36,6 +36,37 @@ Known flaky (pre-existing, not caused by a milestone): `e2e-admin/public.spec.ts
 | PHOTO-M17 | Deployment prep: vercel.json, isolated production build, env example, checklist | `apps/photos/vercel.json` | isolated build passes |
 | PHOTO-M18 | Polish: WCAG 2.2 AA, Lighthouse mobile 80+, CLS under 0.02, 390 and 1440 screenshots light and dark | all | axe clean; Lighthouse recorded |
 
+## Music site (branch `claude/music-site`, owner request 2026-10-27, Q125 to Q135)
+
+Spec: [other-sites.md](other-sites.md). Gates run on 2026-10-27: `pnpm typecheck` clean; unit tests green except one pre-existing failure in `packages/ui` (`test/protection.test.tsx`, "ProtectedImage on the photo site": the photo app dropped Halation protection; not touched here); `pnpm lint` clean except two pre-existing format errors in `packages/sites` (maintenance page files); production e2e for music (axe at 390 and 1440, light and dark, 12 routes, no JS, reduced motion, cross-site rule, mocks absent in production) 107 passed in the first run, then 50 of 50 after the fixes; music maintenance e2e 7 passed; `e2e-admin/music.spec.ts` 5 passed (dev servers, throwaway database). Screenshots: `screenshots/music/`.
+
+| Id | Scope | Status |
+|---|---|---|
+| MUSIC-M1 | `@jerryqiu/scores` (rights, fee pass-through, license text, per-buyer PDF stamp, preview, page count) and `packages/db/src/music.ts` with migration 0018; 32 unit tests | done |
+| MUSIC-M2 | Music app on Holominimal: layout, dock, maintenance, home, catalog with filters, piece page with click-to-play recordings and score preview, listen, performances, about, licensing, privacy | done |
+| MUSIC-M3 | Store: scores and bundles, cart (cookie), checkout (Stripe Checkout or labeled MOCK in development), webhook, receipt email, order page, buyer library with one-time sign-in link, per-buyer stamped downloads with a cap | done |
+| MUSIC-M4 | Studio `/studio`: pieces and rights, direct score uploads (signed PUT locally, Vercel Blob in production), products, bundles, recordings and performances, orders with refunds and download limits, commissions, newsletter send and CSV export, overview reports | done |
+| MUSIC-M5 | P2: commissions page, newsletter with double opt-in, ensemble and institution licenses, bundles in the store | done |
+| MUSIC-M6 | Tests, screenshots, docs | done; see "Not built" below |
+
+Not built (decisions in QUESTIONS.md): playing uploaded audio on the site (recordings are embeds, Q134); passwords for buyers (Q133); tax and multi-currency; scheduled newsletter sends (Q135). Nothing was pushed: the sandbox could not reach GitHub with write access (403), so the work is in local commits on `claude/music-site`.
+
+Owner to-do for music (also in [02-sites-and-deployment.md](02-sites-and-deployment.md)): create the `jq-music` Vercel project (Root Directory `apps/music`), set `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` (a separate endpoint on the music host), `MUSIC_EMAIL_FROM` or `EMAIL_FROM` with `RESEND_API_KEY`, `DATABASE_URL`, `AUTH_SECRET` (same as the hub), `STORAGE_DRIVER=blob` with `BLOB_READ_WRITE_TOKEN`; run `pnpm db:migrate`; enter the real pieces, files and prices in the studio; have a lawyer review the license wording (Q129).
+
+## Other sites: flying, make, hub (branch `claude/other-sites`, stacked on `claude/music-site`; owner request 2026-10-27, Q136 to Q147)
+
+Gates run 2026-10-27 on this branch: `pnpm lint` clean; `pnpm typecheck` clean; unit tests green for aviation (47), db (make 8, flying 6, music 19 and the rest), payments, scores, make, music, web, photos, sites, auth, email (one pre-existing failure in `packages/ui` `protection.test.tsx`, untouched); production e2e (`playwright test`, all specs, production builds of all seven apps) 389 of 394 passed on the first run, the 5 failures (the hub's old index-control tests and a 44px target on one link) were fixed and re-run green; `test:admin` (dev servers, throwaway database) 114 of 118 passed, the 2 failures (a photo shop mock payment and a hub inbox triage) pass when run alone (load flakiness, as noted in "Known flaky"), and 2 did not run; `test:maintenance` 34 of 35 passed, the one failure is the photo `/api/health` answering 503 because the local dev database was not running at that moment. Curated screenshots: `screenshots/music|make|flying|hub/`. The smoke screenshots under `screenshots/phase-1/` were not re-committed (about 75 MB of churn).
+
+| Id | Scope | Status |
+|---|---|---|
+| OTHER-M1 | `@jerryqiu/aviation` (wind, density altitude, wind triangle, trip, weight and balance, METAR and TAF decoding, flight publishing rules): 47 tests | done |
+| OTHER-M2 | Make: data layer (migration 0019, 8 tests), Holominimal site (home, projects by place, project pages, tool wall, now, about), checked screenshots, studio, `/api/img` public route; hub sign-in accepts the make origin | done |
+| OTHER-M3 | Flying: data layer (migration 0020, 6 tests), Holominimal site, five tools, weather decoder with lookup, database-backed map, studio for airports and flights | done |
+| OTHER-M4 | Hub public site on Holominimal (home, about, connect, writing, legal, 404); admin untouched | done |
+| OTHER-M5 | Tests: `e2e-admin/make.spec.ts`, `e2e-admin/flying.spec.ts`, production specs updated (routes, static tier, keyboard, cross-site, mocks), music spec still green | done, see log |
+
+Not built (documented defaults): a bundled airport database, airspace, terrain, NOTAMs; a CFI booking flow; make project import from GitHub; the hub admin on Holominimal.
+
 ## Owner to-do (keys and accounts)
 
 Nothing below has been created or spent. Placeholders marked `TODO(owner): needs <KEY>` in code.

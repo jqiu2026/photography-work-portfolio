@@ -1,15 +1,14 @@
-import "@halation/ui/styles.css";
+import "@holominimal/ui/styles.css";
+import "../holominimal.css";
+import { Theme } from "@holominimal/ui";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { ThemeScript } from "@jerryqiu/sites/theme-script";
-import { ThemeProvider } from "@halation/ui";
-import { ScreenshotGuard } from "@halation/ui/media";
-import { SmoothScroll } from "@halation/ui/motion";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { fontVars } from "@/lib/fonts";
+import { HubChrome } from "@/components/site/HubChrome";
 import { Maintenance } from "@/components/site/Maintenance";
 import { person } from "@/content/site";
+import { siteFontVars } from "@/lib/site-fonts";
 import { siteSettings } from "@/lib/site-settings";
 
 const base =
@@ -34,21 +33,20 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function SiteLayout({ children }: { children: ReactNode }) {
-  const { general, protection } = await siteSettings("hub");
+  const { general } = await siteSettings("hub");
   return (
-    <html lang="en" suppressHydrationWarning className={fontVars}>
+    <html lang="en" suppressHydrationWarning className={siteFontVars}>
       <head>
-        <ThemeScript preset="hub" />
         <meta name="robots" content="noai, noimageai" />
       </head>
-      <body className="hl-root">
-        <ThemeProvider preset="hub">
-          <ScreenshotGuard level={protection.level}>
-            <SmoothScroll>
-              {general.maintenance ? <Maintenance message={general.maintenanceMessage} /> : children}
-            </SmoothScroll>
-          </ScreenshotGuard>
-        </ThemeProvider>
+      <body>
+        <Theme theme={{ accent: "blue" }}>
+          {general.maintenance ? (
+            <Maintenance message={general.maintenanceMessage} />
+          ) : (
+            <HubChrome>{children}</HubChrome>
+          )}
+        </Theme>
         <Analytics />
         <SpeedInsights />
       </body>

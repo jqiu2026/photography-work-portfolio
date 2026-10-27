@@ -3,6 +3,7 @@ export const photos = "http://localhost:4002";
 export const docs = "http://localhost:4001";
 export const music = "http://localhost:4003";
 export const flying = "http://localhost:4004";
+export const make = "http://localhost:4005";
 
 /** Every public route of every site. */
 export const routes: { site: string; path: string; base: string }[] = [
@@ -19,12 +20,42 @@ export const routes: { site: string; path: string; base: string }[] = [
     "/accessibility",
     "/nope",
   ].map((path) => ({ site: "hub", path, base: hub })),
-  ...["/", "/listen", "/performances", "/about"].map((path) => ({
+  ...[
+    "/",
+    "/compositions",
+    "/scores",
+    "/listen",
+    "/performances",
+    "/commission",
+    "/newsletter",
+    "/about",
+    "/licensing",
+    "/privacy",
+    "/cart",
+    "/library",
+  ].map((path) => ({
     site: "music",
     path,
     base: music,
   })),
-  ...["/", "/log", "/aircraft", "/about"].map((path) => ({
+  ...["/", "/projects", "/now", "/tools", "/about"].map((path) => ({
+    site: "make",
+    path,
+    base: make,
+  })),
+  ...[
+    "/",
+    "/log",
+    "/map",
+    "/aircraft",
+    "/about",
+    "/tools",
+    "/tools/crosswind",
+    "/tools/density-altitude",
+    "/tools/weather",
+    "/tools/trip",
+    "/tools/weight-balance",
+  ].map((path) => ({
     site: "flying",
     path,
     base: flying,

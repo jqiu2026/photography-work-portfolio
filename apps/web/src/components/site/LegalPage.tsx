@@ -1,21 +1,17 @@
-import { Container, Prose, Section } from "@halation/ui";
 import type { ReactNode } from "react";
 import { getLegalPage } from "@/lib/content-db";
-import { RenderMarkdownBare } from "@jerryqiu/render";
+import { Markdown } from "./Markdown";
 import { PageHeader } from "./PageHeader";
-import { SiteShell } from "./SiteShell";
 
 /** Shared layout for legal pages. All legal text is a draft for professional review (see QUESTIONS.md Q13). */
 export function LegalPage({ title, updated, children }: { title: string; updated: string; children: ReactNode }) {
   return (
-    <SiteShell>
+    <div>
       <PageHeader eyebrow="Legal" title={title} intro={`Last updated ${updated}. Plain-language draft.`} />
-      <Section style={{ paddingTop: 0 }}>
-        <Container size="sm">
-          <Prose>{children}</Prose>
-        </Container>
-      </Section>
-    </SiteShell>
+      <div className="hb-wrap hb-section">
+        <div className="hm-prose hb-prose">{children}</div>
+      </div>
+    </div>
   );
 }
 
@@ -26,7 +22,7 @@ export async function LegalOrBuiltin({ slug, fallback }: { slug: string; fallbac
   const updated = new Date(page.updatedAt).toLocaleDateString("en-US", { month: "long", year: "numeric" });
   return (
     <LegalPage title={page.title} updated={updated}>
-      <RenderMarkdownBare source={page.body} />
+      <Markdown source={page.body} />
     </LegalPage>
   );
 }

@@ -282,3 +282,22 @@ describe("the platform subscription", () => {
     ).toBeNull();
   });
 });
+
+describe("checkout metadata", () => {
+  it("copies extra metadata to the session and the payment", () => {
+    const b = new URLSearchParams(
+      checkoutBody({
+        invoiceId: "o1",
+        invoiceNumber: "M-000001",
+        amountCents: 1500,
+        currency: "usd",
+        description: "Scores",
+        successUrl: "https://x/ok",
+        cancelUrl: "https://x/no",
+        metadata: { site: "music" },
+      }),
+    );
+    expect(b.get("metadata[site]")).toBe("music");
+    expect(b.get("payment_intent_data[metadata][site]")).toBe("music");
+  });
+});

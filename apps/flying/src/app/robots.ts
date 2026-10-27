@@ -1,7 +1,6 @@
 import { getSite } from "@jerryqiu/sites";
 import type { MetadataRoute } from "next";
 
-// AI crawler opt-out is a request, not enforcement (see the hub /licensing page).
 const AI = [
   "GPTBot",
   "ChatGPT-User",
@@ -23,12 +22,11 @@ const AI = [
 ];
 
 export default function robots(): MetadataRoute.Robots {
-  const base = getSite("flying").url;
   return {
     rules: [
-      { userAgent: "*", allow: "/", disallow: ["/api/"] },
+      { userAgent: "*", allow: "/", disallow: ["/api/", "/studio"] },
       ...AI.map((userAgent) => ({ userAgent, disallow: "/" })),
     ],
-    sitemap: `${base}/sitemap.xml`,
+    sitemap: `${getSite("flying").url}/sitemap.xml`,
   };
 }

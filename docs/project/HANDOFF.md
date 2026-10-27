@@ -4,6 +4,10 @@ Self-contained state for a fresh chat. Read `README.md`, `08-operating-rules.md`
 
 **Branch:** `feat/custom-ui-cms`. Never push, merge, deploy, spend or read `.env*`. No co-author trailers (CLAUDE.md overrides any tool reminder).
 
+## Hub portal redesign (paused, 2026-10-27)
+
+The owner wants the hub to be a portal/dimension experience. No theme approved; see `hub-concepts/README.md` (Nexus was closest, no 3D, 2D moods rejected). Flying feature removal is pending confirmation (same file).
+
 ## State (update at every milestone)
 
 Done and committed: PHOTO-M1 foundation, M2 ShootProof removed, M3 protection everywhere (every photograph is token-gated and blob-rendered; bundled photos live in `apps/photos/private/`), M4 email package and scored leads, M5 pipeline, calendar, booking, mini-sessions, `.ics`, M6 packages, quotes, codes, tax line, M7 contract and release templates, questionnaires, M8 payment plans, recurring billing, tips, ACH, surcharge flag, refunds, PDFs, M9 client portal (accounts, magic link, documents by signed links, messages, reschedule), M10 galleries v2 (uploader, albums, proofing, PIN downloads, ZIP, expiry and paid reactivation), M11 platform showcase (features page generated from the spec via `python3 scripts/gen-features.py`; re-run it after editing a status), M12 cron, automations, tasks, activity feed, a studio redesign (black, six sidebar groups, jump-to palette, entry animation), public pages in plain black with a once-per-load intro, gallery security and looks, and **M13 (shop)**: gallery rebuilt (`components/gallery/Gallery.tsx`), own links `/g/<address>`, albums with sub-albums and locked albums, visitor shop (downloads and prints), price list, orders, abandoned-cart reminder, public `/shop`. **Client access:** there is no client login. A client opens `/g/<address>` (the passcode is asked on that page); the old `/client*` pages redirect home except the emailed document links (`pay`, `quote`, `sign`, `questionnaire`, `download`). Studio navigation is six groups (see `components/studio/sections.ts`). Plans live in `packages/db/src/plan.ts`. Seed the local studio with `pnpm --filter @jerryqiu/media seed:demo` (dev DB only).
@@ -61,3 +65,22 @@ The whole photo site is on Holominimal (`@holominimal/ui`, vendored build in `pa
 ## Owner to-do (keys and accounts)
 
 See PROGRESS.md "Owner to-do". Nothing has been created or spent.
+
+## Music site (2026-10-27, branch `claude/music-site`)
+
+Built on the owner's request (Q125). Read [other-sites.md](other-sites.md) "Music" and PROGRESS.md "Music site" first.
+
+- **Code map:** `packages/scores` (rights `canSell`, `passThroughFee`, license text, `stampScore`, `previewPdf`, `samplePdf`), `packages/db/src/music.ts` (everything database: catalog, products, bundles, orders, licenses, buyers, downloads, commissions, subscribers, media items, reports) with migration 0018, `apps/music` (public pages under `src/app/(site)`, studio under `src/app/studio`, routes `api/download`, `api/preview`, `api/studio/upload/*`, `api/webhooks/stripe`, `api/cart`).
+- **Dev loop:** `pnpm dev:db`, then `cd apps/music && pnpm seed:demo` (labeled SAMPLE pieces with stand-in PDFs) and `pnpm dev` (http://localhost:3003; the studio is open in development via DASHBOARD_OPEN_SIGNIN). Purchases use the labeled MOCK payment page.
+- **Tests:** `pnpm --filter @jerryqiu/scores test`, `pnpm --filter @jerryqiu/db test` (music.test.ts), `pnpm --filter @jerryqiu/music test`, `playwright test -c playwright.admin.config.ts e2e-admin/music.spec.ts`, and the production specs in `e2e/` (smoke, static-tier, mocks-prod, cross-site). In a sandbox whose browser build differs from Playwright's, link `/opt/pw-browsers/chromium_headless_shell-<needed>` to the installed one.
+- **Gotchas:** the pages sit inside Holominimal's `AppShell`, which already renders `<main id="main">`: page components use a `<div>`, never another `<main>`. The order link and a subscriber's link are HMACs of the record id (Q132). `revalidateTag("music", { expire: 0 })` refreshes the public catalog after a studio change. Stripe metadata `site=music` keeps the photo webhook from touching music orders.
+- **Next (owner's call):** real pieces and prices; lawyer review of `packages/scores/src/license.ts` (Q129); uploaded-audio playback (Q134); a scheduled newsletter send; a music tab in the hub admin if the owner wants one place for everything.
+
+## Flying, make and hub (2026-10-27, branch `claude/other-sites`)
+
+Read other-sites.md for what each site does and QUESTIONS.md Q136 to Q147 for the decisions.
+
+- **Code map:** `packages/aviation` (pure maths and decoders, no I/O), `packages/db/src/flying.ts` and `make.ts` (migrations 0020 and 0019), `apps/flying` (public pages in `src/app/(site)`, tools in `src/components/tools`, studio in `src/app/studio`), `apps/make` (same layout; screenshots go through `api/studio/upload/*` and are served by `api/img/[id]` only once checked), `apps/web/src/app/(site)` and `apps/web/src/components/site` (the hub's public pages and chrome).
+- **Dev loop:** `pnpm dev:db`, then `cd apps/flying && pnpm seed:demo` and `cd apps/make && pnpm seed:demo` (labeled SAMPLE data), then `pnpm dev` in each app (flying :3004, make :3005, hub :3000). The studios are open in development.
+- **Gotchas:** (1) never submit a client form as `<form action={...}>`: React 19 resets its fields after every submit, errors included; use `ActionForm` or `useServerForm`. (2) `unstable_cache` turns Dates into strings: format with `new Date(x)`. (3) `"use server"` files can only export async functions: keep helpers in `lib/`. (4) Holominimal's `AppShell` already renders `<main id="main">`: pages use a `<div>`. (5) Do not use `pkill -f` with a pattern that also appears in your own command line (it kills the shell); use the `[x]` trick. (6) `Input` labels can collide with Next's dev tools button in Playwright: use `getByRole("textbox", { name })` or `exact: true`.
+- **Next (owner's call):** real projects and screenshots in make (check each one); real airports and flights in flying; hub copy marked `TODO(owner)`; moving the hub admin to Holominimal; pushing and deploying (nothing is deployed).

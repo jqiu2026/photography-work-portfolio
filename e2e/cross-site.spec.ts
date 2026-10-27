@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { flying, hub, music, photos, routes } from "./routes";
+import { flying, hub, make, music, photos, routes } from "./routes";
 
 /**
  * Cross-site rule (12-vision-v2.md): photography, music and flying reference nothing else in the family. The ONLY link
@@ -10,6 +10,7 @@ const worlds = {
   photos: { origin: new URL(photos).origin, prefix: "" },
   music: { origin: new URL(music).origin, prefix: "" },
   flying: { origin: new URL(flying).origin, prefix: "" },
+  make: { origin: new URL(make).origin, prefix: "" },
 } as const;
 
 for (const r of routes.filter((x) => x.site in worlds)) {

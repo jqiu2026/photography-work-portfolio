@@ -26,3 +26,6 @@ export function getImage(group: "gallery" | "projects" | "blogs" | "site", id: s
 export function allImages(group: "gallery" | "projects" | "blogs" | "site") {
   return Object.entries(manifest(group)).map(([id, a]) => ({ id, ...a }));
 }
+
+/** The `srcset` attribute for an optimized image. */
+export const srcSet = (a: ImageAsset) => a.files.map((f) => `${f.src} ${f.width}w`).join(", ");

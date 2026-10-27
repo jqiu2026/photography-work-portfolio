@@ -1,14 +1,10 @@
-import { Image } from "@halation/ui/media";
-import { Condense, Scene, Settle, StageProvider, Streak, Threshold } from "@halation/ui/stage";
-import { getSite } from "@jerryqiu/sites";
+import { getMakeUrl, getSite } from "@jerryqiu/sites";
 import type { Metadata } from "next";
 import NextLink from "next/link";
-import { Footer } from "@/components/site/HubFooter";
-import { HubIndex } from "@/components/site/HubIndex";
-import "@/components/home/home.css";
-import { getImage } from "@/lib/images";
-import { getPerson } from "@/lib/profile";
+import { Button } from "@/components/site/ui";
 import { getWriting } from "@/lib/content";
+import { getImage, srcSet } from "@/lib/images";
+import { getPerson } from "@/lib/profile";
 
 export const metadata: Metadata = {
   title: { absolute: "Jerry Qiu" },
@@ -44,9 +40,6 @@ export default async function Home() {
   const { person, socials } = await getPerson();
   const writing = await getWriting();
   const [featured, ...rest] = writing;
-  const photos = getSite("photos");
-  const music = getSite("music");
-  const flying = getSite("flying");
   const hubUrl = getSite("hub").url;
   const jsonLd = {
     "@context": "https://schema.org",
@@ -56,181 +49,186 @@ export default async function Home() {
     jobTitle: "Photographer",
     sameAs: socials.filter((s) => s.href.startsWith("http")).map((s) => s.href),
   };
-  const worlds = [
+  const rooms = [
+    // TODO(owner): rewrite these in your voice.
     {
-      site: photos,
-      accent: "red" as const,
       title: "Photography",
-      // TODO(owner): rewrite in your voice.
+      href: getSite("photos").url,
       text: "Pictures of people at work.",
       img: getImage("gallery", "jry0022-enhanced-nr"),
-      alt: "",
     },
     {
-      site: music,
-      accent: "amber" as const,
       title: "Music",
+      href: getSite("music").url,
       text: "Things I wrote, and sometimes played.",
       img: getImage("gallery", "jry0473"),
-      alt: "",
     },
     {
-      site: flying,
-      accent: "green" as const,
       title: "Flying",
+      href: getSite("flying").url,
       text: "Where I've been, from above.",
       img: getImage("blogs", "day-one-cover"),
-      alt: "",
     },
+    { title: "Make", href: getMakeUrl(), text: "Things I build, and what I learned.", img: null },
   ];
-
   return (
-    <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <StageProvider world="hub">
-        <a className="hl-skip" href="#main">
-          Skip to content
-        </a>
-        <HubIndex
-          routes={[
-            { label: "Writing", href: "/writing" },
-            { label: "About", href: "/about" },
-            { label: "Connect", href: "/connect" },
-          ]}
-        />
-        <main id="main" className="home">
-          <Scene id="start" label="Jerry Qiu" className="home-ignition" as="header">
-            <div className="home-wrap">
-              <p className="hl-eyebrow">{person.location}</p>
-              <Streak as="h1" text={`${person.name}.`} className="home-name" />
-              <Settle as="p" className="home-roles" when="load">
-                {roles.map((r, i) => (
-                  <span key={r}>
-                    {r}
-                    {i < roles.length - 1 ? <i aria-hidden> · </i> : null}
-                  </span>
-                ))}
-                <span className="hl-sr-only"> in {person.location}</span>
-              </Settle>
-              {/* TODO(owner): rewrite in your voice. */}
-              <Settle as="p" className="home-lede" when="load">
-                I take photographs, build websites, fly drones and make music. I'm in New York.
-              </Settle>
-              <p className="home-cue" aria-hidden>
-                Scroll
-              </p>
-            </div>
-          </Scene>
+    <div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
+      />
+      <div className="hb-wrap">
+        <section className="hb-hero" aria-labelledby="h">
+          <p className="hm-eyebrow">{person.location}</p>
+          <h1 id="h" className="hm-iridescent-text">
+            {person.name}.
+          </h1>
+          <p className="hb-roles">
+            {roles.map((r, i) => (
+              <span key={r}>
+                {r}
+                {i < roles.length - 1 ? <i aria-hidden> · </i> : null}
+              </span>
+            ))}
+            <span className="hb-sr"> in {person.location}</span>
+          </p>
+          {/* TODO(owner): rewrite in your voice. */}
+          <p className="hb-lede">I take photographs, build websites, fly drones and make music. I'm in New York.</p>
+          <div className="hb-row">
+            <Button asChild>
+              <NextLink href="/writing">Read my writing</NextLink>
+            </Button>
+            <Button asChild variant="secondary">
+              <NextLink href="/connect">Get in touch</NextLink>
+            </Button>
+          </div>
+        </section>
 
-          <Scene id="proof" label="Proof" className="home-proof">
-            <div className="home-wrap">
-              <Condense text="A few of the things I've shot." className="home-h2" />
-              <ul className="home-planes">
-                {proof.map((p, i) => (
-                  <li key={p.id} style={{ ["--i" as string]: i } as React.CSSProperties}>
-                    <figure>
-                      <Image asset={getImage("gallery", p.id)} alt={p.alt} sizes="(min-width: 900px) 30vw, 70vw" />
-                      <figcaption className="hl-eyebrow">{p.caption}</figcaption>
-                    </figure>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Scene>
+        <section className="hb-section" aria-labelledby="proof">
+          <h2 id="proof" className="hb-h2">
+            A few of the things I've shot.
+          </h2>
+          <ul className="hb-strip">
+            {proof.map((p) => {
+              const img = getImage("gallery", p.id);
+              return (
+                <li key={p.id}>
+                  <figure>
+                    <img
+                      src={img.files[1]?.src ?? img.files[0].src}
+                      srcSet={srcSet(img)}
+                      sizes="(min-width: 900px) 20vw, 60vw"
+                      width={img.width}
+                      height={img.height}
+                      alt={p.alt}
+                      loading="lazy"
+                      style={{ backgroundColor: img.color }}
+                    />
+                    <figcaption>{p.caption}</figcaption>
+                  </figure>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
 
-          <Scene id="what" label="What I do" className="home-what" pin={2.4}>
-            <div className="home-wrap home-steps">
-              {/* TODO(owner): rewrite these four lines in your voice. Facts: original About page. */}
-              <p style={{ ["--c" as string]: 0.3 } as React.CSSProperties}>
-                Photography is how I started, and it is still how I pay attention.
-              </p>
-              <p style={{ ["--c" as string]: 0.43 } as React.CSSProperties}>
-                I fly drones with a Part 107 certificate.
-              </p>
-              <p style={{ ["--c" as string]: 0.57 } as React.CSSProperties}>I built this site.</p>
-              <p style={{ ["--c" as string]: 0.7 } as React.CSSProperties}>I run the StuyAviators Instagram.</p>
-            </div>
-          </Scene>
+        <section className="hb-section" aria-labelledby="what">
+          <h2 id="what" className="hb-h2">
+            What I do
+          </h2>
+          <div className="hb-lines">
+            {/* TODO(owner): rewrite these four lines in your voice. Facts: original About page. */}
+            <p>Photography is how I started, and it is still how I pay attention.</p>
+            <p>I fly drones with a Part 107 certificate.</p>
+            <p>I built this site.</p>
+            <p>I run the StuyAviators Instagram.</p>
+          </div>
+        </section>
 
-          <Scene id="rooms" label="Three rooms" className="home-rooms">
-            <div className="home-wrap">
-              <Condense text="Three rooms. Knock on any." className="home-h2" />
-              <div className="home-doors">
-                {worlds.map((w) => (
-                  <Threshold
-                    key={w.title}
-                    href={w.site.url}
-                    title={w.title}
-                    label={`Enter ${w.title.toLowerCase()}`}
-                    accent={w.accent}
-                    media={<Image asset={w.img} alt={w.alt} sizes="(min-width: 900px) 28vw, 80vw" fill />}
-                  >
-                    {w.text}
-                  </Threshold>
-                ))}
-              </div>
-            </div>
-          </Scene>
+        <section className="hb-section" aria-labelledby="rooms">
+          <h2 id="rooms" className="hb-h2">
+            Four rooms. Knock on any.
+          </h2>
+          <div className="hb-rooms">
+            {rooms.map((r) => (
+              <a key={r.title} href={r.href} className="hb-room" aria-label={`Enter ${r.title.toLowerCase()}`}>
+                {r.img ? (
+                  <img
+                    src={r.img.files[0].src}
+                    srcSet={srcSet(r.img)}
+                    sizes="(min-width: 900px) 22vw, 80vw"
+                    width={r.img.width}
+                    height={r.img.height}
+                    alt=""
+                    loading="lazy"
+                    style={{ backgroundColor: r.img.color }}
+                  />
+                ) : null}
+                <h3>{r.title}</h3>
+                <p>{r.text}</p>
+              </a>
+            ))}
+          </div>
+        </section>
 
-          <Scene id="writing" label="Writing" className="home-writing">
-            <div className="home-wrap">
-              <p className="hl-eyebrow">Writing</p>
-              {featured ? (
-                <NextLink href={`/writing/${featured.slug}`} className="home-featured">
-                  {featured.cover ? (
-                    <span className="home-featured__img">
-                      <Image asset={featured.cover} alt="" sizes="(min-width: 900px) 50vw, 100vw" />
-                    </span>
-                  ) : null}
-                  <span className="home-featured__text">
-                    <time dateTime={featured.date} className="hl-eyebrow">
-                      {fmt(featured.date)}
-                    </time>
-                    <span className="home-featured__title">{featured.title}</span>
-                    {featured.summary ? <span className="home-featured__sum">{featured.summary}</span> : null}
-                  </span>
-                </NextLink>
+        <section className="hb-section" aria-labelledby="writing">
+          <h2 id="writing" className="hb-h2">
+            Writing
+          </h2>
+          {featured ? (
+            <NextLink href={`/writing/${featured.slug}`} className="hb-featured">
+              {featured.cover ? (
+                <img
+                  src={featured.cover.files[1]?.src ?? featured.cover.files[0].src}
+                  srcSet={srcSet(featured.cover)}
+                  sizes="(min-width: 900px) 40vw, 100vw"
+                  width={featured.cover.width}
+                  height={featured.cover.height}
+                  alt=""
+                  loading="lazy"
+                  style={{ backgroundColor: featured.cover.color }}
+                />
               ) : null}
-              {rest.length ? (
-                <ul className="home-list">
-                  {rest.map((p) => (
-                    <li key={p.slug}>
-                      <NextLink href={`/writing/${p.slug}`}>
-                        <span>{p.title}</span>
-                        <time dateTime={p.date} className="hl-eyebrow">
-                          {fmt(p.date)}
-                        </time>
-                      </NextLink>
-                    </li>
-                  ))}
-                </ul>
-              ) : null}
-              <NextLink href="/writing" className="home-more">
-                All writing →
-              </NextLink>
-            </div>
-          </Scene>
+              <span className="hb-stack">
+                <time dateTime={featured.date} className="hb-mono">
+                  {fmt(featured.date)}
+                </time>
+                <strong style={{ fontSize: "var(--hm-text-2xl)", fontWeight: 500 }}>{featured.title}</strong>
+                {featured.summary ? <span className="hb-muted">{featured.summary}</span> : null}
+              </span>
+            </NextLink>
+          ) : null}
+          {rest.map((p) => (
+            <NextLink key={p.slug} href={`/writing/${p.slug}`} className="hb-post">
+              <strong>{p.title}</strong>
+              <time dateTime={p.date} className="hb-mono">
+                {fmt(p.date)}
+              </time>
+            </NextLink>
+          ))}
+          <p>
+            <NextLink className="hb-link" href="/writing">
+              All writing
+            </NextLink>
+          </p>
+        </section>
 
-          <Scene id="hello" label="Say hello" className="home-hello">
-            <div className="home-wrap">
-              <Condense text="Say hello." className="home-hello__title" />
-              {/* TODO(owner): rewrite in your voice. */}
-              <Settle as="p" className="home-lede">
-                If something here made you curious, tell me. I read everything.
-              </Settle>
-              <div className="home-actions">
-                <NextLink href="/connect" className="home-btn">
-                  Get in touch
-                </NextLink>
-                <a href={`mailto:${person.email}`} className="home-btn home-btn--ghost">
-                  {person.email}
-                </a>
-              </div>
-            </div>
-          </Scene>
-        </main>
-        <Footer person={person} socials={socials} worlds={worlds.map((w) => ({ label: w.title, href: w.site.url }))} />
-      </StageProvider>
-    </>
+        <section className="hb-section" aria-labelledby="hello">
+          <h2 id="hello" className="hb-h2">
+            Say hello.
+          </h2>
+          {/* TODO(owner): rewrite in your voice. */}
+          <p className="hb-lede">If something here made you curious, tell me. I read everything.</p>
+          <div className="hb-row">
+            <Button asChild>
+              <NextLink href="/connect">Get in touch</NextLink>
+            </Button>
+            <Button asChild variant="ghost">
+              <a href={`mailto:${person.email}`}>{person.email}</a>
+            </Button>
+          </div>
+        </section>
+      </div>
+    </div>
   );
 }

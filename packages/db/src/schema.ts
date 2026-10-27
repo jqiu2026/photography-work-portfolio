@@ -1,8 +1,10 @@
 import { sql } from "drizzle-orm";
 import {
+  type AnyPgColumn,
   bigserial,
   boolean,
   date,
+  doublePrecision,
   index,
   integer,
   jsonb,
@@ -276,6 +278,8 @@ export const musicItems = pgTable("music_items", {
   embedId: text("embed_id"),
   audioMediaId: uuid("audio_media_id").references(() => media.id),
   coverMediaId: uuid("cover_media_id").references(() => media.id),
+  /** the piece this recording or performance is of (null for an item that is not tied to a catalog entry) */
+  workId: uuid("work_id").references((): AnyPgColumn => musicWorks.id),
   rights: rightsEnum("rights").notNull().default("original"),
   needsReview: boolean("needs_review").notNull().default(false),
   featured: boolean("featured").notNull().default(false),
@@ -1652,3 +1656,366 @@ export const studioApiKeys = pgTable("studio_api_keys", {
   revokedAt: timestamp("revoked_at", { withTimezone: true }),
 });
 export type StudioApiKey = typeof studioApiKeys.$inferSelect;
+
+/*
+ * Music: the catalog, the score store, buyers, licenses, commissions and the newsletter (apps/music). Prices are cents.
+ * A work is a piece of music; a product is something sold about it (a score at a license tier, or a bundle).
+ */
+export const workStatusEnum = pgEnum("music_work_status", ["draft", "published"]);
+export const workRightsEnum = pgEnum("music_work_rights", [
+  "original",
+  "public-domain-arrangement",
+  "arrangement-copyrighted",
+]);
+export const scoreFileKindEnum = pgEnum("music_file_kind", [
+  "full-score",
+  "parts",
+  "piano-reduction",
+  "midi",
+  "practice-audio",
+  "other",
+]);
+export const productKindEnum = pgEnum("music_product_kind", ["score", "bundle"]);
+export const licenseTierEnum = pgEnum("music_license_tier", ["personal", "ensemble", "institution"]);
+export const musicOrderStatusEnum = pgEnum("music_order_status", ["pending", "paid", "refunded", "canceled"]);
+export const commissionStatusEnum = pgEnum("music_commission_status", [
+  "new",
+  "talking",
+  "accepted",
+  "declined",
+  "done",
+]);
+
+export const musicWorks = pgTable(
+  "music_works",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    slug: text("slug").notNull(),
+    title: text("title").notNull(),
+    year: integer("year"),
+    /** the forces as written on the score, for example "2 trumpets, horn, trombone" */
+    forces: text("forces"),
+    /** searchable instrument tags, lowercase, for example ["trombone", "brass quartet"] */
+    instruments: jsonb("instruments").$type<string[]>().notNull().default(sql`'[]'::jsonb`),
+    genre: text("genre"),
+    difficulty: text("difficulty"),
+    durationSec: integer("duration_sec"),
+    summary: text("summary"),
+    programNote: text("program_note"),
+    rightsType: workRightsEnum("rights_type").notNull().default("original"),
+    /** a license for an arrangement of a copyrighted work is on file: unlocks the store for that piece */
+    licenseOnFile: boolean("license_on_file").notNull().default(false),
+    licenseNote: text("license_note"),
+    status: workStatusEnum("status").notNull().default("draft"),
+    featured: boolean("featured").notNull().default(false),
+    coverMediaId: uuid("cover_media_id").references(() => media.id),
+    sort: integer("sort").notNull().default(0),
+    ...stamps,
+  },
+  (t) => [uniqueIndex("music_works_slug_idx").on(t.slug), index("music_works_status_idx").on(t.status, t.sort)],
+);
+
+/** A deliverable file of a work: the full score, parts, a reduction, MIDI or practice audio. Stored privately. */
+export const musicScoreFiles = pgTable(
+  "music_score_files",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    workId: uuid("work_id")
+      .notNull()
+      .references(() => musicWorks.id),
+    kind: scoreFileKindEnum("kind").notNull().default("full-score"),
+    label: text("label").notNull(),
+    filename: text("filename").notNull(),
+    mime: text("mime").notNull().default("application/pdf"),
+    storageKey: text("storage_key").notNull(),
+    bytes: integer("bytes").notNull().default(0),
+    pages: integer("pages"),
+    /** free preview: the first pages are shown to everyone, never the file itself */
+    previewPages: integer("preview_pages").notNull().default(2),
+    version: integer("version").notNull().default(1),
+    sort: integer("sort").notNull().default(0),
+    ...stamps,
+  },
+  (t) => [index("music_score_files_work_idx").on(t.workId, t.sort)],
+);
+
+export const musicProducts = pgTable(
+  "music_products",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    kind: productKindEnum("kind").notNull().default("score"),
+    /** null for a bundle */
+    workId: uuid("work_id").references(() => musicWorks.id),
+    title: text("title").notNull(),
+    description: text("description"),
+    tier: licenseTierEnum("tier").notNull().default("personal"),
+    priceCents: integer("price_cents").notNull(),
+    /** which files the buyer gets; empty means every file of the work */
+    fileIds: jsonb("file_ids").$type<string[]>().notNull().default(sql`'[]'::jsonb`),
+    active: boolean("active").notNull().default(true),
+    sort: integer("sort").notNull().default(0),
+    ...stamps,
+  },
+  (t) => [index("music_products_work_idx").on(t.workId)],
+);
+
+export const musicBundleItems = pgTable(
+  "music_bundle_items",
+  {
+    bundleId: uuid("bundle_id")
+      .notNull()
+      .references(() => musicProducts.id),
+    productId: uuid("product_id")
+      .notNull()
+      .references(() => musicProducts.id),
+  },
+  (t) => [primaryKey({ columns: [t.bundleId, t.productId] })],
+);
+
+export const musicBuyers = pgTable(
+  "music_buyers",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    email: text("email").notNull(),
+    name: text("name"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex("music_buyers_email_idx").on(t.email)],
+);
+
+/** One-time sign-in links for the buyer library. Only a hash of the token is stored. */
+export const musicBuyerLinks = pgTable(
+  "music_buyer_links",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    buyerId: uuid("buyer_id")
+      .notNull()
+      .references(() => musicBuyers.id),
+    tokenHash: text("token_hash").notNull(),
+    expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+    usedAt: timestamp("used_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex("music_buyer_links_hash_idx").on(t.tokenHash)],
+);
+
+export const musicOrders = pgTable(
+  "music_orders",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    seq: bigserial("seq", { mode: "number" }).notNull(),
+    buyerId: uuid("buyer_id").references(() => musicBuyers.id),
+    email: text("email").notNull(),
+    holderName: text("holder_name").notNull(),
+    /** the ensemble or institution a non-personal license names */
+    organization: text("organization"),
+    status: musicOrderStatusEnum("status").notNull().default("pending"),
+    subtotalCents: integer("subtotal_cents").notNull(),
+    discountCents: integer("discount_cents").notNull().default(0),
+    feeCents: integer("fee_cents").notNull().default(0),
+    totalCents: integer("total_cents").notNull(),
+    currency: text("currency").notNull().default("usd"),
+    provider: text("provider"),
+    providerRef: text("provider_ref"),
+    /** the link in the receipt email: opens the order and its downloads without signing in */
+    accessTokenHash: text("access_token_hash").notNull(),
+    paidAt: timestamp("paid_at", { withTimezone: true }),
+    refundedAt: timestamp("refunded_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    uniqueIndex("music_orders_seq_idx").on(t.seq),
+    uniqueIndex("music_orders_access_idx").on(t.accessTokenHash),
+    index("music_orders_buyer_idx").on(t.buyerId),
+  ],
+);
+
+export const musicOrderLines = pgTable(
+  "music_order_lines",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    orderId: uuid("order_id")
+      .notNull()
+      .references(() => musicOrders.id),
+    productId: uuid("product_id")
+      .notNull()
+      .references(() => musicProducts.id),
+    workId: uuid("work_id").references(() => musicWorks.id),
+    title: text("title").notNull(),
+    tier: licenseTierEnum("tier").notNull(),
+    priceCents: integer("price_cents").notNull(),
+    fileIds: jsonb("file_ids").$type<string[]>().notNull().default(sql`'[]'::jsonb`),
+  },
+  (t) => [index("music_order_lines_order_idx").on(t.orderId)],
+);
+
+/** A license issued when an order is paid: one per work delivered. Revoked on refund. */
+export const musicLicenses = pgTable(
+  "music_licenses",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    licenseNo: text("license_no").notNull(),
+    orderId: uuid("order_id")
+      .notNull()
+      .references(() => musicOrders.id),
+    orderLineId: uuid("order_line_id")
+      .notNull()
+      .references(() => musicOrderLines.id),
+    buyerId: uuid("buyer_id").references(() => musicBuyers.id),
+    workId: uuid("work_id")
+      .notNull()
+      .references(() => musicWorks.id),
+    tier: licenseTierEnum("tier").notNull(),
+    holder: text("holder").notNull(),
+    organization: text("organization"),
+    fileIds: jsonb("file_ids").$type<string[]>().notNull().default(sql`'[]'::jsonb`),
+    downloadLimit: integer("download_limit").notNull().default(10),
+    issuedAt: timestamp("issued_at", { withTimezone: true }).notNull().defaultNow(),
+    revokedAt: timestamp("revoked_at", { withTimezone: true }),
+  },
+  (t) => [uniqueIndex("music_licenses_no_idx").on(t.licenseNo), index("music_licenses_buyer_idx").on(t.buyerId)],
+);
+
+export const musicDownloads = pgTable(
+  "music_downloads",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    licenseId: uuid("license_id")
+      .notNull()
+      .references(() => musicLicenses.id),
+    fileId: uuid("file_id")
+      .notNull()
+      .references(() => musicScoreFiles.id),
+    ipHash: text("ip_hash"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("music_downloads_license_idx").on(t.licenseId)],
+);
+
+export const musicCommissions = pgTable("music_commissions", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  organization: text("organization"),
+  forces: text("forces"),
+  occasion: text("occasion"),
+  deadline: date("deadline"),
+  budget: text("budget"),
+  message: text("message").notNull(),
+  status: commissionStatusEnum("status").notNull().default("new"),
+  ownerNote: text("owner_note"),
+  ipHash: text("ip_hash"),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+/** Newsletter with double opt-in: a subscriber counts only once `confirmedAt` is set. */
+export const musicSubscribers = pgTable(
+  "music_subscribers",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    email: text("email").notNull(),
+    tokenHash: text("token_hash").notNull(),
+    confirmedAt: timestamp("confirmed_at", { withTimezone: true }),
+    unsubscribedAt: timestamp("unsubscribed_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex("music_subscribers_email_idx").on(t.email)],
+);
+
+/*
+ * Make (apps/make): a curated showcase of a few projects with write-ups, screenshots checked before they show, and a
+ * "now" log. The studio's vocabulary (bench, shelf, scrap bin, tool wall) is a styling layer over these plain fields.
+ */
+export const makeStatusEnum = pgEnum("make_project_status", ["building", "shipped", "archived"]);
+
+export const makeProjects = pgTable(
+  "make_projects",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    slug: text("slug").notNull(),
+    title: text("title").notNull(),
+    summary: text("summary"),
+    /** Markdown: what it is, how it works, what I learned. */
+    body: text("body"),
+    status: makeStatusEnum("status").notNull().default("building"),
+    year: integer("year"),
+    role: text("role"),
+    stack: jsonb("stack").$type<string[]>().notNull().default(sql`'[]'::jsonb`),
+    links: jsonb("links")
+      .$type<{ label: string; url: string; kind: "demo" | "source" | "writeup" | "other" }[]>()
+      .notNull()
+      .default(sql`'[]'::jsonb`),
+    /** what went wrong or what I would do differently: shown on the scrap bin and at the end of a write-up */
+    lessons: text("lessons"),
+    published: boolean("published").notNull().default(false),
+    sort: integer("sort").notNull().default(0),
+    ...stamps,
+  },
+  (t) => [uniqueIndex("make_projects_slug_idx").on(t.slug), index("make_projects_pub_idx").on(t.published, t.sort)],
+);
+
+/** A screenshot. It is only shown publicly once `reviewed` is ticked: someone looked for secrets and member data. */
+export const makeImages = pgTable(
+  "make_images",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    projectId: uuid("project_id")
+      .notNull()
+      .references(() => makeProjects.id),
+    storageKey: text("storage_key").notNull(),
+    mime: text("mime").notNull().default("image/webp"),
+    width: integer("width"),
+    height: integer("height"),
+    alt: text("alt").notNull().default(""),
+    caption: text("caption"),
+    reviewed: boolean("reviewed").notNull().default(false),
+    cover: boolean("cover").notNull().default(false),
+    sort: integer("sort").notNull().default(0),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    deletedAt: timestamp("deleted_at", { withTimezone: true }),
+  },
+  (t) => [index("make_images_project_idx").on(t.projectId, t.sort)],
+);
+
+export const makeNow = pgTable("make_now", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  body: text("body").notNull(),
+  projectId: uuid("project_id").references(() => makeProjects.id),
+  visible: boolean("visible").notNull().default(true),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  deletedAt: timestamp("deleted_at", { withTimezone: true }),
+});
+
+/*
+ * Flying (apps/flying): airports the owner has been to and past flights. A flight stores NO registration (tail number) and no
+ * live position: only the airports, the date it landed (shown to the month, and only 7+ days later), the aircraft TYPE and a note.
+ */
+export const flyingAirports = pgTable(
+  "flying_airports",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    code: text("code").notNull(),
+    name: text("name").notNull(),
+    lat: doublePrecision("lat").notNull(),
+    lon: doublePrecision("lon").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex("flying_airports_code_idx").on(t.code)],
+);
+
+export const flyingFlights = pgTable(
+  "flying_flights",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    fromCode: text("from_code").notNull(),
+    toCode: text("to_code").notNull(),
+    landedOn: date("landed_on").notNull(),
+    aircraftType: text("aircraft_type"),
+    note: text("note"),
+    visible: boolean("visible").notNull().default(true),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    deletedAt: timestamp("deleted_at", { withTimezone: true }),
+  },
+  (t) => [index("flying_flights_landed_idx").on(t.landedOn)],
+);

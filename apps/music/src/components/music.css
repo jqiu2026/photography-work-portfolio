@@ -1,0 +1,363 @@
+/*
+ * Music site on Holominimal: a dark page under a quiet night sky, the proximity dock, hairlines instead of boxes.
+ * Everything reads --hm-* tokens (never hard-coded colors). Class prefix mu-.
+ */
+.mu {
+  min-height: 100dvh;
+  color-scheme: dark;
+}
+.mu-wrap {
+  width: min(100% - 2 * var(--hm-gutter), 72rem);
+  margin-inline: auto;
+}
+.mu-pagehead {
+  padding-top: clamp(2.2rem, 6vw, 4.5rem);
+}
+.mu-section {
+  padding-block: clamp(2rem, 5vw, 4rem);
+}
+.mu-h2 {
+  margin: 0 0 1.2rem;
+  font-size: var(--hm-text-xl);
+}
+.mu-voice {
+  font-family: var(--font-voice), "Newsreader", Georgia, serif;
+}
+.mu-mono {
+  font-family: var(--hm-font-mono);
+  font-size: var(--hm-text-sm);
+  color: var(--hm-muted);
+}
+.mu-muted {
+  color: var(--hm-muted);
+}
+.mu-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  align-items: center;
+}
+.mu-stack {
+  display: grid;
+  gap: var(--hm-space-4);
+}
+.mu-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--hm-space-3);
+}
+.mu-link {
+  color: var(--hm-fg-soft);
+  text-underline-offset: 3px;
+}
+.mu-link:hover {
+  color: var(--hm-fg-strong);
+}
+
+/* home */
+.mu-hero {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  grid-template-columns: 1.1fr 0.9fr;
+  align-items: center;
+  padding-block: clamp(2.5rem, 8vw, 6rem);
+}
+.mu-hero h1 {
+  margin: 0 0 1rem;
+  font-size: clamp(3rem, 9vw, 6.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+}
+.mu-hero__lede {
+  max-width: 34rem;
+  font-family: var(--font-voice), "Newsreader", Georgia, serif;
+  font-size: clamp(1.2rem, 2.4vw, 1.6rem);
+  color: var(--hm-fg-soft);
+  margin: 0 0 1.6rem;
+}
+.mu-photo {
+  margin: 0;
+  border-radius: var(--hm-radius-lg, 1rem);
+  overflow: hidden;
+  border: 1px solid var(--hm-line);
+}
+.mu-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+@media (max-width: 860px) {
+  .mu-hero {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* catalog */
+.mu-filters {
+  display: grid;
+  gap: var(--hm-space-3);
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  align-items: end;
+  padding-bottom: var(--hm-space-5);
+}
+.mu-filters .mu-filters__q {
+  grid-column: span 2;
+}
+.mu-grid {
+  display: grid;
+  gap: var(--hm-space-4);
+  grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+}
+.mu-card {
+  display: grid;
+  gap: 0.5rem;
+  align-content: start;
+  padding: var(--hm-space-5);
+  border-top: 1px solid var(--hm-line);
+  text-decoration: none;
+  color: inherit;
+  transition: background var(--hm-dur-fast) var(--hm-ease-out);
+}
+.mu-card:hover {
+  background: var(--hm-surface);
+}
+.mu-card h3 {
+  margin: 0;
+  font-family: var(--font-voice), "Newsreader", Georgia, serif;
+  font-size: var(--hm-text-xl);
+  font-weight: 400;
+}
+.mu-card p {
+  margin: 0;
+  color: var(--hm-fg-soft);
+}
+.mu-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+/* piece page */
+.mu-piece {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  align-items: start;
+}
+@media (max-width: 860px) {
+  .mu-piece {
+    grid-template-columns: 1fr;
+  }
+}
+.mu-facts {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.35rem 1.2rem;
+  margin: 0;
+}
+.mu-facts dt {
+  color: var(--hm-muted);
+}
+.mu-facts dd {
+  margin: 0;
+}
+.mu-buy {
+  display: grid;
+  gap: var(--hm-space-4);
+  padding: var(--hm-space-5);
+  border: 1px solid var(--hm-line);
+  border-radius: var(--hm-radius-lg, 1rem);
+}
+.mu-offer {
+  display: grid;
+  gap: 0.4rem;
+  padding-block: var(--hm-space-3);
+  border-top: 1px solid var(--hm-line);
+}
+.mu-offer:first-of-type {
+  border-top: 0;
+}
+.mu-price {
+  font-size: var(--hm-text-xl);
+  font-variant-numeric: tabular-nums;
+}
+
+/* player: a poster that loads the embed only when pressed */
+.mu-player {
+  display: grid;
+  gap: 0.6rem;
+}
+.mu-player__frame {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--hm-line);
+  border-radius: var(--hm-radius-md, 0.75rem);
+  overflow: hidden;
+  background: var(--hm-surface);
+}
+.mu-player__frame--audio {
+  aspect-ratio: auto;
+  min-height: 9rem;
+}
+.mu-player__frame iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+.mu-player__play {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  gap: 0.4rem;
+  justify-items: center;
+  width: 100%;
+  background: transparent;
+  color: var(--hm-fg-strong);
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+}
+.mu-player__play:focus-visible {
+  outline: 2px solid var(--hm-accent);
+  outline-offset: -4px;
+}
+.mu-player__icon {
+  display: grid;
+  place-content: center;
+  width: 3.4rem;
+  height: 3.4rem;
+  border-radius: 50%;
+  border: 1px solid var(--hm-line-strong, var(--hm-line));
+}
+
+/* score preview */
+.mu-preview {
+  width: 100%;
+  height: min(70vh, 40rem);
+  border: 1px solid var(--hm-line);
+  border-radius: var(--hm-radius-md, 0.75rem);
+  background: var(--hm-surface);
+}
+
+/* tables and lists */
+.mu-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.mu-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 0.85rem;
+  border-top: 1px solid var(--hm-line);
+}
+.mu-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.mu-table th,
+.mu-table td {
+  text-align: left;
+  padding: 0.7rem 0.5rem;
+  border-top: 1px solid var(--hm-line);
+  vertical-align: top;
+}
+.mu-table th {
+  color: var(--hm-muted);
+  font-weight: 400;
+  font-size: var(--hm-text-sm);
+}
+.mu-table .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.mu-totals {
+  display: grid;
+  gap: 0.4rem;
+  margin-left: auto;
+  max-width: 20rem;
+  padding-top: var(--hm-space-4);
+}
+.mu-totals div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.mu-totals .mu-totals__sum {
+  border-top: 1px solid var(--hm-line);
+  padding-top: 0.6rem;
+  font-size: var(--hm-text-lg);
+}
+.mu-form {
+  display: grid;
+  gap: var(--hm-space-4);
+  max-width: 34rem;
+}
+.mu-note {
+  padding: var(--hm-space-4);
+  border: 1px solid var(--hm-line);
+  border-radius: var(--hm-radius-md, 0.75rem);
+  color: var(--hm-fg-soft);
+}
+
+/* footer */
+.mu-foot {
+  margin-top: clamp(3rem, 8vw, 6rem);
+  padding-block: 2.5rem 3rem;
+  border-top: 1px solid var(--hm-line);
+  width: min(100% - 2 * var(--hm-gutter), 72rem);
+  margin-inline: auto;
+}
+.mu-foot__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: 2rem;
+}
+.mu-foot h2 {
+  margin: 0 0 0.7rem;
+  font-size: var(--hm-text-sm);
+  font-weight: 400;
+  letter-spacing: var(--hm-tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--hm-muted);
+}
+.mu-foot ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.4rem;
+}
+.mu-foot a {
+  color: var(--hm-fg-soft);
+  text-decoration: none;
+}
+.mu-foot a:hover {
+  color: var(--hm-fg-strong);
+}
+.mu-foot__base {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2.5rem;
+  color: var(--hm-muted);
+  font-size: var(--hm-text-sm);
+}
+.mu-foot__base p {
+  margin: 0;
+}
+.mu-return {
+  color: var(--hm-fg-strong);
+  border: 1px solid var(--hm-line);
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}

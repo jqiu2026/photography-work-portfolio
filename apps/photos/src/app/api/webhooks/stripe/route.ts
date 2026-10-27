@@ -30,6 +30,9 @@ export async function POST(request: Request) {
   } catch {
     return new Response("Bad request", { status: 400 });
   }
+  // the music site's orders arrive at its own endpoint; this one acknowledges and ignores them
+  if ((event.data?.object?.metadata as Record<string, string> | undefined)?.site === "music")
+    return Response.json({ received: true, ignored: "music" });
   const db = getDb();
   if (!db) return new Response("No database", { status: 503 });
   // the platform's own subscription (Full Frame): switch the plan; it is never treated as an invoice payment
