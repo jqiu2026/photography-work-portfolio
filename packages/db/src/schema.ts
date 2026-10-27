@@ -1725,3 +1725,67 @@ export const musicSubscribers = pgTable(
   },
   (t) => [uniqueIndex("music_subscribers_email_idx").on(t.email)],
 );
+
+/*
+ * Make (apps/make): a curated showcase of a few projects with write-ups, screenshots checked before they show, and a
+ * "now" log. The studio's vocabulary (bench, shelf, scrap bin, tool wall) is a styling layer over these plain fields.
+ */
+export const makeStatusEnum = pgEnum("make_project_status", ["building", "shipped", "archived"]);
+
+export const makeProjects = pgTable(
+  "make_projects",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    slug: text("slug").notNull(),
+    title: text("title").notNull(),
+    summary: text("summary"),
+    /** Markdown: what it is, how it works, what I learned. */
+    body: text("body"),
+    status: makeStatusEnum("status").notNull().default("building"),
+    year: integer("year"),
+    role: text("role"),
+    stack: jsonb("stack").$type<string[]>().notNull().default(sql`'[]'::jsonb`),
+    links: jsonb("links")
+      .$type<{ label: string; url: string; kind: "demo" | "source" | "writeup" | "other" }[]>()
+      .notNull()
+      .default(sql`'[]'::jsonb`),
+    /** what went wrong or what I would do differently: shown on the scrap bin and at the end of a write-up */
+    lessons: text("lessons"),
+    published: boolean("published").notNull().default(false),
+    sort: integer("sort").notNull().default(0),
+    ...stamps,
+  },
+  (t) => [uniqueIndex("make_projects_slug_idx").on(t.slug), index("make_projects_pub_idx").on(t.published, t.sort)],
+);
+
+/** A screenshot. It is only shown publicly once `reviewed` is ticked: someone looked for secrets and member data. */
+export const makeImages = pgTable(
+  "make_images",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    projectId: uuid("project_id")
+      .notNull()
+      .references(() => makeProjects.id),
+    storageKey: text("storage_key").notNull(),
+    mime: text("mime").notNull().default("image/webp"),
+    width: integer("width"),
+    height: integer("height"),
+    alt: text("alt").notNull().default(""),
+    caption: text("caption"),
+    reviewed: boolean("reviewed").notNull().default(false),
+    cover: boolean("cover").notNull().default(false),
+    sort: integer("sort").notNull().default(0),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    deletedAt: timestamp("deleted_at", { withTimezone: true }),
+  },
+  (t) => [index("make_images_project_idx").on(t.projectId, t.sort)],
+);
+
+export const makeNow = pgTable("make_now", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  body: text("body").notNull(),
+  projectId: uuid("project_id").references(() => makeProjects.id),
+  visible: boolean("visible").notNull().default(true),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  deletedAt: timestamp("deleted_at", { withTimezone: true }),
+});
