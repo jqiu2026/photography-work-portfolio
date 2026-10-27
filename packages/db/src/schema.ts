@@ -4,6 +4,7 @@ import {
   bigserial,
   boolean,
   date,
+  doublePrecision,
   index,
   integer,
   jsonb,
@@ -1789,3 +1790,36 @@ export const makeNow = pgTable("make_now", {
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   deletedAt: timestamp("deleted_at", { withTimezone: true }),
 });
+
+/*
+ * Flying (apps/flying): airports the owner has been to and past flights. A flight stores NO registration (tail number) and no
+ * live position: only the airports, the date it landed (shown to the month, and only 7+ days later), the aircraft TYPE and a note.
+ */
+export const flyingAirports = pgTable(
+  "flying_airports",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    code: text("code").notNull(),
+    name: text("name").notNull(),
+    lat: doublePrecision("lat").notNull(),
+    lon: doublePrecision("lon").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex("flying_airports_code_idx").on(t.code)],
+);
+
+export const flyingFlights = pgTable(
+  "flying_flights",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    fromCode: text("from_code").notNull(),
+    toCode: text("to_code").notNull(),
+    landedOn: date("landed_on").notNull(),
+    aircraftType: text("aircraft_type"),
+    note: text("note"),
+    visible: boolean("visible").notNull().default(true),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    deletedAt: timestamp("deleted_at", { withTimezone: true }),
+  },
+  (t) => [index("flying_flights_landed_idx").on(t.landedOn)],
+);

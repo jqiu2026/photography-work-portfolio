@@ -30,7 +30,8 @@
     "./gallery-expiry": "./src/gallery-expiry.ts",
     "./automation": "./src/automation.ts",
     "./music": "./src/music.ts",
-    "./make": "./src/make.ts"
+    "./make": "./src/make.ts",
+    "./flying": "./src/flying.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
@@ -42,11 +43,12 @@
     "backup": "node ../../scripts/with-env.mjs dev tsx scripts/backup.ts"
   },
   "dependencies": {
+    "@jerryqiu/aviation": "workspace:*",
+    "@jerryqiu/scores": "workspace:*",
     "@neondatabase/serverless": "^1.2.0",
     "drizzle-orm": "^0.45.4",
     "pg": "^8.16.0",
-    "zod": "^4.6.5",
-    "@jerryqiu/scores": "workspace:*"
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@electric-sql/pglite": "^0.5.8",

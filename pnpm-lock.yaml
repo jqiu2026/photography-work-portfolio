@@ -736,6 +736,9 @@ importers:
 
   packages/db:
     dependencies:
+      '@jerryqiu/aviation':
+        specifier: workspace:*
+        version: link:../aviation
       '@jerryqiu/scores':
         specifier: workspace:*
         version: link:../scores
