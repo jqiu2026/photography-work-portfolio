@@ -309,7 +309,7 @@ export const paintForge: Painter = (c, w, h, t) => {
     }
   }
   // lava falls
-  for (const fx of [0.18, 0.83]) {
+  for (const fx of [0.18, 0.93]) {
     const x = Math.round((w * fx) / T) * T;
     const top = h * 0.12;
     for (let y = top; y < h * 0.8; y += T) {
@@ -345,6 +345,27 @@ export const paintForge: Painter = (c, w, h, t) => {
     const x = ax + T / 2 + vx * beat;
     const y = ay - T * 2 + vy * beat + 60 * beat * beat;
     if (y < sea) fill(c, x, y, 1, 1, rgba(mix(hex("#fff3b0"), hex("#ff6a2b"), beat / 1.15), 1 - beat / 1.15));
+  }
+  // something being made: a tower that builds itself, block by block, then starts again
+  const bx = Math.round(w * 0.76);
+  const by = sea - T;
+  for (let i = -1; i <= 1; i++) block(c, bx + i * T, by, T, hex("#2c1414"), 0.15, 0.4);
+  const cycle = 14;
+  const prog = (t % cycle) / cycle;
+  const plan = 15;
+  const placed = Math.min(plan, Math.floor(prog * (plan + 4)));
+  for (let k = 0; k < placed; k++) {
+    const col = (k % 3) - 1;
+    const row = Math.floor(k / 3) + 1;
+    const metal = k % 4 === 0 ? hex("#c9c2b8") : k % 2 ? hex("#6b3a2a") : hex("#8a4b30");
+    const land = (prog * (plan + 4) - k) * 4; // a moment after it is placed
+    const drop = land < 1 ? (1 - land) * T * 3 : 0;
+    block(c, bx + col * T, by - row * T - drop, T, metal, 0.3, 0.35);
+    fill(c, bx + col * T, by - row * T - drop, T, 1, "rgba(255,150,80,.5)");
+    if (land >= 1 && land < 1.6) {
+      for (let q = 0; q < 6; q++)
+        fill(c, bx + col * T + hash(q + k) * T, by - row * T - (land - 1) * T * 2 * hash(q * 3 + k), 1, 1, "#ffd25a");
+    }
   }
   // embers rising
   for (let i = 0; i < 40; i++) {

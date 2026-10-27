@@ -69,6 +69,7 @@ export function Nexus({ realms, children }: { realms: RealmLink[]; children: Rea
     if (d > 2) d -= 4;
     if (d < -2) d += 4;
     s.target += d;
+    if (i !== s.hub.sel) s.hub.shift = 0;
     s.hub.sel = i;
     setSel(i);
     s.kick();
@@ -154,6 +155,7 @@ export function Nexus({ realms, children }: { realms: RealmLink[]; children: Rea
       frameNo++;
       const hub = s.hub;
       hub.reveal = Math.min(1, hub.reveal + dt / 2.6);
+      if (hub.shift !== undefined) hub.shift += dt;
       hub.rot += (s.target - hub.rot) * (s.reduce ? 1 : Math.min(1, dt * 5));
       const ease = s.reduce ? 1 : Math.min(1, dt * 3);
       hub.tint = mix(hub.tint ?? LOOKS[hub.sel].accent, LOOKS[hub.sel].accent, ease);
@@ -216,7 +218,7 @@ export function Nexus({ realms, children }: { realms: RealmLink[]; children: Rea
       } else if (s.reduce) el.style.backgroundImage = `url(${buf.toDataURL()})`;
       else view.drawImage(buf, 0, 0, bw, bh, 0, 0, W, H);
 
-      el.style.opacity = String(s.phase === "hub" ? 1 - 0.72 * clamp(scrollY / innerHeight) : 1);
+      el.style.opacity = String(s.phase === "hub" ? 1 - 0.84 * clamp(scrollY / innerHeight) : 1);
       if (!s.reduce && !document.hidden) {
         if (away && s.phase === "hub") setTimeout(() => s.kick(), 120);
         else s.kick();

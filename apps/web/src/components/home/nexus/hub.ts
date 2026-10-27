@@ -15,6 +15,8 @@ export type HubState = {
   previews: HTMLCanvasElement[];
   /** the Nexus's light, easing toward the front gate's colour */
   tint?: RGB;
+  /** seconds since the ring last turned to a new gate (a ripple of light crosses the platform) */
+  shift?: number;
   /** pointer, -1..1, eased: far layers drift against it */
   mx?: number;
   my?: number;
@@ -229,6 +231,16 @@ export function paintNexus(c: CanvasRenderingContext2D, w: number, h: number, t:
     const x = cx + Math.cos(a) * rx * 0.62;
     const y = cy + Math.sin(a) * ry * 0.62 + rise;
     fill(c, x, y, node ? 2 : 1, node ? 2 : 1, rgba(mix(acc, [255, 255, 255], node ? 0.5 : 0), (0.25 + 0.6 * flow) * r));
+  }
+
+  // the ripple when a new gate comes to the front
+  if (s.shift !== undefined && s.shift < 1.4) {
+    const k = s.shift / 1.4;
+    for (let a = 0; a < TAU; a += 0.008) {
+      const x = cx + Math.cos(a) * rx * (0.2 + k * 0.85);
+      const y = cy + Math.sin(a) * ry * (0.2 + k * 0.85) + rise;
+      fill(c, x, y, 2, 1, rgba(mix(acc, [255, 255, 255], 0.4), (1 - k) * 0.8));
+    }
   }
 
   const ring = gates(w, h, s).map((g) => ({ ...g, y: g.y + rise }));
