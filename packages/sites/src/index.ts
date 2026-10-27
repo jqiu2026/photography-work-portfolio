@@ -75,3 +75,11 @@ export function getSite(id: SiteId): SiteInfo {
 export function sitePath(_id: SiteId, path = "/"): string {
   return path === "" ? "/" : path;
 }
+
+/**
+ * The Make site is not part of the family switcher (it has no preset), so it is not in `getSites()`; its address is here for
+ * the sign-in callback allow-list and for its own metadata.
+ */
+export function getMakeUrl(): string {
+  return origin(process.env.NEXT_PUBLIC_MAKE_URL, "http://localhost:3005", "https://make.jerryqiu.com");
+}

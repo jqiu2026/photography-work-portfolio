@@ -19,6 +19,7 @@ const env = {
   NEXT_PUBLIC_PHOTOS_URL: "http://localhost:3302",
   NEXT_PUBLIC_MUSIC_URL: "http://localhost:3304",
   NEXT_PUBLIC_FLYING_URL: "http://localhost:3305",
+  NEXT_PUBLIC_MAKE_URL: "http://localhost:3306",
   REVALIDATE_SECRET: "e2e-revalidate-secret-0123456789",
 };
 
@@ -72,6 +73,13 @@ export default defineConfig({
       command: "pnpm --filter @jerryqiu/flying dev",
       port: 3305,
       env: { ...env, PORT: "3305", NEXT_DIST_DIR: ".next-e2e" },
+      reuseExistingServer: false,
+      timeout: 180_000,
+    },
+    {
+      command: "pnpm --filter @jerryqiu/make dev",
+      port: 3306,
+      env: { ...env, PORT: "3306", NEXT_DIST_DIR: ".next-e2e" },
       reuseExistingServer: false,
       timeout: 180_000,
     },

@@ -9,7 +9,7 @@ export const apps = [
   { name: "photos", filter: "@jerryqiu/photos", port: 4101, open: "/api/health", sitemap: true },
   { name: "music", filter: "@jerryqiu/music", port: 4102, open: "/api/revalidate", sitemap: true },
   { name: "flying", filter: "@jerryqiu/flying", port: 4103, open: "/api/revalidate", sitemap: true },
-  { name: "make", filter: "@jerryqiu/make", port: 4104, open: undefined, sitemap: false },
+  { name: "make", filter: "@jerryqiu/make", port: 4104, open: "/api/revalidate", sitemap: true },
 ] as const;
 
 export default defineConfig({

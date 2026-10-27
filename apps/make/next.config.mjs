@@ -1,5 +1,9 @@
 /** @type {import('next').NextConfig} */
 export default {
   distDir: process.env.NEXT_DIST_DIR || ".next",
-  transpilePackages: ["@halation/ui", "@jerryqiu/sites"],
+  transpilePackages: ["@jerryqiu/sites", "@jerryqiu/db", "@jerryqiu/auth", "@jerryqiu/storage", "@jerryqiu/protect"],
+  serverExternalPackages: ["sharp", "pg", "@electric-sql/pglite"],
+  async headers() {
+    return [{ source: "/(.*)", headers: [{ key: "Content-Security-Policy", value: "frame-ancestors 'self'" }] }];
+  },
 };

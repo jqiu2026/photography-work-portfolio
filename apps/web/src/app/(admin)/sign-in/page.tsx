@@ -1,6 +1,6 @@
 import { Button, Container, Heading, Text } from "@halation/ui";
 import { safeCallback } from "@jerryqiu/auth/policy";
-import { getSites } from "@jerryqiu/sites";
+import { getMakeUrl, getSites } from "@jerryqiu/sites";
 import { redirect } from "next/navigation";
 import { currentUser, kit, signIn } from "@/auth";
 
@@ -18,7 +18,7 @@ export default async function SignIn({
   searchParams,
 }: { searchParams: Promise<{ error?: string; callbackUrl?: string }> }) {
   const sp = await searchParams;
-  const origins = getSites().map((s) => new URL(s.url).origin);
+  const origins = [...getSites().map((s) => s.url), getMakeUrl()].map((u) => new URL(u).origin);
   const callback = safeCallback(sp.callbackUrl, "/admin", origins);
   if (await currentUser()) redirect(callback);
   const configured = Boolean(process.env.AUTH_GOOGLE_ID && process.env.AUTH_GOOGLE_SECRET);

@@ -3,9 +3,9 @@ import { type NextRequest, NextResponse } from "next/server";
 
 /**
  * While maintenance mode is on (see packages/sites/src/maintenance.ts: on by default in a production build, off with
- * MAINTENANCE_MODE=0) every public route answers with the shared "back soon" page. Paths kept open: none beyond the defaults (cron, webhooks, auth, health, revalidate).
+ * MAINTENANCE_MODE=0) every public route answers with the shared "back soon" page. Paths kept open: the owner studio, its sign-in and uploads (plus the defaults: cron, webhooks, auth, health, revalidate).
  */
-const OPEN: readonly string[] = [];
+const OPEN = ["/studio", "/sign-in", "/api/studio", "/api/upload", "/api/storage"];
 
 export function proxy(request: NextRequest) {
   return maintenance(request, OPEN) ?? NextResponse.next();

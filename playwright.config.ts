@@ -52,6 +52,13 @@ export default defineConfig({
       timeout: 120_000,
     },
     {
+      command: "pnpm --filter @jerryqiu/make start",
+      port: 4005,
+      env: { PORT: "4005", MAINTENANCE_MODE: "0" },
+      reuseExistingServer: true,
+      timeout: 120_000,
+    },
+    {
       command: "pnpm --filter @jerryqiu/flying start",
       port: 4004,
       env: { PORT: "4004", MAINTENANCE_MODE: "0" },

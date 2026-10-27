@@ -1,0 +1,239 @@
+/*
+ * Make on Holominimal. The workshop words (bench, shelf, scrap bin, tool wall) are a naming and texture layer only: every
+ * place carries its plain meaning next to the word, and nothing is hidden behind the metaphor. Class prefix mk-.
+ */
+.mk {
+  min-height: 100dvh;
+  color-scheme: dark;
+}
+.mk-wrap {
+  width: min(100% - 2 * var(--hm-gutter), 72rem);
+  margin-inline: auto;
+}
+.mk-pagehead {
+  padding-top: clamp(2.2rem, 6vw, 4.5rem);
+}
+.mk-section {
+  padding-block: clamp(2rem, 5vw, 4rem);
+}
+.mk-h2 {
+  margin: 0 0 1.2rem;
+  font-size: var(--hm-text-xl);
+}
+.mk-muted {
+  color: var(--hm-muted);
+}
+.mk-mono {
+  font-family: var(--hm-font-mono);
+  font-size: var(--hm-text-sm);
+  color: var(--hm-muted);
+}
+.mk-stack {
+  display: grid;
+  gap: var(--hm-space-4);
+}
+.mk-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--hm-space-3);
+}
+.mk-link {
+  color: var(--hm-fg-soft);
+  text-underline-offset: 3px;
+}
+.mk-link:hover {
+  color: var(--hm-fg-strong);
+}
+.mk-form {
+  display: grid;
+  gap: var(--hm-space-4);
+  max-width: 34rem;
+}
+.mk-note {
+  padding: var(--hm-space-4);
+  border: 1px solid var(--hm-line);
+  border-radius: var(--hm-radius-md);
+  color: var(--hm-fg-soft);
+}
+.mk-hero {
+  padding-block: clamp(2.5rem, 8vw, 6rem) clamp(1.5rem, 4vw, 3rem);
+}
+.mk-hero h1 {
+  margin: 0 0 1rem;
+  font-size: clamp(3rem, 9vw, 6.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+}
+.mk-hero p {
+  max-width: 36rem;
+  font-size: clamp(1.1rem, 2.2vw, 1.4rem);
+  color: var(--hm-fg-soft);
+  margin: 0 0 1.4rem;
+}
+
+/* the places: a bench has a ruled top edge, a shelf a plank under it, the scrap bin a dashed edge. Texture only. */
+.mk-place {
+  display: grid;
+  gap: var(--hm-space-4);
+  padding-block: var(--hm-space-6, 2rem);
+}
+.mk-place__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem 1rem;
+}
+.mk-place__head h2 {
+  margin: 0;
+  font-size: var(--hm-text-2xl);
+}
+.mk-place[data-place="bench"] {
+  border-top: 2px solid var(--hm-accent-line, var(--hm-line-strong));
+}
+.mk-place[data-place="shelf"] {
+  border-bottom: 3px solid var(--hm-line);
+}
+.mk-place[data-place="scrap"] {
+  border-top: 1px dashed var(--hm-line-strong, var(--hm-line));
+}
+
+.mk-grid {
+  display: grid;
+  gap: var(--hm-space-4);
+  grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+}
+.mk-card {
+  display: grid;
+  align-content: start;
+  gap: 0.6rem;
+  padding: var(--hm-space-4);
+  border: 1px solid var(--hm-line);
+  border-radius: var(--hm-radius-lg);
+  text-decoration: none;
+  color: inherit;
+  transition: background var(--hm-dur-fast) var(--hm-ease-out), border-color var(--hm-dur-fast) var(--hm-ease-out);
+}
+.mk-card:hover {
+  background: var(--hm-surface);
+  border-color: var(--hm-line-hover, var(--hm-line-strong));
+}
+.mk-card h3 {
+  margin: 0;
+  font-size: var(--hm-text-xl);
+  font-weight: 500;
+}
+.mk-card p {
+  margin: 0;
+  color: var(--hm-fg-soft);
+}
+.mk-shot {
+  margin: 0;
+  border: 1px solid var(--hm-line);
+  border-radius: var(--hm-radius-md);
+  overflow: hidden;
+  background: var(--hm-surface);
+}
+.mk-shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.mk-shot figcaption {
+  padding: 0.6rem 0.8rem;
+  color: var(--hm-muted);
+  font-size: var(--hm-text-sm);
+}
+.mk-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.mk-detail {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  align-items: start;
+}
+@media (max-width: 860px) {
+  .mk-detail {
+    grid-template-columns: 1fr;
+  }
+}
+.mk-facts {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.35rem 1.2rem;
+  margin: 0;
+}
+.mk-facts dt {
+  color: var(--hm-muted);
+}
+.mk-facts dd {
+  margin: 0;
+}
+.mk-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.mk-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 0.85rem;
+  border-top: 1px solid var(--hm-line);
+}
+.mk-wall {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.mk-wall li {
+  padding: 0.5rem 0.9rem;
+  border: 1px solid var(--hm-line);
+  border-radius: 999px;
+}
+.mk-foot {
+  margin-top: clamp(3rem, 8vw, 6rem);
+  padding-block: 2rem 3rem;
+  border-top: 1px solid var(--hm-line);
+  width: min(100% - 2 * var(--hm-gutter), 72rem);
+  margin-inline: auto;
+}
+.mk-foot nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+}
+.mk-foot a {
+  color: var(--hm-fg-soft);
+  text-decoration: none;
+}
+.mk-foot a:hover {
+  color: var(--hm-fg-strong);
+}
+.mk-foot__base {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2rem;
+  color: var(--hm-muted);
+  font-size: var(--hm-text-sm);
+}
+.mk-foot__base p {
+  margin: 0;
+}
+.mk-return {
+  color: var(--hm-fg-strong);
+  border: 1px solid var(--hm-line);
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
