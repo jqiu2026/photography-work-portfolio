@@ -55,7 +55,7 @@ Owner to-do for music (also in [02-sites-and-deployment.md](02-sites-and-deploym
 
 ## Other sites: flying, make, hub (branch `claude/other-sites`, stacked on `claude/music-site`; owner request 2026-10-27, Q136 to Q147)
 
-Gates and screenshots: see the log below; `screenshots/phase-1/<site>/` holds the smoke screenshots (390 and 1440, light and dark).
+Gates run 2026-10-27 on this branch: `pnpm lint` clean; `pnpm typecheck` clean; unit tests green for aviation (47), db (make 8, flying 6, music 19 and the rest), payments, scores, make, music, web, photos, sites, auth, email (one pre-existing failure in `packages/ui` `protection.test.tsx`, untouched); production e2e (`playwright test`, all specs, production builds of all seven apps) 389 of 394 passed on the first run, the 5 failures (the hub's old index-control tests and a 44px target on one link) were fixed and re-run green; `test:admin` (dev servers, throwaway database) 114 of 118 passed, the 2 failures (a photo shop mock payment and a hub inbox triage) pass when run alone (load flakiness, as noted in "Known flaky"), and 2 did not run; `test:maintenance` 34 of 35 passed, the one failure is the photo `/api/health` answering 503 because the local dev database was not running at that moment. Curated screenshots: `screenshots/music|make|flying|hub/`. The smoke screenshots under `screenshots/phase-1/` were not re-committed (about 75 MB of churn).
 
 | Id | Scope | Status |
 |---|---|---|
