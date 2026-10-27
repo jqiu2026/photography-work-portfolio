@@ -143,6 +143,26 @@ export async function addItems(db: Database, galleryId: string, mediaIds: string
       .where(and(eq(s.studioAlbums.id, albumId), isNull(s.studioAlbums.coverMediaId)));
   return mediaIds.length;
 }
+/**
+ * A filename no other photograph in this gallery uses (case-insensitive), so two different pictures that share a name
+ * ("IMG_0001.jpg" from two cameras) stay apart in proofing lists and downloads: "IMG_0001.jpg" becomes "IMG_0001-2.jpg".
+ * `also` holds names already claimed by uploads still in flight.
+ */
+export async function freeFilename(db: Database, galleryId: string, name: string, also: string[] = []) {
+  const rows = await db
+    .select({ filename: s.media.filename })
+    .from(s.studioGalleryItems)
+    .innerJoin(s.media, eq(s.media.id, s.studioGalleryItems.mediaId))
+    .where(and(eq(s.studioGalleryItems.galleryId, galleryId), isNull(s.media.deletedAt)));
+  const taken = new Set([...rows.map((r) => r.filename), ...also].map((n) => n.toLowerCase()));
+  if (!taken.has(name.toLowerCase())) return name;
+  const dot = name.lastIndexOf(".");
+  const [base, ext] = dot > 0 ? [name.slice(0, dot), name.slice(dot)] : [name, ""];
+  for (let n = 2; ; n++) {
+    const next = `${base}-${n}${ext}`;
+    if (!taken.has(next.toLowerCase())) return next;
+  }
+}
 export async function removeItem(db: Database, galleryId: string, mediaId: string) {
   await db
     .delete(s.studioGalleryItems)
@@ -531,8 +551,12 @@ export async function freshPasscode(db: Database, length = 8): Promise<string> {
   throw new StudioError("Could not make a unique passcode. Try again.");
 }
 
-/** A new draft with the same settings, albums and photographs. Returns the passcode (shown once). */
-export async function duplicateGallery(db: Database, id: string, by?: string) {
+/**
+ * A new draft with the same settings and albums, and (unless `photos` is false) the same photographs. Photographs are shared
+ * references to the same media rows: nothing is stored again. Returns the passcode (shown once).
+ */
+export async function duplicateGallery(db: Database, id: string, by?: string, opts: { photos?: boolean } = {}) {
+  const photos = opts.photos ?? true;
   const [g] = await db
     .select()
     .from(s.studioGalleries)
@@ -559,6 +583,7 @@ export async function duplicateGallery(db: Database, id: string, by?: string) {
       slug: await freeSlug(db, `${g.title} copy`),
       title: `${g.title} (copy)`.slice(0, 120),
       status: "draft",
+      coverMediaId: photos ? g.coverMediaId : null,
       passcodeHash: await hashPasscode(passcode),
       updatedBy: by,
     })
@@ -575,7 +600,7 @@ export async function duplicateGallery(db: Database, id: string, by?: string) {
         sort: a.sort,
         parentId: a.parentId ? (map.get(a.parentId) ?? null) : null,
         description: a.description,
-        coverMediaId: a.coverMediaId,
+        coverMediaId: photos ? a.coverMediaId : null,
         passcodeHash: a.passcodeHash,
         hidden: a.hidden,
       })
@@ -600,7 +625,9 @@ export async function duplicateGallery(db: Database, id: string, by?: string) {
         sort: r.sort,
       })),
     );
-  const items = await db.select().from(s.studioGalleryItems).where(eq(s.studioGalleryItems.galleryId, id));
+  const items = photos
+    ? await db.select().from(s.studioGalleryItems).where(eq(s.studioGalleryItems.galleryId, id))
+    : [];
   if (items.length)
     await db.insert(s.studioGalleryItems).values(
       items.map((i) => ({

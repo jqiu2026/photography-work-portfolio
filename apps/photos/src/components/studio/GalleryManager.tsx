@@ -78,7 +78,7 @@ import { type DownloadRuleRow, GalleryDownloads } from "./GalleryDownloads";
 import { GalleryLinkPanel } from "./GalleryLinkPanel";
 import { GalleryShopPanel, type StoreSettings } from "./GalleryShopPanel";
 import { GalleryUploader } from "./GalleryUploader";
-import { Frame, useAct, useConfirm } from "./StudioFrame";
+import { FormDialog, Frame, useAct, useConfirm } from "./StudioFrame";
 import "./gallery-manager.css";
 
 type Item = {
@@ -358,6 +358,7 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
     });
   const [ask, confirmEl] = useConfirm();
   const [pub, setPub] = useState(false);
+  const [dupe, setDupe] = useState<{ photos: boolean } | null>(null);
   const [pubSubject, setPubSubject] = useState("");
   const [pubConsent, setPubConsent] = useState("");
   const bulk = async (op: "hide" | "show" | "remove" | "album" | "front", albumId?: string) => {
@@ -1498,8 +1499,8 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
             </SettingsSection>
             <SettingsSection title="Duplicate or delete" className="gm-block gm-danger">
               <div className="gm-row">
-                <Button variant="secondary" disabled={pending} onClick={() => run(() => duplicateGalleryAction(gid))}>
-                  Duplicate as a draft
+                <Button variant="secondary" disabled={pending} onClick={() => setDupe({ photos: false })}>
+                  Duplicate…
                 </Button>
                 <Button
                   variant="danger"
@@ -1526,6 +1527,26 @@ export function GalleryManager({ data }: { user?: string; data: GalleryManagerDa
         </Tabs>
       </div>
       {confirmEl}
+      <FormDialog
+        open={dupe !== null}
+        onOpenChange={(o) => !o && setDupe(null)}
+        title="Duplicate this gallery"
+        description="A new draft with these settings: design, albums, download rules, privacy and expiry. It gets its own link and passcode."
+        submitLabel="Duplicate"
+        size="sm"
+        pending={pending}
+        onSubmit={() => dupe && run(() => duplicateGalleryAction(gid, dupe.photos))}
+      >
+        <Checkbox
+          label="Also copy the photographs"
+          checked={dupe?.photos ?? false}
+          onChange={(e) => setDupe({ photos: e.target.checked })}
+        />
+        <Text size="sm" tone="muted">
+          The copy shows the same files: nothing is uploaded or stored again. Leave it off to start a new client's
+          gallery with this look.
+        </Text>
+      </FormDialog>
       <Dialog open={pub} onOpenChange={setPub}>
         <DialogContent size="sm">
           <DialogTitle>Publish to the portfolio</DialogTitle>

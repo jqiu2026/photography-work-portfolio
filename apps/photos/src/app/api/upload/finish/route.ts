@@ -1,9 +1,8 @@
 import { markCreated } from "@jerryqiu/db/team";
 import { createHash } from "node:crypto";
-import { getDb, schema, writeAudit } from "@jerryqiu/db";
+import { getDb, writeAudit } from "@jerryqiu/db";
 import * as gal from "@jerryqiu/db/galleries";
 import { ImageError, ingestImage, safeName } from "@jerryqiu/media";
-import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { guardedRoute } from "@/lib/route-guard";
@@ -22,7 +21,8 @@ const body = z.object({
 /**
  * Step 2: the browser has put the file in private storage. Read it back, check it is the file that was announced (SHA-256),
  * validate the real bytes (format, size, pixel count), create the four sizes with GPS and personal EXIF stripped, keep the
- * original private, and add the photograph to the gallery. On any failure the stray original is deleted.
+ * original private, and add the photograph to the gallery. An exact copy that arrived meanwhile is not stored twice. On any
+ * failure the stray original is deleted.
  */
 export const POST = guardedRoute(
   "studio.access",
@@ -49,7 +49,11 @@ export const POST = guardedRoute(
         id,
         originalKey: key,
       });
-      await db.update(schema.media).set({ sha256 }).where(eq(schema.media.id, r.id));
+      // the same file finished elsewhere since step 1: use that photograph (nothing new was stored)
+      if (r.duplicate) {
+        await gal.addItems(db, galleryId, [r.id], albumId ?? null);
+        return NextResponse.json({ mediaId: r.id, duplicate: true });
+      }
       await gal.addItems(db, galleryId, [r.id], albumId ?? null);
       // a photographer can take back what they just uploaded, for a few minutes
       await markCreated(db, user.email, "photo", `${galleryId}:${r.id}`);

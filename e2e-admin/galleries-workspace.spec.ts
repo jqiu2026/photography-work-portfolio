@@ -3,7 +3,10 @@ import { choose, pickDateTime, note } from "./ui";
 import sharp from "sharp";
 import { clientOpen, newGallery, publishOpenGallery, uploadPhotos } from "./gallery-helpers";
 
-/** The gallery workspace: list, bulk photo tools, design, sharing, scheduled publishing, duplicate and delete. */
+/**
+ * The gallery workspace: list, bulk photo tools, design, sharing, scheduled publishing, duplicate (with or without the
+ * photographs) and delete; an upload never stores a file twice, and a different picture with a taken name is renamed.
+ */
 const PHOTOS = "http://localhost:3302";
 const uid = Date.now().toString(36);
 const email = `ws-${uid}@example.test`;
@@ -157,7 +160,11 @@ test("duplicate as a draft, schedule it for the past, and the hourly job publish
 }) => {
   await page.goto(url, { waitUntil: "networkidle" });
   await page.getByRole("tab", { name: "Settings" }).click();
-  await page.getByRole("button", { name: "Duplicate as a draft" }).click();
+  await page.getByRole("button", { name: "Duplicate…" }).click();
+  const dupe = page.getByRole("form", { name: "Duplicate this gallery" });
+  await expect(dupe.getByLabel("Also copy the photographs")).not.toBeChecked();
+  await dupe.getByLabel("Also copy the photographs").check();
+  await dupe.getByRole("button", { name: "Duplicate" }).click();
   await page.waitForURL((u) => /\/studio\/gallery\//.test(u.pathname) && u.href.split("#")[0] !== url, {
     timeout: 25_000,
   });
@@ -185,4 +192,38 @@ test("duplicate as a draft, schedule it for the past, and the hourly job publish
   await expect(page).toHaveURL(/\/studio\/galleries$/, { timeout: 25_000 });
   await expect(page.getByRole("link", { name: /\(copy\)/ })).toHaveCount(0);
   await expect(page.getByRole("link", { name: new RegExp(`Workspace ${uid}`) }).first()).toBeVisible();
+});
+
+test("duplicating only the settings starts empty; uploads skip exact copies and rename a different picture with a taken name", async ({
+  page,
+}) => {
+  await page.goto(url, { waitUntil: "networkidle" });
+  await page.getByRole("tab", { name: "Settings" }).click();
+  await page.getByRole("button", { name: "Duplicate…" }).click();
+  await page.getByRole("form", { name: "Duplicate this gallery" }).getByRole("button", { name: "Duplicate" }).click();
+  await slow(note(page).filter({ hasText: "settings only" }).first()).toBeVisible();
+  await page.waitForURL((u) => /\/studio\/gallery\//.test(u.pathname) && u.href.split("#")[0] !== url, {
+    timeout: 25_000,
+  });
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("(copy)");
+  await expect(page.locator(".gm-stats")).toContainText("Photos0");
+
+  await page.goto(url, { waitUntil: "networkidle" });
+  if (!(await page.locator("input[type=file]").count()))
+    await page.getByRole("button", { name: "Upload photographs" }).click();
+  await page.locator("input[type=file]").setInputFiles([
+    // the same bytes as an earlier upload, under any name: added once, never stored again
+    { name: "b-second-again.jpg", mimeType: "image/jpeg", buffer: await jpeg("#33aa66") },
+    // a different picture that shares a name already in this gallery
+    { name: "a-first.jpg", mimeType: "image/jpeg", buffer: await jpeg("#77aa22") },
+  ]);
+  await slow(note(page).filter({ hasText: "renamed because the name was taken" }).first()).toContainText(
+    "1 already uploaded",
+  );
+  await expect(page.locator("[data-upload-state=duplicate]")).toHaveCount(1);
+  await expect(page.locator("[data-upload-state=done]")).toContainText("saved as a-first-2.jpg");
+  await page.reload({ waitUntil: "networkidle" });
+  await expect(page.locator(".gm-stats")).toContainText("Photos4");
+  await expect(page.getByRole("button", { name: "Open a-first-2.jpg" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Open a-first.jpg" })).toBeVisible();
 });

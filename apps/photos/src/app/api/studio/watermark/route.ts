@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { getDb } from "@jerryqiu/db";
 import { saveWatermark } from "@jerryqiu/db/gallery-extras";
 import { StudioError } from "@jerryqiu/db/studio";
@@ -7,7 +8,10 @@ import { originalsStore } from "@/lib/storage";
 
 export const dynamic = "force-dynamic";
 
-/** Saves a watermark: multipart with `name`, `kind` (text or image), `text` or a PNG `file`, position, opacity and size. */
+/**
+ * Saves a watermark: multipart with `name`, `kind` (text or image), `text` or a PNG `file`, position, opacity and size.
+ * The PNG is stored under its SHA-256, so the same image used by several watermarks is stored once.
+ */
 export const POST = guardedRoute(
   "studio.access",
   async (req) => {
@@ -21,8 +25,10 @@ export const POST = guardedRoute(
       if (file instanceof File && file.size) {
         if (file.type !== "image/png" || file.size > 4 * 1024 * 1024)
           throw new StudioError("A watermark image is a PNG under 4 MB (transparent works best).");
-        imageKey = `watermark/${crypto.randomUUID()}.png`;
-        await originalsStore().put(imageKey, new Uint8Array(await file.arrayBuffer()), { contentType: "image/png" });
+        const bytes = new Uint8Array(await file.arrayBuffer());
+        imageKey = `watermark/${createHash("sha256").update(bytes).digest("hex")}.png`;
+        if (!(await originalsStore().head(imageKey)))
+          await originalsStore().put(imageKey, bytes, { contentType: "image/png" });
       }
       const id = await saveWatermark(db, {
         id: String(f.get("id") ?? "") || undefined,

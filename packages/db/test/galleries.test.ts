@@ -240,6 +240,33 @@ describe("studio gallery tools", () => {
     expect(copyAlbums.find((a) => a.id === moved?.item.albumId)?.name).toBe("Dupe album");
   });
 
+  it("duplicates only the settings and albums when the photographs are left out", async () => {
+    const album = await gal.createAlbum(db, gid, "Settings album");
+    await gal.addItems(db, gid, [media[1]], album.id);
+    await gal.setCover(db, gid, media[1]);
+    const { gallery: copy } = await gal.duplicateGallery(db, gid, "owner@test", { photos: false });
+    expect(copy.coverMediaId).toBeNull();
+    expect(await gal.galleryContents(db, copy.id, { includeHidden: true })).toEqual([]);
+    const albums = await gal.listAlbums(db, copy.id);
+    expect(albums.find((a) => a.name === "Settings album")?.coverMediaId).toBeNull();
+    // with the photographs, the copy points at the same media rows: nothing is stored again
+    const before = (await db.select().from(schema.media)).length;
+    const { gallery: full } = await gal.duplicateGallery(db, gid, "owner@test", { photos: true });
+    const ids = (await gal.galleryContents(db, full.id, { includeHidden: true })).map((i) => i.media.id).sort();
+    expect(ids).toEqual((await gal.galleryContents(db, gid, { includeHidden: true })).map((i) => i.media.id).sort());
+    expect((await db.select().from(schema.media)).length).toBe(before);
+  });
+
+  it("gives a clashing filename a free one within the gallery, ignoring case", async () => {
+    const [m] = await db.select().from(schema.media).where(eq(schema.media.id, media[0]));
+    expect(await gal.freeFilename(db, gid, "fresh-name.jpg")).toBe("fresh-name.jpg");
+    expect(await gal.freeFilename(db, gid, m.filename.toUpperCase())).toMatch(/-2\.[^.]+$/i);
+    expect(await gal.freeFilename(db, gid, m.filename, [m.filename.replace(/(\.[^.]+)$/, "-2$1")])).toMatch(
+      /-3\.[^.]+$/,
+    );
+    expect(await gal.freeFilename(db, gid, "README", ["readme"])).toBe("README-2");
+  });
+
   it("generates passcodes that are readable and unique", async () => {
     const seen = new Set<string>();
     for (let i = 0; i < 20; i++) seen.add(await gal.freshPasscode(db));

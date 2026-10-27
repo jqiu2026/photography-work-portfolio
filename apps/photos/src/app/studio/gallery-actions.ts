@@ -464,18 +464,19 @@ export async function sendGalleryLinkAction(galleryId: string) {
   });
 }
 
-export async function duplicateGalleryAction(galleryId: string) {
+/** A draft copy of the settings and albums; with `photos`, the same photographs too (shared, never stored again). */
+export async function duplicateGalleryAction(galleryId: string, photos = false) {
   return studio(async ({ db, user }) => {
     await assertPlan(db, "galleries");
-    const r = await gal.duplicateGallery(db, gid(galleryId), user.email ?? undefined);
+    const r = await gal.duplicateGallery(db, gid(galleryId), user.email ?? undefined, { photos: Boolean(photos) });
     return {
-      message: "Duplicated as a draft",
+      message: photos ? "Duplicated as a draft, with the photographs" : "Duplicated as a draft, settings only",
       extra: { galleryId: r.gallery.id, passcode: r.passcode },
       audit: {
         action: "studio.gallery.duplicate",
         entity: "studio_gallery",
         entityId: r.gallery.id,
-        summary: "Duplicated a gallery",
+        summary: photos ? "Duplicated a gallery with its photographs" : "Duplicated a gallery's settings",
       },
     };
   });

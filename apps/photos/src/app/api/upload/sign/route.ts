@@ -20,11 +20,14 @@ const body = z.object({
   type: z.enum(["image/jpeg", "image/png", "image/webp", "image/avif", "image/gif", "image/tiff"]),
   sha256: z.string().regex(/^[0-9a-f]{64}$/),
   albumId: z.string().uuid().optional(),
+  /** names this browser has already claimed for uploads still in flight to the same gallery */
+  claimed: z.array(z.string().max(200)).max(2000).optional(),
 });
 
 /**
  * Step 1 of a gallery upload. Exact duplicates (same SHA-256) are not uploaded again: if the photograph already exists it is
- * simply added to this gallery. Otherwise returns how to send the file: a signed PUT (local development) or Vercel Blob's
+ * simply added to this gallery. A different picture with a name this gallery already uses gets a free name ("-2") and the
+ * answer says so (`renamedFrom`). Otherwise returns how to send the file: a signed PUT (local development) or Vercel Blob's
  * client upload (production). Nothing is trusted yet; the bytes are validated again in step 2.
  */
 export const POST = guardedRoute(
@@ -36,7 +39,7 @@ export const POST = guardedRoute(
         { error: "Unsupported file. Use a JPEG, PNG, WebP, AVIF, GIF or TIFF under 60 MB." },
         { status: 400 },
       );
-    const { galleryId, filename, type, sha256, albumId } = parsed.data;
+    const { galleryId, filename, type, sha256, albumId, claimed } = parsed.data;
     const db = getDb();
     if (!db) return NextResponse.json({ error: "No database." }, { status: 503 });
     const [g] = await db
@@ -63,12 +66,15 @@ export const POST = guardedRoute(
       if (e instanceof StudioError) return NextResponse.json({ error: e.message }, { status: 402 });
       throw e;
     }
+    const asked = safeName(filename);
+    const name = await gal.freeFilename(db, galleryId, asked, (claimed ?? []).map(safeName));
+    const named = { filename: name, renamedFrom: name === asked ? undefined : asked };
     const id = crypto.randomUUID();
-    const key = `orig/${id}/${safeName(filename)}`;
+    const key = `orig/${id}/${name}`;
     if ((process.env.STORAGE_DRIVER ?? "local") === "blob")
-      return NextResponse.json({ mode: "blob", id, key, contentType: type });
+      return NextResponse.json({ mode: "blob", id, key, contentType: type, ...named });
     const uploadUrl = await originalsStore().getSignedUrl(key, { expiresIn: 600, method: "PUT", contentType: type });
-    return NextResponse.json({ mode: "signed", id, key, uploadUrl, contentType: type });
+    return NextResponse.json({ mode: "signed", id, key, uploadUrl, contentType: type, ...named });
   },
   { limit: 600 },
 );
