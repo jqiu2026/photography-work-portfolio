@@ -135,3 +135,12 @@ export async function samplePdf(title: string, pages = 6): Promise<Uint8Array> {
   }
   return doc.save();
 }
+
+/** The number of pages of a PDF, or null when the bytes are not a readable PDF. */
+export async function pdfPageCount(bytes: Uint8Array): Promise<number | null> {
+  try {
+    return (await PDFDocument.load(bytes, { ignoreEncryption: true })).getPageCount();
+  } catch {
+    return null;
+  }
+}

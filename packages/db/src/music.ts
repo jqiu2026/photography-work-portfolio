@@ -761,17 +761,28 @@ export async function setCommissionStatus(
 }
 
 /* ---------- newsletter (double opt-in) ---------- */
+/**
+ * A subscriber's link token is derived from their id and the site secret (like the order link), so every newsletter can
+ * carry a working unsubscribe link without storing the raw token. Only its hash is stored.
+ */
+export const subscriberTokenFor = (id: string) =>
+  createHmac("sha256", process.env.AUTH_SECRET ?? "dev-only-secret")
+    .update(`music-sub:${id}`)
+    .digest("base64url");
+
 export async function subscribe(db: Database, email: string) {
   const e = z.string().trim().toLowerCase().email().max(200).parse(email);
-  const { token, hash } = newToken();
   const [existing] = await db.select().from(s.musicSubscribers).where(eq(s.musicSubscribers.email, e));
   if (existing?.confirmedAt && !existing.unsubscribedAt) return { status: "already" as const };
+  const id = existing?.id ?? randomUUID();
+  const token = subscriberTokenFor(id);
+  const hash = sha256Hex(token);
   if (existing)
     await db
       .update(s.musicSubscribers)
       .set({ tokenHash: hash, unsubscribedAt: null })
-      .where(eq(s.musicSubscribers.id, existing.id));
-  else await db.insert(s.musicSubscribers).values({ email: e, tokenHash: hash });
+      .where(eq(s.musicSubscribers.id, id));
+  else await db.insert(s.musicSubscribers).values({ id, email: e, tokenHash: hash });
   return { status: "pending" as const, token, email: e };
 }
 
@@ -884,3 +895,86 @@ export async function previewFile(db: Database, fileId: string) {
   if (!row || row.file.mime !== "application/pdf" || row.file.previewPages < 1) return null;
   return row.file;
 }
+
+/* ---------- recordings and performances (music_items) ---------- */
+export const mediaItemSchema = z.object({
+  kind: z.enum(["recording", "performance"]),
+  title: z.string().trim().min(1).max(200),
+  workId: z.string().uuid().nullable().optional(),
+  date: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .nullable()
+    .optional(),
+  venue: z.string().trim().max(200).nullable().optional(),
+  ensemble: z.string().trim().max(200).nullable().optional(),
+  note: z.string().trim().max(400).nullable().optional(),
+  provider: z.enum(["youtube", "spotify", "soundcloud", "bandcamp"]).nullable().optional(),
+  embedId: z.string().trim().max(60).nullable().optional(),
+});
+
+export async function addMediaItem(db: Database, input: z.input<typeof mediaItemSchema>) {
+  const v = mediaItemSchema.parse(input);
+  if (v.kind === "recording" && (!v.provider || !v.embedId))
+    throw new StudioError("A recording needs a provider and an id.");
+  const [row] = await db
+    .insert(s.musicItems)
+    .values({
+      kind: v.kind,
+      title: v.title,
+      workId: v.workId ?? null,
+      date: v.date ?? null,
+      venue: v.venue ?? null,
+      ensemble: v.ensemble ?? null,
+      note: v.note ?? null,
+      provider: v.kind === "recording" ? (v.provider ?? null) : null,
+      embedId: v.kind === "recording" ? (v.embedId ?? null) : null,
+    })
+    .returning();
+  return row;
+}
+
+export async function removeMediaItem(db: Database, id: string) {
+  await db.update(s.musicItems).set({ deletedAt: new Date(), visible: false }).where(eq(s.musicItems.id, id));
+}
+
+export const listMediaItems = (db: Database) =>
+  db
+    .select()
+    .from(s.musicItems)
+    .where(isNull(s.musicItems.deletedAt))
+    .orderBy(desc(s.musicItems.date), asc(s.musicItems.title));
+
+export async function orderDetail(db: Database, id: string) {
+  const [order] = await db.select().from(s.musicOrders).where(eq(s.musicOrders.id, id));
+  if (!order) return null;
+  const [lines, licenses, downloads] = await Promise.all([
+    db.select().from(s.musicOrderLines).where(eq(s.musicOrderLines.orderId, id)),
+    db.select().from(s.musicLicenses).where(eq(s.musicLicenses.orderId, id)),
+    db
+      .select({ licenseId: s.musicDownloads.licenseId, n: sql<number>`count(*)::int` })
+      .from(s.musicDownloads)
+      .innerJoin(s.musicLicenses, eq(s.musicLicenses.id, s.musicDownloads.licenseId))
+      .where(eq(s.musicLicenses.orderId, id))
+      .groupBy(s.musicDownloads.licenseId),
+  ]);
+  return { order, number: orderNo(order.seq), lines, licenses, downloads };
+}
+
+export async function setLicenseDownloadLimit(db: Database, licenseId: string, limit: number) {
+  if (!Number.isInteger(limit) || limit < 1 || limit > 1000) throw new StudioError("Use a limit from 1 to 1000.");
+  await db.update(s.musicLicenses).set({ downloadLimit: limit }).where(eq(s.musicLicenses.id, licenseId));
+}
+
+export async function getProductAdmin(db: Database, id: string) {
+  const [p] = await db.select().from(s.musicProducts).where(eq(s.musicProducts.id, id));
+  return p ?? null;
+}
+
+export async function setPreviewPages(db: Database, fileId: string, pages: number) {
+  if (!Number.isInteger(pages) || pages < 0 || pages > 10) throw new StudioError("Use 0 to 10 preview pages.");
+  await db.update(s.musicScoreFiles).set({ previewPages: pages }).where(eq(s.musicScoreFiles.id, fileId));
+}
+
+export const listSubscribersAdmin = (db: Database) =>
+  db.select().from(s.musicSubscribers).orderBy(desc(s.musicSubscribers.createdAt));
