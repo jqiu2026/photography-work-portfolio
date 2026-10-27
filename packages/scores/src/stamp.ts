@@ -79,3 +79,59 @@ export async function licensePdf(facts: LicenseFacts): Promise<Uint8Array> {
   appendLicensePage(doc, font, bold, facts);
   return doc.save();
 }
+
+/**
+ * A free preview: only the first `pages` pages, each marked PREVIEW across the page. The rest of the score is never in the
+ * bytes that leave the server. A score with no more pages than the preview shows nothing extra (the caller caps it).
+ */
+export async function previewPdf(original: Uint8Array, pages: number): Promise<Uint8Array> {
+  const src = await PDFDocument.load(original, { ignoreEncryption: true });
+  const out = await PDFDocument.create();
+  const n = Math.max(1, Math.min(pages, Math.max(1, src.getPageCount() - 1)));
+  const copied = await out.copyPages(
+    src,
+    Array.from({ length: Math.min(n, src.getPageCount()) }, (_, i) => i),
+  );
+  const bold = await out.embedFont(StandardFonts.HelveticaBold);
+  for (const page of copied) {
+    out.addPage(page);
+    const { width, height } = page.getSize();
+    page.drawText("PREVIEW", {
+      x: width * 0.12,
+      y: height * 0.28,
+      size: Math.min(width, height) / 5,
+      font: bold,
+      color: rgb(0.5, 0.5, 0.5),
+      opacity: 0.18,
+      rotate: degrees(40),
+    });
+  }
+  out.setTitle("Preview");
+  return out.save();
+}
+
+/** A labeled stand-in score for development and tests: SAMPLE on every page. Never sold. */
+export async function samplePdf(title: string, pages = 6): Promise<Uint8Array> {
+  const doc = await PDFDocument.create();
+  const font = await doc.embedFont(StandardFonts.Helvetica);
+  const bold = await doc.embedFont(StandardFonts.HelveticaBold);
+  for (let i = 0; i < pages; i++) {
+    const page = doc.addPage([595, 842]);
+    page.drawText(title.replace(/[^\x20-\x7e]/g, "-"), { x: 56, y: 780, size: 20, font: bold });
+    page.drawText(`SAMPLE page ${i + 1} of ${pages}: not music, a stand-in file for development.`, {
+      x: 56,
+      y: 750,
+      size: 10,
+      font,
+    });
+    for (let s = 0; s < 8; s++)
+      for (let l = 0; l < 5; l++)
+        page.drawLine({
+          start: { x: 56, y: 680 - s * 80 - l * 7 },
+          end: { x: 539, y: 680 - s * 80 - l * 7 },
+          thickness: 0.6,
+          color: rgb(0.2, 0.2, 0.2),
+        });
+  }
+  return doc.save();
+}

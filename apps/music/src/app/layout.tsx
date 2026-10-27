@@ -1,40 +1,33 @@
-import "@halation/ui/styles.css";
-import { ThemeScript } from "@jerryqiu/sites/theme-script";
-import { ThemeProvider } from "@halation/ui";
-import { ScreenshotGuard } from "@halation/ui/media";
-import { SmoothScroll } from "@halation/ui/motion";
+import "@holominimal/ui/styles.css";
+import "./holominimal.css";
+import { Theme } from "@holominimal/ui";
+import { getSite } from "@jerryqiu/sites";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { getSite } from "@jerryqiu/sites";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { Maintenance } from "@/components/site/Maintenance";
+import { Maintenance } from "@/components/Maintenance";
 import { fontVars } from "@/lib/fonts";
 import { siteSettings } from "@/lib/site-settings";
 
 export const metadata: Metadata = {
   metadataBase: new URL(getSite("music").url),
   title: { default: "Music · Jerry Qiu", template: "%s · Music · Jerry Qiu" },
-  description: "Music by Jerry Qiu: background, recordings and performances.",
+  description: "Music by Jerry Qiu: compositions, recordings, performances, and scores to play.",
   other: { "ai-crawlers": "noai, noimageai" },
 };
 
 export default async function MusicLayout({ children }: { children: ReactNode }) {
-  const { general, protection } = await siteSettings("music");
+  const { general } = await siteSettings("music");
   return (
     <html lang="en" suppressHydrationWarning className={fontVars}>
       <head>
-        <ThemeScript preset="music" />
         <meta name="robots" content="noai, noimageai" />
       </head>
-      <body className="hl-root">
-        <ThemeProvider preset="music">
-          <ScreenshotGuard level={protection.level}>
-            <SmoothScroll>
-              {general.maintenance ? <Maintenance message={general.maintenanceMessage} /> : children}
-            </SmoothScroll>
-          </ScreenshotGuard>
-        </ThemeProvider>
+      <body>
+        <Theme theme={{ accent: "amber" }}>
+          {general.maintenance ? <Maintenance message={general.maintenanceMessage} /> : children}
+        </Theme>
         <Analytics />
         <SpeedInsights />
       </body>

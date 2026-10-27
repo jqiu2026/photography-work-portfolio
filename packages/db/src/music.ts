@@ -1,5 +1,6 @@
 import { type LicenseTier, type RightsType, canSell, licenseNumber, orderTotals } from "@jerryqiu/scores";
 import { and, asc, desc, eq, inArray, isNull, sql } from "drizzle-orm";
+import { createHmac, randomUUID } from "node:crypto";
 import { z } from "zod";
 import type { Database } from "./client";
 import { StudioError } from "./errors";
@@ -459,11 +460,14 @@ export async function createOrder(db: Database, input: z.input<typeof orderInput
   const needsOrg = lines.some((l) => l.tier !== "personal");
   if (needsOrg && !v.organization?.trim()) throw new StudioError("Name the ensemble or institution for this license.");
   const totals = orderTotals(lines.map((l) => ({ productId: l.productId, title: l.title, priceCents: l.priceCents })));
-  const { token, hash } = newToken();
+  const id = randomUUID();
+  const token = accessTokenFor(id);
+  const hash = sha256Hex(token);
   const buyer = await upsertBuyer(db, v.email, v.holderName);
   const [order] = await db
     .insert(s.musicOrders)
     .values({
+      id,
       buyerId: buyer.id,
       email: v.email,
       holderName: v.holderName,
@@ -477,6 +481,34 @@ export async function createOrder(db: Database, input: z.input<typeof orderInput
 }
 
 export const orderNumber = orderNo;
+
+export async function orderLinesFor(db: Database, orderId: string) {
+  const [order] = await db.select().from(s.musicOrders).where(eq(s.musicOrders.id, orderId));
+  if (!order) return [];
+  const lines = await db.select().from(s.musicOrderLines).where(eq(s.musicOrderLines.orderId, orderId));
+  return [{ order, lines }];
+}
+
+export async function setOrderProviderRef(db: Database, orderId: string, provider: string, providerRef: string) {
+  await db
+    .update(s.musicOrders)
+    .set({ provider, providerRef })
+    .where(and(eq(s.musicOrders.id, orderId), eq(s.musicOrders.status, "pending")));
+}
+
+/**
+ * The order link is derived from the order id and the site secret, so a receipt can always be sent with the same link the
+ * buyer saw on the success page. Only its hash is stored; knowing the id alone is not enough to open an order.
+ */
+export const accessTokenFor = (orderId: string) =>
+  createHmac("sha256", process.env.AUTH_SECRET ?? "dev-only-secret")
+    .update(`music-order:${orderId}`)
+    .digest("base64url");
+
+export async function orderByProviderRef(db: Database, providerRef: string) {
+  const [o] = await db.select().from(s.musicOrders).where(eq(s.musicOrders.providerRef, providerRef));
+  return o ?? null;
+}
 
 /**
  * Marks an order paid and issues one license per line. Safe to call twice (a webhook replay): the second call changes
@@ -805,3 +837,50 @@ export const listOrdersAdmin = (db: Database, limit = 100) =>
   db.select().from(s.musicOrders).orderBy(desc(s.musicOrders.createdAt)).limit(limit);
 
 export type { RightsType };
+
+/** The cart as the buyer sees it: lines and totals, or the reason it cannot be bought (an item was withdrawn, or is twice). */
+export async function previewCart(db: Database, productIds: string[]) {
+  if (!productIds.length)
+    return { lines: [] as OrderLineDraft[], totals: orderTotals([]), error: null as string | null };
+  try {
+    const lines = await expandCart(db, productIds);
+    return {
+      lines,
+      totals: orderTotals(lines.map((l) => ({ productId: l.productId, title: l.title, priceCents: l.priceCents }))),
+      error: null as string | null,
+    };
+  } catch (e) {
+    if (e instanceof StudioError) return { lines: [] as OrderLineDraft[], totals: orderTotals([]), error: e.message };
+    throw e;
+  }
+}
+
+export const needsOrganization = (lines: { tier: string }[]) => lines.some((l) => l.tier !== "personal");
+
+export async function licenseWithContext(db: Database, licenseId: string) {
+  const [row] = await db
+    .select({ license: s.musicLicenses, work: s.musicWorks, order: s.musicOrders })
+    .from(s.musicLicenses)
+    .innerJoin(s.musicWorks, eq(s.musicWorks.id, s.musicLicenses.workId))
+    .innerJoin(s.musicOrders, eq(s.musicOrders.id, s.musicLicenses.orderId))
+    .where(eq(s.musicLicenses.id, licenseId));
+  return row ?? null;
+}
+
+/** A score file that may be previewed publicly: a PDF of a published piece, with preview pages switched on. */
+export async function previewFile(db: Database, fileId: string) {
+  const [row] = await db
+    .select({ file: s.musicScoreFiles, work: s.musicWorks })
+    .from(s.musicScoreFiles)
+    .innerJoin(s.musicWorks, eq(s.musicWorks.id, s.musicScoreFiles.workId))
+    .where(
+      and(
+        eq(s.musicScoreFiles.id, fileId),
+        isNull(s.musicScoreFiles.deletedAt),
+        isNull(s.musicWorks.deletedAt),
+        eq(s.musicWorks.status, "published"),
+      ),
+    );
+  if (!row || row.file.mime !== "application/pdf" || row.file.previewPages < 1) return null;
+  return row.file;
+}

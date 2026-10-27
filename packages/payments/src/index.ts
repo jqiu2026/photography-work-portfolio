@@ -20,6 +20,8 @@ export type CheckoutInput = {
   /** Optional tip and card surcharge, charged as their own line items and recorded in the metadata. */
   tipCents?: number;
   surchargeCents?: number;
+  /** Extra metadata copied to the session and the payment (for example `site: "music"`, so each app's webhook ignores the other's events). */
+  metadata?: Record<string, string>;
 };
 
 export type StripeConfig = { secretKey: string; apiBase?: string; fetch?: typeof fetch };
@@ -66,6 +68,12 @@ export function checkoutBody(i: CheckoutInput): string {
     customer_email: i.customerEmail,
     "metadata[invoice_id]": i.invoiceId,
     "payment_intent_data[metadata][invoice_id]": i.invoiceId,
+    ...Object.fromEntries(
+      Object.entries(i.metadata ?? {}).flatMap(([k, v]) => [
+        [`metadata[${k}]`, v],
+        [`payment_intent_data[metadata][${k}]`, v],
+      ]),
+    ),
     "line_items[0][quantity]": 1,
     "line_items[0][price_data][currency]": i.currency,
     "line_items[0][price_data][unit_amount]": i.amountCents,

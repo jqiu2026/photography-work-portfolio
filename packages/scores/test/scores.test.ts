@@ -91,3 +91,16 @@ describe("stamping", () => {
     expect((await PDFDocument.load(await licensePdf(facts))).getPageCount()).toBe(1);
   });
 });
+
+describe("preview", () => {
+  it("keeps only the first pages and never the whole score", async () => {
+    const { previewPdf } = await import("../src");
+    const src = await PDFDocument.create();
+    for (let i = 0; i < 9; i++) src.addPage([400, 600]);
+    const out = await PDFDocument.load(await previewPdf(await src.save(), 2));
+    expect(out.getPageCount()).toBe(2);
+    const one = await PDFDocument.create();
+    one.addPage([400, 600]);
+    expect((await PDFDocument.load(await previewPdf(await one.save(), 5))).getPageCount()).toBe(1);
+  });
+});

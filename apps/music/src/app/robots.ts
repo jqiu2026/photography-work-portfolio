@@ -26,7 +26,7 @@ export default function robots(): MetadataRoute.Robots {
   const base = getSite("music").url;
   return {
     rules: [
-      { userAgent: "*", allow: "/", disallow: ["/api/"] },
+      { userAgent: "*", allow: "/", disallow: ["/api/", "/studio", "/cart", "/checkout", "/order/", "/library"] },
       ...AI.map((userAgent) => ({ userAgent, disallow: "/" })),
     ],
     sitemap: `${base}/sitemap.xml`,
