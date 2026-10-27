@@ -14,6 +14,10 @@ Done and committed: PHOTO-M1 foundation, M2 ShootProof removed, M3 protection ev
 
 **Next (see PROGRESS.md table):** M13 leftovers (tracking emails from the lab webhook, cancel a submitted print after a refund; the QR code for the link is done), M14 rest (revenue and true-hourly-rate reports, storage cost in money, data export and delete), M15 rest (the owner REST API with keys), M16 face search, culling and video mocks, M17 deployment prep, M18 polish and accessibility (axe on the new pages: /book questionnaire, studio Expenses, Gear, Call sheets, Rights, Subscribers, Testimonials).
 
+**Done 2026-10-27 (studio audit):** see `AUDIT-studio-2026-10-27.md` and the PROGRESS log. Void invoices, Mark paid by balance with a confirm, edit and cancel shoots (the Add a shoot dialog doubles as Edit shoot when `f.job` is set), archive inquiries, overdue and balance on invoice cards, per-section loaders for the record pages, calendar and layout-picker accessibility. Open from the audit: Q161 to Q167, plus U12 to U14 and E4 in the audit file.
+
+**Last check (2026-10-27, after the audit commits):** `pnpm lint` clean, `pnpm typecheck` clean, `pnpm test` all green (db 160, photos 44, every package), `pnpm test:e2e` 304 passed, `pnpm test:admin` 123 of 124 in one full run: `galleries-security.spec.ts` test 1 failed once ("Clicking the checkbox did not change its state" on Show filenames, a click before hydration under load) and the whole spec passed 6/6 when rerun alone. Treat it as flaky, like the two `public.spec.ts` ones.
+
 **Studio tests read toasts:** use `note(page)` from `e2e-admin/ui.ts` (toast or status element), not `getByRole("status")`; the toast's Dismiss button label repeats its text, so `getByLabel("Email")` can match it: use `getByRole("textbox", { name })`.
 
 ## UI: Holominimal (2026-10-18)
@@ -39,6 +43,8 @@ The whole photo site is on Holominimal (`@holominimal/ui`, vendored build in `pa
 
 ## Gotchas
 
+- Closed studio dialogs stay in the DOM, so two dialogs on one page must not share a field label (`getByLabel("Title")` would match both). Reuse one dialog for add and edit, as Clients and Shoots do.
+- 2026-10-27: the owner's local database `~/.jerryqiu-dev/pglite` aborts on open (Q167); a throwaway one runs with `PGLITE_DIR=<dir> PGLITE_PORT=54349 pnpm dev:db` and `DATABASE_URL=postgres://postgres:postgres@127.0.0.1:54349/postgres` for the photo dev server and the seed scripts.
 - Port 3001 is an unrelated project; docs app on 3010. `pnpm` 12.11.2; macOS `sed -i ''`.
 - React 19 resets uncontrolled form fields after a `<form action>` finishes: use `onSubmit` + transition (see `useServerForm` in `components/portal/PortalForms.tsx`) or controlled fields.
 - Gallery pages: the visitor session is the same signed cookie as the client's (`PortalSession.r = "v"`); proofing actions require `a.role === "client"`. A locked album's photographs are filtered with `lockedMediaIds` everywhere (page data, downloads, image tokens). A shop order is an invoice of kind `shop`; paid orders are finished in `lib/shop-fulfil.ts` (called from `afterPayment`).
@@ -46,6 +52,7 @@ The whole photo site is on Holominimal (`@holominimal/ui`, vendored build in `pa
 - Dev `unstable_cache` staleness makes `e2e-admin/public.spec.ts` tests 2 and 3 flaky (pre-existing).
 - A stale `apps/photos/.next/types` breaks typecheck after deleting routes: `rm -rf apps/photos/.next/types`.
 - Public e2e rate limits are per IP; the image route allows 900 requests per minute per IP.
+- 2026-10-26: build caches (`apps/*/.next`, `.next-e2e`, `.next-e2e-b`) were deleted to free about 18 GB. The first `pnpm dev`, `build` or `test:e2e` rebuilds them and is slower. Tracked `.next-maintenance` folders were kept.
 
 ## Owner to-do (keys and accounts)
 
