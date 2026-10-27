@@ -19,7 +19,20 @@ export const routes: { site: string; path: string; base: string }[] = [
     "/accessibility",
     "/nope",
   ].map((path) => ({ site: "hub", path, base: hub })),
-  ...["/", "/listen", "/performances", "/about"].map((path) => ({
+  ...[
+    "/",
+    "/compositions",
+    "/scores",
+    "/listen",
+    "/performances",
+    "/commission",
+    "/newsletter",
+    "/about",
+    "/licensing",
+    "/privacy",
+    "/cart",
+    "/library",
+  ].map((path) => ({
     site: "music",
     path,
     base: music,
