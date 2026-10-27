@@ -63,10 +63,14 @@ export function Uploader({
         });
         const f = await fin.json();
         if (!fin.ok) throw new Error(f.error ?? "Processing failed");
-        ids.push(s.id);
+        ids.push(f.id ?? s.id);
         set(i, {
           state: "done",
-          note: f.similarTo ? `Looks like “${f.similarTo.filename}” (already in the library)` : undefined,
+          note: f.duplicate
+            ? "Already in the library, not stored again"
+            : f.similarTo
+              ? `Looks like “${f.similarTo.filename}” (already in the library)`
+              : undefined,
         });
       } catch (e) {
         set(i, { state: "error", note: (e as Error).message });

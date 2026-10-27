@@ -76,6 +76,34 @@ describe("ingestImage", () => {
     expect(m.reviewStatus).toBe("needs_review");
     expect(m.containsPeople).toBe(true);
   });
+  it("never stores the same file twice: an exact copy answers with the photograph already there", async () => {
+    const bytes = await picture(520, 340);
+    const a = await ingestImage({ db, originals, publicStore: pub, filename: "same.jpg", bytes, user: "u" });
+    // a staged original (as the upload routes leave it) is removed rather than kept as a second copy
+    const staged = `orig/${crypto.randomUUID()}/same-again.jpg`;
+    await originals.put(staged, new Uint8Array(bytes), { contentType: "image/jpeg" });
+    const b = await ingestImage({
+      db,
+      originals,
+      publicStore: pub,
+      filename: "same-again.jpg",
+      bytes,
+      user: "u",
+      originalKey: staged,
+    });
+    expect(b).toMatchObject({ id: a.id, duplicate: true });
+    expect(await originals.head(staged)).toBeNull();
+    const [m] = await db.select().from(schema.media).where(eq(schema.media.id, a.id));
+    expect(m.sha256).toMatch(/^[0-9a-f]{64}$/);
+    expect(
+      (
+        await db
+          .select()
+          .from(schema.media)
+          .where(eq(schema.media.sha256, m.sha256 as string))
+      ).length,
+    ).toBe(1);
+  });
   it("warns about a near-duplicate upload", async () => {
     const a = await ingestImage({
       db,

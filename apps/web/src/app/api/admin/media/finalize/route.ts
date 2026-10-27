@@ -50,6 +50,7 @@ export const POST = guardedRoute(
         replaceId: replace ? id : undefined,
         originalKey: key,
       });
+      if (r.duplicate) return NextResponse.json({ id: r.id, duplicate: true });
       await writeAudit(db, {
         actor: user.email,
         action: replace ? "media.replace" : "media.upload",

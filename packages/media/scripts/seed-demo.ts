@@ -331,11 +331,15 @@ if (q) await com.sendQuote(db, q.id).catch(() => {});
 const originals = createStorage("originals");
 const publicStore = createStorage("public");
 const hues = [12, 28, 48, 110, 165, 200, 235, 285, 320, 350];
-async function photo(i: number, w: number, h: number) {
+// every demo photograph differs (a counter across galleries): identical bytes would be stored once and shared
+let made = 0;
+async function photo(w: number, h: number) {
+  const i = made++;
   const hue = hues[i % hues.length];
+  const light = 52 - 6 * (Math.floor(i / hues.length) % 4);
   const noise = Buffer.alloc(w * h * 3);
   for (let k = 0; k < noise.length; k++) noise[k] = (k * 2654435761) >>> 24;
-  const base = await sharp({ create: { width: w, height: h, channels: 3, background: `hsl(${hue} 55% 52%)` } })
+  const base = await sharp({ create: { width: w, height: h, channels: 3, background: `hsl(${hue} 55% ${light}%)` } })
     .jpeg()
     .toBuffer();
   return sharp(base)
@@ -359,7 +363,7 @@ async function fill(galleryId: string, label: string, n: number) {
       originals,
       publicStore,
       filename: `${label}-${String(i + 1).padStart(3, "0")}.jpg`,
-      bytes: await photo(i, portraitShape ? 1200 : 1800, portraitShape ? 1800 : 1200),
+      bytes: await photo(portraitShape ? 1200 : 1800, portraitShape ? 1800 : 1200),
       user: "demo",
       defaultReview: false,
     });

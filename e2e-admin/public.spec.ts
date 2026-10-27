@@ -102,7 +102,8 @@ test.describe("the public site follows the CMS", () => {
 
   test("images are served by the image route: derivatives only, cacheable, no original path", async ({ page }) => {
     await page.goto("/admin/media", { waitUntil: "networkidle" });
-    const buffer = await sharp({ create: { width: 1800, height: 1200, channels: 3, background: "#3a6ea5" } })
+    // its own colour: the same bytes as the media spec's upload would be recognised as a duplicate and not stored again
+    const buffer = await sharp({ create: { width: 1800, height: 1200, channels: 3, background: "#4a7e95" } })
       .jpeg()
       .toBuffer();
     await page.getByLabel("Upload images").setInputFiles({ name: `pub-${uid}.jpg`, mimeType: "image/jpeg", buffer });

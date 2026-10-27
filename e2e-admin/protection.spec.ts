@@ -3,8 +3,10 @@ import sharp from "sharp";
 
 const uid = Date.now().toString(36);
 const PHOTOS = "http://localhost:3302";
+// each call makes a new file (one pixel wider): the same bytes again would be recognised and not stored twice
+let made = 0;
 const photo = (color: string) =>
-  sharp({ create: { width: 1600, height: 1000, channels: 3, background: color } })
+  sharp({ create: { width: 1600 + made++, height: 1000, channels: 3, background: color } })
     .jpeg()
     .toBuffer();
 

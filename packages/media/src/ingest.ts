@@ -1,5 +1,6 @@
 import { type Database, schema } from "@jerryqiu/db";
 import type { StorageProvider } from "@jerryqiu/storage";
+import { createHash } from "node:crypto";
 import { and, eq, isNotNull, isNull, ne } from "drizzle-orm";
 import { ImageError, type Processed, contentTypeFor, hamming, processImage, safeName } from "./process";
 
@@ -7,12 +8,15 @@ export type Ingested = {
   id: string;
   similarTo?: { id: string; filename: string; distance: number };
   replaced: boolean;
+  /** true when an exact copy was already in the library: `id` is that photograph and nothing was stored */
+  duplicate?: boolean;
 };
 
 /**
  * Turns an original (already in the private store, or passed as bytes) into a media row with public derivatives.
  *  - New: random id, original at `orig/<id>/<name>` (private), derivatives at `img/<id>/<width>.<format>` (public).
  *  - Replace-in-place (`replaceId`): same id, new original and derivatives, so every page that uses it updates.
+ *  - Exact duplicates (same SHA-256) are not stored again; see `duplicate`.
  *  - People: images are flagged `needs_review` with contains_people when `defaultReview` is set (used for imported
  *    school-event photos, per docs/project/11-legal-and-compliance.md).
  */
@@ -29,6 +33,20 @@ export async function ingestImage(opts: {
   defaultReview?: boolean;
   alt?: string;
 }): Promise<Ingested> {
+  // the same file is never stored twice: an exact copy (same SHA-256) answers with the photograph already in the library,
+  // and a staged original the caller already put in storage is removed
+  const sha256 = createHash("sha256").update(opts.bytes).digest("hex");
+  if (!opts.replaceId) {
+    const [same] = await opts.db
+      .select({ id: schema.media.id })
+      .from(schema.media)
+      .where(and(eq(schema.media.sha256, sha256), isNull(schema.media.deletedAt)))
+      .limit(1);
+    if (same) {
+      if (opts.originalKey) await opts.originals.delete(opts.originalKey).catch(() => {});
+      return { id: same.id, replaced: false, duplicate: true };
+    }
+  }
   const processed: Processed = await processImage(opts.bytes, { owner: "Jerry Qiu" });
   const id = opts.replaceId ?? opts.id ?? crypto.randomUUID();
   const name = safeName(opts.filename);
@@ -68,6 +86,7 @@ export async function ingestImage(opts: {
     color: processed.color,
     blur: processed.blur,
     phash: processed.phash,
+    sha256,
     originalKey,
     derivatives: stored,
     exif: processed.exif,
