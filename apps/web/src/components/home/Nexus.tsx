@@ -41,6 +41,8 @@ export function Nexus({ realms, children }: { realms: RealmLink[]; children: Rea
   const [phase, setPhaseState] = useState<Phase>("hub");
   const [sound, setSound] = useState(false);
   const [boot, setBoot] = useState<string | null>(null);
+  const [hover, setHover] = useState(-1);
+  const tag = useRef<HTMLDivElement>(null);
   const audio = useRef<Ambience | null>(null);
   const st = useRef({
     target: 0,
@@ -294,6 +296,11 @@ export function Nexus({ realms, children }: { realms: RealmLink[]; children: Rea
       }
       const g = hit(e);
       if (section.current) section.current.style.cursor = g ? "pointer" : "";
+      setHover(g ? g.i : -1);
+      if (g && tag.current) {
+        tag.current.style.left = `${(g.x + g.w / 2) * s.scale}px`;
+        tag.current.style.top = `${g.y * s.scale - 10}px`;
+      }
     };
     const onClick = (e: MouseEvent) => {
       const g = hit(e);
@@ -416,6 +423,22 @@ export function Nexus({ realms, children }: { realms: RealmLink[]; children: Rea
         <canvas ref={canvas} className="nx-canvas" aria-hidden />
       )}
       <div className="nx-scrim" aria-hidden />
+      <div
+        ref={tag}
+        className="nx-tag"
+        aria-hidden
+        data-on={hover >= 0 && phase === "hub" ? "" : undefined}
+        style={
+          hover >= 0 ? ({ "--nx-accent": `rgb(${LOOKS[hover].accent.join(",")})` } as React.CSSProperties) : undefined
+        }
+      >
+        {hover >= 0 ? (
+          <>
+            <strong>{LOOKS[hover].name}</strong> {realms.find((x) => x.key === LOOKS[hover].key)?.site}
+            <small>{hover === sel ? "click to step through" : "click to turn"}</small>
+          </>
+        ) : null}
+      </div>
       <div className="nx-hero">{children}</div>
 
       <div

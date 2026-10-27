@@ -47,6 +47,36 @@
   transition: opacity 0.4s ease;
 }
 
+.nx-tag {
+  position: fixed;
+  z-index: 5;
+  transform: translate(-50%, -100%);
+  display: grid;
+  justify-items: center;
+  padding: 0.35rem 0.6rem;
+  font-family: var(--font-pixel), var(--hm-font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--nx-ink);
+  background: var(--nx-panel);
+  border: 2px solid var(--nx-accent);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+.nx-tag[data-on] {
+  opacity: 1;
+}
+.nx-tag strong {
+  color: var(--nx-accent);
+  font-weight: 400;
+}
+.nx-tag small {
+  font-size: 0.6rem;
+  opacity: 0.7;
+}
 .nx-hero {
   transition: opacity 0.5s ease, transform 0.6s ease;
 }
