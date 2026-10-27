@@ -16,6 +16,10 @@ Done and committed: PHOTO-M1 foundation, M2 ShootProof removed, M3 protection ev
 
 **Done 2026-10-27 (studio audit):** see `AUDIT-studio-2026-10-27.md` and the PROGRESS log. Void invoices, Mark paid by balance with a confirm, edit and cancel shoots (the Add a shoot dialog doubles as Edit shoot when `f.job` is set), archive inquiries, overdue and balance on invoice cards, per-section loaders for the record pages, calendar and layout-picker accessibility. Open from the audit: Q161 to Q167, plus U12 to U14 and E4 in the audit file.
 
+**Done 2026-10-27 (follow-up):** Duplicate… dialog with "Also copy the photographs" (Q164); one stored copy of every file and same-name renaming in a gallery (Q168, `ingestImage` dedupes by SHA-256, `freeFilename` in `galleries.ts`, the uploader queues its sign calls so names are handed out in turn). Test fixtures that upload images must make unique bytes, or the second upload is answered with the first photograph and its name.
+
+**Last check (2026-10-27, after the duplicate follow-up):** lint and typecheck clean, `pnpm test` all green (db 162, media 40, photos 44), `pnpm test:e2e` 304 passed, `pnpm test:admin` 121 passed with `galleries-security.spec.ts` test 3 failing once (3 after it did not run); that spec passed 6/6 alone.
+
 **Last check (2026-10-27, after the audit commits):** `pnpm lint` clean, `pnpm typecheck` clean, `pnpm test` all green (db 160, photos 44, every package), `pnpm test:e2e` 304 passed, `pnpm test:admin` 123 of 124 in one full run: `galleries-security.spec.ts` test 1 failed once ("Clicking the checkbox did not change its state" on Show filenames, a click before hydration under load) and the whole spec passed 6/6 when rerun alone. Treat it as flaky, like the two `public.spec.ts` ones.
 
 **Studio tests read toasts:** use `note(page)` from `e2e-admin/ui.ts` (toast or status element), not `getByRole("status")`; the toast's Dismiss button label repeats its text, so `getByLabel("Email")` can match it: use `getByRole("textbox", { name })`.

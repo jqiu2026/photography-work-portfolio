@@ -48,7 +48,8 @@ role and audit; upload routes sniff types; no `window.confirm` left; empty forms
 | Cancel or reschedule a shoot | Shoots get cancelled; the stage list already had it | **Built** (U3) |
 | Overdue invoices at a glance | Chasing money is the most common studio task | **Built** (U5) |
 | A polite "not a fit" reply when archiving | Saves typing the same email | Q163, not built |
-| Duplicate a gallery's settings to a new gallery | Wedding photographers reuse one look | Q164, not built |
+| Duplicate a gallery's settings to a new gallery | Wedding photographers reuse one look | **Built** after the owner's answer (Q164): Duplicate… asks whether to carry the photographs, which are shared, never stored again |
+| Never store the same file twice; rename a different picture with a taken name | Owner rule (Q168) | **Built**: exact copies skipped everywhere, same-name clashes renamed and reported |
 
 ## Verification
 
