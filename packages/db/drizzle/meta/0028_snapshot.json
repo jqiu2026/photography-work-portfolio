@@ -267,12 +267,8 @@
           "name": "appointments_job_id_studio_jobs_id_fk",
           "tableFrom": "appointments",
           "tableTo": "studio_jobs",
-          "columnsFrom": [
-            "job_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["job_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -280,12 +276,8 @@
           "name": "appointments_client_id_studio_clients_id_fk",
           "tableFrom": "appointments",
           "tableTo": "studio_clients",
-          "columnsFrom": [
-            "client_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["client_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -293,12 +285,8 @@
           "name": "appointments_booking_id_studio_bookings_id_fk",
           "tableFrom": "appointments",
           "tableTo": "studio_bookings",
-          "columnsFrom": [
-            "booking_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["booking_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -306,12 +294,8 @@
           "name": "appointments_invoice_id_studio_invoices_id_fk",
           "tableFrom": "appointments",
           "tableTo": "studio_invoices",
-          "columnsFrom": [
-            "invoice_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["invoice_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -504,9 +488,7 @@
         "blackout_dates_date_unique": {
           "name": "blackout_dates_date_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "date"
-          ]
+          "columns": ["date"]
         }
       },
       "policies": {},
@@ -613,12 +595,8 @@
           "name": "client_accounts_client_id_studio_clients_id_fk",
           "tableFrom": "client_accounts",
           "tableTo": "studio_clients",
-          "columnsFrom": [
-            "client_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["client_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -700,12 +678,8 @@
           "name": "client_login_tokens_account_id_client_accounts_id_fk",
           "tableFrom": "client_login_tokens",
           "tableTo": "client_accounts",
-          "columnsFrom": [
-            "account_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["account_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -967,12 +941,8 @@
           "name": "flight_entries_photo_media_id_media_id_fk",
           "tableFrom": "flight_entries",
           "tableTo": "media",
-          "columnsFrom": [
-            "photo_media_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["photo_media_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1267,12 +1237,8 @@
           "name": "galleries_cover_media_id_media_id_fk",
           "tableFrom": "galleries",
           "tableTo": "media",
-          "columnsFrom": [
-            "cover_media_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["cover_media_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1361,12 +1327,8 @@
           "name": "gallery_items_gallery_id_galleries_id_fk",
           "tableFrom": "gallery_items",
           "tableTo": "galleries",
-          "columnsFrom": [
-            "gallery_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["gallery_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -1374,12 +1336,8 @@
           "name": "gallery_items_media_id_media_id_fk",
           "tableFrom": "gallery_items",
           "tableTo": "media",
-          "columnsFrom": [
-            "media_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["media_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1593,12 +1551,8 @@
           "name": "make_images_project_id_make_projects_id_fk",
           "tableFrom": "make_images",
           "tableTo": "make_projects",
-          "columnsFrom": [
-            "project_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["project_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1659,12 +1613,8 @@
           "name": "make_now_project_id_make_projects_id_fk",
           "tableFrom": "make_now",
           "tableTo": "make_projects",
-          "columnsFrom": [
-            "project_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["project_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -2085,12 +2035,8 @@
           "name": "music_bundle_items_bundle_id_music_products_id_fk",
           "tableFrom": "music_bundle_items",
           "tableTo": "music_products",
-          "columnsFrom": [
-            "bundle_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["bundle_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -2098,12 +2044,8 @@
           "name": "music_bundle_items_product_id_music_products_id_fk",
           "tableFrom": "music_bundle_items",
           "tableTo": "music_products",
-          "columnsFrom": [
-            "product_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["product_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -2111,10 +2053,7 @@
       "compositePrimaryKeys": {
         "music_bundle_items_bundle_id_product_id_pk": {
           "name": "music_bundle_items_bundle_id_product_id_pk",
-          "columns": [
-            "bundle_id",
-            "product_id"
-          ]
+          "columns": ["bundle_id", "product_id"]
         }
       },
       "uniqueConstraints": {},
@@ -2187,12 +2126,8 @@
           "name": "music_buyer_links_buyer_id_music_buyers_id_fk",
           "tableFrom": "music_buyer_links",
           "tableTo": "music_buyers",
-          "columnsFrom": [
-            "buyer_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["buyer_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -2419,12 +2354,8 @@
           "name": "music_downloads_license_id_music_licenses_id_fk",
           "tableFrom": "music_downloads",
           "tableTo": "music_licenses",
-          "columnsFrom": [
-            "license_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["license_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -2432,12 +2363,8 @@
           "name": "music_downloads_file_id_music_score_files_id_fk",
           "tableFrom": "music_downloads",
           "tableTo": "music_score_files",
-          "columnsFrom": [
-            "file_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["file_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -2602,12 +2529,8 @@
           "name": "music_items_audio_media_id_media_id_fk",
           "tableFrom": "music_items",
           "tableTo": "media",
-          "columnsFrom": [
-            "audio_media_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["audio_media_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -2615,12 +2538,8 @@
           "name": "music_items_cover_media_id_media_id_fk",
           "tableFrom": "music_items",
           "tableTo": "media",
-          "columnsFrom": [
-            "cover_media_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["cover_media_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -2628,12 +2547,8 @@
           "name": "music_items_work_id_music_works_id_fk",
           "tableFrom": "music_items",
           "tableTo": "music_works",
-          "columnsFrom": [
-            "work_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["work_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -2769,12 +2684,8 @@
           "name": "music_licenses_order_id_music_orders_id_fk",
           "tableFrom": "music_licenses",
           "tableTo": "music_orders",
-          "columnsFrom": [
-            "order_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["order_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -2782,12 +2693,8 @@
           "name": "music_licenses_order_line_id_music_order_lines_id_fk",
           "tableFrom": "music_licenses",
           "tableTo": "music_order_lines",
-          "columnsFrom": [
-            "order_line_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["order_line_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -2795,12 +2702,8 @@
           "name": "music_licenses_buyer_id_music_buyers_id_fk",
           "tableFrom": "music_licenses",
           "tableTo": "music_buyers",
-          "columnsFrom": [
-            "buyer_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["buyer_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -2808,12 +2711,8 @@
           "name": "music_licenses_work_id_music_works_id_fk",
           "tableFrom": "music_licenses",
           "tableTo": "music_works",
-          "columnsFrom": [
-            "work_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["work_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -2902,12 +2801,8 @@
           "name": "music_order_lines_order_id_music_orders_id_fk",
           "tableFrom": "music_order_lines",
           "tableTo": "music_orders",
-          "columnsFrom": [
-            "order_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["order_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -2915,12 +2810,8 @@
           "name": "music_order_lines_product_id_music_products_id_fk",
           "tableFrom": "music_order_lines",
           "tableTo": "music_products",
-          "columnsFrom": [
-            "product_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["product_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -2928,12 +2819,8 @@
           "name": "music_order_lines_work_id_music_works_id_fk",
           "tableFrom": "music_order_lines",
           "tableTo": "music_works",
-          "columnsFrom": [
-            "work_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["work_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -3116,12 +3003,8 @@
           "name": "music_orders_buyer_id_music_buyers_id_fk",
           "tableFrom": "music_orders",
           "tableTo": "music_buyers",
-          "columnsFrom": [
-            "buyer_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["buyer_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -3259,12 +3142,8 @@
           "name": "music_products_work_id_music_works_id_fk",
           "tableFrom": "music_products",
           "tableTo": "music_works",
-          "columnsFrom": [
-            "work_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["work_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -3420,12 +3299,8 @@
           "name": "music_score_files_work_id_music_works_id_fk",
           "tableFrom": "music_score_files",
           "tableTo": "music_works",
-          "columnsFrom": [
-            "work_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["work_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -3700,12 +3575,8 @@
           "name": "music_works_cover_media_id_media_id_fk",
           "tableFrom": "music_works",
           "tableTo": "media",
-          "columnsFrom": [
-            "cover_media_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["cover_media_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -3881,12 +3752,8 @@
           "name": "post_versions_post_id_posts_id_fk",
           "tableFrom": "post_versions",
           "tableTo": "posts",
-          "columnsFrom": [
-            "post_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["post_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -4070,12 +3937,8 @@
           "name": "posts_cover_media_id_media_id_fk",
           "tableFrom": "posts",
           "tableTo": "media",
-          "columnsFrom": [
-            "cover_media_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["cover_media_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -4135,12 +3998,8 @@
           "name": "project_versions_project_id_projects_id_fk",
           "tableFrom": "project_versions",
           "tableTo": "projects",
-          "columnsFrom": [
-            "project_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["project_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -4337,12 +4196,8 @@
           "name": "projects_cover_media_id_media_id_fk",
           "tableFrom": "projects",
           "tableTo": "media",
-          "columnsFrom": [
-            "cover_media_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["cover_media_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -4511,10 +4366,7 @@
       "compositePrimaryKeys": {
         "settings_site_key_pk": {
           "name": "settings_site_key_pk",
-          "columns": [
-            "site",
-            "key"
-          ]
+          "columns": ["site", "key"]
         }
       },
       "uniqueConstraints": {},
@@ -4855,12 +4707,8 @@
           "name": "studio_albums_gallery_id_studio_galleries_id_fk",
           "tableFrom": "studio_albums",
           "tableTo": "studio_galleries",
-          "columnsFrom": [
-            "gallery_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["gallery_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -4927,9 +4775,7 @@
         "studio_api_keys_key_hash_unique": {
           "name": "studio_api_keys_key_hash_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "key_hash"
-          ]
+          "columns": ["key_hash"]
         }
       },
       "policies": {},
@@ -5162,12 +5008,8 @@
           "name": "studio_bookings_client_id_studio_clients_id_fk",
           "tableFrom": "studio_bookings",
           "tableTo": "studio_clients",
-          "columnsFrom": [
-            "client_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["client_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -5241,12 +5083,8 @@
           "name": "studio_call_sheets_job_id_studio_jobs_id_fk",
           "tableFrom": "studio_call_sheets",
           "tableTo": "studio_jobs",
-          "columnsFrom": [
-            "job_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["job_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -5256,9 +5094,7 @@
         "studio_call_sheets_job_id_unique": {
           "name": "studio_call_sheets_job_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "job_id"
-          ]
+          "columns": ["job_id"]
         }
       },
       "policies": {},
@@ -5689,12 +5525,8 @@
           "name": "studio_contracts_job_id_studio_jobs_id_fk",
           "tableFrom": "studio_contracts",
           "tableTo": "studio_jobs",
-          "columnsFrom": [
-            "job_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["job_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -5740,10 +5572,7 @@
       "compositePrimaryKeys": {
         "studio_created_entity_entity_id_pk": {
           "name": "studio_created_entity_entity_id_pk",
-          "columns": [
-            "entity",
-            "entity_id"
-          ]
+          "columns": ["entity", "entity_id"]
         }
       },
       "uniqueConstraints": {},
@@ -5834,12 +5663,8 @@
           "name": "studio_download_events_gallery_id_studio_galleries_id_fk",
           "tableFrom": "studio_download_events",
           "tableTo": "studio_galleries",
-          "columnsFrom": [
-            "gallery_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["gallery_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -5966,12 +5791,8 @@
           "name": "studio_download_rules_gallery_id_studio_galleries_id_fk",
           "tableFrom": "studio_download_rules",
           "tableTo": "studio_galleries",
-          "columnsFrom": [
-            "gallery_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["gallery_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -6087,12 +5908,8 @@
           "name": "studio_expenses_job_id_studio_jobs_id_fk",
           "tableFrom": "studio_expenses",
           "tableTo": "studio_jobs",
-          "columnsFrom": [
-            "job_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["job_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -6139,12 +5956,8 @@
           "name": "studio_favorites_gallery_id_studio_galleries_id_fk",
           "tableFrom": "studio_favorites",
           "tableTo": "studio_galleries",
-          "columnsFrom": [
-            "gallery_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["gallery_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -6152,12 +5965,8 @@
           "name": "studio_favorites_media_id_media_id_fk",
           "tableFrom": "studio_favorites",
           "tableTo": "media",
-          "columnsFrom": [
-            "media_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["media_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -6165,10 +5974,7 @@
       "compositePrimaryKeys": {
         "studio_favorites_gallery_id_media_id_pk": {
           "name": "studio_favorites_gallery_id_media_id_pk",
-          "columns": [
-            "gallery_id",
-            "media_id"
-          ]
+          "columns": ["gallery_id", "media_id"]
         }
       },
       "uniqueConstraints": {},
@@ -6473,12 +6279,8 @@
           "name": "studio_galleries_job_id_studio_jobs_id_fk",
           "tableFrom": "studio_galleries",
           "tableTo": "studio_jobs",
-          "columnsFrom": [
-            "job_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["job_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -6486,12 +6288,8 @@
           "name": "studio_galleries_cover_media_id_media_id_fk",
           "tableFrom": "studio_galleries",
           "tableTo": "media",
-          "columnsFrom": [
-            "cover_media_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["cover_media_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -6545,12 +6343,8 @@
           "name": "studio_gallery_items_gallery_id_studio_galleries_id_fk",
           "tableFrom": "studio_gallery_items",
           "tableTo": "studio_galleries",
-          "columnsFrom": [
-            "gallery_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["gallery_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -6558,12 +6352,8 @@
           "name": "studio_gallery_items_media_id_media_id_fk",
           "tableFrom": "studio_gallery_items",
           "tableTo": "media",
-          "columnsFrom": [
-            "media_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["media_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -6571,10 +6361,7 @@
       "compositePrimaryKeys": {
         "studio_gallery_items_gallery_id_media_id_pk": {
           "name": "studio_gallery_items_gallery_id_media_id_pk",
-          "columns": [
-            "gallery_id",
-            "media_id"
-          ]
+          "columns": ["gallery_id", "media_id"]
         }
       },
       "uniqueConstraints": {},
@@ -6679,12 +6466,8 @@
           "name": "studio_gear_uses_gear_id_studio_gear_id_fk",
           "tableFrom": "studio_gear_uses",
           "tableTo": "studio_gear",
-          "columnsFrom": [
-            "gear_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["gear_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -6692,12 +6475,8 @@
           "name": "studio_gear_uses_job_id_studio_jobs_id_fk",
           "tableFrom": "studio_gear_uses",
           "tableTo": "studio_jobs",
-          "columnsFrom": [
-            "job_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["job_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -6705,11 +6484,7 @@
       "compositePrimaryKeys": {
         "studio_gear_uses_gear_id_job_id_on_date_pk": {
           "name": "studio_gear_uses_gear_id_job_id_on_date_pk",
-          "columns": [
-            "gear_id",
-            "job_id",
-            "on_date"
-          ]
+          "columns": ["gear_id", "job_id", "on_date"]
         }
       },
       "uniqueConstraints": {},
@@ -6852,12 +6627,8 @@
           "name": "studio_gift_ledger_card_id_studio_gift_cards_id_fk",
           "tableFrom": "studio_gift_ledger",
           "tableTo": "studio_gift_cards",
-          "columnsFrom": [
-            "card_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["card_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -7066,12 +6837,8 @@
           "name": "studio_invoices_job_id_studio_jobs_id_fk",
           "tableFrom": "studio_invoices",
           "tableTo": "studio_jobs",
-          "columnsFrom": [
-            "job_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["job_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -7221,12 +6988,8 @@
           "name": "studio_jobs_client_id_studio_clients_id_fk",
           "tableFrom": "studio_jobs",
           "tableTo": "studio_clients",
-          "columnsFrom": [
-            "client_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["client_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -7308,12 +7071,8 @@
           "name": "studio_messages_client_id_studio_clients_id_fk",
           "tableFrom": "studio_messages",
           "tableTo": "studio_clients",
-          "columnsFrom": [
-            "client_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["client_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -7321,12 +7080,8 @@
           "name": "studio_messages_job_id_studio_jobs_id_fk",
           "tableFrom": "studio_messages",
           "tableTo": "studio_jobs",
-          "columnsFrom": [
-            "job_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["job_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -7493,12 +7248,8 @@
           "name": "studio_order_items_order_id_studio_orders_id_fk",
           "tableFrom": "studio_order_items",
           "tableTo": "studio_orders",
-          "columnsFrom": [
-            "order_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["order_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -7506,12 +7257,8 @@
           "name": "studio_order_items_product_id_studio_products_id_fk",
           "tableFrom": "studio_order_items",
           "tableTo": "studio_products",
-          "columnsFrom": [
-            "product_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["product_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -7681,12 +7428,8 @@
           "name": "studio_orders_gallery_id_studio_galleries_id_fk",
           "tableFrom": "studio_orders",
           "tableTo": "studio_galleries",
-          "columnsFrom": [
-            "gallery_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["gallery_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -7694,12 +7437,8 @@
           "name": "studio_orders_invoice_id_studio_invoices_id_fk",
           "tableFrom": "studio_orders",
           "tableTo": "studio_invoices",
-          "columnsFrom": [
-            "invoice_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["invoice_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -7915,12 +7654,8 @@
           "name": "studio_payment_plans_job_id_studio_jobs_id_fk",
           "tableFrom": "studio_payment_plans",
           "tableTo": "studio_jobs",
-          "columnsFrom": [
-            "job_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["job_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -8070,12 +7805,8 @@
           "name": "studio_payments_invoice_id_studio_invoices_id_fk",
           "tableFrom": "studio_payments",
           "tableTo": "studio_invoices",
-          "columnsFrom": [
-            "invoice_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["invoice_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -8505,12 +8236,8 @@
           "name": "studio_promo_codes_referrer_client_id_studio_clients_id_fk",
           "tableFrom": "studio_promo_codes",
           "tableTo": "studio_clients",
-          "columnsFrom": [
-            "referrer_client_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["referrer_client_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -8518,12 +8245,8 @@
           "name": "studio_promo_codes_gallery_id_studio_galleries_id_fk",
           "tableFrom": "studio_promo_codes",
           "tableTo": "studio_galleries",
-          "columnsFrom": [
-            "gallery_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["gallery_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -8624,12 +8347,8 @@
           "name": "studio_proofs_gallery_id_studio_galleries_id_fk",
           "tableFrom": "studio_proofs",
           "tableTo": "studio_galleries",
-          "columnsFrom": [
-            "gallery_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["gallery_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -8637,12 +8356,8 @@
           "name": "studio_proofs_media_id_media_id_fk",
           "tableFrom": "studio_proofs",
           "tableTo": "media",
-          "columnsFrom": [
-            "media_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["media_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -8742,12 +8457,8 @@
           "name": "studio_questionnaire_sends_questionnaire_id_studio_questionnaires_id_fk",
           "tableFrom": "studio_questionnaire_sends",
           "tableTo": "studio_questionnaires",
-          "columnsFrom": [
-            "questionnaire_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["questionnaire_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -8755,12 +8466,8 @@
           "name": "studio_questionnaire_sends_client_id_studio_clients_id_fk",
           "tableFrom": "studio_questionnaire_sends",
           "tableTo": "studio_clients",
-          "columnsFrom": [
-            "client_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["client_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -8768,12 +8475,8 @@
           "name": "studio_questionnaire_sends_job_id_studio_jobs_id_fk",
           "tableFrom": "studio_questionnaire_sends",
           "tableTo": "studio_jobs",
-          "columnsFrom": [
-            "job_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["job_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -9164,12 +8867,8 @@
           "name": "studio_quotes_client_id_studio_clients_id_fk",
           "tableFrom": "studio_quotes",
           "tableTo": "studio_clients",
-          "columnsFrom": [
-            "client_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["client_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -9177,12 +8876,8 @@
           "name": "studio_quotes_job_id_studio_jobs_id_fk",
           "tableFrom": "studio_quotes",
           "tableTo": "studio_jobs",
-          "columnsFrom": [
-            "job_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["job_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -9190,12 +8885,8 @@
           "name": "studio_quotes_package_id_studio_packages_id_fk",
           "tableFrom": "studio_quotes",
           "tableTo": "studio_packages",
-          "columnsFrom": [
-            "package_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["package_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -9203,12 +8894,8 @@
           "name": "studio_quotes_invoice_id_studio_invoices_id_fk",
           "tableFrom": "studio_quotes",
           "tableTo": "studio_invoices",
-          "columnsFrom": [
-            "invoice_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["invoice_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -9288,12 +8975,8 @@
           "name": "studio_recurring_job_id_studio_jobs_id_fk",
           "tableFrom": "studio_recurring",
           "tableTo": "studio_jobs",
-          "columnsFrom": [
-            "job_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["job_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -9359,12 +9042,8 @@
           "name": "studio_refunds_payment_id_studio_payments_id_fk",
           "tableFrom": "studio_refunds",
           "tableTo": "studio_payments",
-          "columnsFrom": [
-            "payment_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["payment_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -9477,12 +9156,8 @@
           "name": "studio_security_events_gallery_id_studio_galleries_id_fk",
           "tableFrom": "studio_security_events",
           "tableTo": "studio_galleries",
-          "columnsFrom": [
-            "gallery_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["gallery_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -9696,12 +9371,8 @@
           "name": "studio_tasks_job_id_studio_jobs_id_fk",
           "tableFrom": "studio_tasks",
           "tableTo": "studio_jobs",
-          "columnsFrom": [
-            "job_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["job_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -9709,12 +9380,8 @@
           "name": "studio_tasks_client_id_studio_clients_id_fk",
           "tableFrom": "studio_tasks",
           "tableTo": "studio_clients",
-          "columnsFrom": [
-            "client_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["client_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -9798,12 +9465,8 @@
           "name": "studio_testimonials_client_id_studio_clients_id_fk",
           "tableFrom": "studio_testimonials",
           "tableTo": "studio_clients",
-          "columnsFrom": [
-            "client_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["client_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -9811,12 +9474,8 @@
           "name": "studio_testimonials_job_id_studio_jobs_id_fk",
           "tableFrom": "studio_testimonials",
           "tableTo": "studio_jobs",
-          "columnsFrom": [
-            "job_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["job_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -10072,12 +9731,8 @@
           "name": "studio_visitors_gallery_id_studio_galleries_id_fk",
           "tableFrom": "studio_visitors",
           "tableTo": "studio_galleries",
-          "columnsFrom": [
-            "gallery_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["gallery_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -10264,12 +9919,8 @@
           "name": "studio_webhook_deliveries_webhook_id_studio_webhooks_id_fk",
           "tableFrom": "studio_webhook_deliveries",
           "tableTo": "studio_webhooks",
-          "columnsFrom": [
-            "webhook_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["webhook_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -10645,318 +10296,157 @@
     "public.studio_access_mode": {
       "name": "studio_access_mode",
       "schema": "public",
-      "values": [
-        "passcode",
-        "magic-link",
-        "both"
-      ]
+      "values": ["passcode", "magic-link", "both"]
     },
     "public.appointment_kind": {
       "name": "appointment_kind",
       "schema": "public",
-      "values": [
-        "shoot",
-        "consult",
-        "minislot",
-        "block"
-      ]
+      "values": ["shoot", "consult", "minislot", "block"]
     },
     "public.appointment_status": {
       "name": "appointment_status",
       "schema": "public",
-      "values": [
-        "open",
-        "hold",
-        "confirmed",
-        "cancelled"
-      ]
+      "values": ["open", "hold", "confirmed", "cancelled"]
     },
     "public.studio_booking_status": {
       "name": "studio_booking_status",
       "schema": "public",
-      "values": [
-        "new",
-        "converted",
-        "archived"
-      ]
+      "values": ["new", "converted", "archived"]
     },
     "public.studio_gallery_status": {
       "name": "studio_gallery_status",
       "schema": "public",
-      "values": [
-        "draft",
-        "published",
-        "archived"
-      ]
+      "values": ["draft", "published", "archived"]
     },
     "public.music_commission_status": {
       "name": "music_commission_status",
       "schema": "public",
-      "values": [
-        "new",
-        "talking",
-        "accepted",
-        "declined",
-        "done"
-      ]
+      "values": ["new", "talking", "accepted", "declined", "done"]
     },
     "public.studio_contract_status": {
       "name": "studio_contract_status",
       "schema": "public",
-      "values": [
-        "draft",
-        "sent",
-        "viewed",
-        "signed",
-        "declined",
-        "void"
-      ]
+      "values": ["draft", "sent", "viewed", "signed", "declined", "void"]
     },
     "public.studio_download_policy": {
       "name": "studio_download_policy",
       "schema": "public",
-      "values": [
-        "none",
-        "preview",
-        "web",
-        "full"
-      ]
+      "values": ["none", "preview", "web", "full"]
     },
     "public.flight_kind": {
       "name": "flight_kind",
       "schema": "public",
-      "values": [
-        "milestone",
-        "flight"
-      ]
+      "values": ["milestone", "flight"]
     },
     "public.inbox_status": {
       "name": "inbox_status",
       "schema": "public",
-      "values": [
-        "new",
-        "read",
-        "replied",
-        "archived",
-        "spam"
-      ]
+      "values": ["new", "read", "replied", "archived", "spam"]
     },
     "public.studio_invoice_status": {
       "name": "studio_invoice_status",
       "schema": "public",
-      "values": [
-        "draft",
-        "sent",
-        "viewed",
-        "partial",
-        "paid",
-        "void",
-        "refunded"
-      ]
+      "values": ["draft", "sent", "viewed", "partial", "paid", "void", "refunded"]
     },
     "public.studio_job_status": {
       "name": "studio_job_status",
       "schema": "public",
-      "values": [
-        "inquiry",
-        "booked",
-        "shot",
-        "editing",
-        "delivered",
-        "paid",
-        "cancelled"
-      ]
+      "values": ["inquiry", "booked", "shot", "editing", "delivered", "paid", "cancelled"]
     },
     "public.license": {
       "name": "license",
       "schema": "public",
-      "values": [
-        "all-rights-reserved",
-        "cc-by",
-        "cc-by-nc",
-        "cc-by-sa",
-        "cc0"
-      ]
+      "values": ["all-rights-reserved", "cc-by", "cc-by-nc", "cc-by-sa", "cc0"]
     },
     "public.music_license_tier": {
       "name": "music_license_tier",
       "schema": "public",
-      "values": [
-        "personal",
-        "ensemble",
-        "institution"
-      ]
+      "values": ["personal", "ensemble", "institution"]
     },
     "public.make_project_status": {
       "name": "make_project_status",
       "schema": "public",
-      "values": [
-        "building",
-        "shipped",
-        "archived"
-      ]
+      "values": ["building", "shipped", "archived"]
     },
     "public.media_kind": {
       "name": "media_kind",
       "schema": "public",
-      "values": [
-        "image",
-        "audio",
-        "video",
-        "file"
-      ]
+      "values": ["image", "audio", "video", "file"]
     },
     "public.music_kind": {
       "name": "music_kind",
       "schema": "public",
-      "values": [
-        "recording",
-        "performance"
-      ]
+      "values": ["recording", "performance"]
     },
     "public.music_order_status": {
       "name": "music_order_status",
       "schema": "public",
-      "values": [
-        "pending",
-        "paid",
-        "refunded",
-        "canceled"
-      ]
+      "values": ["pending", "paid", "refunded", "canceled"]
     },
     "public.studio_payment_status": {
       "name": "studio_payment_status",
       "schema": "public",
-      "values": [
-        "pending",
-        "succeeded",
-        "failed",
-        "refunded"
-      ]
+      "values": ["pending", "succeeded", "failed", "refunded"]
     },
     "public.music_product_kind": {
       "name": "music_product_kind",
       "schema": "public",
-      "values": [
-        "score",
-        "bundle"
-      ]
+      "values": ["score", "bundle"]
     },
     "public.project_type": {
       "name": "project_type",
       "schema": "public",
-      "values": [
-        "photography",
-        "software",
-        "design",
-        "writing",
-        "other"
-      ]
+      "values": ["photography", "software", "design", "writing", "other"]
     },
     "public.studio_quote_status": {
       "name": "studio_quote_status",
       "schema": "public",
-      "values": [
-        "draft",
-        "sent",
-        "viewed",
-        "accepted",
-        "declined",
-        "expired",
-        "void"
-      ]
+      "values": ["draft", "sent", "viewed", "accepted", "declined", "expired", "void"]
     },
     "public.review_status": {
       "name": "review_status",
       "schema": "public",
-      "values": [
-        "ok",
-        "needs_review"
-      ]
+      "values": ["ok", "needs_review"]
     },
     "public.music_rights": {
       "name": "music_rights",
       "schema": "public",
-      "values": [
-        "original",
-        "cover",
-        "licensed",
-        "third-party-embed"
-      ]
+      "values": ["original", "cover", "licensed", "third-party-embed"]
     },
     "public.role": {
       "name": "role",
       "schema": "public",
-      "values": [
-        "owner",
-        "editor",
-        "client",
-        "bookkeeper",
-        "photographer"
-      ]
+      "values": ["owner", "editor", "client", "bookkeeper", "photographer"]
     },
     "public.music_file_kind": {
       "name": "music_file_kind",
       "schema": "public",
-      "values": [
-        "full-score",
-        "parts",
-        "piano-reduction",
-        "midi",
-        "practice-audio",
-        "other"
-      ]
+      "values": ["full-score", "parts", "piano-reduction", "midi", "practice-audio", "other"]
     },
     "public.site": {
       "name": "site",
       "schema": "public",
-      "values": [
-        "hub",
-        "photos",
-        "music",
-        "flying",
-        "all"
-      ]
+      "values": ["hub", "photos", "music", "flying", "all"]
     },
     "public.status": {
       "name": "status",
       "schema": "public",
-      "values": [
-        "draft",
-        "scheduled",
-        "published"
-      ]
+      "values": ["draft", "scheduled", "published"]
     },
     "public.timeline_category": {
       "name": "timeline_category",
       "schema": "public",
-      "values": [
-        "work",
-        "education",
-        "leadership",
-        "volunteering",
-        "flying",
-        "music",
-        "photography",
-        "other"
-      ]
+      "values": ["work", "education", "leadership", "volunteering", "flying", "music", "photography", "other"]
     },
     "public.music_work_rights": {
       "name": "music_work_rights",
       "schema": "public",
-      "values": [
-        "original",
-        "public-domain-arrangement",
-        "arrangement-copyrighted"
-      ]
+      "values": ["original", "public-domain-arrangement", "arrangement-copyrighted"]
     },
     "public.music_work_status": {
       "name": "music_work_status",
       "schema": "public",
-      "values": [
-        "draft",
-        "published"
-      ]
+      "values": ["draft", "published"]
     }
   },
   "schemas": {},
