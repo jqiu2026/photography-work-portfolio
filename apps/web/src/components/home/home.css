@@ -11,9 +11,47 @@
   clip-path: inset(50%);
   white-space: nowrap;
 }
+/* the room behind the page stays lit, so sections are bands of quiet type over it, not panels */
+.hh-intro {
+  display: grid;
+  justify-items: center;
+  gap: 1.5rem;
+  padding-block: clamp(3rem, 10vh, 6rem);
+  text-align: center;
+}
+.hh-lede {
+  margin: 0;
+  max-width: 34rem;
+  font-size: var(--hm-text-xl, 1.35rem);
+  line-height: 1.5;
+  color: var(--hm-fg-soft);
+}
+.hh-intro .px-row {
+  justify-content: center;
+}
 .hh-section {
-  padding-block: clamp(3rem, 8vw, 6rem);
+  min-height: 80svh;
+  display: grid;
+  align-content: center;
+  padding-block: clamp(3rem, 10vh, 7rem);
   border-top: 1px solid var(--hm-line);
+}
+/* sections rise into place as they come into view, where the browser can tie it to the scroll */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .hh-intro > *,
+    .hh-section > * {
+      animation: hh-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 60%;
+    }
+  }
+}
+@keyframes hh-in {
+  from {
+    opacity: 0;
+    transform: translateY(2rem);
+  }
 }
 .hh-head {
   display: grid;
@@ -196,6 +234,7 @@
 
 /* say hello */
 .hh-hello {
+  min-height: 70svh;
   display: grid;
   gap: 1rem;
   justify-items: start;

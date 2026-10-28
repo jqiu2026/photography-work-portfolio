@@ -2,12 +2,17 @@
  * The hub's portals. The canvas sits behind the page; the words and the doors are plain HTML on top. Holominimal's
  * type, hairlines and motion tokens; the only colour is the light of the four worlds.
  */
+/* the first screen: the name above, the four portals in the middle of it, centred both ways */
 .px {
   position: relative;
   min-height: 100svh;
   display: grid;
   grid-template-rows: auto 1fr auto;
-  padding-block: clamp(2.5rem, 9vh, 6rem) clamp(1.5rem, 6vh, 3.5rem);
+  justify-items: center;
+  /* centred on the screen, not the column: reach back under the sidebar and pad both sides by its width */
+  margin-left: calc(-1 * var(--hm-sidebar, 0px));
+  padding: clamp(2rem, 7vh, 4.5rem) calc(var(--hm-sidebar, 0px) + var(--hm-gutter, 16px)) clamp(1.25rem, 4vh, 2.5rem);
+  text-align: center;
   color: var(--hm-fg-strong);
 }
 .px-canvas {
@@ -22,28 +27,21 @@
 
 /* the words */
 .px-hero {
-  max-width: 38rem;
+  max-width: 44rem;
   transition: opacity var(--hm-dur-slow) var(--hm-ease-glide), transform var(--hm-dur-slow) var(--hm-ease-glide);
 }
 .px-hero h1 {
-  margin: 0.6rem 0 1.1rem;
+  margin: 0.5rem 0 0.7rem;
   font-family: var(--hm-font-display, var(--hm-font-sans));
-  font-size: clamp(3rem, 8.5vw, 6.4rem);
+  font-size: clamp(2.6rem, 6.5vw, 5.2rem);
   font-weight: 500;
   line-height: 0.95;
   letter-spacing: var(--hm-tracking-tight, -0.03em);
 }
 .px-roles {
-  margin: 0 0 1rem;
+  margin: 0;
   font-size: var(--hm-text-lg);
   color: var(--hm-fg-soft);
-}
-.px-lede {
-  margin: 0 0 1.8rem;
-  max-width: 30rem;
-  font-size: var(--hm-text-md);
-  line-height: 1.6;
-  color: var(--hm-muted);
 }
 .px-row {
   display: flex;
@@ -53,8 +51,9 @@
 
 /* the doors: a row standing on the floor, the middle two a little taller so the row reads as an arc */
 .px-gates {
-  align-self: end;
-  padding-top: clamp(2rem, 6vh, 4rem);
+  align-self: center;
+  width: 100%;
+  padding-block: clamp(1.5rem, 5vh, 3rem);
 }
 .px-gates ul {
   list-style: none;
@@ -63,12 +62,12 @@
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   align-items: end;
-  gap: clamp(0.75rem, 3vw, 3rem);
-  max-width: 62rem;
+  gap: clamp(0.75rem, 3.5vw, 3.75rem);
+  max-width: 68rem;
   margin-inline: auto;
 }
 .px-gate {
-  --px-w: clamp(4.4rem, 12vw, 9.5rem);
+  --px-w: clamp(4.6rem, min(13vw, 21vh), 11.5rem);
   position: relative;
   display: grid;
   justify-items: center;
@@ -141,25 +140,24 @@
   top: 100%;
   left: 50%;
   width: max-content;
-  max-width: 14rem;
+  max-width: 18rem;
   margin-top: 0.5rem;
-  translate: -50% 0;
   text-align: center;
   font-size: var(--hm-text-sm);
   color: var(--hm-fg-soft);
   opacity: 0;
-  transform: translateY(-0.3rem);
+  transform: translate(-50%, -0.3rem);
   transition: opacity var(--hm-dur-base) var(--hm-ease-out), transform var(--hm-dur-base) var(--hm-ease-out);
   pointer-events: none;
 }
 .px-gate:hover .px-line,
 .px-gate:focus-visible .px-line {
   opacity: 1;
-  transform: none;
+  transform: translate(-50%, 0);
 }
 
 .px-hint {
-  margin: 3.2rem 0 0;
+  margin: 0;
   text-align: center;
   font-family: var(--hm-font-mono);
   font-size: var(--hm-text-2xs);
@@ -226,25 +224,32 @@
 }
 
 @media (max-width: 860px) {
-  /* the dock is a strip across the top here */
+  /* the dock is a strip across the top here, so there is no sidebar to centre around */
   .px {
     min-height: calc(100svh - 3.25rem);
-    padding-block: 2rem 1.5rem;
+    margin-left: 0;
+    padding: 2rem var(--hm-gutter, 16px) 1.5rem;
   }
 }
 @media (max-width: 640px) {
+  /* two by two, as large as the screen allows */
   .px-gates ul {
-    gap: 0.6rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 1.6rem;
+    column-gap: 1rem;
   }
   .px-gate {
-    --px-w: calc((100vw - 2 * var(--hm-gutter, 16px) - 1.8rem) / 4 * 0.78);
-    gap: 0.6rem;
+    --px-w: min(32vw, 13svh);
+    gap: 0.5rem;
+  }
+  .px-gates li:nth-child(n) .px-door {
+    aspect-ratio: 1 / 1.75;
   }
   .px-name {
-    font-size: var(--hm-text-sm);
+    font-size: var(--hm-text-md);
   }
   .px-site {
-    font-size: var(--hm-text-2xs);
+    font-size: var(--hm-text-xs, var(--hm-text-sm));
   }
   .px-line,
   .px-hint {

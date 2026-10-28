@@ -65,16 +65,20 @@ export default async function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
       />
+      <Portals worlds={worlds}>
+        <p className="hm-eyebrow">The Nexus · {person.location}</p>
+        <h1 className="hm-iridescent-text">{person.name}</h1>
+        <p className="px-roles">
+          {roles.join(", ")}
+          <span className="hh-sr"> in {person.location}</span>.
+        </p>
+      </Portals>
+
+      {/* each section below carries one world's air into the room behind it (data-ambient) */}
       <div className="hh">
-        <Portals worlds={worlds}>
-          <p className="hm-eyebrow">The Nexus · {person.location}</p>
-          <h1 className="hm-iridescent-text">{person.name}</h1>
-          <p className="px-roles">
-            {roles.join(", ")}
-            <span className="hh-sr"> in {person.location}</span>.
-          </p>
+        <section className="hh-intro" aria-label="Introduction">
           {/* TODO(owner): rewrite in your voice. */}
-          <p className="px-lede">I take photographs, build websites, fly drones and make music. I'm in New York.</p>
+          <p className="hh-lede">I take photographs, build websites, fly drones and make music. I'm in New York.</p>
           <div className="px-row">
             <Button asChild>
               <NextLink href="/writing">Read my writing</NextLink>
@@ -83,9 +87,9 @@ export default async function Home() {
               <NextLink href="/connect">Get in touch</NextLink>
             </Button>
           </div>
-        </Portals>
+        </section>
 
-        <section className="hh-section" aria-labelledby="proof">
+        <section className="hh-section" data-ambient="exposure" aria-labelledby="proof">
           <header className="hh-head">
             <p className="hm-eyebrow">Photography</p>
             <h2 id="proof">A few of the things I've shot</h2>
@@ -115,7 +119,7 @@ export default async function Home() {
           </ul>
         </section>
 
-        <section className="hh-section" aria-labelledby="what">
+        <section className="hh-section" data-ambient="altitude" aria-labelledby="what">
           <header className="hh-head">
             <p className="hm-eyebrow">About</p>
             <h2 id="what">What I do</h2>
@@ -129,7 +133,7 @@ export default async function Home() {
           </ol>
         </section>
 
-        <section className="hh-section" aria-labelledby="writing">
+        <section className="hh-section" data-ambient="resonance" aria-labelledby="writing">
           <header className="hh-head">
             <p className="hm-eyebrow">Notes</p>
             <h2 id="writing">Writing</h2>
@@ -172,7 +176,7 @@ export default async function Home() {
           </p>
         </section>
 
-        <section className="hh-section hh-hello" aria-labelledby="hello">
+        <section className="hh-section hh-hello" data-ambient="forge" aria-labelledby="hello">
           <h2 id="hello">Say hello.</h2>
           {/* TODO(owner): rewrite in your voice. */}
           <p>If something here made you curious, tell me. I read everything.</p>

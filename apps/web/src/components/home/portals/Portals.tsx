@@ -2,7 +2,18 @@
 
 import { type CSSProperties, type MouseEvent, type ReactNode, useEffect, useRef, useState } from "react";
 import { FRAG, VERT } from "./shader";
-import { approach, bloom, type Door, diveDoor, lookOf, nearness, toGl, type WorldLink } from "./worlds";
+import {
+  approach,
+  bloom,
+  type Door,
+  diveDoor,
+  FLOOD_FROM,
+  lookOf,
+  nearness,
+  toGl,
+  tour,
+  type WorldLink,
+} from "./worlds";
 import "./portals.css";
 
 const REDUCE = "(prefers-reduced-motion: reduce)";
@@ -99,9 +110,11 @@ export function Portals({ worlds, children }: { worlds: WorldLink[]; children: R
       floor: u("uFloor"),
       dive: u("uDive"),
       diveIdx: u("uDiveIdx"),
-      fade: u("uFade"),
       open: u("uOpen"),
       cursor: u("uCursor"),
+      flood: u("uFlood"),
+      origin: u("uOrigin"),
+      floorA: u("uFloorA"),
     };
     g.uniform3fv(U.accent, new Float32Array(worlds.flatMap((w) => lookOf(w.key).accent)));
 
@@ -133,6 +146,13 @@ export function Portals({ worlds, children }: { worlds: WorldLink[]; children: R
     const doorData = new Float32Array(16);
     const hoverData = new Float32Array(4);
     const openData = new Float32Array(4);
+    const floodData = new Float32Array(4);
+    const originData = new Float32Array(8);
+    // the sections below the portals each carry one world's air (data-ambient on the section)
+    const zones = Array.from(document.querySelectorAll<HTMLElement>("[data-ambient]")).map((el) => ({
+      el,
+      i: worlds.findIndex((w) => w.key === el.dataset.ambient),
+    }));
     let cursorX = -1e4;
     let cursorY = -1e4;
     const frame = (now: number) => {
@@ -150,51 +170,76 @@ export function Portals({ worlds, children }: { worlds: WorldLink[]; children: R
         frames = 0;
         slow = 0;
       }
+      // the scene runs behind the whole page: the portals and their floor scroll away, the worlds' air stays
       const top = stage.current?.getBoundingClientRect();
-      const fade = top ? Math.max(0, Math.min(1, 1 + top.top / (top.height * 0.85))) : 1;
-      cv.style.opacity = String(fade);
-      if (fade > 0) {
-        s.pointer[0] = approach(s.pointer[0], s.pointerTo[0], 3, dt);
-        s.pointer[1] = approach(s.pointer[1], s.pointerTo[1], 3, dt);
-        let floor = 0;
-        // the light you carry trails the pointer a little
-        cursorX = cursorX < -1e3 ? s.cursor[0] : approach(cursorX, s.cursor[0], 6, dt);
-        cursorY = cursorY < -1e3 ? s.cursor[1] : approach(cursorY, s.cursor[1], 6, dt);
-        for (let i = 0; i < 4; i++) {
-          openData[i] = bloom(t, i);
-          const el = doors.current[i];
-          const r = el?.getBoundingClientRect();
-          // a portal stirs as you come near it, and wakes fully when you look into it
-          const near = r ? nearness(s.cursor, r) : 0;
-          s.hover[i] = approach(s.hover[i], s.diveIdx === i ? 1 : Math.max(s.hoverTo[i], near * 0.4), 7, dt);
-          hoverData[i] = s.hover[i];
-          if (!r) continue;
-          floor = Math.max(floor, r.bottom);
-          let d: Door = { x: r.left, y: r.top, w: r.width, h: r.height };
-          if (s.diveIdx === i) d = diveDoor(d, innerWidth, innerHeight, s.dive);
-          doorData.set(toGl(d, innerHeight, scale), i * 4);
-        }
-        if (s.diveIdx >= 0) {
-          s.dive = Math.min(1, (now - s.diveAt) / 1000 / DIVE_SECONDS);
-          if (s.dive >= 1 && s.diveHref) {
-            const href = s.diveHref;
-            s.diveHref = null;
-            location.assign(href);
-          }
-        }
-        g.uniform2f(U.res, cv.width, cv.height);
-        g.uniform1f(U.time, t);
-        g.uniform2f(U.pointer, s.pointer[0], s.pointer[1]);
-        g.uniform4fv(U.door, doorData);
-        g.uniform1fv(U.hover, hoverData);
-        g.uniform1f(U.floor, (innerHeight - floor) * scale);
-        g.uniform1f(U.dive, s.dive);
-        g.uniform1f(U.diveIdx, s.diveIdx);
-        g.uniform1f(U.fade, fade);
-        g.uniform1fv(U.open, openData);
-        g.uniform2f(U.cursor, cursorX * scale, (innerHeight - cursorY) * scale);
-        g.drawArrays(g.TRIANGLES, 0, 3);
+      const vis = top ? Math.max(0, Math.min(1, 1 + top.top / (top.height * 0.7))) : 1;
+      s.pointer[0] = approach(s.pointer[0], s.pointerTo[0], 3, dt);
+      s.pointer[1] = approach(s.pointer[1], s.pointerTo[1], 3, dt);
+      let floor = 0;
+      // the light you carry trails the pointer a little
+      cursorX = cursorX < -1e3 ? s.cursor[0] : approach(cursorX, s.cursor[0], 6, dt);
+      cursorY = cursorY < -1e3 ? s.cursor[1] : approach(cursorY, s.cursor[1], 6, dt);
+      const zone = [0, 0, 0, 0];
+      for (const z of zones) {
+        if (z.i < 0) continue;
+        const r = z.el.getBoundingClientRect();
+        const off = Math.abs(r.top + r.height / 2 - innerHeight / 2) / (r.height / 2 + innerHeight * 0.35);
+        zone[z.i] = Math.max(zone[z.i], Math.min(1, Math.max(0, 1.4 - off * 1.4)));
       }
+      const looked = s.hoverTo.some((h) => h > 0) || s.diveIdx >= 0;
+      for (let i = 0; i < 4; i++) {
+        openData[i] = bloom(t, i);
+        const el = doors.current[i];
+        const r = el?.getBoundingClientRect();
+        // a portal stirs as you come near it, and wakes fully when you look into it
+        const near = r ? nearness(s.cursor, r) : 0;
+        s.hover[i] = approach(s.hover[i], s.diveIdx === i ? 1 : Math.max(s.hoverTo[i], near * 0.4), 7, dt);
+        hoverData[i] = s.hover[i];
+        // how much of this world fills the room: looking into it, the room's own drift, or the section in view
+        const idle = looked ? 0 : tour(t, i) * 0.4 * openData[i];
+        const want = Math.max(s.hover[i] * vis, idle * vis, zone[i] * 0.7 * (1 - vis * 0.6));
+        floodData[i] = approach(floodData[i], want, 2.2, dt);
+        const from = FLOOD_FROM[worlds[i].key];
+        let ox = from[0] * innerWidth;
+        let oy = from[1] * innerHeight;
+        if (r) {
+          ox += (r.left + r.width / 2 - ox) * vis;
+          oy += (r.top + r.height * 0.4 - oy) * vis;
+        }
+        originData[i * 2] = ox * scale;
+        originData[i * 2 + 1] = (innerHeight - oy) * scale;
+        // a portal well off screen is not drawn at all
+        if (!r || r.bottom < -r.height) {
+          doorData.set([0, 0, 0, 0], i * 4);
+          continue;
+        }
+        floor = Math.max(floor, r.bottom);
+        let d: Door = { x: r.left, y: r.top, w: r.width, h: r.height };
+        if (s.diveIdx === i) d = diveDoor(d, innerWidth, innerHeight, s.dive);
+        doorData.set(toGl(d, innerHeight, scale), i * 4);
+      }
+      if (s.diveIdx >= 0) {
+        s.dive = Math.min(1, (now - s.diveAt) / 1000 / DIVE_SECONDS);
+        if (s.dive >= 1 && s.diveHref) {
+          const href = s.diveHref;
+          s.diveHref = null;
+          location.assign(href);
+        }
+      }
+      g.uniform2f(U.res, cv.width, cv.height);
+      g.uniform1f(U.time, t);
+      g.uniform2f(U.pointer, s.pointer[0], s.pointer[1]);
+      g.uniform4fv(U.door, doorData);
+      g.uniform1fv(U.hover, hoverData);
+      g.uniform1f(U.floor, (innerHeight - floor) * scale);
+      g.uniform1f(U.floorA, vis);
+      g.uniform1f(U.dive, s.dive);
+      g.uniform1f(U.diveIdx, s.diveIdx);
+      g.uniform1fv(U.open, openData);
+      g.uniform1fv(U.flood, floodData);
+      g.uniform2fv(U.origin, originData);
+      g.uniform2f(U.cursor, cursorX * scale, (innerHeight - cursorY) * scale);
+      g.drawArrays(g.TRIANGLES, 0, 3);
       if (running && !document.hidden) raf = requestAnimationFrame(frame);
     };
     raf = requestAnimationFrame(frame);

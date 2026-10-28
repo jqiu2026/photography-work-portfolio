@@ -2,7 +2,9 @@
  * The scene, drawn in one fragment shader: a dark room with a slow nebula and drifting motes, a black glass floor, and
  * four portals standing in it. Each is a window into its dimension (with depth: the far layers move less than the near
  * ones as the pointer moves), under a thin moving membrane, with no frame: its edge breathes and frays into iridescent
- * haze, and it thins into mist at the floor.
+ * haze, and it thins into mist at the floor. Each world also floods the whole screen (rays, rings, cloud, embers)
+ * when its portal is looked at, when the room drifts to it on its own, or when its section of the page is in view,
+ * so the scene runs behind the entire page; the floor sinks away once the portals scroll past.
  * The floor reflects them. Hovering one brightens it and lets its light into the room; stepping through grows it to
  * fill the screen. WebGL 1 / GLSL ES 1.0 so it runs everywhere WebGL does.
  */
@@ -23,9 +25,11 @@ uniform vec3 uAccent[4];
 uniform float uFloor;      // floor line, canvas px from the bottom
 uniform float uDive;       // 0..1
 uniform float uDiveIdx;    // which portal, or -1
-uniform float uFade;       // 0..1, the scene fades as the page scrolls past it
 uniform float uOpen[4];    // 0..1, each portal blooming out of the mist on arrival
 uniform vec2 uCursor;      // the pointer in canvas px (y up), for the light you carry
+uniform float uFlood[4];   // 0..1, how much of each world fills the whole screen (looked at, or the section in view)
+uniform vec2 uOrigin[4];   // where each world's flood comes from, canvas px
+uniform float uFloorA;     // 0..1, the glass floor sinks away once the portals scroll past
 
 #define TAU 6.28318530718
 
@@ -175,6 +179,51 @@ vec3 world(int k, vec2 u, float H, vec2 par, float t, float hov) {
   return col * (0.88 + 0.22 * hov);
 }
 
+// each world, let out into the whole room: o is where it comes from. Seam-free (no angle wraps at a fractional rate).
+vec3 flood(int k, vec2 px, vec2 o, float t) {
+  vec2 p = (px - o) / uRes.y;
+  vec2 sp = px / uRes.y;
+  float r = length(p);
+  if (k == 0) {
+    // Exposure: low gold sun-rays fanning out from it, a warm wash, dust turning in the light
+    float a = atan(p.y, p.x);
+    float rays = pow(0.5 + 0.5 * sin(a * 14.0 + sin(a * 5.0 + t * 0.25) * 2.0 + t * 0.05), 6.0);
+    vec3 c = vec3(1.0, 0.72, 0.35) * rays * exp(-r * 1.1) * 0.35;
+    c += vec3(1.0, 0.6, 0.28) * exp(-r * 1.6) * 0.22;
+    c += vec3(1.0, 0.88, 0.6) * stars(sp * 26.0 + vec2(t * 0.03, t * 0.06), 0.07, t * 1.5) * 0.55;
+    return c;
+  }
+  if (k == 1) {
+    // Resonance: rings that keep time rolling out across the screen, violet stars
+    float beat = fract(t * 92.0 / 60.0 / 2.0);
+    vec3 c = vec3(0.0);
+    for (int j = 0; j < 4; j++) {
+      float ph = fract(beat + float(j) * 0.25);
+      c += vec3(0.62, 0.4, 1.0) * exp(-abs(r - ph * 2.4) * 22.0) * pow(1.0 - ph, 1.5) * 0.45;
+    }
+    c += vec3(0.3, 0.12, 0.55) * exp(-r * 1.3) * 0.25;
+    c += vec3(0.75, 0.65, 1.0) * stars(sp * 40.0, 0.12, t) * 0.6;
+    return c;
+  }
+  if (k == 2) {
+    // Altitude: sheets of cloud drifting past, cool light from above
+    float c1 = fbm3(sp * vec2(1.1, 2.2) + vec2(t * 0.035, 0.0));
+    float c2 = fbm3(sp * vec2(2.0, 3.6) + vec2(t * 0.07, 5.0));
+    float cloud = smoothstep(0.5, 0.85, c1) * 0.7 + smoothstep(0.55, 0.9, c2) * 0.4;
+    vec3 c = vec3(0.6, 0.78, 1.0) * cloud * 0.42;
+    c += vec3(0.25, 0.5, 0.9) * smoothstep(0.2, 1.0, px.y / uRes.y) * 0.12;
+    c += vec3(0.45, 0.75, 1.0) * exp(-r * 1.4) * 0.15;
+    return c;
+  }
+  // Forge: embers rising through the whole room, heat glowing up from below
+  vec2 e = vec2(sp.x * 22.0 + sin(sp.y * 6.0 + t * 0.7) * 0.6, sp.y * 22.0 - t * 2.2);
+  vec3 c = vec3(1.0, 0.55, 0.18) * stars(e, 0.07, t * 5.0) * 1.1;
+  c += vec3(1.0, 0.42, 0.12) * stars(e * 0.6 + 9.0, 0.05, t * 3.0) * 0.6;
+  c += vec3(0.9, 0.3, 0.06) * exp(-px.y / uRes.y * 3.2) * (0.16 + 0.05 * fbm3(sp * 3.0 - vec2(0.0, t * 0.4)));
+  c += vec3(1.0, 0.4, 0.1) * exp(-r * 1.5) * 0.15;
+  return c;
+}
+
 void main() {
   vec2 px = gl_FragCoord.xy;
   vec2 uv = px / uRes;
@@ -201,7 +250,7 @@ void main() {
   room += (vec3(0.05, 0.06, 0.1) + vec3(0.12, 0.1, 0.2) * neb) * carry;
 
   vec3 col = room * (1.0 - 0.75 * smoothstep(0.0, 0.5, uDive));
-  float isFloor = step(px.y, fl);
+  float isFloor = step(px.y, fl) * step(0.01, uFloorA);
 
   // the floor: black glass with a faint grid in perspective that fades into the distance
   if (isFloor > 0.5) {
@@ -209,10 +258,18 @@ void main() {
     vec2 g = vec2((px.x - uRes.x * 0.5) / (depth * uRes.y + 40.0), 1.0 / (depth + 0.04));
     vec2 gl = abs(fract(g * vec2(6.0, 1.2) + vec2(0.0, -t * 0.05)) - 0.5);
     float grid = smoothstep(0.48, 0.5, max(gl.x, gl.y)) * smoothstep(0.0, 0.25, depth) * (1.0 - depth) * 0.25;
-    col = vec3(0.006, 0.007, 0.012) + vec3(0.25, 0.35, 0.6) * grid * (0.15 + carry * 0.6) + spill * grid * 0.25;
+    vec3 glass = vec3(0.006, 0.007, 0.012) + vec3(0.25, 0.35, 0.6) * grid * (0.15 + carry * 0.6) + spill * grid * 0.25;
+    col = mix(col, glass, uFloorA);
   }
   // the hairline where the floor meets the dark
-  col += vec3(0.6, 0.7, 1.0) * exp(-abs(px.y - fl) * 0.9) * 0.18;
+  col += vec3(0.6, 0.7, 1.0) * exp(-abs(px.y - fl) * 0.9) * 0.18 * uFloorA;
+
+  // the worlds let out into the room: whichever is looked at, or belongs to the part of the page in view, fills it
+  vec3 fl4 = vec3(0.0);
+  for (int i = 0; i < 4; i++) {
+    if (uFlood[i] > 0.004) fl4 += flood(i, px, uOrigin[i], t) * uFlood[i];
+  }
+  col += fl4 * (1.0 - smoothstep(0.3, 0.8, uDive));
 
   // the portals
   for (int i = 0; i < 4; i++) {
@@ -310,6 +367,6 @@ void main() {
 
   col = col / (1.0 + col * 0.35);
   col = pow(col, vec3(0.95));
-  gl_FragColor = vec4(col * uFade, 1.0);
+  gl_FragColor = vec4(col, 1.0);
 }
 `;

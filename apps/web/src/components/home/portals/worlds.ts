@@ -93,3 +93,23 @@ export function nearness([x, y]: [number, number], r: { left: number; top: numbe
   const dy = Math.max(r.top - y, 0, y - (r.top + r.height));
   return Math.exp(-Math.hypot(dx, dy) / Math.max(1, r.width));
 }
+
+/**
+ * With nothing looked at, the room drifts through the four worlds on its own: each takes a turn of about seven
+ * seconds, swelling and fading, overlapping the next. 0..1 for world `i` at `t` seconds.
+ */
+export function tour(t: number, i: number) {
+  const d = (((t / 7 - i) % 4) + 4) % 4;
+  return d < 1.4 ? Math.sin((Math.PI * d) / 1.4) ** 2 : 0;
+}
+
+/**
+ * Where each world's flood comes from once the portals have scrolled away (fractions of the screen, y down): the sun
+ * from high on the right, the rings from the middle, the sky from overhead, the heat from below.
+ */
+export const FLOOD_FROM: Record<WorldKey, [number, number]> = {
+  exposure: [0.85, -0.1],
+  resonance: [0.5, 0.5],
+  altitude: [0.5, -0.25],
+  forge: [0.5, 1.15],
+};

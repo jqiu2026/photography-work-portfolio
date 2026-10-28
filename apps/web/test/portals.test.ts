@@ -1,5 +1,15 @@
 import { describe, expect, it } from "vitest";
-import { approach, bloom, diveDoor, lookOf, nearness, toGl, WORLDS } from "@/components/home/portals/worlds";
+import {
+  approach,
+  bloom,
+  diveDoor,
+  FLOOD_FROM,
+  lookOf,
+  nearness,
+  toGl,
+  tour,
+  WORLDS,
+} from "@/components/home/portals/worlds";
 import { FRAG } from "@/components/home/portals/shader";
 
 describe("the portals", () => {
@@ -56,6 +66,17 @@ describe("the portals", () => {
     expect(nearness([-1e4, -1e4], r)).toBeCloseTo(0, 6);
   });
 
+  it("drifts through the worlds one at a time, each overlapping only the next", () => {
+    for (let t = 0; t < 56; t += 0.25) {
+      const w = [0, 1, 2, 3].map((i) => tour(t, i));
+      for (const x of w) expect(x).toBeGreaterThanOrEqual(0);
+      for (const x of w) expect(x).toBeLessThanOrEqual(1);
+      expect(w.filter((x) => x > 1e-9).length).toBeLessThanOrEqual(2);
+    }
+    expect(tour(3.5 + 28, 0)).toBeCloseTo(tour(3.5, 0), 9);
+    for (const w of WORLDS) expect(FLOOD_FROM[w.key]).toHaveLength(2);
+  });
+
   it("declares every uniform the component sets", () => {
     for (const u of [
       "uRes",
@@ -67,9 +88,11 @@ describe("the portals", () => {
       "uFloor",
       "uDive",
       "uDiveIdx",
-      "uFade",
       "uOpen[4]",
       "uCursor",
+      "uFlood[4]",
+      "uOrigin[4]",
+      "uFloorA",
     ])
       expect(FRAG).toMatch(new RegExp(`uniform \\w+ ${u.replace(/[[\]]/g, "\\$&")};`));
   });
