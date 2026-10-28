@@ -1,8 +1,9 @@
 import { getMakeUrl, getSite } from "@jerryqiu/sites";
 import type { Metadata } from "next";
 import NextLink from "next/link";
-import { Nexus } from "@/components/home/Nexus";
-import type { RealmLink } from "@/components/home/nexus/realms";
+import { Portals } from "@/components/home/portals/Portals";
+import type { WorldLink } from "@/components/home/portals/worlds";
+import "@/components/home/home.css";
 import { Button } from "@/components/site/ui";
 import { getWriting } from "@/lib/content";
 import { getImage, srcSet } from "@/lib/images";
@@ -52,7 +53,7 @@ export default async function Home() {
     sameAs: socials.filter((s) => s.href.startsWith("http")).map((s) => s.href),
   };
   // TODO(owner): rewrite these lines in your voice.
-  const realms: RealmLink[] = [
+  const worlds: WorldLink[] = [
     { key: "exposure", site: "Photography", href: getSite("photos").url, line: "Pictures of people at work." },
     { key: "resonance", site: "Music", href: getSite("music").url, line: "Things I wrote, and sometimes played." },
     { key: "altitude", site: "Flying", href: getSite("flying").url, line: "Where I've been, from above." },
@@ -64,40 +65,33 @@ export default async function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
       />
-      <div className="hb-wrap">
-        <Nexus realms={realms}>
-          <section className="hb-hero" aria-labelledby="h">
-            <p className="hm-eyebrow">The Nexus · {person.location}</p>
-            <h1 id="h" className="hm-iridescent-text">
-              {person.name}.
-            </h1>
-            <p className="hb-roles">
-              {roles.map((r, i) => (
-                <span key={r}>
-                  {r}
-                  {i < roles.length - 1 ? <i aria-hidden> · </i> : null}
-                </span>
-              ))}
-              <span className="hb-sr"> in {person.location}</span>
-            </p>
-            {/* TODO(owner): rewrite in your voice. */}
-            <p className="hb-lede">I take photographs, build websites, fly drones and make music. I'm in New York.</p>
-            <div className="hb-row">
-              <Button asChild>
-                <NextLink href="/writing">Read my writing</NextLink>
-              </Button>
-              <Button asChild variant="secondary">
-                <NextLink href="/connect">Get in touch</NextLink>
-              </Button>
-            </div>
-          </section>
-        </Nexus>
+      <div className="hh">
+        <Portals worlds={worlds}>
+          <p className="hm-eyebrow">The Nexus · {person.location}</p>
+          <h1 className="hm-iridescent-text">{person.name}</h1>
+          <p className="px-roles">
+            {roles.join(", ")}
+            <span className="hh-sr"> in {person.location}</span>.
+          </p>
+          {/* TODO(owner): rewrite in your voice. */}
+          <p className="px-lede">I take photographs, build websites, fly drones and make music. I'm in New York.</p>
+          <div className="px-row">
+            <Button asChild>
+              <NextLink href="/writing">Read my writing</NextLink>
+            </Button>
+            <Button asChild variant="secondary">
+              <NextLink href="/connect">Get in touch</NextLink>
+            </Button>
+          </div>
+        </Portals>
 
-        <section className="hb-section" aria-labelledby="proof">
-          <h2 id="proof" className="hb-h2">
-            A few of the things I've shot.
-          </h2>
-          <ul className="hb-strip">
+        <section className="hh-section" aria-labelledby="proof">
+          <header className="hh-head">
+            <p className="hm-eyebrow">Photography</p>
+            <h2 id="proof">A few of the things I've shot</h2>
+          </header>
+          {/* on narrow screens the strip scrolls sideways, so it takes focus for the arrow keys */}
+          <ul className="hh-strip" tabIndex={0} aria-label="Photographs">
             {proof.map((p) => {
               const img = getImage("gallery", p.id);
               return (
@@ -121,25 +115,27 @@ export default async function Home() {
           </ul>
         </section>
 
-        <section className="hb-section" aria-labelledby="what">
-          <h2 id="what" className="hb-h2">
-            What I do
-          </h2>
-          <div className="hb-lines">
-            {/* TODO(owner): rewrite these four lines in your voice. Facts: original About page. */}
-            <p>Photography is how I started, and it is still how I pay attention.</p>
-            <p>I fly drones with a Part 107 certificate.</p>
-            <p>I built this site.</p>
-            <p>I run the StuyAviators Instagram.</p>
-          </div>
+        <section className="hh-section" aria-labelledby="what">
+          <header className="hh-head">
+            <p className="hm-eyebrow">About</p>
+            <h2 id="what">What I do</h2>
+          </header>
+          {/* TODO(owner): rewrite these four lines in your voice. Facts: original About page. */}
+          <ol className="hh-lines">
+            <li>Photography is how I started, and it is still how I pay attention.</li>
+            <li>I fly drones with a Part 107 certificate.</li>
+            <li>I built this site.</li>
+            <li>I run the StuyAviators Instagram.</li>
+          </ol>
         </section>
 
-        <section className="hb-section" aria-labelledby="writing">
-          <h2 id="writing" className="hb-h2">
-            Writing
-          </h2>
+        <section className="hh-section" aria-labelledby="writing">
+          <header className="hh-head">
+            <p className="hm-eyebrow">Notes</p>
+            <h2 id="writing">Writing</h2>
+          </header>
           {featured ? (
-            <NextLink href={`/writing/${featured.slug}`} className="hb-featured">
+            <NextLink href={`/writing/${featured.slug}`} className="hh-featured">
               {featured.cover ? (
                 <img
                   src={featured.cover.files[1]?.src ?? featured.cover.files[0].src}
@@ -152,37 +148,35 @@ export default async function Home() {
                   style={{ backgroundColor: featured.cover.color }}
                 />
               ) : null}
-              <span className="hb-stack">
-                <time dateTime={featured.date} className="hb-mono">
-                  {fmt(featured.date)}
-                </time>
-                <strong style={{ fontSize: "var(--hm-text-2xl)", fontWeight: 500 }}>{featured.title}</strong>
-                {featured.summary ? <span className="hb-muted">{featured.summary}</span> : null}
+              <span className="hh-featured-text">
+                <time dateTime={featured.date}>{fmt(featured.date)}</time>
+                <strong>{featured.title}</strong>
+                {featured.summary ? <span>{featured.summary}</span> : null}
               </span>
             </NextLink>
           ) : null}
-          {rest.map((p) => (
-            <NextLink key={p.slug} href={`/writing/${p.slug}`} className="hb-post">
-              <strong>{p.title}</strong>
-              <time dateTime={p.date} className="hb-mono">
-                {fmt(p.date)}
-              </time>
-            </NextLink>
-          ))}
-          <p>
-            <NextLink className="hb-link" href="/writing">
-              All writing
-            </NextLink>
+          {rest.length ? (
+            <ul className="hh-posts">
+              {rest.map((p) => (
+                <li key={p.slug}>
+                  <NextLink href={`/writing/${p.slug}`}>
+                    <strong>{p.title}</strong>
+                    <time dateTime={p.date}>{fmt(p.date)}</time>
+                  </NextLink>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+          <p className="hh-more">
+            <NextLink href="/writing">All writing →</NextLink>
           </p>
         </section>
 
-        <section className="hb-section" aria-labelledby="hello">
-          <h2 id="hello" className="hb-h2">
-            Say hello.
-          </h2>
+        <section className="hh-section hh-hello" aria-labelledby="hello">
+          <h2 id="hello">Say hello.</h2>
           {/* TODO(owner): rewrite in your voice. */}
-          <p className="hb-lede">If something here made you curious, tell me. I read everything.</p>
-          <div className="hb-row">
+          <p>If something here made you curious, tell me. I read everything.</p>
+          <div className="px-row">
             <Button asChild>
               <NextLink href="/connect">Get in touch</NextLink>
             </Button>

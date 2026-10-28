@@ -6,7 +6,7 @@ Self-contained state for a fresh chat. Read `README.md`, `08-operating-rules.md`
 
 ## Hub portal redesign (paused, 2026-10-27)
 
-The owner wants the hub to be a portal/dimension experience. No theme approved; see `hub-concepts/README.md` (Nexus was closest, no 3D, 2D moods rejected). Flying feature removal is pending confirmation (same file).
+The owner wants the hub to be a portal/dimension experience. The second build (2026-10-28) replaced the first, which the owner found "too minecrafty" with portals "not polished enough"; see `hub-concepts/README.md`. Flying feature removal is pending confirmation (same file).
 
 ## State (update at every milestone)
 
@@ -24,7 +24,7 @@ Done and committed: PHOTO-M1 foundation, M2 ShootProof removed, M3 protection ev
 
 **Branch now: `wip/hub-portals`** (owner, 2026-10-27: commit and push all work to a work-in-progress branch; `claude/other-sites` and `claude/subdomain-apps-deployment-4vrcll` were temporary and are merged in). Pushing that branch is approved; merging to `main` and deploying still need the owner.
 
-**Hub Nexus (2026-10-27):** `apps/web/src/components/home/Nexus.tsx` and `home/nexus/`. Everything is painted smooth (gradients, curves, glows) on an offscreen canvas at most about 1600 px across and scaled to the screen; worlds are pure functions `(ctx, w, h, t)` in `paint.ts`, so a new world is one painter plus an entry in `realms.ts`. 60 fps measured headless at 1440 x 900. The dev server for the hub can run against a throwaway DB: `PGLITE_PORT=... PGLITE_DIR=<scratch> pnpm --filter @jerryqiu/db dev`, then `PORT=3010 NEXT_DIST_DIR=.next-hubdev DATABASE_URL=... pnpm --filter @jerryqiu/web dev` (`.next-*` folders are ignored).
+**Hub portals (2026-10-28):** `apps/web/src/components/home/portals/`. `Portals.tsx` lays out four arched doors as plain links (CSS grid) and, when WebGL is there, draws the scene behind them in one fragment shader (`shader.ts`) at the doors' measured positions, so layout changes are CSS only. A world is one branch of `world()` in the shader plus an entry in `worlds.ts` (names, light, the CSS fallback picture). The canvas drops its resolution by itself if frames run slow. The dev server for the hub can run against a throwaway DB: `PGLITE_PORT=... PGLITE_DIR=<scratch> pnpm --filter @jerryqiu/db dev`, then `PORT=3010 NEXT_DIST_DIR=.next-hubdev DATABASE_URL=... pnpm --filter @jerryqiu/web dev` (`.next-*` folders are ignored).
 
 **Last check (2026-10-27, `wip/hub-portals`, after Halation's removal and the site intros):** `pnpm lint` and `pnpm typecheck` clean, unit tests all green (`pnpm -r --workspace-concurrency=2 test` if the default run is killed for memory), `pnpm test:e2e` 410 passed (includes `nexus.spec.ts` and `intros.spec.ts`), `pnpm test:admin` 138 passed. Admin specs read Holominimal toasts (`.hm-toast`); a toast's dismiss button repeats its text, so click buttons by exact name.
 

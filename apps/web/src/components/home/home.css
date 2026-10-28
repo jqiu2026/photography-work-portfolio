@@ -1,0 +1,208 @@
+/* The hub home below the portals: Holominimal's black, hairlines, one sans, gray for the quiet parts. Prefix hh-. */
+.hh {
+  width: min(100% - 2 * var(--hm-gutter), 72rem);
+  margin-inline: auto;
+}
+.hh-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.hh-section {
+  padding-block: clamp(3rem, 8vw, 6rem);
+  border-top: 1px solid var(--hm-line);
+}
+.hh-head {
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: clamp(1.5rem, 3vw, 2.25rem);
+}
+.hh-head .hm-eyebrow {
+  margin: 0;
+}
+.hh-head h2,
+.hh-hello h2 {
+  margin: 0;
+  font-size: var(--hm-text-2xl);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+}
+
+/* photographs */
+.hh-strip {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--hm-space-4);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+@media (max-width: 960px) {
+  .hh-strip {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(13rem, 62vw);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 0.5rem;
+  }
+  .hh-strip li {
+    scroll-snap-align: start;
+  }
+}
+.hh-strip figure {
+  margin: 0;
+  display: grid;
+  gap: 0.7rem;
+}
+.hh-strip img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: var(--hm-radius-md);
+  outline: 1px solid var(--hm-line);
+  outline-offset: -1px;
+  transition: transform var(--hm-dur-slow) var(--hm-ease-glide), filter var(--hm-dur-slow) var(--hm-ease-glide);
+}
+.hh-strip li:hover img {
+  transform: translateY(-3px);
+  filter: brightness(1.06);
+}
+.hh-strip figcaption {
+  font-size: var(--hm-text-sm);
+  color: var(--hm-muted);
+}
+
+/* what I do: four numbered lines between hairlines */
+.hh-lines {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: hh;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: clamp(1.5rem, 4vw, 3rem);
+}
+@media (max-width: 720px) {
+  .hh-lines {
+    grid-template-columns: 1fr;
+  }
+}
+.hh-lines li {
+  counter-increment: hh;
+  display: grid;
+  grid-template-columns: 2.5rem 1fr;
+  align-items: baseline;
+  padding-block: 1.1rem;
+  border-top: 1px solid var(--hm-line);
+  font-size: var(--hm-text-lg);
+  line-height: 1.45;
+  color: var(--hm-fg);
+}
+.hh-lines li::before {
+  content: counter(hh, decimal-leading-zero);
+  font-family: var(--hm-font-mono);
+  font-size: var(--hm-text-2xs);
+  letter-spacing: 0.1em;
+  color: var(--hm-muted);
+}
+
+/* writing */
+.hh-featured {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: clamp(1.25rem, 4vw, 3rem);
+  align-items: center;
+  color: inherit;
+  text-decoration: none;
+}
+@media (max-width: 860px) {
+  .hh-featured {
+    grid-template-columns: 1fr;
+  }
+}
+.hh-featured img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border-radius: var(--hm-radius-lg);
+  outline: 1px solid var(--hm-line);
+  outline-offset: -1px;
+}
+.hh-featured-text {
+  display: grid;
+  gap: 0.7rem;
+}
+.hh-featured-text time,
+.hh-posts time {
+  font-size: var(--hm-text-sm);
+  color: var(--hm-muted);
+  font-variant-numeric: tabular-nums;
+}
+.hh-featured-text strong {
+  font-size: var(--hm-text-2xl);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+}
+.hh-featured-text span {
+  color: var(--hm-fg-soft);
+  line-height: 1.6;
+}
+.hh-featured:hover strong,
+.hh-posts a:hover strong {
+  text-decoration: underline;
+  text-decoration-color: var(--hm-line-strong);
+  text-underline-offset: 4px;
+}
+.hh-posts {
+  list-style: none;
+  margin: clamp(1.5rem, 3vw, 2.25rem) 0 0;
+  padding: 0;
+}
+.hh-posts a {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding-block: 1rem;
+  border-top: 1px solid var(--hm-line);
+  color: inherit;
+  text-decoration: none;
+}
+.hh-posts strong {
+  font-weight: 500;
+  font-size: var(--hm-text-lg);
+}
+.hh-more {
+  margin: 1.5rem 0 0;
+}
+.hh-more a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--hm-fg-soft);
+  text-decoration: none;
+}
+.hh-more a:hover {
+  color: var(--hm-fg-strong);
+}
+
+/* say hello */
+.hh-hello {
+  display: grid;
+  gap: 1rem;
+  justify-items: start;
+}
+.hh-hello p {
+  margin: 0 0 0.75rem;
+  max-width: 32rem;
+  font-size: var(--hm-text-lg);
+  color: var(--hm-fg-soft);
+}

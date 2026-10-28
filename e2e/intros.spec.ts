@@ -14,10 +14,12 @@ for (const [site, url, first] of [
     await page.goto(`${url}/`, { waitUntil: "networkidle" });
     const intro = page.getByRole("region", { name: `${site}: introduction` });
     await expect(intro).toBeVisible();
-    await expect(intro).toContainText(first);
     const marks = intro.getByRole("list", { name: "Chapters" }).getByRole("button");
     await expect(marks).toHaveCount(5);
+    // it plays by itself, so on a slow load it may be past the first chapter already: go back to it
+    await marks.first().click();
     await expect(marks.first()).toHaveAttribute("aria-current", "step");
+    await expect(intro).toContainText(first);
     await page.keyboard.press("ArrowRight");
     await expect(marks.nth(1)).toHaveAttribute("aria-current", "step");
     await expect(intro.getByRole("button", { name: "Play" })).toBeVisible();

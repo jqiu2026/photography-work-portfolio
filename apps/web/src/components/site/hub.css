@@ -59,21 +59,6 @@
   border-radius: var(--hm-radius-md);
   color: var(--hm-fg-soft);
 }
-.hb-hero {
-  padding-block: clamp(2.5rem, 8vw, 6rem) clamp(1.5rem, 4vw, 3rem);
-}
-.hb-hero h1 {
-  margin: 0 0 1rem;
-  font-size: clamp(3rem, 9vw, 6.5rem);
-  line-height: 0.95;
-  letter-spacing: -0.03em;
-}
-.hb-hero p {
-  max-width: 36rem;
-  font-size: clamp(1.1rem, 2.2vw, 1.4rem);
-  color: var(--hm-fg-soft);
-  margin: 0 0 1.4rem;
-}
 
 .hb-grid {
   display: grid;
@@ -214,17 +199,6 @@
   display: inline-flex;
   align-items: center;
 }
-
-/* hub home */
-.hb-roles {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.2rem 0.7rem;
-  margin: 0 0 1rem;
-  font-family: var(--hm-font-mono);
-  font-size: var(--hm-text-md);
-  color: var(--hm-muted);
-}
 .hb-lede {
   font-family: var(--font-voice), "Newsreader", Georgia, serif;
   font-size: clamp(1.2rem, 2.4vw, 1.7rem);
@@ -232,77 +206,6 @@
   max-width: 34rem;
   color: var(--hm-fg-soft);
   margin: 0 0 1.6rem;
-}
-.hb-strip {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: var(--hm-space-4);
-  grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
-}
-.hb-strip figure {
-  margin: 0;
-  display: grid;
-  gap: 0.5rem;
-}
-.hb-strip img {
-  display: block;
-  width: 100%;
-  height: 12rem;
-  object-fit: cover;
-  border-radius: var(--hm-radius-md);
-  border: 1px solid var(--hm-line);
-}
-.hb-strip figcaption {
-  color: var(--hm-muted);
-  font-size: var(--hm-text-sm);
-}
-.hb-lines {
-  display: grid;
-  gap: 0.8rem;
-}
-.hb-lines p {
-  margin: 0;
-  font-family: var(--font-voice), "Newsreader", Georgia, serif;
-  font-size: clamp(1.2rem, 2.4vw, 1.6rem);
-  color: var(--hm-fg-soft);
-}
-.hb-rooms {
-  display: grid;
-  gap: var(--hm-space-4);
-  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
-}
-.hb-room {
-  display: grid;
-  gap: 0.6rem;
-  align-content: start;
-  text-decoration: none;
-  color: inherit;
-  padding: var(--hm-space-3);
-  border: 1px solid var(--hm-line);
-  border-radius: var(--hm-radius-lg);
-  transition: background var(--hm-dur-fast) var(--hm-ease-out), border-color var(--hm-dur-fast) var(--hm-ease-out);
-}
-.hb-room:hover {
-  background: var(--hm-surface);
-  border-color: var(--hm-line-hover, var(--hm-line-strong));
-}
-.hb-room img {
-  display: block;
-  width: 100%;
-  height: 10rem;
-  object-fit: cover;
-  border-radius: var(--hm-radius-md);
-}
-.hb-room h3 {
-  margin: 0;
-  font-size: var(--hm-text-xl);
-  font-weight: 500;
-}
-.hb-room p {
-  margin: 0;
-  color: var(--hm-fg-soft);
 }
 .hb-post {
   display: grid;
@@ -321,32 +224,6 @@
 .hb-post strong {
   margin: 0;
   font-size: var(--hm-text-xl);
-  font-weight: 500;
-}
-.hb-featured {
-  display: grid;
-  gap: var(--hm-space-4);
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  align-items: center;
-  text-decoration: none;
-  color: inherit;
-  margin-bottom: var(--hm-space-5);
-}
-@media (max-width: 860px) {
-  .hb-featured {
-    grid-template-columns: 1fr;
-  }
-}
-.hb-featured img {
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: var(--hm-radius-lg);
-  border: 1px solid var(--hm-line);
-}
-.hb-featured h3 {
-  margin: 0.3rem 0;
-  font-size: var(--hm-text-2xl);
   font-weight: 500;
 }
 .hb-prose {

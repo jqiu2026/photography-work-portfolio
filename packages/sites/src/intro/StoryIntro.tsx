@@ -1,6 +1,7 @@
 "use client";
 
 import { type CSSProperties, Fragment, useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { SCENES, type SceneName } from "./scenes";
 import "./intro.css";
 
@@ -180,7 +181,8 @@ export function StoryIntro({
   if (reduce !== false || !open) return null;
   const ch = chapters[index];
   const last = index === chapters.length - 1 && !playing;
-  return (
+  // straight into body, so no ancestor's stacking context can put the page's cover above it
+  return createPortal(
     <div
       ref={root}
       className="si"
@@ -257,7 +259,8 @@ export function StoryIntro({
           {last ? `Into the ${site.toLowerCase()} site` : "Skip the story"} <span aria-hidden>→</span>
         </button>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
 
