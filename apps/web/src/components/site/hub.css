@@ -24,13 +24,18 @@
   color: var(--hm-muted);
 }
 .hb-mono {
-  font-family: var(--hm-font-mono);
   font-size: var(--hm-text-sm);
+  font-variant-numeric: tabular-nums;
   color: var(--hm-muted);
 }
 .hb-stack {
   display: grid;
+  align-content: start;
   gap: var(--hm-space-4);
+}
+.hb-stack > p,
+.hb-stack > .hb-h2 {
+  margin: 0;
 }
 .hb-row {
   display: flex;
@@ -200,10 +205,9 @@
   align-items: center;
 }
 .hb-lede {
-  font-family: var(--font-voice), "Newsreader", Georgia, serif;
-  font-size: clamp(1.2rem, 2.4vw, 1.7rem);
-  line-height: 1.35;
-  max-width: 34rem;
+  font-size: var(--hm-text-lg);
+  line-height: 1.6;
+  max-width: 40rem;
   color: var(--hm-fg-soft);
   margin: 0 0 1.6rem;
 }
