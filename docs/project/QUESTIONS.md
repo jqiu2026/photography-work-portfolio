@@ -242,7 +242,7 @@ Nothing blocks the build. Everything below has a default in use.
 - Q171 (hub, world names and mapping): Exposure = photography (daylight terraces), Resonance = music (the void), Altitude = flying (the sky), Forge = make (the lava cavern). Names are the Nexus concept's; the scenes are original, drawn in code, with no art from any game. Say if a world should map to a different site or take another name.
 - Q172 (hub, the copy): each world's line is the old room text ("Pictures of people at work." and so on), marked TODO(owner) in `app/(site)/page.tsx` for your own words.
 - Q173 (hub, sound): generated in the browser (Web Audio), never autoplays, off until the visitor presses Sound; the choice is not remembered between visits.
-- Q174 (hub, type): Silkscreen (SIL OFL 1.1, self-hosted by next/font, licence in `packages/ui/licenses/fonts/`) for the Nexus labels only; the name and body keep the site's faces.
+- Q174 (hub, type): withdrawn 2026-10-27; the owner asked for no pixel look, so the Nexus uses the site's own faces (Martian Mono for labels).
 - Q175 (hub, motion and access): reduced motion draws still frames and swaps instantly between the Nexus and a world; every control is an HTML button or link (keyboard, screen readers); without JavaScript the page shows its content and the rooms stay reachable from the dock and footer. A world is a modal dialog; Escape and the back button leave it.
 - Q176 (flying extras): the owner's earlier "I don't want those features in Flying" is still unconfirmed (see `hub-concepts/README.md`); nothing was removed. The owner asked on 2026-10-27 to ignore that note for now.
 

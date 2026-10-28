@@ -22,7 +22,7 @@ const onReduce = (cb: () => void) => {
 /**
  * The hub's front door: the Nexus, a stone platform in a void with four portals, one per site. Arrow keys, the gate
  * buttons or a click turn the ring; stepping through a portal dives into that world, which fills the screen, with a
- * link on to the real site. Drawn in pixels on one canvas; the text and every control are ordinary HTML on top.
+ * link on to the real site. Painted smooth on one canvas; the text and every control are ordinary HTML on top.
  */
 export function Nexus({ realms, children }: { realms: RealmLink[]; children: ReactNode }) {
   const canvas = useRef<HTMLCanvasElement>(null);
@@ -147,8 +147,8 @@ export function Nexus({ realms, children }: { realms: RealmLink[]; children: Rea
     s.reduce = reduce;
     s.hub.previews = LOOKS.map(() => {
       const p = document.createElement("canvas");
-      p.width = 32;
-      p.height = 48;
+      p.width = 120;
+      p.height = 180;
       return p;
     });
     // a link to a world (#forge) opens it straight away
@@ -167,14 +167,18 @@ export function Nexus({ realms, children }: { realms: RealmLink[]; children: Rea
     let W = 0;
     let H = 0;
     const resize = () => {
-      W = innerWidth;
-      H = innerHeight;
+      // drawn smooth, near the screen's own resolution: at most about 1600 pixels across, scaled up softly
+      const dpr = Math.min(2, devicePixelRatio || 1);
+      W = Math.round(innerWidth * dpr);
+      H = Math.round(innerHeight * dpr);
       cv.width = W;
       cv.height = H;
-      s.scale = W >= 2200 ? 5 : W >= 1200 ? 4 : W >= 700 ? 3.5 : 3;
-      buf.width = Math.max(120, Math.round(W / s.scale));
-      buf.height = Math.max(120, Math.round(H / s.scale));
-      view.imageSmoothingEnabled = false;
+      const q = Math.max(1, W / 1600);
+      buf.width = Math.max(160, Math.round(W / q));
+      buf.height = Math.max(160, Math.round(H / q));
+      s.scale = innerWidth / buf.width;
+      view.imageSmoothingEnabled = true;
+      view.imageSmoothingQuality = "high";
       s.kick();
     };
 
@@ -258,14 +262,15 @@ export function Nexus({ realms, children }: { realms: RealmLink[]; children: Rea
         }
       }
 
-      // up to the screen in hard pixels; a portal makes the view swim, the forge's heat makes it shimmer
+      // up to the screen; a portal makes the view swim, the forge's heat makes it shimmer
       if (wobble > 0.01 || shimmer > 0) {
         const sy = H / bh;
-        for (let y = 0; y < bh; y += 2) {
+        const band = Math.max(2, Math.round(bh / 120));
+        for (let y = 0; y < bh; y += band) {
+          const k = y / bh;
           const dx =
-            Math.sin(y * 0.16 + t * 6) * wobble * s.scale * 4 +
-            Math.sin(y * 0.5 + t * 9) * shimmer * (y / bh) * s.scale;
-          view.drawImage(buf, 0, y, bw, 2, Math.round(dx), Math.round(y * sy), W, Math.ceil(2 * sy));
+            Math.sin(k * 22 + t * 6) * wobble * W * 0.012 + Math.sin(k * 70 + t * 9) * shimmer * k * W * 0.0025;
+          view.drawImage(buf, 0, y, bw, band, dx, y * sy, W, band * sy + 1);
         }
       } else if (s.reduce) el.style.backgroundImage = `url(${buf.toDataURL()})`;
       else view.drawImage(buf, 0, 0, bw, bh, 0, 0, W, H);
