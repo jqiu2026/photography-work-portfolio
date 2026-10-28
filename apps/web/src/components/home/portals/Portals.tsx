@@ -2,7 +2,7 @@
 
 import { type CSSProperties, type MouseEvent, type ReactNode, useEffect, useRef, useState } from "react";
 import { FRAG, VERT } from "./shader";
-import { approach, type Door, diveDoor, lookOf, toGl, type WorldLink } from "./worlds";
+import { approach, bloom, type Door, diveDoor, lookOf, nearness, toGl, type WorldLink } from "./worlds";
 import "./portals.css";
 
 const REDUCE = "(prefers-reduced-motion: reduce)";
@@ -13,6 +13,7 @@ type Live = {
   hoverTo: number[];
   pointer: [number, number];
   pointerTo: [number, number];
+  cursor: [number, number];
   dive: number;
   diveAt: number;
   diveIdx: number;
@@ -38,6 +39,7 @@ export function Portals({ worlds, children }: { worlds: WorldLink[]; children: R
     hoverTo: [0, 0, 0, 0],
     pointer: [0, 0],
     pointerTo: [0, 0],
+    cursor: [-1e4, -1e4],
     dive: 0,
     diveAt: 0,
     diveIdx: -1,
@@ -98,6 +100,8 @@ export function Portals({ worlds, children }: { worlds: WorldLink[]; children: R
       dive: u("uDive"),
       diveIdx: u("uDiveIdx"),
       fade: u("uFade"),
+      open: u("uOpen"),
+      cursor: u("uCursor"),
     };
     g.uniform3fv(U.accent, new Float32Array(worlds.flatMap((w) => lookOf(w.key).accent)));
 
@@ -116,6 +120,7 @@ export function Portals({ worlds, children }: { worlds: WorldLink[]; children: R
     const s = live.current;
     const onPointer = (e: PointerEvent) => {
       s.pointerTo = [(e.clientX / innerWidth) * 2 - 1, -((e.clientY / innerHeight) * 2 - 1)];
+      s.cursor = [e.clientX, e.clientY];
     };
     addEventListener("pointermove", onPointer, { passive: true });
 
@@ -127,6 +132,9 @@ export function Portals({ worlds, children }: { worlds: WorldLink[]; children: R
     let running = true;
     const doorData = new Float32Array(16);
     const hoverData = new Float32Array(4);
+    const openData = new Float32Array(4);
+    let cursorX = -1e4;
+    let cursorY = -1e4;
     const frame = (now: number) => {
       const dt = Math.min(0.05, (now - last) / 1000);
       last = now;
@@ -149,12 +157,18 @@ export function Portals({ worlds, children }: { worlds: WorldLink[]; children: R
         s.pointer[0] = approach(s.pointer[0], s.pointerTo[0], 3, dt);
         s.pointer[1] = approach(s.pointer[1], s.pointerTo[1], 3, dt);
         let floor = 0;
+        // the light you carry trails the pointer a little
+        cursorX = cursorX < -1e3 ? s.cursor[0] : approach(cursorX, s.cursor[0], 6, dt);
+        cursorY = cursorY < -1e3 ? s.cursor[1] : approach(cursorY, s.cursor[1], 6, dt);
         for (let i = 0; i < 4; i++) {
-          s.hover[i] = approach(s.hover[i], s.diveIdx === i ? 1 : s.hoverTo[i], 7, dt);
-          hoverData[i] = s.hover[i];
+          openData[i] = bloom(t, i);
           const el = doors.current[i];
-          if (!el) continue;
-          const r = el.getBoundingClientRect();
+          const r = el?.getBoundingClientRect();
+          // a portal stirs as you come near it, and wakes fully when you look into it
+          const near = r ? nearness(s.cursor, r) : 0;
+          s.hover[i] = approach(s.hover[i], s.diveIdx === i ? 1 : Math.max(s.hoverTo[i], near * 0.4), 7, dt);
+          hoverData[i] = s.hover[i];
+          if (!r) continue;
           floor = Math.max(floor, r.bottom);
           let d: Door = { x: r.left, y: r.top, w: r.width, h: r.height };
           if (s.diveIdx === i) d = diveDoor(d, innerWidth, innerHeight, s.dive);
@@ -177,6 +191,8 @@ export function Portals({ worlds, children }: { worlds: WorldLink[]; children: R
         g.uniform1f(U.dive, s.dive);
         g.uniform1f(U.diveIdx, s.diveIdx);
         g.uniform1f(U.fade, fade);
+        g.uniform1fv(U.open, openData);
+        g.uniform2f(U.cursor, cursorX * scale, (innerHeight - cursorY) * scale);
         g.drawArrays(g.TRIANGLES, 0, 3);
       }
       if (running && !document.hidden) raf = requestAnimationFrame(frame);

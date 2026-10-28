@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { approach, diveDoor, lookOf, toGl, WORLDS } from "@/components/home/portals/worlds";
+import { approach, bloom, diveDoor, lookOf, nearness, toGl, WORLDS } from "@/components/home/portals/worlds";
 import { FRAG } from "@/components/home/portals/shader";
 
 describe("the portals", () => {
@@ -42,6 +42,20 @@ describe("the portals", () => {
     expect(fast).toBeCloseTo(slow, 6);
   });
 
+  it("opens the portals one after another, from closed to fully open", () => {
+    expect(bloom(0, 0)).toBe(0);
+    expect(bloom(1, 0)).toBeGreaterThan(bloom(1, 3));
+    expect(bloom(1, 3)).toBe(0);
+    for (let i = 0; i < 4; i++) expect(bloom(10, i)).toBe(1);
+  });
+
+  it("stirs a portal as the pointer nears it", () => {
+    const r = { left: 100, top: 100, width: 100, height: 200 };
+    expect(nearness([150, 200], r)).toBe(1);
+    expect(nearness([300, 200], r)).toBeCloseTo(Math.exp(-1), 6);
+    expect(nearness([-1e4, -1e4], r)).toBeCloseTo(0, 6);
+  });
+
   it("declares every uniform the component sets", () => {
     for (const u of [
       "uRes",
@@ -54,6 +68,8 @@ describe("the portals", () => {
       "uDive",
       "uDiveIdx",
       "uFade",
+      "uOpen[4]",
+      "uCursor",
     ])
       expect(FRAG).toMatch(new RegExp(`uniform \\w+ ${u.replace(/[[\]]/g, "\\$&")};`));
   });

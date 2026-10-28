@@ -1,7 +1,8 @@
 /**
  * The scene, drawn in one fragment shader: a dark room with a slow nebula and drifting motes, a black glass floor, and
- * four arched portals standing on it. Each portal is a window into its dimension (with depth: the far layers move less
- * than the near ones as the pointer moves), under a thin moving membrane, inside an iridescent rim, and lit from within.
+ * four portals standing in it. Each is a window into its dimension (with depth: the far layers move less than the near
+ * ones as the pointer moves), under a thin moving membrane, with no frame: its edge breathes and frays into iridescent
+ * haze, and it thins into mist at the floor.
  * The floor reflects them. Hovering one brightens it and lets its light into the room; stepping through grows it to
  * fill the screen. WebGL 1 / GLSL ES 1.0 so it runs everywhere WebGL does.
  */
@@ -23,6 +24,8 @@ uniform float uFloor;      // floor line, canvas px from the bottom
 uniform float uDive;       // 0..1
 uniform float uDiveIdx;    // which portal, or -1
 uniform float uFade;       // 0..1, the scene fades as the page scrolls past it
+uniform float uOpen[4];    // 0..1, each portal blooming out of the mist on arrival
+uniform vec2 uCursor;      // the pointer in canvas px (y up), for the light you carry
 
 #define TAU 6.28318530718
 
@@ -37,6 +40,12 @@ float fbm(vec2 p) {
   mat2 r = mat2(0.8, -0.6, 0.6, 0.8);
   for (int i = 0; i < 5; i++) { v += a * noise(p); p = r * p * 2.02; a *= 0.5; }
   return v;
+}
+float fbm3(vec2 p) {
+  float v = 0.0, a = 0.5;
+  mat2 r = mat2(0.8, -0.6, 0.6, 0.8);
+  for (int i = 0; i < 3; i++) { v += a * noise(p); p = r * p * 2.02; a *= 0.5; }
+  return v / 0.875;
 }
 vec2 rot(vec2 p, float a) { float c = cos(a), s = sin(a); return vec2(c * p.x - s * p.y, s * p.x + c * p.y); }
 
@@ -187,6 +196,10 @@ void main() {
   float horizon = exp(-abs(px.y - fl) / (uRes.y * 0.06));
   room += (vec3(0.1, 0.13, 0.22) + spill * 0.5) * horizon * 0.5;
 
+  // a faint light you carry: it follows the pointer, cool and wide, and picks out the nebula where it passes
+  float carry = exp(-length(px - uCursor) / (uRes.y * 0.22));
+  room += (vec3(0.05, 0.06, 0.1) + vec3(0.12, 0.1, 0.2) * neb) * carry;
+
   vec3 col = room * (1.0 - 0.75 * smoothstep(0.0, 0.5, uDive));
   float isFloor = step(px.y, fl);
 
@@ -196,7 +209,7 @@ void main() {
     vec2 g = vec2((px.x - uRes.x * 0.5) / (depth * uRes.y + 40.0), 1.0 / (depth + 0.04));
     vec2 gl = abs(fract(g * vec2(6.0, 1.2) + vec2(0.0, -t * 0.05)) - 0.5);
     float grid = smoothstep(0.48, 0.5, max(gl.x, gl.y)) * smoothstep(0.0, 0.25, depth) * (1.0 - depth) * 0.25;
-    col = vec3(0.006, 0.007, 0.012) + vec3(0.25, 0.35, 0.6) * grid * 0.15 + spill * grid * 0.25;
+    col = vec3(0.006, 0.007, 0.012) + vec3(0.25, 0.35, 0.6) * grid * (0.15 + carry * 0.6) + spill * grid * 0.25;
   }
   // the hairline where the floor meets the dark
   col += vec3(0.6, 0.7, 1.0) * exp(-abs(px.y - fl) * 0.9) * 0.18;
@@ -209,7 +222,8 @@ void main() {
     float diving = (uDiveIdx == float(i)) ? uDive : 0.0;
     float others = (uDiveIdx >= 0.0 && uDiveIdx != float(i)) ? uDive : 0.0;
     vec3 acc = uAccent[i];
-    float lift = 1.0 - smoothstep(0.0, 0.35, others);
+    float open = uOpen[i];
+    float lift = (1.0 - smoothstep(0.0, 0.35, others)) * open;
 
     // it stands on the floor; its base is where the reflection starts
     float base = d.y - d.w;
@@ -217,7 +231,7 @@ void main() {
     float sd = sdArch(q, d.z, d.w);
 
     // light around the opening, more when looked at
-    float reach = min(d.z, uRes.y * 0.09) * (0.35 + 0.5 * hov);
+    float reach = min(d.z, uRes.y * 0.09) * (0.5 + 0.55 * hov);
     float glow = exp(-max(sd, 0.0) / reach);
     col += acc * glow * (0.12 + 0.35 * hov) * lift;
 
@@ -228,10 +242,10 @@ void main() {
       vec2 mq = vec2(q.x + ripple, base + below - d.y);
       float msd = sdArch(mq, d.z, d.w);
       float fall = exp(-below / (d.w * 0.45));
-      if (msd < 2.0 && fall > 0.02) {
+      if (msd < d.z * 0.3 && fall > 0.02) {
         float H = d.w / d.z;
         vec3 m = world(i, mq / d.z, H, -uPointer * 0.6, t, hov);
-        col = mix(col, m * 0.5, smoothstep(1.5, -1.5, msd) * fall * 0.75 * lift);
+        col = mix(col, m * 0.45, smoothstep(d.z * 0.3, -d.z * 0.3, msd) * fall * 0.7 * lift);
       }
       col += acc * exp(-max(msd, 0.0) / (d.z * 0.3)) * fall * 0.1 * lift;
     }
@@ -240,10 +254,28 @@ void main() {
     vec2 pool = (px - vec2(d.x, base)) / vec2(d.z * 1.6, d.z * 0.22);
     col += acc * exp(-dot(pool, pool)) * (0.18 + 0.3 * hov) * isFloor * lift;
 
-    if (sd < 3.0) {
+    // the edge is not a line: it breathes and frays, wisps drifting upward off it, and it settles as you step in
+    float breath = 0.5 + 0.5 * sin(t * 0.55 + float(i) * 1.7);
+    float soft = d.z * (0.2 + 0.06 * hov + 0.04 * breath) * (1.0 - diving);
+    if (open > 0.0 && sd < soft * 2.5 + d.z * 0.35) {
+      vec2 eq = q / d.z;
+      float sid = float(i) * 7.3;
+      float n1 = fbm3(eq * 1.6 + vec2(sid, -t * 0.22)) - 0.5;
+      float n2 = fbm3(eq * 4.2 + vec2(t * 0.15, sid - t * 0.45)) - 0.5;
+      // the outline itself wanders: the sides sway and the crown leans, slowly, so no two moments hold the same shape
+      vec2 warp = vec2(sin(eq.y * 2.1 + t * 0.45 + sid) * 0.6 + sin(eq.y * 4.3 - t * 0.31 + sid * 2.0) * 0.4,
+                       sin(eq.x * 1.9 + t * 0.37 - sid) * 0.5) * 0.5;
+      float wsd = sdArch(q + warp * d.z * 0.5 * (1.0 - diving), d.z * 0.92, d.w);
+      float esd = wsd + (n1 * 0.7 + n2 * 0.35) * d.z * 0.55 * (1.0 - diving);
+      // arriving, each opens from a seam of light at its heart outward
+      esd += (1.0 - open) * (d.z + d.w) * 1.1;
+      // the opening thins toward the floor, so it seems to stand in mist rather than on a sill
+      float foot = mix(0.35, 1.0, smoothstep(-1.02, -0.55, q.y / d.w));
+      float fill = smoothstep(soft + 1.5, -soft - 1.5, esd) * mix(foot, 1.0, diving) * smoothstep(0.0, 0.4, open);
+
       // inside: the world, seen through the opening, with depth
       float H = d.w / d.z;
-      vec2 u = q / d.z;
+      vec2 u = eq;
       vec2 par = -uPointer * (0.6 + 0.6 * hov);
       // the membrane: the surface swirls slowly around the centre, faster when looked at or entered
       float r = length(q / d.z);
@@ -252,18 +284,19 @@ void main() {
       vec3 w = world(i, uw, H, par, t, hov);
       float sheen = fbm(rot(q / d.z, t * 0.15 + float(i)) * 1.8 + t * 0.1);
       w += acc * 0.18 * smoothstep(0.55, 0.8, sheen) * (1.0 - diving);
-      // dark at the edge, as if the world sits a little behind the frame
-      float inner = smoothstep(0.0, -d.z * 0.35, sd);
-      w *= mix(0.45, 1.0, inner);
-      float fill = smoothstep(1.5, -1.5, sd);
+      // the world fades into the dark toward its edge rather than meeting a frame
+      float inner = smoothstep(soft, -d.z * 0.55, esd);
+      w *= mix(0.3, 1.0, inner);
       col = mix(col, w, fill * mix(lift, 1.0, diving));
 
-      // the rim: a thin iridescent edge tinted by the world, brighter on top where light catches it
+      // a veil of iridescent haze where the world meets the room, broken into strands that drift up
       float ang = atan(q.y, q.x) / TAU;
-      vec3 rimc = mix(iris(ang + t * 0.05 + float(i) * 0.25), acc, 0.45);
-      float rimw = 1.4 + 1.2 * hov;
-      float rim = exp(-abs(sd) / rimw) * (0.7 + 0.3 * smoothstep(-0.2, 0.8, q.y / d.w));
-      col += rimc * rim * (0.75 + 0.6 * hov) * lift * (1.0 - diving);
+      vec3 veilc = mix(iris(ang + t * 0.04 + float(i) * 0.25 + n1 * 0.3), acc, 0.55);
+      float strands = smoothstep(0.35, 0.8, fbm3(vec2(eq.x * 3.2, eq.y * 1.1 - t * 0.4) + sid));
+      float veil = exp(-abs(esd) / (soft * 0.8 + 2.0)) * (0.25 + 0.75 * strands);
+      col += veilc * veil * (0.16 + 0.26 * hov + 0.06 * breath) * lift * (1.0 - diving);
+      // the moment it opens, the seam flares
+      col += veilc * exp(-abs(esd) / (soft + 4.0)) * smoothstep(0.0, 0.35, open) * (1.0 - open) * 1.6;
     }
   }
 

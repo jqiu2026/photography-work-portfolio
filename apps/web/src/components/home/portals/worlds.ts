@@ -80,3 +80,16 @@ export function diveDoor(d: Door, vw: number, vh: number, t: number): Door {
 /** Eases a value toward a target at `rate` per second, independent of the frame rate. */
 export const approach = (v: number, target: number, rate: number, dt: number) =>
   v + (target - v) * (1 - Math.exp(-rate * dt));
+
+/** How far portal `i` has opened `t` seconds after the scene starts: one after another, out of the mist, eased. */
+export function bloom(t: number, i: number) {
+  const k = Math.min(1, Math.max(0, (t - 0.35 - i * 0.28) / 1.5));
+  return 1 - (1 - k) ** 3;
+}
+
+/** 1 with the pointer on the door, falling off over about a door's width away from it; 0 far off or with no pointer. */
+export function nearness([x, y]: [number, number], r: { left: number; top: number; width: number; height: number }) {
+  const dx = Math.max(r.left - x, 0, x - (r.left + r.width));
+  const dy = Math.max(r.top - y, 0, y - (r.top + r.height));
+  return Math.exp(-Math.hypot(dx, dy) / Math.max(1, r.width));
+}
