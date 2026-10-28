@@ -1,6 +1,8 @@
 "use client";
 
-import { Button, Dialog, IconButton, Input, Sheet, ThemeToggle } from "@halation/ui";
+import { Button, IconButton } from "@/components/kit";
+import { Dialog, Input, Sheet } from "@/components/kit-client";
+
 import { Command, LogOut, Menu } from "lucide-react";
 import NextLink from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -14,7 +16,7 @@ function Links({ groups, onNavigate }: { groups: NavGroup[]; onNavigate?: () => 
     <nav aria-label="Admin" className="adm-nav">
       {groups.map((g) => (
         <div key={g.title}>
-          <p className="hl-eyebrow">{g.title}</p>
+          <p className="adm-eyebrow">{g.title}</p>
           <ul>
             {g.items.map((i) => {
               const current = i.href === "/admin" ? pathname === "/admin" : pathname.startsWith(i.href);
@@ -37,7 +39,7 @@ function SiteSelector({ site, back }: { site: AdminSite; back: string }) {
   return (
     <form action={setAdminSite} className="adm-sites" aria-label="Site">
       <input type="hidden" name="back" value={back} />
-      <p className="hl-eyebrow">Editing</p>
+      <p className="adm-eyebrow">Editing</p>
       <div role="group" aria-label="Choose site">
         {adminSites.map((s) => (
           <button key={s.id} type="submit" name="site" value={s.id} aria-pressed={s.id === site} title={s.note}>
@@ -112,7 +114,6 @@ export function AdminTopbar({
             dev sign-in
           </span>
         ) : null}
-        <ThemeToggle />
         <span className="adm-user" title={userEmail}>
           {userEmail}
         </span>
@@ -154,7 +155,7 @@ export function AdminTopbar({
               </NextLink>
             </li>
           ))}
-          {!results.length ? <li style={{ color: "var(--hl-muted)" }}>No match</li> : null}
+          {!results.length ? <li style={{ color: "var(--hm-muted)" }}>No match</li> : null}
         </ul>
       </Dialog>
     </header>

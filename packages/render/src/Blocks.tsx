@@ -1,6 +1,5 @@
-import { Quote } from "@halation/ui";
-import { EmbedFacade } from "@halation/ui";
-import { ProtectedImage } from "@halation/ui/media";
+import { EmbedFacade, Quote } from "./ui";
+import { ProtectedImage } from "./media";
 import type { ProjectBlockView } from "@jerryqiu/db/queries";
 import { RenderMarkdown } from "./markdown";
 

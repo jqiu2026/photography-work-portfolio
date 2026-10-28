@@ -1,6 +1,8 @@
 "use client";
 
-import { Button, Input, Select, Textarea } from "@halation/ui";
+import { Button } from "@/components/kit";
+import { Input, Select, Textarea } from "@/components/kit-client";
+
 import { type RefObject, useEffect, useRef, useState } from "react";
 import { RenderMarkdown } from "@jerryqiu/render";
 import { autosavePost, deletePost, savePost } from "@/app/(admin)/admin/posts/actions";
@@ -169,7 +171,7 @@ export function PostForm({ values }: { values: PostValues }) {
       <MediaPicker name="coverMediaId" label="Cover image" defaultValue={values.coverMediaId} />
       <div>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "end" }}>
-          <span className="hl-field__label">Body (Markdown)</span>
+          <span className="hm-field-label">Body (Markdown)</span>
           <div role="tablist" aria-label="Editor mode" style={{ display: "flex", gap: "0.25rem" }}>
             {(["write", "preview"] as const).map((m) => (
               <Button
@@ -194,12 +196,19 @@ export function PostForm({ values }: { values: PostValues }) {
             rows={20}
             value={body}
             onChange={(e) => setBody(e.target.value)}
-            style={{ fontFamily: "var(--hl-font-mono)", fontSize: "var(--hl-text-sm)" }}
+            style={{ fontFamily: "var(--hm-font-mono)", fontSize: "var(--hm-text-sm)" }}
             aria-label="Body"
           />
         </div>
         {mode === "preview" ? (
-          <div style={{ border: "1px solid var(--hl-line)", borderRadius: 4, padding: "1.5rem", marginTop: "0.5rem" }}>
+          <div
+            style={{
+              border: "1px solid var(--hm-line-strong)",
+              borderRadius: 4,
+              padding: "1.5rem",
+              marginTop: "0.5rem",
+            }}
+          >
             {body.trim() ? <RenderMarkdown source={body} /> : <p className="adm-note">Nothing to preview yet.</p>}
           </div>
         ) : null}

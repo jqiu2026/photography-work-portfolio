@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Field, Input, Select, Textarea } from "@halation/ui";
+import { Button, Field, Input, Select, Textarea } from "@holominimal/ui";
 import NextLink from "next/link";
 import { useState, type FormEvent } from "react";
 
@@ -69,29 +69,29 @@ export function ContactForm({
   if (state === "sent")
     return (
       <div role="status" style={{ maxWidth: "36rem" }}>
-        <p style={{ fontSize: "var(--hl-text-lg)" }}>Thanks, your message is on its way.</p>
-        <p style={{ color: "var(--hl-muted)" }}>I read everything and will reply by email.</p>
+        <p style={{ fontSize: "var(--hm-text-lg)" }}>Thanks, your message is on its way.</p>
+        <p style={{ color: "var(--hm-muted)" }}>I read everything and will reply by email.</p>
       </div>
     );
   return (
     <form onSubmit={submit} noValidate style={{ display: "grid", gap: "1.25rem", maxWidth: "36rem" }}>
-      <Field label="Your name" error={errors.name} required>
-        <Input name="name" autoComplete="name" />
+      <Field label="Your name" error={errors.name}>
+        <Input name="name" autoComplete="name" required />
       </Field>
-      <Field label="Email" error={errors.email} required>
-        <Input name="email" type="email" autoComplete="email" />
+      <Field label="Email" error={errors.email}>
+        <Input name="email" type="email" autoComplete="email" required />
       </Field>
       <Field label="Topic">
-        <Select name="topic">
-          <option>General</option>
-          <option>Photography</option>
-          <option>Music</option>
-          <option>Flying</option>
-          <option>Licensing a photograph</option>
+        <Select name="topic" defaultValue="General">
+          <option value="General">General</option>
+          <option value="Photography">Photography</option>
+          <option value="Music">Music</option>
+          <option value="Flying">Flying</option>
+          <option value="Licensing a photograph">Licensing a photograph</option>
         </Select>
       </Field>
-      <Field label="Message" error={errors.message} required>
-        <Textarea name="message" />
+      <Field label="Message" error={errors.message}>
+        <Textarea name="message" required />
       </Field>
       <div aria-hidden style={{ position: "absolute", left: "-9999px" }}>
         <label>
@@ -99,7 +99,7 @@ export function ContactForm({
           <input name="website" tabIndex={-1} autoComplete="off" />
         </label>
       </div>
-      <p style={{ fontSize: "var(--hl-text-sm)", color: "var(--hl-muted)" }}>
+      <p style={{ fontSize: "var(--hm-text-sm)", color: "var(--hm-muted)" }}>
         {endpoint
           ? "Your message is stored so I can reply, and emailed to me. I delete it on request. See the"
           : "Pressing send opens your email app with this message. Nothing is stored on this site. See the"}{" "}
@@ -109,7 +109,7 @@ export function ContactForm({
         .
       </p>
       {state === "error" ? (
-        <p role="alert" style={{ color: "var(--hl-danger, #b00020)" }}>
+        <p role="alert" style={{ color: "var(--hm-danger, #f87171)" }}>
           {problem}{" "}
           <a href={`mailto:${to}`} style={{ textDecoration: "underline" }}>
             Email {to}

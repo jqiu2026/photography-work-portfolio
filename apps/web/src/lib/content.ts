@@ -1,4 +1,4 @@
-import type { ImageAsset } from "@halation/ui/media";
+import type { ImageAsset } from "@jerryqiu/render/media";
 import { getPosts as dbPosts } from "@/lib/content-db";
 import { getImage } from "@/lib/images";
 import { readMdxDir as mdxFiles } from "@jerryqiu/render/mdx-files";

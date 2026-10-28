@@ -1,6 +1,8 @@
 "use client";
 
-import { Button, Checkbox, Field, Input, Row, Select, Textarea, useToast } from "@halation/ui";
+import { Button, Row } from "@/components/kit";
+import { Checkbox, Field, Input, Select, Textarea, useToast } from "@/components/kit-client";
+
 import { useRouter } from "next/navigation";
 import {
   type ReactNode,
@@ -119,7 +121,7 @@ export function FieldE({
 export function ErrorFor({ name }: { name: string }) {
   const err = useContext(StateCtx).fieldErrors?.[name];
   return err ? (
-    <p role="alert" className="adm-bad" style={{ marginTop: "0.4rem", fontSize: "var(--hl-text-sm)" }}>
+    <p role="alert" className="adm-bad" style={{ marginTop: "0.4rem", fontSize: "var(--hm-text-sm)" }}>
       {err}
     </p>
   ) : null;
@@ -165,7 +167,7 @@ export function F({
           </p>
         ) : null}
         {err ? (
-          <p role="alert" className="adm-bad" style={{ marginTop: "0.3rem", fontSize: "var(--hl-text-sm)" }}>
+          <p role="alert" className="adm-bad" style={{ marginTop: "0.3rem", fontSize: "var(--hm-text-sm)" }}>
             {err}
           </p>
         ) : null}

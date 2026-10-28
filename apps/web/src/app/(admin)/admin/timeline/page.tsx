@@ -1,6 +1,6 @@
+import { Button } from "@/components/kit";
 import { schema } from "@jerryqiu/db";
 import { asc, desc, isNull } from "drizzle-orm";
-import { Button } from "@halation/ui";
 import NextLink from "next/link";
 import { NoDb, PageHead } from "@/components/admin/ui";
 import { withDb } from "@/lib/admin-db";

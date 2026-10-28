@@ -9,15 +9,15 @@
   height: 100dvh;
   overflow: auto;
   padding: 1.25rem;
-  border-right: 1px solid var(--hl-line);
-  background: var(--hl-surface);
+  border-right: 1px solid var(--hm-line-strong);
+  background: var(--hm-surface);
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 .adm-brand {
   font-weight: 600;
-  font-size: var(--hl-text-xl);
+  font-size: var(--hm-text-xl);
   letter-spacing: -0.03em;
   text-decoration: none;
 }
@@ -31,19 +31,19 @@
 }
 .adm-sites button {
   font: inherit;
-  font-size: var(--hl-text-sm);
+  font-size: var(--hm-text-sm);
   padding: 0.55em 0.4em;
   min-height: 40px;
-  border: 1px solid var(--hl-line);
-  background: var(--hl-bg);
-  color: var(--hl-muted);
+  border: 1px solid var(--hm-line-strong);
+  background: var(--hm-bg);
+  color: var(--hm-muted);
   cursor: pointer;
-  border-radius: var(--hl-radius-control);
+  border-radius: var(--hm-radius-md);
 }
 .adm-sites button[aria-pressed="true"] {
-  background: var(--hl-text);
-  color: var(--hl-bg);
-  border-color: var(--hl-text);
+  background: var(--hm-fg);
+  color: var(--hm-bg);
+  border-color: var(--hm-fg);
 }
 .adm-nav {
   display: flex;
@@ -59,18 +59,18 @@
   display: block;
   padding: 0.45em 0.6em;
   margin-inline: -0.6em;
-  border-radius: var(--hl-radius-sm);
+  border-radius: var(--hm-radius-sm);
   text-decoration: none;
-  color: var(--hl-muted);
-  font-size: var(--hl-text-sm);
+  color: var(--hm-muted);
+  font-size: var(--hm-text-sm);
 }
 .adm-nav a:hover {
-  color: var(--hl-text);
-  background: var(--hl-surface-2);
+  color: var(--hm-fg);
+  background: var(--hm-surface-raised);
 }
 .adm-nav a[aria-current="page"] {
-  color: var(--hl-text);
-  background: var(--hl-surface-2);
+  color: var(--hm-fg);
+  background: var(--hm-surface-raised);
   font-weight: 500;
 }
 .adm-main {
@@ -84,10 +84,10 @@
   align-items: center;
   gap: 1rem;
   padding: 0.6rem 1.25rem;
-  border-bottom: 1px solid var(--hl-line);
+  border-bottom: 1px solid var(--hm-line-strong);
   position: sticky;
   top: 0;
-  background: color-mix(in srgb, var(--hl-bg) 90%, transparent);
+  background: color-mix(in srgb, var(--hm-bg) 90%, transparent);
   backdrop-filter: blur(10px);
   z-index: 20;
 }
@@ -99,22 +99,22 @@
   min-width: 0;
 }
 .adm-user {
-  font-size: var(--hl-text-sm);
-  color: var(--hl-muted);
+  font-size: var(--hm-text-sm);
+  color: var(--hm-muted);
   max-width: 16rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .adm-dev {
-  font-size: var(--hl-text-xs);
+  font-size: var(--hm-text-xs);
   padding: 0.2em 0.6em;
-  background: var(--hl-yellow);
+  background: var(--hm-warning);
   color: #0a0a0a;
   border-radius: 2px;
 }
 .adm-kbd {
-  font-family: var(--hl-font-mono);
+  font-family: var(--hm-font-mono);
   font-size: 0.75em;
   opacity: 0.6;
   margin-left: 0.4em;
@@ -131,16 +131,16 @@
   display: flex;
   justify-content: space-between;
   padding: 0.7em 0.5em;
-  border-radius: var(--hl-radius-sm);
+  border-radius: var(--hm-radius-sm);
   text-decoration: none;
 }
 .adm-palette a:hover,
 .adm-palette a:focus-visible {
-  background: var(--hl-surface-2);
+  background: var(--hm-surface-raised);
 }
 .adm-palette span {
-  color: var(--hl-muted);
-  font-size: var(--hl-text-sm);
+  color: var(--hm-muted);
+  font-size: var(--hm-text-sm);
 }
 @media (max-width: 900px) {
   .adm {
@@ -157,14 +157,14 @@
   }
 }
 .adm-h1 {
-  font-size: var(--hl-text-3xl);
+  font-size: var(--hm-text-3xl);
   letter-spacing: -0.04em;
   font-weight: 600;
   line-height: 1.05;
   margin-bottom: 0.5rem;
 }
 .adm-lede {
-  color: var(--hl-muted);
+  color: var(--hm-muted);
   margin-bottom: 2rem;
   max-width: 60ch;
 }
@@ -174,25 +174,25 @@
   gap: 1rem;
 }
 .adm-card {
-  border: 1px solid var(--hl-line);
-  border-radius: var(--hl-radius-lg);
+  border: 1px solid var(--hm-line-strong);
+  border-radius: var(--hm-radius-lg);
   padding: 1.25rem;
-  background: var(--hl-surface);
+  background: var(--hm-surface);
   text-decoration: none;
   display: block;
 }
 .adm-card h2 {
-  font-size: var(--hl-text-lg);
+  font-size: var(--hm-text-lg);
   font-weight: 600;
   letter-spacing: -0.02em;
 }
 .adm-card p {
-  color: var(--hl-muted);
-  font-size: var(--hl-text-sm);
+  color: var(--hm-muted);
+  font-size: var(--hm-text-sm);
   margin-top: 0.3rem;
 }
 .adm-card .n {
-  font-size: var(--hl-text-3xl);
+  font-size: var(--hm-text-3xl);
   letter-spacing: -0.04em;
   font-weight: 600;
   display: block;
@@ -201,22 +201,22 @@
 .adm-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: var(--hl-text-sm);
+  font-size: var(--hm-text-sm);
 }
 .adm-table th {
   text-align: left;
   font-weight: 500;
-  color: var(--hl-muted);
+  color: var(--hm-muted);
   padding: 0.6em 0.8em;
-  border-bottom: 1px solid var(--hl-line);
+  border-bottom: 1px solid var(--hm-line-strong);
 }
 .adm-table td {
   padding: 0.75em 0.8em;
-  border-bottom: 1px solid var(--hl-line);
+  border-bottom: 1px solid var(--hm-line-strong);
   vertical-align: middle;
 }
 .adm-table tr:hover td {
-  background: var(--hl-surface);
+  background: var(--hm-surface);
 }
 .adm-toolbar {
   display: flex;
@@ -242,42 +242,42 @@
   }
 }
 .adm-ok {
-  color: var(--hl-success);
+  color: var(--hm-success);
 }
 .adm-bad {
-  color: var(--hl-danger);
+  color: var(--hm-danger);
 }
 .adm-warn {
-  color: var(--hl-warn);
+  color: var(--hm-warning);
 }
 .adm-note {
-  font-size: var(--hl-text-sm);
-  color: var(--hl-muted);
+  font-size: var(--hm-text-sm);
+  color: var(--hm-muted);
 }
 .adm-tab {
   text-decoration: none;
-  color: var(--hl-muted);
+  color: var(--hm-muted);
   padding: 0.3em 0;
   border-bottom: 2px solid transparent;
-  font-size: var(--hl-text-sm);
+  font-size: var(--hm-text-sm);
 }
 .adm-tab[aria-current="page"] {
-  color: var(--hl-text);
-  border-bottom-color: var(--hl-text);
+  color: var(--hm-fg);
+  border-bottom-color: var(--hm-fg);
 }
 .adm-drop {
-  border: 1.5px dashed var(--hl-line);
-  border-radius: var(--hl-radius-lg);
+  border: 1.5px dashed var(--hm-line-strong);
+  border-radius: var(--hm-radius-lg);
   padding: 2rem;
   text-align: center;
   display: grid;
   gap: 0.75rem;
   justify-items: center;
-  transition: border-color var(--hl-dur-base), background var(--hl-dur-base);
+  transition: border-color var(--hm-dur-base), background var(--hm-dur-base);
 }
 .adm-drop[data-over] {
-  border-color: var(--hl-accent-text);
-  background: var(--hl-surface);
+  border-color: var(--hm-accent);
+  background: var(--hm-surface);
 }
 .adm-jobs {
   list-style: none;
@@ -285,14 +285,14 @@
   margin: 1rem 0 0;
   display: grid;
   gap: 0.6rem;
-  font-size: var(--hl-text-sm);
+  font-size: var(--hm-text-sm);
 }
 .adm-jobs li {
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 0.25rem 1rem;
 }
-.adm-jobs li > .hl-progress {
+.adm-jobs li > .hm-progress {
   grid-column: 1 / -1;
 }
 .adm-media {
@@ -312,14 +312,14 @@
   width: 100%;
   aspect-ratio: 4 / 3;
   object-fit: cover;
-  border-radius: var(--hl-radius-md);
-  border: 1px solid var(--hl-line);
+  border-radius: var(--hm-radius-md);
+  border: 1px solid var(--hm-line-strong);
   display: block;
 }
 .adm-media span {
   display: block;
-  font-size: var(--hl-text-xs);
-  color: var(--hl-muted);
+  font-size: var(--hm-text-xs);
+  color: var(--hm-muted);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -329,7 +329,7 @@
   position: absolute;
   top: 6px;
   left: 6px;
-  background: var(--hl-yellow);
+  background: var(--hm-warning);
   color: #0a0a0a;
   font-size: 0.68rem;
   padding: 0.1em 0.5em;
@@ -349,10 +349,10 @@
   gap: 1rem;
 }
 .adm-gitems li {
-  border: 1px solid var(--hl-line);
-  border-radius: var(--hl-radius-lg);
+  border: 1px solid var(--hm-line-strong);
+  border-radius: var(--hm-radius-lg);
   overflow: hidden;
-  background: var(--hl-surface);
+  background: var(--hm-surface);
   cursor: grab;
 }
 .adm-gitems li[data-hidden] {
@@ -368,4 +368,23 @@
   padding: 0.75rem;
   display: grid;
   gap: 0.5rem;
+}
+
+/* Holominimal fill-ins for the admin: the small eyebrow label and native selects in the control style */
+.adm-eyebrow {
+  margin: 0 0 0.4rem;
+  font-family: var(--hm-font-mono);
+  font-size: var(--hm-text-xs);
+  letter-spacing: var(--hm-tracking-eyebrow, 0.14em);
+  text-transform: uppercase;
+  color: var(--hm-muted);
+}
+.adm-select {
+  appearance: none;
+  padding-right: 2.2rem;
+  background-image: linear-gradient(45deg, transparent 50%, currentColor 50%),
+    linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position: calc(100% - 1.1rem) 50%, calc(100% - 0.75rem) 50%;
+  background-size: 0.35rem 0.35rem;
+  background-repeat: no-repeat;
 }

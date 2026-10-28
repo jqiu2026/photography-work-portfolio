@@ -1,6 +1,7 @@
-import "@halation/ui/styles.css";
+import "@holominimal/ui/styles.css";
+import "@jerryqiu/render/render.css";
+import { Theme, ToastProvider } from "@holominimal/ui";
 import { ThemeScript } from "@jerryqiu/sites/theme-script";
-import { ThemeProvider, ToastProvider, TooltipProvider } from "@halation/ui";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { fontVars } from "@/lib/fonts";
@@ -16,15 +17,13 @@ export default function AdminRootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning className={fontVars}>
       <head>
-        <ThemeScript preset="hub" />
+        <ThemeScript preset="hub" defaultTheme="dark" />
         <meta name="robots" content="noindex, nofollow, noarchive" />
       </head>
-      <body className="hl-root">
-        <ThemeProvider preset="hub">
-          <TooltipProvider>
-            <ToastProvider>{children}</ToastProvider>
-          </TooltipProvider>
-        </ThemeProvider>
+      <body>
+        <Theme theme={{ accent: "blue" }}>
+          <ToastProvider>{children}</ToastProvider>
+        </Theme>
       </body>
     </html>
   );

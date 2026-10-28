@@ -1,13 +1,89 @@
-.docs-shell { display: grid; grid-template-columns: 17rem 1fr; min-height: 100dvh; }
-.docs-side { position: sticky; top: 0; height: 100dvh; padding: 1.5rem; border-right: 1px solid var(--hl-line); overflow: auto; }
-.docs-side__top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-.docs-brand { font-family: var(--hl-font-display); font-size: 1.5rem; text-decoration: none; letter-spacing: var(--hl-display-tracking); }
-.docs-side ul { list-style: none; padding: 0; margin: 0.5rem 0 1.5rem; }
-.docs-side li a { display: block; padding: 0.4em 0; color: var(--hl-muted); text-decoration: none; font-size: var(--hl-text-sm); }
-.docs-side li a:hover { color: var(--hl-text); }
-.docs-main { padding: clamp(1.5rem, 5vw, 4rem); max-width: 60rem; }
-.docs-main h1 { font-family: var(--hl-font-display); font-weight: 400; font-size: var(--hl-text-4xl); letter-spacing: var(--hl-display-tracking); line-height: 1; margin-bottom: 1rem; }
-@media (max-width: 860px) { .docs-shell { grid-template-columns: 1fr; } .docs-side { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--hl-line); } }
-.docs-main { min-width: 0; }
-.docs-main pre, .docs-main .hl-code { max-width: 100%; overflow-x: auto; }
-.docs-demo { padding: 1.5rem; border: 1px solid var(--hl-line); border-radius: var(--hl-radius-lg); margin: 1rem 0 1.5rem; overflow: hidden; }
+/* The docs on Holominimal: a readable column, code samples, swatches, demo frames. */
+.docs-main {
+  width: min(100% - 2 * var(--hm-gutter, 1.25rem), 52rem);
+  margin-inline: auto;
+  padding-block: clamp(2rem, 6vw, 4.5rem) 6rem;
+}
+.docs-prose {
+  color: var(--hm-fg);
+  line-height: 1.65;
+}
+.docs-prose h1 {
+  margin: 0 0 1rem;
+  font-size: var(--hm-text-3xl);
+  letter-spacing: var(--hm-tracking-tight);
+}
+.docs-prose h2 {
+  margin: 2.4rem 0 0.8rem;
+  font-size: var(--hm-text-xl);
+}
+.docs-prose p,
+.docs-prose ul {
+  max-width: 68ch;
+  color: var(--hm-fg-soft);
+}
+.docs-prose a {
+  color: var(--hm-fg);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.docs-prose code {
+  font-family: var(--hm-font-mono);
+  font-size: 0.88em;
+}
+.docs-eyebrow {
+  font-family: var(--hm-font-mono);
+  font-size: var(--hm-text-xs);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--hm-muted);
+}
+.docs-code {
+  margin: 1rem 0;
+  padding: 1rem 1.1rem;
+  overflow-x: auto;
+  background: var(--hm-surface);
+  border: 1px solid var(--hm-line-strong);
+  border-radius: var(--hm-radius-md);
+  font-size: var(--hm-text-sm);
+}
+.docs-demo {
+  margin: 1rem 0;
+  padding: 1.5rem;
+  border: 1px solid var(--hm-line-strong);
+  border-radius: var(--hm-radius-lg);
+  background: var(--hm-surface);
+}
+.docs-table {
+  overflow-x: auto;
+}
+.docs-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--hm-text-sm);
+}
+.docs-table th,
+.docs-table td {
+  padding: 0.5rem 0.6rem;
+  text-align: left;
+  border-bottom: 1px solid var(--hm-line);
+  vertical-align: top;
+}
+.docs-swatches {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  gap: 0.6rem;
+  padding: 0;
+  list-style: none;
+}
+.docs-swatches li {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.docs-swatches span {
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--hm-radius-sm);
+  border: 1px solid var(--hm-line-strong);
+}

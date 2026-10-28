@@ -1,6 +1,8 @@
 "use client";
 
-import { Button, Input, Select, Textarea } from "@halation/ui";
+import { Button } from "@/components/kit";
+import { Input, Select, Textarea } from "@/components/kit-client";
+
 import { ArrowDown, ArrowUp, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { deleteProject, saveProject } from "@/app/(admin)/admin/projects/actions";
@@ -337,13 +339,13 @@ export function ProjectForm({ values }: { values: ProjectValues }) {
       <F name="category" label="Category" defaultValue={values.category} />
       <MediaPicker name="coverMediaId" label="Cover image" defaultValue={values.coverMediaId} />
       <div>
-        <span className="hl-field__label">Body</span>
+        <span className="hm-field-label">Body</span>
         <div style={{ marginTop: "0.5rem" }}>
           <BlockEditor blocks={blocks} onChange={setBlocks} />
         </div>
       </div>
       <div>
-        <span className="hl-field__label">Credits</span>
+        <span className="hm-field-label">Credits</span>
         <div style={{ marginTop: "0.5rem" }}>
           <CreditsEditor credits={credits} onChange={setCredits} />
         </div>

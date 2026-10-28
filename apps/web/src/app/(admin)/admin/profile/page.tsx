@@ -71,7 +71,7 @@ export default async function ProfilePage() {
         />
       </ActionForm>
 
-      <h2 style={{ margin: "3rem 0 0.5rem", fontSize: "var(--hl-text-2xl)", letterSpacing: "-0.03em" }}>
+      <h2 style={{ margin: "3rem 0 0.5rem", fontSize: "var(--hm-text-2xl)", letterSpacing: "-0.03em" }}>
         Account links
       </h2>
       <p className="adm-note" style={{ marginBottom: "1rem" }}>

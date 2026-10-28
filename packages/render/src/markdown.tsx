@@ -1,5 +1,5 @@
-import { EmbedFacade, Link, Prose } from "@halation/ui";
-import { ProtectedImage } from "@halation/ui/media";
+import { EmbedFacade, Link, Prose } from "./ui";
+import { ProtectedImage } from "./media";
 import NextLink from "next/link";
 import type { ReactNode } from "react";
 import ReactMarkdown, { type Components, defaultUrlTransform } from "react-markdown";

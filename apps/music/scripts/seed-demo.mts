@@ -52,7 +52,7 @@ const spec = [
     price: 1500,
   },
   {
-    title: "SAMPLE: Halation Study",
+    title: "SAMPLE: Afterglow Study",
     year: 2026,
     forces: "piano",
     instruments: ["piano"],

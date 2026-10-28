@@ -1,5 +1,6 @@
 import "@holominimal/ui/styles.css";
 import "../holominimal.css";
+import "@jerryqiu/render/render.css";
 import { Theme } from "@holominimal/ui";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";

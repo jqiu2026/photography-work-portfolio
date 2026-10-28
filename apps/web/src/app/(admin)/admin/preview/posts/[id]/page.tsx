@@ -19,11 +19,11 @@ export default async function PreviewPost({ params }: { params: Promise<{ id: st
       <p
         role="status"
         style={{
-          background: "var(--hl-yellow)",
+          background: "var(--hm-warning)",
           color: "#0a0a0a",
           padding: "0.6rem 1rem",
           margin: "-1rem -1rem 1rem",
-          fontSize: "var(--hl-text-sm)",
+          fontSize: "var(--hm-text-sm)",
         }}
       >
         Preview. This is how “{post.title}” will look ({post.status}). It is not public unless published.

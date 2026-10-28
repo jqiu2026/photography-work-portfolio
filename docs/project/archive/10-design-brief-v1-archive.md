@@ -20,7 +20,7 @@ The owner admires the look of Squarespace sites. Study (browse, read, take notes
 - What makes them feel premium: editorial typography, large imagery with a lot of air, consistent vertical rhythm, a very quiet header, slow elegant hover states, full-bleed image sections alternating with narrow text columns, small tasteful captions, restrained color.
 - Apple product pages for the **motion** layer: pinned scenes, scroll-scrubbed sequences, big type reveals.
 
-Write what you learned (patterns, not pixels) in `docs/project/design-language.md`.
+Write what you learned (patterns, not pixels) in (an earlier brief, removed).
 
 ## NOT the StuyAviators site
 
@@ -37,7 +37,7 @@ The owner showed stuyaviators.vercel.app only as an example of the kind of site 
 The owner is away, so decide, but decide with evidence:
 
 1. Build a dev-only `/_design` page in `apps/web` with **three** directions for the home hero, type pairing and palette, each as a real rendered screen (light and dark): e.g. A "Gallery white" (warm off-white, high-contrast serif display + clean sans), B "Midnight cinema" (near-black, one cool accent, large grotesk), C "Soft neutral" (stone/greige, understated serif + mono details).
-2. Score each against the priorities above (and check AA contrast, loading weight). Pick one, record the reasoning in `design-language.md`, log it as Q3 in [QUESTIONS.md](QUESTIONS.md) with the alternates preserved as theme presets so the owner can switch by changing one token file.
+2. Score each against the priorities above (and check AA contrast, loading weight). Pick one, record the reasoning in (an earlier brief, removed), log it as Q3 in [QUESTIONS.md](QUESTIONS.md) with the alternates preserved as theme presets so the owner can switch by changing one token file.
 3. Every choice (fonts, images) must have a license that allows the use: prefer SIL OFL fonts via `next/font`, own photos for imagery.
 
 ## Design system requirements

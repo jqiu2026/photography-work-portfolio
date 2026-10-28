@@ -54,4 +54,4 @@ The StuyAviators site is an **engineering reference only**; this site must not l
 - The hub itself does not sell anything; selling happens on music (scores) and photography (studio services).
 
 ## Status note (2026-10-12, end of Phase 2.5)
-Phase 2.5 is built: the blog stays on the hub and case studies live on the photography site; Halation UI (stage, Flow, index control, tiers) drives all four homes; local mocks exist for the studio, client portal, score store and flight map. See [PHASE-2.5-SUMMARY.md](PHASE-2.5-SUMMARY.md), [redesign-brief.md](redesign-brief.md) and [design-language.md](design-language.md).
+Phase 2.5 is built: the blog stays on the hub and case studies live on the photography site; the old UI kit (stage, Flow, index control, tiers) drives all four homes; local mocks exist for the studio, client portal, score store and flight map. See [PHASE-2.5-SUMMARY.md](PHASE-2.5-SUMMARY.md), (an earlier brief, removed) and (an earlier brief, removed).

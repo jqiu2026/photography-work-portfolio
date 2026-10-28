@@ -80,7 +80,7 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
               </NextLink>
             ))}
           </div>
-          <h2 style={{ margin: "2.5rem 0 0.75rem", fontSize: "var(--hl-text-xl)" }}>Recent activity</h2>
+          <h2 style={{ margin: "2.5rem 0 0.75rem", fontSize: "var(--hm-text-xl)" }}>Recent activity</h2>
           {data.recent.length ? (
             <table className="adm-table">
               <tbody>

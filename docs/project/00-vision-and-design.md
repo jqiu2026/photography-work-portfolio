@@ -4,7 +4,7 @@ Merged 2026-10-15 from the old 00, 10, 12 and design-language docs (archived in 
 
 ## What this is
 
-A family of sites on one monorepo and one original design system, **Halation UI** (`@halation/ui`, prefix `hl`; licence undecided, Q32).
+A family of sites on one monorepo and one design system, Holominimal (`@holominimal/ui`, prefix `hm`).
 
 | Site | Host | App | Role |
 |---|---|---|---|
@@ -24,7 +24,7 @@ Build the complete photo.jerryqiu.com as the portfolio **and** the live tour of 
 
 The visual redesign is a later, separate pass. Until then:
 
-- Use existing `@halation/ui` primitives and tokens: clean, dark-cinema-first with a light theme, red accent for photography, fast and calm.
+- Use Holominimal components and tokens: clean, dark-cinema-first with a light theme, red accent for photography, fast and calm.
 - **Paused (do not build):** the "v3" design (colossal viewport-size type, parallax, focus pulls, custom cursor labels, full-page effects, WebGL stage, scroll-jacking). Owner feedback on a prototype: the cursor label, image animations and jitter were unacceptable.
 - Minimal motion: short fades only, nothing scroll-linked, respect `prefers-reduced-motion`.
 - Studio and client areas are dense and calm: 15 px body, hairline tables, status as text plus a dot.

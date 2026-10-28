@@ -1,13 +1,13 @@
 # 18. Design prompt v3: hub, music and photo (2026-10-15, rev. 3)
 
-Paste or point a build session at this file. It replaces the visual direction in [redesign-brief.md](redesign-brief.md) and [design-language.md](design-language.md) for **jerryqiu.com (hub), music.jerryqiu.com and photo.jerryqiu.com**. Flying and Make are not part of this pass. Where this file and older docs disagree, this file wins, **except** [08-operating-rules.md](08-operating-rules.md) and CLAUDE.md, which always win (including on commits, see 5.8). This pass is a visual redesign inside the Phase 2.5 boundary; do not start Phase 3 work. Rev. 3 changes are listed in section 7. Hard rules from [08-operating-rules.md](08-operating-rules.md) still apply: no co-author trailers or "generated with" text, no push or deploy, no spending, log defaults in QUESTIONS.md.
+Paste or point a build session at this file. It replaces the visual direction in (an earlier brief, removed) and (an earlier brief, removed) for **jerryqiu.com (hub), music.jerryqiu.com and photo.jerryqiu.com**. Flying and Make are not part of this pass. Where this file and older docs disagree, this file wins, **except** [08-operating-rules.md](08-operating-rules.md) and CLAUDE.md, which always win (including on commits, see 5.8). This pass is a visual redesign inside the Phase 2.5 boundary; do not start Phase 3 work. Rev. 3 changes are listed in section 7. Hard rules from [08-operating-rules.md](08-operating-rules.md) still apply: no co-author trailers or "generated with" text, no push or deploy, no spending, log defaults in QUESTIONS.md.
 
 **The brief in one line:** *massive, dreamy and experiential, built from photographs and type, not from shader effects.* Scale does the drama (type the size of the viewport, images that fill it), softness does the dream (focus pulls, slow dissolves, ambient colour taken from the photograph itself), and depth does the experience (layers that move at different speeds, sections that stack and part). Everything must still be a finished page without JavaScript.
 
 ## 0. What to remove, what to keep, what is new
 
 **Remove completely (do not repair, do not hide behind a flag)**
-- The background light trail: streaks, the cursor streak, the fluid-dye layer, halation bloom, and the full-page WebGL/canvas "stage". No WebGL or `<canvas>` background on these three sites.
+- The background light trail: streaks, the cursor streak, the fluid-dye layer, old-kit bloom, and the full-page WebGL/canvas "stage". No WebGL or `<canvas>` background on these three sites.
 - The aperture / iris: the iris scene, the aperture glyph in the index control, f-stop readouts as decoration, the word "Aperture" as a concept.
 - The hub corridor / threshold / portal (dolly through three frames). Replaced by the stacking rooms in section 2.
 - Scroll-jacking. Scroll always moves at the user's hand speed. **Sticky scenes are allowed** (native `position: sticky`, content scrolls through them, the page is never frozen and never exceeds 400vh for one scene); wheel/touch events are never intercepted and the scrollbar is never hidden.
@@ -15,7 +15,7 @@ Paste or point a build session at this file. It replaces the visual direction in
 **Keep**
 - Dark cinematic photo site, real photographs first, the page set (home, portfolio, work, video, about, book, client, studio) and routes, the music and hub content model.
 - Real photographs are never filtered by effects *as final pixels*: blur, dissolve and parallax are only allowed as transitions and ambient layers, and every photograph ends fully sharp, unmasked and unrecoloured at rest.
-- Tokens in `@halation/ui`, WCAG 2.2 AA, keyboard, `prefers-reduced-motion`, the "Calm" choice, protected-image rules, one jerryqiu.com return button on photo and music, privacy and fact rules from [11](11-legal-and-compliance.md) and [12](12-vision-v2.md). Real facts only; drafts marked `TODO(owner)`.
+- Tokens in the old UI kit, WCAG 2.2 AA, keyboard, `prefers-reduced-motion`, the "Calm" choice, protected-image rules, one jerryqiu.com return button on photo and music, privacy and fact rules from [11](11-legal-and-compliance.md) and [12](12-vision-v2.md). Real facts only; drafts marked `TODO(owner)`.
 
 **New building blocks (all DOM + CSS, optional tiny JS)**
 1. **Colossal type:** words set at 14 to 28 vw, cropped by the viewport edge on purpose.
@@ -43,7 +43,7 @@ Paste or point a build session at this file. It replaces the visual direction in
 - Fonts: `font-display: swap` for text. Colossal display type is **preloaded** with `swap` and a metric-adjusted fallback (`size-adjust`, `ascent-override`) so there is no layout shift; do not use `optional`, which can leave first-time visitors with the fallback in the hero.
 
 ### 1.3 Colour
-- Field: night `#07080c`, cinema (photo) `#050506`, day `#f3f1ec`. Ink/dim from design-language.md.
+- Field: night `#07080c`, cinema (photo) `#050506`, day `#f3f1ec`. Ink/dim from (an earlier brief, removed).
 - Accents (hub blue, photo red, music amber) appear **only** as: link underline/hover, focus ring, primary button fill, 1 px rules, small markers (dots, numerals), the cursor label background. Never as a gradient, glow or panel.
 - Dreamy colour comes from photographs through the ambient wash, plus two neutral gradients allowed per page: a 0 to 60% black scrim under text on imagery, and a 40 vh field-to-transparent fade at section edges.
 - No grain overlay, no drop shadows, no glass.
@@ -172,7 +172,7 @@ Paste or point a build session at this file. It replaces the visual direction in
 
 ## 5. Build instructions for the session
 
-1. Read 12, 08, 18 (this), the three apps' `AGENTS.md`, and the `@halation/ui` tokens. Do not read env files.
+1. Read 12, 08, 18 (this), the three apps' `AGENTS.md`, and the the old UI kit tokens. Do not read env files.
 2. Work per app (`apps/web`, `apps/photos`, `apps/music`); do not cross-import between apps. Shared primitives (header, footer, ColossalType, FocusPull, Dissolve, AmbientWash, StickyStack, CursorLabel, Marquee, Reveal) go in `packages/ui` and must be usable with zero JavaScript; add unit tests for tier logic.
 3. Delete (do not hide) the stage canvas, streak, fluid, iris, index control and corridor code from these three apps; remove now-unused exports from `packages/ui` only if nothing else imports them (Flying and docs may still).
 4. Order: tokens and tiers → shared components → hub scenes 1 to 6 → photo scenes 1 to 7 and Theatre lightbox → music scenes 1 to 5 and piece/store pages → polish. After each site run lint, typecheck, unit tests and the e2e suite; update e2e expectations tied to removed elements.

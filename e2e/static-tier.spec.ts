@@ -12,7 +12,6 @@ const homes = [
     url: `${hub}/`,
     h1: /Jerry Qiu/,
     texts: [/The Nexus/i, /Say hello/i, /photographer/i],
-    halation: false,
   },
   {
     name: "photos",
@@ -20,9 +19,9 @@ const homes = [
     h1: /Pictures of people at work/i,
     texts: [/Working with me/i, /Let.s make something worth keeping/i],
   },
-  { name: "music", url: `${music}/`, h1: /Music/, texts: [/New pieces, in your inbox/i], halation: false },
-  { name: "make", url: `${make}/`, h1: /Make/, texts: [/small showcase/i], halation: false },
-  { name: "flying", url: `${flying}/`, h1: /Flying/, texts: [/Tools I built to learn/i, /The log/i], halation: false },
+  { name: "music", url: `${music}/`, h1: /Music/, texts: [/New pieces, in your inbox/i] },
+  { name: "make", url: `${make}/`, h1: /Make/, texts: [/small showcase/i] },
+  { name: "flying", url: `${flying}/`, h1: /Flying/, texts: [/Tools I built to learn/i, /The log/i] },
 ];
 
 for (const h of homes) {
@@ -33,16 +32,6 @@ for (const h of homes) {
     await expect(page.locator("main#main")).toBeVisible();
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(h.h1);
     for (const t of h.texts) await expect(page.getByText(t).first()).toBeVisible();
-    // nothing is held back at opacity 0 waiting for script
-    const hidden = await page.$$eval(
-      "[data-hl-reveal]",
-      (els) =>
-        els.filter(
-          (e) => getComputedStyle(e).opacity === "0" || getComputedStyle(e.firstElementChild ?? e).opacity === "0",
-        ).length,
-    );
-    expect(hidden).toBe(0);
-    expect(await page.locator("canvas.hl-stage__canvas").count()).toBe(0);
     await ctx.close();
   });
 
@@ -52,9 +41,6 @@ for (const h of homes) {
     await page.goto(h.url, { waitUntil: "networkidle" });
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(h.h1);
     for (const t of h.texts) await expect(page.getByText(t).first()).toBeVisible();
-    // the music site is on Holominimal, which has no stage tiers: only the Halation sites carry the attribute
-    if (h.halation !== false) await expect(page.locator("html")).toHaveAttribute("data-hl-tier", "static");
-    expect(await page.locator("canvas.hl-stage__canvas").count()).toBe(0);
     await ctx.close();
   });
 }

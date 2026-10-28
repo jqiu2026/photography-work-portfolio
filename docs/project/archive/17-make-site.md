@@ -6,7 +6,7 @@ Merged 2026-10-15. A curated showcase of 3 to 5 projects with real write-ups and
 - P1 Vocabulary: Bench (Now), Shelf (finished projects), Scrap bin (failed experiments and what was learned), Tool wall (stack). P2 Parts bin (snippets).
 - P1 Workshop palette (kraft/pegboard or blueprint blue, check contrast), mono labels, graph-paper backgrounds in small doses.
 - P2 Spec-sheet header per project (materials, time, difficulty, status stamp); blueprint diagrams; "open bench" toys. P3 caution labels, sticker wall.
-- Guardrails: plain navigation, label the Shelf "Projects" somewhere visible, respect reduced motion, test on phone and slow connection. Uses Halation UI tokens where possible.
+- Guardrails: plain navigation, label the Shelf "Projects" somewhere visible, respect reduced motion, test on phone and slow connection. Uses the old UI kit tokens where possible.
 
 ## 2. Pages
 - P1 Home (intro, three featured projects), Projects index (filters, status), Project page, About.

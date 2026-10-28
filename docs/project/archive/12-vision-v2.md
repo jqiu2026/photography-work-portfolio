@@ -1,6 +1,6 @@
 # 12. Owner vision v2 (2026-10-12)
 
-**This document is the source of truth for look, feel, structure and scope. Where it disagrees with 00, 01, 02, 10 or design-language.md, this wins; those files were rewritten to match.** It records the owner's answers to ten questions plus earlier direction. Phase 2 (CMS, protection, bridge) is done and stays; this vision drives "Phase 2.5" (redesign and split), described in [HANDOFF.md](HANDOFF.md).
+**This document is the source of truth for look, feel, structure and scope. Where it disagrees with 00, 01, 02, 10 or (an earlier brief, removed), this wins; those files were rewritten to match.** It records the owner's answers to ten questions plus earlier direction. Phase 2 (CMS, protection, bridge) is done and stays; this vision drives "Phase 2.5" (redesign and split), described in [HANDOFF.md](HANDOFF.md).
 
 ## One sentence
 
@@ -11,7 +11,7 @@ jerryqiu.com is one immersive, scroll-driven story about a person, and photograp
 | # | Question | Owner's answer | What it means |
 |---|---|---|---|
 | 1 | Feeling in the first 15 seconds of the hub | A mix of **awe, bold, expressive, cinematic, inventive** | Large, confident, memorable. Cinematic light and scale, expressive type, inventive interaction. Not quiet, not quirky-cute. |
-| 2 | Motion metaphor that ties the family together | **Flow**: liquid, light streaks | Everything flows: content condenses out of liquid, scenes melt into each other, light streaks trail across the stage and the cursor drags them (a photographer's long exposure; halation glow around bright points). One motion language across all four sites. |
+| 2 | Motion metaphor that ties the family together | **Flow**: liquid, light streaks | Everything flows: content condenses out of liquid, scenes melt into each other, light streaks trail across the stage and the cursor drags them (a photographer's long exposure; old-kit glow around bright points). One motion language across all four sites. |
 | 3 | How the hub introduces photography, music and flying | **"Space" dimensions**: cool, not too fantastical; futuristic but professional, modern, minimal | The three sites appear as dimensions you pass into (depth, space, thresholds). Restraint: clean geometry, depth and light, no sci-fi kitsch. |
 | 4 | Where the blog sits on the hub | **After the three worlds**, as a **featured post plus list** | Order: who I am, the three worlds, writing (one large featured post flowing into a compact list), then "Say hello." |
 | 5 | Photography: what makes it cooler | **Apple-product-page immersion**: animations and renders with text that is unique and feels good, not buzzwords. A photo portfolio/gallery, a video portfolio/gallery, and a photo dashboard / business management service: **our own native platform built around the site** | Product-page choreography for photography. Words are crafted and specific. The site is the front of a studio platform (Phase 3 scope, see below). |
@@ -52,7 +52,7 @@ The owner wants the whole vision designed now and "working as expected" locally;
 - WCAG 2.2 AA, full keyboard use, skip link, landmarks, visible focus, reduced motion gives a complete static page, alt text always present, no autoplaying sound.
 - Photographs are never degraded by effects; image protection semantics in [05](05-security-and-image-protection.md) stay.
 - Real facts only. Privacy for flying: no live location, no tail numbers by default, nobody identifiable without permission ([11](11-legal-and-compliance.md)).
-- The UI package is original (not derived from Once UI or any existing kit), has its own name (default proposal: **Halation UI**, chosen by the owner; see Q33), and is prepared to be sold: the owner does the publishing and selling.
+- The UI package is original (not derived from Once UI or any existing kit), has its own name (default proposal: the old UI kit, chosen by the owner; see Q33), and is prepared to be sold: the owner does the publishing and selling.
 
 ## Status (2026-10-12)
 Built in Phase 2.5; see [PHASE-2.5-SUMMARY.md](PHASE-2.5-SUMMARY.md) for what exists, what is mocked and the honest gaps.

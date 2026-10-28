@@ -98,7 +98,7 @@ describe("score store", () => {
     expect(compositions.every((c) => c.sample)).toBe(true);
   });
   it("cart: only scores for sale, bought once, totals in cents", () => {
-    expect(() => addToCart([], "sample-halation-study")).toThrow(/no score for sale/);
+    expect(() => addToCart([], "sample-afterglow-study")).toThrow(/no score for sale/);
     let cart = addToCart([], "sample-nocturne-for-brass");
     cart = addToCart(cart, "sample-nocturne-for-brass");
     expect(cart).toHaveLength(1);
@@ -119,7 +119,7 @@ describe("score store", () => {
     const pages = d.preview("sample-window-music");
     expect(pages.length).toBeLessThanOrEqual(2);
     expect(pages[0].svg).toContain("MOCK PREVIEW");
-    expect(d.preview("sample-halation-study")).toEqual([]);
+    expect(d.preview("sample-afterglow-study")).toEqual([]);
   });
 });
 

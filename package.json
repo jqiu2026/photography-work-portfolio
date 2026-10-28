@@ -2,7 +2,7 @@
   "name": "jerryqiu-sites",
   "private": true,
   "version": "0.1.0",
-  "description": "Monorepo for jerryqiu.com, photo., music., flying. and make. plus the @halation/ui package",
+  "description": "Monorepo for jerryqiu.com, photo., music., flying. and make., all on the Holominimal design system",
   "packageManager": "pnpm@12.11.2",
   "scripts": {
     "dev": "concurrently -n db,seed,web,docs,photo,music,flying -c green,gray,cyan,magenta,yellow,blue,red \"pnpm dev:db\" \"pnpm dev:seed\" \"pnpm dev:web\" \"pnpm dev:docs\" \"pnpm dev:photos\" \"pnpm dev:music\" \"pnpm dev:flying\"",
@@ -30,7 +30,6 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
     "@biomejs/biome": "^1.9.4",
-    "@changesets/cli": "^3.0.3",
     "@next/env": "16.3.8",
     "@playwright/test": "1.64.0",
     "@testing-library/jest-dom": "^7.0.1",

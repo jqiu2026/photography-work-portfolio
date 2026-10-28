@@ -76,4 +76,4 @@ The hub redirects `/work` and `/work/:slug` (301) to `NEXT_PUBLIC_PHOTOS_URL`; `
 
 ## UI package publishing (not in scope)
 
-Halation UI publishing and selling (licence Q32, npm, trademark) is the owner's; see `archive/PUBLISHING.md` and `archive/SELLING.md`. Releases are manual via Changesets; nothing publishes automatically.
+Releases are manual via Changesets; nothing publishes automatically.

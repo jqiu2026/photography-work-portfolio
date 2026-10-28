@@ -1,6 +1,0 @@
-{
-  "package": "@halation/ui",
-  "brand": "Halation",
-  "cssPrefix": "hl",
-  "_note": "Single source of truth for the UI package name. Change it with: node scripts/rename.mjs --package @acme/kit --brand AcmeKit --prefix ac"
-}

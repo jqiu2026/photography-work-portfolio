@@ -62,7 +62,7 @@ export default async function EditFlight({ params }: { params: Promise<{ id: str
         <MediaPicker name="photoMediaId" label="Photo" defaultValue={row?.photoMediaId} />
         <fieldset
           style={{
-            border: "1px solid var(--hl-line)",
+            border: "1px solid var(--hm-line-strong)",
             borderRadius: 4,
             padding: "1rem",
             display: "grid",

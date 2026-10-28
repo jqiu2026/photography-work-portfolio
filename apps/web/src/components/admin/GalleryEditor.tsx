@@ -1,6 +1,8 @@
 "use client";
 
-import { Button, Input, useToast } from "@halation/ui";
+import { Button } from "@/components/kit";
+import { Input, useToast } from "@/components/kit-client";
+
 import { ArrowDown, ArrowUp, EyeOff, Star, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";

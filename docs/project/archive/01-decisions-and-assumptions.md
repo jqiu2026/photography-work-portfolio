@@ -7,7 +7,7 @@ The owner will not be around while this runs. **Never block on a question.** Use
 | # | Decision |
 |---|---|
 | D1 | Own UI package, open source, with docs. Name is a placeholder for now. |
-| D2 | Three phases (see [02](02-phase-1-ui-package-and-redesign.md), [03](03-phase-2-cms-and-protection.md), [04](04-phase-3-photo-business-platform.md)). Phase 1 flows into Phase 2 automatically. **Stop after Phase 2.** |
+| D2 | Three phases (see 02, [03](03-phase-2-cms-and-protection.md), [04](04-phase-3-photo-business-platform.md)). Phase 1 flows into Phase 2 automatically. **Stop after Phase 2.** |
 | D3 | Look: modern, minimalist, professional, sleek, elegant, intuitive, legal. Squarespace-grade polish with a restrained Apple-style motion layer (scroll sequences, WebGL hero). Details in [10](10-design-brief.md). |
 | D4 | Full ShootProof replacement in Phase 3 (galleries, contracts, invoices, payments). About 30 GB of photos today. |
 | D5 | Login is Google OAuth restricted to `@jerryqiu.com` Workspace accounts. |
@@ -41,7 +41,7 @@ The owner will not be around while this runs. **Never block on a question.** Use
 | A24 | Cross-site auth | Staff session (owner/editors) uses Auth.js with a cookie scoped to `.jerryqiu.com` **in production only**, so one sign-in covers `/admin` (hub app, manages all sites' content) and `/studio` (photos app). In dev, apps on different ports share `localhost` cookies. **Client** sessions (Phase 3) use a different, host-only cookie on `photo.jerryqiu.com` so a client session never reaches other subdomains. Same `AUTH_SECRET` in both projects. | Convenience for the owner, isolation for clients. Log as Q14. |
 | A25 | What lives where | **Hub app (`apps/web`)**: hub pages, music site, flying site, `/admin` (the CMS for *all* sites). **Photos app (`apps/photos`)**: Phase 1 public photography portfolio (moved from the old site: showcase, galleries, about the photographer, "book/contact"), Phase 2 reads portfolio content from the DB plus a `/studio` admin shell and the ShootProof bridge, Phase 3 client galleries, store, booking, contracts, invoices. The hub keeps only a photography *preview* that links out. | Matches how the owner thinks about the sites. |
 | A26 | Local dev hosts | No `/etc/hosts` edits. Hub on `localhost:3000`, photos on `localhost:3002`. The music and flying sites are reachable in dev both by path (`localhost:3000/music`, `localhost:3000/flying`) and by subdomain in Chrome/Firefox (`music.localhost:3000`, `flying.localhost:3000`, which resolve to loopback). Cross-site links come from the site registry in `packages/sites`, which reads env (`NEXT_PUBLIC_*_URL`) and defaults to the localhost URLs in dev and the real subdomains in production. | No system changes needed. |
-| A27 | Design direction | Chosen in Phase 1 via the `/_design` exploration (see [10](10-design-brief.md)), not copied from StuyAviators. Winner and rationale recorded in `design-language.md` and Q3. | Evidence-based while the owner is away. |
+| A27 | Design direction | Chosen in Phase 1 via the `/_design` exploration (see [10](10-design-brief.md)), not copied from StuyAviators. Winner and rationale recorded in (an earlier brief, removed) and Q3. | Evidence-based while the owner is away. |
 | A29 | Sites and nav | **Superseded 2026-10-12:** no navbar on any home; no site switcher or "More from me"; photos, music and flying link nowhere else except one footer button back to jerryqiu.com (the hub introduces the others). Former: Hub nav: Work, Writing, About, and a **Sites** group (Photos, Music, Flying) plus a Connect button. Every site shares a header with a small **site switcher** ("Jerry Qiu ▾" listing all sites) and a footer "More from me" row, so the family feels like one person with several rooms. Each site has its own accent/hero/theme preset from the same design system. See [10](10-design-brief.md). |
 | A30 | Facts about the owner | Claude must **never invent** biography, ratings, flight hours, awards, quotes or performances. Use `TODO(owner):` placeholders and clearly fake sample data in dev only; production hides empty fields. Existing content (blog posts, projects, about copy in `src/resources/content.tsx`) is real and may be reused. | Honesty, and the non-boastful goal. |
 | A31 | Social/account links | Stored in CMS settings (label, URL, icon, order, show-in-header/footer). Seed with placeholders; real URLs found in the existing `content.tsx` (it has a social list) are imported as-is. `rel="me"` + `Person` JSON-LD `sameAs`. | Profile-style home needs them. |
@@ -55,7 +55,7 @@ The owner will not be around while this runs. **Never block on a question.** Use
 | A16 | Email | **Resend** free tier (3,000/month) for notifications; React Email templates (already used in stuyaviators). | Free at this volume. |
 | A17 | Payments | **Stripe** (pay-as-you-go fees, no monthly cost). Build behind a `PaymentProvider` interface. Test mode only until the owner adds live keys. | Standard. |
 | A18 | E-signature | Built in: typed name + drawn signature, timestamp, IP, user agent, document hash, audit trail PDF. | Free. Add a "have a lawyer review the templates" note. Not legal advice. |
-| A19 | Placeholder package name | `@halation/ui`, brand `Halation`, CSS variable prefix `--hl-`. All occurrences come from **one config file** and a `pnpm rename` script so the real name is a 5-minute swap. | Owner is still choosing a name. |
+| A19 | Placeholder package name | the old UI kit, brand `the old UI kit`, its own CSS variable prefix. All occurrences come from **one config file** and a `pnpm rename` script so the real name is a 5-minute swap. | Owner is still choosing a name. |
 | A20 | Branding for the hub | Brand is **Jerry Qiu** (personal), not "Jerry Qiu Photography"; photography branding lives on the studio. Palette, type and identity come from the `/_design` exploration, **not** from StuyAviators. Photos need neutral surroundings. | The hub is about the whole person. |
 | A21 | Analytics | Keep `@vercel/analytics` and `@vercel/speed-insights` (already installed). No other trackers. | Already paid for with Pro. |
 | A22 | Git push / PRs / deploy | **Never** without the owner. Local commits only. | Outward-facing. |
@@ -83,7 +83,7 @@ The owner will not be around while this runs. **Never block on a question.** Use
 | V9 | Technical ambition | The strongest techniques (real-time WebGL stage, shaders, fluid simulation, view transitions) with quality tiers and static fallbacks. |
 | V10 | Scope | Design everything now; build working local mocks of the studio, score store, client portal and flight map; real services in Phase 3. |
 | V11 | Voice | Jerry's own first-person voice; Claude drafts from real facts and marks `TODO(owner)`. |
-| V12 | Package | Completely new, original UI system and name (owner's suggestion and default: **Halation UI**), prepared for sale (owner publishes and sells). Supersedes A-decisions about the old package look, handwritten `--hl-*` CSS, and "open source MIT" intent: licence is an open question (Q32). |
+| V12 | Package | Completely new, original UI system and name (owner's suggestion and default: the old UI kit), prepared for sale (owner publishes and sells). Supersedes A-decisions about the old package look, handwritten old-kit tokens CSS, and "open source MIT" intent: licence is an open question (Q32). |
 
 Earlier decisions A29 (nav/site switcher), the Phase 1 palette/type decisions, and the "no e-commerce on the hub" wording are superseded where they conflict.
 
@@ -92,7 +92,7 @@ Earlier decisions A29 (nav/site switcher), the Phase 1 palette/type decisions, a
 | # | Topic | Decision |
 |---|---|---|
 | R1 | Split | Projects are `site: "photos"` (migration `0001_projects_to_photos`); hub `/work` 301s to `NEXT_PUBLIC_PHOTOS_URL`; shared `@jerryqiu/render` package. |
-| R2 | Package | Halation UI (`@halation/ui`, prefix `hl`); own fluid solver on `ogl`; fonts Anybody, Hanken Grotesk, Newsreader, Martian Mono (OFL 1.1, verified); headless Radix Primitives allowed (Q40). |
+| R2 | Package | the old UI kit (the old UI kit, prefix `hl`); own fluid solver on `ogl`; fonts Anybody, Hanken Grotesk, Newsreader, Martian Mono (OFL 1.1, verified); headless Radix Primitives allowed (Q40). |
 | R3 | Navigation | No navbar anywhere: quiet text mark, floating index control, skip link, landmarks. Inner pages use a poster-only stage. |
 | R4 | Tiers | Static tier is decided before paint for reduced motion, Save-Data, slow connections and the Calm choice (no layout shift); full and reduced are chosen after first paint, then governed. |
 | R5 | Mocks | `@jerryqiu/mocks`, labelled MOCK, off in production builds (Q47), localStorage for state, Stripe test-mode shape, privacy rules for flights enforced in code (Q43). |

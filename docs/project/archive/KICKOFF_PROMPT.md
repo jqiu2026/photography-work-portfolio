@@ -11,11 +11,11 @@ You are the lead engineer on a long, unattended, multi-phase project in /Users/j
 3. docs/project/00-vision-and-principles.md, then 10-design-brief.md and 11-legal-and-compliance.md
 4. docs/project/01-decisions-and-assumptions.md
 5. docs/project/PROGRESS.md and docs/project/QUESTIONS.md
-6. docs/project/02-phase-1-ui-package-and-redesign.md, then 03 when you reach Phase 2. Also read 05, 06, 09, DEPLOYMENT.md when relevant. Do NOT start 04 (Phase 3).
+6. (an earlier brief, removed), then 03 when you reach Phase 2. Also read 05, 06, 09, DEPLOYMENT.md when relevant. Do NOT start 04 (Phase 3).
 7. If docs/project/HANDOFF.md exists, it is the most recent state: follow it first.
 
 ## What we are building
-A family of sites for Jerry Qiu, one monorepo, one open-source UI package of our own (placeholder name @halation/ui, one-config rename):
+A family of sites for Jerry Qiu, one monorepo, one open-source UI package of our own (placeholder name the old UI kit, one-config rename):
 - jerryqiu.com, the personal hub ("ME"): a profile-style home (like a glorified LinkedIn page that is his own, not LinkedIn and not imitating its look) showing who he is warmly and WITHOUT boasting, with social/account links, about/timeline, work, writing, connect.
 - photos.jerryqiu.com: photography portfolio now (apps/photos); becomes the ShootProof replacement in Phase 3 (ShootProof serves this hostname today; never touch DNS).
 - music.jerryqiu.com and flying.jerryqiu.com: small content sites served by the hub app via host routing (proxy.ts), on a shared interest-site template.

@@ -2,7 +2,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
-  border-top: 1px solid var(--hl-line);
+  border-top: 1px solid var(--hm-line-strong);
   padding-block: 3rem;
 }
 .next-prev a {
@@ -15,12 +15,12 @@
   text-align: right;
 }
 .next-prev span {
-  color: var(--hl-muted);
-  font-size: var(--hl-text-sm);
+  color: var(--hm-muted);
+  font-size: var(--hm-text-sm);
 }
 .next-prev strong {
-  font-family: var(--hl-font-display);
-  font-weight: var(--hl-display-weight);
-  font-size: var(--hl-text-2xl);
-  letter-spacing: var(--hl-display-tracking);
+  font-family: var(--hm-font-display);
+  font-weight: var(--hm-weight-semibold);
+  font-size: var(--hm-text-2xl);
+  letter-spacing: var(--hm-tracking-tight);
 }

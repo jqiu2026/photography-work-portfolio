@@ -1,4 +1,4 @@
-import { EmbedFacade, Link, Prose } from "@halation/ui";
+import { EmbedFacade, Link, Prose } from "./ui";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import NextLink from "next/link";
 import type { AnchorHTMLAttributes, HTMLAttributes, ReactNode } from "react";

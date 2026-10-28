@@ -1,8 +1,8 @@
 "use client";
 
-import { Select } from "@halation/ui";
+import { Select, useToast } from "@/components/kit-client";
+
 import { useRouter } from "next/navigation";
-import { useToast } from "@halation/ui";
 import { changeRole, setUserActive } from "@/app/(admin)/admin/users/actions";
 import { ConfirmButton } from "./form-kit";
 

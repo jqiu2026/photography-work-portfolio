@@ -1,28 +1,26 @@
-import type { ReactNode } from "react";
-import { docs, groups } from "@/content/components";
+import { Dock, DockItem } from "@holominimal/ui";
+import { docs } from "@/content/components";
 
-const start = [["Overview", "/"], ["Getting started", "/getting-started"], ["Theming", "/theming"], ["Motion", "/motion"], ["Accessibility", "/accessibility"], ["Changelog", "/changelog"], ["Contributing", "/contributing"]];
+const start = [
+  ["Overview", "/"],
+  ["Getting started", "/getting-started"],
+  ["Theming", "/theming"],
+  ["Motion", "/motion"],
+  ["Accessibility", "/accessibility"],
+  ["Components", "/components"],
+  ["Changelog", "/changelog"],
+  ["Contributing", "/contributing"],
+] as const;
 
-export function Sidebar({ toggle }: { toggle: ReactNode }) {
+/** The docs' navigation: the guides, then the components page (each component is listed there). */
+export function Sidebar() {
   return (
-    <aside className="docs-side">
-      <div className="docs-side__top"><a href="/" className="docs-brand">Halation</a>{toggle}</div>
-      <nav aria-label="Docs">
-        <div>
-          <p className="hl-eyebrow">Start</p>
-          <ul>{start.map(([label, href]) => <li key={href}><a href={href}>{label}</a></li>)}</ul>
-        </div>
-        <div>
-          <p className="hl-eyebrow">Components</p>
-          <ul><li><a href="/components">All {docs.length}</a></li></ul>
-        </div>
-        {groups.map((g) => (
-          <div key={g}>
-            <p className="hl-eyebrow">{g}</p>
-            <ul>{docs.filter((d) => d.group === g).map((d) => <li key={d.name}><a href={`/components/${d.name.toLowerCase()}`}>{d.name}</a></li>)}</ul>
-          </div>
-        ))}
-      </nav>
-    </aside>
+    <Dock aria-label="Docs">
+      {start.map(([label, href]) => (
+        <DockItem key={href} asChild>
+          <a href={href}>{href === "/components" ? `${label} (${docs.length})` : label}</a>
+        </DockItem>
+      ))}
+    </Dock>
   );
 }

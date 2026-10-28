@@ -4,8 +4,8 @@ Date: 2026-10-12. Branch `feat/custom-ui-cms`. Nothing was pushed, merged, deplo
 
 ## What was built
 
-- **Monorepo (pnpm workspace):** `apps/web` (hub + music + flying, :3000), `apps/photos` (:3002), `apps/docs` (:3001), `packages/ui` (`@halation/ui`), `packages/sites` (site registry, shared chrome, contact form), `packages/config`.
-- **UI package (88 exported components):** layout, typography, forms (Radix), overlays, navigation (site switcher, header, footer with "More from me"), profile and site components, motion layer (reveals, parallax, pinned scenes, step sequence, stacking cards, horizontal showcase, tilt, magnetic, Lenis, marquee), media (responsive `Image`, justified/masonry `Gallery`, `Lightbox`, `BeforeAfter`, scroll-scrubbed `ImageSequence`, `VideoBackground`, `ProtectedImage` stub), WebGL (`ShaderHero`, `ShaderLayer`: the pointer-reactive glitch). Plain CSS with `--hl-*` tokens, light/dark and four site presets.
+- **Monorepo (pnpm workspace):** `apps/web` (hub + music + flying, :3000), `apps/photos` (:3002), `apps/docs` (:3001), `packages/ui` (the old UI kit), `packages/sites` (site registry, shared chrome, contact form), `packages/config`.
+- **UI package (88 exported components):** layout, typography, forms (Radix), overlays, navigation (site switcher, header, footer with "More from me"), profile and site components, motion layer (reveals, parallax, pinned scenes, step sequence, stacking cards, horizontal showcase, tilt, magnetic, Lenis, marquee), media (responsive `Image`, justified/masonry `Gallery`, `Lightbox`, `BeforeAfter`, scroll-scrubbed `ImageSequence`, `VideoBackground`, `ProtectedImage` stub), WebGL (`ShaderHero`, `ShaderLayer`: the pointer-reactive glitch). Plain CSS with old-kit tokens tokens, light/dark and four site presets.
 - **Docs site:** a page for every component (live example, props, accessibility, when not to use), plus guides. A test fails if an export is undocumented.
 - **Sites:**
   - Hub `jerryqiu.com`: type-first hero with a glitch photograph band, profile row, scroll-highlight intro, pinned scene with image sequence, previews of the other sites, horizontal showcase of real projects, writing, closing CTA; /about, /work (+ project pages with lightbox), /writing (+ RSS), /connect, legal pages, `security.txt`, robots (AI crawler opt-out), sitemap, redirects.
@@ -13,7 +13,7 @@ Date: 2026-10-12. Branch `feat/custom-ui-cms`. Nothing was pushed, merged, deplo
   - Music and flying: shared interest template; only real facts shown, everything else is dev-only `TODO(owner)` and hidden in production.
   - Host routing in `apps/web/src/proxy.ts` (music./flying. rewrite, production redirects).
 - **Quality tooling:** Vitest unit tests (UI 38, registry 5, docs coverage 4), Playwright e2e (every route of every site x light/dark x 390/1440 with axe, console-error and overflow checks, keyboard, reduced motion, mobile menu; 149 tests), Biome, Lighthouse script, image optimizer, sequence maker, contrast checker, rename script, licenses script, packed-tarball Vite example.
-- **Open-source hygiene:** MIT `LICENSE`, README, CONTRIBUTING, CODE_OF_CONDUCT, SECURITY, Changesets, issue/PR templates, CI (verify only, no publish/deploy), `THIRD_PARTY_LICENSES.md` (no copyleft), `PUBLISHING.md`, working `dist` build that keeps `"use client"` boundaries.
+- **Open-source hygiene:** MIT `LICENSE`, README, CONTRIBUTING, CODE_OF_CONDUCT, SECURITY, Changesets, issue/PR templates, CI (verify only, no publish/deploy), `THIRD_PARTY_LICENSES.md` (no copyleft), (an earlier brief, removed), working `dist` build that keeps `"use client"` boundaries.
 
 ## Decisions made along the way (also in QUESTIONS.md)
 

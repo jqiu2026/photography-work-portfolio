@@ -55,7 +55,7 @@ Hub, music, flying (`apps/web`) and the photography portfolio (`apps/photos`) al
 
 ## 2.5 Image protection (see [05](05-security-and-image-protection.md) for the threat model)
 
-Implement `@halation/ui/media` `ProtectedImage` and the server pieces:
+Implement `@jerryqiu/render/media` `ProtectedImage` and the server pieces:
 
 1. **Server:** originals are private. A route (`/api/img/[id]`) serves derivatives only after checks: valid HMAC-signed, **expiring** token (`exp`, `w`, `viewer`) minted during server render; `Sec-Fetch-Dest: image` / `Referer` same-site checks; per-IP and per-token rate limiting; `Cache-Control: private, no-store` for protected images; no directory listing; no predictable URLs.
 2. **Client:** `ProtectedImage` fetches the image bytes, converts to a `blob:` URL (or draws to `<canvas>`), and revokes it on unmount; the stable file URL never appears in the HTML source (page HTML carries only an opaque id). Transparent overlay element over the image blocks drag/long-press save; `pointer-events` handled so links still work. Skeleton + blur placeholder while loading; works with SSR (placeholder from DB, no JS = low-res placeholder only).

@@ -40,8 +40,8 @@ export const compositions: Composition[] = [
     sample: true,
   },
   {
-    slug: "sample-halation-study",
-    title: "SAMPLE: Halation Study",
+    slug: "sample-afterglow-study",
+    title: "SAMPLE: Afterglow Study",
     year: 2026,
     forces: "piano",
     durationMin: 4,

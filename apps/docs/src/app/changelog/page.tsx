@@ -1,14 +1,13 @@
-import { Prose } from "@halation/ui";
-
 export const metadata = { title: "Changelog" };
 
 export default function Page() {
   return (
-    <Prose>
+    <article className="docs-prose">
       <h1>Changelog</h1>
-      <p>Releases are managed with Changesets (see <code>.changeset/</code> and <code>CHANGELOG.md</code>). The package is not published yet.</p>
-      <h2>0.1.0 (unreleased)</h2>
-      <ul><li>First public API: layout, typography, forms, overlays, navigation, profile and site components, motion, media and WebGL entry points.</li></ul>
-    </Prose>
+      <h2>2026-10-27</h2>
+      <ul>
+        <li>These docs now describe Holominimal, the one design system across the sites; the earlier kit is gone.</li>
+      </ul>
+    </article>
   );
 }

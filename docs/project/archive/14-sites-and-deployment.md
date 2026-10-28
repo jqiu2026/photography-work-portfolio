@@ -13,7 +13,7 @@
 ## 2. Deployment rules (owner decision)
 
 - One Git repo. **Each site is its own Vercel project and its own deployment**, with Root Directory set to its app folder. A failed build or bad env var in one project blocks only that project.
-- Shared code lives in one **master shared folder** (`packages/`, today `@halation/ui`, `@jerryqiu/render`, `@jerryqiu/mocks`, payments and others). Apps may read from it. **The shared folder never imports from an app, and apps never import from each other.** A deployment can only see its own app folder plus the shared folder.
+- Shared code lives in one **master shared folder** (`packages/`, today the old UI kit, `@jerryqiu/render`, `@jerryqiu/mocks`, payments and others). Apps may read from it. **The shared folder never imports from an app, and apps never import from each other.** A deployment can only see its own app folder plus the shared folder.
 - Each app has its own `.env.local` and a `.env.example` listing names only. Secrets are never committed, pasted or read by Claude.
 - Changes to a shared package can affect several apps, so a shared change must pass every app's gates before it is merged.
 - Vercel Pro is one team: about $20/month, the only fixed cost target ([06](06-cost-analysis.md), Q56). Set a spend budget of about $10 with pausing on.

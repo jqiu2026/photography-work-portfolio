@@ -8,10 +8,8 @@
   "exports": {
     ".": "./src/index.ts",
     "./profile": "./src/profile.ts",
-    "./shell": "./src/SiteShell.tsx",
     "./theme-script": "./src/ThemeScript.tsx",
     "./contact": "./src/ContactForm.tsx",
-    "./index-control": "./src/ShellIndex.tsx",
     "./mock": "./src/MockBanner.tsx",
     "./maintenance": "./src/maintenance.ts"
   },
@@ -30,9 +28,8 @@
     "react-dom": "19.2.8"
   },
   "dependencies": {
-    "@halation/ui": "workspace:*",
-    "@jerryqiu/mocks": "workspace:*",
-    "@holominimal/ui": "workspace:^"
+    "@holominimal/ui": "workspace:^",
+    "@jerryqiu/mocks": "workspace:*"
   },
   "peerDependencies": {
     "next": "^16",

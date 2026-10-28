@@ -10,8 +10,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@jerryqiu/sites": "workspace:*",
-    "@halation/ui": "workspace:*",
+    "@holominimal/ui": "workspace:^",
     "lucide-react": "^1.55.0",
     "next": "16.3.8",
     "react": "19.2.8",

@@ -1,4 +1,5 @@
-import { Breadcrumbs, Container, Eyebrow, Heading, Section, Text } from "@halation/ui";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage } from "@holominimal/ui";
+import { Container, Eyebrow, Heading, Section, Text } from "@/components/kit";
 import type { ReactNode } from "react";
 import { RenderMarkdown } from "@jerryqiu/render";
 
@@ -18,7 +19,14 @@ export function PostView({ post }: { post: PostData }) {
   return (
     <>
       <Container size="md" style={{ paddingTop: "clamp(2rem, 6vw, 4rem)" }}>
-        <Breadcrumbs items={[{ label: "Writing", href: "/writing" }, { label: post.title }]} />
+        <Breadcrumb>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/writing">Writing</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbItem>
+            <BreadcrumbPage>{post.title}</BreadcrumbPage>
+          </BreadcrumbItem>
+        </Breadcrumb>
         <Eyebrow style={{ margin: "2.5rem 0 1rem" }}>
           {post.publishedAt ? fmt(post.publishedAt) : "Draft"} · {post.author}
         </Eyebrow>

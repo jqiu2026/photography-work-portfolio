@@ -20,8 +20,8 @@ If two goals conflict, the higher one wins, except that accessibility and the fa
 
 Designed once, in the UI package; every world uses it:
 
-- **Stage:** a persistent full-viewport layer (real-time WebGL / shader scene with a fluid simulation and light-streak / halation effects, plus DOM content layered over it) that transforms continuously with scroll. Scenes hand off through liquid transitions instead of section breaks.
-- **Motion language (Flow: liquid + light streaks):** one easing and one spring family; shapes condense, spread and melt; type resolves out of liquid and light streaks (long-exposure trails, anamorphic streaks, soft halation glow on highlights); velocity-aware smooth scroll; cursor ripples and magnetic physics; view-transition style page changes. Document the exact curves, durations and the flow/threshold transition recipes.
+- **Stage:** a persistent full-viewport layer (real-time WebGL / shader scene with a fluid simulation and light-streak / old-kit effects, plus DOM content layered over it) that transforms continuously with scroll. Scenes hand off through liquid transitions instead of section breaks.
+- **Motion language (Flow: liquid + light streaks):** one easing and one spring family; shapes condense, spread and melt; type resolves out of liquid and light streaks (long-exposure trails, anamorphic streaks, soft old-kit glow on highlights); velocity-aware smooth scroll; cursor ripples and magnetic physics; view-transition style page changes. Document the exact curves, durations and the flow/threshold transition recipes.
 - **Index control instead of a navbar:** a small floating mark opens a full-screen index of the page's scenes and routes; plus scroll progress and the theme toggle. Inner pages may use the same control and a very quiet header, never a conventional navbar on homes.
 - **Closing pattern:** every home ends with its own "Say hello." moment (the hub's version is retained). Photography, music and flying footers add exactly one button back to jerryqiu.com and nothing else about other sites.
 - **Quality tiers:** full (3D/fluid stage), reduced (cheaper shaders, lower DPR, fewer particles), static (poster frames, CSS only). Chosen automatically from device capability, battery/Save-Data, `prefers-reduced-motion` and WebGL support; the static tier must still be beautiful and complete.
@@ -38,7 +38,7 @@ Each world needs its own **concept sheet** (mood, metaphor, type character, colo
 ## Not copied, not Once UI, not StuyAviators
 
 - The UI system is designed from scratch: its own tokens, class/prefix names, component set and prop APIs, spacing rhythm, type scale, shapes and motion. Study references for ideas and for what to avoid; never copy assets, text, layouts or code.
-- Keep a written **comparison** (side-by-side screenshots) against Once UI's docs/demo and against StuyAviators in `redesign-brief.md`. If someone could mistake one for another, redesign.
+- Keep a written **comparison** (side-by-side screenshots) against Once UI's docs/demo and against StuyAviators in (an earlier brief, removed). If someone could mistake one for another, redesign.
 - Fonts: SIL OFL (or properly licensed) only; check each licence for use in a product that is sold.
 
 ## Information architecture
@@ -89,11 +89,11 @@ Keep old URLs working with redirects (`/blog` to `/writing`, `/contact` to `/con
 
 - **Accessibility:** WCAG 2.2 AA contrast, visible focus, 44 px targets, full keyboard paths, skip link, landmarks, alt text always present, reduced motion = complete static layout, no autoplaying sound.
 - **Performance:** stage code lazy-loaded; DPR capped; paused off-screen; no layout shift; LCP an image or text; mobile Lighthouse performance 90 or better on every home.
-- **Tokens and architecture:** the designer chooses (hand-written CSS with tokens is fine). A new package name replaces `@halation/ui` through `pnpm rename`; the owner's suggestion and default is **Halation UI** (halation: the glow that spreads around bright light in film), unless the brief finds a conflict (check by reading only; the owner does trademark and npm checks). Docs site with a demo for every export; tests; changelog.
+- **Tokens and architecture:** the designer chooses (hand-written CSS with tokens is fine). A new package name replaces the old UI kit through `pnpm rename`; the owner's suggestion and default is the old UI kit (old-kit: the glow that spreads around bright light in film), unless the brief finds a conflict (check by reading only; the owner does trademark and npm checks). Docs site with a demo for every export; tests; changelog.
 - **Imagery:** photographs are never degraded by overlays or filters beyond the deliberate effects in a scene; correct colour; fast loading; protected where configured.
 
 ## UX heuristics checklist
 
 Clear current-location cue; consistent patterns; visible keyboard focus; inline, human form errors; 44 px touch targets; no horizontal scroll at 320 px; fast perceived loading (blur-up, posters); no dead ends; designed 404 with a way home; every page has a purpose and one primary action; the floating index works with keyboard and screen readers.
 
-> **Status (2026-10-12):** the designer's brief that fulfils this document is [redesign-brief.md](redesign-brief.md); the compact reference is [design-language.md](design-language.md). Both are built (see [PHASE-2.5-SUMMARY.md](PHASE-2.5-SUMMARY.md)).
+> **Status (2026-10-12):** the designer's brief that fulfils this document is (an earlier brief, removed); the compact reference is (an earlier brief, removed). Both are built (see [PHASE-2.5-SUMMARY.md](PHASE-2.5-SUMMARY.md)).

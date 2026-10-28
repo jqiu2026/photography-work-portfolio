@@ -16,7 +16,7 @@ Not legal or tax advice. Stripe Tax calculates; registering and filing stay with
 
 ## 2. Architecture
 
-- Next.js 16 (App Router, `proxy.ts` not middleware), React 19, Auth.js v5 beta, own CSS tokens from `@halation/ui` (not Tailwind in app code).
+- Next.js 16 (App Router, `proxy.ts` not middleware), React 19, Auth.js v5 beta, Holominimal (`@holominimal/ui`) components and tokens (not Tailwind in app code).
 - Providers sit behind interfaces; each has a real adapter (reads its key from an env var) and a labelled mock that is disabled in production builds (`mocksEnabled()` in `@jerryqiu/mocks`). Missing keys never crash the app; the feature says what to set.
 
 | Concern | Package or place | Interface | Mock |
@@ -205,7 +205,7 @@ Columns: id, feature, priority, status today (verified 2026-10-15), where it liv
 | F-111 | Webhooks in (Stripe) and out (owner endpoints), owner API | P3 | partial (outgoing signed webhooks for inquiries, payments, gallery publishes and shop orders; Stripe webhooks in; a read-only owner REST API `/api/v1/clients|jobs|invoices|galleries` with revocable keys made in Automations) | `/api/v1/*` | unit | M15 |
 | F-112 | Notifications centre and activity feed | P3 | partial (owner activity feed with unread; client notification centre is the portal home) | studio | e2e | M15 |
 | F-113 | Mobile-friendly photographer side, installable PWA | P1 | partial (responsive board and forms, installable manifest and icon; offline mode and push are not built) | studio CSS, manifest | e2e 390px | M5, M18 |
-| F-114 | Dark and light themes | P1 | done | `@halation/ui` | e2e | done |
+| F-114 | Dark and light themes | P1 | done | Holominimal | e2e | done |
 | F-115 | WCAG 2.2 AA, performance budgets (Lighthouse mobile 80+, CLS under 0.02) | P1 | partial | all | axe, lighthouse | M18 |
 | F-116 | Error and health pages, seed and demo data | P1 | partial (health API and owner health page done; demo data in M18) | `/api/health`, seed | e2e | M11 |
 | F-117 | Marketing pages from this table (Live / Preview / Soon badges) | P1 | done | `/features` etc. | e2e | M11 |

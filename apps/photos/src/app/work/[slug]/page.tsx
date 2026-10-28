@@ -1,3 +1,4 @@
+import "@jerryqiu/render/render.css";
 import { Breadcrumbs, Container, Eyebrow, Heading, Section, Text } from "@/components/ui";
 import { ProtectedGallery, ProtectedImage } from "@/components/media";
 import { Blocks, MDX } from "@jerryqiu/render";

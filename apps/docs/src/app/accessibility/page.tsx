@@ -1,19 +1,17 @@
-import { Prose } from "@halation/ui";
-
-export const metadata = { title: "Accessibility guide" };
+export const metadata = { title: "Accessibility" };
 
 export default function Page() {
   return (
-    <Prose>
-      <h1>Accessibility guide</h1>
-      <p>The target is WCAG 2.2 AA. It is a release gate: the end-to-end suite runs axe on every page in light and dark at 390px and 1440px.</p>
+    <article className="docs-prose">
+      <h1>Accessibility</h1>
+      <p>The target is WCAG 2.2 AA, checked with axe in the end-to-end suites at phone and desktop widths.</p>
       <ul>
-        <li><strong>Contrast.</strong> Text tokens meet AA on every theme. Accent fills are paired with an AA text color (<code>--hl-accent-text</code>).</li>
-        <li><strong>Keyboard.</strong> Every control is a native element or a Radix primitive, with a visible focus ring and 44px targets.</li>
-        <li><strong>Names.</strong> Icon-only controls require a label. Images require <code>alt</code> (<code>""</code> when decorative).</li>
-        <li><strong>Motion.</strong> Reduced motion gives a complete static page; nothing essential lives in animation.</li>
-        <li><strong>Third parties.</strong> Embeds load only after a click.</li>
+        <li><strong>Contrast.</strong> Text tokens meet AA on black; muted text is the quietest that still does.</li>
+        <li><strong>Keyboard.</strong> Every control is a native element or follows the ARIA pattern for its role, with a visible focus ring.</li>
+        <li><strong>Names.</strong> Icon buttons require <code>aria-label</code>; progress bars require one too.</li>
+        <li><strong>Motion.</strong> Reduced motion gives a complete still page.</li>
+        <li><strong>Feedback.</strong> Toasts are a polite live region; field errors are alerts tied to their control.</li>
       </ul>
-    </Prose>
+    </article>
   );
 }
