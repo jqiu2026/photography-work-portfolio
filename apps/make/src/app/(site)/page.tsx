@@ -4,13 +4,23 @@ import Link from "next/link";
 import { ProjectCard } from "@/components/ProjectCard";
 import { Button, EmptyState } from "@/components/ui";
 import { getNow, getProjects } from "@/lib/data";
+import { StoryIntro } from "@jerryqiu/sites/intro";
 
 export default async function MakeHome() {
   const [projects, now] = await Promise.all([getProjects(), getNow()]);
   const bench = projects.filter((p) => p.place === "bench");
   const shelf = projects.filter((p) => p.place === "shelf");
+  // TODO(owner): rewrite these lines in your voice. They only name what the site holds.
+  const intro = [
+    { name: "Make", title: "Things I build, and what I learned.", scene: "blueprint" as const },
+    { name: "The bench", title: "What's on the bench now.", scene: "blocks" as const },
+    { name: "Write-ups", title: "How they work.", scene: "code" as const },
+    { name: "The shelf", title: "Finished, and on the shelf.", scene: "circuit" as const },
+    { name: "Showcase", title: "A small showcase.", scene: "blueprint" as const },
+  ];
   return (
     <div>
+      <StoryIntro site="Make" accent="#5ef0a0" chapters={intro} />
       <div className="mk-wrap">
         <section className="mk-hero" aria-labelledby="h">
           <p className="hm-eyebrow">Jerry Qiu</p>

@@ -11,7 +11,7 @@ test.describe("galleries", () => {
   test("create a gallery, upload into it, reorder, hide, set a cover, and delete it", async ({ page }) => {
     await page.goto("/admin/galleries/new", { waitUntil: "networkidle" });
     await page.getByRole("textbox", { name: /^Title/ }).fill(`E2E Gallery ${uid}`);
-    await page.getByRole("button", { name: "Save" }).click();
+    await page.getByRole("button", { name: "Save", exact: true }).click();
     await expect(page).toHaveURL(/\/admin\/galleries\/[0-9a-f-]{36}$/);
 
     await page.getByLabel("Upload into this gallery").setInputFiles([
@@ -52,7 +52,7 @@ test.describe("galleries", () => {
     // protection level is saved
     await page.getByLabel("Image protection").selectOption("strict");
     await page.getByRole("button", { name: "Save" }).first().click();
-    await expect(page.locator(".hl-toast", { hasText: "Saved" })).toBeVisible();
+    await expect(page.locator(".hm-toast", { hasText: "Saved" })).toBeVisible();
 
     page.once("dialog", (d) => d.accept());
     await page.getByRole("button", { name: "Delete" }).first().click();
@@ -66,10 +66,10 @@ test.describe("music", () => {
     await page.getByRole("textbox", { name: /^Title/ }).fill(`Recording ${uid}`);
     await page.getByLabel("Player").selectOption("youtube");
     await page.getByLabel("Link id").fill("<script>alert(1)</script>");
-    await page.getByRole("button", { name: "Save" }).click();
+    await page.getByRole("button", { name: "Save", exact: true }).click();
     await expect(page.getByText(/A YouTube video id/)).toBeVisible();
     await page.getByLabel("Link id").fill("aqz-KE-bpKQ");
-    await page.getByRole("button", { name: "Save" }).click();
+    await page.getByRole("button", { name: "Save", exact: true }).click();
     await expect(page).toHaveURL(/\/admin\/music$/);
     await expect(page.getByRole("link", { name: `Recording ${uid}` })).toBeVisible();
   });
@@ -77,7 +77,7 @@ test.describe("music", () => {
     await page.goto("/admin/music/new", { waitUntil: "networkidle" });
     await page.getByRole("textbox", { name: /^Title/ }).fill("No service");
     await page.getByLabel("Link id").fill("something");
-    await page.getByRole("button", { name: "Save" }).click();
+    await page.getByRole("button", { name: "Save", exact: true }).click();
     await expect(page.getByText("Choose the service for this link")).toBeVisible();
   });
 });
@@ -87,17 +87,17 @@ test.describe("flying", () => {
     await page.goto("/admin/flying/new", { waitUntil: "networkidle" });
     await page.getByRole("textbox", { name: /^Title/ }).fill(`Flight ${uid}`);
     await page.getByLabel("Visible on the site").check();
-    await page.getByRole("button", { name: "Save" }).click();
+    await page.getByRole("button", { name: "Save", exact: true }).click();
     await expect(page.getByText(/Tick the safety checklist first/)).toBeVisible();
     // saving hidden is fine
     await page.getByLabel("Visible on the site").uncheck();
-    await page.getByRole("button", { name: "Save" }).click();
+    await page.getByRole("button", { name: "Save", exact: true }).click();
     await expect(page).toHaveURL(/\/admin\/flying$/);
     await page.getByRole("link", { name: `Flight ${uid}` }).click();
     for (const l of [/does not reveal where I am/, /decided on purpose/, /Nobody identifiable/])
       await page.getByLabel(l).check();
     await page.getByLabel("Visible on the site").check();
-    await page.getByRole("button", { name: "Save" }).click();
+    await page.getByRole("button", { name: "Save", exact: true }).click();
     await expect(page).toHaveURL(/\/admin\/flying$/);
     await expect(page.getByRole("row", { name: new RegExp(`Flight ${uid}`) })).toContainText("visible");
   });

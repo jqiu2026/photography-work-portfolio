@@ -18,7 +18,7 @@ test.describe("inbox", () => {
     await expect(page.getByRole("link", { name: "Reply by email" })).toHaveAttribute("href", /^mailto:visitor-/);
     await page.getByLabel("Status").selectOption("replied");
     await page.getByLabel("Private notes").fill("Sent the price list");
-    await page.getByRole("button", { name: "Save" }).click();
+    await page.getByRole("button", { name: "Save", exact: true }).click();
     await expect(page.getByText("Saved").first()).toBeVisible();
 
     await page.goto("/admin/inbox?status=replied", { waitUntil: "networkidle" });
@@ -56,27 +56,27 @@ test.describe("settings and legal pages", () => {
     await page.goto("/admin/settings", { waitUntil: "networkidle" });
     const g = card(page, "general");
     await g.getByLabel("Contact email shown on the site").fill("not-an-email");
-    await g.getByRole("button", { name: "Save" }).click();
+    await g.getByRole("button", { name: "Save", exact: true }).click();
     await expect(g.getByText("Not an email address")).toBeVisible();
     await g.getByLabel("Site name").fill(`Hub ${uid}`);
     await g.getByLabel("Contact email shown on the site").fill("hello@jerryqiu.com");
-    await g.getByRole("button", { name: "Save" }).click();
+    await g.getByRole("button", { name: "Save", exact: true }).click();
     await expect(page.getByText("Saved").first()).toBeVisible();
     await page.reload({ waitUntil: "networkidle" });
     await expect(card(page, "general").getByLabel("Site name")).toHaveValue(`Hub ${uid}`);
 
     const nav = card(page, "nav");
     await nav.getByLabel("Links").fill("About | javascript:alert(1)");
-    await nav.getByRole("button", { name: "Save" }).click();
+    await nav.getByRole("button", { name: "Save", exact: true }).click();
     await expect(nav.getByText(/Label \| \/path/)).toBeVisible();
   });
   test("a legal page can be saved as a draft and then published", async ({ page }) => {
     await page.goto("/admin/settings/legal/terms", { waitUntil: "networkidle" });
     await page.getByLabel(/Page text/).fill(`## Terms ${uid}\n\nBe kind.`);
-    await page.getByRole("button", { name: "Save" }).click();
+    await page.getByRole("button", { name: "Save", exact: true }).click();
     await expect(page.getByText("Saved as draft")).toBeVisible();
     await page.getByLabel("Status").selectOption("published");
-    await page.getByRole("button", { name: "Save" }).click();
+    await page.getByRole("button", { name: "Save", exact: true }).click();
     await expect(page.getByText("Saved and published")).toBeVisible();
     await page.goto("/admin/settings", { waitUntil: "networkidle" });
     await expect(page.getByRole("row", { name: /Terms of use/ })).toContainText("published");

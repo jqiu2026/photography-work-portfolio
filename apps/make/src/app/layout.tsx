@@ -9,6 +9,7 @@ import type { ReactNode } from "react";
 import { Maintenance } from "@/components/Maintenance";
 import { fontVars } from "@/lib/fonts";
 import { siteSettings } from "@/lib/site-settings";
+import { IntroCover } from "@jerryqiu/sites/intro";
 
 export const metadata: Metadata = {
   metadataBase: new URL(getMakeUrl()),
@@ -22,6 +23,7 @@ export default async function MakeLayout({ children }: { children: ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning className={fontVars}>
       <head>
+        <IntroCover />
         <meta name="robots" content="noai, noimageai" />
       </head>
       <body>

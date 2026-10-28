@@ -11,7 +11,8 @@
     "./theme-script": "./src/ThemeScript.tsx",
     "./contact": "./src/ContactForm.tsx",
     "./mock": "./src/MockBanner.tsx",
-    "./maintenance": "./src/maintenance.ts"
+    "./maintenance": "./src/maintenance.ts",
+    "./intro": "./src/intro/StoryIntro.tsx"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

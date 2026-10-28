@@ -171,7 +171,7 @@ test.describe("the watermark setting", () => {
     await card.getByLabel("Add a visible watermark to images").check();
     await card.getByLabel("Watermark text").fill("© E2E");
     await card.getByRole("button", { name: "Save" }).click();
-    await expect(page.locator(".hl-toast", { hasText: "Saved" })).toBeVisible();
+    await expect(page.locator(".hm-toast", { hasText: "Saved" })).toBeVisible();
 
     const marked = await fetchImage();
     expect(marked.equals(plain)).toBe(false);
@@ -180,7 +180,7 @@ test.describe("the watermark setting", () => {
     // restore for later tests
     await card.getByLabel("Add a visible watermark to images").uncheck();
     await card.getByRole("button", { name: "Save" }).click();
-    await expect(page.locator(".hl-toast", { hasText: "Saved" }).last()).toBeVisible();
+    await expect(page.locator(".hm-toast", { hasText: "Saved" }).last()).toBeVisible();
     await page.getByRole("group", { name: "Choose site" }).first().getByRole("button", { name: "Hub" }).click();
   });
 });

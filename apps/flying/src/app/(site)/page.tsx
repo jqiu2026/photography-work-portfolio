@@ -4,6 +4,7 @@ import { Button, EmptyState } from "@/components/ui";
 import { getPublicFlights } from "@/lib/data";
 import { getImage, srcSet } from "@/lib/images";
 import { getFlyingContent } from "@/lib/interests";
+import { StoryIntro } from "@jerryqiu/sites/intro";
 
 const TOOLS = [
   ["Crosswind", "/tools/crosswind", "Headwind and crosswind for a runway."],
@@ -17,8 +18,24 @@ export default async function FlyingHome() {
   const [flying, { flights }] = await Promise.all([getFlyingContent(), getPublicFlights()]);
   const cockpit = getImage("blogs", "day-one-cover");
   void getSite;
+  const plane = getImage("gallery", "jetblue-a220-300-1");
+  const pic = (i: typeof plane) => ({
+    src: i.files[1]?.src ?? i.files[0].src,
+    srcSet: srcSet(i),
+    alt: "",
+    color: i.color,
+  });
+  // TODO(owner): rewrite these lines in your voice. They only name what the site holds.
+  const intro = [
+    { name: "Flying", title: "I'm learning to read the sky.", scene: "horizon" as const },
+    { name: "The log", title: "Where I've been, from above.", scene: "route" as const },
+    { name: "Tools", title: "Tools I built to learn.", scene: "clouds" as const },
+    { name: "Aircraft", title: "On approach.", scene: "clouds" as const, image: pic(plane) },
+    { name: "Arrival", title: "Have a look around.", scene: "runway" as const, image: pic(cockpit) },
+  ];
   return (
     <div>
+      <StoryIntro site="Flying" accent="#6fd8ff" chapters={intro} />
       <div className="fl-wrap">
         <section className="fl-hero" aria-labelledby="h">
           <p className="hm-eyebrow">Jerry Qiu</p>

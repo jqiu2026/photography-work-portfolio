@@ -2,6 +2,7 @@ import { Button, EmptyState } from "@/components/ui";
 import Link from "next/link";
 import { PieceCard } from "@/components/PieceCard";
 import { NewsletterForm } from "@/components/NewsletterForm";
+import { StoryIntro } from "@jerryqiu/sites/intro";
 import { getCatalog } from "@/lib/data";
 import { getImage, srcSet } from "@/lib/images";
 import { getMusicContent } from "@/lib/interests";
@@ -13,8 +14,22 @@ export default async function MusicHome() {
     .filter((c) => c.featured)
     .concat(catalog.filter((c) => !c.featured))
     .slice(0, 4);
+  // TODO(owner): rewrite these lines in your voice. They only name what the site holds.
+  const intro = [
+    { name: "Music", title: "Things I wrote, and sometimes played.", scene: "waves" as const },
+    {
+      name: "Compositions",
+      title: "Every piece, in one catalog.",
+      scene: "staff" as const,
+      image: { src: img.files[1]?.src ?? img.files[0].src, srcSet: srcSet(img), alt: "", color: img.color },
+    },
+    { name: "Scores", title: "Scores to play.", line: "Sheet music, ready for your stand.", scene: "bars" as const },
+    { name: "Listen", title: "Recordings and performances.", scene: "rings" as const },
+    { name: "Commission", title: "Something new, written for you.", scene: "waves" as const },
+  ];
   return (
     <div>
+      <StoryIntro site="Music" accent="#ffb340" chapters={intro} />
       <div className="mu-wrap">
         <section className="mu-hero" aria-labelledby="h">
           <div>
