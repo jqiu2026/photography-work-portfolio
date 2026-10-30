@@ -24,6 +24,14 @@ export default function Landing() {
           </Link>
         </div>
       </div>
+      <p className="l-foot">
+        <span>&copy; {new Date().getFullYear()} Jerry Qiu</span>
+        <span>
+          <a className="mail" href="mailto:info@jerryqiu.com">
+            info@jerryqiu.com
+          </a>
+        </span>
+      </p>
     </main>
   );
 }
