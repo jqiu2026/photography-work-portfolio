@@ -114,7 +114,7 @@ export function Gallery({ categories }: { categories: Category[] }) {
   }, []);
   const close = useCallback(() => {
     setOpen(null);
-    (opener.current as HTMLElement | null)?.focus?.();
+    (opener.current as HTMLElement | null)?.focus?.({ preventScroll: true });
   }, []);
 
   return (
@@ -145,7 +145,7 @@ function Viewer({ cat, start, onClose }: { cat: Category; start: number; onClose
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
-    root.current?.querySelector<HTMLElement>(".x")?.focus();
+    root.current?.querySelector<HTMLElement>(".x")?.focus({ preventScroll: true });
     return () => {
       document.body.style.overflow = "";
     };

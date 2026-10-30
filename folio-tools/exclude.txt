@@ -1,0 +1,5 @@
+# Photos left out of the site: each line is the start of an original file path. Rebuild with folio-tools/build.mjs.
+# 2025 Senior Sunset stop-motion frames (colors look wrong)
+/Volumes/HOME-20TB/01_Media/Photos/2025/2025-06-26_SeniorSunset/
+# removed by the owner (was Event photo 4)
+/Volumes/HOME-20TB/01_Media/Photos/2026/2026-02-27_PA_CNYDinner/02_EXPORTS/2026-02-27_PA_CNYDinner-133.jpg

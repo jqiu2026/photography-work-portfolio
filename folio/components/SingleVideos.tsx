@@ -12,13 +12,13 @@ export function SingleVideos({ videos }: { videos: Vid[] }) {
   const root = useRef<HTMLDivElement>(null);
   const close = useCallback(() => {
     setOpen(null);
-    (opener.current as HTMLElement | null)?.focus?.();
+    (opener.current as HTMLElement | null)?.focus?.({ preventScroll: true });
   }, []);
 
   useEffect(() => {
     if (!open) return;
     document.body.style.overflow = "hidden";
-    root.current?.querySelector<HTMLElement>(".x")?.focus();
+    root.current?.querySelector<HTMLElement>(".x")?.focus({ preventScroll: true });
     const key = (e: KeyboardEvent) => {
       if (e.key === "Escape") close();
     };

@@ -25,14 +25,14 @@ img{-webkit-user-drag:none;pointer-events:none}
 .irid{display:inline-block;padding-right:.08em;background-image:linear-gradient(90deg,#fff 0%,hsl(var(--violet)) 45%,hsl(var(--cyan)) 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
 .hero p{margin:1rem 0 0;color:var(--soft);max-width:34rem;font-size:1.1rem}
 
-.cats{position:sticky;top:3.3rem;z-index:15;display:flex;gap:.4rem;overflow-x:auto;padding:.6rem var(--gutter);scrollbar-width:none;background:none}
+.cats{position:sticky;top:4.6rem;z-index:15;display:flex;gap:.4rem;overflow-x:auto;padding:.6rem var(--gutter);scrollbar-width:none;background:none}
 .cats::-webkit-scrollbar{display:none}
 .cats a{flex:none;padding:.35rem .85rem;border-radius:999px;border:1px solid var(--line2);color:var(--soft);text-decoration:none;font-size:.85rem;white-space:nowrap;background:rgb(0 0 0/.45);backdrop-filter:blur(12px) saturate(1.4);-webkit-backdrop-filter:blur(12px) saturate(1.4)}
 .cats a:hover{color:var(--fg);border-color:var(--muted)}
 .cats a.on{color:#000;background:var(--fg);border-color:var(--fg)}
 
 main{padding-bottom:5rem}
-.cat{padding:clamp(2rem,6vw,4.5rem) var(--gutter) 0;max-width:110rem;margin:0 auto;scroll-margin-top:6rem}
+.cat{padding:clamp(2rem,6vw,4.5rem) var(--gutter) 0;max-width:110rem;margin:0 auto;scroll-margin-top:8rem}
 .cat h2{display:flex;align-items:baseline;gap:.9rem;margin:0 0 1.1rem;font-size:clamp(1.8rem,5vw,3.4rem);font-weight:400;letter-spacing:-.03em;line-height:1}
 .cat h2 small{font-size:.8rem;letter-spacing:.1em;color:var(--muted);font-weight:400}
 .masonry{display:flex;gap:var(--gap);align-items:flex-start}
@@ -100,7 +100,7 @@ main{padding-bottom:5rem}
 .vmodal .x{position:absolute;top:.9rem;right:.9rem;display:grid;place-items:center;width:2.8rem;height:2.8rem;border:1px solid var(--line2);border-radius:999px;background:rgb(255 255 255/.06);color:var(--fg);font-size:1.3rem;cursor:pointer}
 
 /* motion */
-.page{animation:pagein .7s cubic-bezier(.2,.7,.2,1) both}
+.page{animation:pagein .7s cubic-bezier(.2,.7,.2,1) backwards}
 @keyframes pagein{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 .top{animation:hdrin .7s cubic-bezier(.2,.7,.2,1) both}
 @keyframes hdrin{from{opacity:0;transform:translateY(-100%)}to{opacity:1;transform:none}}

@@ -29,6 +29,17 @@ const CATEGORIES = [
   { slug: "wedding", title: "Wedding", from: ["Wedding"] },
 ];
 
+// Photos left out on purpose: lines of folio-tools/exclude.txt, each a start of an original file path (see _picks.tsv).
+const EXCLUDE = fs.existsSync(path.resolve(import.meta.dirname, "exclude.txt"))
+  ? fs.readFileSync(path.resolve(import.meta.dirname, "exclude.txt"), "utf8").split("\n").map((l) => l.trim()).filter((l) => l && !l.startsWith("#"))
+  : [];
+const SOURCE = new Map(); // "Category/file" -> original path, from the picks list
+if (fs.existsSync(path.join(PICKS, "_picks.tsv")))
+  for (const l of fs.readFileSync(path.join(PICKS, "_picks.tsv"), "utf8").split("\n").slice(1)) {
+    const [cat, file, , src] = l.split("\t");
+    if (cat && file && src) SOURCE.set(`${cat}/${file}`, src);
+  }
+const sourceOf = (f) => SOURCE.get(`${path.basename(path.dirname(f))}/${path.basename(f)}`) ?? f;
 const GRID = { edge: 900, quality: 60 }; // what the masonry loads
 const FULL = { edge: 1600, quality: 68 }; // what the viewer opens: medium quality on purpose
 
@@ -54,10 +65,13 @@ for (const cat of CATEGORIES) {
     files = EXTRA_TEAM.flatMap((p) => (fs.statSync(p).isDirectory() ? listDir(p) : [p]));
   }
   files = interleave(files);
+  if (process.env.DRY) files.forEach((f, k) => console.log(`${cat.slug}-${String(k + 1).padStart(2, "0")}\t${sourceOf(f)}`));
+  files = files.filter((f) => !EXCLUDE.some((x) => sourceOf(f).startsWith(x)));
   const dir = path.join(OUT, "public/photos", cat.slug);
   fs.mkdirSync(dir, { recursive: true });
   const items = [];
   let n = 0;
+  if (process.env.DRY) continue;
   for (const f of files) {
     n++;
     const id = `${cat.slug}-${String(n).padStart(2, "0")}`;
