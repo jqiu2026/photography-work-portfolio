@@ -16,7 +16,7 @@ export function SiteHeader() {
         Jerry Qiu
       </Link>
       <nav aria-label="Pages">
-        {link("/", "Photos", path === "/")}
+        {link("/photos", "Photos", path.startsWith("/photos"))}
         {link("/videos", "Videos", path.startsWith("/videos"))}
       </nav>
     </header>

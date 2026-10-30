@@ -10,7 +10,10 @@ function Shot({ cat, index, onOpen }: { cat: Category; index: number; onOpen: (i
   const [id, w, h] = cat.items[index];
   const ref = useRef<HTMLButtonElement>(null);
   const [seen, setSeen] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+  const img = useRef<HTMLImageElement>(null);
   useEffect(() => {
+    if (img.current?.complete) setLoaded(true); // already in the cache before hydration
     const el = ref.current;
     if (!el) return;
     const io = new IntersectionObserver(
@@ -29,12 +32,13 @@ function Shot({ cat, index, onOpen }: { cat: Category; index: number; onOpen: (i
     <button
       ref={ref}
       type="button"
-      className={seen ? "shot in" : "shot"}
+      className={`shot${seen ? " in" : ""}${loaded ? " ld" : ""}`}
+      style={{ transitionDelay: seen ? `${(index % 5) * 60}ms` : undefined }}
       aria-label={`${cat.title}, photo ${index + 1} of ${cat.items.length}: open`}
       onClick={() => onOpen(index)}
     >
       {/* biome-ignore lint/performance/noImgElement: already-resized WebP files, served as they are */}
-      <img src={src(cat.slug, id, "s")} width={w} height={h} alt="" loading="lazy" decoding="async" draggable={false} />
+      <img ref={img} onLoad={() => setLoaded(true)} src={src(cat.slug, id, "s")} width={w} height={h} alt="" loading="lazy" decoding="async" draggable={false} />
     </button>
   );
 }

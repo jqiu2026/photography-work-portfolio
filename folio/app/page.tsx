@@ -1,16 +1,29 @@
-import { Gallery } from "@/components/Gallery";
-import { CATEGORIES } from "@/lib/photos-data";
+import Link from "next/link";
 
-export default function PhotosPage() {
+export default function Landing() {
   return (
-    <>
-      <section className="hero">
-        <h1>
-          Photos<span className="irid">.</span>
+    <main className="landing">
+      <div className="orb o1" aria-hidden="true" />
+      <div className="orb o2" aria-hidden="true" />
+      <div className="landing-in">
+        <p className="l-eyebrow rise" style={{ "--d": "0.1s" } as React.CSSProperties}>
+          Jerry Qiu
+        </p>
+        <h1 className="l-title rise" style={{ "--d": "0.25s" } as React.CSSProperties}>
+          <span className="irid shimmer">Folio</span>
         </h1>
-        <p>Events, sports, stage and the people in them. Scroll.</p>
-      </section>
-      <Gallery categories={CATEGORIES} />
-    </>
+        <p className="l-desc rise" style={{ "--d": "0.45s" } as React.CSSProperties}>
+          Photography and video from events, stages, sports and the people in them.
+        </p>
+        <div className="l-actions rise" style={{ "--d": "0.65s" } as React.CSSProperties}>
+          <Link href="/photos" className="btn primary">
+            View Photos <span aria-hidden="true">&rarr;</span>
+          </Link>
+          <Link href="/videos" className="btn">
+            View Videos <span aria-hidden="true">&rarr;</span>
+          </Link>
+        </div>
+      </div>
+    </main>
   );
 }
